@@ -1,13 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\.github",
-    "\\Assets",
-    "\\Includes",
-    "\\Includes\\Helpers",
-    "\\Library",
-    "\\Sources"
+    "\\Library\\include",
+    "\\Library\\include\\CTRPluginFramework",
+    "\\Library\\include\\CTRPluginFrameworkImpl",
+    "\\Library\\include\\CTRPluginFrameworkImpl\\Graphics",
+    "\\Library\\include\\CTRPluginFramework\\Graphics",
+    "\\Library\\source",
+    "\\Library\\source\\CTRPluginFrameworkImpl",
+    "\\Library\\source\\CTRPluginFrameworkImpl\\Graphics",
+    "\\Library\\source\\CTRPluginFrameworkImpl\\Menu"
   ],
-  "SelectedNode": "\\Sources\\PluginMain.cpp",
+  "SelectedNode": "\\README.md",
   "PreviewInSolutionExplorer": false
 }
