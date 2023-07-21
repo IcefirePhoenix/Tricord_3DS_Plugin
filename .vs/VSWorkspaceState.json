@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\.github",
+    "\\Assets",
+    "\\Includes",
+    "\\Includes\\Helpers",
+    "\\Library",
+    "\\Sources"
+  ],
+  "SelectedNode": "\\Sources\\PluginMain.cpp",
+  "PreviewInSolutionExplorer": false
+}
