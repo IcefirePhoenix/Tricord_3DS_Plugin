@@ -355,7 +355,7 @@ namespace CTRPluginFramework
         // title is left blank since the name is already set in the lib files
         // TODO: check spacing of about description
         PluginMenu* menu = new PluginMenu("", 0, 5, 0,
-            "An advanced, region-free cheat plugin made for The \nLegend of Zelda: Tri Force Heroes.\n\nForked from the original CTRPluginFramework blank \ntemplate repository.");
+            "An advanced, region-free cheat plugin made for\nThe Legend of Zelda: Tri Force Heroes.\n\nForked from the original CTRPluginFramework\nblank template repository.");
 
         // Synchronize the menu with frame event
         menu->SynchronizeWithFrame(true);

@@ -12,10 +12,10 @@
 namespace CTRPluginFramework
 {
     Menu::Menu(const std::string& title, const std::string& footer, IconCallback iconCallback) :
-        _noteTB("Tricord", "v0.5.0", IntRect(40, 30, 320, 180))
+        _noteTB("", "v0.5.0", IntRect(40, 30, 320, 180))
     {
         drawFooter = true;
-        _root = _folder = new MenuFolderImpl(title, "Tricord");
+        _root = _folder = new MenuFolderImpl(title, "");
         _iconCallback = iconCallback;
         _lastNoteItem = _lastSelectedItem = nullptr;
         _selector = 0;
@@ -24,7 +24,7 @@ namespace CTRPluginFramework
     }
 
     Menu::Menu(MenuFolderImpl *folder, IconCallback iconCallback) :
-        _noteTB("Tricord", "v0.5.0", IntRect(40, 30, 320, 180))
+        _noteTB("", "v0.5.0", IntRect(40, 30, 320, 180))
     {
         drawFooter = true;
         _root = _folder = folder == nullptr ? new MenuFolderImpl("Menu") : folder;
