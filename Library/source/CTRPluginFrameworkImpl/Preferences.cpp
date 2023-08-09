@@ -214,7 +214,7 @@ namespace CTRPluginFramework
         {
             std::string source;
 
-            //if (FwkSettings::Header->isDefaultPlugin)
+            if (FwkSettings::Header->isDefaultPlugin)
                 source = "/Tricord/Resources/Background/";
 
 
@@ -278,7 +278,7 @@ namespace CTRPluginFramework
 
     void    Preferences::UnloadBackgrounds(void)
     {
-        if (bottomBackgroundImage || topBackgroundImage)
+        if (bottomBackgroundImage || topBackgroundImage || bottomBoxBGImage)
             _bmpCanBeLoaded = true;
 
         if (bottomBackgroundImage)
@@ -291,6 +291,12 @@ namespace CTRPluginFramework
         {
             delete topBackgroundImage;
             topBackgroundImage = nullptr;
+        }
+
+        if (bottomBoxBGImage)
+        {
+            delete bottomBoxBGImage;
+            bottomBoxBGImage = nullptr;
         }
 
         // Update Window

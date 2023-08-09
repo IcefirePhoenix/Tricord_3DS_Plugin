@@ -1,16 +1,17 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Library",
     "\\Library\\include",
-    "\\Library\\include\\CTRPluginFramework",
     "\\Library\\include\\CTRPluginFrameworkImpl",
-    "\\Library\\include\\CTRPluginFrameworkImpl\\Graphics",
-    "\\Library\\include\\CTRPluginFramework\\Graphics",
     "\\Library\\source",
     "\\Library\\source\\CTRPluginFrameworkImpl",
-    "\\Library\\source\\CTRPluginFrameworkImpl\\Graphics",
-    "\\Library\\source\\CTRPluginFrameworkImpl\\Menu"
+    "\\Library\\source\\CTRPluginFrameworkImpl\\System",
+    "\\Library\\source\\CTRPluginFrameworkImpl\\System\\Services",
+    "\\Library\\source\\CTRPluginFramework\\Graphics",
+    "\\Library\\source\\CTRPluginFramework\\Menu",
+    "\\Library\\source\\CTRPluginFramework\\System"
   ],
-  "SelectedNode": "\\README.md",
+  "SelectedNode": "\\Makefile",
   "PreviewInSolutionExplorer": false
 }

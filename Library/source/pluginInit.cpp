@@ -52,7 +52,7 @@ namespace CTRPluginFramework
     Handle      g_resumeEvent = 0;
     bool        g_keepRunning = true;
 
-    void    ThreadInit(void *arg);
+    void    ThreadInit(void* arg);
     void    ThreadExit(void);
     void    InstallOSD(void); ///< OSDImpl
     void    InitializeRandomEngine(void);
@@ -120,7 +120,7 @@ Result     OnSharedMemMap(Handle handle, void* sharedMem, MemPerm myPerm, MemPer
         // Probably breaks if hid thread is paused just here, but the likelyness of this
         // happening is very low, so I guess it's good enough...
         if (llabs(currSysTick - firstSysTick) < 1000000000ULL && llabs(currSysTick - firstSysTickTS) < 1000000000ULL &&
-        arrayIndex < 8 && arrayIndexTS < 8)
+            arrayIndex < 8 && arrayIndexTS < 8)
             hidSetSharedMem((vu32*)sharedMem);
     }
     return res;
@@ -154,7 +154,7 @@ namespace CTRPluginFramework
         // Set current working directory
         if (FwkSettings::Header->isDefaultPlugin)
         {
-            std::string path = "/Tricord/Data";
+            std::string path = "/luma/plugins/ActionReplay";
 
             if (!Directory::IsExists(path))
                 Directory::Create(path);
@@ -168,7 +168,7 @@ namespace CTRPluginFramework
         }
         else
         {
-            char path[255] = {0};
+            char path[255] = { 0 };
 
             PLGLDR__GetPluginPath(path);
             for (u32 i = 254; i > 0; --i)
@@ -188,10 +188,10 @@ namespace CTRPluginFramework
 
         // Init System::Heap
         Heap::__ctrpf_heap_size = size;
-        Heap::__ctrpf_heap = static_cast<u8 *>(::operator new(size));
+        Heap::__ctrpf_heap = static_cast<u8*>(::operator new(size));
     }
 
-    void    KeepThreadMain(void *arg UNUSED)
+    void    KeepThreadMain(void* arg UNUSED)
     {
         // Initialize the synchronization subsystem
         __sync_init();
@@ -232,7 +232,7 @@ namespace CTRPluginFramework
         ScreenImpl::Initialize();
 
         // Init default settings
-        FwkSettings &settings = FwkSettings::Get();
+        FwkSettings& settings = FwkSettings::Get();
 
         settings.ThreadPriority = 0x30;
         settings.AllowActionReplay = true;
@@ -282,7 +282,7 @@ namespace CTRPluginFramework
             u32 svcMapMemoryBlockAddr = 0x00100000 - 4;
             do
             {
-                svcMapMemoryBlockAddr = Utils::Search<u32>(svcMapMemoryBlockAddr + 4, Process::GetTextSize(), {0xEF00001F});
+                svcMapMemoryBlockAddr = Utils::Search<u32>(svcMapMemoryBlockAddr + 4, Process::GetTextSize(), { 0xEF00001F });
                 if (svcMapMemoryBlockAddr)
                 {
                     for (int i = 0; i > -10; i--)
@@ -315,7 +315,8 @@ namespace CTRPluginFramework
             // Check the svcMapMemoryBlock hook was installed properly
             if (!g_onSharedMemMapHook.IsEnabled())
                 abort();
-        } else {
+        }
+        else {
             hidExitFake();
             hidInit();
         }
@@ -472,7 +473,7 @@ namespace CTRPluginFramework
             ProcessImpl::UpdateMemRegions();
         }
 
-    // exit
+        // exit
         svcCloseHandle(g_keepEvent);
         svcExitThread();
     }
@@ -483,35 +484,10 @@ namespace CTRPluginFramework
         // Init sysfont
         Font::Initialize();
         {
-            // If secondary (Tricord-exclusive) cheat directory doesn't exist, create it
-            std::string dirpath = "/Tricord/Cheats";
+            // If /cheats/ doesn't exists, create it
+            const char* dirpath = "/cheats";
             if (!Directory::IsExists(dirpath))
                 Directory::Create(dirpath);
-            {
-                switch (Process::GetTitleID()) {
-                case 0x0004000000176F00:
-                    dirpath += Utils::Format("/NA");
-                    break;
-
-                case 0x0004000000177000:
-                    dirpath += Utils::Format("/EU");
-                    break;
-
-                case 0x0004000000176E00:
-                    dirpath += Utils::Format("/JP");
-                    break;
-
-                case 0x0004000000182B00:
-                    dirpath += Utils::Format("/KOR");
-                    break;
-
-                default:
-                    break;
-                }
-
-                if (!Directory::IsExists(dirpath))
-                    Directory::Create(dirpath);
-            }
         }
 
         // Set AR file path
@@ -523,8 +499,7 @@ namespace CTRPluginFramework
 
         {
             // If /Screenshots/ doesn't exists, create it
-            // changed directory
-            const char* dirpath = "Tricord/Screenshots";
+            const char* dirpath = "/Screenshots";
             if (!Directory::IsExists(dirpath))
                 Directory::Create(dirpath);
 
@@ -541,7 +516,7 @@ namespace CTRPluginFramework
     }
 
     // Main thread's start
-    void  ThreadInit(void *arg)
+    void  ThreadInit(void* arg)
     {
         Initialize();
 
@@ -598,7 +573,7 @@ namespace CTRPluginFramework
     }
 
     extern "C"
-    int   __entrypoint(int arg)
+        int   __entrypoint(int arg)
     {
         // Set ProcessImpl::MainThreadTls
         ProcessImpl::MainThreadTls = (u32)getThreadLocalStorage();
@@ -621,7 +596,7 @@ namespace CTRPluginFramework
         // Create event
         svcCreateEvent(&g_continueGameEvent, RESET_ONESHOT);
         // Start ctrpf's primary thread
-        svcCreateThread(&g_keepThreadHandle, KeepThreadMain, arg, (u32 *)&keepThreadStack[0x1000], 0x1A, 0);
+        svcCreateThread(&g_keepThreadHandle, KeepThreadMain, arg, (u32*)&keepThreadStack[0x1000], 0x1A, 0);
         // Wait until basic initialization has been made before returning to game
         svcWaitSynchronization(g_continueGameEvent, U64_MAX);
         // Close the event
