@@ -631,6 +631,7 @@ namespace CTRPluginFramework
 
         // Render Top
         //_RenderTop();
+
         task.Start();
 
         // Render Bottom

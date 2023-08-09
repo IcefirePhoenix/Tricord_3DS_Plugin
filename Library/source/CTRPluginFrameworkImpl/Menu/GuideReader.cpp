@@ -204,7 +204,7 @@ namespace CTRPluginFramework
                     _last = entry;
 
                     char data[0x1001];
-                    File file(entry->note + "/" + entry->name + ".txt");
+                    File file(entry->note + entry->name + ".txt");
                     s64  size = file.GetSize();
 
                     if (!file.IsOpen())
@@ -231,7 +231,9 @@ namespace CTRPluginFramework
                     _guideTB.Open();
                 }
                 else
+                {
                     _guideTB.Open();
+                }
             }
         }
 

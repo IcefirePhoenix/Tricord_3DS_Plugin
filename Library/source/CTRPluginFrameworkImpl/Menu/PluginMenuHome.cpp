@@ -12,7 +12,7 @@ namespace CTRPluginFramework
 
     PluginMenuHome::PluginMenuHome(std::string &name, bool showNoteBottom) :
 
-        _noteTB("", "v0.5.0", IntRect(20, 46, 280, 124)),
+        _noteTB("", "", showNoteBottom ? IntRect(20, 46, 280, 124) : IntRect(40, 30, 320, 180)),
 
         _showStarredBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Freecam", IntRect(45, 100, 110, 28)),
         _hidMapperBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Game Modes", IntRect(165, 100, 110, 28)),
