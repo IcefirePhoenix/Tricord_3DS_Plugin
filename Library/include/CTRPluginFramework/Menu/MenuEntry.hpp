@@ -61,7 +61,7 @@ namespace CTRPluginFramework
         * \brief Set a value for entry's argument
         * \param The value of the argument
         */
-        void    SetArg(void *arg) const;
+        void    SetArg(void* arg) const;
 
         /**
         * \brief Get the value of this entry's argument

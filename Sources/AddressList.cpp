@@ -23,9 +23,13 @@ namespace CTRPluginFramework {
 		CostumeAttrA = Address(0x32849510, 0x00000000, 0x00000000, 0x00000000);
 		CostumeAttrB = Address(0x32849512, 0x00000000, 0x00000000, 0x00000000);
 		CostumeAttrC = Address(0x32849513, 0x00000000, 0x00000000, 0x00000000);
+		CurrCostume = Address(0x32849564, 0x00000000, 0x00000000, 0x00000000);
+		CostumeCatalogPointer = Address(0x32C828E8, 0x00000000, 0x00000000, 0x00000000);
 		// CurrCostumeG = Address(0x3284)
 		PlayerStatus = Address(0x32849511, 0x00000000, 0x00000000, 0x00000000);
 		TingleBalloons = Address(0x32849680, 0x00000000, 0x00000000, 0x00000000);
+		UnusedCostumeDataPointerList = Address(0x0075C390, 0x00000000, 0x00000000, 0x00000000);
+
 
 		// Console
 
@@ -46,6 +50,7 @@ namespace CTRPluginFramework {
 		PreviousSpawnID = Address(0x3280EDC2, 0x00000000, 0x00000000, 0x00000000);
 
 		// Items
+		// Note: Strafe refers to speed
 		BowStrafe = Address(0x0038CC7C, 0x00000000, 0x00000000, 0x00000000);
 		FireGloveStrafe = Address(0x300C8FD8, 0x00000000, 0x00000000, 0x00000000);
 		GustStrafe = Address(0x003C85A8, 0x00000000, 0x00000000, 0x00000000);
@@ -61,6 +66,10 @@ namespace CTRPluginFramework {
 		LobbyBallCounter = Address(0x329F18F4, 0x00000000, 0x00000000, 0x00000000);
 		LobbyBallSong = Address(0x329F193C, 0x00000000, 0x00000000, 0x00000000);
 		TextBoxSpeed = Address(0x0018122C, 0x00000000, 0x00000000, 0x00000000);
+
+		// Padding
+		TextToRodata = Address(0x006A9168, 0x00000000, 0x00000000, 0x00000000);
+
 
 		// Player
 		ActiveLink = Address(0x31A03879, 0x00000000, 0x00000000, 0x00000000);
@@ -94,6 +103,7 @@ namespace CTRPluginFramework {
 		FogC = Address(0x31B31BE0, 0x00000000, 0x00000000, 0x00000000);
 
 		// Savefile
+		CostumeObtainStatus = Address(0x32C8256A, 0x00000000, 0x00000000, 0x00000000);
 		ColiseumWinCount = Address(0x31A062AC, 0x00000000, 0x00000000, 0x00000000);
 		EditMerchantStock = Address(0x31A077A4, 0x00000000, 0x00000000, 0x00000000);
 		HeroPointCount = Address(0x31A0611C, 0x00000000, 0x00000000, 0x00000000);
@@ -128,6 +138,10 @@ namespace CTRPluginFramework {
 	Address		AddressList::CostumeAttrA;
 	Address		AddressList::CostumeAttrB;
 	Address		AddressList::CostumeAttrC;
+	Address		AddressList::CostumeCatalogPointer;
+	Address		AddressList::CurrCostume;
+	Address		AddressList::UnusedCostumeDataPointerList;
+
 	Address		AddressList::PlayerStatus;
 	Address		AddressList::TingleBalloons;
 
@@ -164,6 +178,10 @@ namespace CTRPluginFramework {
 	Address		AddressList::LobbyBallCounter;
 	Address		AddressList::LobbyBallSong;
 	Address		AddressList::TextBoxSpeed;
+	
+	// Padding
+	Address		AddressList::TextToRodata;
+
 
 	// Player
 	Address		AddressList::ActiveLink;
@@ -195,6 +213,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::FogC;
 
 	// Savefile
+	Address		AddressList::CostumeObtainStatus;
 	Address		AddressList::ColiseumWinCount;
 	Address		AddressList::EditMerchantStock;
 	Address		AddressList::HeroPointCount;
