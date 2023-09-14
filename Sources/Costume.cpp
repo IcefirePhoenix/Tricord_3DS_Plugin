@@ -264,7 +264,7 @@ namespace CTRPluginFramework
 
             // check for null pointer
             if (CostumeCatalogLocation != 0x00000000) {
-                Process::Write32((AddressList::UnusedCostumeDataPointerList.addr + 0x18), AddressList::TextToRodata.addr);
+                Process::Write32((AddressList::UnusedCostumeDataPointerList.addr), AddressList::TextToRodata.addr);
                 Process::Write8((CostumeCatalogLocation + 0xE8 + costumeCatalogSize), 0x29); // write to catalog    
             }
 
