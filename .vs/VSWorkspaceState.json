@@ -8,10 +8,9 @@
     "\\Library\\source\\CTRPluginFrameworkImpl",
     "\\Library\\source\\CTRPluginFrameworkImpl\\System",
     "\\Library\\source\\CTRPluginFrameworkImpl\\System\\Services",
-    "\\Library\\source\\CTRPluginFramework\\Graphics",
-    "\\Library\\source\\CTRPluginFramework\\Menu",
-    "\\Library\\source\\CTRPluginFramework\\System"
+    "\\Sources",
+    "\\Sources\\Helpers"
   ],
-  "SelectedNode": "\\Makefile",
+  "SelectedNode": "\\PaddingUsage.txt",
   "PreviewInSolutionExplorer": false
 }

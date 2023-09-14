@@ -27,8 +27,12 @@ namespace CTRPluginFramework {
 		static Address		CostumeAttrA;
 		static Address		CostumeAttrB;
 		static Address		CostumeAttrC;
+		static Address		CurrCostume;
+		static Address		CostumeCatalogPointer;
 		static Address		PlayerStatus;
 		static Address		TingleBalloons;
+		static Address		UnusedCostumeDataPointerList;
+
 
 		// Emotes
 		static Address		DoTEmotes;
@@ -64,6 +68,10 @@ namespace CTRPluginFramework {
 		static Address		LobbyBallSong;
 		static Address		TextBoxSpeed;
 
+		// Padding
+		static Address		TextToRodata; // ends 0x6AA000 for NA
+
+
 		// Player
 		static Address		ActiveLink;
 		static Address		CurrentItem;
@@ -94,6 +102,7 @@ namespace CTRPluginFramework {
 		static Address		FogC;
 
 		// Savefile
+		static Address		CostumeObtainStatus;
 		static Address		ColiseumWinCount;
 		static Address		EditMerchantStock;
 		static Address		HeroPointCount;

@@ -10,6 +10,17 @@
 namespace CTRPluginFramework
 {
     using StringVector = std::vector<std::string>;
+    extern MenuEntry* menuCostumeSlotA;
+    extern MenuEntry* menuCostumeSlotB;
+    extern MenuEntry* menuCostumeSlotC;
+    extern MenuEntry* menuCostumeSlotD;
+    extern MenuEntry* restoreGreatFairy;
+    extern MenuEntry* manageCatalogSize;
+    extern MenuEntry* initCustomCostumes;
+    extern MenuEntry* writeCostumeIDToSlot;
+
+
+
 
     // Emote functions
     void emoteSwapper(MenuEntry* entry);
@@ -23,15 +34,15 @@ namespace CTRPluginFramework
     void recolorLevelTex(MenuEntry* entry);
 
     // Costume functions
+    extern bool showSlots;
+    void manageCatalogSizeAuto(MenuEntry* entry);
     void openCustomCostumeSlots(MenuEntry* entry);
-    void customCostumeSlotA(MenuEntry* entry);
-    void customCostumeSlotB(MenuEntry* entry);
-    void customCostumeSlotC(MenuEntry* entry);
-    void customCostumeSlotD(MenuEntry* entry);
+    void writeCostumeSlot(MenuEntry* entry);
     void greatFairyEnable(MenuEntry* entry);
-    void gChangeCostume(MenuEntry* entry);    
-    void bChangeCostume(MenuEntry* entry);
-    void rChangeCostume(MenuEntry* entry);
+    void changeLinkCostume(MenuEntry* entry);
+    void selectCostumeID(MenuEntry* entry);
+    void initCustomCostumesAuto(MenuEntry* entry);
+
     
 
     // Miscellaneous functions

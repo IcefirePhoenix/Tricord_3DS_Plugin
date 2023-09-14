@@ -9,18 +9,6 @@
 #define TID_KOR 		0x0004000000182B00
 
 namespace CTRPluginFramework {
-	enum CurrRegion {
-		INVALID = 0,
-		USA,
-		EUR,
-		JPN,
-		KOR,
-	};
-
-	extern CurrRegion c_Region;
-
-	extern std::string regionName;
-
 	class Address {
 	public:
 		Address(u32 usa, u32 eur, u32 jpn, u32 kor);

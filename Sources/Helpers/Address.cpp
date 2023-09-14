@@ -1,30 +1,35 @@
 #include "Helpers/Address.hpp"
+#include "CTRPluginFramework/System/Process.hpp"
+
 
 namespace CTRPluginFramework {
-	CurrRegion c_Region = INVALID;
-
-	std::string regionName = "";
+	//CurrRegion c_Region = Process::GetTitleID;
+	//std::string regionName = "";
 
 
 	Address::Address(u32 usa, u32 eur, u32 jpn, u32 kor) {
-		switch (c_Region) {
+		switch (Process::GetTitleID()) {
 
-			case CurrRegion::USA: addr = usa; 
+			case 0x0004000000176F00:
+				addr = usa; 
 				break;
 
-			case CurrRegion::EUR: addr = eur; 
+			case 0x0004000000177000:
+				addr = eur; 
 				break;
 
-			case CurrRegion::JPN: addr = jpn; 
+			case 0x0004000000176E00:
+				addr = jpn; 
 				break;
 
-			case CurrRegion::KOR: addr = kor; 
+			case 0x0004000000182B00:
+				addr = kor; 
 				break;
 
-			case CurrRegion::INVALID: addr = 0; 
-				break;
-
-			default: addr = 0; 
+			default: 
+				addr = 0;
+				OSD::Notify("The current title is not a retail version of TFH!", Color::Red);
+				OSD::Notify("Addresses cannot be initialized.", Color::Red);
 				break;
 		}
 	}
