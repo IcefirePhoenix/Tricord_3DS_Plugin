@@ -175,6 +175,7 @@ namespace CTRPluginFramework
         return (_userInput);
     }
 
+
     std::string &KeyboardImpl::GetMessage(void)
     {
         return (_text);

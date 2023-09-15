@@ -76,4 +76,26 @@ namespace CTRPluginFramework
 
         return player.Open();
     }
+
+    // borrowed from OnionFS
+    bool showMsgKbd(std::string text, DialogType digtype) {
+        Keyboard kbd(text);
+        StringVector opts;
+        switch (digtype)
+        {
+        case CTRPluginFramework::DialogType::DialogOk:
+            opts = { "Ok" };
+            break;
+        case CTRPluginFramework::DialogType::DialogOkCancel:
+            opts = { "Ok", "Cancel" };
+            break;
+        case CTRPluginFramework::DialogType::DialogYesNo:
+            opts = { "Yes", "No" };
+            break;
+        default:
+            break;
+        }
+        kbd.Populate(opts);
+        return kbd.Open() == 0;
+    }
 }

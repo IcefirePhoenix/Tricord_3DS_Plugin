@@ -12,5 +12,7 @@ namespace CTRPluginFramework {
 	extern const StringVector customCostumeList;
 
 	int chooseLink(void);
+
+	bool showMsgKbd(std::string text, DialogType digtype);
 }
 #endif
