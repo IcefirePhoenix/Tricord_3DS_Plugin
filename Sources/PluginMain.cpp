@@ -129,10 +129,10 @@ namespace CTRPluginFramework
 
              // init slot entries
              // are these gear or box??
-             menuCostumeSlotA = new MenuEntry("Set custom costume slot 1", nullptr, selectCostumeID);
-             menuCostumeSlotB = new MenuEntry("Set custom costume slot 2", nullptr, selectCostumeID);
-             menuCostumeSlotC = new MenuEntry("Set custom costume slot 3", nullptr, selectCostumeID);
-             menuCostumeSlotD = new MenuEntry("Set custom costume slot 4", nullptr, selectCostumeID);
+             menuCostumeSlotA = new MenuEntry("Set custom costume slot A", nullptr, selectCostumeID, "This setting is not accessible if Restore Great Fairy Costume is enabled.");
+             menuCostumeSlotB = new MenuEntry("Set custom costume slot B", nullptr, selectCostumeID);
+             menuCostumeSlotC = new MenuEntry("Set custom costume slot C", nullptr, selectCostumeID);
+             menuCostumeSlotD = new MenuEntry("Set custom costume slot D", nullptr, selectCostumeID);
              restoreGreatFairy = new MenuEntry("Restore Great Fairy Costume", greatFairyEnable);
 
              

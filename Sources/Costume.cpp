@@ -65,6 +65,7 @@ namespace CTRPluginFramework
             // this is redundant and long and I really dislike it...
             // thing is, I tried a switch statement and it jumbled the order of every entry so yeah :(
             menuCostumeSlotA->Show(); // no need for if-statement here
+            menuCostumeSlotA->CanBeSelected(true);
 
             if (choice == 1) {
                 menuCostumeSlotB->Show();
@@ -80,14 +81,13 @@ namespace CTRPluginFramework
             } 
 
             if (restoreGreatFairy->IsActivated() && choice >= 0) {
-                menuCostumeSlotA->Hide();
+                menuCostumeSlotA->CanBeSelected(false);
 
-                std::string errMsg = ("Custom Costume Slot A is currently in-use by Restore Great Fairy. Please disable Restore ");
-                errMsg += ("Great Fairy in order to use this costume slot.\n\nNote: The option to configure Custom Costume Slot A ");
-                errMsg += ("has automatically been hidden in the menu.");
+                std::string errMsg = ("Custom Costume Slot A is currently in-use by Restore Great Fairy Costume. Please disable Restore ");
+                errMsg += ("Great Fairy Costume in order to use this costume slot.\n\nNote: The option to configure Custom Costume Slot A ");
+                errMsg += ("has automatically been disabled in the menu.");
 
                 MessageBox(Color::Gainsboro << "Error", errMsg)();
-                return;
             }
         }
     }
@@ -121,7 +121,7 @@ namespace CTRPluginFramework
             }
 
             // check if slots A-C have a costume chosen
-            for (int i = 3; i >= 1; i--) {
+            for (int i = 3; i > 0; i--) {
                 if (CustomSlots[i] != 255) {
                     catalogIncSize++;
                 }
@@ -158,19 +158,19 @@ namespace CTRPluginFramework
         else {
             // if custom, then populate keyboard with this:
             costumeList.Populate(customCostumeList);
-            result = costumeList.Open() + 0x26; // adding 0x25 to get to 0x26-0x29 range
+            result = costumeList.Open() + 0x26; // adding 0x26 to get to 0x26-0x29 range
         }
 
-        if (entry->Name() == "Set custom costume slot 1") {
+        if (entry->Name() == "Set custom costume slot A") {
             CustomSlots[0] = result;
         }
-        else if (entry->Name() == "Set custom costume slot 2") {
+        else if (entry->Name() == "Set custom costume slot B") {
             CustomSlots[1] = result;
         }
-        else if (entry->Name() == "Set custom costume slot 3") {
+        else if (entry->Name() == "Set custom costume slot C") {
             CustomSlots[2] = result;
         }
-        else if (entry->Name() == "Set custom costume slot 4") {
+        else if (entry->Name() == "Set custom costume slot D") {
             CustomSlots[3] = result;
         }
     }
@@ -197,6 +197,10 @@ namespace CTRPluginFramework
             if (CustomSlots[3] != 255) {
                 Process::Write8((DLCAddressStart + 0x3), CustomSlots[3]);
             }
+
+            if (!restoreGreatFairy->IsActivated()) {
+                menuCostumeSlotA->CanBeSelected(true);
+            }
         }
     }
 
@@ -222,7 +226,14 @@ namespace CTRPluginFramework
         Process::WriteString(AddressList::TextToRodata.addr + 0x38, "costume_customC", StringFormat::Utf8);
         Process::WriteString(AddressList::TextToRodata.addr + 0x49, "costume_customD", StringFormat::Utf8);
         
-        //Process::Write32((AddressList::UnusedCostumeDataPointerList.addr), (AddressList::TextToRodata.addr + 0x14));
+        // this is to restore the pointer list -> directs to costume_customA rather than costume_highfairy
+        if (!restoreGreatFairy->IsActivated()) {
+            // this would be the correct one to use, but for now we'll just use the default Hero's Tunic
+            // Process::Write32((AddressList::UnusedCostumeDataPointerList.addr), (AddressList::TextToRodata.addr + 0x14));
+            Process::Write32((AddressList::UnusedCostumeDataPointerList.addr), 0x0060B658);
+        }
+
+
         //Process::Write32((AddressList::UnusedCostumeDataPointerList.addr + 0x08), (AddressList::TextToRodata.addr + 0x26));
 
         /*
@@ -250,27 +261,22 @@ namespace CTRPluginFramework
         
         // if Slot 1 is already in use and Fairy is enabled
         if (CustomSlots[0] != 255) {
-            if (MessageBox(Color::Gainsboro << "Error", "Restore Great Fairy Costume cannot be used while Custom Costume Slot A is in-use.\n\nWould you like to disable Custom Costume Slot A?", DialogType::DialogYesNo)()){
-                CustomSlots[0] = 255;
-                menuCostumeSlotA->Hide();
+            if (MessageBox(Color::Gainsboro << "Error", "Tricord cannot place Great Fairy Costume into Custom Costume Slot A since it is currently configured to display a different costume.\n\nWould you like to overwrite the current costume in Custom Costume Slot A with Great Fairy?", DialogType::DialogYesNo)() == true) {
+                    menuCostumeSlotA->CanBeSelected(false);
+                    CustomSlots[0] = 255;
             }
             else {
                 entry->Disable();
+                return;
             }
-            return;
         }
-
-        else if (CustomSlots[0] == 255) {
-
+        
+        
+        if (CustomSlots[0] == 255) {
             // check for null pointer
             if (CostumeCatalogLocation != 0x00000000) {
                 Process::Write32((AddressList::UnusedCostumeDataPointerList.addr), AddressList::TextToRodata.addr);
-                Process::Write8((CostumeCatalogLocation + 0xE8 + costumeCatalogSize), 0x29); // write to catalog    
-            }
-
-            if (entry->WasJustActivated()) {
-                // use a callback
-                MessageBox(Color::Gainsboro << "Note", "Custom Costume Slot A cannot be used while Restore Great Fairy is enabled. To use it, please disable Restore Great Fairy first.\n\nThe option to configure Custom Costume Slot A will automatically be hidden in the menu.")();
+                Process::Write8((CostumeCatalogLocation + 0xE8 + costumeCatalogSize), 0x26); // write to catalog    
             }
         }
     }    
