@@ -30,7 +30,6 @@ namespace CTRPluginFramework {
 		TingleBalloons = Address(0x32849680, 0x00000000, 0x00000000, 0x00000000);
 		UnusedCostumeDataPointerList = Address(0x0075C390, 0x00000000, 0x00000000, 0x00000000);
 
-
 		// Console
 
 		// Emotes
@@ -70,7 +69,6 @@ namespace CTRPluginFramework {
 		// Padding
 		TextToRodata = Address(0x006A9168, 0x00000000, 0x00000000, 0x00000000);
 
-
 		// Player
 		ActiveLink = Address(0x31A03879, 0x00000000, 0x00000000, 0x00000000);
 		CurrentItem = Address(0x32841A20, 0x00000000, 0x00000000, 0x00000000);
@@ -78,6 +76,7 @@ namespace CTRPluginFramework {
 		EnergyMax = Address(0x328496C5, 0x00000000, 0x00000000, 0x00000000);
 		EnergyMultiplier = Address(0x328496CC, 0x00000000, 0x00000000, 0x00000000);
 		//check if jinxed is model or effects also
+		IsInvincible = Address(0x32849544, 0x00000000, 0x00000000, 0x00000000);
 		IsJinxed = Address(0x328495AC, 0x00000000, 0x00000000, 0x00000000);
 		IsSpawned = Address(0x32841410, 0x00000000, 0x00000000, 0x00000000);
 		IsSwapping = Address(0x31A04610, 0x00000000, 0x00000000, 0x00000000);
@@ -141,7 +140,6 @@ namespace CTRPluginFramework {
 	Address		AddressList::CostumeCatalogPointer;
 	Address		AddressList::CurrCostume;
 	Address		AddressList::UnusedCostumeDataPointerList;
-
 	Address		AddressList::PlayerStatus;
 	Address		AddressList::TingleBalloons;
 
@@ -182,13 +180,13 @@ namespace CTRPluginFramework {
 	// Padding
 	Address		AddressList::TextToRodata;
 
-
 	// Player
 	Address		AddressList::ActiveLink;
 	Address		AddressList::CurrentItem;
 	Address		AddressList::Energy;
 	Address		AddressList::EnergyMax;
 	Address		AddressList::EnergyMultiplier;
+	Address		AddressList::IsInvincible;
 	Address		AddressList::IsJinxed;
 	Address		AddressList::IsSpawned;
 	Address		AddressList::IsSwapping;

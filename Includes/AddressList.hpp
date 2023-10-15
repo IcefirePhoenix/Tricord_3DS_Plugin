@@ -78,6 +78,7 @@ namespace CTRPluginFramework {
 		static Address		Energy;
 		static Address		EnergyMax;
 		static Address		EnergyMultiplier;
+		static Address		IsInvincible;
 		static Address		IsJinxed;
 		static Address		IsSpawned;
 		static Address		IsSwapping;

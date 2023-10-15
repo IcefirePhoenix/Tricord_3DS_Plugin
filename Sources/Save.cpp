@@ -16,7 +16,7 @@ namespace CTRPluginFramework
         // 1) open numerical keyboard 
         // 2) simple write to hero point address 
         
-        // Note: we need to convert from decimal to hex here...
+        // Note convert from decimal to hex...
     }
 
     void coliseumWinCountSet(MenuEntry* entry) {
@@ -24,7 +24,7 @@ namespace CTRPluginFramework
         // 1) open numerical keyboard 
         // 2) simple write to coliseum win address 
         
-        // Note: we need to convert from decimal to hex here...
+        // Note: convert from decimal to hex here...
     }
 
     void openMerchantSlots(MenuEntry* entry) {
@@ -33,10 +33,10 @@ namespace CTRPluginFramework
 
     void merchantSlotA(MenuEntry* entry) {
         // TODO:
-        // okay not sure tbh
+        // two options...
         // 
-        // we can either do a numerical keyboard and the user just types in the item ID...
-        // OR we open a combo box with A LOT of options to scroll through...
+        // - numerical keyboard -> user inputs item ID...
+        // - combo box populated with A LOT of options...
     }
 
     void merchantSlotB(MenuEntry* entry) {

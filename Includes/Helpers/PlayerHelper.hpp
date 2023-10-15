@@ -10,9 +10,12 @@
 namespace CTRPluginFramework {
 	extern const StringVector universalCostumeList;
 	extern const StringVector customCostumeList;
+	extern const StringVector swordList;
+
 
 	int chooseLink(void);
 
 	bool showMsgKbd(std::string text, DialogType digtype);
+
 }
 #endif

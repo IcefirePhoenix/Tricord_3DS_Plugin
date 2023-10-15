@@ -12,7 +12,7 @@ namespace CTRPluginFramework
 
 	void customEmotes(MenuEntry* entry) {
 		// TODO: 
-		// 1) verify .ctpk edits work
+		// 1) verify .ctpk edits 
 		// 2) TBD
 	}
 }

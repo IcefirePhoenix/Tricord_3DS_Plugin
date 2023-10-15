@@ -62,11 +62,11 @@ namespace CTRPluginFramework
 
             int choice = addSlots.Open();
 
-            // this is redundant and long and I really dislike it...
-            // thing is, I tried a switch statement and it jumbled the order of every entry so yeah :(
-            menuCostumeSlotA->Show(); // no need for if-statement here
+            // no need for if-statement here
+            menuCostumeSlotA->Show(); 
             menuCostumeSlotA->CanBeSelected(true);
 
+            // really redundant; using a switch statement jumbles the entry order...
             if (choice == 1) {
                 menuCostumeSlotB->Show();
             }
@@ -95,7 +95,6 @@ namespace CTRPluginFramework
     u32 CostumeCatalogLocation;
     u8 costumeCatalogSize;
     u8 catalogIncSize;
-
 
     void manageCatalogSizeAuto(MenuEntry* entry) {
         u8 isObtained;
@@ -151,12 +150,12 @@ namespace CTRPluginFramework
         int choice = costumeType.Open();
 
         if (choice == 0) {
-            // if OG, then populate keyboard with this:
+            // populate with vanilla costumes
             costumeList.Populate(universalCostumeList);
             result = costumeList.Open();
         }
         else {
-            // if custom, then populate keyboard with this:
+            // populate with custom costumes
             costumeList.Populate(customCostumeList);
             result = costumeList.Open() + 0x26; // adding 0x26 to get to 0x26-0x29 range
         }
@@ -177,7 +176,6 @@ namespace CTRPluginFramework
 
     void writeCostumeSlot(MenuEntry* entry) {
         // check for null pointer
-        // aka: don't write if catalog is NOT currently open
         if (CostumeCatalogLocation != 0x00000000) {
             u32 DLCAddressStart = (CostumeCatalogLocation + 0xE8 + costumeCatalogSize);
             // write costume ID to desired slot ONLY if costume was previously chosen
@@ -205,26 +203,21 @@ namespace CTRPluginFramework
     }
 
     void initCustomCostumesAuto(MenuEntry* entry) {
-        // when function is fixed + working, this should be enabled at all times
-        // meaning the entry should be set to Enable() straight from InitMenu()
+
         std::string customCostumeDirectory = ("/Tricord/Custom/Costumes");
-
-        // init string labels
-        // should this just be one large block of code / one instruction
-        // is that possible lol
-
-        // should also write descriptions and names too for the catalog
-        // but first figure out where those + pointers are located in memory...
-        // are we supporting english only or every language?
-        
-        // custom name: Custom Costume #1
-        // custom description: "A custom costume imported in-game via the Tricord plugin!
-        // This otherworldly garb comes with no powers, but it looks quite dapper!"
-
+       
+        // init string labels... can/should this be done in one instruction...?
+   
         Process::WriteString(AddressList::TextToRodata.addr + 0x14, "costume_customA", StringFormat::Utf8);
         Process::WriteString(AddressList::TextToRodata.addr + 0x26, "costume_customB", StringFormat::Utf8);
         Process::WriteString(AddressList::TextToRodata.addr + 0x38, "costume_customC", StringFormat::Utf8);
         Process::WriteString(AddressList::TextToRodata.addr + 0x49, "costume_customD", StringFormat::Utf8);
+
+        // also costume names + descriptions? locate msbt pointers
+        // Example:
+        // Custom Costume #1
+        // "A custom costume imported in-game via the Tricord plugin!
+        // This otherworldly garb comes with no powers, but it looks quite dapper!"
         
         // this is to restore the pointer list -> directs to costume_customA rather than costume_highfairy
         if (!restoreGreatFairy->IsActivated()) {
@@ -233,12 +226,10 @@ namespace CTRPluginFramework
             Process::Write32((AddressList::UnusedCostumeDataPointerList.addr), 0x0060B658);
         }
 
-
-        //Process::Write32((AddressList::UnusedCostumeDataPointerList.addr + 0x08), (AddressList::TextToRodata.addr + 0x26));
+        // currently a mess; ignore for now... possibly move this to a reset function...
+        // check if file exist, then edit pointer list
 
         /*
-        // check if file exist
-        // then edit pointer list
         if (File::Exists(customCostumeDirectory + "/costume_customA.bch")){
             Process::Write32((AddressList::UnusedCostumeDataPointerList.addr), (AddressList::TextToRodata.addr + 0x14));
         } 
@@ -246,11 +237,12 @@ namespace CTRPluginFramework
             Process::Write32((AddressList::UnusedCostumeDataPointerList.addr + 0x08), (AddressList::TextToRodata.addr + 0x26));
         }
         //else if (File::Exists(customCostumeDirectory + "/costume_customC.bch")) {
-        //    Process::Write32((AddressList::UnusedCostumeDataPointerList.addr + 0x10), (AddressList::TextToRodata.addr + 0x38));
-       // }
+            Process::Write32((AddressList::UnusedCostumeDataPointerList.addr + 0x10), (AddressList::TextToRodata.addr + 0x38));
+        }
         else {
             MessageBox(Color::Gainsboro << "Error", "Custom Costume files cannot be found or do ot exist in the Tricord directory.")();
-        }*/
+        }
+        */
     }
        
     void greatFairyEnable(MenuEntry* entry) {
@@ -259,7 +251,7 @@ namespace CTRPluginFramework
 
         Process::WriteString(AddressList::TextToRodata.addr, "costume_highfairy", StringFormat::Utf8);
         
-        // if Slot 1 is already in use and Fairy is enabled
+        // if Slot 1 is already in-use -> this entry is enabled
         if (CustomSlots[0] != 255) {
             if (MessageBox(Color::Gainsboro << "Error", "Tricord cannot place Great Fairy Costume into Custom Costume Slot A since it is currently configured to display a different costume.\n\nWould you like to overwrite the current costume in Custom Costume Slot A with Great Fairy?", DialogType::DialogYesNo)() == true) {
                     menuCostumeSlotA->CanBeSelected(false);
@@ -271,7 +263,6 @@ namespace CTRPluginFramework
             }
         }
         
-        
         if (CustomSlots[0] == 255) {
             // check for null pointer
             if (CostumeCatalogLocation != 0x00000000) {
@@ -282,31 +273,20 @@ namespace CTRPluginFramework
     }    
 
     void changeLinkCostume(MenuEntry* entry) {
-        int playerID = chooseLink();
+        u32 playerID = chooseLink();
+        playerID = playerID * 0x10000;
 
         // note 1: currently only uses the OG costume list
-        
-        // note 2: didn't use selectCostumeID() here in order to add note
-        // eventually when this is changed to selectCostumeID(), the note should be added as 
-        // a menu callback message box
+        // note 2: didn't use selectCostumeID() here in order to add menu note 
+
         Keyboard costumeList("Choose a costume:\n\nBe sure to load into a new area for changes to fully take effect.");
         costumeList.Populate(universalCostumeList);
 
         u8 result = costumeList.Open();
+        Process::Write8((AddressList::CurrCostume.addr + playerID), result);
+    }
 
-        switch (playerID) {
-        case 0:
-            Process::Write8(AddressList::CurrCostume.addr, result);
-            break;
-        case 1:
-            Process::Write8((AddressList::CurrCostume.addr + 0x10000), result);
-            break;
-        case 2:
-            Process::Write8((AddressList::CurrCostume.addr + 0x20000), result);
-            break;
-        default:
-            OSD::Notify(("ERROR: Cannot write Costume data for Player  " + std::to_string(playerID)), Color::Red);
-            break;
-        }
+    void selCostumeEffect(MenuEntry* entry) {
+        // currently unimplemented, ignore for now...
     }
 }
