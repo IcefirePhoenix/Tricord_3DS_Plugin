@@ -42,7 +42,7 @@ namespace CTRPluginFramework
 
     void    Hotkey::AskForKeys(void)
     {
-        HotkeysModifier(_keys, "Select the keys you want to use for:\n" + _name)();
+        HotkeysModifier(_keys, "Hotkey Modifier for " + _name)();
     }
 
     u32     Hotkey::GetKeys(void)
@@ -157,7 +157,7 @@ namespace CTRPluginFramework
         if (_hotkeys.size() == 0)
             return;
 
-        Keyboard                    keyboard("Hotkeys Modifier:\n\nWhich hotkey do you want to change ?");
+        Keyboard                    keyboard("Hotkeys Modifier:");
         std::vector<std::string>    hkNames;
         int                         ret;
 

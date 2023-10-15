@@ -18,7 +18,7 @@ namespace CTRPluginFramework
         // 1) open up numerical keyboard and get user input (do we set limits here)
         // 2) simple memory write to BGM volume address
 
-        // Note: we need to convert from decimal to hex here
+        // Note: convert from decimal to hex here
     }
 
     void lobbyBallSong(MenuEntry* entry) {

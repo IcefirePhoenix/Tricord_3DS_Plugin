@@ -10,6 +10,8 @@
 namespace CTRPluginFramework
 {
     using StringVector = std::vector<std::string>;
+
+    // extern MenuEntry* resetCostume;
     extern MenuEntry* menuCostumeSlotA;
     extern MenuEntry* menuCostumeSlotB;
     extern MenuEntry* menuCostumeSlotC;
@@ -19,18 +21,16 @@ namespace CTRPluginFramework
     extern MenuEntry* initCustomCostumes;
     extern MenuEntry* writeCostumeIDToSlot;
 
-
-
+    extern MenuEntry* resetMiscellaneous;
+    extern MenuEntry* instantTextDisplay;
 
     // Emote functions
     void emoteSwapper(MenuEntry* entry);
     void customEmotes(MenuEntry* entry);
 
     // Link Color functions
-    void customColorG(MenuEntry* entry);
-    void customColorB(MenuEntry* entry);
-    void customColorR(MenuEntry* entry);
-    int selectLinkColor(void);
+    void customColor(MenuEntry* entry);
+    int selCustomLinkColor(void);
     void recolorLevelTex(MenuEntry* entry);
 
     // Costume functions
@@ -42,51 +42,37 @@ namespace CTRPluginFramework
     void changeLinkCostume(MenuEntry* entry);
     void selectCostumeID(MenuEntry* entry);
     void initCustomCostumesAuto(MenuEntry* entry);
+    void selCostumeEffect(MenuEntry* entry);
 
     
 
     // Miscellaneous functions
     void buttonSpammer(MenuEntry* entry);
+    void displayPhoto(MenuEntry* entry);
     void instantText(MenuEntry* entry);
     void beamCooldown(MenuEntry* entry);
+    void defaultMisc(MenuEntry* entry);
+
 
     // Player functions
+    void resetPlayer(MenuEntry* entry);
+    void setPlayerChanges(MenuEntry* entry);
     void posEditor(MenuEntry* entry);
-    void openJinxOptions(MenuEntry* entry);
-    void gJinx(MenuEntry* entry);
-    void bJinx(MenuEntry* entry);
-    void rJinx(MenuEntry* entry);
-    void openSpawnOptions(MenuEntry* entry);
-    void gSpawn(MenuEntry* entry);
-    void bSpawn(MenuEntry* entry);
-    void rSpawn(MenuEntry* entry);
+    void openToggleMenu(int CurrentStatus);
+    void jinxOpt(MenuEntry* entry);
+    void spawnOpt(MenuEntry* entry);
+    void visibilityOpt(MenuEntry* entry);
+    void invincibleOpt(MenuEntry* entry);
     void waterStorage(MenuEntry* entry);
-    void openVisibleOptions(MenuEntry* entry);
-    void gVisible(MenuEntry* entry);
-    void bVisible(MenuEntry* entry);
-    void rVisible(MenuEntry* entry);
-    void openInvincibleOptions(MenuEntry* entry);
-    void gInvincible(MenuEntry* entry);
-    void bInvincible(MenuEntry* entry);
-    void rInvincible(MenuEntry* entry);
-    // I don't really know if I wanna add these... they seem a bit unnecessary tbh
-    //void openVoiceOptions(MenuEntry* entry);
-    //int gVoiceClient(void);
-    //int bVoiceClient(void);
-    //int rVoiceClient(void);
-    //int gVoice;
-    //int bVoice;
-    //int rVoice;
-    //bool gVoiceChosen;
-    //bool bVoiceChosen;
-    //bool rVoiceChosen;
     void removeCollision(MenuEntry* entry);
+    void pvpMode(MenuEntry* entry);
+    void swordModelOpt(MenuEntry* entry);
+    u8 chooseSword(void);
     void linkSize(MenuEntry* entry);
-    void pvpModeEnable(MenuEntry* entry);
-    void openSwordOptions(MenuEntry* entry);
-    void gSwordChoose(MenuEntry* entry);
-    void bSwordChoose(MenuEntry* entry);
-    void rSwordChoose(MenuEntry* entry);
+    float editPlayerSize(void);
+
+
+
 
     // Energy functions
     void infEnergy(MenuEntry* entry);
@@ -95,21 +81,14 @@ namespace CTRPluginFramework
 
 
     // Item functions
-    void openItemOptions(MenuEntry* entry);
-    void gSetItem(MenuEntry* entry);
-    void bSetItem(MenuEntry* entry);
-    void rSetItem(MenuEntry* entry);
-    void openShadowItemOptions(MenuEntry* entry);
-    void gShadowSetItem(MenuEntry* entry);
-    void bShadowSetItem(MenuEntry* entry);
-    void rShadowSetItem(MenuEntry* entry);
+    void itemOpt(MenuEntry* entry);
+    void shadowItemOpt(MenuEntry* entry);
     void strafingSpeedSet(MenuEntry* entry);
     void upgradeItemAlways(MenuEntry* entry);
 
     // Rendering functions
     void hideHUD(MenuEntry* entry);
     void disableFog(MenuEntry* entry);
-
 
     // Save functions
     void mainVoice(MenuEntry* entry);
