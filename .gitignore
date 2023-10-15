@@ -1,2 +1,13 @@
-/Build
+*.elf
 *.3gx
+
+/Build
+
+/0004000000176F00
+
+/ActionReplay
+
+/.github
+
+/.vs
+
