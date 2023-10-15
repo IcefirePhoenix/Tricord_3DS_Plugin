@@ -10,21 +10,21 @@ Text -> Rodata
 	
 2) Costume::initCustomCostumesAuto() 
 	[UTF8 string: costume_customA]
-	[Start: 0x0; End: 0x10]
-	[0x10 bytes | 17 bytes]
+	[Start: 0x14; End: 0x22; Padding: 0x3]
+	[0x0E bytes | 15 bytes]
 	
 3) Costume::initCustomCostumesAuto() 
 	[UTF8 string: costume_customB]
-	[Start: 0x0; End: 0x10]
-	[0x10 bytes | 17 bytes]
+	[Start: 0x26; End: 0x34; Padding: 0x3]
+	[0x0E bytes | 15 bytes]
 	
 4) Costume::initCustomCostumesAuto() 
 	[UTF8 string: costume_customC]
-	[Start: 0x0; End: 0x10]
-	[0x10 bytes | 17 bytes]
+	[Start: 0x38; End: 0x45; Padding: 0x3]
+	[0x0E bytes | 15 bytes]
 	
 5) Costume::initCustomCostumesAuto() 
 	[UTF8 string: costume_customD]
-	[Start: 0x0; End: 0x10]
-	[0x10 bytes | 17 bytes]
+	[Start: 0x49; End: 0x57; Padding: 0x3]
+	[0x0E bytes | 15 bytes]
 	
