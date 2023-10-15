@@ -28,9 +28,12 @@ namespace CTRPluginFramework
         {false, false, false, false} // pvp mode
     };
 
-    u8 SwordStatuses[4] = {NULL, NULL, NULL, 0};
+    // col 1-3 = statuses
+    // col 4 = u8 used as bool
+    u8 SwordStatuses[4] = { NULL, NULL, NULL, 0 };
 
-    float PlayerSizes[2] = {NULL, 0.0};
+    // col 1 = statuses
+    // col 2 = float used as bool
 
     void resetPlayer(MenuEntry* entry) {
         // restore default values upon disabling of checkbox entries, if applicable
