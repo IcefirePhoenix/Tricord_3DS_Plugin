@@ -1,0 +1,122 @@
+#ifndef ADDRESSLIST_HPP
+#define ADDRESSLIST_HPP
+
+#include <CTRPluginFramework.hpp>
+#include <Helpers/Address.hpp>
+
+namespace CTRPluginFramework {
+	class AddressList {
+	public:
+		static void     InitAddresses(void);
+
+		// Camera
+		static Address		CameraLinkFocus;
+		static Address		CameraMode;
+		static Address		CameraPosX;
+		static Address		CameraPosY;
+		static Address		CameraPosZ;
+		static Address		CameraRotationX;
+		static Address		CameraRotationY;
+		static Address		CameraRotationZ;
+		static Address		MasterZoom;
+
+		// Chaos
+		static Address		HeartsTakeHealth;
+
+		// Costume
+		static Address		CostumeAttrA;
+		static Address		CostumeAttrB;
+		static Address		CostumeAttrC;
+		static Address		CurrCostume;
+		static Address		CostumeCatalogPointer;
+		static Address		PlayerStatus;
+		static Address		TingleBalloons;
+		static Address		UnusedCostumeDataPointerList;
+
+
+		// Emotes
+		static Address		DoTEmotes;
+		static Address		LobbyEmotes;
+
+		// Game Data
+		static Address		CurrLevelID;
+		static Address		CurrStageID;
+		static Address		CurrSpawnID;
+		static Address		DrablandsRupeeCount;
+		static Address		HealthCurrent;
+		static Address		HealthMax;
+		static Address		LoadingStatus;
+		static Address		PreviousLevelID;
+		static Address		PreviousStageID;
+		static Address		PreviousSpawnID;
+
+		// Items
+		static Address		BowStrafe;
+		static Address		FireGloveStrafe;
+		static Address		GustStrafe;
+		static Address		HammerStrafe;
+		static Address		RoboNiceAtk;
+		static Address		RoboNiceSFX;
+		static Address		RoboNiceSpeed;
+		static Address		RoboStrafe;
+		static Address		WaterRodStrafe;
+
+
+		// Miscellaneous
+		static Address		DisplayTopPhoto;
+		static Address		LobbyBallCounter;
+		static Address		LobbyBallSong;
+		static Address		TextBoxSpeed;
+
+		// Padding
+		static Address		TextToRodata; // ends 0x6AA000 for NA
+
+
+		// Player
+		static Address		ActiveLink;
+		static Address		CurrentItem;
+		static Address		Energy;
+		static Address		EnergyMax;
+		static Address		EnergyMultiplier;
+		static Address		IsInvincible;
+		static Address		IsJinxed;
+		static Address		IsSpawned;
+		static Address		IsSwapping;
+		static Address		IsWaterStorage;
+		static Address		IsVisible;
+		static Address		LinkVoice;
+		static Address		LiveNameColorG;
+		static Address		LiveNameColorB;
+		static Address		LiveNameColorR;
+		static Address		LockMovement;
+		static Address		NoCollision;
+		static Address		PlayerModelSize;
+		static Address		PositionX;
+		static Address		PositionY;
+		static Address		PositionZ;
+		static Address		PVPMode;
+		static Address		SwordType;
+
+		// Rendering
+		static Address		FogA;
+		static Address		FogB;
+		static Address		FogC;
+
+		// Savefile
+		static Address		CostumeObtainStatus;
+		static Address		ColiseumWinCount;
+		static Address		EditMerchantStock;
+		static Address		HeroPointCount;
+		static Address		MainVoice;
+		static Address		ResetMerchantStock;
+
+		// SFX and BGM
+		static Address		BGMType;
+		static Address		BGMVolume;
+		static Address		LinkVoiceSpeed;
+		static Address		MasterVolume;
+		
+	};
+}
+
+#endif

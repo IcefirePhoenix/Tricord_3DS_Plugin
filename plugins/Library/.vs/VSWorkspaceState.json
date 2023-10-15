@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\include",
+    "\\include\\CTRPluginFrameworkImpl",
+    "\\include\\CTRPluginFrameworkImpl\\Menu",
+    "\\source",
+    "\\source\\CTRPluginFramework",
+    "\\source\\CTRPluginFrameworkImpl",
+    "\\source\\CTRPluginFrameworkImpl\\Graphics",
+    "\\source\\CTRPluginFramework\\Utils"
+  ],
+  "PreviewInSolutionExplorer": false
+}
