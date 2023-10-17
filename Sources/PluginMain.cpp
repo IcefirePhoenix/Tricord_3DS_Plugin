@@ -192,7 +192,7 @@ namespace CTRPluginFramework {
             *sound += new MenuEntry("Set current BGM", bgmSet);
             *sound += new MenuEntry("Set BGM volume", nullptr, bgmVolSet);
             *sound += new MenuEntry("Choose Lobby Ball song", lobbyBallSong);
-            *sound += new MenuEntry("Set Lobby Ball volume", lobbyBallVol);
+            //*sound += new MenuEntry("Set Lobby Ball volume", lobbyBallVol);
             *sound += new MenuEntry("Set Link Voice volume", nullptr, voiceVol);
             *sound += new MenuEntry("Set Low Health Alert volume", nullptr, lowHPVol);
             // unnecessary?
