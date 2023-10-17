@@ -97,6 +97,7 @@ namespace CTRPluginFramework {
 		SwordType = Address(0x328419EC, 0x00000000, 0x00000000, 0x00000000);
 
 		// Rendering
+		HUDPointer = Address(0x32C8289C, 0x00000000, 0x00000000, 0x00000000);
 		FogA = Address(0x31B31BE4, 0x00000000, 0x00000000, 0x00000000);
 		FogB = Address(0x31B31BDC, 0x00000000, 0x00000000, 0x00000000);
 		FogC = Address(0x31B31BE0, 0x00000000, 0x00000000, 0x00000000);
@@ -119,6 +120,8 @@ namespace CTRPluginFramework {
 
 
 	// this initializes an address entry with the correct regional address
+	// allowing it to be used outside of this file
+	
 	// Camera
 	Address		AddressList::CameraLinkFocus;
 	Address		AddressList::CameraMode;
@@ -206,6 +209,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::SwordType;
 
 	// Rendering
+	Address		AddressList::HUDPointer;
 	Address		AddressList::FogA;
 	Address		AddressList::FogB;
 	Address		AddressList::FogC;
