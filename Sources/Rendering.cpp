@@ -6,11 +6,28 @@
 namespace CTRPluginFramework
 {
     void hideHUD(MenuEntry* entry) {
-        // TODO 1: replicate the HUD code 
-        // TODO 2: add doppel location indicators
+        // TODO: add doppel location indicators
+
+        // prep check  -- if HUD pointer is null
+        u32 pointerCheck;
+        Process::Read32(AddressList::HUDPointer), pointerCheck);
+
+        // define offsets for easy reference
+        u32 mainHUDoffset = 0x00000018;
+        u32 ActionButtonBGOffset = 0x000075D0;
+        u32 ActionBUttonTextOffset = 0x000078B0;
+
+        if (pointerCheck != 0x00000000) {
+            Process::Write32((AddressList::HUDPointer + mainHUDoffset), 0x7F000004);
+            Process::Write32((AddressList::HUDPointer + ActionButtonBGOffset), 0x00000010);
+            Process::Write32((AddressList::HUDPointer + ActionBUttonTextOffset), 0x00FFFF00);
+        }
     }
 
+    // does this reset itself? 
     void disableFog(MenuEntry* entry) {
-        // TODO: replicate fog code
+        Process::Write32((AddressList::FogA), 0xFF700FFF);
+        Process::Write32((AddressList::FogB), 0x453B8000);
+        Process::Write32((AddressList::FogC), 0x459C4000);
     }
 }

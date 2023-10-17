@@ -98,6 +98,7 @@ namespace CTRPluginFramework {
 		static Address		SwordType;
 
 		// Rendering
+		static Address		HUDPointer;
 		static Address		FogA;
 		static Address		FogB;
 		static Address		FogC;
