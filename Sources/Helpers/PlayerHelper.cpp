@@ -215,7 +215,7 @@ namespace CTRPluginFramework
         "Nothing"
     };
 
-    extern const IntVector emoteIDs = {
+    static const std::vector<u8> emoteIDs = {
         0x00,  // over here
         0x01,  // item
         0x02,  // throw
@@ -230,6 +230,7 @@ namespace CTRPluginFramework
         0x0B,  // waving
         0x0C   // blank
     };
+
 
     u32 chooseLink(void) {
         Keyboard player("Choose a Link:");
