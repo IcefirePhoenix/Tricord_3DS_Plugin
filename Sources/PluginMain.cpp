@@ -17,10 +17,28 @@
 
 #include <vector>
 
-namespace CTRPluginFramework
+namespace CTRPluginFramework {
 
-{
-   
+    // Menu Entries aren't given a name by default
+    // If they need to be referenced elsewhere, they need a name
+    MenuEntry* menuCostumeSlotA;
+    MenuEntry* menuCostumeSlotB;
+    MenuEntry* menuCostumeSlotC;
+    MenuEntry* menuCostumeSlotD;
+
+    MenuEntry* manageCatalogSize;
+    MenuEntry* restoreGreatFairy;
+
+    MenuEntry* initCustomCostumes;
+    MenuEntry* writeCostumeIDToSlot;
+
+    MenuEntry* resetMiscellaneous;
+    MenuEntry* instantTextDisplay;
+
+    MenuEntry* managePlayerCodes;
+
+
+    // experimental -> hotkey menu entry
     static MenuEntry* EntryWithHotkey(MenuEntry* entry, const std::vector<Hotkey>& hotkeys) {
         if (entry != nullptr) {
             for (const Hotkey& hotkey : hotkeys)
@@ -29,213 +47,201 @@ namespace CTRPluginFramework
         return entry;
     }
 
-     MenuEntry* menuCostumeSlotA;
-     MenuEntry* menuCostumeSlotB;
-     MenuEntry* menuCostumeSlotC;
-     MenuEntry* menuCostumeSlotD;
 
-     MenuEntry* manageCatalogSize;
-     MenuEntry* restoreGreatFairy;
+    void    InitMenu(PluginMenu& menu)
+    {
+        // create emote folder
+        MenuFolder* emotes = new MenuFolder("Emote Codes");
+        {
+            *emotes += new MenuEntry("Enable Emote Swapper", emoteSwapper);
+            *emotes += new MenuEntry("Use Custom Emotes", customEmotes);
+        }
 
-     MenuEntry* initCustomCostumes;
-     MenuEntry* writeCostumeIDToSlot;
+        // create linkcolor folder
+        MenuFolder* linkcolor = new MenuFolder("Custom Link Colors");
+        {
+            // implement presets...?
+            *linkcolor += new MenuEntry("Set Green Link color", nullptr, customColor);
+            *linkcolor += new MenuEntry("Set Blue Link color", nullptr, customColor);
+            *linkcolor += new MenuEntry("Set Red Link color", nullptr, customColor);
+            *linkcolor += new MenuEntry("Use re-colored level textures", recolorLevelTex);
+        }
 
-     MenuEntry* resetMiscellaneous;
-     MenuEntry* instantTextDisplay;
+        // create costume folder
+        MenuFolder* costume = new MenuFolder("Costume Codes");
+        {
+            *costume += new MenuEntry("Trigger Custom Costume Slots", nullptr, openCustomCostumeSlots);
 
-     MenuEntry* managePlayerCodes;
+            // Menu Entries defined above
+            menuCostumeSlotA = new MenuEntry("Set custom costume slot A", nullptr, selectCostumeID, "This setting is not accessible if Restore Great Fairy Costume is enabled.");
+            menuCostumeSlotB = new MenuEntry("Set custom costume slot B", nullptr, selectCostumeID);
+            menuCostumeSlotC = new MenuEntry("Set custom costume slot C", nullptr, selectCostumeID);
+            menuCostumeSlotD = new MenuEntry("Set custom costume slot D", nullptr, selectCostumeID);
+            restoreGreatFairy = new MenuEntry("Restore Great Fairy Costume", greatFairyEnable);
 
+            *costume += menuCostumeSlotA;
+            *costume += menuCostumeSlotB;
+            *costume += menuCostumeSlotC;
+            *costume += menuCostumeSlotD;
+            *costume += restoreGreatFairy;
 
-     void    InitMenu(PluginMenu& menu)
-     {
+            // by default these should be hidden 
+            menuCostumeSlotA->Hide();
+            menuCostumeSlotB->Hide();
+            menuCostumeSlotC->Hide();
+            menuCostumeSlotD->Hide();
 
-         MenuFolder* emotes = new MenuFolder("Emote Codes");
-         {
-             *emotes += new MenuEntry("Enable Emote Swapper", emoteSwapper);
-             *emotes += new MenuEntry("Use Custom Emotes", customEmotes);
-         }
-         menu += emotes;
+            // these are not added to the menu -- these are auto-managed by the plugin
+            manageCatalogSize = new MenuEntry("Manage Catalog Size (auto)", manageCatalogSizeAuto);
+            initCustomCostumes = new MenuEntry("Init Custom Costume list (auto)", initCustomCostumesAuto);
+            writeCostumeIDToSlot = new MenuEntry("Write to costume slots (auto", writeCostumeSlot);
 
+            *costume += new MenuEntry("Change Player Costume", nullptr, changeLinkCostume);
+        }
 
-         MenuFolder* linkcolor = new MenuFolder("Custom Link Colors");
-         {
-             // implement presets...?
-             *linkcolor += new MenuEntry("Set Green Link color", nullptr, customColor);
-             *linkcolor += new MenuEntry("Set Blue Link color", nullptr, customColor);
-             *linkcolor += new MenuEntry("Set Red Link color", nullptr, customColor);
-             *linkcolor += new MenuEntry("Use re-colored level textures", recolorLevelTex);
-         }
-         menu += linkcolor;
+        // create costume sub-folders
+        MenuFolder* costumeEffects = new MenuFolder("Costume Effect(s)");
+        *costumeEffects += new MenuEntry("Set Costume Effects", nullptr, selCostumeEffect);
 
-         MenuFolder* costume = new MenuFolder("Costume Codes");
+        MenuFolder* extraCustomConfig = new MenuFolder("Additional Customizations");
+        // *extraCustomConfig += new MenuEntry("Set number of Tingle Balloons", nullptr, tingleBalloonNumber);
+        // *extraCustomConfig += new MenuEntry("Set Cheetah walking speed", nullptr, cheetahSpeed);
+        // *extraCustomConfig += new MenuEntry("Set luck percentage", nullptr, luckPercent);
+        // *extraCustomConfig += new MenuEntry("Set number of additional Hearts", nullptr, addHeart);
+        // *extraCustomConfig += new MenuEntry("Set sword beam type", nullptr, swordBeamConfig);
 
-         {
-             *costume += new MenuEntry("Trigger Custom Costume Slots", nullptr, openCustomCostumeSlots);
+        *costume += costumeEffects;
+        *extraCustomConfig += costumeEffects;
 
-             menuCostumeSlotA = new MenuEntry("Set custom costume slot A", nullptr, selectCostumeID, "This setting is not accessible if Restore Great Fairy Costume is enabled.");
-             menuCostumeSlotB = new MenuEntry("Set custom costume slot B", nullptr, selectCostumeID);
-             menuCostumeSlotC = new MenuEntry("Set custom costume slot C", nullptr, selectCostumeID);
-             menuCostumeSlotD = new MenuEntry("Set custom costume slot D", nullptr, selectCostumeID);
-             restoreGreatFairy = new MenuEntry("Restore Great Fairy Costume", greatFairyEnable);
-             
-             // not added to the menu -- these are auto-managed by the plugin
-             manageCatalogSize = new MenuEntry("Manage Catalog Size (auto)", manageCatalogSizeAuto);
-             initCustomCostumes = new MenuEntry("Init Custom Costume list (auto)", initCustomCostumesAuto);
-             writeCostumeIDToSlot = new MenuEntry("Write to costume slots (auto", writeCostumeSlot);
+        // create misc folder
+        MenuFolder* miscellaneous = new MenuFolder("Miscellaneous Codes");
+        {
+            resetMiscellaneous = new MenuEntry("Reset Miscellaneous codes (auto)", defaultMisc);
+            instantTextDisplay = new MenuEntry("Force instant text boxes", instantText);
 
-             *costume += menuCostumeSlotA;
-             *costume += menuCostumeSlotB;
-             *costume += menuCostumeSlotC;
-             *costume += menuCostumeSlotD;
-             *costume += restoreGreatFairy;
-             *costume += new MenuEntry("Change Player Costume", nullptr, changeLinkCostume);
+            // test hotkey entry
+            *miscellaneous += (EntryWithHotkey(new MenuEntry("Enable button spam", buttonSpammer, "When any of the selected keys are\npressed down, they will automatically spam.\nGood for in-game manuevers that require\nstrict timing of button input(s).\n\nDefault keys: A, B, X, Y, L, R."), {
+                Hotkey(Key::A | Key::B | Key::X | Key::Y | Key::L | Key::R , "Button Spammer")
+                }));
 
-             // by default these should be hidden 
-             menuCostumeSlotA->Hide();
-             menuCostumeSlotB->Hide();
-             menuCostumeSlotC->Hide();
-             menuCostumeSlotD->Hide();
-         }
+            *miscellaneous += new MenuEntry("Disable sword beam cooldown", beamCooldown);
+            *miscellaneous += new MenuEntry("Display photo on top screen", displayPhoto);
+            *miscellaneous += instantTextDisplay;
+        }
 
-         MenuFolder* costumeEffects = new MenuFolder("Costume Effect(s)");
-         MenuFolder* extraCustomConfig = new MenuFolder("Additional Customizations");
+        // create player folder
+        MenuFolder* player = new MenuFolder("Player Codes");
+        {
+            // hotkeys -> posEditor (?)
+            *player += new MenuEntry("Enable position editor menu", posEditor);
+            *player += new MenuEntry("Enable Water Storage", nullptr, waterStorage);
+            *player += new MenuEntry("Spawn/Despawn Links", nullptr, spawnOpt);
+            *player += new MenuEntry("Set Link model size", nullptr, linkSize);
+            *player += new MenuEntry("Set Sword Types", nullptr, swordModelOpt);
+            *player += new MenuEntry("Toggle Collision", nullptr, removeCollision);
+            *player += new MenuEntry("Toggle Jinxed model", nullptr, jinxOpt);
+            *player += new MenuEntry("Toggle Link Visibility", nullptr, visibilityOpt);
+            *player += new MenuEntry("Toggle Link Invincibility", nullptr, invincibleOpt);
+            *player += new MenuEntry("Toggle PvP damage", nullptr, pvpMode);
 
-         *costumeEffects += new MenuEntry("Set Costume Effects", nullptr, selCostumeEffect);
+            // this is not added to the player folder
+            managePlayerCodes = new MenuEntry("Set Player edits (auto)", setPlayerChanges);
+        }
 
-         // *extraCustomConfig += new MenuEntry("Set number of Tingle Balloons", nullptr, tingleBalloonNumber);
-         // *extraCustomConfig += new MenuEntry("Set Cheetah walking speed", nullptr, cheetahSpeed);
-         // *extraCustomConfig += new MenuEntry("Set luck percentage", nullptr, luckPercent);
-         // *extraCustomConfig += new MenuEntry("Set number of additional Hearts", nullptr, addHeart);
-         // *extraCustomConfig += new MenuEntry("Set sword beam type", nullptr, swordBeamConfig);
+        // create energy folder
+        MenuFolder* energy = new MenuFolder("Energy Codes");
+        {
+            *energy += new MenuEntry("Infinite energy", infEnergy);
+            *energy += new MenuEntry("Set max energy amount", nullptr, maxEnergySet);
+            *energy += new MenuEntry("Set energy consumption multiplier", nullptr, energyConsumeMultiplier);
+        }
 
-         *costume += costumeEffects;
-         *extraCustomConfig += costumeEffects;
+        // create item folder
+        MenuFolder* items = new MenuFolder("Item Codes");
+        {
+            *items += new MenuEntry("Set current item", itemOpt);
+            *items += new MenuEntry("Set Shadow Link item", shadowItemOpt);
+            *items += new MenuEntry("Set strafing speeds", nullptr, strafingSpeedSet);
+            *items += new MenuEntry("Always use upgraded Items", upgradeItemAlways);
+        }
 
-         menu += costume;
+        MenuFolder* render = new MenuFolder("Rendering Codes");
+        {
+            *render += new MenuEntry("Hide HUD", hideHUD);
+            *render += new MenuEntry("Disable fog effects", disableFog);
+        }
 
-         MenuFolder* miscellaneous = new MenuFolder("Miscellaneous Codes");
-         {
-             resetMiscellaneous = new MenuEntry("Reset Miscellaneous codes (auto)", defaultMisc);
-             instantTextDisplay = new MenuEntry("Force instant text boxes", instantText);
+        // create save folder
+        MenuFolder* save = new MenuFolder("Savefile Codes");
+        {
+            *save += new MenuEntry("Set Main Voice", nullptr, mainVoice);
+            *save += new MenuEntry("Set Hero Point count", nullptr, heroPointCountSet);
+            *save += new MenuEntry("Set Coliseum Win count", nullptr, coliseumWinCountSet);
+            *save += new MenuEntry("Edit Merchant stock", openMerchantSlots);
+            *save += new MenuEntry("Set 1st slot", merchantSlotA);
+            *save += new MenuEntry("Set 2nd slot", merchantSlotB);
+            *save += new MenuEntry("Set 3rd slot", merchantSlotC);
+            *save += new MenuEntry("Set 4th slot", merchantSlotD);
+            *save += new MenuEntry("Set 5th slot", merchantSlotE);
+            *save += new MenuEntry("Reset Merchant stock availability", nullptr, resetMerchant);
+        }
 
-             *miscellaneous += (EntryWithHotkey(new MenuEntry("Enable button spam", buttonSpammer, "When any of the selected keys are\npressed down, they will automatically spam.\nGood for in-game manuevers that require\nstrict timing of button input(s).\n\nDefault keys: A, B, X, Y, L, R."), {
-                 Hotkey(Key::A | Key::B | Key:: X | Key::Y | Key::L | Key::R , "Button Spammer")
-                 }));
-             
-             *miscellaneous += new MenuEntry("Disable sword beam cooldown", beamCooldown);
-             *miscellaneous += new MenuEntry("Display photo on top screen", displayPhoto);
-             *miscellaneous += instantTextDisplay;
-         }
-         menu += miscellaneous;
+        // create sound folder
+        MenuFolder* sound = new MenuFolder("BGM and SFX Codes");
+        {
+            *sound += new MenuEntry("Set current BGM", bgmSet);
+            *sound += new MenuEntry("Set BGM volume", nullptr, bgmVolSet);
+            *sound += new MenuEntry("Choose Lobby Ball song", lobbyBallSong);
+            *sound += new MenuEntry("Set Lobby Ball volume", lobbyBallVol);
+            *sound += new MenuEntry("Set Link Voice volume", nullptr, voiceVol);
+            *sound += new MenuEntry("Set Low Health Alert volume", nullptr, lowHPVol);
+            // unnecessary?
+            // *sound += new MenuEntry("Set Level Completion Fanfare volume", levelDoneVol);
+        }
 
+        // is this correct syntax?
+        //menu += emotes, linkcolor, costume, miscellaneous, player, energy, items, render, save, sound;
 
-         MenuFolder* player = new MenuFolder("Player Codes");
-         {
-             // hotkeys -> posEditor (?)
+        // add folders to menu
+        menu += emotes;
+        menu += linkcolor;
+        menu += costume;
+        menu += miscellaneous;
+        menu += player;
+        menu += energy;
+        menu += items;
+        menu += render;
+        menu += save;
+        menu += sound;
+    }
 
-             *player += new MenuEntry("Enable position editor menu", posEditor);
-             *player += new MenuEntry("Enable Water Storage", nullptr, waterStorage);
-             *player += new MenuEntry("Spawn/Despawn Links", nullptr, spawnOpt);
-             *player += new MenuEntry("Set Link model size", nullptr, linkSize);
-             *player += new MenuEntry("Set Sword Types", nullptr, swordModelOpt);
-             *player += new MenuEntry("Toggle Collision", nullptr, removeCollision);
-             *player += new MenuEntry("Toggle Jinxed model", nullptr, jinxOpt);
-             *player += new MenuEntry("Toggle Link Visibility", nullptr, visibilityOpt);
-             *player += new MenuEntry("Toggle Link Invincibility", nullptr, invincibleOpt);
-             *player += new MenuEntry("Toggle PvP damage", nullptr, pvpMode);
+    int main(void)
+    {
+        // title is left blank since the name is already set within the lib
+        PluginMenu* menu = new PluginMenu("", 0, 5, 0,
+            "An advanced, region-free cheat plugin made for\nThe Legend of Zelda: Tri Force Heroes.\n\nForked from the original CTRPluginFramework\nblank template repository.");
 
-             managePlayerCodes = new MenuEntry("Set Player edits (auto", setPlayerChanges);
+        // Synchronize the menu with frame event
+        menu->SynchronizeWithFrame(true);
 
-         }
-         menu += player;
+        // Init menu entries & folders
+        InitMenu(*menu);
 
-         MenuFolder* energy = new MenuFolder("Energy Codes");
-         {
-             *energy += new MenuEntry("Infinite energy", infEnergy);
-             *energy += new MenuEntry("Set max energy amount", nullptr, maxEnergySet);
-             *energy += new MenuEntry("Set energy consumption multiplier", nullptr, energyConsumeMultiplier);
-         }
-         menu += energy;
+        // init reset functions
+        // resetCostume->Enable();
+        resetMiscellaneous->Enable();
 
+        // init continuous functions
+        managePlayerCodes->Enable();
 
-         MenuFolder* items = new MenuFolder("Item Codes");
-         {
-             *items += new MenuEntry("Set current item", itemOpt);
-             *items += new MenuEntry("Set Shadow Link item", shadowItemOpt);
-             *items += new MenuEntry("Set strafing speeds", nullptr, strafingSpeedSet);
-             *items += new MenuEntry("Always use upgraded Items", upgradeItemAlways);
-         }
-         menu += items;
+        // Launch menu and mainloop
+        menu->Run();
 
+        delete menu;
 
-         MenuFolder* render = new MenuFolder("Rendering Codes");
-         {
-             // should these be part of freecam?
-             *render += new MenuEntry("Hide HUD", hideHUD);
-             *render += new MenuEntry("Disable fog effects", disableFog);
-         }
-         menu += render;
-
-         MenuFolder* save = new MenuFolder("Savefile Codes");
-         {
-             *save += new MenuEntry("Set Main Voice", nullptr, mainVoice);
-             *save += new MenuEntry("Set Hero Point count", nullptr, heroPointCountSet);
-             *save += new MenuEntry("Set Coliseum Win count", nullptr, coliseumWinCountSet);
-             *save += new MenuEntry("Edit Merchant stock", openMerchantSlots);
-             *save += new MenuEntry("Set 1st slot", merchantSlotA);
-             *save += new MenuEntry("Set 2nd slot", merchantSlotB);
-             *save += new MenuEntry("Set 3rd slot", merchantSlotC);
-             *save += new MenuEntry("Set 4th slot", merchantSlotD);
-             *save += new MenuEntry("Set 5th slot", merchantSlotE);
-             *save += new MenuEntry("Reset Merchant stock availability", nullptr, resetMerchant);
-         }
-         menu += save;
-
-         MenuFolder* sound = new MenuFolder("BGM and SFX Codes");
-         {
-             *sound += new MenuEntry("Set current BGM", bgmSet);
-             *sound += new MenuEntry("Set BGM volume", nullptr, bgmVolSet);
-             *sound += new MenuEntry("Choose Lobby Ball song", lobbyBallSong);
-             // unnecessary?
-             // *sound += new MenuEntry("Set Lobby Ball volume", lobbyBallVol);
-             *sound += new MenuEntry("Set Link Voice volume", nullptr, voiceVol);
-             *sound += new MenuEntry("Set Low Health Alert volume", nullptr, lowHPVol);
-             // unnecessary?
-             // *sound += new MenuEntry("Set Level Completion Fanfare volume", levelDoneVol);
-         }
-         menu += sound;
-     }
-
-     int main(void)
-     {
-         // title is left blank since the name is already set within the lib
-         PluginMenu* menu = new PluginMenu("", 0, 5, 0,
-             "An advanced, region-free cheat plugin made for\nThe Legend of Zelda: Tri Force Heroes.\n\nForked from the original CTRPluginFramework\nblank template repository.");
-
-         // Synchronize the menu with frame event
-         menu->SynchronizeWithFrame(true);
-
-         // Init menu entries & folders
-         InitMenu(*menu);
-
-         // these are continuously running from startup
-         // init reset functions
-         
-         // resetCostume->Enable();
-         resetMiscellaneous->Enable();
-
-         // init continuous functions
-         managePlayerCodes->Enable();
-
-
-         // Launch menu and mainloop
-         menu->Run();
-
-         delete menu;
-
-         // Exit plugin
-         return (0);
-     }
+        // Exit plugin
+        return (0);
+    }
 
     // Patch NFC disabling the touchscreen when scanning an amiibo
     static void    ToggleTouchscreenForceOn(void)
@@ -284,7 +290,6 @@ namespace CTRPluginFramework
         svcCloseHandle(processHandle);
     }
 
-
     void    PatchProcess(FwkSettings& settings)
     {
         AddressList::InitAddresses();
@@ -298,24 +303,4 @@ namespace CTRPluginFramework
     {
         ToggleTouchscreenForceOn();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

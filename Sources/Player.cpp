@@ -157,12 +157,11 @@ namespace CTRPluginFramework
         // - to save position: swap to desired Link, then hit save button -- this will store the X, Y, and Z coords
         // - to load position: swap to desired Link, the hit load button -- this will write stored values to pos addresses
         // 
-        // todo: figure out how to draw to the screen and load in the custom graphics etcs
+        // todo: figure out how to draw to the screen and load in the custom graphics etc
         // 
         // - note 1: if no position was saved for the current Link AND load button was pressed, display OSD notif on 
         // top screen saying that there's no saved position to load
         // - note 2: the code should check current Link first
-
 
     }
 
@@ -424,6 +423,4 @@ namespace CTRPluginFramework
             }
         }
     }
-
-
 }
