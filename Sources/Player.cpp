@@ -183,6 +183,7 @@ namespace CTRPluginFramework
 
         while (loop) {
             // update top screen info
+            // should the current values be checked first
             title = "Editing player options:\n\n";
             title.append("Player 1: " << ((PlayerStatuses[CurrentStatus][0]) ? (Color::LimeGreen << "Enabled") : (Color::Red << "Disabled")) << Color::White << "\n");
             title.append("Player 2: " << ((PlayerStatuses[CurrentStatus][1]) ? (Color::LimeGreen << "Enabled") : (Color::Red << "Disabled")) << Color::White << "\n");
@@ -342,6 +343,7 @@ namespace CTRPluginFramework
         }
     }
 
+    // might need to be moved to a helper file
     u8 chooseSword(void) {
         Keyboard swordMenu("Choose a sword:");
         swordMenu.Populate(swordList);
@@ -369,7 +371,7 @@ namespace CTRPluginFramework
             opts.push_back(std::string("Set size"));
             opts.push_back("Save changes");
             opts.push_back("Disable entry");
-
+            
             // display top screen info
             kbd.GetMessage() = title;
 
@@ -386,7 +388,7 @@ namespace CTRPluginFramework
                     Process::Read32(AddressList::PlayerModelSize.addr, testsize);
                     OSD::Notify(std::to_string(testsize));
 
-                    // this whole section needs to be changes to convert input to u32 hex
+                    // currently broken: this whole section needs to be changed to convert input to u32 hex
 
                     float result;
 
