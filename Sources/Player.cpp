@@ -16,36 +16,33 @@
 
 namespace CTRPluginFramework
 {
-    // column 1-3 = link statuses
-    // column 4 = whether entry is enabled/disabled
+
     bool PlayerStatuses[7][4] = {
-        {false, false, false, false}, // jinx
-        {false, false, false, false}, // spawn
-        {false, false, false, false}, // visibility
-        {false, false, false, false}, // invincibility
-        {false, false, false, false}, // water storage
-        {false, false, false, false}, // collision
-        {false, false, false, false} // pvp mode
+        {false, false, false }, // jinx
+        {false, false, false }, // spawn
+        {false, false, false }, // visibility
+        {false, false, false }, // invincibility
+        {false, false, false }, // water storage
+        {false, false, false }, // collision
+        {false, false, false }  // pvp mode
     };
 
-    // col 1-3 = statuses
-    // col 4 = u8 used as bool
-    u8 SwordStatuses[4] = {NULL, NULL, NULL, 0};
+    bool isJinxEdited, isSpawnEdited, isVisibleEdited, isInvinciEdited, isWaterEdited, isCollisionEdited, isPVPEdited = false;
 
-    // col 1 = statuses
-    // col 2 = float used as bool
-    float PlayerSizes[2] = { NULL, 0.0 };
+    u8 SwordStatuses[3] = {NULL, NULL, NULL};
+    float PlayerSizes = NULL;
+
+    bool isSizeEdited, isSwordEdited;
 
     void resetPlayer(MenuEntry* entry) {
         // restore default values upon disabling of checkbox entries, if applicable
-
         // reset link size, sword model (do check the current costume first.. or is this unnecessary?), pvp mode, collision (?), 
     }
 
     void setPlayerChanges(MenuEntry* entry) {
         // this should be used to actually apply the changes since we're not actually using checkboxes
 
-        if (PlayerStatuses[0][3]) { // check if jinxed is set to be edited
+        if (isJinxEdited) { // check if jinxed is set to be edited
             for (int i = 0x0; i < 0x3; i++) { // traverse through links
                 if (PlayerStatuses[0][i]) {
                     Process::Write32((AddressList::IsJinxed.addr + (i * 0x10000)), 0x00000000); // jinxed
@@ -56,7 +53,7 @@ namespace CTRPluginFramework
             }
         }
 
-        if (PlayerStatuses[1][3]) { // check if spawned is set to be edited
+        if (isSpawnEdited) { // check if spawned is set to be edited
             for (int i = 0x0; i < 0x3; i++) { // traverse through links
                 if (PlayerStatuses[1][i]) {
                     Process::Write8((AddressList::IsSpawned.addr + (i * 0x10000)), 0x1); // spawned
@@ -67,7 +64,7 @@ namespace CTRPluginFramework
             }
         }
 
-        if (PlayerStatuses[2][3]) { // check if visibility is set to be edited
+        if (isVisibleEdited) { // check if visibility is set to be edited
             for (int i = 0x0; i < 0x3; i++) { // traverse through links
                 if (PlayerStatuses[2][i]) {
                     Process::Write8((AddressList::IsVisible.addr + (i * 0x10000)), 0x0); // visibility
@@ -78,7 +75,7 @@ namespace CTRPluginFramework
             }
         }
 
-        if (PlayerStatuses[3][3]) { // check if invinci is set to be edited
+        if (isInvinciEdited) { // check if invinci is set to be edited
             for (int i = 0x0; i < 0x3; i++) { // traverse through links
                 if (PlayerStatuses[3][i]) {
                     Process::Write8((AddressList::IsInvincible.addr + (i * 0x10000)), 0x16); // invinci
@@ -89,7 +86,7 @@ namespace CTRPluginFramework
             }
         }
 
-        if (PlayerStatuses[4][3]) { // check if water storage is set to be edited
+        if (isWaterEdited) { // check if water storage is set to be edited
             for (int i = 0x0; i < 0x3; i++) { // traverse through links
                 if (PlayerStatuses[4][i]) {
                     Process::Write8((AddressList::IsWaterStorage.addr + (i * 0x10000)), 0x0); // water storage
@@ -102,7 +99,7 @@ namespace CTRPluginFramework
             }
         }
 
-        if (PlayerStatuses[5][3]) { // check if collision is set to be edited
+        if (isCollisionEdited) { // check if collision is set to be edited
             for (int i = 0x0; i < 0x3; i++) { // traverse through links
                 if (PlayerStatuses[4][i]) {
                     Process::Write8((AddressList::NoCollision.addr + (i * 0x10000)), 0x16); // no collision
@@ -124,7 +121,7 @@ namespace CTRPluginFramework
             }
         }
 
-        if (SwordStatuses[3] == 1) { // check if sword type is set to be edited
+        if (isSwordEdited) { // check if sword type is set to be edited
             for (int i = 0x0; i < 0x3; i++) { // traverse through links
                 if (SwordStatuses[i] != NULL) {
                     Process::Write8((AddressList::SwordType.addr + (i * 0x10000)), SwordStatuses[i]); // set sword
@@ -133,9 +130,9 @@ namespace CTRPluginFramework
         }
 
 
-        if (PlayerSizes[1] == 1.0) { // check if size is set to be edited
-            if (PlayerSizes[0] > 0.0 || PlayerSizes[0] != NULL) {
-                Process::Write32(AddressList::PlayerModelSize.addr, PlayerSizes[0]); // set size
+        if (isSizeEdited) { // check if size is set to be edited
+            if (PlayerSizes > 0.0 || PlayerSizes != NULL) {
+                Process::WriteFloat(AddressList::PlayerModelSize.addr, PlayerSizes); // set size
             }
         }
     }
@@ -166,7 +163,7 @@ namespace CTRPluginFramework
     }
 
     // this opens a toggle menu similar to OnionFS
-    void openToggleMenu(int CurrentStatus) {
+    void openToggleMenu(int CurrentStatus, std::string entryTitle, bool setStatus) {
 
         // set up bottom menu options
         std::string enSlid = Color::LimeGreen << "\u2282\u25CF";
@@ -184,7 +181,7 @@ namespace CTRPluginFramework
         while (loop) {
             // update top screen info
             // should the current values be checked first
-            title = "Editing player options:\n\n";
+            title = entryTitle + " Menu\n\n";
             title.append("Player 1: " << ((PlayerStatuses[CurrentStatus][0]) ? (Color::LimeGreen << "Enabled") : (Color::Red << "Disabled")) << Color::White << "\n");
             title.append("Player 2: " << ((PlayerStatuses[CurrentStatus][1]) ? (Color::LimeGreen << "Enabled") : (Color::Red << "Disabled")) << Color::White << "\n");
             title.append("Player 3: " << ((PlayerStatuses[CurrentStatus][2]) ? (Color::LimeGreen << "Enabled") : (Color::Red << "Disabled")) << Color::White << "\n");
@@ -226,16 +223,18 @@ namespace CTRPluginFramework
                 case 3:
                 {
                     // enable address writes
-                    PlayerStatuses[CurrentStatus][3] = true;
+                    setStatus = true;
+
+                    // end loop; exit menu
                     loop = false;
                     break;
                 }
                 default:
                 {
                     // disable address writes
-                    PlayerStatuses[CurrentStatus][3] = false;
+                    setStatus = false;
 
-                    // end loop = exit the menu
+                    // end loop; exit menu
                     loop = false;
                     break;
                 }
@@ -244,31 +243,31 @@ namespace CTRPluginFramework
     }
 
     void jinxOpt(MenuEntry* entry) {
-        openToggleMenu(0); // jinx data is located on row 1
+        openToggleMenu(0, "Jinx Options", isJinxEdited); // jinx data is located on row 1
     }
 
     void spawnOpt(MenuEntry* entry) {
-        openToggleMenu(1); // spawn data is located on row 2
+        openToggleMenu(1, "Player Spawn Options", isSpawnEdited); // spawn data is located on row 2
     }
 
     void visibilityOpt(MenuEntry* entry) {
-        openToggleMenu(2); // visibility data is located on row 3
+        openToggleMenu(2, "Player Visibility Options", isVisibleEdited); // visibility data is located on row 3
     }
 
     void invincibleOpt(MenuEntry* entry) {
-        openToggleMenu(3); // invinci data is located on row 4
+        openToggleMenu(3, "Player Invincibility Options", isInvinciEdited); // invinci data is located on row 4
     }
 
     void waterStorage(MenuEntry* entry) {
-        openToggleMenu(4); // water storage data is located on row 5
+        openToggleMenu(4, "Water Storage Options", isWaterEdited); // water storage data is located on row 5
     }
 
     void removeCollision(MenuEntry* entry) {
-        openToggleMenu(5); // collision data is located on row 6
+        openToggleMenu(5, "Player Collision Options", isCollisionEdited); // collision data is located on row 6
     }
 
     void pvpMode(MenuEntry* entry) {
-        openToggleMenu(6); // pvp data is located on row 7
+        openToggleMenu(6, "PvP Options", isPVPEdited); // pvp data is located on row 7
     }
 
     void swordModelOpt(MenuEntry* entry) {
@@ -284,7 +283,7 @@ namespace CTRPluginFramework
 
         while (loop) {
             // update top screen info
-            title = "Editing player swords:\n\n";
+            title = "Player Sword Options Menu:\n\n";
             title.append("Player 1: " << ((SwordStatuses[0] == NULL) ? Color::White << "No changes currently set\n" : Color::White << (swordList[SwordStatuses[0]] + "\n")));
             title.append("Player 2: " << ((SwordStatuses[1] == NULL) ? Color::White << "No changes currently set\n" : Color::White << (swordList[SwordStatuses[1]] + "\n")));
             title.append("Player 3: " << ((SwordStatuses[2] == NULL) ? Color::White << "No changes currently set\n" : Color::White << (swordList[SwordStatuses[2]] + "\n")));
@@ -325,7 +324,7 @@ namespace CTRPluginFramework
                 case 3:
                 {
                     // enable address writes
-                    SwordStatuses[3] = 1;
+                    isSwordEdited = true;
                     loop = false;
 
                     break;
@@ -333,7 +332,7 @@ namespace CTRPluginFramework
                 default:
                 {
                     // disable address writes
-                    SwordStatuses[3] = 0;
+                    isSwordEdited = false;
 
                     // end loop = exit the menu
                     loop = false;
@@ -363,8 +362,8 @@ namespace CTRPluginFramework
 
         while (loop) {
             // update top screen info
-            title = "Editing size for ALL players:\n\n";
-            title.append("Current size: " << ((PlayerSizes[0] == NULL) ? Color::White << "No changes currently set\n" : Color::White << "Current size: " + std::to_string(PlayerSizes[0])));
+            title = "Player Size Options Menu:\n\n";
+            title.append("Current size: " << ((PlayerSizes == NULL) ? Color::White << "No changes currently set\n" : Color::White << "Current size: " + std::to_string(PlayerSizes)));
      
             // update bottom screen info
             opts.clear();
@@ -381,33 +380,27 @@ namespace CTRPluginFramework
             // begin watching for changes
             int chose;
             switch (chose = kbd.Open()) {
-                // toggle functionality -> swaps current status (enabled/disabled)
                 case 0:
                 {
-                    u32 testsize;
-                    Process::Read32(AddressList::PlayerModelSize.addr, testsize);
-                    OSD::Notify(std::to_string(testsize));
-
-                    // currently broken: this whole section needs to be changed to convert input to u32 hex
-
                     float result;
 
                     Keyboard sizeKB("Set player size:");
                     sizeKB.IsHexadecimal(false);
-                    sizeKB.SetMaxLength(3);
-
                     sizeKB.Open(result);
 
-                    PlayerSizes[0] = result;
-
-                    OSD::Notify(std::to_string(PlayerSizes[0]));
+                    if (result < 0.0) {
+                        MessageBox(Color::Gainsboro << "Error", "Player Sizes cannot be negative.")();
+                    }
+                    else {
+                        PlayerSizes = result;
+                    }
                     break;
                 
                 }
                 case 1:
                 {
                     // enable address writes
-                    PlayerSizes[1] = 1.0;
+                    isSizeEdited = true;
 
                     // end loop = exit the menu
                     loop = false;
@@ -416,7 +409,7 @@ namespace CTRPluginFramework
                 default:
                 {
                     // disable address writes
-                    PlayerSizes[1] = 0.0;
+                    isSizeEdited = false;
 
                     // end loop = exit the menu
                     loop = false; 
