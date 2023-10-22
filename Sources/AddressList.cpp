@@ -101,6 +101,7 @@ namespace CTRPluginFramework {
 		FogA = Address(0x31B31BE4, 0x00000000, 0x00000000, 0x00000000);
 		FogB = Address(0x31B31BDC, 0x00000000, 0x00000000, 0x00000000);
 		FogC = Address(0x31B31BE0, 0x00000000, 0x00000000, 0x00000000);
+		ScrollingTextOpacity = Address(0x00151C40, 0x00000000, 0x00000000, 0x00000000);
 
 		// Savefile
 		CostumeObtainStatus = Address(0x32C8256A, 0x00000000, 0x00000000, 0x00000000);
@@ -213,6 +214,8 @@ namespace CTRPluginFramework {
 	Address		AddressList::FogA;
 	Address		AddressList::FogB;
 	Address		AddressList::FogC;
+	Address		AddressList::ScrollingTextOpacity;
+
 
 	// Savefile
 	Address		AddressList::CostumeObtainStatus;
