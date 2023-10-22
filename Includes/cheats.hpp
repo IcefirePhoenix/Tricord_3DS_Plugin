@@ -69,7 +69,6 @@ namespace CTRPluginFramework
     void swordModelOpt(MenuEntry* entry);
     u8 chooseSword(void);
     void linkSize(MenuEntry* entry);
-    float editPlayerSize(void);
 
 
 
@@ -89,6 +88,7 @@ namespace CTRPluginFramework
     // Rendering functions
     void hideHUD(MenuEntry* entry);
     void disableFog(MenuEntry* entry);
+    void disableScrollingText(MenuEntry* entry);
 
     // Save functions
     void mainVoice(MenuEntry* entry);

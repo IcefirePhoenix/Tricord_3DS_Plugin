@@ -31,4 +31,20 @@ namespace CTRPluginFramework
         Process::Write32((AddressList::FogB.addr), 0x453B8000);
         Process::Write32((AddressList::FogC.addr), 0x459C4000);
     }
+
+    bool isScrollTextDisabled = false;
+    
+    void disableScrollingText(MenuEntry* entry) { // this should be a toggle
+        isScrollTextDisabled = !isScrollTextDisabled;
+
+        if (isScrollTextDisabled) {
+            Process::Write32(AddressList::ScrollingTextOpacity.addr, 0x00000000);
+            MessageBox(Color::Gainsboro << "Success", "Scrolling Text has been disabled.")();
+
+        }
+        else {
+            Process::Write32(AddressList::ScrollingTextOpacity.addr, 0x3F800000);
+            MessageBox(Color::Gainsboro << "Success", "Scrolling Text has been enabled.")();
+        }
+    }
 }

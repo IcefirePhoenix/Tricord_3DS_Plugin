@@ -145,9 +145,11 @@ namespace CTRPluginFramework {
             *items += new MenuEntry("Set strafing speeds", nullptr, strafingSpeedSet);
             *items += new MenuEntry("Always use upgraded Items", upgradeItemAlways);
 
+        // create rendering folder
         MenuFolder* render = new MenuFolder("Rendering Codes");
             *render += new MenuEntry("Hide HUD", hideHUD);
             *render += new MenuEntry("Disable fog effects", disableFog);
+            *render += new MenuEntry("Toggle scrolling messages", nullptr, disableScrollingText);
 
         // create save folder
         MenuFolder* save = new MenuFolder("Savefile Codes");
@@ -174,7 +176,16 @@ namespace CTRPluginFramework {
             // *sound += new MenuEntry("Set Level Completion Fanfare volume", levelDoneVol);
 
         // add folders to menu
-        menu += emotes, linkcolor, costume, miscellaneous, player, energy, items, render, save, sound;
+            menu += emotes;
+            menu += linkcolor;
+            menu += costume;
+            menu += miscellaneous;
+            menu += player;
+            menu += energy;
+            menu += items;
+            menu += render;
+            menu += save;
+            menu += sound;
     }
 
     int main(void)

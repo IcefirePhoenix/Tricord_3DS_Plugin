@@ -102,6 +102,8 @@ namespace CTRPluginFramework {
 		static Address		FogA;
 		static Address		FogB;
 		static Address		FogC;
+		static Address		ScrollingTextOpacity;
+
 
 		// Savefile
 		static Address		CostumeObtainStatus;
