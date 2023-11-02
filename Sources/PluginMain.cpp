@@ -120,6 +120,7 @@ namespace CTRPluginFramework {
             // hotkeys -> posEditor (?)
             *player += new MenuEntry("Enable position editor menu", posEditor);
             *player += new MenuEntry("Enable Water Storage", nullptr, waterStorage);
+            *player += new MenuEntry("Display current respawn location", respawnIndicator);
             *player += new MenuEntry("Disable Collision (experimental!)", nullptr, removeCollision);
             *player += new MenuEntry("Spawn/Despawn Links", nullptr, spawnOpt);
             *player += new MenuEntry("Set Link model size", nullptr, linkSize);
