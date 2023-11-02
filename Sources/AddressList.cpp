@@ -94,9 +94,21 @@ namespace CTRPluginFramework {
 		PositionY = Address(0x328412DC, 0x00000000, 0x00000000, 0x00000000);
 		PositionZ = Address(0x328412E0, 0x00000000, 0x00000000, 0x00000000);
 		PVPMode = Address(0x32849545, 0x00000000, 0x00000000, 0x00000000);
+		RespawnPositionX = Address(0x32841750, 0x00000000, 0x00000000, 0x00000000);
+		RespawnPositionY = Address(0x32841754, 0x00000000, 0x00000000, 0x00000000);
+		RespawnPositionZ = Address(0x32841758, 0x00000000, 0x00000000, 0x00000000);
 		SwordType = Address(0x328419EC, 0x00000000, 0x00000000, 0x00000000);
 
 		// Rendering
+		ArrowIndicatorColorBot = Address(0x32D91B24, 0x00000000, 0x00000000, 0x00000000);
+		ArrowIndicatorColorMid = Address(0x32D91A04, 0x00000000, 0x00000000, 0x00000000);
+		ArrowIndicatorColorTop = Address(0x32D918E4, 0x00000000, 0x00000000, 0x00000000);
+		ArrowIndicatorLocationBot = Address(0x32D91AE8, 0x00000000, 0x00000000, 0x00000000);
+		ArrowIndicatorLocationMid = Address(0x32D919C8, 0x00000000, 0x00000000, 0x00000000);
+		ArrowIndicatorLocationTop = Address(0x32D918A8, 0x00000000, 0x00000000, 0x00000000);
+		ArrowIndicatorVisibilityBot = Address(0x32D91B28, 0x00000000, 0x00000000, 0x00000000);
+		ArrowIndicatorVisibilityMid = Address(0x32D91A08, 0x00000000, 0x00000000, 0x00000000);
+		ArrowIndicatorVisibilityTop = Address(0x32D918E8, 0x00000000, 0x00000000, 0x00000000);
 		HUDPointer = Address(0x32C8289C, 0x00000000, 0x00000000, 0x00000000);
 		FogA = Address(0x31B31BE4, 0x00000000, 0x00000000, 0x00000000);
 		FogB = Address(0x31B31BDC, 0x00000000, 0x00000000, 0x00000000);
@@ -207,9 +219,21 @@ namespace CTRPluginFramework {
 	Address		AddressList::PositionY;
 	Address		AddressList::PositionZ;
 	Address		AddressList::PVPMode;
+	Address		AddressList::RespawnPositionX;
+	Address		AddressList::RespawnPositionY;
+	Address		AddressList::RespawnPositionZ;
 	Address		AddressList::SwordType;
 
 	// Rendering
+	Address		AddressList::ArrowIndicatorColorTop;
+	Address		AddressList::ArrowIndicatorColorMid;
+	Address		AddressList::ArrowIndicatorColorBot;
+	Address		AddressList::ArrowIndicatorLocationTop;
+	Address		AddressList::ArrowIndicatorLocationMid;
+	Address		AddressList::ArrowIndicatorLocationBot;
+	Address		AddressList::ArrowIndicatorVisibilityTop;
+	Address		AddressList::ArrowIndicatorVisibilityMid;
+	Address		AddressList::ArrowIndicatorVisibilityBot;
 	Address		AddressList::HUDPointer;
 	Address		AddressList::FogA;
 	Address		AddressList::FogB;

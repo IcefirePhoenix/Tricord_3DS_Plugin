@@ -408,4 +408,34 @@ namespace CTRPluginFramework
             }
         }
     }
+
+    void respawnIndicator(MenuEntry* entry) {
+        float respawnCoords[3][3] = {
+            {NULL, NULL, NULL}, // green
+            {NULL, NULL, NULL}, // blue
+            {NULL, NULL, NULL}  // red
+        };
+
+        // grab respawn coords
+        for (int iterateColor = 0; iterateColor < 3; iterateColor++) {
+            Process::ReadFloat((AddressList::RespawnPositionX.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][0]);
+            Process::ReadFloat((AddressList::RespawnPositionY.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][1]);
+            Process::ReadFloat((AddressList::RespawnPositionZ.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][2]);
+        }
+
+        // top arrow = G, mid arrow = B, bot arrow = R
+        Process::Write8(AddressList::ArrowIndicatorColorTop.addr, 0x0);
+        Process::Write8(AddressList::ArrowIndicatorColorMid.addr, 0x1);
+        Process::Write8(AddressList::ArrowIndicatorColorBot.addr, 0x2);
+
+        Process::Write32(AddressList::ArrowIndicatorVisibilityTop.addr, 0x10FFFF00);
+        Process::Write32(AddressList::ArrowIndicatorVisibilityMid.addr, 0x10FFFF00);
+        Process::Write32(AddressList::ArrowIndicatorVisibilityBot.addr, 0x10FFFF00);
+
+        for (int iterateArray = 0; iterateArray < 3; iterateArray++) {
+            Process::WriteFloat((AddressList::ArrowIndicatorLocationTop.addr + (iterateArray * 0x4)), respawnCoords[0][iterateArray]);
+            Process::WriteFloat((AddressList::ArrowIndicatorLocationMid.addr + (iterateArray * 0x4)), respawnCoords[1][iterateArray]);
+            Process::WriteFloat((AddressList::ArrowIndicatorLocationBot.addr + (iterateArray * 0x4)), respawnCoords[2][iterateArray]);
+        }
+    }
 }

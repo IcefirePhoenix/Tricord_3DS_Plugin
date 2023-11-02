@@ -58,7 +58,6 @@ namespace CTRPluginFramework
     void resetPlayer(MenuEntry* entry);
     void setPlayerChanges(MenuEntry* entry);
     void posEditor(MenuEntry* entry);
-    void openToggleMenu(int CurrentStatus);
     void jinxOpt(MenuEntry* entry);
     void spawnOpt(MenuEntry* entry);
     void visibilityOpt(MenuEntry* entry);
@@ -66,8 +65,8 @@ namespace CTRPluginFramework
     void waterStorage(MenuEntry* entry);
     void removeCollision(MenuEntry* entry);
     void pvpMode(MenuEntry* entry);
+    void respawnIndicator(MenuEntry* entry);
     void swordModelOpt(MenuEntry* entry);
-    u8 chooseSword(void);
     void linkSize(MenuEntry* entry);
 
 

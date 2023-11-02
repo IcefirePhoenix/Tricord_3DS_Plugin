@@ -95,9 +95,21 @@ namespace CTRPluginFramework {
 		static Address		PositionY;
 		static Address		PositionZ;
 		static Address		PVPMode;
+		static Address		RespawnPositionX;
+		static Address		RespawnPositionY;
+		static Address		RespawnPositionZ;
 		static Address		SwordType;
 
 		// Rendering
+		static Address		ArrowIndicatorColorBot;
+		static Address		ArrowIndicatorColorMid;
+		static Address		ArrowIndicatorColorTop;
+		static Address		ArrowIndicatorLocationBot;
+		static Address		ArrowIndicatorLocationMid;
+		static Address		ArrowIndicatorLocationTop;
+		static Address		ArrowIndicatorVisibilityBot;
+		static Address		ArrowIndicatorVisibilityMid;
+		static Address		ArrowIndicatorVisibilityTop;
 		static Address		HUDPointer;
 		static Address		FogA;
 		static Address		FogB;
