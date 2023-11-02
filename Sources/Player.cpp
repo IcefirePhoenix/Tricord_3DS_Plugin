@@ -162,7 +162,7 @@ namespace CTRPluginFramework
     }
 
     // this opens a toggle menu similar to OnionFS
-    void openToggleMenu(int CurrentStatus, std::string entryTitle, bool& setStatus) {
+    void openToggleMenu(int CurrentStatus, std::string entryTitle, bool& setStatus, std::string enabledText, std::string disabledText) {
 
         // set up bottom menu options
         std::string enSlid = Color::LimeGreen << "\u2282\u25CF";
@@ -180,9 +180,9 @@ namespace CTRPluginFramework
         while (loop) {
             // update top screen info
             title = entryTitle + "\n\n";
-            title.append("Player 1: " << ((PlayerStatuses[CurrentStatus][0]) ? (Color::LimeGreen << "Enabled") : (Color::Red << "Disabled")) << Color::White << "\n");
-            title.append("Player 2: " << ((PlayerStatuses[CurrentStatus][1]) ? (Color::LimeGreen << "Enabled") : (Color::Red << "Disabled")) << Color::White << "\n");
-            title.append("Player 3: " << ((PlayerStatuses[CurrentStatus][2]) ? (Color::LimeGreen << "Enabled") : (Color::Red << "Disabled")) << Color::White << "\n");
+            title.append("Player 1: " << ((PlayerStatuses[CurrentStatus][0]) ? (Color::LimeGreen << enabledText) : (Color::Red << disabledText)) << Color::White << "\n");
+            title.append("Player 2: " << ((PlayerStatuses[CurrentStatus][1]) ? (Color::LimeGreen << enabledText) : (Color::Red << disabledText)) << Color::White << "\n");
+            title.append("Player 3: " << ((PlayerStatuses[CurrentStatus][2]) ? (Color::LimeGreen << enabledText) : (Color::Red << disabledText)) << Color::White << "\n");
 
             // update bottom screen info
             opts.clear();
@@ -241,31 +241,31 @@ namespace CTRPluginFramework
     }
 
     void jinxOpt(MenuEntry* entry) {
-        openToggleMenu(0, "Jinx Options", isJinxEdited); // jinx data is located on row 1
+        openToggleMenu(0, "Jinx Options", isJinxEdited, "Jinx model in-use", "Disabled"); // jinx data is located on row 1
     }
 
     void spawnOpt(MenuEntry* entry) {
-        openToggleMenu(1, "Player Spawn Options", isSpawnEdited); // spawn data is located on row 2
+        openToggleMenu(1, "Player Spawn Options", isSpawnEdited, "Spawned", "Not spawned"); // spawn data is located on row 2
     }
 
     void visibilityOpt(MenuEntry* entry) {
-        openToggleMenu(2, "Player Visibility Options", isVisibleEdited); // visibility data is located on row 3
+        openToggleMenu(2, "Player Visibility Options", isVisibleEdited, "Not visible", "Visible"); // visibility data is located on row 3
     }
 
     void invincibleOpt(MenuEntry* entry) {
-        openToggleMenu(3, "Player Invincibility Options", isInvinciEdited); // invinci data is located on row 4
+        openToggleMenu(3, "Player Invincibility Options", isInvinciEdited, "Invincible", "Not invincible"); // invinci data is located on row 4
     }
 
     void waterStorage(MenuEntry* entry) {
-        openToggleMenu(4, "Water Storage Options ", isWaterEdited); // water storage data is located on row 5
+        openToggleMenu(4, "Water Storage Options ", isWaterEdited, "Water Storage enabled", "Water Storage disabled"); // water storage data is located on row 5
     }
 
     void removeCollision(MenuEntry* entry) {
-        openToggleMenu(5, "Player Collision Options (experimental!)", isCollisionEdited); // collision data is located on row 6
+        openToggleMenu(5, "Player Collision Options (experimental!)", isCollisionEdited, "No collision", "Collision enabled"); // collision data is located on row 6
     }
 
     void pvpMode(MenuEntry* entry) {
-        openToggleMenu(6, "PvP Options", isPVPEdited); // pvp data is located on row 7
+        openToggleMenu(6, "PvP Options", isPVPEdited, "PvP enabled", "PvP Disabled"); // pvp data is located on row 7
     }
 
     void swordModelOpt(MenuEntry* entry) {

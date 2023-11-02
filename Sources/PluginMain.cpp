@@ -120,10 +120,10 @@ namespace CTRPluginFramework {
             // hotkeys -> posEditor (?)
             *player += new MenuEntry("Enable position editor menu", posEditor);
             *player += new MenuEntry("Enable Water Storage", nullptr, waterStorage);
+            *player += new MenuEntry("Disable Collision (experimental!)", nullptr, removeCollision);
             *player += new MenuEntry("Spawn/Despawn Links", nullptr, spawnOpt);
             *player += new MenuEntry("Set Link model size", nullptr, linkSize);
             *player += new MenuEntry("Set Sword Types", nullptr, swordModelOpt);
-            *player += new MenuEntry("Toggle Collision", nullptr, removeCollision);
             *player += new MenuEntry("Toggle Jinxed model", nullptr, jinxOpt);
             *player += new MenuEntry("Toggle Link Visibility", nullptr, visibilityOpt);
             *player += new MenuEntry("Toggle Link Invincibility", nullptr, invincibleOpt);
