@@ -2,6 +2,8 @@
 #define PLAYERHELPER_HPP
 
 #include <CTRPluginFramework.hpp>
+#include "CTRPluginFrameworkImpl/Menu/MenuEntryImpl.hpp"
+
 #include "Helpers.hpp"
 #include "Unicode.h"
 #include "AddressList.hpp"
@@ -13,9 +15,9 @@ namespace CTRPluginFramework {
 	extern const StringVector swordList;
 
 
-	int chooseLink(void);
+	u32 chooseLink(void);
+	u8 chooseSword(void);
 
 	bool showMsgKbd(std::string text, DialogType digtype);
-
 }
 #endif

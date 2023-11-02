@@ -2,6 +2,10 @@
 #include "csvc.h"
 #include "AddressList.hpp"
 #include "Helpers/Address.hpp"
+#include "Helpers/PlayerHelper.hpp"
+#include "CTRPluginFrameworkImpl/Menu/MenuEntryImpl.hpp"
+
+
 #include "CTRPluginFramework/Menu/MessageBox.hpp"
 #include "CTRPluginFramework/Graphics/OSD.hpp"
 
@@ -243,8 +247,14 @@ namespace CTRPluginFramework
         };
         player.Populate(linkList);
 
-        u32 result = player.Open();
-        return result;
+        return player.Open();
+    }
+
+    u8 chooseSword(void) {
+        Keyboard swordMenu("Choose a sword:");
+        swordMenu.Populate(swordList);
+
+        return swordMenu.Open();
     }
 
     // borrowed from OnionFS
@@ -268,5 +278,4 @@ namespace CTRPluginFramework
         kbd.Populate(opts);
         return kbd.Open() == 0;
     }
-
 }

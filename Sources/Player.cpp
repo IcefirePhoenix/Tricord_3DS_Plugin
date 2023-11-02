@@ -17,7 +17,7 @@
 namespace CTRPluginFramework
 {
 
-    bool PlayerStatuses[7][4] = {
+    bool PlayerStatuses[7][3] = {
         {false, false, false }, // jinx
         {false, false, false }, // spawn
         {false, false, false }, // visibility
@@ -27,12 +27,10 @@ namespace CTRPluginFramework
         {false, false, false }  // pvp mode
     };
 
-    bool isJinxEdited, isSpawnEdited, isVisibleEdited, isInvinciEdited, isWaterEdited, isCollisionEdited, isPVPEdited = false;
+    bool isJinxEdited, isSpawnEdited, isVisibleEdited, isInvinciEdited, isWaterEdited, isCollisionEdited, isPVPEdited, isSizeEdited, isSwordEdited;
 
     u8 SwordStatuses[3] = {NULL, NULL, NULL};
     float PlayerSizes = NULL;
-
-    bool isSizeEdited, isSwordEdited;
 
     void resetPlayer(MenuEntry* entry) {
         // restore default values upon disabling of checkbox entries, if applicable
@@ -40,6 +38,7 @@ namespace CTRPluginFramework
     }
 
     void setPlayerChanges(MenuEntry* entry) {
+
         // this should be used to actually apply the changes since we're not actually using checkboxes
 
         if (isJinxEdited) { // check if jinxed is set to be edited
@@ -101,18 +100,18 @@ namespace CTRPluginFramework
 
         if (isCollisionEdited) { // check if collision is set to be edited
             for (int i = 0x0; i < 0x3; i++) { // traverse through links
-                if (PlayerStatuses[4][i]) {
-                    Process::Write8((AddressList::NoCollision.addr + (i * 0x10000)), 0x16); // no collision
+                if (PlayerStatuses[5][i]) {
+                    Process::Write8((AddressList::NoCollision.addr + (i * 0x10000)), 0xEA); // no collision
                 }
                 else {
-                    Process::Write8((AddressList::NoCollision.addr + (i * 0x10000)), 0x00); // collision
+                    Process::Write8((AddressList::NoCollision.addr + (i * 0x10000)), 0x10); // collision
                 }
             }
         }
 
-        if (PlayerStatuses[6][3]) { // check if pvp is set to be edited
+        if (isPVPEdited) { // check if pvp is set to be edited
             for (int i = 0x0; i < 0x3; i++) { // traverse through links
-                if (PlayerStatuses[4][i]) {
+                if (PlayerStatuses[6][i]) {
                     Process::Write8((AddressList::PVPMode.addr + (i * 0x10000)), 0x1); // pvp
                 }
                 else {
@@ -163,7 +162,7 @@ namespace CTRPluginFramework
     }
 
     // this opens a toggle menu similar to OnionFS
-    void openToggleMenu(int CurrentStatus, std::string entryTitle, bool setStatus) {
+    void openToggleMenu(int CurrentStatus, std::string entryTitle, bool& setStatus) {
 
         // set up bottom menu options
         std::string enSlid = Color::LimeGreen << "\u2282\u25CF";
@@ -180,8 +179,7 @@ namespace CTRPluginFramework
 
         while (loop) {
             // update top screen info
-            // should the current values be checked first
-            title = entryTitle + " Menu\n\n";
+            title = entryTitle + "\n\n";
             title.append("Player 1: " << ((PlayerStatuses[CurrentStatus][0]) ? (Color::LimeGreen << "Enabled") : (Color::Red << "Disabled")) << Color::White << "\n");
             title.append("Player 2: " << ((PlayerStatuses[CurrentStatus][1]) ? (Color::LimeGreen << "Enabled") : (Color::Red << "Disabled")) << Color::White << "\n");
             title.append("Player 3: " << ((PlayerStatuses[CurrentStatus][2]) ? (Color::LimeGreen << "Enabled") : (Color::Red << "Disabled")) << Color::White << "\n");
@@ -259,11 +257,11 @@ namespace CTRPluginFramework
     }
 
     void waterStorage(MenuEntry* entry) {
-        openToggleMenu(4, "Water Storage Options", isWaterEdited); // water storage data is located on row 5
+        openToggleMenu(4, "Water Storage Options ", isWaterEdited); // water storage data is located on row 5
     }
 
     void removeCollision(MenuEntry* entry) {
-        openToggleMenu(5, "Player Collision Options", isCollisionEdited); // collision data is located on row 6
+        openToggleMenu(5, "Player Collision Options (experimental!)", isCollisionEdited); // collision data is located on row 6
     }
 
     void pvpMode(MenuEntry* entry) {
@@ -283,7 +281,7 @@ namespace CTRPluginFramework
 
         while (loop) {
             // update top screen info
-            title = "Player Sword Options Menu:\n\n";
+            title = "Player Sword Options:\n\n";
             title.append("Player 1: " << ((SwordStatuses[0] == NULL) ? Color::White << "No changes currently set\n" : Color::White << (swordList[SwordStatuses[0]] + "\n")));
             title.append("Player 2: " << ((SwordStatuses[1] == NULL) ? Color::White << "No changes currently set\n" : Color::White << (swordList[SwordStatuses[1]] + "\n")));
             title.append("Player 3: " << ((SwordStatuses[2] == NULL) ? Color::White << "No changes currently set\n" : Color::White << (swordList[SwordStatuses[2]] + "\n")));
@@ -340,14 +338,6 @@ namespace CTRPluginFramework
                 }
             }
         }
-    }
-
-    // might need to be moved to a helper file
-    u8 chooseSword(void) {
-        Keyboard swordMenu("Choose a sword:");
-        swordMenu.Populate(swordList);
-
-        return swordMenu.Open();
     }
 
     void linkSize(MenuEntry* entry) {
