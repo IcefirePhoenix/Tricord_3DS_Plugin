@@ -40,6 +40,7 @@ namespace CTRPluginFramework {
 		CurrLevelID = Address(0x3280EDC4, 0x00000000, 0x00000000, 0x00000000);
 		CurrStageID = Address(0x3280EDC8, 0x00000000, 0x00000000, 0x00000000);
 		CurrSpawnID = Address(0x3280EDCA, 0x00000000, 0x00000000, 0x00000000);
+		DoppelsEnabled = Address(0x32D81E46, 0x00000000, 0x00000000, 0x00000000);
 		DrablandsRupeeCount = Address(0x32C8178C, 0x00000000, 0x00000000, 0x00000000);
 		HealthCurrent = Address(0x32C824F4, 0x00000000, 0x00000000, 0x00000000);
 		HealthMax = Address(0x32C824F5, 0x00000000, 0x00000000, 0x00000000);
@@ -166,6 +167,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::CurrLevelID;
 	Address		AddressList::CurrStageID;
 	Address		AddressList::CurrSpawnID;
+	Address		AddressList::DoppelsEnabled;
 	Address		AddressList::DrablandsRupeeCount;
 	Address		AddressList::HealthCurrent;
 	Address		AddressList::HealthMax;

@@ -42,6 +42,7 @@ namespace CTRPluginFramework {
 		static Address		CurrLevelID;
 		static Address		CurrStageID;
 		static Address		CurrSpawnID;
+		static Address		DoppelsEnabled;
 		static Address		DrablandsRupeeCount;
 		static Address		HealthCurrent;
 		static Address		HealthMax;

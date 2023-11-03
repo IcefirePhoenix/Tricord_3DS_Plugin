@@ -438,4 +438,8 @@ namespace CTRPluginFramework
             Process::WriteFloat((AddressList::ArrowIndicatorLocationBot.addr + (iterateArray * 0x4)), respawnCoords[2][iterateArray]);
         }
     }
+
+    void bypassDoppelDemo(MenuEntry* entry) {
+        Process::Write8(AddressList::DoppelsEnabled.addr, 0x01);
+    }
 }
