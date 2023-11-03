@@ -90,16 +90,20 @@ namespace CTRPluginFramework
     void disableScrollingText(MenuEntry* entry);
 
     // Save functions
+    void useVoiceless(MenuEntry* entry);
     void mainVoice(MenuEntry* entry);
     void heroPointCountSet(MenuEntry* entry);
     void coliseumWinCountSet(MenuEntry* entry);
-    void openMerchantSlots(MenuEntry* entry);
+    void openMerchantMatMenu(int slotNumber);
     void merchantSlotA(MenuEntry* entry);
     void merchantSlotB(MenuEntry* entry);
     void merchantSlotC(MenuEntry* entry);
     void merchantSlotD(MenuEntry* entry);
     void merchantSlotE(MenuEntry* entry);
     void resetMerchant(MenuEntry* entry);
+
+
+
 
     // Sound functions
     void bgmSet(MenuEntry* entry);

@@ -83,7 +83,6 @@ namespace CTRPluginFramework {
 		IsWaterStorage = Address(0x32849231, 0x00000000, 0x00000000, 0x00000000);
 		IsVisible = Address(0x32849550, 0x00000000, 0x00000000, 0x00000000);
 		LinkVoice = Address(0x3284A260, 0x00000000, 0x00000000, 0x00000000);
-		// should these three be one single address...
 		LiveNameColorG = Address(0x007767F0, 0x00000000, 0x00000000, 0x00000000);
 		LiveNameColorB = Address(0x007767F4, 0x00000000, 0x00000000, 0x00000000);
 		LiveNameColorR = Address(0x007767F8, 0x00000000, 0x00000000, 0x00000000);
