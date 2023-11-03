@@ -214,9 +214,7 @@ namespace CTRPluginFramework
         {
             std::string source;
 
-            if (FwkSettings::Header->isDefaultPlugin)
-                source = "/Tricord/Resources/Background/";
-
+            source = "/Tricord/Resources/Background/";
 
             // Try to load top background
             if (topBackgroundImage == nullptr && File::Exists(source + "CustomTopBG.bmp"))
@@ -249,6 +247,9 @@ namespace CTRPluginFramework
 
                 bottomBackgroundImage = image;
             }
+            else {
+                OSD::Notify("Cannot find CustomBottomBG.bmp background file!");
+            }
 
             if (bottomBoxBGImage == nullptr && File::Exists(source + "CustomBottomBoxBG.bmp"))
             {
@@ -263,6 +264,9 @@ namespace CTRPluginFramework
                 }
 
                 bottomBoxBGImage = image;
+            }
+            else {
+                OSD::Notify("Cannot find CustomBottomBoxBG.bmp background file!");
             }
 
             // Update Window
