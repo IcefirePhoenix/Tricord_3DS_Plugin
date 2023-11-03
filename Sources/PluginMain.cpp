@@ -154,16 +154,20 @@ namespace CTRPluginFramework {
 
         // create save folder
         MenuFolder* save = new MenuFolder("Savefile Codes");
+            *save += new MenuEntry("Use Voiceless", useVoiceless);
             *save += new MenuEntry("Set Main Voice", nullptr, mainVoice);
             *save += new MenuEntry("Set Hero Point count", nullptr, heroPointCountSet);
             *save += new MenuEntry("Set Coliseum Win count", nullptr, coliseumWinCountSet);
-            *save += new MenuEntry("Edit Merchant stock", openMerchantSlots);
-            *save += new MenuEntry("Set 1st slot", merchantSlotA);
-            *save += new MenuEntry("Set 2nd slot", merchantSlotB);
-            *save += new MenuEntry("Set 3rd slot", merchantSlotC);
-            *save += new MenuEntry("Set 4th slot", merchantSlotD);
-            *save += new MenuEntry("Set 5th slot", merchantSlotE);
-            *save += new MenuEntry("Reset Merchant stock availability", nullptr, resetMerchant);
+
+            MenuFolder* merchant = new MenuFolder("Street Merchant Codes");
+            *merchant += new MenuEntry("Set 1st material slot", nullptr, merchantSlotA);
+            *merchant += new MenuEntry("Set 2nd material slot", nullptr, merchantSlotB);
+            *merchant += new MenuEntry("Set 3rd material slot", nullptr, merchantSlotC);
+            *merchant += new MenuEntry("Set 4th material slot", nullptr, merchantSlotD);
+            *merchant += new MenuEntry("Set 5th material slot", nullptr, merchantSlotE);
+            *merchant += new MenuEntry("Force re-stock Street Merchant stall", nullptr, resetMerchant);
+
+            *save += merchant;
 
         // create sound folder
         MenuFolder* sound = new MenuFolder("BGM and SFX Codes");

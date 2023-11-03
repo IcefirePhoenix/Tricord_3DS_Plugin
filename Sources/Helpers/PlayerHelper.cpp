@@ -95,6 +95,17 @@ namespace CTRPluginFramework
         "No item"
     };
 
+    extern const StringVector worldList = {
+        "Woodlands",
+        "Riverside",
+        "Volcano",
+        "Ice Cavern",
+        "Fortress",
+        "The Dunes",
+        "The Ruins",
+        "Sky Realm"
+    };
+
     extern const StringVector otherMats = {
         "Lady's Glasses",
         "Lady's Collar",
@@ -219,6 +230,13 @@ namespace CTRPluginFramework
         "Nothing"
     };
 
+    extern const StringVector voiceList = {
+    "A Link Between Worlds",
+    "Wind Waker",
+    "Ocarina of Time",
+    "Spirit Tracks"
+    };
+
     static const std::vector<u8> emoteIDs = {
         0x00,  // over here
         0x01,  // item
@@ -234,7 +252,6 @@ namespace CTRPluginFramework
         0x0B,  // waving
         0x0C   // blank
     };
-
 
     u32 chooseLink(void) {
         Keyboard player("Choose a Link:");
@@ -277,5 +294,71 @@ namespace CTRPluginFramework
         }
         kbd.Populate(opts);
         return kbd.Open() == 0;
+    }
+
+    int selectMaterialWorld(void) {
+        StringVector worldSelectionList = worldList;
+
+        worldSelectionList.insert(worldSelectionList.begin(), "Other");
+
+        Keyboard chooseWorld("Select a world:");
+        chooseWorld.Populate(worldSelectionList);
+
+        return chooseWorld.Open();
+    }
+
+    int selectMaterialIndiv(int selectedWorld) {
+        u8 chosenMaterial;
+        Keyboard chooseMaterial("Select a material:");
+
+        switch (selectedWorld) {
+        case 0:
+            chooseMaterial.Populate(otherMats);
+            chosenMaterial = chooseMaterial.Open();
+            break;
+
+        case 1:
+            chooseMaterial.Populate(woodlandMats);
+            chosenMaterial = chooseMaterial.Open() + 6;
+            break;
+
+        case 2:
+            chooseMaterial.Populate(riversideMats);
+            chosenMaterial = chooseMaterial.Open() + 14;
+            break;
+
+        case 3:
+            chooseMaterial.Populate(volcanoMats);
+            chosenMaterial = chooseMaterial.Open() + 22;
+            break;
+
+        case 4:
+            chooseMaterial.Populate(iceMats);
+            chosenMaterial = chooseMaterial.Open() + 30;
+            break;
+
+        case 5:
+            chooseMaterial.Populate(fortressMats);
+            chosenMaterial = chooseMaterial.Open() + 38;
+            break;
+
+        case 6:
+            chooseMaterial.Populate(dunesMats);
+            chosenMaterial = chooseMaterial.Open() + 46;
+            break;
+
+        case 7:
+            chooseMaterial.Populate(ruinsMats);
+            chosenMaterial = chooseMaterial.Open() + 54;
+            break;
+
+        case 8:
+            chooseMaterial.Populate(skyMats);
+            chosenMaterial = chooseMaterial.Open() + 62;
+            break;
+        }
+
+        chosenMaterial = chosenMaterial + 20; // 0-23 are not materials
+        return chosenMaterial;
     }
 }

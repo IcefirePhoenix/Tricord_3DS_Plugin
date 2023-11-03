@@ -1,61 +1,82 @@
 #include "cheats.hpp"
 #include "AddressList.hpp"
 #include "Helpers/Address.hpp"
+#include "Helpers/PlayerHelper.hpp"
 #include "3ds.h"
 
 namespace CTRPluginFramework
 {
+    void useVoiceless(MenuEntry* entry) {
+        // this is a checkbox; auto-overwrites mainVoice
+        Process::Write8(AddressList::MainVoice.addr, 0x4);
+    }
+
     void mainVoice(MenuEntry* entry) {
-        // TODO: 
-        // 1) open combo box with 5 options (4 voices + voiceless)
-        // 2) simple 8-bit write to voice address
+        Keyboard voiceMenu("Choose a voice:\n\nThese changes can be observable online. Keep in\nmind your selection will be overwritten by Voiceless,\nif used.");
+        voiceMenu.Populate(voiceList);
+
+        u8 result = voiceMenu.Open();
+        Process::Write8(AddressList::MainVoice.addr, result);
     }
 
     void heroPointCountSet(MenuEntry* entry) {
-        // TODO: 
-        // 1) open numerical keyboard 
-        // 2) simple write to hero point address 
-        
-        // Note convert from decimal to hex...
+        u32 result;
+        Keyboard heroPointInput("Set Hero Point count:");
+        heroPointInput.IsHexadecimal(false);
+        heroPointInput.Open(result);
+
+        // no need to check for negatives -- if one is inputted, it automatically turns into the 32-bit positive limit
+        if (result > 999) {
+            MessageBox(Color::Gainsboro << "Invalid Hero Point count! Cannot be negative OR higher than the maximum of 999.")();
+        }
+        else {
+            Process::Write32(AddressList::HeroPointCount.addr, static_cast<unsigned char>(result));
+        }
     }
 
     void coliseumWinCountSet(MenuEntry* entry) {
-        // TODO: 
-        // 1) open numerical keyboard 
-        // 2) simple write to coliseum win address 
-        
-        // Note: convert from decimal to hex here...
-    }
+        u32 result;
+        Keyboard heroPointInput("Set Coliseum Win count:");
+        heroPointInput.IsHexadecimal(false);
+        heroPointInput.Open(result);
 
-    void openMerchantSlots(MenuEntry* entry) {
-        // TODO: when enabled, cause the 5 merchant slot options to appear in the menu
+        if (result > 999) {
+            MessageBox(Color::Gainsboro << "Invalid Coliseum Win count! Cannot be negative OR higher than the maximum of 999.")();
+        }
+        else {
+            Process::Write32(AddressList::HeroPointCount.addr, static_cast<unsigned char>(result));
+        }
     }
 
     void merchantSlotA(MenuEntry* entry) {
-        // TODO:
-        // two options...
-        // 
-        // - numerical keyboard -> user inputs item ID...
-        // - combo box populated with A LOT of options...
+        openMerchantMatMenu(0);
     }
 
     void merchantSlotB(MenuEntry* entry) {
-        // TODO: see merchantSlotA()
+        openMerchantMatMenu(2);
     }
 
     void merchantSlotC(MenuEntry* entry) {
-        // TODO: see merchantSlotA()
+        openMerchantMatMenu(4);
     }
 
     void merchantSlotD(MenuEntry* entry) {
-        // TODO: see merchantSlotA()
+        openMerchantMatMenu(6);
     }
 
     void merchantSlotE(MenuEntry* entry) {
-        // TODO: see merchantSlotA()
+        openMerchantMatMenu(8);
     }
+    
+    void openMerchantMatMenu(int slotNumber) {
+        int world = selectMaterialWorld();
+        int material = selectMaterialIndiv(world);
+        
+        Process::Write8((AddressList::EditMerchantStock.addr + static_cast<unsigned char>(slotNumber)), static_cast<unsigned char>(material));
+    };
 
     void resetMerchant(MenuEntry* entry) {
-        // TODO: simple memory write to merchant reset address
+        Process::Write8(AddressList::ResetMerchantStock.addr, 0x0);
+        MessageBox(Color::Gainsboro << "Street Merchant Stall has been re-stocked.")();
     }
 }
