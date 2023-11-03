@@ -69,7 +69,7 @@ namespace CTRPluginFramework
         _item->SetRadio(id);
     }
 
-    void    MenuEntry::SetArg(int *arg) const
+    void    MenuEntry::SetArg(void *arg) const
     {
         _item->SetArg(arg);
     }
