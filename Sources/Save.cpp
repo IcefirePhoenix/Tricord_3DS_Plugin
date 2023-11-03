@@ -30,7 +30,7 @@ namespace CTRPluginFramework
             MessageBox(Color::Gainsboro << "Invalid Hero Point count! Cannot be negative OR higher than the maximum of 999.")();
         }
         else {
-            Process::Write32(AddressList::HeroPointCount.addr, static_cast<unsigned char>(result));
+            Process::Write32(AddressList::HeroPointCount.addr, result);
         }
     }
 
@@ -44,7 +44,7 @@ namespace CTRPluginFramework
             MessageBox(Color::Gainsboro << "Invalid Coliseum Win count! Cannot be negative OR higher than the maximum of 999.")();
         }
         else {
-            Process::Write32(AddressList::HeroPointCount.addr, static_cast<unsigned char>(result));
+            Process::Write32(AddressList::HeroPointCount.addr, result);
         }
     }
 
