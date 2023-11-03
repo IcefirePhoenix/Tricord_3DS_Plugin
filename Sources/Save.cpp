@@ -68,6 +68,8 @@ namespace CTRPluginFramework
         openMerchantMatMenu(8);
     }
     
+    // slot number is just an offset used to navigate between them without having to define 5 separate addresses
+    // note: each slot has a 8-bit spacer between them; increment by 2
     void openMerchantMatMenu(int slotNumber) {
         int world = selectMaterialWorld();
         int material = selectMaterialIndiv(world);
