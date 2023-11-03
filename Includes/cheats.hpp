@@ -68,6 +68,7 @@ namespace CTRPluginFramework
     void respawnIndicator(MenuEntry* entry);
     void swordModelOpt(MenuEntry* entry);
     void linkSize(MenuEntry* entry);
+    void bypassDoppelDemo(MenuEntry* entry);
 
 
 

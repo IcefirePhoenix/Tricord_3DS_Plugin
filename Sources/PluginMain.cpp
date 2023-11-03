@@ -118,6 +118,7 @@ namespace CTRPluginFramework {
         // create player folder
         MenuFolder* player = new MenuFolder("Player Codes");
             // hotkeys -> posEditor (?)
+            *player += new MenuEntry("Bypass Doppel Master dialogue cutscene", bypassDoppelDemo);
             *player += new MenuEntry("Enable position editor menu", posEditor);
             *player += new MenuEntry("Enable Water Storage", nullptr, waterStorage);
             *player += new MenuEntry("Display current respawn location", respawnIndicator);
