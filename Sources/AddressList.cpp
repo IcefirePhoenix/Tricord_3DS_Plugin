@@ -48,6 +48,7 @@ namespace CTRPluginFramework {
 		PreviousLevelID = Address(0x3280EDBC, 0x00000000, 0x00000000, 0x00000000);
 		PreviousStageID = Address(0x3280EDC0, 0x00000000, 0x00000000, 0x00000000);
 		PreviousSpawnID = Address(0x3280EDC2, 0x00000000, 0x00000000, 0x00000000);
+		TimeElasped = Address(0x3280EDE0, 0x00000000, 0x00000000, 0x00000000);
 
 		// Items
 		// Note: Strafe refers to speed
@@ -174,7 +175,9 @@ namespace CTRPluginFramework {
 	Address		AddressList::LoadingStatus;
 	Address		AddressList::PreviousLevelID;
 	Address		AddressList::PreviousStageID;
-	Address		AddressList::PreviousSpawnID;
+	Address		AddressList::PreviousSpawnID;	
+	Address		AddressList::TimeElasped
+
 
 	// Items
 	Address		AddressList::BowStrafe;
