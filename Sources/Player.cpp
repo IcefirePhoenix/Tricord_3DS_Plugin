@@ -340,106 +340,126 @@ namespace CTRPluginFramework
         }
     }
 
-    void linkSize(MenuEntry* entry) {
-        // placeholders 
-        Keyboard kbd("dummy text");
-        std::string title;
-        StringVector opts;
+void linkSize(MenuEntry* entry) {
+    // placeholders 
+    Keyboard kbd("dummy text");
+    std::string title;
+    StringVector opts;
 
-        // this menu stays open regardless of input UNLESS the user specifies they wish to exit
-        bool loop = true;
-        kbd.CanAbort(false);
+    // this menu stays open regardless of input UNLESS the user specifies they wish to exit
+    bool loop = true;
+    kbd.CanAbort(false);
 
-        while (loop) {
-            // update top screen info
-            title = "Player Size Options Menu:\n\n";
-            title.append("Current size: " << ((PlayerSizes == NULL) ? Color::White << "No changes currently set\n" : Color::White << "Current size: " + std::to_string(PlayerSizes)));
-     
-            // update bottom screen info
-            opts.clear();
-            opts.push_back(std::string("Set size"));
-            opts.push_back("Save changes");
-            opts.push_back("Disable entry");
-            
-            // display top screen info
-            kbd.GetMessage() = title;
+    while (loop) {
+        // update top screen info
+        title = "Player Size Options Menu:\n\n";
+        title.append("Current size: " << ((PlayerSizes == NULL) ? Color::White << "No changes currently set\n" : Color::White << "Current size: " + std::to_string(PlayerSizes)));
 
-            // populate bottom screen options
-            kbd.Populate(opts);
+        // update bottom screen info
+        opts.clear();
+        opts.push_back(std::string("Set size"));
+        opts.push_back("Save changes");
+        opts.push_back("Disable entry");
 
-            // begin watching for changes
-            int chose;
-            switch (chose = kbd.Open()) {
-                case 0:
-                {
-                    float result;
+        // display top screen info
+        kbd.GetMessage() = title;
 
-                    Keyboard sizeKB("Set player size:");
-                    sizeKB.IsHexadecimal(false);
-                    sizeKB.Open(result);
+        // populate bottom screen options
+        kbd.Populate(opts);
 
-                    if (result < 0.0) {
-                        MessageBox(Color::Gainsboro << "Error", "Player Sizes cannot be negative.")();
-                    }
-                    else {
-                        PlayerSizes = result;
-                    }
-                    break;
-                
-                }
-                case 1:
-                {
-                    // enable address writes
-                    isSizeEdited = true;
+        // begin watching for changes
+        int chose;
+        switch (chose = kbd.Open()) {
+        case 0:
+        {
+            float result;
 
-                    // end loop = exit the menu
-                    loop = false;
-                    break;
-                }
-                default:
-                {
-                    // disable address writes
-                    isSizeEdited = false;
+            Keyboard sizeKB("Set player size:");
+            sizeKB.IsHexadecimal(false);
+            sizeKB.Open(result);
 
-                    // end loop = exit the menu
-                    loop = false; 
-                    break;
-                }
+            if (result < 0.0) {
+                MessageBox(Color::Gainsboro << "Error", "Player Sizes cannot be negative.")();
             }
+            else {
+                PlayerSizes = result;
+            }
+            break;
+
+        }
+        case 1:
+        {
+            // enable address writes
+            isSizeEdited = true;
+
+            // end loop = exit the menu
+            loop = false;
+            break;
+        }
+        default:
+        {
+            // disable address writes
+            isSizeEdited = false;
+
+            // end loop = exit the menu
+            loop = false;
+            break;
+        }
         }
     }
+}
 
-    void respawnIndicator(MenuEntry* entry) {
-        float respawnCoords[3][3] = {
-            {NULL, NULL, NULL}, // green
-            {NULL, NULL, NULL}, // blue
-            {NULL, NULL, NULL}  // red
-        };
+void respawnIndicator(MenuEntry* entry) {
+    float respawnCoords[3][3] = {
+        {NULL, NULL, NULL}, // green
+        {NULL, NULL, NULL}, // blue
+        {NULL, NULL, NULL}  // red
+    };
 
-        // grab respawn coords
-        for (int iterateColor = 0; iterateColor < 3; iterateColor++) {
-            Process::ReadFloat((AddressList::RespawnPositionX.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][0]);
-            Process::ReadFloat((AddressList::RespawnPositionY.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][1]);
-            Process::ReadFloat((AddressList::RespawnPositionZ.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][2]);
-        }
-
-        // top arrow = G, mid arrow = B, bot arrow = R
-        Process::Write8(AddressList::ArrowIndicatorColorTop.addr, 0x0);
-        Process::Write8(AddressList::ArrowIndicatorColorMid.addr, 0x1);
-        Process::Write8(AddressList::ArrowIndicatorColorBot.addr, 0x2);
-
-        Process::Write32(AddressList::ArrowIndicatorVisibilityTop.addr, 0x10FFFF00);
-        Process::Write32(AddressList::ArrowIndicatorVisibilityMid.addr, 0x10FFFF00);
-        Process::Write32(AddressList::ArrowIndicatorVisibilityBot.addr, 0x10FFFF00);
-
-        for (int iterateArray = 0; iterateArray < 3; iterateArray++) {
-            Process::WriteFloat((AddressList::ArrowIndicatorLocationTop.addr + (iterateArray * 0x4)), respawnCoords[0][iterateArray]);
-            Process::WriteFloat((AddressList::ArrowIndicatorLocationMid.addr + (iterateArray * 0x4)), respawnCoords[1][iterateArray]);
-            Process::WriteFloat((AddressList::ArrowIndicatorLocationBot.addr + (iterateArray * 0x4)), respawnCoords[2][iterateArray]);
-        }
+    // grab respawn coords
+    for (int iterateColor = 0; iterateColor < 3; iterateColor++) {
+        Process::ReadFloat((AddressList::RespawnPositionX.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][0]);
+        Process::ReadFloat((AddressList::RespawnPositionY.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][1]);
+        Process::ReadFloat((AddressList::RespawnPositionZ.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][2]);
     }
 
-    void bypassDoppelDemo(MenuEntry* entry) {
+    // top arrow = G, mid arrow = B, bot arrow = R
+    Process::Write8(AddressList::ArrowIndicatorColorTop.addr, 0x0);
+    Process::Write8(AddressList::ArrowIndicatorColorMid.addr, 0x1);
+    Process::Write8(AddressList::ArrowIndicatorColorBot.addr, 0x2);
+
+    Process::Write32(AddressList::ArrowIndicatorVisibilityTop.addr, 0x10FFFF00);
+    Process::Write32(AddressList::ArrowIndicatorVisibilityMid.addr, 0x10FFFF00);
+    Process::Write32(AddressList::ArrowIndicatorVisibilityBot.addr, 0x10FFFF00);
+
+    for (int iterateArray = 0; iterateArray < 3; iterateArray++) {
+        Process::WriteFloat((AddressList::ArrowIndicatorLocationTop.addr + (iterateArray * 0x4)), respawnCoords[0][iterateArray]);
+        Process::WriteFloat((AddressList::ArrowIndicatorLocationMid.addr + (iterateArray * 0x4)), respawnCoords[1][iterateArray]);
+        Process::WriteFloat((AddressList::ArrowIndicatorLocationBot.addr + (iterateArray * 0x4)), respawnCoords[2][iterateArray]);
+    }
+}
+
+void bypassDoppelDemo(MenuEntry* entry) {
+    u8 currLevelID, currStageID;
+    u32 elapsedTime;
+
+    Process::Read8(AddressList::CurrLevelID.addr, currLevelID);
+    Process::Read8(AddressList::CurrStageID.addr, currStageID);
+    Process::Read32(AddressList::TimeElasped.addr, elaspedTime);
+
+    if (currLevelID && currStageID == 0x01){
         Process::Write8(AddressList::DoppelsEnabled.addr, 0x01);
+        
+        if (elapsedTime == 0x00000000) {
+            // set blue to triforce
+            Process::WriteFloat((AddressList::PositionX.addr + 0x10000), -0.8);
+            Process::WriteFloat((AddressList::PositionY.addr + 0x10000), 1.1452);
+            Process::WriteFloat((AddressList::PositionZ.addr + 0x10000), -9.95);
+
+            // set red to triforce
+            Process::WriteFloat((AddressList::PositionX.addr + 0x20000), 0.8);
+            Process::WriteFloat((AddressList::PositionY.addr + 0x20000), 1.1452);
+            Process::WriteFloat((AddressList::PositionZ.addr + 0x20000), -9.95);
+        }
     }
 }
