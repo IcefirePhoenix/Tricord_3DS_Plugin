@@ -66,6 +66,7 @@ namespace CTRPluginFramework {
 		DisplayTopPhoto = Address(0x31B2FE21, 0x00000000, 0x00000000, 0x00000000);
 		LobbyBallCounter = Address(0x329F18F4, 0x00000000, 0x00000000, 0x00000000);
 		LobbyBallSong = Address(0x329F193C, 0x00000000, 0x00000000, 0x00000000);
+		SeeChestContents = Address(0x0022FFB8, 0x00000000, 0x00000000, 0x00000000);
 		TextBoxSpeed = Address(0x0018122C, 0x00000000, 0x00000000, 0x00000000);
 
 		// Padding
@@ -195,6 +196,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::DisplayTopPhoto;
 	Address		AddressList::LobbyBallCounter;
 	Address		AddressList::LobbyBallSong;
+	Address		AddressList::SeeChestContents;
 	Address		AddressList::TextBoxSpeed;
 	
 	// Padding

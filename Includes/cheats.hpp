@@ -52,6 +52,8 @@ namespace CTRPluginFramework
     void instantText(MenuEntry* entry);
     void beamCooldown(MenuEntry* entry);
     void defaultMisc(MenuEntry* entry);
+    void seeChestContents(MenuEntry* entry);
+
 
 
     // Player functions
