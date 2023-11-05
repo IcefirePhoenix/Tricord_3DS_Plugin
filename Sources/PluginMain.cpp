@@ -106,13 +106,14 @@ namespace CTRPluginFramework {
             resetMiscellaneous = new MenuEntry("Reset Miscellaneous codes (auto)", defaultMisc);
             instantTextDisplay = new MenuEntry("Force instant text boxes", instantText);
 
-            // test hotkey entry
+            // test hotkey entry -- broken...
             *miscellaneous += (EntryWithHotkey(new MenuEntry("Enable button spam", buttonSpammer, "When any of the selected keys are\npressed down, they will automatically spam.\nGood for in-game manuevers that require\nstrict timing of button input(s).\n\nDefault keys: A, B, X, Y, L, R."), {
                 Hotkey(Key::A | Key::B | Key::X | Key::Y | Key::L | Key::R , "Button Spammer")
             }));
 
             *miscellaneous += new MenuEntry("Disable sword beam cooldown", beamCooldown);
             *miscellaneous += new MenuEntry("Display photo on top screen", displayPhoto);
+            *miscellaneous += new MenuEntry("Always display Treasure Chest contents", seeChestContents);
             *miscellaneous += instantTextDisplay;
 
         // create player folder

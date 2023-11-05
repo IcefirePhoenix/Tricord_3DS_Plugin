@@ -68,6 +68,7 @@ namespace CTRPluginFramework {
 		static Address		DisplayTopPhoto;
 		static Address		LobbyBallCounter;
 		static Address		LobbyBallSong;
+		static Address		SeeChestContents;
 		static Address		TextBoxSpeed;
 
 		// Padding

@@ -42,4 +42,13 @@ namespace CTRPluginFramework
         // TODO: opening gear -> opens combo box with toggle switches
 
     }
+
+    void seeChestContents(MenuEntry* entry) {
+        if (entry->WasJustActivated()) {
+            Process::Patch(AddressList::SeeChestContents.addr, 0xEA000017);
+        } 
+        if (!entry->IsActivated()) {
+            Process::Patch(AddressList::SeeChestContents.addr, 0x0A000017);
+        }
+    }
 }
