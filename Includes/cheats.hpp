@@ -25,8 +25,11 @@ namespace CTRPluginFramework
     extern MenuEntry* instantTextDisplay;
 
     // Emote functions
-    void emoteSwapper(MenuEntry* entry);
+    void lobbyEmoteSwapper(MenuEntry* entry);
+    void drablandEmoteSwapper(MenuEntry* entry);
     void customEmotes(MenuEntry* entry);
+    void refreshEmoteGraphics(const u32 *color, std::vector<u8> &layout, bool useBlank);
+
 
     // Link Color functions
     void customColor(MenuEntry* entry);
