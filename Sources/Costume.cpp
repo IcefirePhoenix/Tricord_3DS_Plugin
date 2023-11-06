@@ -4,16 +4,15 @@
 #include "Helpers/Address.hpp"
 #include "Helpers/PlayerHelper.hpp"
 
+#include "CTRPluginFramework/Graphics/OSD.hpp"
+#include "CTRPluginFramework/Menu/MessageBox.hpp"
+
 #include "CTRPluginFrameworkImpl/Menu.hpp"
 #include "CTRPluginFrameworkImpl/Menu/MenuItem.hpp"
 #include "CTRPluginFrameworkImpl/Menu/MenuEntryImpl.hpp"
 #include "CTRPluginFrameworkImpl/System/FSPath.hpp"
 
-#include "CTRPluginFramework/Menu/MessageBox.hpp"
-#include "CTRPluginFramework/Graphics/OSD.hpp"
-
 #include <CTRPluginFramework.hpp>
-
 #include "3ds.h"
 
 namespace CTRPluginFramework
@@ -78,7 +77,7 @@ namespace CTRPluginFramework
                 menuCostumeSlotB->Show();
                 menuCostumeSlotC->Show();
                 menuCostumeSlotD->Show();
-            } 
+            }
 
             if (restoreGreatFairy->IsActivated() && choice >= 0) {
                 menuCostumeSlotA->CanBeSelected(false);
@@ -93,8 +92,7 @@ namespace CTRPluginFramework
     }
 
     u32 CostumeCatalogLocation;
-    u8 costumeCatalogSize;
-    u8 catalogIncSize;
+    u8 costumeCatalogSize, catalogIncSize;
 
     void manageCatalogSizeAuto(MenuEntry* entry) {
         u8 isObtained;
@@ -105,8 +103,7 @@ namespace CTRPluginFramework
         // check for null pointer... this should ONLY be running when a catalog is open
         if (CostumeCatalogLocation != 0x00000000) {
 
-            costumeCatalogSize = 0;
-            catalogIncSize = 0;
+            costumeCatalogSize = catalogIncSize = 0;
 
             // count obtained costumes
             for (u32 i = 0x0; i < 0x26; i++) {
