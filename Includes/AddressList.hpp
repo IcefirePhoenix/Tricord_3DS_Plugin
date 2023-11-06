@@ -35,8 +35,17 @@ namespace CTRPluginFramework {
 
 
 		// Emotes
-		static Address		DoTEmotes;
+		static Address		GameplayEmotes;
 		static Address		LobbyEmotes;
+		static Address		EmoteAGraphic;
+		static Address		EmoteBGraphic;
+		static Address		EmoteCGraphic;
+		static Address		EmoteDGraphic;
+		static Address		EmoteEGraphic;
+		static Address		EmoteFGraphic;
+		static Address		EmoteGGraphic;
+		static Address		EmoteHGraphic;
+		static Address		UseDoTLayoutAlways;
 
 		// Game Data
 		static Address		CurrLevelID;
@@ -50,7 +59,7 @@ namespace CTRPluginFramework {
 		static Address		PreviousLevelID;
 		static Address		PreviousStageID;
 		static Address		PreviousSpawnID;
-		static Address		TimeElasped;
+		static Address		TimeElapsed;
 
 		// Items
 		static Address		BowStrafe;

@@ -53,7 +53,15 @@ namespace CTRPluginFramework {
     {
         // create emote folder
         MenuFolder* emotes = new MenuFolder("Emote Codes");
-            *emotes += new MenuEntry("Enable Emote Swapper", emoteSwapper);
+            *emotes += (EntryWithHotkey(new MenuEntry("Enable Drablands Emote Swapper", drablandEmoteSwapper), {
+                Hotkey(Key::DPadLeft, "Drablands Emote Swapper"),
+                Hotkey(Key::DPadRight, "Drablands Emote Swapper")
+
+            }));
+            *emotes += (EntryWithHotkey(new MenuEntry("Enable Lobby Emote Swapper", lobbyEmoteSwapper), {
+                Hotkey(Key::DPadLeft, "Lobby Emote Swapper"),
+                Hotkey(Key::DPadRight, "Lobby Emote Swapper")
+            }));
             *emotes += new MenuEntry("Use Custom Emotes", customEmotes);
         
 

@@ -33,8 +33,17 @@ namespace CTRPluginFramework {
 		// Console
 
 		// Emotes
-		DoTEmotes = Address(0x006B6E98, 0x00000000, 0x00000000, 0x00000000);
+		GameplayEmotes = Address(0x006B6E98, 0x00000000, 0x00000000, 0x00000000);
 		LobbyEmotes = Address(0x006B6EA0, 0x00000000, 0x00000000, 0x00000000);
+		EmoteAGraphic = Address(0x32C91830, 0x00000000, 0x00000000, 0x00000000);
+		EmoteBGraphic = Address(0x32C9225C, 0x00000000, 0x00000000, 0x00000000);
+		EmoteCGraphic = Address(0x32C92BEC, 0x00000000, 0x00000000, 0x00000000);
+		EmoteDGraphic = Address(0x32C9357C, 0x00000000, 0x00000000, 0x00000000);
+		EmoteEGraphic = Address(0x32C93F0C, 0x00000000, 0x00000000, 0x00000000);
+		EmoteFGraphic = Address(0x32C9489C, 0x00000000, 0x00000000, 0x00000000);
+		EmoteGGraphic = Address(0x32C9522C, 0x00000000, 0x00000000, 0x00000000);
+		EmoteHGraphic = Address(0x32C95BBC, 0x00000000, 0x00000000, 0x00000000);
+		UseDoTLayoutAlways = Address(0x2F0C6C, 0x00000000, 0x00000000, 0x00000000);
 
 		// Game Data
 		CurrLevelID = Address(0x3280EDC4, 0x00000000, 0x00000000, 0x00000000);
@@ -48,7 +57,7 @@ namespace CTRPluginFramework {
 		PreviousLevelID = Address(0x3280EDBC, 0x00000000, 0x00000000, 0x00000000);
 		PreviousStageID = Address(0x3280EDC0, 0x00000000, 0x00000000, 0x00000000);
 		PreviousSpawnID = Address(0x3280EDC2, 0x00000000, 0x00000000, 0x00000000);
-		TimeElasped = Address(0x3280EDE0, 0x00000000, 0x00000000, 0x00000000);
+		TimeElapsed = Address(0x3280EDE0, 0x00000000, 0x00000000, 0x00000000);
 
 		// Items
 		// Note: Strafe refers to speed
@@ -162,8 +171,19 @@ namespace CTRPluginFramework {
 	Address		AddressList::TingleBalloons;
 
 	// Emotes
-	Address		AddressList::DoTEmotes;
+	Address		AddressList::GameplayEmotes;
 	Address		AddressList::LobbyEmotes;
+	Address		AddressList::EmoteAGraphic;
+	Address		AddressList::EmoteBGraphic;
+	Address		AddressList::EmoteCGraphic;
+	Address		AddressList::EmoteDGraphic;
+	Address		AddressList::EmoteEGraphic;
+	Address		AddressList::EmoteFGraphic;
+	Address		AddressList::EmoteGGraphic;
+	Address		AddressList::EmoteHGraphic;
+	Address		AddressList::UseDoTLayoutAlways;
+
+
 
 	// Game Data
 	Address		AddressList::CurrLevelID;
@@ -177,7 +197,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::PreviousLevelID;
 	Address		AddressList::PreviousStageID;
 	Address		AddressList::PreviousSpawnID;	
-	Address		AddressList::TimeElasped
+	Address		AddressList::TimeElapsed;
 
 
 	// Items
