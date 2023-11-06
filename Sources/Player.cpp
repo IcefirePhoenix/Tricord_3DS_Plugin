@@ -29,7 +29,7 @@ namespace CTRPluginFramework
 
     bool isJinxEdited, isSpawnEdited, isVisibleEdited, isInvinciEdited, isWaterEdited, isCollisionEdited, isPVPEdited, isSizeEdited, isSwordEdited;
 
-    u8 SwordStatuses[3] = {NULL, NULL, NULL};
+    u8 SwordStatuses[3] = { NULL, NULL, NULL };
     float PlayerSizes = NULL;
 
     void resetPlayer(MenuEntry* entry) {
@@ -89,7 +89,7 @@ namespace CTRPluginFramework
             for (int i = 0x0; i < 0x3; i++) { // traverse through links
                 if (PlayerStatuses[4][i]) {
                     Process::Write8((AddressList::IsWaterStorage.addr + (i * 0x10000)), 0x0); // water storage
-                    Process::Write16((AddressList::IsWaterStorage.addr + (i * 0x10000) + 0x1 ), 0x0); // there's no 24-bit write here
+                    Process::Write16((AddressList::IsWaterStorage.addr + (i * 0x10000) + 0x1), 0x0); // there's no 24-bit write here
                 }
                 else {
                     Process::Write8((AddressList::IsWaterStorage.addr + (i * 0x10000)), 0xFF); // not water storage
@@ -159,6 +159,7 @@ namespace CTRPluginFramework
         // top screen saying that there's no saved position to load
         // - note 2: the code should check current Link first
 
+
     }
 
     // this opens a toggle menu similar to OnionFS
@@ -190,7 +191,7 @@ namespace CTRPluginFramework
             opts.push_back(std::string("Player 2 ") << ((PlayerStatuses[CurrentStatus][1]) ? enSlid : disSlid));
             opts.push_back(std::string("Player 3 ") << ((PlayerStatuses[CurrentStatus][2]) ? enSlid : disSlid));
             opts.push_back("Save changes");
-            opts.push_back("Disable entry"); 
+            opts.push_back("Disable entry");
 
             // display top screen info
             kbd.GetMessage() = title;
@@ -201,41 +202,41 @@ namespace CTRPluginFramework
             // begin watching for changes
             int chose;
             switch (chose = kbd.Open())
-            { 
+            {
                 // toggle functionality -> swaps current status (enabled/disabled)
-                case 0:
-                {
-                    PlayerStatuses[CurrentStatus][0] = !PlayerStatuses[CurrentStatus][0];
-                    break;
-                }
-                case 1:
-                {
-                    PlayerStatuses[CurrentStatus][1] = !PlayerStatuses[CurrentStatus][1];
-                    break;
-                }
-                case 2:
-                {
-                    PlayerStatuses[CurrentStatus][2] = !PlayerStatuses[CurrentStatus][2];
-                    break;
-                }
-                case 3:
-                {
-                    // enable address writes
-                    setStatus = true;
+            case 0:
+            {
+                PlayerStatuses[CurrentStatus][0] = !PlayerStatuses[CurrentStatus][0];
+                break;
+            }
+            case 1:
+            {
+                PlayerStatuses[CurrentStatus][1] = !PlayerStatuses[CurrentStatus][1];
+                break;
+            }
+            case 2:
+            {
+                PlayerStatuses[CurrentStatus][2] = !PlayerStatuses[CurrentStatus][2];
+                break;
+            }
+            case 3:
+            {
+                // enable address writes
+                setStatus = true;
 
-                    // end loop; exit menu
-                    loop = false;
-                    break;
-                }
-                default:
-                {
-                    // disable address writes
-                    setStatus = false;
+                // end loop; exit menu
+                loop = false;
+                break;
+            }
+            default:
+            {
+                // disable address writes
+                setStatus = false;
 
-                    // end loop; exit menu
-                    loop = false;
-                    break;
-                }
+                // end loop; exit menu
+                loop = false;
+                break;
+            }
             }
         }
     }
@@ -304,162 +305,163 @@ namespace CTRPluginFramework
             int chose;
             switch (chose = kbd.Open()) {
                 // toggle functionality -> swaps current status (enabled/disabled)
-                case 0:
-                {
-                    SwordStatuses[0] = chooseSword();
-                    break;
-                }
-                case 1:
-                {
-                    SwordStatuses[1] = chooseSword();
-                    break;
-                }
-                case 2:
-                {
-                    SwordStatuses[2] = chooseSword();
-                    break;
-                }
-                case 3:
-                {
-                    // enable address writes
-                    isSwordEdited = true;
-                    loop = false;
+            case 0:
+            {
+                SwordStatuses[0] = chooseSword();
+                break;
+            }
+            case 1:
+            {
+                SwordStatuses[1] = chooseSword();
+                break;
+            }
+            case 2:
+            {
+                SwordStatuses[2] = chooseSword();
+                break;
+            }
+            case 3:
+            {
+                // enable address writes
+                isSwordEdited = true;
+                loop = false;
 
-                    break;
-                }
-                default:
-                {
-                    // disable address writes
-                    isSwordEdited = false;
+                break;
+            }
+            default:
+            {
+                // disable address writes
+                isSwordEdited = false;
 
-                    // end loop = exit the menu
-                    loop = false;
-                    break;
-                }
+                // end loop = exit the menu
+                loop = false;
+                break;
+            }
             }
         }
     }
 
-void linkSize(MenuEntry* entry) {
-    // placeholders 
-    Keyboard kbd("dummy text");
-    std::string title;
-    StringVector opts;
+    void linkSize(MenuEntry* entry) {
+        // placeholders 
+        Keyboard kbd("dummy text");
+        std::string title;
+        StringVector opts;
 
-    // this menu stays open regardless of input UNLESS the user specifies they wish to exit
-    bool loop = true;
-    kbd.CanAbort(false);
+        // this menu stays open regardless of input UNLESS the user specifies they wish to exit
+        bool loop = true;
+        kbd.CanAbort(false);
 
-    while (loop) {
-        // update top screen info
-        title = "Player Size Options Menu:\n\n";
-        title.append("Current size: " << ((PlayerSizes == NULL) ? Color::White << "No changes currently set\n" : Color::White << "Current size: " + std::to_string(PlayerSizes)));
+        while (loop) {
+            // update top screen info
+            title = "Player Size Options Menu:\n\n";
+            title.append("Current size: " << ((PlayerSizes == NULL) ? Color::White << "No changes currently set\n" : Color::White << "Current size: " + std::to_string(PlayerSizes)));
 
-        // update bottom screen info
-        opts.clear();
-        opts.push_back(std::string("Set size"));
-        opts.push_back("Save changes");
-        opts.push_back("Disable entry");
+            // update bottom screen info
+            opts.clear();
+            opts.push_back(std::string("Set size"));
+            opts.push_back("Save changes");
+            opts.push_back("Disable entry");
 
-        // display top screen info
-        kbd.GetMessage() = title;
+            // display top screen info
+            kbd.GetMessage() = title;
 
-        // populate bottom screen options
-        kbd.Populate(opts);
+            // populate bottom screen options
+            kbd.Populate(opts);
 
-        // begin watching for changes
-        int chose;
-        switch (chose = kbd.Open()) {
-        case 0:
-        {
-            float result;
+            // begin watching for changes
+            int chose;
+            switch (chose = kbd.Open()) {
+            case 0:
+            {
+                float result;
 
-            Keyboard sizeKB("Set player size:");
-            sizeKB.IsHexadecimal(false);
-            sizeKB.Open(result);
+                Keyboard sizeKB("Set player size:");
+                sizeKB.IsHexadecimal(false);
+                sizeKB.Open(result);
 
-            if (result < 0.0) {
-                MessageBox(Color::Gainsboro << "Error", "Player Sizes cannot be negative.")();
+                if (result < 0.0) {
+                    MessageBox(Color::Gainsboro << "Error", "Player Sizes cannot be negative.")();
+                }
+                else {
+                    PlayerSizes = result;
+                }
+                break;
+
             }
-            else {
-                PlayerSizes = result;
+            case 1:
+            {
+                // enable address writes
+                isSizeEdited = true;
+
+                // end loop = exit the menu
+                loop = false;
+                break;
             }
-            break;
+            default:
+            {
+                // disable address writes
+                isSizeEdited = false;
 
-        }
-        case 1:
-        {
-            // enable address writes
-            isSizeEdited = true;
-
-            // end loop = exit the menu
-            loop = false;
-            break;
-        }
-        default:
-        {
-            // disable address writes
-            isSizeEdited = false;
-
-            // end loop = exit the menu
-            loop = false;
-            break;
-        }
+                // end loop = exit the menu
+                loop = false;
+                break;
+            }
+            }
         }
     }
-}
 
-void respawnIndicator(MenuEntry* entry) {
-    float respawnCoords[3][3] = {
-        {NULL, NULL, NULL}, // green
-        {NULL, NULL, NULL}, // blue
-        {NULL, NULL, NULL}  // red
-    };
+    void respawnIndicator(MenuEntry* entry) {
+        float respawnCoords[3][3] = {
+            {NULL, NULL, NULL}, // green
+            {NULL, NULL, NULL}, // blue
+            {NULL, NULL, NULL}  // red
+        };
 
-    // grab respawn coords
-    for (int iterateColor = 0; iterateColor < 3; iterateColor++) {
-        Process::ReadFloat((AddressList::RespawnPositionX.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][0]);
-        Process::ReadFloat((AddressList::RespawnPositionY.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][1]);
-        Process::ReadFloat((AddressList::RespawnPositionZ.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][2]);
+        // grab respawn coords
+        for (int iterateColor = 0; iterateColor < 3; iterateColor++) {
+            Process::ReadFloat((AddressList::RespawnPositionX.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][0]);
+            Process::ReadFloat((AddressList::RespawnPositionY.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][1]);
+            Process::ReadFloat((AddressList::RespawnPositionZ.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][2]);
+        }
+
+        // top arrow = G, mid arrow = B, bot arrow = R
+        Process::Write8(AddressList::ArrowIndicatorColorTop.addr, 0x0);
+        Process::Write8(AddressList::ArrowIndicatorColorMid.addr, 0x1);
+        Process::Write8(AddressList::ArrowIndicatorColorBot.addr, 0x2);
+
+        Process::Write32(AddressList::ArrowIndicatorVisibilityTop.addr, 0x10FFFF00);
+        Process::Write32(AddressList::ArrowIndicatorVisibilityMid.addr, 0x10FFFF00);
+        Process::Write32(AddressList::ArrowIndicatorVisibilityBot.addr, 0x10FFFF00);
+
+        for (int iterateArray = 0; iterateArray < 3; iterateArray++) {
+            Process::WriteFloat((AddressList::ArrowIndicatorLocationTop.addr + (iterateArray * 0x4)), respawnCoords[0][iterateArray]);
+            Process::WriteFloat((AddressList::ArrowIndicatorLocationMid.addr + (iterateArray * 0x4)), respawnCoords[1][iterateArray]);
+            Process::WriteFloat((AddressList::ArrowIndicatorLocationBot.addr + (iterateArray * 0x4)), respawnCoords[2][iterateArray]);
+        }
     }
 
-    // top arrow = G, mid arrow = B, bot arrow = R
-    Process::Write8(AddressList::ArrowIndicatorColorTop.addr, 0x0);
-    Process::Write8(AddressList::ArrowIndicatorColorMid.addr, 0x1);
-    Process::Write8(AddressList::ArrowIndicatorColorBot.addr, 0x2);
+    void bypassDoppelDemo(MenuEntry* entry) {
+        u8 currLevelID, currStageID;
+        u32 elapsedTime;
 
-    Process::Write32(AddressList::ArrowIndicatorVisibilityTop.addr, 0x10FFFF00);
-    Process::Write32(AddressList::ArrowIndicatorVisibilityMid.addr, 0x10FFFF00);
-    Process::Write32(AddressList::ArrowIndicatorVisibilityBot.addr, 0x10FFFF00);
+        Process::Read8(AddressList::CurrLevelID.addr, currLevelID);
+        Process::Read8(AddressList::CurrStageID.addr, currStageID);
+        Process::Read32(AddressList::TimeElapsed.addr, elapsedTime);
 
-    for (int iterateArray = 0; iterateArray < 3; iterateArray++) {
-        Process::WriteFloat((AddressList::ArrowIndicatorLocationTop.addr + (iterateArray * 0x4)), respawnCoords[0][iterateArray]);
-        Process::WriteFloat((AddressList::ArrowIndicatorLocationMid.addr + (iterateArray * 0x4)), respawnCoords[1][iterateArray]);
-        Process::WriteFloat((AddressList::ArrowIndicatorLocationBot.addr + (iterateArray * 0x4)), respawnCoords[2][iterateArray]);
-    }
-}
+        if (currLevelID && currStageID == 0x01) {
+            Process::Write8(AddressList::DoppelsEnabled.addr, 0x01);
 
-void bypassDoppelDemo(MenuEntry* entry) {
-    u8 currLevelID, currStageID;
-    u32 elapsedTime;
+            if (elapsedTime == 0x00000000) {
+                // set blue to triforce
+                Process::WriteFloat((AddressList::PositionX.addr + 0x10000), -0.8);
+                Process::WriteFloat((AddressList::PositionY.addr + 0x10000), 1.1452);
+                Process::WriteFloat((AddressList::PositionZ.addr + 0x10000), -9.95);
 
-    Process::Read8(AddressList::CurrLevelID.addr, currLevelID);
-    Process::Read8(AddressList::CurrStageID.addr, currStageID);
-    Process::Read32(AddressList::TimeElasped.addr, elaspedTime);
-
-    if (currLevelID && currStageID == 0x01){
-        Process::Write8(AddressList::DoppelsEnabled.addr, 0x01);
-        
-        if (elapsedTime == 0x00000000) {
-            // set blue to triforce
-            Process::WriteFloat((AddressList::PositionX.addr + 0x10000), -0.8);
-            Process::WriteFloat((AddressList::PositionY.addr + 0x10000), 1.1452);
-            Process::WriteFloat((AddressList::PositionZ.addr + 0x10000), -9.95);
-
-            // set red to triforce
-            Process::WriteFloat((AddressList::PositionX.addr + 0x20000), 0.8);
-            Process::WriteFloat((AddressList::PositionY.addr + 0x20000), 1.1452);
-            Process::WriteFloat((AddressList::PositionZ.addr + 0x20000), -9.95);
+                // set red to triforce
+                Process::WriteFloat((AddressList::PositionX.addr + 0x20000), 0.8);
+                Process::WriteFloat((AddressList::PositionY.addr + 0x20000), 1.1452);
+                Process::WriteFloat((AddressList::PositionZ.addr + 0x20000), -9.95);
+            }
         }
     }
 }
