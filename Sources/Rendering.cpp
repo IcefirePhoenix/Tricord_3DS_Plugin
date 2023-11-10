@@ -18,7 +18,6 @@ namespace CTRPluginFramework
         u32 ActionBUttonTextOffset = 0x000078B0;
 
         if (pointerCheck != 0x00000000) {
-            OSD::Notify(std::to_string(pointerCheck));
             Process::Write32((pointerCheck + mainHUDoffset), 0x7F000004);
             Process::Write32((pointerCheck + ActionButtonBGOffset), 0x00000010);
             Process::Write32((pointerCheck + ActionBUttonTextOffset), 0x00FFFF00);
