@@ -3,32 +3,29 @@
 
 
 namespace CTRPluginFramework {
-	//CurrRegion c_Region = Process::GetTitleID;
-	//std::string regionName = "";
-
-
 	Address::Address(u32 usa, u32 eur, u32 jpn, u32 kor) {
 		switch (Process::GetTitleID()) {
 
-			case 0x0004000000176F00:
+			case TID_USA:
 				addr = usa; 
 				break;
 
-			case 0x0004000000177000:
+			case TID_EUR:
 				addr = eur; 
 				break;
 
-			case 0x0004000000176E00:
+			case TID_JPN:
 				addr = jpn; 
 				break;
 
-			case 0x0004000000182B00:
+			case TID_KOR:
 				addr = kor; 
 				break;
 
 			default: 
 				addr = 0;
-				OSD::Notify("The current title is not a retail version of TFH!", Color::Red);
+				OSD::Notify("The current title is not a supported, retail version of TFH!", Color::Red);
+				OSD::Notify("Supported TFH regions include NA, EU/AUS, JP, and KOR.", Color::Red);
 				OSD::Notify("Addresses cannot be initialized.", Color::Red);
 				break;
 		}
