@@ -10,10 +10,10 @@
 
 namespace CTRPluginFramework {
 	class Address {
-	public:
+	public:		
 		Address(u32 usa, u32 eur, u32 jpn, u32 kor);
 
-		Address(u32 address);
+		Address(u32 address); 
 		
 		Address(void);
 
