@@ -38,7 +38,6 @@ namespace CTRPluginFramework
     }
 
     void setPlayerChanges(MenuEntry* entry) {
-
         // this should be used to actually apply the changes since we're not actually using checkboxes
 
         if (isJinxEdited) { // check if jinxed is set to be edited
@@ -200,8 +199,7 @@ namespace CTRPluginFramework
             kbd.Populate(opts);
 
             // begin watching for changes
-            int chose;
-            switch (chose = kbd.Open())
+            switch (kbd.Open())
             {
                 // toggle functionality -> swaps current status (enabled/disabled)
             case 0:
@@ -302,8 +300,7 @@ namespace CTRPluginFramework
             kbd.Populate(opts);
 
             // begin watching for changes
-            int chose;
-            switch (chose = kbd.Open()) {
+            switch (kbd.Open()) {
                 // toggle functionality -> swaps current status (enabled/disabled)
             case 0:
             {
@@ -369,8 +366,7 @@ namespace CTRPluginFramework
             kbd.Populate(opts);
 
             // begin watching for changes
-            int chose;
-            switch (chose = kbd.Open()) {
+            switch (kbd.Open()) {
             case 0:
             {
                 float result;
@@ -448,7 +444,7 @@ namespace CTRPluginFramework
         Process::Read8(AddressList::CurrStageID.addr, currStageID);
         Process::Read32(AddressList::TimeElapsed.addr, elapsedTime);
 
-        if (currLevelID && currStageID == 0x01) {
+        if (currLevelID == 0x01 && currStageID == 0x02) {
             Process::Write8(AddressList::DoppelsEnabled.addr, 0x01);
 
             if (elapsedTime == 0x00000000) {
