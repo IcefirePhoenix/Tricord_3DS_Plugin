@@ -151,6 +151,8 @@ namespace CTRPluginFramework
 
         // Draw labels
         for (int i = 0, posY = 68; i < 6; ++i, posY += 9)
+            Renderer::DrawSysString(stable[i], 55, posY, 290, Preferences::Settings.MainTextColor);
+        for (int i = 6, posY = 68; i < 12; ++i, posY += 9)
             Renderer::DrawSysString(stable[i], 150, posY, 290, Preferences::Settings.MainTextColor);
         for (int i = 12 + skip, posY = 68 + (skip * 25); i < 18; ++i, posY += 9)
             Renderer::DrawSysString(stable[i], 240, posY, 310, Preferences::Settings.MainTextColor);
