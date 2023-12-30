@@ -11,21 +11,23 @@
 
 namespace CTRPluginFramework
 {
-    static const Key ktable[14] =
+    static const Key ktable[18] =
     {
-        ZL, L, DPadUp, DPadLeft, DPadRight, DPadDown, Start,
-        ZR, R, X, Y, A, B, Select
+        L, DPadUp, DPadLeft, DPadRight, DPadDown, Start,
+        R, X, Y, A, B, Select,
+        ZL, ZR, CPadUp, CPadLeft, CPadRight, CPadDown
     };
 
-    static const char *stable[14] =
+    static const char *stable[18] =
     {
-        FONT_ZL, FONT_L, FONT_DU, FONT_DL, FONT_DR, FONT_DD, "Start",
-        FONT_ZR, FONT_R, FONT_X, FONT_Y, FONT_A, FONT_B, "Select"
+        FONT_L, FONT_DU, FONT_DL, FONT_DR, FONT_DD, "Start",
+        FONT_R, FONT_X, FONT_Y, FONT_A, FONT_B, "Select", 
+        FONT_ZL, FONT_ZR, "\uE077 Up", "\uE077 Left", "\uE077 Right", "\uE077 Down"
     };
 
     static int    GetIndex(int code)
     {
-        for (int i = 0; i < 14; ++i)
+        for (int i = 0; i < 18; ++i)
             if (ktable[i] == code)
                 return (i);
 
@@ -37,29 +39,33 @@ namespace CTRPluginFramework
     {
         FwkSettings &settings = FwkSettings::Get();
 
-        for (int i = 0, posY = 32; i < 7; ++i, posY += 25)
+        for (int i = 0, posY = 68; i < 6; ++i, posY += 25)
         {
-            Button b(Button::Icon | Button::Toggle, IntRect(30, posY, 20, 20), Icon::DrawCheckBox);
+            Button b(Button::Icon | Button::Toggle, IntRect(35, posY, 20, 20), Icon::DrawCheckBox);
             _checkboxs.push_back(b);
         }
-        for (int i = 0, posY = 32; i < 7; ++i, posY += 25)
+        for (int i = 0, posY = 68; i < 6; ++i, posY += 25)
         {
-            Button b(Button::Icon | Button::Toggle, IntRect(200, posY, 20, 20), Icon::DrawCheckBox);
+            Button b(Button::Icon | Button::Toggle, IntRect(130, posY, 20, 20), Icon::DrawCheckBox);
             _checkboxs.push_back(b);
         }
-        for (int i = 0; i < 16; ++i)
+        for (int i = 0, posY = 68; i < 6; ++i, posY += 25)
+        {
+            Button b(Button::Icon | Button::Toggle, IntRect(220, posY, 20, 20), Icon::DrawCheckBox);
+            _checkboxs.push_back(b);
+        }
+        for (int i = 0; i < 20; ++i)
         {
             if (keys & (1u << i))
             {
                 _checkboxs[GetIndex(1u << i)].SetState(true);
             }
         }
-
         if (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable)
         {
             // Disable ZL & ZR on O3DS
-            _checkboxs[0].Enable(false);
-            _checkboxs[7].Enable(false);
+            _checkboxs[12].Enable(false);
+            _checkboxs[13].Enable(false);
         }
     }
 
@@ -91,7 +97,7 @@ namespace CTRPluginFramework
 
             _keys = 0;
 
-            for (int i = 0; i < 14; i++)
+            for (int i = 0; i < 18; i++)
             {
                 if (_checkboxs[i].GetState())
                     _keys |= ktable[i];
@@ -127,7 +133,7 @@ namespace CTRPluginFramework
         Window::TopWindow.Draw("Hotkey Modifier");
 
         int posY = 61;
-        Renderer::DrawSysStringReturn((const u8*)_message.c_str(), 40, posY, 300, Preferences::Settings.MainTextColor);
+        Renderer::DrawSysStringReturn((const u8*)_message.c_str(), 40, posY, 335, Preferences::Settings.MainTextColor);
     }
 
     void    HotkeysModifier::_DrawBottom(void)
@@ -141,13 +147,13 @@ namespace CTRPluginFramework
         for (auto it = _checkboxs.begin(); it != _checkboxs.end(); it++)
             (*it).Draw();
 
-        int skip = (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable) ? 1 : 0;
+        int skip = (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable) ? 2 : 0;
 
         // Draw labels
-        for (int i = 0 + skip, posY = 32 + (skip * 25); i < 7; ++i, posY += 9)
-            Renderer::DrawSysString(stable[i], 50, posY, 290, Preferences::Settings.MainTextColor);
-        for (int i = 7 + skip, posY = 32 + (skip * 25); i < 14; ++i, posY += 9)
-            Renderer::DrawSysString(stable[i], 220, posY, 290, Preferences::Settings.MainTextColor);
+        for (int i = 0, posY = 68; i < 6; ++i, posY += 9)
+            Renderer::DrawSysString(stable[i], 150, posY, 290, Preferences::Settings.MainTextColor);
+        for (int i = 12 + skip, posY = 68 + (skip * 25); i < 18; ++i, posY += 9)
+            Renderer::DrawSysString(stable[i], 240, posY, 310, Preferences::Settings.MainTextColor);
     }
 
     void    HotkeysModifier::_Update(void)
