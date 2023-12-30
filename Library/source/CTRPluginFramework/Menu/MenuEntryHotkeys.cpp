@@ -40,11 +40,6 @@ namespace CTRPluginFramework
         return (Controller::IsKeysPressed(_keys));
     }
 
-    void    Hotkey::AskForKeys(void)
-    {
-        HotkeysModifier(_keys, "Hotkey Modifier for " + _name)();
-    }
-
     u32     Hotkey::GetKeys(void)
     {
         return (_keys);
@@ -55,7 +50,7 @@ namespace CTRPluginFramework
         return _name;
     }
 
-    static const std::string g_keyName[16] =
+    static const std::string g_keyName[20] =
     {
         FONT_A,
         FONT_B,
@@ -72,7 +67,11 @@ namespace CTRPluginFramework
         "",
         "",
         FONT_ZL,
-        FONT_ZR
+        FONT_ZR,
+        "\uE077 Up", 
+        "\uE077 Left", 
+        "\uE077 Right", 
+        "\uE077 Down"
     };
 
     std::string     KeysToString(u32 keys)
@@ -94,6 +93,12 @@ namespace CTRPluginFramework
         }
         return (ret);
     }
+
+    void    Hotkey::AskForKeys(void)
+    {
+        HotkeysModifier(_keys, "Select new Hotkeys for the following entry:\n\n" + _name)();
+    }
+
 
     std::string     Hotkey::ToString(bool withName) const
     {
