@@ -6,14 +6,18 @@ namespace CTRPluginFramework {
 	void AddressList::InitAddresses(void) {
 
 		// Camera
+		DynamicCameraCheck = Address(0x00143810, 0x00000000, 0x00000000, 0x00000000);
+		GameplayCameraCheck = Address(0x00143A7C, 0x00000000, 0x00000000, 0x00000000);
+		GameplayCameraInit = Address(0x00143A80, 0x00000000, 0x00000000, 0x00000000);
+		RetGameplayCameraInit = Address(0x00143B80, 0x00000000, 0x00000000, 0x00000000);
+
 		CameraLinkFocus = Address(0x32C815D0, 0x00000000, 0x00000000, 0x00000000);
 		CameraMode = Address(0x32C814BC, 0x00000000, 0x00000000, 0x00000000);
 		CameraPosX = Address(0x32C814C0, 0x00000000, 0x00000000, 0x00000000);
 		CameraPosY = Address(0x32C814C4, 0x00000000, 0x00000000, 0x00000000);
 		CameraPosZ = Address(0x32C814C8, 0x00000000, 0x00000000, 0x00000000);
 		CameraRotationX = Address(0x32C81520, 0x00000000, 0x00000000, 0x00000000);
-		CameraRotationY = Address(0x32C81524, 0x00000000, 0x00000000, 0x00000000);
-		CameraRotationZ = Address(0x32C81528, 0x00000000, 0x00000000, 0x00000000);
+		CameraRotationZ = Address(0x32C81524, 0x00000000, 0x00000000, 0x00000000);
 		MasterZoom = Address(0x005F529C, 0x00000000, 0x00000000, 0x00000000);
 
 		// Chaos
@@ -146,7 +150,11 @@ namespace CTRPluginFramework {
 	// this initializes an address entry with the correct regional address
 	// allowing it to be used outside of this file
 	
-	// Camera
+	// Camera	
+	Address		AddressList::DynamicCameraCheck;
+	Address		AddressList::GameplayCameraCheck;
+	Address		AddressList::GameplayCameraInit;
+	Address		AddressList::RetGameplayCameraInit;
 	Address		AddressList::CameraLinkFocus;
 	Address		AddressList::CameraMode;
 	Address		AddressList::CameraPosX;

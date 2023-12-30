@@ -10,6 +10,10 @@ namespace CTRPluginFramework {
 		static void     InitAddresses(void);
 
 		// Camera
+		static Address		DynamicCameraCheck;
+		static Address		GameplayCameraCheck;
+		static Address		GameplayCameraInit;
+		static Address		RetGameplayCameraInit;
 		static Address		CameraLinkFocus;
 		static Address		CameraMode;
 		static Address		CameraPosX;
@@ -32,7 +36,6 @@ namespace CTRPluginFramework {
 		static Address		PlayerStatus;
 		static Address		TingleBalloons;
 		static Address		UnusedCostumeDataPointerList;
-
 
 		// Emotes
 		static Address		GameplayEmotes;
@@ -72,7 +75,6 @@ namespace CTRPluginFramework {
 		static Address		RoboStrafe;
 		static Address		WaterRodStrafe;
 
-
 		// Miscellaneous
 		static Address		DisplayTopPhoto;
 		static Address		LobbyBallCounter;
@@ -82,7 +84,6 @@ namespace CTRPluginFramework {
 
 		// Padding
 		static Address		TextToRodata; // ends 0x6AA000 for NA
-
 
 		// Player
 		static Address		ActiveLink;
@@ -127,7 +128,6 @@ namespace CTRPluginFramework {
 		static Address		FogB;
 		static Address		FogC;
 		static Address		ScrollingTextOpacity;
-
 
 		// Savefile
 		static Address		CostumeObtainStatus;
