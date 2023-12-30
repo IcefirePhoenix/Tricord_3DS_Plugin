@@ -33,6 +33,11 @@ namespace CTRPluginFramework
         _item->Hide();
     }
 
+    void    MenuFolder::HideWithoutDisable(void) const
+    {
+        _item->HideWithoutDisable();
+    }
+
     void    MenuFolder::Show(void) const
     {
         _item->Show();

@@ -46,6 +46,12 @@ namespace CTRPluginFramework
         void    Hide(void) const;
 
         /**
+         * \brief Hide the folder from the menu without disabling entries.\n
+         * Will NOT disable every MenuEntry objects contained in this folder and subfolders
+         */
+        void    HideWithoutDisable(void) const;
+
+        /**
          * \brief Display the folder previously hidden in the menu
          */
         void    Show(void) const;

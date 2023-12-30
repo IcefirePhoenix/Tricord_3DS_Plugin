@@ -50,6 +50,9 @@ namespace CTRPluginFramework
         void    _controllerBtn_OnClick(void);
         void    _keyboardBtn_OnClick(void);
 
+        void    _freecamBtn_OnClick(void);
+        void    _gameModeBtn_OnClick(void);
+
         void    _actionReplayBtn_OnClick(void); // 4
         void    _gameGuideBtn_OnClick(void); // 2
         void    _searchBtn_OnClick(void); // 3
@@ -63,7 +66,8 @@ namespace CTRPluginFramework
         MenuFolderImpl    * _starredConst;
 
         int                 _mode;
-        bool                _starMode;
+        bool                _starMode; 
+
         int                 _selector;
         int                 _selectedTextSize;
         float               _maxScrollOffset;
@@ -78,7 +82,8 @@ namespace CTRPluginFramework
 
         // Mode buttons
         Button              _showStarredBtn;
-        Button              _hidMapperBtn;
+        Button              _freecamBtn;
+        Button              _gameModeBtn;
         Button              _gameGuideBtn;
         Button              _searchBtn;
         Button              _arBtn;
