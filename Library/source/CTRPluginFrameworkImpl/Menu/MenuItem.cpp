@@ -58,6 +58,33 @@ namespace CTRPluginFramework
         }
     }
 
+    void    MenuItem::HideWithoutDisable(void)
+    {
+        if (Flags.isVisible == false)
+            return;
+
+        Flags.isVisible = false;
+
+        // If the item is starred
+        if (Flags.isStarred)
+            PluginMenuImpl::UnStar(this);
+
+        // Else refresh the menu to be sure that we're not currently in a hidden folder
+        if (_type == MenuType::Folder)
+        {
+            PluginMenuImpl::Refresh();
+        }
+
+        // Remove the item from it's container
+        if (_container != nullptr)
+        {
+            MenuFolderImpl* container = reinterpret_cast<MenuFolderImpl*>(_container);
+            std::vector<MenuItem*>& items = container->_items;
+
+            items.erase(std::remove(items.begin(), items.end(), this), items.end());
+        }
+    }
+
     void    MenuItem::Hide(void)
     {
         if (Flags.isVisible == false)
