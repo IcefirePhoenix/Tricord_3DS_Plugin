@@ -10,6 +10,10 @@ namespace CTRPluginFramework {
 		static void     InitAddresses(void);
 
 		// Camera
+		static Address		DynamicCameraCheck;
+		static Address		GameplayCameraCheck;
+		static Address		GameplayCameraInit;
+		static Address		RetGameplayCameraInit;
 		static Address		CameraLinkFocus;
 		static Address		CameraMode;
 		static Address		CameraPosX;
