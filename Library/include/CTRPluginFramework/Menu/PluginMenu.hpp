@@ -208,6 +208,8 @@ namespace CTRPluginFramework
          */
         static bool                IsBackgroundLoaded(bool isTopScreen);
 
+        bool FreecamToggle;
+        bool GameplayToggle;
 
     private:
         std::unique_ptr<PluginMenuImpl> _menu;
