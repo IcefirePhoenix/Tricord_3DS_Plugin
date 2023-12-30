@@ -16,20 +16,58 @@ namespace CTRPluginFramework
     extern MenuEntry* menuCostumeSlotB;
     extern MenuEntry* menuCostumeSlotC;
     extern MenuEntry* menuCostumeSlotD;
+
     extern MenuEntry* restoreGreatFairy;
     extern MenuEntry* manageCatalogSize;
+
     extern MenuEntry* initCustomCostumes;
     extern MenuEntry* writeCostumeIDToSlot;
 
     extern MenuEntry* resetMiscellaneous;
     extern MenuEntry* instantTextDisplay;
 
+    extern MenuEntry* managePlayerCodes;
+    extern MenuEntry* menuFreecam;
+    // Menu functions
+    void InitFreecamFolder(PluginMenu& menu);
+    void InitEmoteFolder(PluginMenu& menu);
+    void InitColorFolder(PluginMenu& menu);
+    void InitCostumeFolder(PluginMenu& menu);
+    void InitMiscFolder(PluginMenu& menu);
+    void InitPlayerFolder(PluginMenu& menu);
+    void InitEnergyFolder(PluginMenu& menu);
+    void InitItemsFolder(PluginMenu& menu);
+    void InitRenderFolder(PluginMenu& menu);
+    void InitSaveFolder(PluginMenu& menu);
+    void InitSoundFolder(PluginMenu& menu);
+    void AddAllFolders(PluginMenu& menu);
+
+
     // Emote functions
     void lobbyEmoteSwapper(MenuEntry* entry);
     void drablandEmoteSwapper(MenuEntry* entry);
     void customEmotes(MenuEntry* entry);
-    void refreshEmoteGraphics(const u32 *color, std::vector<u8> &layout, bool useBlank);
+    void refreshEmoteGraphics(const u32 color[][4], std::vector<u8>& layout, bool useBlank);
 
+    // Freecam functions
+    void useFreecam(MenuEntry* entry);
+    void shiftCamNorth(void);
+    void shiftCamSouth(void);
+    void shiftCamEast(void);
+    void shiftCamWest(void);
+    void zoomCamIn(void);
+    void zoomCamOut(void);
+    void raiseCam(void);
+    void lowerCam(void);
+    void rotateCamXCounter(void);
+    void rotateCamXClockwise(void);
+    void rotateCamZCounter(void);
+    void rotateCamZClockwise(void);
+    void editHotkeys(MenuEntry* entry);
+    void lockCamera(void);
+    void managePlayerLock(void);
+    void editSensitivity(MenuEntry* entry);
+    float setSensitivity(std::string message);
 
     // Link Color functions
     void customColor(MenuEntry* entry);
@@ -47,8 +85,6 @@ namespace CTRPluginFramework
     void initCustomCostumesAuto(MenuEntry* entry);
     void selCostumeEffect(MenuEntry* entry);
 
-    
-
     // Miscellaneous functions
     void buttonSpammer(MenuEntry* entry);
     void displayPhoto(MenuEntry* entry);
@@ -57,9 +93,8 @@ namespace CTRPluginFramework
     void defaultMisc(MenuEntry* entry);
     void seeChestContents(MenuEntry* entry);
 
-
-
     // Player functions
+    void ToggleMenuChange(void);
     void resetPlayer(MenuEntry* entry);
     void setPlayerChanges(MenuEntry* entry);
     void posEditor(MenuEntry* entry);
@@ -74,9 +109,6 @@ namespace CTRPluginFramework
     void swordModelOpt(MenuEntry* entry);
     void linkSize(MenuEntry* entry);
     void bypassDoppelDemo(MenuEntry* entry);
-
-
-
 
     // Energy functions
     void infEnergy(MenuEntry* entry);
@@ -107,9 +139,6 @@ namespace CTRPluginFramework
     void merchantSlotD(MenuEntry* entry);
     void merchantSlotE(MenuEntry* entry);
     void resetMerchant(MenuEntry* entry);
-
-
-
 
     // Sound functions
     void bgmSet(MenuEntry* entry);
