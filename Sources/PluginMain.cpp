@@ -9,6 +9,9 @@
 #include "CTRPluginFrameworkImpl/Menu/MenuEntryTools.hpp"
 #include "CTRPluginFrameworkImpl/Menu/MenuEntryImpl.hpp"
 #include "CTRPluginFrameworkImpl/Menu/MenuFolderImpl.hpp"
+#include "CTRPluginFrameworkImpl/Menu/Menu.hpp"
+#include "CTRPluginFrameworkImpl/Menu/PluginMenuHome.hpp"
+
 #include "CTRPluginFrameworkImpl/Menu/MenuItem.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuImpl.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuTools.hpp"
@@ -21,7 +24,6 @@ namespace CTRPluginFramework {
 
     // Menu Entries aren't given a name by default
     // If they need to be referenced elsewhere, they need a name
-    // Not all Menu Entries fall under this category though
     MenuEntry* menuCostumeSlotA;
     MenuEntry* menuCostumeSlotB;
     MenuEntry* menuCostumeSlotC;
@@ -38,8 +40,21 @@ namespace CTRPluginFramework {
 
     MenuEntry* managePlayerCodes;
 
+    MenuEntry* menuFreecam;
 
-    // experimental -> hotkey menu entry
+    MenuFolder* freecam;
+    MenuFolder* emotes;
+    MenuFolder* gameplay;
+    MenuFolder* linkcolor;
+    MenuFolder* costume;
+    MenuFolder* miscellaneous;
+    MenuFolder* player;
+    MenuFolder* energy;
+    MenuFolder* items;
+    MenuFolder* render;
+    MenuFolder* save;
+    MenuFolder* sound;
+
     static MenuEntry* EntryWithHotkey(MenuEntry* entry, const std::vector<Hotkey>& hotkeys) {
         if (entry != nullptr) {
             for (const Hotkey& hotkey : hotkeys)
@@ -48,128 +63,216 @@ namespace CTRPluginFramework {
         return entry;
     }
 
-    // might want to split this into different functions for better readability
     void    InitMenu(PluginMenu& menu)
     {
-        // create emote folder
-        MenuFolder* emotes = new MenuFolder("Emote Codes");
-            *emotes += (EntryWithHotkey(new MenuEntry("Enable Drablands Emote Swapper", drablandEmoteSwapper), {
-                Hotkey(Key::DPadLeft, "Drablands Emote Swapper"),
-                Hotkey(Key::DPadRight, "Drablands Emote Swapper")
+        InitFreecamFolder(menu);
+        InitEmoteFolder(menu);
+        InitColorFolder(menu);
+        InitCostumeFolder(menu);
+        InitMiscFolder(menu);
+        InitPlayerFolder(menu);
+        InitEnergyFolder(menu);
+        InitItemsFolder(menu);
+        InitRenderFolder(menu);
+        InitSaveFolder(menu);
+        InitSoundFolder(menu);
 
-            }));
-            *emotes += (EntryWithHotkey(new MenuEntry("Enable Lobby Emote Swapper", lobbyEmoteSwapper), {
-                Hotkey(Key::DPadLeft, "Lobby Emote Swapper"),
-                Hotkey(Key::DPadRight, "Lobby Emote Swapper")
-            }));
-            *emotes += new MenuEntry("Use Custom Emotes", customEmotes);
-        
+        AddAllFolders(menu);
+    }
 
-        // create linkcolor folder (presets?)
-        MenuFolder* linkcolor = new MenuFolder("Custom Link Colors");
-            *linkcolor += new MenuEntry("Set Green Link color", nullptr, customColor);
-            *linkcolor += new MenuEntry("Set Blue Link color", nullptr, customColor);
-            *linkcolor += new MenuEntry("Set Red Link color", nullptr, customColor);
-            *linkcolor += new MenuEntry("Use re-colored level textures", recolorLevelTex);
-        
+    void AddAllFolders(PluginMenu& menu)
+    {
+        menu += freecam;
+        menu += gameplay;
+        menu += linkcolor;
+        menu += costume;
+        menu += miscellaneous;
+        menu += player;
+        menu += energy;
+        menu += items;
+        menu += render;
+        menu += save;
+        menu += sound;
+    }
 
-        // create costume folder
-        MenuFolder* costume = new MenuFolder("Costume Codes");
-            *costume += new MenuEntry("Trigger Custom Costume Slots", nullptr, openCustomCostumeSlots);
+    void InitEmoteFolder (PluginMenu& menu) 
+    {
+        emotes = new MenuFolder("Emote Codes");
 
-            // init Menu Entries defined above
-            menuCostumeSlotA = new MenuEntry("Set custom costume slot A", nullptr, selectCostumeID, "This setting is not accessible if Restore Great Fairy Costume is enabled.");
-            menuCostumeSlotB = new MenuEntry("Set custom costume slot B", nullptr, selectCostumeID);
-            menuCostumeSlotC = new MenuEntry("Set custom costume slot C", nullptr, selectCostumeID);
-            menuCostumeSlotD = new MenuEntry("Set custom costume slot D", nullptr, selectCostumeID);
-            restoreGreatFairy = new MenuEntry("Restore Great Fairy Costume", greatFairyEnable);
-
-            // add to costume folder + hide by default
-            *costume += menuCostumeSlotA, menuCostumeSlotB, menuCostumeSlotC, menuCostumeSlotD, restoreGreatFairy;
-            menuCostumeSlotA, menuCostumeSlotB, menuCostumeSlotC, menuCostumeSlotD->Hide();
-   
-            // these are not added to the menu -- these are auto-managed by the plugin and don't need to be accessed by the user
-            manageCatalogSize = new MenuEntry("Manage Catalog Size (auto)", manageCatalogSizeAuto);
-            initCustomCostumes = new MenuEntry("Init Custom Costume list (auto)", initCustomCostumesAuto);
-            writeCostumeIDToSlot = new MenuEntry("Write to costume slots (auto", writeCostumeSlot);
-
-            *costume += new MenuEntry("Change Player Costume", nullptr, changeLinkCostume);
-
-            // create costume sub-folders
-            MenuFolder* costumeEffects = new MenuFolder("Costume Effect(s)");
-                *costumeEffects += new MenuEntry("Set Costume Effects", nullptr, selCostumeEffect);
-
-            MenuFolder* extraCustomConfig = new MenuFolder("Additional Customizations");
-                // *extraCustomConfig += new MenuEntry("Set number of Tingle Balloons", nullptr, tingleBalloonNumber);
-                // *extraCustomConfig += new MenuEntry("Set Cheetah walking speed", nullptr, cheetahSpeed);
-                // *extraCustomConfig += new MenuEntry("Set luck percentage", nullptr, luckPercent);
-                // *extraCustomConfig += new MenuEntry("Set number of additional Hearts", nullptr, addHeart);
-                // *extraCustomConfig += new MenuEntry("Set sword beam type", nullptr, swordBeamConfig);
-
-            *costume += costumeEffects;
-            *extraCustomConfig += costumeEffects;
-
-        // create misc folder
-        MenuFolder* miscellaneous = new MenuFolder("Miscellaneous Codes");
-            resetMiscellaneous = new MenuEntry("Reset Miscellaneous codes (auto)", defaultMisc);
-            instantTextDisplay = new MenuEntry("Force instant text boxes", instantText);
-
-            // test hotkey entry -- broken...
-            *miscellaneous += (EntryWithHotkey(new MenuEntry("Enable button spam", buttonSpammer, "When any of the selected keys are\npressed down, they will automatically spam.\nGood for in-game manuevers that require\nstrict timing of button input(s).\n\nDefault keys: A, B, X, Y, L, R."), {
-                Hotkey(Key::A | Key::B | Key::X | Key::Y | Key::L | Key::R , "Button Spammer")
+        *emotes += (EntryWithHotkey(new MenuEntry("Enable Drablands Emote Swapper", drablandEmoteSwapper), {
+            Hotkey(Key::DPadLeft, "Swap to original emote set"),
+            Hotkey(Key::DPadRight, "Swap to alternative emote set")
             }));
 
-            *miscellaneous += new MenuEntry("Disable sword beam cooldown", beamCooldown);
-            *miscellaneous += new MenuEntry("Display photo on top screen", displayPhoto);
-            *miscellaneous += new MenuEntry("Always display Treasure Chest contents", seeChestContents);
-            *miscellaneous += instantTextDisplay;
+        *emotes += (EntryWithHotkey(new MenuEntry("Enable Lobby Emote Swapper", lobbyEmoteSwapper), {
+            Hotkey(Key::DPadLeft, "Swap to original emote set"),
+            Hotkey(Key::DPadRight, "Swap to alternative emote set")
+            }));
 
-        // create player folder
-        MenuFolder* player = new MenuFolder("Player Codes");
-            // hotkeys -> posEditor (?)
-            *player += new MenuEntry("Bypass Doppel Master dialogue cutscene", bypassDoppelDemo);
-            *player += new MenuEntry("Enable position editor menu", posEditor);
-            *player += new MenuEntry("Enable Water Storage", nullptr, waterStorage);
-            *player += new MenuEntry("Display current respawn location", respawnIndicator);
-            *player += new MenuEntry("Disable Collision (experimental!)", nullptr, removeCollision);
-            *player += new MenuEntry("Spawn/Despawn Links", nullptr, spawnOpt);
-            *player += new MenuEntry("Set Link model size", nullptr, linkSize);
-            *player += new MenuEntry("Set Sword Types", nullptr, swordModelOpt);
-            *player += new MenuEntry("Toggle Jinxed model", nullptr, jinxOpt);
-            *player += new MenuEntry("Toggle Link Visibility", nullptr, visibilityOpt);
-            *player += new MenuEntry("Toggle Link Invincibility", nullptr, invincibleOpt);
-            *player += new MenuEntry("Toggle PvP damage", nullptr, pvpMode);
+        // *emotes += new MenuEntry("Use Custom Emotes", customEmotes);
+    }
 
-            // this is not added to the player folder
-            managePlayerCodes = new MenuEntry("Set Player edits (auto)", setPlayerChanges);
+    void InitFreecamFolder(PluginMenu& menu)
+    {
+        freecam = new MenuFolder("Freecam Codes");
 
-        // create energy folder
-        MenuFolder* energy = new MenuFolder("Energy Codes");
-            *energy += new MenuEntry("Infinite energy", infEnergy);
-            *energy += new MenuEntry("Set max energy amount", nullptr, maxEnergySet);
-            *energy += new MenuEntry("Set energy consumption multiplier", nullptr, energyConsumeMultiplier);
+        menuFreecam = (EntryWithHotkey(new MenuEntry("Use Freecam button controls", useFreecam), {
+                Hotkey(Key::L, "Enable/Disable Freecam"),
+                Hotkey(Key::R, "Toggle camera lock"),
+                Hotkey(Key::L | Key::R, "Reset camera"),
+                Hotkey(Key::X, "Shift camera north"),
+                Hotkey(Key::B, "Shift camera south"),
+                Hotkey(Key::Y, "Shift camera east"),
+                Hotkey(Key::A, "Shift camera west"),
+                Hotkey(Key::DPadLeft, "Zoom in"),
+                Hotkey(Key::DPadRight, "Zoom out"),
+                Hotkey(Key::DPadUp, "Raise camera"),
+                Hotkey(Key::DPadDown, "Lower camera"),
+                Hotkey(Key::CPadDown, "Rotate counterclockwise (X-axis)"),
+                Hotkey(Key::CPadUp, "Rotate clockwise (X-axis)"),
+                Hotkey(Key::CPadLeft, "Rotate counterclockwise (Z-axis)"),
+                Hotkey(Key::CPadRight, "Rotate clockwise (Z-axis)")
+        }));
 
-        // create item folder
-        MenuFolder* items = new MenuFolder("Item Codes");
-            *items += new MenuEntry("Set current item", itemOpt);
-            *items += new MenuEntry("Set Shadow Link item", shadowItemOpt);
-            *items += new MenuEntry("Set strafing speeds", nullptr, strafingSpeedSet);
-            *items += new MenuEntry("Always use upgraded Items", upgradeItemAlways);
+        *freecam += menuFreecam;
+        *freecam += new MenuEntry("Edit button controls", nullptr, editHotkeys);
+        *freecam += new MenuEntry("Edit sensitivity", nullptr, editSensitivity);
+    }
 
-        // create rendering folder
-        MenuFolder* render = new MenuFolder("Rendering Codes");
-            *render += new MenuEntry("Hide HUD", hideHUD);
-            *render += new MenuEntry("Disable fog effects", disableFog);
-            *render += new MenuEntry("Toggle scrolling messages", nullptr, disableScrollingText);
+    void InitColorFolder(PluginMenu& menu)
+    {
+        // presets?
+        linkcolor = new MenuFolder("Custom Link Colors");
 
-        // create save folder
-        MenuFolder* save = new MenuFolder("Savefile Codes");
-            *save += new MenuEntry("Use Voiceless", useVoiceless);
-            *save += new MenuEntry("Set Main Voice", nullptr, mainVoice);
-            *save += new MenuEntry("Set Hero Point count", nullptr, heroPointCountSet);
-            *save += new MenuEntry("Set Coliseum Win count", nullptr, coliseumWinCountSet);
+        *linkcolor += new MenuEntry("Set Green Link color", nullptr, customColor);
+        *linkcolor += new MenuEntry("Set Blue Link color", nullptr, customColor);
+        *linkcolor += new MenuEntry("Set Red Link color", nullptr, customColor);
+        *linkcolor += new MenuEntry("Use re-colored level textures", recolorLevelTex);
+    }
 
-            MenuFolder* merchant = new MenuFolder("Street Merchant Codes");
+    void InitCostumeFolder(PluginMenu& menu)
+    {
+        costume = new MenuFolder("Costume Codes");
+
+        *costume += new MenuEntry("Trigger Custom Costume Slots", nullptr, openCustomCostumeSlots);
+        menuCostumeSlotA = new MenuEntry("Set custom costume slot A", nullptr, selectCostumeID, 
+            "This setting is not accessible if Restore Great Fairy Costume is enabled.");
+        menuCostumeSlotB = new MenuEntry("Set custom costume slot B", nullptr, selectCostumeID);
+        menuCostumeSlotC = new MenuEntry("Set custom costume slot C", nullptr, selectCostumeID);
+        menuCostumeSlotD = new MenuEntry("Set custom costume slot D", nullptr, selectCostumeID);
+        restoreGreatFairy = new MenuEntry("Restore Great Fairy Costume", greatFairyEnable);
+
+        // add to costume folder + hide by default
+        *costume += menuCostumeSlotA;
+        *costume += menuCostumeSlotB;
+        *costume += menuCostumeSlotC;
+        *costume += menuCostumeSlotD;
+        *costume += restoreGreatFairy;
+
+        menuCostumeSlotA->Hide();
+        menuCostumeSlotB->Hide();
+        menuCostumeSlotC->Hide();
+        menuCostumeSlotD->Hide();
+
+        *costume += new MenuEntry("Change Player Costume", nullptr, changeLinkCostume);
+
+        // create costume sub-folders
+        MenuFolder* costumeEffects = new MenuFolder("Costume Effect(s)");
+        *costumeEffects += new MenuEntry("Set Costume Effects", nullptr, selCostumeEffect);
+
+        MenuFolder* extraCustomConfig = new MenuFolder("Additional Customizations");
+        // *extraCustomConfig += new MenuEntry("Set number of Tingle Balloons", nullptr, tingleBalloonNumber);
+        // *extraCustomConfig += new MenuEntry("Set Cheetah walking speed", nullptr, cheetahSpeed);
+        // *extraCustomConfig += new MenuEntry("Set luck percentage", nullptr, luckPercent);
+        // *extraCustomConfig += new MenuEntry("Set number of additional Hearts", nullptr, addHeart);
+        // *extraCustomConfig += new MenuEntry("Set sword beam type", nullptr, swordBeamConfig);
+
+        *costume += costumeEffects;
+        *extraCustomConfig += costumeEffects;
+
+        // NOT added to main menu -- these are auto-managed by the plugin and don't need to be accessed by the user
+        manageCatalogSize = new MenuEntry("Manage Catalog Size (auto)", manageCatalogSizeAuto);
+        initCustomCostumes = new MenuEntry("Init Custom Costume list (auto)", initCustomCostumesAuto);
+        writeCostumeIDToSlot = new MenuEntry("Write to costume slots (auto)", writeCostumeSlot);
+    }
+
+    void InitMiscFolder(PluginMenu& menu)
+    {
+        miscellaneous = new MenuFolder("Miscellaneous Codes");
+
+        // broken...
+        *miscellaneous += (EntryWithHotkey(new MenuEntry("Enable button spam", buttonSpammer, "When any of the selected keys are\npressed down, they will automatically spam.\nGood for in-game manuevers that require\nstrict timing of button input(s).\n\nDefault keys: A, B, X, Y, L, R."), {
+            Hotkey(Key::A | Key::B | Key::X | Key::Y | Key::L | Key::R , "Button Spammer")
+        }));
+
+        *miscellaneous += new MenuEntry("Disable sword beam cooldown", beamCooldown);
+        *miscellaneous += new MenuEntry("Display photo on top screen", displayPhoto);
+        *miscellaneous += new MenuEntry("Always display Treasure Chest contents", seeChestContents);
+        *miscellaneous += new MenuEntry("Force instant text boxes", instantText);
+
+        resetMiscellaneous = new MenuEntry("Reset Miscellaneous codes (auto)", defaultMisc);
+    }
+
+    void InitPlayerFolder(PluginMenu& menu)
+    {
+        player = new MenuFolder("Player Codes");
+        // hotkeys -> posEditor (?)
+
+        *player += new MenuEntry("Bypass Doppel Master dialogue cutscene", bypassDoppelDemo);
+        *player += new MenuEntry("Enable position editor menu", posEditor);
+        *player += new MenuEntry("Enable Water Storage", nullptr, waterStorage);
+        *player += new MenuEntry("Display current respawn location", respawnIndicator);
+        *player += new MenuEntry("Disable Collision (experimental!)", nullptr, removeCollision);
+        *player += new MenuEntry("Spawn/Despawn Links", nullptr, spawnOpt);
+        *player += new MenuEntry("Set Link model size", nullptr, linkSize);
+        *player += new MenuEntry("Set Sword Types", nullptr, swordModelOpt);
+        *player += new MenuEntry("Toggle Jinxed model", nullptr, jinxOpt);
+        *player += new MenuEntry("Toggle Link Visibility", nullptr, visibilityOpt);
+        *player += new MenuEntry("Toggle Link Invincibility", nullptr, invincibleOpt);
+        *player += new MenuEntry("Toggle PvP damage", nullptr, pvpMode);
+
+        managePlayerCodes = new MenuEntry("Set Player edits (auto)", setPlayerChanges);
+        resetMiscellaneous = new MenuEntry("Reset Miscellaneous codes (auto)", defaultMisc);
+    }
+
+    void InitEnergyFolder(PluginMenu& menu)
+    {
+        energy = new MenuFolder("Energy Codes");
+
+        *energy += new MenuEntry("Infinite energy", infEnergy);
+        *energy += new MenuEntry("Set max energy amount", nullptr, maxEnergySet);
+        *energy += new MenuEntry("Set energy consumption multiplier", nullptr, energyConsumeMultiplier);
+    }
+
+    void InitItemsFolder(PluginMenu& menu)
+    {
+        items = new MenuFolder("Item Codes");
+
+        *items += new MenuEntry("Set current item", itemOpt);
+        *items += new MenuEntry("Set Shadow Link item", shadowItemOpt);
+        *items += new MenuEntry("Set strafing speeds", nullptr, strafingSpeedSet);
+        *items += new MenuEntry("Always use upgraded Items", upgradeItemAlways);
+    }
+
+    void InitRenderFolder(PluginMenu& menu) 
+    {
+        render = new MenuFolder("Rendering Codes");
+
+        *render += new MenuEntry("Hide HUD", hideHUD);
+        *render += new MenuEntry("Disable fog effects", disableFog);
+        *render += new MenuEntry("Toggle scrolling messages", nullptr, disableScrollingText);
+    }
+
+    void InitSaveFolder(PluginMenu& menu)
+    {
+        save = new MenuFolder("Savefile Codes");
+
+        *save += new MenuEntry("Use Voiceless", useVoiceless);
+        *save += new MenuEntry("Set Main Voice", nullptr, mainVoice);
+        *save += new MenuEntry("Set Hero Point count", nullptr, heroPointCountSet);
+        *save += new MenuEntry("Set Coliseum Win count", nullptr, coliseumWinCountSet);
+
+        MenuFolder* merchant = new MenuFolder("Street Merchant Codes");
             *merchant += new MenuEntry("Set 1st material slot", nullptr, merchantSlotA);
             *merchant += new MenuEntry("Set 2nd material slot", nullptr, merchantSlotB);
             *merchant += new MenuEntry("Set 3rd material slot", nullptr, merchantSlotC);
@@ -177,54 +280,93 @@ namespace CTRPluginFramework {
             *merchant += new MenuEntry("Set 5th material slot", nullptr, merchantSlotE);
             *merchant += new MenuEntry("Force re-stock Street Merchant stall", nullptr, resetMerchant);
 
-            *save += merchant;
-
-        // create sound folder
-        MenuFolder* sound = new MenuFolder("BGM and SFX Codes");
-            *sound += new MenuEntry("Set current BGM", bgmSet);
-            *sound += new MenuEntry("Set BGM volume", nullptr, bgmVolSet);
-            *sound += new MenuEntry("Choose Lobby Ball song", lobbyBallSong);
-            //*sound += new MenuEntry("Set Lobby Ball volume", lobbyBallVol);
-            *sound += new MenuEntry("Set Link Voice volume", nullptr, voiceVol);
-            *sound += new MenuEntry("Set Low Health Alert volume", nullptr, lowHPVol);
-            // unnecessary?
-            // *sound += new MenuEntry("Set Level Completion Fanfare volume", levelDoneVol);
-
-        // add folders to menu
-            menu += emotes;
-            menu += linkcolor;
-            menu += costume;
-            menu += miscellaneous;
-            menu += player;
-            menu += energy;
-            menu += items;
-            menu += render;
-            menu += save;
-            menu += sound;
+        *save += merchant;
     }
 
+    void InitSoundFolder(PluginMenu& menu)
+    {
+        sound = new MenuFolder("BGM and SFX Codes");
+
+        *sound += new MenuEntry("Set current BGM", bgmSet);
+        *sound += new MenuEntry("Set BGM volume", nullptr, bgmVolSet);
+        *sound += new MenuEntry("Choose Lobby Ball song", lobbyBallSong);
+        //*sound += new MenuEntry("Set Lobby Ball volume", lobbyBallVol);
+        *sound += new MenuEntry("Set Link Voice volume", nullptr, voiceVol);
+        *sound += new MenuEntry("Set Low Health Alert volume", nullptr, lowHPVol);
+        // *sound += new MenuEntry("Set Level Completion Fanfare volume", levelDoneVol);
+    }
+
+    void ToggleMenuChange(Time time)
+    {
+        if (PluginMenu::GetRunningInstance()->FreecamToggle) 
+        {
+            freecam->Show();
+            costume->HideWithoutDisable();
+            gameplay->HideWithoutDisable();
+            emotes->HideWithoutDisable();
+            linkcolor->HideWithoutDisable();
+            miscellaneous->HideWithoutDisable();
+            player->HideWithoutDisable();
+            energy->HideWithoutDisable();
+            items->HideWithoutDisable();
+            render->HideWithoutDisable();
+            save->HideWithoutDisable();
+            sound->HideWithoutDisable();
+        }
+        else
+        {
+            freecam->HideWithoutDisable();
+            if (!PluginMenu::GetRunningInstance()->GameplayToggle)
+            {
+                costume->Show();
+                emotes->Show();
+                linkcolor->Show();
+                miscellaneous->Show();
+                player->Show();
+                energy->Show();
+                items->Show();
+                render->Show();
+                save->Show();
+                sound->Show();
+            }
+            else
+            {
+                gameplay->Show();
+                costume->HideWithoutDisable();
+                freecam->HideWithoutDisable();
+                gameplay->HideWithoutDisable();
+                emotes->HideWithoutDisable();
+                linkcolor->HideWithoutDisable();
+                miscellaneous->HideWithoutDisable();
+                player->HideWithoutDisable();
+                energy->HideWithoutDisable();
+                items->HideWithoutDisable();
+                render->HideWithoutDisable();
+                save->HideWithoutDisable();
+                sound->HideWithoutDisable();
+            }
+        }
+    }
+
+    // this function only runs once at plugin startup
     int main(void)
     {
-        // title is left blank since the name is already set within the lib
+        // title is left blank since the name is already set inside the lib
         PluginMenu* menu = new PluginMenu("", 0, 5, 0,
             "An advanced, region-free cheat plugin made for\nThe Legend of Zelda: Tri Force Heroes.\n\nForked from the original CTRPluginFramework\nblank template repository.");
 
-        // Synchronize the menu with frame event
         menu->SynchronizeWithFrame(true);
 
-        // Init menu entries & folders
         InitMenu(*menu);
+        menu->OnNewFrame = ToggleMenuChange;
 
-        // init reset functions
+        // init auto functions
         // resetCostume->Enable();
         resetMiscellaneous->Enable();
-
-        // init continuous functions
         managePlayerCodes->Enable();
 
         // Launch menu and mainloop
         menu->Run();
-
         delete menu;
 
         // Exit plugin
@@ -286,7 +428,6 @@ namespace CTRPluginFramework {
     }
 
     // Called when the process exits
-    // Useful to save settings, undo patches or clean up things
     void    OnProcessExit(void)
     {
         ToggleTouchscreenForceOn();
