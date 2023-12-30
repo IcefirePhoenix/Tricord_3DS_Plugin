@@ -4,33 +4,35 @@
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuExecuteLoop.hpp"
 #include "CTRPluginFramework/Menu/MenuFolder.hpp"
 #include "CTRPluginFramework/Sound.hpp"
+#include <CTRPluginFramework.hpp>
 
 #include <cstring>
 
 namespace CTRPluginFramework
 {
 
-    PluginMenuHome::PluginMenuHome(std::string &name, bool showNoteBottom) :
+    PluginMenuHome::PluginMenuHome(std::string& name, bool showNoteBottom) :
 
         _noteTB("", "", showNoteBottom ? IntRect(20, 46, 280, 124) : IntRect(40, 30, 320, 180)),
 
-        _showStarredBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Freecam", IntRect(45, 100, 110, 28)),
-        _hidMapperBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Game Modes", IntRect(165, 100, 110, 28)),
-        _gameGuideBtn(Button::Sysfont | Button::Rounded, "FAQ/Credits", IntRect(45, 135, 110, 28)),
-        _searchBtn(Button::Sysfont | Button::Rounded, "Search", IntRect(165, 135, 110, 28)),
-        _arBtn(Button::Sysfont | Button::Rounded, "Action Replay", IntRect(45, 170, 110, 28)),
-        _toolsBtn(Button::Sysfont | Button::Rounded, "Tools", IntRect(165, 170, 110, 28)),
+        _showStarredBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Favorites", IntRect(45, 115, 110, 28)),
+        _freecamBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Freecam", IntRect(45, 80, 110, 28)),
+        _gameModeBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Game Modes", IntRect(165, 80, 110, 28)),
+        _gameGuideBtn(Button::Sysfont | Button::Rounded, "FAQ/Credits", IntRect(105, 185, 110, 28)),
+        _searchBtn(Button::Sysfont | Button::Rounded, "Search", IntRect(165, 115, 110, 28)),
+        _arBtn(Button::Sysfont | Button::Rounded, "Action Replay", IntRect(45, 150, 110, 28)),
+        _toolsBtn(Button::Sysfont | Button::Rounded, "Tools", IntRect(165, 150, 110, 28)),
 
         // _closeBtn(*this, nullptr, IntRect(275, 24, 20, 20), Icon::DrawClose),
-        _keyboardBtn(Button::Icon, IntRect(130, 30, 25, 25), Icon::DrawKeyboard),
-        _controllerBtn(Button::Icon, IntRect(170, 30, 25, 25), Icon::DrawGameController25),
+        _keyboardBtn(Button::Icon, IntRect(330, 30, 25, 25), Icon::DrawKeyboard),
+        _controllerBtn(Button::Icon, IntRect(370, 30, 25, 25), Icon::DrawGameController25),
 
         _AddFavoriteBtn(Button::Icon | Button::Toggle, IntRect(50, 30, 25, 25), Icon::DrawAddFavorite),
         _InfoBtn(Button::Icon | Button::Toggle, IntRect(90, 30, 25, 25), Icon::DrawInfo)
 
     {
         _root = _folder = new MenuFolderImpl("Main Menu");
-        _starredConst = _starred = new MenuFolderImpl("Freecam Options");
+        _starredConst = _starred = new MenuFolderImpl("Favorites");
 
         _starMode = false;
         _selector = 0;
@@ -105,8 +107,10 @@ namespace CTRPluginFramework
 
         if (!ShowNoteBottom) {
             // Check all buttons
+
             if (_showStarredBtn()) _showStarredBtn_OnClick();
-            // _hidMapperBtn();
+            if (_freecamBtn()) _freecamBtn_OnClick();
+            if (_gameModeBtn()) _gameModeBtn_OnClick();
             if (_gameGuideBtn()) _gameGuideBtn_OnClick();
             if (_searchBtn()) _searchBtn_OnClick();
             if (_arBtn()) _actionReplayBtn_OnClick();
@@ -579,14 +583,15 @@ namespace CTRPluginFramework
         else
         {
             _showStarredBtn.Draw();
-            _hidMapperBtn.Draw();
+            _freecamBtn.Draw();
+            _gameModeBtn.Draw();
             _gameGuideBtn.Draw();
             _searchBtn.Draw();
             _arBtn.Draw();
-           // _AddFavoriteBtn.Draw();
+            _AddFavoriteBtn.Draw();
             _InfoBtn.Draw();
             //_keyboardBtn.Draw();
-           // _controllerBtn.Draw();
+            //_controllerBtn.Draw();
         }
         _toolsBtn.Draw();
     }
@@ -646,13 +651,13 @@ namespace CTRPluginFramework
                 if (!ShowNoteBottom)
                 {
                     // A folder will not have a menufunc
-                    _keyboardBtn.Enable(false);
+                    //_keyboardBtn.Enable(false);
                     // Check if folder has a note
                     _InfoBtn.Enable(e->note.size());
                     // Enable AddFavorites icon
                     _AddFavoriteBtn.Enable(true);
                     _AddFavoriteBtn.SetState(e->_IsStarred());
-                    _controllerBtn.Enable(false);
+                    //_controllerBtn.Enable(false);
                 }
                 if (e->HasNoteChanged())
                 {
@@ -670,14 +675,14 @@ namespace CTRPluginFramework
                 if (!ShowNoteBottom)
                 {
                     // Check if entry has a menu func
-                    _keyboardBtn.Enable(e->MenuFunc != nullptr);
+                    //_keyboardBtn.Enable(e->MenuFunc != nullptr);
                     // Check if entry has a note
                     _InfoBtn.Enable(note.size());
                     // Enable AddFavorites icon
                     _AddFavoriteBtn.Enable(true);
                     _AddFavoriteBtn.SetState(e->_IsStarred());
                     // Enable controller icon
-                    _controllerBtn.Enable(e->_owner != nullptr && e->_owner->Hotkeys.Count() > 0);
+                    //_controllerBtn.Enable(e->_owner != nullptr && e->_owner->Hotkeys.Count() > 0);
                 }
                 if (e->HasNoteChanged())
                 {
@@ -702,14 +707,15 @@ namespace CTRPluginFramework
         {
             // Update buttons
             _showStarredBtn.Update(isTouched, touchPos);
-            //_hidMapperBtn.Update(isTouched, touchPos);
+            _freecamBtn.Update(isTouched, touchPos);
+            _gameModeBtn.Update(isTouched, touchPos);
             _gameGuideBtn.Update(isTouched, touchPos);
             _searchBtn.Update(isTouched, touchPos);
             _arBtn.Update(isTouched, touchPos);
             _AddFavoriteBtn.Update(isTouched, touchPos);
             _InfoBtn.Update(isTouched, touchPos);
-            _keyboardBtn.Update(isTouched, touchPos);
-            _controllerBtn.Update(isTouched, touchPos);
+            //_keyboardBtn.Update(isTouched, touchPos);
+            //_controllerBtn.Update(isTouched, touchPos);
         }
         _toolsBtn.Update(isTouched, touchPos);
 
@@ -791,6 +797,8 @@ namespace CTRPluginFramework
         }
     }
 
+    // this is broken now, idk why
+    // TODO: fix
     void    PluginMenuHome::_showStarredBtn_OnClick(void)
     {
         static int bak = 0;
@@ -809,7 +817,7 @@ namespace CTRPluginFramework
         {
             MenuEntryImpl* e = reinterpret_cast<MenuEntryImpl *>(f->_items[_selector]);
             _InfoBtn.Enable(e->note.size() > 0);
-            _keyboardBtn.Enable(e->MenuFunc != nullptr);
+            //_keyboardBtn.Enable(e->MenuFunc != nullptr);
             _AddFavoriteBtn.Enable(true);
             _AddFavoriteBtn.SetState(e->_IsStarred());
 
@@ -853,9 +861,69 @@ namespace CTRPluginFramework
             e->MenuFunc(e->_owner);
     }
 
-    void PluginMenuHome::_actionReplayBtn_OnClick()
+    void     PluginMenuHome::_actionReplayBtn_OnClick(void)
     {
         _mode = 4;
+    }
+
+    // custom
+    void    PluginMenuHome::_gameModeBtn_OnClick(void)
+    {
+        std::string msg = PluginMenu::GetRunningInstance()->GameplayToggle ? 
+            "If you exit this menu, any chosen Gameplay Modes will be disabled.\n\nWould you like to continue to the Main Menu?" :
+            "Choosing a custom Gameplay Mode will auto-disable any codes that may cause conflicts (see the FAQ for details). You will also be unable to access the Main Menu until you quit.\n\nWould you like to proceed?";
+       
+        if (MessageBox(Color::Gainsboro << "Gameplay Modes", msg, DialogType::DialogYesNo)())
+            PluginMenu::GetRunningInstance()->GameplayToggle = !PluginMenu::GetRunningInstance()->GameplayToggle;
+
+        // Freecam remains selectable here
+        if (PluginMenu::GetRunningInstance()->GameplayToggle)
+        {
+            _gameGuideBtn.Lock();
+            _toolsBtn.Lock();
+            _showStarredBtn.Lock();
+            _AddFavoriteBtn.Lock();
+            _arBtn.Lock();
+            _searchBtn.Lock();
+        }
+        else
+        {
+            _gameGuideBtn.Unlock();
+            _toolsBtn.Unlock();
+            _showStarredBtn.Unlock();
+            _AddFavoriteBtn.Unlock();
+            _arBtn.Unlock();
+            _searchBtn.Unlock();
+        }
+    }
+
+    // custom
+    void    PluginMenuHome::_freecamBtn_OnClick(void)
+    {
+        PluginMenu::GetRunningInstance()->FreecamToggle = !PluginMenu::GetRunningInstance()->FreecamToggle;
+
+        if (PluginMenu::GetRunningInstance()->FreecamToggle)
+        {
+            _gameModeBtn.Lock();
+            _gameGuideBtn.Lock();
+            _toolsBtn.Lock();
+            _showStarredBtn.Lock();
+            _AddFavoriteBtn.Lock();
+            _arBtn.Lock();
+            _searchBtn.Lock();
+        }
+        else if (!PluginMenu::GetRunningInstance()->GameplayToggle)
+        {
+            _gameModeBtn.Unlock();
+            _gameGuideBtn.Unlock();
+            _toolsBtn.Unlock();
+            _showStarredBtn.Unlock();
+            _AddFavoriteBtn.Unlock();
+            _arBtn.Unlock();
+            _searchBtn.Unlock();
+        }
+        else if (PluginMenu::GetRunningInstance()->GameplayToggle)
+            _gameModeBtn.Unlock();
     }
 
     void    PluginMenuHome::_gameGuideBtn_OnClick(void)

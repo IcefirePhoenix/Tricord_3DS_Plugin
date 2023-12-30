@@ -51,6 +51,8 @@ namespace CTRPluginFramework
         std::string     note;
 
         void    Hide(void);
+        void    HideWithoutDisable(void);
+
         void    Show(void);
         bool    IsVisible(void) const
         {
