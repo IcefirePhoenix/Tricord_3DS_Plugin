@@ -78,15 +78,15 @@ namespace CTRPluginFramework
 
     static PluginMenuActionReplay *__pmARinstance = nullptr;
     PluginMenuActionReplay::PluginMenuActionReplay() :
-        _topMenu{ "ActionReplay" },
-        _noteBtn(Button::Icon | Button::Toggle, IntRect(90, 30, 25, 25), Icon::DrawInfo),
-        _editorBtn(Button::Icon, IntRect(130, 30, 25, 25), Icon::DrawEdit),
-        _newBtn(Button::Icon, IntRect(165, 30, 25, 25), Icon::DrawPlus),
-        _cutBtn(Button::Icon, IntRect(200, 30, 25, 25), Icon::DrawCut),
-        _pasteBtn(Button::Icon, IntRect(200, 30, 25, 25), Icon::DrawClipboard),
-        _duplicateBtn(Button::Icon, IntRect(235, 30, 25, 25), Icon::DrawDuplicate),
-        _trashBtn(Button::Icon, IntRect(50, 30, 25, 25), Icon::DrawTrash),
-        _openFileBtn(0, "Open", IntRect(30, 195, 34, 15)),
+        _topMenu{ "Action Replay Codes" },
+        _noteBtn(Button::Icon | Button::Toggle, IntRect(40, 125, 110, 28), Icon::DrawInfo),
+        _editorBtn(Button::Icon, IntRect(40, 90, 110, 28), Icon::DrawEdit),
+        _newBtn(Button::Icon, IntRect(170, 90, 110, 28), Icon::DrawPlus),
+        _cutBtn(Button::Icon, IntRect(170, 162, 110, 28), Icon::DrawCut),
+        _pasteBtn(Button::Icon, IntRect(170, 160, 110, 28), Icon::DrawClipboard),
+        _duplicateBtn(Button::Icon, IntRect(170, 127, 110, 28), Icon::DrawDuplicate),
+        _trashBtn(Button::Icon, IntRect(40, 160, 110, 28), Icon::DrawTrash),
+        _openFileBtn(0, "Open", IntRect(30, 200, 34, 15)),
 
         _clipboard{ nullptr },
         _path{0}
@@ -174,22 +174,50 @@ namespace CTRPluginFramework
         Renderer::SetTarget(BOTTOM);
         Window::BottomWindow.Draw();
 
-        _noteBtn.Draw();
-        _editorBtn.Draw();
-        _newBtn.Draw();
+        Renderer::DrawRect(IntRect(30, 85, 259, 110), Color::Magenta, true);
+
         _cutBtn.Draw();
         _pasteBtn.Draw();
-        _duplicateBtn.Draw();
-        _trashBtn.Draw();
-
-        _openFileBtn.Draw();
+        _newBtn.Draw();
 
         int posX = 30 + 34 + 5;
-        int posY = 195;
+        int posY = 200;
 
-        Renderer::DrawRect(posX, posY, 220, 15, Color::Gray);
+        // y positions are not consistent?
+        int yCoordA = 95;
+        int yCoordB = 132;
+        int cutPasteY = 168;
+
+        Renderer::DrawRect(posX, posY, 220, 15, Color::Maroon);
         posY += 3;
-        Renderer::DrawString((const char *)_path, posX + 2, posY, Color::Black);
+        Renderer::DrawString((const char *)_path, posX + 2, posY, Color::Gainsboro);
+        
+        const char* labels[6] =
+        {
+            "Create New", "Duplicate", "Open Editor", "", "Delete", "Read Note"
+        };
+
+        if (_clipboard == nullptr) {
+            _noteBtn.Draw();
+            _editorBtn.Draw();
+            _duplicateBtn.Draw();
+            _trashBtn.Draw();
+            _openFileBtn.Draw();
+
+            Renderer::DrawSysString(labels[1], 205, yCoordB, 290, Preferences::Settings.MainTextColor);
+           
+            if (!_topMenu.GetSelectedItem()->note.empty())
+                Renderer::DrawSysString(labels[5], 75, yCoordB -= 17, 290, Preferences::Settings.MainTextColor);
+
+            for (int i = 2, yCoord2 = 95; i < 5; ++i, yCoord2 += 28)
+                Renderer::DrawSysString(labels[i], 75, yCoord2, 290, Preferences::Settings.MainTextColor);
+        }
+
+        Renderer::DrawSysString(labels[0], 205, yCoordA, 290, Preferences::Settings.MainTextColor);
+
+        // cut/paste label
+        const char* swapLabel = (_clipboard != nullptr) ? "Paste" : "Cut";
+        Renderer::DrawSysString(swapLabel, 205, cutPasteY, 290, Preferences::Settings.MainTextColor);
     }
 
     void    PluginMenuActionReplay::_ProcessEvent(EventList &eventList)
@@ -391,7 +419,7 @@ namespace CTRPluginFramework
 
         if (root->ItemsCount() > 0)
         {
-            if (MessageBox(Color::Orange << "Warning", "Do you want to clear current code list?", DialogType::DialogYesNo)())
+            if (MessageBox(Color::Orange << "Warning", "Do you want to clear the current code list?", DialogType::DialogYesNo)())
             {
                 // Ensure we're at the root of the menu
                 __pmARinstance->_topMenu.CloseAll();
