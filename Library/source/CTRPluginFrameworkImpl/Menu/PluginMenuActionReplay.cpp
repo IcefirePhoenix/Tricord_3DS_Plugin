@@ -178,6 +178,7 @@ namespace CTRPluginFramework
 
         _cutBtn.Draw();
         _pasteBtn.Draw();
+        _openFileBtn.Draw();
 
         int posX = 30 + 34 + 5;
         int posY = 200;
@@ -202,7 +203,6 @@ namespace CTRPluginFramework
             _editorBtn.Draw();
             _duplicateBtn.Draw();
             _trashBtn.Draw();
-            _openFileBtn.Draw();
 
             Renderer::DrawSysString(labels[0], 205, yCoordA, 290, Preferences::Settings.MainTextColor);
             Renderer::DrawSysString(labels[1], 205, yCoordB, 290, Preferences::Settings.MainTextColor);
