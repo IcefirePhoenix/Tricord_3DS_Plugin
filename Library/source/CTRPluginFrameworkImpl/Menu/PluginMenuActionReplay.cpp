@@ -83,7 +83,7 @@ namespace CTRPluginFramework
         _editorBtn(Button::Icon, IntRect(40, 90, 110, 28), Icon::DrawEdit),
         _newBtn(Button::Icon, IntRect(170, 90, 110, 28), Icon::DrawPlus),
         _cutBtn(Button::Icon, IntRect(170, 162, 110, 28), Icon::DrawCut),
-        _pasteBtn(Button::Icon, IntRect(170, 160, 110, 28), Icon::DrawClipboard),
+        _pasteBtn(Button::Icon, IntRect(170, 162, 110, 28), Icon::DrawClipboard),
         _duplicateBtn(Button::Icon, IntRect(170, 127, 110, 28), Icon::DrawDuplicate),
         _trashBtn(Button::Icon, IntRect(40, 160, 110, 28), Icon::DrawTrash),
         _openFileBtn(0, "Open", IntRect(30, 200, 34, 15)),
@@ -178,7 +178,6 @@ namespace CTRPluginFramework
 
         _cutBtn.Draw();
         _pasteBtn.Draw();
-        _newBtn.Draw();
 
         int posX = 30 + 34 + 5;
         int posY = 200;
@@ -198,12 +197,14 @@ namespace CTRPluginFramework
         };
 
         if (_clipboard == nullptr) {
+            _newBtn.Draw();
             _noteBtn.Draw();
             _editorBtn.Draw();
             _duplicateBtn.Draw();
             _trashBtn.Draw();
             _openFileBtn.Draw();
 
+            Renderer::DrawSysString(labels[0], 205, yCoordA, 290, Preferences::Settings.MainTextColor);
             Renderer::DrawSysString(labels[1], 205, yCoordB, 290, Preferences::Settings.MainTextColor);
            
             if (!_topMenu.GetSelectedItem()->note.empty())
@@ -213,7 +214,6 @@ namespace CTRPluginFramework
                 Renderer::DrawSysString(labels[i], 75, yCoord2, 290, Preferences::Settings.MainTextColor);
         }
 
-        Renderer::DrawSysString(labels[0], 205, yCoordA, 290, Preferences::Settings.MainTextColor);
 
         // cut/paste label
         const char* swapLabel = (_clipboard != nullptr) ? "Paste" : "Cut";
