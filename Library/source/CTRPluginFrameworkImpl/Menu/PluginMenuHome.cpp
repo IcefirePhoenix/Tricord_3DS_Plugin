@@ -15,13 +15,13 @@ namespace CTRPluginFramework
 
         _noteTB("", "", showNoteBottom ? IntRect(20, 46, 280, 124) : IntRect(40, 30, 320, 180)),
 
-        _showStarredBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Favorites", IntRect(45, 115, 110, 28)),
-        _freecamBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Freecam", IntRect(45, 80, 110, 28)),
-        _gameModeBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Game Modes", IntRect(165, 80, 110, 28)),
-        _gameGuideBtn(Button::Sysfont | Button::Rounded, "FAQ/Credits", IntRect(105, 185, 110, 28)),
-        _searchBtn(Button::Sysfont | Button::Rounded, "Search", IntRect(165, 115, 110, 28)),
-        _arBtn(Button::Sysfont | Button::Rounded, "Action Replay", IntRect(45, 150, 110, 28)),
-        _toolsBtn(Button::Sysfont | Button::Rounded, "Tools", IntRect(165, 150, 110, 28)),
+        _showStarredBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Favorites", IntRect(45, 125, 110, 28)),
+        _freecamBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Freecam", IntRect(45, 90, 110, 28)),
+        _gameModeBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Game Modes", IntRect(165, 90, 110, 28)),
+        _gameGuideBtn(Button::Sysfont | Button::Rounded, "FAQ/Credits", IntRect(105, 195, 110, 28)),
+        _searchBtn(Button::Sysfont | Button::Rounded, "Search", IntRect(165, 125, 110, 28)),
+        _arBtn(Button::Sysfont | Button::Rounded, "Action Replay", IntRect(45, 160, 110, 28)),
+        _toolsBtn(Button::Sysfont | Button::Rounded, "Tools", IntRect(165, 160, 110, 28)),
 
         // _closeBtn(*this, nullptr, IntRect(275, 24, 20, 20), Icon::DrawClose),
         _keyboardBtn(Button::Icon, IntRect(330, 30, 25, 25), Icon::DrawKeyboard),
