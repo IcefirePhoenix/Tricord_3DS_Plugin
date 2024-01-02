@@ -59,6 +59,11 @@ namespace CTRPluginFramework
         _item->Hide();
     }
 
+    void    MenuEntry::HideWithoutDisable(void) const
+    {
+        _item->HideWithoutDisable();
+    }
+
     void    MenuEntry::Show(void) const
     {
         _item->Show();
