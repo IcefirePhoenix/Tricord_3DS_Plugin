@@ -101,7 +101,7 @@ namespace CTRPluginFramework
     void    Hotkey::AskForKeys(void)
     {
         FwkSettings& settings = FwkSettings::Get();
-        std::string lockKeys = (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable) ? "\n\n\nNote: o2/3DS detected; n2/3DS buttons have\nbeen disabled and cannot be selected in this\nmenu." : "";
+        std::string lockKeys = (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable) ? "\n\n\nNote: o2/3DS detected; checkboxes for n2/3DS buttons have\nbeen disabled and cannot be selected in this\nmenu." : "";
         
         HotkeysModifier(_keys, "Select new Hotkeys for the following entry:\n\n" + _name + lockKeys)();
     }

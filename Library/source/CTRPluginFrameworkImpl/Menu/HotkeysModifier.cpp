@@ -14,7 +14,7 @@ namespace CTRPluginFramework
     static const Key ktable[22] =
     {
         L, DPadUp, DPadLeft, DPadRight, DPadDown,
-        R, X, Y, A, B,
+        R, A, B, X, Y,
         ZL, CPadUp, CPadLeft, CPadRight, CPadDown,
         ZR, CStickUp, CStickLeft, CStickRight, CStickDown,
         Start, Select
@@ -23,9 +23,9 @@ namespace CTRPluginFramework
     static const char *stable[22] =
     {
         FONT_L, FONT_DU, FONT_DL, FONT_DR, FONT_DD,
-        FONT_R, FONT_X, FONT_Y, FONT_A, FONT_B,
+        FONT_R, FONT_A, FONT_B, FONT_X, FONT_Y,
         FONT_ZL, "\uE077 Up", "\uE077 Left", "\uE077 Right", "\uE077 Down",
-        FONT_ZR, "CS Up", "CS Left", "CS Right", "CS Down",
+        FONT_ZR, "\uE04A Up", "\uE04A Left", "\uE04A Right", "\uE04A Down",
         "Start", "Select"
     };
 
