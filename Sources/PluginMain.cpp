@@ -41,8 +41,9 @@ namespace CTRPluginFramework {
     MenuEntry* managePlayerCodes;
 
     MenuEntry* menuFreecam;
+    MenuEntry* editFreecamControls;
+    MenuEntry* editFreecamSen;
 
-    MenuFolder* freecam;
     MenuFolder* emotes;
     MenuFolder* gameplay;
     MenuFolder* linkcolor;
@@ -65,7 +66,7 @@ namespace CTRPluginFramework {
 
     void    InitMenu(PluginMenu& menu)
     {
-        InitFreecamFolder(menu);
+        InitFreecamCodes(menu);
         InitEmoteFolder(menu);
         InitColorFolder(menu);
         InitCostumeFolder(menu);
@@ -82,7 +83,6 @@ namespace CTRPluginFramework {
 
     void AddAllFolders(PluginMenu& menu)
     {
-        menu += freecam;
         menu += gameplay;
         menu += linkcolor;
         menu += costume;
@@ -112,10 +112,9 @@ namespace CTRPluginFramework {
         // *emotes += new MenuEntry("Use Custom Emotes", customEmotes);
     }
 
-    void InitFreecamFolder(PluginMenu& menu)
+    void InitFreecamCodes(PluginMenu& menu)
     {
-        freecam = new MenuFolder("Freecam Codes");
-
+        // TODO: touchscreen-based controls
         menuFreecam = (EntryWithHotkey(new MenuEntry("Use Freecam button controls", useFreecam), {
                 Hotkey(Key::L, "Enable/Disable Freecam"),
                 Hotkey(Key::R, "Toggle camera lock"),
@@ -134,9 +133,12 @@ namespace CTRPluginFramework {
                 Hotkey(Key::CPadRight, "Rotate clockwise (Z-axis)")
         }));
 
-        *freecam += menuFreecam;
-        *freecam += new MenuEntry("Edit button controls", nullptr, editHotkeys);
-        *freecam += new MenuEntry("Edit sensitivity", nullptr, editSensitivity);
+        editFreecamControls = new MenuEntry("Edit button controls", nullptr, editHotkeys);
+        editFreecamSen = new MenuEntry("Edit sensitivity", nullptr, editSensitivity);
+
+        menu += menuFreecam;
+        menu += editFreecamControls;
+        menu += editFreecamSen;
     }
 
     void InitColorFolder(PluginMenu& menu)
@@ -300,7 +302,10 @@ namespace CTRPluginFramework {
     {
         if (PluginMenu::GetRunningInstance()->FreecamToggle) 
         {
-            freecam->Show();
+            menuFreecam->Show();
+            editFreecamControls->Show();
+            editFreecamSen->Show();
+
             costume->HideWithoutDisable();
             gameplay->HideWithoutDisable();
             emotes->HideWithoutDisable();
@@ -314,8 +319,11 @@ namespace CTRPluginFramework {
             sound->HideWithoutDisable();
         }
         else
-        {
-            freecam->HideWithoutDisable();
+        {          
+            menuFreecam->HideWithoutDisable();
+            editFreecamControls->HideWithoutDisable();
+            editFreecamSen->HideWithoutDisable();
+
             if (!PluginMenu::GetRunningInstance()->GameplayToggle)
             {
                 costume->Show();
@@ -331,10 +339,12 @@ namespace CTRPluginFramework {
             }
             else
             {
+                menuFreecam->HideWithoutDisable();
+                editFreecamControls->HideWithoutDisable();
+                editFreecamSen->HideWithoutDisable();
+
                 gameplay->Show();
                 costume->HideWithoutDisable();
-                freecam->HideWithoutDisable();
-                gameplay->HideWithoutDisable();
                 emotes->HideWithoutDisable();
                 linkcolor->HideWithoutDisable();
                 miscellaneous->HideWithoutDisable();
