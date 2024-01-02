@@ -1,9 +1,13 @@
+#include "Unicode.h"
+
 #include "CTRPluginFramework/Menu/MenuEntryHotkeys.hpp"
 #include "CTRPluginFramework/System/Controller.hpp"
 #include "CTRPluginFrameworkImpl/Menu/HotkeysModifier.hpp"
 #include "CTRPluginFramework/Menu/MenuEntry.hpp"
-#include "Unicode.h"
 #include "CTRPluginFramework/Menu/Keyboard.hpp"
+#include "CTRPluginFramework/System/System.hpp"
+#include "CTRPluginFrameworkImpl/System/SystemImpl.hpp"
+#include "CTRPluginFrameworkImpl/Preferences.hpp"
 
 namespace CTRPluginFramework
 {
@@ -96,7 +100,10 @@ namespace CTRPluginFramework
 
     void    Hotkey::AskForKeys(void)
     {
-        HotkeysModifier(_keys, "Select new Hotkeys for the following entry:\n\n" + _name)();
+        FwkSettings& settings = FwkSettings::Get();
+        std::string lockKeys = (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable) ? "\n\n\nNote: o2/3DS detected; n2/3DS buttons have\nbeen disabled and cannot be selected in this\nmenu." : "";
+        
+        HotkeysModifier(_keys, "Select new Hotkeys for the following entry:\n\n" + _name + lockKeys)();
     }
 
 

@@ -11,18 +11,22 @@
 
 namespace CTRPluginFramework
 {
-    static const Key ktable[18] =
+    static const Key ktable[22] =
     {
-        L, DPadUp, DPadLeft, DPadRight, DPadDown, Start,
-        R, X, Y, A, B, Select,
-        ZL, ZR, CPadUp, CPadLeft, CPadRight, CPadDown
+        L, DPadUp, DPadLeft, DPadRight, DPadDown,
+        R, X, Y, A, B,
+        ZL, CPadUp, CPadLeft, CPadRight, CPadDown,
+        ZR, CStickUp, CStickLeft, CStickRight, CStickDown,
+        Start, Select
     };
 
-    static const char *stable[18] =
+    static const char *stable[22] =
     {
-        FONT_L, FONT_DU, FONT_DL, FONT_DR, FONT_DD, "Start",
-        FONT_R, FONT_X, FONT_Y, FONT_A, FONT_B, "Select", 
-        FONT_ZL, FONT_ZR, "\uE077 Up", "\uE077 Left", "\uE077 Right", "\uE077 Down"
+        FONT_L, FONT_DU, FONT_DL, FONT_DR, FONT_DD,
+        FONT_R, FONT_X, FONT_Y, FONT_A, FONT_B,
+        FONT_ZL, "\uE077 Up", "\uE077 Left", "\uE077 Right", "\uE077 Down",
+        FONT_ZR, "CS Up", "CS Left", "CS Right", "CS Down",
+        "Start", "Select"
     };
 
     static int    GetIndex(int code)
@@ -39,33 +43,48 @@ namespace CTRPluginFramework
     {
         FwkSettings &settings = FwkSettings::Get();
 
-        for (int i = 0, posY = 68; i < 6; ++i, posY += 25)
+        for (int i = 0, posY = 88; i < 5; ++i, posY += 25)
         {
-            Button b(Button::Icon | Button::Toggle, IntRect(35, posY, 20, 20), Icon::DrawCheckBox);
-            _checkboxs.push_back(b);
+            Button b(Button::Icon | Button::Toggle, IntRect(30, posY, 20, 20), Icon::DrawCheckBox);
+            _checkboxes.push_back(b);
         }
-        for (int i = 0, posY = 68; i < 6; ++i, posY += 25)
+        for (int i = 0, posY = 88; i < 5; ++i, posY += 25)
+        {
+            Button b(Button::Icon | Button::Toggle, IntRect(80, posY, 20, 20), Icon::DrawCheckBox);
+            _checkboxes.push_back(b);
+        }
+        for (int i = 0, posY = 88; i < 5; ++i, posY += 25)
         {
             Button b(Button::Icon | Button::Toggle, IntRect(130, posY, 20, 20), Icon::DrawCheckBox);
-            _checkboxs.push_back(b);
+            _checkboxes.push_back(b);
         }
-        for (int i = 0, posY = 68; i < 6; ++i, posY += 25)
+        for (int i = 0, posY = 88; i < 5; ++i, posY += 25)
         {
-            Button b(Button::Icon | Button::Toggle, IntRect(220, posY, 20, 20), Icon::DrawCheckBox);
-            _checkboxs.push_back(b);
+            Button b(Button::Icon | Button::Toggle, IntRect(215, posY, 20, 20), Icon::DrawCheckBox);
+            _checkboxes.push_back(b);
         }
-        for (int i = 0; i < 20; ++i)
+        for (int i = 0, posX = 95; i < 2; ++i, posX += 70)
+        {
+            Button b(Button::Icon | Button::Toggle, IntRect(posX, 215, 20, 20), Icon::DrawCheckBox);
+            _checkboxes.push_back(b);
+        }
+        for (int i = 0; i < 24; ++i)
         {
             if (keys & (1u << i))
             {
-                _checkboxs[GetIndex(1u << i)].SetState(true);
+                _checkboxes[GetIndex(1u << i)].SetState(true);
             }
         }
         if (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable)
         {
-            // Disable ZL & ZR on O3DS
-            _checkboxs[12].Enable(false);
-            _checkboxs[13].Enable(false);
+            // Disable ZL/ZR/C-stick options on O3DS
+            _checkboxes[10].Lock();
+            _checkboxes[15].Lock();
+
+            _checkboxes[16].Lock();
+            _checkboxes[17].Lock();
+            _checkboxes[18].Lock();
+            _checkboxes[19].Lock();
         }
     }
 
@@ -99,7 +118,7 @@ namespace CTRPluginFramework
 
             for (int i = 0; i < 18; i++)
             {
-                if (_checkboxs[i].GetState())
+                if (_checkboxes[i].GetState())
                     _keys |= ktable[i];
             }
 
@@ -109,7 +128,7 @@ namespace CTRPluginFramework
             {
                 _keys ^= oldDpadX;
 
-                auto& checkbox = _checkboxs[GetIndex(oldDpadX)];
+                auto& checkbox = _checkboxes[GetIndex(oldDpadX)];
 
                 checkbox.SetState(false);
             }
@@ -118,7 +137,7 @@ namespace CTRPluginFramework
             {
                 _keys ^= oldDpadY;
 
-                auto& checkbox = _checkboxs[GetIndex(oldDpadY)];
+                auto& checkbox = _checkboxes[GetIndex(oldDpadY)];
 
                 checkbox.SetState(false);
             }
@@ -138,24 +157,28 @@ namespace CTRPluginFramework
 
     void    HotkeysModifier::_DrawBottom(void)
     {
-        FwkSettings &settings = FwkSettings::Get();
-
         Renderer::SetTarget(BOTTOM);
         Window::BottomWindow.Draw();
 
         // Draw CheckBoxes
-        for (auto it = _checkboxs.begin(); it != _checkboxs.end(); it++)
+        for (auto it = _checkboxes.begin(); it != _checkboxes.end(); it++)
             (*it).Draw();
 
-        int skip = (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable) ? 2 : 0;
-
         // Draw labels
-        for (int i = 0, posY = 68; i < 6; ++i, posY += 9)
-            Renderer::DrawSysString(stable[i], 55, posY, 290, Preferences::Settings.MainTextColor);
-        for (int i = 6, posY = 68; i < 12; ++i, posY += 9)
+        for (int i = 0, posY = 88; i < 5; ++i, posY += 9)
+            Renderer::DrawSysString(stable[i], 50, posY, 290, Preferences::Settings.MainTextColor);
+        for (int i = 5, posY = 88; i < 10; ++i, posY += 9)
+            Renderer::DrawSysString(stable[i], 100, posY, 290, Preferences::Settings.MainTextColor);
+        for (int i = 10, posY = 88; i < 15; ++i, posY += 9)
             Renderer::DrawSysString(stable[i], 150, posY, 290, Preferences::Settings.MainTextColor);
-        for (int i = 12 + skip, posY = 68 + (skip * 25); i < 18; ++i, posY += 9)
-            Renderer::DrawSysString(stable[i], 240, posY, 310, Preferences::Settings.MainTextColor);
+        for (int i = 15, posY = 88; i < 20; ++i, posY += 9)
+            Renderer::DrawSysString(stable[i], 235, posY, 300, Preferences::Settings.MainTextColor);
+
+        int startY = 215;
+        int selY = 215;
+
+        Renderer::DrawSysString(stable[20], 113, startY, 290, Preferences::Settings.MainTextColor);
+        Renderer::DrawSysString(stable[21], 185, selY, 290, Preferences::Settings.MainTextColor);
     }
 
     void    HotkeysModifier::_Update(void)
@@ -163,7 +186,7 @@ namespace CTRPluginFramework
         bool        isTouched = Touch::IsDown();
         IntVector   touchPos(Touch::GetPosition());
 
-        for (auto it = _checkboxs.begin(); it != _checkboxs.end(); it++)
+        for (auto it = _checkboxes.begin(); it != _checkboxes.end(); it++)
             (*it).Update(isTouched, touchPos);
 
         Window::BottomWindow.Update(isTouched, touchPos);
