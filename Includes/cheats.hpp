@@ -28,8 +28,12 @@ namespace CTRPluginFramework
 
     extern MenuEntry* managePlayerCodes;
     extern MenuEntry* menuFreecam;
+    extern MenuEntry* editFreecamControls;
+    extern MenuEntry* editFreecamSen;
+
+    
     // Menu functions
-    void InitFreecamFolder(PluginMenu& menu);
+    void InitFreecamCodes(PluginMenu& menu);
     void InitEmoteFolder(PluginMenu& menu);
     void InitColorFolder(PluginMenu& menu);
     void InitCostumeFolder(PluginMenu& menu);
