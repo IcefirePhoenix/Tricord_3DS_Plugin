@@ -14,7 +14,7 @@ namespace CTRPluginFramework
     const Color     Color::Magenta(46, 0, 9);
     const Color     Color::Silver(192, 192, 192);
     const Color     Color::Gray(128, 128, 128);
-    const Color     Color::Maroon(37, 1, 8);
+    const Color     Color::Maroon(28, 1, 8);
     const Color     Color::Olive(128, 128, 0);
     const Color     Color::Green(0, 128, 0);
     const Color     Color::LightMagenta(75, 7, 20);
