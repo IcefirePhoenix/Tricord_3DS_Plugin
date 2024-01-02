@@ -22,7 +22,7 @@ namespace CTRPluginFramework
         void    _Update(void);
 
         u32                     &_keys;
-        std::vector<Button>     _checkboxs;
+        std::vector<Button>     _checkboxes;
         const std::string       _message;
 
 
