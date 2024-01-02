@@ -49,6 +49,11 @@ namespace CTRPluginFramework
         void    Hide(void) const;
 
         /**
+        * \brief Hide the entry from the menu. The entry will NOT be disabled
+        */
+        void    HideWithoutDisable(void) const;
+
+        /**
         * \brief Unhide an entry previously hidden
         */
         void    Show(void) const;
