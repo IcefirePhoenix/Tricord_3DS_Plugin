@@ -43,6 +43,7 @@ namespace CTRPluginFramework {
     MenuEntry* menuFreecam;
     MenuEntry* editFreecamControls;
     MenuEntry* editFreecamSen;
+    MenuEntry* swapZoom;
 
     MenuFolder* emotes;
     MenuFolder* gameplay;
@@ -121,8 +122,8 @@ namespace CTRPluginFramework {
                 Hotkey(Key::L | Key::R, "Reset camera"),
                 Hotkey(Key::X, "Shift camera north"),
                 Hotkey(Key::B, "Shift camera south"),
-                Hotkey(Key::Y, "Shift camera east"),
-                Hotkey(Key::A, "Shift camera west"),
+                Hotkey(Key::A, "Shift camera east"),
+                Hotkey(Key::Y, "Shift camera west"),
                 Hotkey(Key::DPadLeft, "Zoom in"),
                 Hotkey(Key::DPadRight, "Zoom out"),
                 Hotkey(Key::DPadUp, "Raise camera"),
@@ -135,10 +136,12 @@ namespace CTRPluginFramework {
 
         editFreecamControls = new MenuEntry("Edit button controls", nullptr, editHotkeys);
         editFreecamSen = new MenuEntry("Edit sensitivity", nullptr, editSensitivity);
+        swapZoom = new MenuEntry("Swap to Orthographic Zoom", nullptr, setZoomType);
 
         menu += menuFreecam;
         menu += editFreecamControls;
         menu += editFreecamSen;
+        menu += swapZoom;
     }
 
     void InitColorFolder(PluginMenu& menu)
@@ -305,6 +308,7 @@ namespace CTRPluginFramework {
             menuFreecam->Show();
             editFreecamControls->Show();
             editFreecamSen->Show();
+            swapZoom->Show();
 
             costume->HideWithoutDisable();
             gameplay->HideWithoutDisable();
@@ -323,6 +327,7 @@ namespace CTRPluginFramework {
             menuFreecam->HideWithoutDisable();
             editFreecamControls->HideWithoutDisable();
             editFreecamSen->HideWithoutDisable();
+            swapZoom->HideWithoutDisable();
 
             if (!PluginMenu::GetRunningInstance()->GameplayToggle)
             {
@@ -342,6 +347,7 @@ namespace CTRPluginFramework {
                 menuFreecam->HideWithoutDisable();
                 editFreecamControls->HideWithoutDisable();
                 editFreecamSen->HideWithoutDisable();
+                swapZoom->HideWithoutDisable();
 
                 gameplay->Show();
                 costume->HideWithoutDisable();
