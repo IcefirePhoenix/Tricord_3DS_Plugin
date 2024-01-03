@@ -54,7 +54,8 @@ namespace CTRPluginFramework
         return _name;
     }
 
-    static const std::string g_keyName[20] =
+    // note: refer to Key enum in Controller class
+    static const std::string g_keyName[32] =
     {
         FONT_A,
         FONT_B,
@@ -72,9 +73,21 @@ namespace CTRPluginFramework
         "",
         FONT_ZL,
         FONT_ZR,
-        "\uE077 Up", 
-        "\uE077 Left", 
+        "",
+        "",
+        "",
+        "",
+        "Touchscreen", // unused for now
+        "",
+        "",   
+        "",
+        "\uE04A Right", 
+        "\uE04A Left", 
+        "\uE04A Up", 
+        "\uE04A Down",
         "\uE077 Right", 
+        "\uE077 Left", 
+        "\uE077 Up", 
         "\uE077 Down"
     };
 
@@ -83,7 +96,7 @@ namespace CTRPluginFramework
         std::string ret;
         bool    add = false;
 
-        for (int i = 0; i < 16; i++)
+        for (int i = 0; i < 32; i++)
         {
             if (keys & (1u << i))
             {
@@ -101,7 +114,7 @@ namespace CTRPluginFramework
     void    Hotkey::AskForKeys(void)
     {
         FwkSettings& settings = FwkSettings::Get();
-        std::string lockKeys = (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable) ? "\n\n\nNote: o2/3DS detected; checkboxes for n2/3DS buttons have\nbeen disabled and cannot be selected in this\nmenu." : "";
+        std::string lockKeys = (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable) ? "\n\n\nNote: o2/3DS detected; checkboxes for\nn2/3DS buttons havebeen disabled and\ncannot be selected in this menu." : "";
         
         HotkeysModifier(_keys, "Select new Hotkeys for the following entry:\n\n" + _name + lockKeys)();
     }

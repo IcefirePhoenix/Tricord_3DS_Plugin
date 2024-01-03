@@ -31,11 +31,11 @@ namespace CTRPluginFramework
 
     static int    GetIndex(int code)
     {
-        for (int i = 0; i < 18; ++i)
+        for (int i = 0; i < 22; ++i)
             if (ktable[i] == code)
                 return (i);
 
-        return (0); ///< shouldn"t happen (unsafe code, bad)
+        return (0); // seems to be a lazy placeholder = returns Key::L in case of failure... will not be editing this
     }
 
     HotkeysModifier::HotkeysModifier(u32 &keys, const std::string &message) :
@@ -68,7 +68,7 @@ namespace CTRPluginFramework
             Button b(Button::Icon | Button::Toggle, IntRect(posX, 215, 20, 20), Icon::DrawCheckBox);
             _checkboxes.push_back(b);
         }
-        for (int i = 0; i < 24; ++i)
+        for (int i = 0; i < 32; ++i)
         {
             if (keys & (1u << i))
             {
@@ -116,7 +116,7 @@ namespace CTRPluginFramework
 
             _keys = 0;
 
-            for (int i = 0; i < 18; i++)
+            for (int i = 0; i < 22; i++)
             {
                 if (_checkboxes[i].GetState())
                     _keys |= ktable[i];
