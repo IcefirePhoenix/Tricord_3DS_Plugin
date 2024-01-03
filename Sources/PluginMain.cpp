@@ -3,6 +3,7 @@
 #include "csvc.h"
 #include "AddressList.hpp"
 #include "Helpers/Address.hpp"
+#include "OnionFS.hpp"
 #include "CTRPluginFrameworkImpl/Menu/HotkeysModifier.hpp"
 
 #include "CTRPluginFramework/Menu/MenuEntry.hpp"
@@ -24,6 +25,8 @@ namespace CTRPluginFramework {
 
     // Menu Entries aren't given a name by default
     // If they need to be referenced elsewhere, they need a name
+    MenuEntry* triggerCostumeSlots;
+
     MenuEntry* menuCostumeSlotA;
     MenuEntry* menuCostumeSlotB;
     MenuEntry* menuCostumeSlotC;
@@ -159,15 +162,16 @@ namespace CTRPluginFramework {
     {
         costume = new MenuFolder("Costume Codes");
 
-        *costume += new MenuEntry("Trigger Custom Costume Slots", nullptr, openCustomCostumeSlots);
-        menuCostumeSlotA = new MenuEntry("Set custom costume slot A", nullptr, selectCostumeID, 
+        triggerCostumeSlots = new MenuEntry("Open Custom Costume Slots", nullptr, openCustomCostumeSlots);
+        menuCostumeSlotA = new MenuEntry("   Set custom costume slot A", nullptr, selectCostumeID, 
             "This setting is not accessible if Restore Great Fairy Costume is enabled.");
-        menuCostumeSlotB = new MenuEntry("Set custom costume slot B", nullptr, selectCostumeID);
-        menuCostumeSlotC = new MenuEntry("Set custom costume slot C", nullptr, selectCostumeID);
-        menuCostumeSlotD = new MenuEntry("Set custom costume slot D", nullptr, selectCostumeID);
+        menuCostumeSlotB = new MenuEntry("   Set custom costume slot B", nullptr, selectCostumeID);
+        menuCostumeSlotC = new MenuEntry("   Set custom costume slot C", nullptr, selectCostumeID);
+        menuCostumeSlotD = new MenuEntry("   Set custom costume slot D", nullptr, selectCostumeID);
         restoreGreatFairy = new MenuEntry("Restore Great Fairy Costume", greatFairyEnable);
 
         // add to costume folder + hide by default
+        *costume += triggerCostumeSlots;
         *costume += menuCostumeSlotA;
         *costume += menuCostumeSlotB;
         *costume += menuCostumeSlotC;
@@ -224,10 +228,10 @@ namespace CTRPluginFramework {
         // hotkeys -> posEditor (?)
 
         *player += new MenuEntry("Bypass Doppel Master dialogue cutscene", bypassDoppelDemo);
-        *player += new MenuEntry("Enable position editor menu", posEditor);
-        *player += new MenuEntry("Enable Water Storage", nullptr, waterStorage);
         *player += new MenuEntry("Display current respawn location", respawnIndicator);
+        *player += new MenuEntry("Enable position editor menu", posEditor);
         *player += new MenuEntry("Disable Collision (experimental!)", nullptr, removeCollision);
+        *player += new MenuEntry("Enable Water Storage", nullptr, waterStorage);
         *player += new MenuEntry("Spawn/Despawn Links", nullptr, spawnOpt);
         *player += new MenuEntry("Set Link model size", nullptr, linkSize);
         *player += new MenuEntry("Set Sword Types", nullptr, swordModelOpt);
@@ -367,13 +371,14 @@ namespace CTRPluginFramework {
     // this function only runs once at plugin startup
     int main(void)
     {
-        // title is left blank since the name is already set inside the lib
-        PluginMenu* menu = new PluginMenu("", 0, 5, 0,
+        PluginMenu* menu = new PluginMenu("Tricord", 0, 5, 0,
             "An advanced, region-free cheat plugin made for\nThe Legend of Zelda: Tri Force Heroes.\n\nForked from the original CTRPluginFramework\nblank template repository.");
 
         menu->SynchronizeWithFrame(true);
-
         InitMenu(*menu);
+
+        // this callback serves a secondary purpose
+        // allows ANY menu-based change to render on new frame
         menu->OnNewFrame = ToggleMenuChange;
 
         // init auto functions
@@ -381,11 +386,10 @@ namespace CTRPluginFramework {
         resetMiscellaneous->Enable();
         managePlayerCodes->Enable();
 
-        // Launch menu and mainloop
         menu->Run();
-        delete menu;
 
         // Exit plugin
+        delete menu;
         return (0);
     }
 
@@ -441,6 +445,10 @@ namespace CTRPluginFramework {
         AddressList::InitAddresses();
 
         ToggleTouchscreenForceOn();
+
+        if (!OnionFS::initOnionFSHooks(Process::GetTextSize())) {
+            panic();
+        }
     }
 
     // Called when the process exits

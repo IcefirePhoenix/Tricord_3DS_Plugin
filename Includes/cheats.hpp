@@ -16,6 +16,7 @@ namespace CTRPluginFramework
     extern MenuEntry* menuCostumeSlotB;
     extern MenuEntry* menuCostumeSlotC;
     extern MenuEntry* menuCostumeSlotD;
+    extern MenuEntry* triggerCostumeSlots;
 
     extern MenuEntry* restoreGreatFairy;
     extern MenuEntry* manageCatalogSize;
@@ -81,7 +82,6 @@ namespace CTRPluginFramework
     void recolorLevelTex(MenuEntry* entry);
 
     // Costume functions
-    extern bool showSlots;
     void manageCatalogSizeAuto(MenuEntry* entry);
     void openCustomCostumeSlots(MenuEntry* entry);
     void writeCostumeSlot(MenuEntry* entry);
@@ -90,6 +90,16 @@ namespace CTRPluginFramework
     void selectCostumeID(MenuEntry* entry);
     void initCustomCostumesAuto(MenuEntry* entry);
     void selCostumeEffect(MenuEntry* entry);
+    int chooseSlotAddNum(void);
+    void disableCustomCostumeMenuOpt(void);
+    void enableCustomCostumeOpt(void);
+    bool isCustomCostumeConflict(int openSlots);
+    void addCustomSlotsToMenu(int openSlots);
+    void resetCostumeArray(void);
+    int chooseSlotAddNum(void);
+    bool isCatalogPointerNull(void);
+
+
 
     // Miscellaneous functions
     void buttonSpammer(MenuEntry* entry);
