@@ -184,19 +184,20 @@ namespace CTRPluginFramework
 			Process::Write32(AddressList::CameraRotationX.addr, 0x7F7F0000);
 	}
 
-	// TODO: finish z camera
 	void rotateCamZCounter(void) {
 		Process::ReadFloat(AddressList::CameraRotationZ.addr, cameraZrotation);
 		Process::WriteFloat(AddressList::CameraRotationZ.addr, (cameraZrotation * rotationSensitivity));
 
 		// if value becomes invalid, fix it after
 		Process::Read32(AddressList::CameraRotationZ.addr, cameraZrawValue);
-		if (cameraZrawValue == 0x00000000) 
+		if (cameraZrawValue == 0x00000000)
 			Process::Write32(AddressList::CameraRotationZ.addr, 0xFE7F0000);
 
 		if (cameraZrawValue == 0x000081FF || cameraZrawValue == 0x00008180)
 			Process::Write32(AddressList::CameraRotationZ.addr, 0x00007E80);
-	
+
+		if (cameraZrawValue == 0x80000000)
+			Process::Write32(AddressList::CameraRotationZ.addr, 0x7F000000);
 	}
 
 	void rotateCamZClockwise(void) {
@@ -205,12 +206,12 @@ namespace CTRPluginFramework
 
 		// if value becomes invalid, fix it after
 		Process::Read32(AddressList::CameraRotationZ.addr, cameraZrawValue);
-		if (cameraZrawValue == 0x00000000 || cameraZrawValue == 0xFF800000) { 
-			Process::Write32(AddressList::CameraRotationZ.addr, 0x00800000);
-		}
-
-		if (cameraZrawValue == 0x7F800000 || cameraZrawValue == 0xFF7F0000 || cameraZrawValue == 0x80000000)
+		if (cameraZrawValue == 0x7F8F0000 || cameraZrawValue == 0x7F800000)
 			Process::Write32(AddressList::CameraRotationZ.addr, 0x80800000);
+
+		if (cameraZrawValue == 0xFF7F0000 || cameraZrawValue == 0x00000000 || cameraZrawValue == 0xFF800000)
+			Process::Write32(AddressList::CameraRotationZ.addr, 0x00800000);
+
 	}
 
 	// TODO: edit Hotkey Manager to use C-pad support
