@@ -22,7 +22,8 @@ namespace CTRPluginFramework {
 		static Address		CameraRotationX;
 		static Address		CameraRotationY;
 		static Address		CameraRotationZ;
-		static Address		MasterZoom;
+		static Address		OrthographicZoom;
+		static Address		PerspectiveZoom;
 
 		// Chaos
 		static Address		HeartsTakeHealth;

@@ -18,7 +18,8 @@ namespace CTRPluginFramework {
 		CameraPosZ = Address(0x32C814C8, 0x00000000, 0x00000000, 0x00000000);
 		CameraRotationX = Address(0x32C81520, 0x00000000, 0x00000000, 0x00000000);
 		CameraRotationZ = Address(0x32C81524, 0x00000000, 0x00000000, 0x00000000);
-		MasterZoom = Address(0x005F529C, 0x00000000, 0x00000000, 0x00000000);
+		OrthographicZoom = Address(0x32C81528, 0x00000000, 0x00000000, 0x00000000);
+		PerspectiveZoom = Address(0x005F529C, 0x00000000, 0x00000000, 0x00000000);
 
 		// Chaos
 		HeartsTakeHealth = Address(0x0015CA04, 0x00000000, 0x00000000, 0x00000000);
@@ -163,7 +164,8 @@ namespace CTRPluginFramework {
 	Address		AddressList::CameraRotationX;
 	Address		AddressList::CameraRotationY;
 	Address		AddressList::CameraRotationZ;
-	Address		AddressList::MasterZoom;
+	Address		AddressList::OrthographicZoom;
+	Address		AddressList::PerspectiveZoom;
 
 	// Chaos
 	Address		AddressList::HeartsTakeHealth;

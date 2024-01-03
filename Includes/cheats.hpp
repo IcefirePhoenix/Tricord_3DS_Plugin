@@ -30,6 +30,7 @@ namespace CTRPluginFramework
     extern MenuEntry* menuFreecam;
     extern MenuEntry* editFreecamControls;
     extern MenuEntry* editFreecamSen;
+    extern MenuEntry* swapZoom;
 
     
     // Menu functions
@@ -72,6 +73,7 @@ namespace CTRPluginFramework
     void managePlayerLock(void);
     void editSensitivity(MenuEntry* entry);
     float setSensitivity(std::string message);
+    void setZoomType(MenuEntry* entry);
 
     // Link Color functions
     void customColor(MenuEntry* entry);

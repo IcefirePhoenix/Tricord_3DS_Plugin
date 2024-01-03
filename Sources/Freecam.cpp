@@ -29,6 +29,7 @@ namespace CTRPluginFramework
 	
 	bool isFreecamInUse;
 	bool isCameraLocked;
+	bool usePerspectiveZoom = true;
 
 	std::string cameraLockStatus = "";
 
@@ -377,6 +378,13 @@ namespace CTRPluginFramework
 			MessageBox(Color::Gainsboro << "Error", "Sensitivity cannot be negative.")();
 
 		return result;
+	}
+
+	void setZoomType(MenuEntry* entry) {
+		usePerspectiveZoom = !usePerspectiveZoom;
+
+		std::string name = usePerspectiveZoom ? "Swap to Orthographic Zoom" : "Swap to Perspective Zoom";
+		swapZoom->SetName(name);
 	}
 }
 
