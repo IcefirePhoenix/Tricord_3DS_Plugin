@@ -19,10 +19,9 @@ namespace CTRPluginFramework
 
 	enum cameraMode { GAMEPLAY, DYNAMIC, CUTSCENE, CAM_ANIMATION };
 
-	// TODO: determine (recommended) min/max values
 	float shiftSensitivity = 0.2;
 	float heightSensitivity = 0.6;
-	float zoomSensitivity = 0.05;
+	float zoomSensitivity = 0.03;
 	float rotationSensitivity = 0.5;
 
 	u32 cameraXrawValue;
@@ -221,7 +220,7 @@ namespace CTRPluginFramework
 		kbd.CanAbort(false);
 
 		while (loop) {
-			title = "Choose a Freecam hotkey to edit.\n\nNote: ZL/ZR and C-stick controls available only on\nn2/3DS models.";
+			title = "Choose a Freecam hotkey to edit.\n\nNote: ZL/ZR and C-stick controls are available\nonly on n2/3DS models.";
 
 			opts.clear();
 			opts.push_back(std::string("Save and exit"));
@@ -311,22 +310,22 @@ namespace CTRPluginFramework
 			switch (kbd.Open()) {
 			case 0:
 			{
-				shiftSensitivity = setSensitivity("Shift Sensitivity Value\n\nRecommended values: []");
+				shiftSensitivity = setSensitivity("Shift Sensitivity Value\n\nRecommended values: [0.05 - 0.30]");
 				break;
 			}
 			case 1:
 			{
-				heightSensitivity = setSensitivity("Height Sensitivity Value\n\nRecommended values : [] ");
+				heightSensitivity = setSensitivity("Height Sensitivity Value\n\nRecommended values : [0.40 - 1.00] ");
 				break;
 			}
 			case 2:
 			{
-				zoomSensitivity = setSensitivity("Zoom Sensitivity Value\n\nRecommended values: []");
+				zoomSensitivity = setSensitivity("Zoom Sensitivity Value\n\nRecommended values: [0.02 - 0.04]");
 				break;
 			}
 			case 3:
 			{
-				rotationSensitivity = setSensitivity("Rotation Sensitivity Value\n\nRecommended values: []");
+				rotationSensitivity = setSensitivity("Rotation Sensitivity Value\n\nRecommended values: [0.10 - 0.50]");
 				break;
 			}
 			default:
