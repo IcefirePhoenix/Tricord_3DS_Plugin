@@ -17,7 +17,8 @@ namespace CTRPluginFramework
 
     struct ItemFlags
     {
-        
+        bool    useSeparatorBefore : 1;
+        bool    useSeparatorAfter : 1;
         bool    useStippledLineForBefore : 1;
         bool    useStippledLineForAfter : 1;
         bool    isVisible : 1;
@@ -37,8 +38,8 @@ namespace CTRPluginFramework
         Uid(++_uidCounter),
         _type(type), _container(nullptr), _index(0)
         {
-           // Flags.useSeparatorBefore = false;
-            //Flags.useSeparatorAfter = false;
+            Flags.useSeparatorBefore = false;
+            Flags.useSeparatorAfter = false;
             Flags.useStippledLineForBefore = false;
             Flags.useStippledLineForAfter = false;
             Flags.isVisible = true;

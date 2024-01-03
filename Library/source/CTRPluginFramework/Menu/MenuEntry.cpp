@@ -99,7 +99,7 @@ namespace CTRPluginFramework
         return (_item->IsVisible());
     }
 
-    /*void    MenuEntry::UseTopSeparator(Separator type) const
+    void    MenuEntry::UseTopSeparator(Separator type) const
     {
         _item->Flags.useSeparatorBefore = type != Separator::None;
         _item->Flags.useStippledLineForBefore = type == Separator::None;
@@ -110,7 +110,7 @@ namespace CTRPluginFramework
         _item->Flags.useSeparatorAfter = type != Separator::None;
         _item->Flags.useStippledLineForAfter = type == Separator::None;
         
-    }*/
+    }
 
     void    MenuEntry::CanBeSelected(bool canBeSelected) const
     {
