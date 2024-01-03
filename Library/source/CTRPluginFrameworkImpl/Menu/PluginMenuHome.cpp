@@ -478,7 +478,6 @@ namespace CTRPluginFramework
 
     void PluginMenuHome::_RenderTop(void)
     {
-        
         const Color &maintext = Preferences::Settings.MainTextColor;
 
         int posY = 25;
@@ -511,20 +510,19 @@ namespace CTRPluginFramework
         for (; i < max; i++)
         {
             MenuItem    *item = folder->_items[i];
-            //ItemFlags   flags = item->Flags;
+            ItemFlags   flags = item->Flags;
             const char  *name = item->name.c_str();
-            const Color  &fg = i == _selector ? Color::Gainsboro : Color::Gainsboro;
             float       offset = i == _selector ? _scrollOffset : 0.f;
 
             // Draw separator if needed
-            /*if (flags.useSeparatorBefore)
+            if (flags.useSeparatorBefore)
             {
                 if (flags.useStippledLineForBefore)
-                    Renderer::DrawStippledLine(posX, posY - 1, 320, unselected, 1);
+                    Renderer::DrawStippledLine(posX, posY - 1, 320, Color::Gainsboro, 1);
                 else
-                    Renderer::DrawLine(posX, posY - 1, 320, unselected, 1);
+                    Renderer::DrawLine(posX, posY - 1, 320, Color::Gainsboro, 1);
             }
-            */
+            
 
             // Draw cursor
             if (drawSelector && i == _selector)
@@ -536,30 +534,30 @@ namespace CTRPluginFramework
                 MenuEntryImpl   *entry = reinterpret_cast<MenuEntryImpl *>(item);
 
                 if (entry->GameFunc != nullptr)
-                    Renderer::DrawSysCheckBox(name, posX, posY, 350, fg, entry->IsActivated(), offset);
+                    Renderer::DrawSysCheckBox(name, posX, posY, 350, Color::Gainsboro, entry->IsActivated(), offset);
                 else
                 {
                     if (entry->MenuFunc != nullptr && !entry->_flags.isUnselectable)
                         Icon::DrawSettings(posX, posY);
 
-                    Renderer::DrawSysString(name, posX + 20, posY, 350, fg, offset);
+                    Renderer::DrawSysString(name, posX + 20, posY, 350, Color::Gainsboro, offset);
                     posY += 1;
                 }
             }
             // Draw folder
             else
             {
-                Renderer::DrawSysFolder(name, posX, posY, 350, fg, offset);
+                Renderer::DrawSysFolder(name, posX, posY, 350, Color::Gainsboro, offset);
             }
 
             // Draw separator if needed
-            /*if (flags.useSeparatorAfter)
+            if (flags.useSeparatorAfter)
             {
                 if (flags.useStippledLineForAfter)
-                    Renderer::DrawStippledLine(posX, posY - 1, 320, unselected, 1);
+                    Renderer::DrawStippledLine(posX, posY - 1, 320, Color::Gainsboro, 1);
                 else
-                    Renderer::DrawLine(posX, posY - 1, 320, unselected, 1);
-            }*/
+                    Renderer::DrawLine(posX, posY - 1, 320, Color::Gainsboro, 1);
+            }
             posY += 4;
 
         }

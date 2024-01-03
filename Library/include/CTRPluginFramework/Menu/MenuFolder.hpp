@@ -66,13 +66,13 @@ namespace CTRPluginFramework
          * \brief Set if this entry must display a separator on top of the entry
          * \param type Type of separator to display
          */
-        //void    UseTopSeparator(Separator type = Separator::Filled) const;
+        void    UseTopSeparator(Separator type = Separator::Filled) const;
 
         /**
         * \brief Set if this entry must display a separator at the bottom of the entry
         * \param type Type of separator to display
         */
-        //void    UseBottomSeparator(Separator type = Separator::Filled) const;
+        void    UseBottomSeparator(Separator type = Separator::Filled) const;
 
         /**
          * \brief Append a MenuEntry object to this folder
