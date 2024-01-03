@@ -129,6 +129,11 @@ namespace CTRPluginFramework
         _item->MenuFunc = func;
     }
 
+    void    MenuEntry::SetName(std::string newName) const
+    {
+        _item->name = newName;
+    }
+
     FuncPointer MenuEntry::GetGameFunc() const
     {
         return _item->GameFunc;
