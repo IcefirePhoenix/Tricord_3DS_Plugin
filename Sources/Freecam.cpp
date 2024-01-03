@@ -7,6 +7,9 @@
 
 namespace CTRPluginFramework
 {
+	// TODO: cam-anim freeze bypass in boss stages (remove support?)
+	// TODO: player movement compensation
+
 	float cameraXcoord;
 	float cameraYcoord;
 	float cameraZcoord;
@@ -14,9 +17,7 @@ namespace CTRPluginFramework
 	float cameraZrotation;
 	float cameraZoom;
 
-	// TODO: cam-anim freeze bypass in boss stages (remove support?)
-	enum cameraMode { GAMEPLAY, DYNAMIC, CUTSCENE, CAM_ANIMATION}; // is this used anywhere?
-	cameraMode currentCamera;
+	enum cameraMode { GAMEPLAY, DYNAMIC, CUTSCENE, CAM_ANIMATION };
 
 	// TODO: determine (recommended) min/max values
 	float shiftSensitivity = 0.2;
@@ -26,58 +27,49 @@ namespace CTRPluginFramework
 
 	u32 cameraXrawValue;
 	u32 cameraZrawValue;
-	
+
 	bool isFreecamInUse;
 	bool isCameraLocked;
 	bool usePerspectiveZoom = true;
 
 	std::string cameraLockStatus = "";
 
-	// TODO: player movement compensation
-
 	void useFreecam(MenuEntry* entry) {
 		// enable/disable freecam
 		if (entry->Hotkeys[0].IsPressed()) {
 			isFreecamInUse = !isFreecamInUse;
 
-			if (isFreecamInUse) {
-				Process::Write8(AddressList::CameraMode.addr, 0x02);
-				OSD::Notify("[FREECAM] Freecam in-use.");
-			}
-			else {
-				Process::Write8(AddressList::CameraMode.addr, 0x00);
-				OSD::Notify("[FREECAM] Freecam disabled.");
-			}
+			int freecamStatus = isFreecamInUse ? static_cast<int>(CUTSCENE) : static_cast<int>(GAMEPLAY);
+			std::string notif = isFreecamInUse ? "[FREECAM] Freecam in-use." : "[FREECAM] Freecam disabled.";
+
+			Process::Write8(AddressList::CameraMode.addr, freecamStatus);
+			OSD::Notify(notif);
 		}
 
 		managePlayerLock();
 
 		// toggle camera lock
 		if (entry->Hotkeys[1].IsPressed()) {
-			// swap status
 			isCameraLocked = !isCameraLocked;
 
-			if (isCameraLocked)
-				cameraLockStatus = "locked.";
-			else
-				cameraLockStatus = "unlocked.";
-
-			OSD::Notify("[FREECAM] Camera position has been manually" + cameraLockStatus);
+			std::string lockNotif = isFreecamInUse ? "locked." : "unlocked.";
+			OSD::Notify("[FREECAM] Camera position has been manually" + lockNotif);
 		}
-		
-		// lock camera impl
+
 		lockCamera();
 
 		// reset camera
 		if (entry->Hotkeys[2].IsPressed()) {
-			Process::Write8(AddressList::CameraMode.addr, 0x00); // use GAMEPLAY cam to re-orient camera back to player 
-			
-			// reset rotation as this doesn't happen automatically
-			Process::Write32(AddressList::CameraRotationX.addr, 0x271C71C6); 
-			Process::Write32(AddressList::CameraRotationX.addr, 0x00000000);
-			
+			Process::Write8(AddressList::CameraMode.addr, static_cast<int>(GAMEPLAY)); // use GAMEPLAY cam to re-orient camera back to player 
+
+			// reset rotation and perspective zoom as this doesn't happen automatically
+			Process::WriteFloat(AddressList::PerspectiveZoom.addr, 1.0);
+			Process::Write32(AddressList::OrthographicZoom.addr, 0x41D80000);
+			Process::Write32(AddressList::CameraRotationX.addr, 0x271C71C6);
+			Process::Write32(AddressList::CameraRotationZ.addr, 0x00000000);
+
 			if (isFreecamInUse)
-				Process::Write8(AddressList::CameraMode.addr, 0x02); // if freecam is activated, use CUTSCENE cam
+				Process::Write8(AddressList::CameraMode.addr, static_cast<int>(CUTSCENE)); // if freecam is activated, use CUTSCENE cam
 
 			OSD::Notify("[FREECAM] Camera position has been reset.");
 		}
@@ -142,16 +134,18 @@ namespace CTRPluginFramework
 		Process::WriteFloat(AddressList::CameraPosX.addr, (cameraXcoord - shiftSensitivity));
 	}
 
-	// experiment with 32C zoom and master zoom
-	// orthographic(?)
 	void zoomCamIn(void) {
-		Process::ReadFloat(AddressList::MasterZoom.addr, cameraZoom);
-		Process::WriteFloat(AddressList::MasterZoom.addr, (cameraZoom * (1 + zoomSensitivity)));
+		Address zoom = usePerspectiveZoom ? AddressList::PerspectiveZoom : AddressList::OrthographicZoom.addr;
+
+		Process::ReadFloat(zoom.addr, cameraZoom);
+		Process::WriteFloat(zoom.addr, (cameraZoom * (1 + zoomSensitivity)));
 	}
 
 	void zoomCamOut(void) {
-		Process::ReadFloat(AddressList::MasterZoom.addr, cameraZoom);
-		Process::WriteFloat(AddressList::MasterZoom.addr, (cameraZoom * (1 - zoomSensitivity)));
+		Address zoom = usePerspectiveZoom ? AddressList::PerspectiveZoom : AddressList::OrthographicZoom.addr;
+
+		Process::ReadFloat(zoom.addr, cameraZoom);
+		Process::WriteFloat(zoom.addr, (cameraZoom * (1 - zoomSensitivity)));
 	}
 
 	void raiseCam(void) {
@@ -163,11 +157,12 @@ namespace CTRPluginFramework
 		Process::ReadFloat(AddressList::CameraPosY.addr, cameraYcoord);
 		Process::WriteFloat(AddressList::CameraPosY.addr, (cameraYcoord - heightSensitivity));
 	}
+
 	void rotateCamXCounter(void) {
 		Process::ReadFloat(AddressList::CameraRotationX.addr, cameraXrotation);
 		if ((cameraXrotation * rotationSensitivity) != 0.0)
 			Process::WriteFloat(AddressList::CameraRotationX.addr, (cameraXrotation * rotationSensitivity));
-	
+
 		// if value becomes invalid, fix it after
 		Process::Read32(AddressList::CameraRotationX.addr, cameraXrawValue);
 		if (cameraXrawValue == 0x00000000)
@@ -177,7 +172,7 @@ namespace CTRPluginFramework
 	void rotateCamXClockwise(void) {
 		Process::ReadFloat(AddressList::CameraRotationX.addr, cameraXrotation);
 		Process::WriteFloat(AddressList::CameraRotationX.addr, (cameraXrotation / rotationSensitivity));
-	
+
 		// if value becomes invalid, fix it after
 		Process::Read32(AddressList::CameraRotationX.addr, cameraXrawValue);
 		if (cameraXrawValue == 0x7F800000)
@@ -214,33 +209,20 @@ namespace CTRPluginFramework
 
 	}
 
-	// TODO: edit Hotkey Manager to use C-pad support
 	void editHotkeys(MenuEntry* entry)
 	{
-		// placeholders 
+		// placeholder
 		Keyboard kbd("dummy text");
+
 		std::string title;
 		StringVector opts;
 
-		// this menu stays open regardless of input UNLESS the user specifies they wish to exit
 		bool loop = true;
 		kbd.CanAbort(false);
 
 		while (loop) {
-			// update top screen info
-			title = "Choose a Freecam hotkey to edit\n"; 
-			title.append(menuFreecam->Hotkeys[0].ToString(true) + "\n");
-			title.append(menuFreecam->Hotkeys[1].ToString(true) + "       " + menuFreecam->Hotkeys[2].ToString(true) + "\n");
-			title.append(menuFreecam->Hotkeys[3].ToString(true) + "       " + menuFreecam->Hotkeys[4].ToString(true) + "\n");
-			title.append(menuFreecam->Hotkeys[5].ToString(true) + "       " + menuFreecam->Hotkeys[6].ToString(true) + "\n");
-			title.append(menuFreecam->Hotkeys[7].ToString(true) + "       " + menuFreecam->Hotkeys[8].ToString(true) + "\n");
-			title.append(menuFreecam->Hotkeys[9].ToString(true) + "       " + menuFreecam->Hotkeys[10].ToString(true) + "\n");
-			title.append(menuFreecam->Hotkeys[11].ToString(true) + "\n");
-			title.append(menuFreecam->Hotkeys[12].ToString(true) + "\n");
-			title.append(menuFreecam->Hotkeys[13].ToString(true) + "\n");			
-			title.append(menuFreecam->Hotkeys[14].ToString(true));
+			title = "Choose a Freecam hotkey to edit.\n\nNote: ZL/ZR and C-stick controls available only on\nn2/3DS models.";
 
-			// update bottom screen info
 			opts.clear();
 			opts.push_back(std::string("Save and exit"));
 			opts.push_back(std::string("Freecam toggle"));
@@ -254,75 +236,68 @@ namespace CTRPluginFramework
 			opts.push_back(std::string("Zoom camera out"));
 			opts.push_back(std::string("Raise camera"));
 			opts.push_back(std::string("Lower camera"));
-			opts.push_back(std::string("Rotate counterclockwise (X-axis)"));
-			opts.push_back(std::string("Rotate clockwise (X-axis)"));
-			opts.push_back(std::string("Rotate counterclockwise (Z-axis)"));
-			opts.push_back(std::string("Rotate clockwise (Z-axis)"));
+			opts.push_back(std::string("Counterclockwise X-rotation"));
+			opts.push_back(std::string("Clockwise X-rotation"));
+			opts.push_back(std::string("Counterclockwise Z-rotation"));
+			opts.push_back(std::string("Clockwise Z-rotation"));
 
-			// display top screen info
 			kbd.GetMessage() = title;
-
-			// populate bottom screen options
 			kbd.Populate(opts);
 
-			// begin watching for changes
 			int chose = kbd.Open();
 			if (chose == 0) {
 				// end loop = exit the menu
 				loop = false;
 				break;
-			} 
-			else {
-				// set new hotkey
-				menuFreecam->Hotkeys[chose - 1].AskForKeys();
-				break;	
 			}
+			else menuFreecam->Hotkeys[chose - 1].AskForKeys();
 		}
 	}
 
 	void lockCamera(void) {
-		if (isFreecamInUse == true || isCameraLocked == true) {
-			Process::Patch(AddressList::DynamicCameraCheck.addr, 0xE3500000);
-			Process::Patch(AddressList::GameplayCameraCheck.addr, 0xE3500002);
-			Process::Patch(AddressList::GameplayCameraInit.addr, 0x1A000002);
-			Process::Patch(AddressList::RetGameplayCameraInit.addr, 0xEA000008);
+		u32 edits[8] = {
+			0xE3500000,
+			0xE3500002,
+			0x1A000002,
+			0xEA000008,
+			0xE3500001,
+			0xE3500000,
+			0x0A000002,
+			0x0A000008
+		};
 
-		}
-		else {
-			Process::Patch(AddressList::DynamicCameraCheck.addr, 0xE3500001);
-			Process::Patch(AddressList::GameplayCameraCheck.addr, 0xE3500000);
-			Process::Patch(AddressList::GameplayCameraInit.addr, 0x0A000002);
-			Process::Patch(AddressList::RetGameplayCameraInit.addr, 0x0A000008);
-		}
+		int index = (isFreecamInUse == true || isCameraLocked == true) ? 0 : 4;
+
+		Process::Patch(AddressList::DynamicCameraCheck.addr, edits[0 + index]);
+		Process::Patch(AddressList::GameplayCameraCheck.addr, edits[1 + index]);
+		Process::Patch(AddressList::GameplayCameraInit.addr, edits[2 + index]);
+		Process::Patch(AddressList::RetGameplayCameraInit.addr, edits[3 + index]);
 	}
 
 	void managePlayerLock(void) {
-		if (isFreecamInUse)
-			Process::Write8(AddressList::LockMovement.addr, 0x10);
-		else
-			Process::Write8(AddressList::LockMovement.addr, 0x00);
+		int lock = isFreecamInUse ? 0x10 : 0x00;
+		Process::Write8(AddressList::LockMovement.addr, lock);
 	}
 
 	void editSensitivity(MenuEntry* entry)
 	{
-		// placeholders 
+		// placeholder
 		Keyboard kbd("dummy text");
+
 		std::string title;
 		StringVector opts;
 
-		// this menu stays open regardless of input UNLESS the user specifies they wish to exit
 		bool loop = true;
 		kbd.CanAbort(false);
 
 		while (loop) {
-			// update top screen info
-			title = "Freecam sensitivity levels:\n\n";
+			title = "Current Freecam sensitivity levels:\n\n";
 			title.append("Shift sensitivity: " + std::to_string(shiftSensitivity));
 			title.append("\nHeight sensitivity: " + std::to_string(heightSensitivity));
 			title.append("\nZoom sensitivity: " + std::to_string(zoomSensitivity));
 			title.append("\nRotation sensitivity: " + std::to_string(rotationSensitivity));
 
-			// update bottom screen info
+			// update bottom screen options
 			opts.clear();
 			opts.push_back(std::string("Set shift sensitivity"));
 			opts.push_back(std::string("Set height sensitivity"));
@@ -330,40 +305,36 @@ namespace CTRPluginFramework
 			opts.push_back(std::string("Set rotation sensitivity"));
 			opts.push_back(std::string("Save and exit"));
 
-			// display top screen info
 			kbd.GetMessage() = title;
-
-			// populate bottom screen options
 			kbd.Populate(opts);
 
-			// begin watching for changes
 			switch (kbd.Open()) {
-				case 0:
-				{
-					shiftSensitivity = setSensitivity("Shift Sensitivity Value\n\nRecommended values: []");
-					break;
-				}
-				case 1:
-				{
-					heightSensitivity = setSensitivity("Height Sensitivity Value\n\nRecommended values : [] ");
-					break;
-				}
-				case 2:
-				{
-					zoomSensitivity = setSensitivity("Zoom Sensitivity Value\n\nRecommended values: []");
-					break;
-				}
-				case 3:
-				{
-					rotationSensitivity = setSensitivity("Rotation Sensitivity Value\n\nRecommended values: []");
-					break;
-				}
-				default:
-				{
-					// end loop = exit the menu
-					loop = false;
-					break;
-				}
+			case 0:
+			{
+				shiftSensitivity = setSensitivity("Shift Sensitivity Value\n\nRecommended values: []");
+				break;
+			}
+			case 1:
+			{
+				heightSensitivity = setSensitivity("Height Sensitivity Value\n\nRecommended values : [] ");
+				break;
+			}
+			case 2:
+			{
+				zoomSensitivity = setSensitivity("Zoom Sensitivity Value\n\nRecommended values: []");
+				break;
+			}
+			case 3:
+			{
+				rotationSensitivity = setSensitivity("Rotation Sensitivity Value\n\nRecommended values: []");
+				break;
+			}
+			default:
+			{
+				// end loop = exit the menu
+				loop = false;
+				break;
+			}
 			}
 		}
 	}
@@ -372,6 +343,8 @@ namespace CTRPluginFramework
 		float result;
 
 		Keyboard sizeKB(message);
+		sizeKB.SetMaxLength(4);
+		sizeKB.CanAbort(true);
 		sizeKB.IsHexadecimal(false);
 		sizeKB.Open(result);
 
