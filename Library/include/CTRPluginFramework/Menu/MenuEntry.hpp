@@ -102,7 +102,7 @@ namespace CTRPluginFramework
         * \brief Set if this entry must display a separator at the bottom of the entry
         * \param type Type of separator to display
         */
-       // void    UseBottomSeparator(Separator type = Separator::Filled) const;
+        // void    UseBottomSeparator(Separator type = Separator::Filled) const;
 
         /**
          * \brief Set if the entry can be selected in the menu or not.\n
@@ -122,6 +122,13 @@ namespace CTRPluginFramework
         * \param func  The new function to be executed on the menu
         */
         void    SetMenuFunc(FuncPointer func) const;
+
+
+        /**
+        * \brief Set the menu name of this entry
+        * \param func  The new name of the entry
+        */
+        void    SetName(std::string name) const;
 
         /**
         * \brief Gets the game function of this entry
