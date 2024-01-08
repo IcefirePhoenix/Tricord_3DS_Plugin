@@ -77,10 +77,12 @@ namespace CTRPluginFramework {
 		static Address		WaterRodStrafe;
 
 		// Miscellaneous
+		static Address		CheckPhotoExist;
 		static Address		DisplayTopPhoto;
 		static Address		LobbyBallCounter;
 		static Address		LobbyBallSong;
 		static Address		SeeChestContents;
+		static Address		SwordBeamCD;
 		static Address		TextBoxSpeed;
 
 		// Padding

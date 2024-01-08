@@ -3,7 +3,8 @@
 #include "csvc.h"
 #include "AddressList.hpp"
 #include "Helpers/Address.hpp"
-#include "OnionFS.hpp"
+#include "Helpers/Level.hpp"
+
 #include "CTRPluginFrameworkImpl/Menu/HotkeysModifier.hpp"
 
 #include "CTRPluginFramework/Menu/MenuEntry.hpp"
@@ -38,7 +39,7 @@ namespace CTRPluginFramework {
     MenuEntry* initCustomCostumes;
     MenuEntry* writeCostumeIDToSlot;
 
-    MenuEntry* resetMiscellaneous;
+    MenuEntry* autoBeamCooldown;
     MenuEntry* instantTextDisplay;
 
     MenuEntry* managePlayerCodes;
@@ -213,13 +214,13 @@ namespace CTRPluginFramework {
         *miscellaneous += (EntryWithHotkey(new MenuEntry("Enable button spam", buttonSpammer, "When any of the selected keys are\npressed down, they will automatically spam.\nGood for in-game manuevers that require\nstrict timing of button input(s).\n\nDefault keys: A, B, X, Y, L, R."), {
             Hotkey(Key::A | Key::B | Key::X | Key::Y | Key::L | Key::R , "Button Spammer")
         }));
-
-        *miscellaneous += new MenuEntry("Disable sword beam cooldown", beamCooldown);
-        *miscellaneous += new MenuEntry("Display photo on top screen", displayPhoto);
-        *miscellaneous += new MenuEntry("Always display Treasure Chest contents", seeChestContents);
-        *miscellaneous += new MenuEntry("Force instant text boxes", instantText);
-
-        resetMiscellaneous = new MenuEntry("Reset Miscellaneous codes (auto)", defaultMisc);
+        
+        *miscellaneous += new MenuEntry("Display photo on top screen", managePhotoDisp);
+        *miscellaneous += new MenuEntry("Toggle sword beam cooldown", nullptr, selectLinkBeam);
+        *miscellaneous += new MenuEntry("Force visibility of Treasure Chest contents", nullptr, seeChestContents);
+        *miscellaneous += new MenuEntry("Force instant text boxes", nullptr, instantText);
+      
+        autoBeamCooldown = new MenuEntry("Set Beam Cooldown (auto)", setBeamCooldown);
     }
 
     void InitPlayerFolder(PluginMenu& menu)
@@ -241,7 +242,6 @@ namespace CTRPluginFramework {
         *player += new MenuEntry("Toggle PvP damage", nullptr, pvpMode);
 
         managePlayerCodes = new MenuEntry("Set Player edits (auto)", setPlayerChanges);
-        resetMiscellaneous = new MenuEntry("Reset Miscellaneous codes (auto)", defaultMisc);
     }
 
     void InitEnergyFolder(PluginMenu& menu)
@@ -267,7 +267,7 @@ namespace CTRPluginFramework {
     {
         render = new MenuFolder("Rendering Codes");
 
-        *render += new MenuEntry("Hide HUD", hideHUD);
+        *render += new MenuEntry("Hide HUD", triggerHideHUD);
         *render += new MenuEntry("Disable fog effects", disableFog);
         *render += new MenuEntry("Toggle scrolling messages", nullptr, disableScrollingText);
     }
@@ -383,7 +383,7 @@ namespace CTRPluginFramework {
 
         // init auto functions
         // resetCostume->Enable();
-        resetMiscellaneous->Enable();
+        autoBeamCooldown->Enable();
         managePlayerCodes->Enable();
 
         menu->Run();
@@ -446,9 +446,6 @@ namespace CTRPluginFramework {
 
         ToggleTouchscreenForceOn();
 
-        if (!OnionFS::initOnionFSHooks(Process::GetTextSize())) {
-            panic();
-        }
     }
 
     // Called when the process exits
