@@ -1,7 +1,6 @@
 #include "Helpers/Address.hpp"
 #include "AddressList.hpp"
 
-
 namespace CTRPluginFramework {
 	void AddressList::InitAddresses(void) {
 
@@ -77,10 +76,12 @@ namespace CTRPluginFramework {
 		WaterRodStrafe = Address(0x300C59C0, 0x00000000, 0x00000000, 0x00000000);
 
 		// Miscellaneous
+		CheckPhotoExist = Address(0x31B2FE3D, 0x00000000, 0x00000000, 0x00000000);
 		DisplayTopPhoto = Address(0x31B2FE21, 0x00000000, 0x00000000, 0x00000000);
 		LobbyBallCounter = Address(0x329F18F4, 0x00000000, 0x00000000, 0x00000000);
 		LobbyBallSong = Address(0x329F193C, 0x00000000, 0x00000000, 0x00000000);
 		SeeChestContents = Address(0x0022FFB8, 0x00000000, 0x00000000, 0x00000000);
+		SwordBeamCD = Address(0x328495A0, 0x00000000, 0x00000000, 0x00000000);
 		TextBoxSpeed = Address(0x0018122C, 0x00000000, 0x00000000, 0x00000000);
 
 		// Padding
@@ -223,10 +224,12 @@ namespace CTRPluginFramework {
 
 
 	// Miscellaneous
+	Address		AddressList::CheckPhotoExist;
 	Address		AddressList::DisplayTopPhoto;
 	Address		AddressList::LobbyBallCounter;
 	Address		AddressList::LobbyBallSong;
 	Address		AddressList::SeeChestContents;
+	Address		AddressList::SwordBeamCD;
 	Address		AddressList::TextBoxSpeed;
 	
 	// Padding

@@ -24,7 +24,7 @@ namespace CTRPluginFramework
     extern MenuEntry* initCustomCostumes;
     extern MenuEntry* writeCostumeIDToSlot;
 
-    extern MenuEntry* resetMiscellaneous;
+    extern MenuEntry* autoBeamCooldown;
     extern MenuEntry* instantTextDisplay;
 
     extern MenuEntry* managePlayerCodes;
@@ -33,7 +33,7 @@ namespace CTRPluginFramework
     extern MenuEntry* editFreecamSen;
     extern MenuEntry* swapZoom;
 
-    
+
     // Menu functions
     void InitFreecamCodes(PluginMenu& menu);
     void InitEmoteFolder(PluginMenu& menu);
@@ -103,11 +103,14 @@ namespace CTRPluginFramework
 
     // Miscellaneous functions
     void buttonSpammer(MenuEntry* entry);
-    void displayPhoto(MenuEntry* entry);
+    void managePhotoDisp(MenuEntry* entry);
     void instantText(MenuEntry* entry);
-    void beamCooldown(MenuEntry* entry);
-    void defaultMisc(MenuEntry* entry);
+    void selectLinkBeam(MenuEntry* entry);
     void seeChestContents(MenuEntry* entry);
+    void setBeamCooldown(MenuEntry* entry);
+    void showPhotoBtnIntroMsg(bool showMsg);
+    void displayPhoto(bool photoCheck);
+
 
     // Player functions
     void ToggleMenuChange(void);
