@@ -72,12 +72,25 @@ namespace CTRPluginFramework {
 		return -1; // wasn't found
 	}
 	
-
 	u8 Level::getCurrLevel(void) {
 		u8 levelID;
 		Process::Read8(AddressList::CurrLevelID.addr, levelID);
 
 		return levelID;
+	}
+
+	u8 Level::getCurrStage(void) {
+		u8 stageID;
+		Process::Read8(AddressList::CurrStageID.addr, stageID);
+
+		return stageID;
+	}
+
+	u32 Level::getElapsedTime(void) {
+		u32 elapsedTime;
+		Process::Read32(AddressList::TimeElapsed.addr, elapsedTime);
+
+		return elapsedTime;
 	}
 
 	bool Level::isInDrablands(void) {

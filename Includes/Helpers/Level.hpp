@@ -12,6 +12,9 @@ namespace CTRPluginFramework {
 
 		static u8 getIDFromName(const std::string& name);
 		static u8 getCurrLevel(void);
+		static u8 getCurrStage(void);
+		static u32 getElapsedTime(void);
+
 		static bool isInDrablands(void);
 
 	private:
