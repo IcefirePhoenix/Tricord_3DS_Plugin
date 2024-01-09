@@ -5,8 +5,6 @@
 
 #include <CTRPluginFramework.hpp>
 
-#include "3ds.h"
-
 namespace CTRPluginFramework {
 
 	Level::Level(u8 ID, std::string externalName, std::string internalName, bool dummyStatus) :

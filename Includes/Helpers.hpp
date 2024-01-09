@@ -2,6 +2,7 @@
 #define HELPERS_HPP
 
 #include "Helpers/Address.hpp"
+#include "Helpers/GeneralHelpers.hpp"
 #include "Helpers/HoldKey.hpp"
 #include "Helpers/KeySequence.hpp"
 #include "Helpers/Level.hpp"
