@@ -165,6 +165,12 @@ namespace CTRPluginFramework
         static int      DrawMore(int posX, int posY);
 
         /*
+        ** Photo
+        ** 32px * 32px
+        ***************/
+        static int     DrawPhoto(int posX, int posY);
+
+        /*
         ** Plus
         ** 25px * 25px
         **************/
