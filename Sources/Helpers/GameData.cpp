@@ -144,4 +144,6 @@ namespace CTRPluginFramework {
         0x0B,  // waving
         0x0C   // blank
     };
+
+    u32 GameData::playerAddressOffset = 0x10000;
 }
