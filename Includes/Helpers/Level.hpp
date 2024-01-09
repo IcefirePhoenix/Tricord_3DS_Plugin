@@ -1,9 +1,6 @@
 #ifndef LEVEL_HPP
 #define LEVEL_HPP
 
-#include "Helpers.hpp"
-#include "AddressList.hpp"
-#include <3ds.h>
 #include "CTRPluginFramework.hpp"
 
 namespace CTRPluginFramework {
