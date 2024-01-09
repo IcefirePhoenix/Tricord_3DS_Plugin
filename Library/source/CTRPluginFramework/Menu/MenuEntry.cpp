@@ -102,13 +102,13 @@ namespace CTRPluginFramework
     void    MenuEntry::UseTopSeparator(Separator type) const
     {
         _item->Flags.useSeparatorBefore = type != Separator::None;
-        _item->Flags.useStippledLineForBefore = type == Separator::None;
+        _item->Flags.useStippledLineForBefore = type == Separator::Stippled;
     }
 
     void    MenuEntry::UseBottomSeparator(Separator type) const
     {
         _item->Flags.useSeparatorAfter = type != Separator::None;
-        _item->Flags.useStippledLineForAfter = type == Separator::None;
+        _item->Flags.useStippledLineForAfter = type == Separator::Stippled;
         
     }
 
