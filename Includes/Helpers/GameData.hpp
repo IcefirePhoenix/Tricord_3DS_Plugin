@@ -16,6 +16,7 @@ namespace CTRPluginFramework {
 		static const StringVector lobbyBallSongs;
 
 		static const std::vector<u8> emoteIDs;
+		static u32 playerAddressOffset;
 	};
 }
 #endif
