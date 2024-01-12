@@ -14,10 +14,10 @@ namespace CTRPluginFramework
     }
 
     void hideHUD(void) {
-        // TODO: add doppel location indicators
         u32 HUDPointerCheck;
         Process::Read32(AddressList::HUDPointer.addr, HUDPointerCheck);
 
+        u8 disableOffScrArrow = 0x10;
         u32 mainHUDoffset = 0x00000018;
         u32 ActionButtonBGOffset = 0x000075D0;
         u32 ActionButtonTextOffset = 0x000078B0;
@@ -27,6 +27,8 @@ namespace CTRPluginFramework
             Process::Write32((HUDPointerCheck + ActionButtonBGOffset), 0x00000010);
             Process::Write32((HUDPointerCheck + ActionButtonTextOffset), 0x00FFFF00);
         }
+
+        Process::Write8(AddressList::OffScreenLocation.addr, disableOffScrArrow);
     }
 
     // does this reset itself? 

@@ -133,6 +133,8 @@ namespace CTRPluginFramework {
 		static Address		FogB;
 		static Address		FogC;
 		static Address		ScrollingTextOpacity;
+		static Address		OffScreenLocation;
+
 
 		// Savefile
 		static Address		CostumeObtainStatus;
