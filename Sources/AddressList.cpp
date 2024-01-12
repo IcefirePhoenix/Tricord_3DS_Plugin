@@ -57,7 +57,8 @@ namespace CTRPluginFramework {
 		DrablandsRupeeCount = Address(0x32C8178C, 0x00000000, 0x00000000, 0x00000000);
 		HealthCurrent = Address(0x32C824F4, 0x00000000, 0x00000000, 0x00000000);
 		HealthMax = Address(0x32C824F5, 0x00000000, 0x00000000, 0x00000000);
-		LoadingStatus = Address(0x3280EDE8, 0x00000000, 0x00000000, 0x00000000);
+		LoadingStatus = Address(0x319FE1D0, 0x00000000, 0x00000000, 0x00000000);
+		PauseStatus = Address(0x3280ED8C, 0x00000000, 0x00000000, 0x00000000);
 		PreviousLevelID = Address(0x3280EDBC, 0x00000000, 0x00000000, 0x00000000);
 		PreviousStageID = Address(0x3280EDC0, 0x00000000, 0x00000000, 0x00000000);
 		PreviousSpawnID = Address(0x3280EDC2, 0x00000000, 0x00000000, 0x00000000);
@@ -66,14 +67,15 @@ namespace CTRPluginFramework {
 		// Items
 		// Note: Strafe refers to speed
 		BowStrafe = Address(0x0038CC7C, 0x00000000, 0x00000000, 0x00000000);
-		FireGloveStrafe = Address(0x300C8FD8, 0x00000000, 0x00000000, 0x00000000);
+		FireGloveStrafe = Address(0x003C8FD8, 0x00000000, 0x00000000, 0x00000000);
 		GustStrafe = Address(0x003C85A8, 0x00000000, 0x00000000, 0x00000000);
 		HammerStrafe = Address(0x003C03E0, 0x00000000, 0x00000000, 0x00000000);
+		ShadowLinkItemPointer = Address(0x32D81DEC, 0x00000000, 0x00000000, 0x00000000);
 		RoboNiceAtk = Address(0x00156AB4, 0x00000000, 0x00000000, 0x00000000);
 		RoboNiceSFX = Address(0x003C2030, 0x00000000, 0x00000000, 0x00000000);
 		RoboNiceSpeed = Address(0x00156898, 0x00000000, 0x00000000, 0x00000000);
 		RoboStrafe = Address(0x003C214C, 0x00000000, 0x00000000, 0x00000000);
-		WaterRodStrafe = Address(0x300C59C0, 0x00000000, 0x00000000, 0x00000000);
+		WaterRodStrafe = Address(0x003C59C0, 0x00000000, 0x00000000, 0x00000000);
 
 		// Miscellaneous
 		CheckPhotoExist = Address(0x31B2FE3D, 0x00000000, 0x00000000, 0x00000000);
@@ -205,6 +207,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::HealthCurrent;
 	Address		AddressList::HealthMax;
 	Address		AddressList::LoadingStatus;
+	Address		AddressList::PauseStatus;
 	Address		AddressList::PreviousLevelID;
 	Address		AddressList::PreviousStageID;
 	Address		AddressList::PreviousSpawnID;	
@@ -216,6 +219,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::FireGloveStrafe;
 	Address		AddressList::GustStrafe;
 	Address		AddressList::HammerStrafe;
+	Address		AddressList::ShadowLinkItemPointer;
 	Address		AddressList::RoboNiceAtk;
 	Address		AddressList::RoboNiceSFX;
 	Address		AddressList::RoboNiceSpeed;
