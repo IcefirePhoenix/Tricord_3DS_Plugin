@@ -60,6 +60,7 @@ namespace CTRPluginFramework {
 		static Address		HealthCurrent;
 		static Address		HealthMax;
 		static Address		LoadingStatus;
+		static Address		PauseStatus;
 		static Address		PreviousLevelID;
 		static Address		PreviousStageID;
 		static Address		PreviousSpawnID;
@@ -70,6 +71,7 @@ namespace CTRPluginFramework {
 		static Address		FireGloveStrafe;
 		static Address		GustStrafe;
 		static Address		HammerStrafe;
+		static Address		ShadowLinkItemPointer;
 		static Address		RoboNiceAtk;
 		static Address		RoboNiceSFX;
 		static Address		RoboNiceSpeed;
