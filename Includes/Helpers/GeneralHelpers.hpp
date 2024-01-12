@@ -6,6 +6,9 @@
 namespace CTRPluginFramework {
 	class GeneralHelpers {
 	public:
+		static std::string enabledSlider;
+		static std::string disabledSlider;
+
 		static u32 chooseLink(void);
 		static u32 chooseShadowLink(void);
 
@@ -15,6 +18,12 @@ namespace CTRPluginFramework {
 		static bool isNullPointer(u32 address);
 
 		static void managePlayerLock(bool isLocked);
+		static void forceEnableDoppels(void);
+
+		static bool isSinglePlayer(void);
+		static bool isLoadingScreen(void);
+		static bool isPauseScreen(void);
+		static bool isPauseScreen(void);
 	};
 }
 #endif

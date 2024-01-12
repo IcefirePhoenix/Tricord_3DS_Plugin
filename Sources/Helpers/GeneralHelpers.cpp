@@ -8,6 +8,9 @@
 
 namespace CTRPluginFramework
 {
+    std::string GeneralHelpers::enabledSlider = Color::LimeGreen << "\u2282\u25CF";
+    std::string GeneralHelpers::disabledSlider = Color::Red << "\u25CF\u2283";
+
     u32 GeneralHelpers::chooseLink(void) {
         Keyboard player("Choose a Link:");
         static const StringVector linkList =
@@ -72,4 +75,30 @@ namespace CTRPluginFramework
         int lock = isLocked ? 0x10 : 0x00;
         Process::Write8(AddressList::LockMovement.addr, lock);
     }
+
+    void GeneralHelpers::forceEnableDoppels(void) {
+        Process::Write8(AddressList::DoppelsEnabled.addr, 0x01);
+    }
+
+    bool GeneralHelpers::isSinglePlayer(void) {
+        u8 mode;
+        Process::Read8(AddressList::DoppelsEnabled.addr, mode);
+
+        return mode == 0x01;
+    }
+
+    bool GeneralHelpers::isLoadingScreen(void) {
+        u8 type;
+        Process::Read8(AddressList::LoadingStatus.addr, type);
+
+        return type == 0x01;
+    }
+
+    bool GeneralHelpers::isPauseScreen(void) {
+        u8 status;
+        Process::Read8(AddressList::PauseStatus.addr, status);
+
+        return status == 0x03;
+    }
 }
+

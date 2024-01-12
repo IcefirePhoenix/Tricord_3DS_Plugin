@@ -16,6 +16,7 @@ namespace CTRPluginFramework {
 		static u32 getElapsedTime(void);
 
 		static bool isInDrablands(void);
+		static bool hasStageBegan(void);
 
 	private:
 		u8				_levelID;
