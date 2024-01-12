@@ -15,8 +15,12 @@ namespace CTRPluginFramework {
 		static const StringVector itemList;
 		static const StringVector lobbyBallSongs;
 
+		static const int generalPlayerIDs[];
 		static const std::vector<u8> emoteIDs;
+
 		static u32 playerAddressOffset;
+
+		static int GameData::getPlayerIDFromColor(std::string color);
 	};
 }
 #endif

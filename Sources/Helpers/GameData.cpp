@@ -145,5 +145,17 @@ namespace CTRPluginFramework {
         0x0C   // blank
     };
 
-    u32 GameData::playerAddressOffset = 0x10000;
+    const int GameData::generalPlayerIDs[3] = { 0, 1, 2 };
+    const u32 GameData::playerAddressOffset = 0x10000;
+
+    int GameData::getPlayerIDFromColor(std::string color) {
+        if (color == "Green")
+            return 0;
+        else if (color == "Blue")
+            return 1;
+        else if (color == "Red")
+            return 2;
+        else
+            return -1;
+    }
 }

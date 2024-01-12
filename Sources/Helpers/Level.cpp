@@ -97,4 +97,8 @@ namespace CTRPluginFramework {
 		u8 level = getCurrLevel();
 		return (getCurrLevel() > 0x3) && (level < 0x62);
 	}
+
+	bool Level::hasStageBegan(void) {
+		return Level::getElapsedTime >= 0x00000000;
+	}
 }
