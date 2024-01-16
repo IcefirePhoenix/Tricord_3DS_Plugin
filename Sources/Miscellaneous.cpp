@@ -3,7 +3,7 @@
 
 #include "Helpers/Address.hpp"
 #include "Helpers/Level.hpp"
-#include "Helpers/PlayerHelper.hpp"
+#include "Helpers/GeneralHelpers.hpp"
 
 #include "CTRPluginFramework/Menu/MenuEntryHotkeys.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/Icon.hpp"
@@ -39,16 +39,17 @@ namespace CTRPluginFramework
         entry->SetName(entryName);
     }
     
-    FloatingButton photoBtn(IntRect(130, 50, 32, 32), Icon::DrawPhoto);
+    FloatingButton photoBtn(IntRect(120, 50, 32, 32), Icon::DrawUnsplash);
     void managePhotoDisp(MenuEntry* entry) {
         u8 doesPhotoExist;
         Process::Read8(AddressList::CheckPhotoExist.addr, doesPhotoExist);
 
         showPhotoBtnIntroMsg(entry->WasJustActivated());
-
-        if (Level::isInDrablands()){
+        
+        if (Level::isInDrablands() && !GeneralHelpers::isLoadingScreen()){
             photoBtn.Draw();
-            photoBtn.Update(Touch::IsDown(), IntVector(Touch::GetPosition()));
+            if (!GeneralHelpers::isPauseScreen())
+                photoBtn.Update(Touch::IsDown(), IntVector(Touch::GetPosition()));
         }
 
         if (photoBtn()) {
@@ -67,7 +68,7 @@ namespace CTRPluginFramework
             displayPhoto(doesPhotoExist);
         else {
             Process::Write8(AddressList::DisplayTopPhoto.addr, 0x0);
-            managePlayerLock(false);
+            GeneralHelpers::managePlayerLock(false);
         }
     }
     
@@ -82,7 +83,7 @@ namespace CTRPluginFramework
         if (photoCheck) {
             Process::Write8(AddressList::DisplayTopPhoto.addr, 0xFF);
             
-            managePlayerLock(true);
+            GeneralHelpers::managePlayerLock(true);
             hideHUD();
         }
     }
