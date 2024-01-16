@@ -22,6 +22,7 @@ namespace CTRPluginFramework {
 
 		static int getPlayerIDFromColor(std::string color);
 		static std::string getSwordNameFromID(int ID);
+		static std::string getCostumeNameFromID(int ID);
 	};
 }
 #endif

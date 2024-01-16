@@ -166,4 +166,13 @@ namespace CTRPluginFramework {
         else
             return "N/A";
     }
+
+    std::string GameData::getCostumeNameFromID(int ID) {
+        if (ID < 0x26)
+            return GameData::universalCostumeList[ID];
+        else if (ID < 0x30)
+            return GameData::customCostumeList[ID - 0x26];
+        else
+            return "N/A";
+    }
 }
