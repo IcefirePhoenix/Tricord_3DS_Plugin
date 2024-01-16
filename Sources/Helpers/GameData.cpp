@@ -67,8 +67,9 @@ namespace CTRPluginFramework {
         "Lady's Ensemble sword",
         "Tri Suit sword",
         "Timeless Tunic sword",
+        "Linebeck's Uniform sword",
         "Fierce Deity Armor sword",
-        "No sword",
+        "No sword - crashes game",
         "Fire Glove - dev/debug"
     };
 
@@ -145,7 +146,7 @@ namespace CTRPluginFramework {
         0x0C   // blank
     };
 
-    const int GameData::generalPlayerIDs[3] = { 0, 1, 2 };
+    const int GameData::generalPlayerIDs[3] = {0, 1, 2};
     const u32 GameData::playerAddressOffset = 0x10000;
 
     int GameData::getPlayerIDFromColor(std::string color) {
@@ -157,5 +158,12 @@ namespace CTRPluginFramework {
             return 2;
         else
             return -1;
+    }
+
+    std::string GameData::getSwordNameFromID(int ID) {
+        if (ID < 0xD)
+            return GameData::swordList[ID];
+        else
+            return "N/A";
     }
 }

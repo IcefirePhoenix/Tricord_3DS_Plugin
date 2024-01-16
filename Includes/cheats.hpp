@@ -27,13 +27,35 @@ namespace CTRPluginFramework
     extern MenuEntry* autoBeamCooldown;
     extern MenuEntry* instantTextDisplay;
 
-    extern MenuEntry* managePlayerCodes;
     extern MenuEntry* menuFreecam;
     extern MenuEntry* editFreecamControls;
     extern MenuEntry* editFreecamSen;
     extern MenuEntry* swapZoom;
 
+    extern MenuEntry* jinxEditAuto;
+    extern MenuEntry* spawnEditAuto;
+    extern MenuEntry* visibleEditAuto;
+    extern MenuEntry* invinciEditAuto;
+    extern MenuEntry* pvpEditAuto;
+    extern MenuEntry* animStoreEditAuto;
+    extern MenuEntry* colEditAuto;
+    extern MenuEntry* swordEditAuto;
+    extern MenuEntry* sizeEditAuto;
 
+
+    // move to player class later
+    enum ColorStatus {
+        greenEnabled = 1 << 0, // 0001
+        blueEnabled = 1 << 1,  // 0010
+        redEnabled = 1 << 2    // 0100
+    };
+
+    enum EditType {
+        NORMAL,
+        SWORD,
+        PLAYER_SIZE
+    };
+    
     // Menu functions
     void InitFreecamCodes(PluginMenu& menu);
     void InitEmoteFolder(PluginMenu& menu);
@@ -71,7 +93,7 @@ namespace CTRPluginFramework
     void rotateCamZClockwise(void);
     void editHotkeys(MenuEntry* entry);
     void lockCamera(void);
-    void managePlayerLock(void);
+    void manageFreecamPlayerLock(void);
     void editSensitivity(MenuEntry* entry);
     float setSensitivity(std::string message);
     void setZoomType(MenuEntry* entry);
@@ -113,22 +135,43 @@ namespace CTRPluginFramework
 
 
     // Player functions
-    void ToggleMenuChange(void);
-    void resetPlayer(MenuEntry* entry);
-    void setPlayerChanges(MenuEntry* entry);
-    void posEditor(MenuEntry* entry);
-    void jinxOpt(MenuEntry* entry);
-    void spawnOpt(MenuEntry* entry);
-    void visibilityOpt(MenuEntry* entry);
-    void invincibleOpt(MenuEntry* entry);
-    void waterStorage(MenuEntry* entry);
-    void removeCollision(MenuEntry* entry);
-    void pvpMode(MenuEntry* entry);
-    void respawnIndicator(MenuEntry* entry);
-    void swordModelOpt(MenuEntry* entry);
-    void linkSize(MenuEntry* entry);
-    void bypassDoppelDemo(MenuEntry* entry);
+    
+    void openToggleMenu(std::string entryTitle, EditType type, u8 *playerStatus = nullptr);
+    void togglePlayerStatus(u8 &playerStatus, ColorStatus color);
+    bool checkPlayerStatus(u8 &playerStatus, int playerID);
 
+    template <typename T>
+    void writePlayerChanges(int editSize, u8& playerStatus, u32 address, T trueValue, T falseValue);
+    void writeSwordChanges(MenuEntry* entry);
+    void writeSizeChanges(MenuEntry* entry);
+    void writeJinxChanges(MenuEntry* entry);
+    void writeSpawnChanges(MenuEntry* entry);
+    void writeVisibilityChanges(MenuEntry* entry);
+    void writeInvincibilityChanges(MenuEntry* entry);
+    void writeAnimStorageChanges(MenuEntry* entry);
+    void writeCollisionChanges(MenuEntry* entry);
+    void writePVPChanges(MenuEntry* entry);
+
+    void setSwordChanges(MenuEntry* entry);
+    void setSizeChanges(MenuEntry* entry);
+    void setJinxChanges(MenuEntry* entry);
+    void setSpawnChanges(MenuEntry* entry);
+    void setVisibilityChanges(MenuEntry* entry);
+    void setInvincibilityChanges(MenuEntry* entry);
+    void setAnimStorageChanges(MenuEntry* entry);
+    void setCollisionChanges(MenuEntry* entry);
+    void setPVPChanges(MenuEntry* entry);
+    bool initEdit(EditType type, int playerID, ColorStatus color, u8 &playerStatus);
+
+    float setPlayerSize(void);
+
+    void posEditor(MenuEntry* entry);
+    void loadPlayerPos(int playerID);
+    void savePlayerPos(int playerID);
+    void resetPositionEditorSaves(bool reset);
+    void respawnIndicator(MenuEntry* entry);
+    void bypassDoppelDemo(MenuEntry* entry);
+    
     // Energy functions
     void infEnergy(MenuEntry* entry);
     void maxEnergySet(MenuEntry* entry);
@@ -136,13 +179,18 @@ namespace CTRPluginFramework
 
 
     // Item functions
+    std::string readCurrItems(u32 address, bool useShadow);
     void itemOpt(MenuEntry* entry);
     void shadowItemOpt(MenuEntry* entry);
     void strafingSpeedSet(MenuEntry* entry);
+    void readCurrStrafingSpeeds(void);
     void upgradeItemAlways(MenuEntry* entry);
+    float setSpeedKB(void);
 
     // Rendering functions
-    void hideHUD(MenuEntry* entry);
+    bool isNullPointer(u32 address); // move to helper file
+    void triggerHideHUD(MenuEntry* entry);
+    void hideHUD(void);
     void disableFog(MenuEntry* entry);
     void disableScrollingText(MenuEntry* entry);
 

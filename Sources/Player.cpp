@@ -1,462 +1,447 @@
 #include "cheats.hpp"
-#include "csvc.h"
 #include "AddressList.hpp"
+#include "Helpers/GameData.hpp"
 #include "Helpers/Address.hpp"
-#include "Helpers/PlayerHelper.hpp"
-#include "CTRPluginFrameworkImpl/Menu/Converter.hpp"
+#include "Helpers/GeneralHelpers.hpp"
 
-#include "CTRPluginFrameworkImpl/Menu.hpp"
-#include "CTRPluginFrameworkImpl/Menu/MenuItem.hpp"
-#include "CTRPluginFrameworkImpl/Menu/MenuEntryImpl.hpp"
-#include "CTRPluginFrameworkImpl/Menu/KeyboardImpl.hpp"
+#include "CTRPluginFrameworkImpl/Graphics/Icon.hpp"
+#include "CTRPluginFramework/System/Touch.hpp"
+#include "CTRPluginFrameworkImpl/Graphics/FloatingButton.hpp"
 
 #include <CTRPluginFramework.hpp>
 
-#include "3ds.h"
-
 namespace CTRPluginFramework
 {
+    // TODO: Locate secondary sword model size values -> Player Size edits only affect the primary size variable
+    // causing sword models to revert back to regular size during specific animations
+    // also sword particle size remains unaffected in general...
 
-    bool PlayerStatuses[7][3] = {
-        {false, false, false }, // jinx
-        {false, false, false }, // spawn
-        {false, false, false }, // visibility
-        {false, false, false }, // invincibility
-        {false, false, false }, // water storage
-        {false, false, false }, // collision
-        {false, false, false }  // pvp mode
-    };
+    u8 jinxStatus, spawnStatus, visibleStatus, invinciStatus, animStoreStatus, collisionStatus, pvpStatus, sizeStatus, swordStatus;
+    u8 swordType[3] = { 0xFF, 0xFF, 0xFF };
 
-    bool isJinxEdited, isSpawnEdited, isVisibleEdited, isInvinciEdited, isWaterEdited, isCollisionEdited, isPVPEdited, isSizeEdited, isSwordEdited;
+    float PlayerSizes = 1.0;
 
-    u8 SwordStatuses[3] = { NULL, NULL, NULL };
-    float PlayerSizes = NULL;
-
-    void resetPlayer(MenuEntry* entry) {
-        // restore default values upon disabling of checkbox entries, if applicable
-        // reset link size, sword model (do check the current costume first.. or is this unnecessary?), pvp mode, collision (?), 
+    void togglePlayerStatus(u8 &playerStatus, ColorStatus color) {
+        playerStatus ^= static_cast<u8>(color);
     }
 
-    void setPlayerChanges(MenuEntry* entry) {
-        // this should be used to actually apply the changes since we're not actually using checkboxes
+    bool checkPlayerStatus(u8 &playerStatus, int playerID) {
+        if (playerStatus & (1 << playerID))
+            return true;
+        return false;
+    }
 
-        if (isJinxEdited) { // check if jinxed is set to be edited
-            for (int i = 0x0; i < 0x3; i++) { // traverse through links
-                if (PlayerStatuses[0][i]) {
-                    Process::Write32((AddressList::IsJinxed.addr + (i * 0x10000)), 0x00000000); // jinxed
-                }
-                else {
-                    Process::Write32((AddressList::IsJinxed.addr + (i * 0x10000)), 0xFFFFFFFF); // not jinxed
-                }
-            }
-        }
+    template <typename T>
+    void writePlayerChanges(int editSize, u8 &playerStatus, u32 address, T trueValue, T falseValue) {
+        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; ++iterateThruPlayers) {
+            T valueToWrite = checkPlayerStatus(playerStatus, iterateThruPlayers) ? trueValue : falseValue;
+            u32 finalAddress = address + (iterateThruPlayers * GameData::playerAddressOffset);
 
-        if (isSpawnEdited) { // check if spawned is set to be edited
-            for (int i = 0x0; i < 0x3; i++) { // traverse through links
-                if (PlayerStatuses[1][i]) {
-                    Process::Write8((AddressList::IsSpawned.addr + (i * 0x10000)), 0x1); // spawned
-                }
-                else {
-                    Process::Write8((AddressList::IsSpawned.addr + (i * 0x10000)), 0x0); // not spawned
-                }
-            }
-        }
-
-        if (isVisibleEdited) { // check if visibility is set to be edited
-            for (int i = 0x0; i < 0x3; i++) { // traverse through links
-                if (PlayerStatuses[2][i]) {
-                    Process::Write8((AddressList::IsVisible.addr + (i * 0x10000)), 0x0); // visibility
-                }
-                else {
-                    Process::Write8((AddressList::IsVisible.addr + (i * 0x10000)), 0x1); // not visible
-                }
-            }
-        }
-
-        if (isInvinciEdited) { // check if invinci is set to be edited
-            for (int i = 0x0; i < 0x3; i++) { // traverse through links
-                if (PlayerStatuses[3][i]) {
-                    Process::Write8((AddressList::IsInvincible.addr + (i * 0x10000)), 0x16); // invinci
-                }
-                else {
-                    Process::Write8((AddressList::IsInvincible.addr + (i * 0x10000)), 0x00); // not invinci
-                }
-            }
-        }
-
-        if (isWaterEdited) { // check if water storage is set to be edited
-            for (int i = 0x0; i < 0x3; i++) { // traverse through links
-                if (PlayerStatuses[4][i]) {
-                    Process::Write8((AddressList::IsWaterStorage.addr + (i * 0x10000)), 0x0); // water storage
-                    Process::Write16((AddressList::IsWaterStorage.addr + (i * 0x10000) + 0x1), 0x0); // there's no 24-bit write here
-                }
-                else {
-                    Process::Write8((AddressList::IsWaterStorage.addr + (i * 0x10000)), 0xFF); // not water storage
-                    Process::Write16((AddressList::IsWaterStorage.addr + (i * 0x10000) + 0x1), 0xFF);
-                }
-            }
-        }
-
-        if (isCollisionEdited) { // check if collision is set to be edited
-            for (int i = 0x0; i < 0x3; i++) { // traverse through links
-                if (PlayerStatuses[5][i]) {
-                    Process::Write8((AddressList::NoCollision.addr + (i * 0x10000)), 0xEA); // no collision
-                }
-                else {
-                    Process::Write8((AddressList::NoCollision.addr + (i * 0x10000)), 0x10); // collision
-                }
-            }
-        }
-
-        if (isPVPEdited) { // check if pvp is set to be edited
-            for (int i = 0x0; i < 0x3; i++) { // traverse through links
-                if (PlayerStatuses[6][i]) {
-                    Process::Write8((AddressList::PVPMode.addr + (i * 0x10000)), 0x1); // pvp
-                }
-                else {
-                    Process::Write8((AddressList::PVPMode.addr + (i * 0x10000)), 0x0); // no pvp
-                }
-            }
-        }
-
-        if (isSwordEdited) { // check if sword type is set to be edited
-            for (int i = 0x0; i < 0x3; i++) { // traverse through links
-                if (SwordStatuses[i] != NULL) {
-                    Process::Write8((AddressList::SwordType.addr + (i * 0x10000)), SwordStatuses[i]); // set sword
-                }
-            }
-        }
-
-
-        if (isSizeEdited) { // check if size is set to be edited
-            if (PlayerSizes > 0.0 || PlayerSizes != NULL) {
-                Process::WriteFloat(AddressList::PlayerModelSize.addr, PlayerSizes); // set size
+            switch (editSize) {
+            case 8:
+                Process::Write8(finalAddress, valueToWrite);
+                break;
+            case 16:
+                Process::Write16(finalAddress, valueToWrite);
+                break;
+            case 32:
+                Process::Write32(finalAddress, valueToWrite);
+                break;
+            default:
+                Process::WriteFloat(finalAddress, valueToWrite);
+                break;
             }
         }
     }
 
-    void posEditor(MenuEntry* entry) {
-        // TODO:
-        // not sure how to implement this
-        // 
-        // could do:
-        // - passive touchscreen controls -> Tricord does NOT need to be open at all times
-        // - graphics should preferably come from current assets, though custom ones 
-        // can be necessary
-        // - graphics need to be moved around -> universal edits are preferable 
-        // - the graphical edits should be applied even if a new area is loaded in 
-        // - also the edits should be loaded in dynamically where they do disappear in case
-        // additional grsphics that are not part of the usual set are loaded in (selection
-        // screens, etc.)
-        // - two new graphics are drawn on the touchscreen: load and save buttons... also need to figure out what graphics to draw...
-        // - to save position: swap to desired Link, then hit save button -- this will store the X, Y, and Z coords
-        // - to load position: swap to desired Link, the hit load button -- this will write stored values to pos addresses
-        // 
-        // todo: figure out how to draw to the screen and load in the custom graphics etc
-        // 
-        // - note 1: if no position was saved for the current Link AND load button was pressed, display OSD notif on 
-        // top screen saying that there's no saved position to load
-        // - note 2: the code should check current Link first
+    void writeJinxChanges(MenuEntry* entry) {
+        u32 jinxed = 0x00000000;
+        u32 notJinxed = 0xFFFFFFFF;
 
-
+        writePlayerChanges(32, jinxStatus, AddressList::IsJinxed.addr, jinxed, notJinxed);
     }
 
-    // this opens a toggle menu similar to OnionFS
-    void openToggleMenu(int CurrentStatus, std::string entryTitle, bool& setStatus, std::string enabledText, std::string disabledText) {
+    void writeSpawnChanges(MenuEntry* entry) {
+        u8 spawned = 0x1;
+        u8 notSpawned = 0x0;
 
-        // set up bottom menu options
-        std::string enSlid = Color::LimeGreen << "\u2282\u25CF";
-        std::string disSlid = Color::Red << "\u25CF\u2283";
-        std::string title;
+        writePlayerChanges(8, spawnStatus, AddressList::IsSpawned.addr, spawned, notSpawned);
+    }
 
-        // placeholders
-        Keyboard kbd("dummy text");
-        StringVector opts;
+    void writeVisibilityChanges(MenuEntry* entry) {
+        u8 visible = 0x1;
+        u8 notVisible = 0x0;
 
-        // this menu stays open regardless of input UNLESS the user specifies they wish to exit
-        bool loop = true;
-        kbd.CanAbort(false);
+        writePlayerChanges(8, visibleStatus, AddressList::IsVisible.addr, visible, notVisible);
+    }
 
-        while (loop) {
-            // update top screen info
-            title = entryTitle + "\n\n";
-            title.append("Player 1: " << ((PlayerStatuses[CurrentStatus][0]) ? (Color::LimeGreen << enabledText) : (Color::Red << disabledText)) << Color::White << "\n");
-            title.append("Player 2: " << ((PlayerStatuses[CurrentStatus][1]) ? (Color::LimeGreen << enabledText) : (Color::Red << disabledText)) << Color::White << "\n");
-            title.append("Player 3: " << ((PlayerStatuses[CurrentStatus][2]) ? (Color::LimeGreen << enabledText) : (Color::Red << disabledText)) << Color::White << "\n");
+    void writeInvincibilityChanges(MenuEntry* entry) {
+        u8 invincible = 0x16;
+        u8 notInvinci = 0x0;
 
-            // update bottom screen info
-            opts.clear();
-            opts.push_back(std::string("Player 1 ") << ((PlayerStatuses[CurrentStatus][0]) ? enSlid : disSlid));
-            opts.push_back(std::string("Player 2 ") << ((PlayerStatuses[CurrentStatus][1]) ? enSlid : disSlid));
-            opts.push_back(std::string("Player 3 ") << ((PlayerStatuses[CurrentStatus][2]) ? enSlid : disSlid));
-            opts.push_back("Save changes");
-            opts.push_back("Disable entry");
+        writePlayerChanges(8, invinciStatus, AddressList::IsInvincible.addr, invincible, notInvinci);
+    }
 
-            // display top screen info
-            kbd.GetMessage() = title;
+    // lazy workaround for 24-bit write
+    void writeAnimStorageChanges(MenuEntry* entry) {
+        u16 animStoredA = 0x0;
+        u16 notStoredA = 0xFFFF;
 
-            // populate bottom screen options
-            kbd.Populate(opts);
+        u8 animStoredB = 0x0;
+        u8 notStoredB = 0xFF;
 
-            // begin watching for changes
-            switch (kbd.Open())
-            {
-                // toggle functionality -> swaps current status (enabled/disabled)
+        writePlayerChanges(16, animStoreStatus, AddressList::IsWaterStorage.addr, animStoredA, notStoredA);
+        writePlayerChanges(8, animStoreStatus, AddressList::IsWaterStorage.addr + 0x2, animStoredB, notStoredB);
+    }
+
+    void writeCollisionChanges(MenuEntry* entry) {
+        u8 collision = 0x10;
+        u8 noCollision = 0xEA;
+
+        writePlayerChanges(8, collisionStatus, AddressList::NoCollision.addr, collision, noCollision);
+    }
+
+    void writePVPChanges(MenuEntry* entry) {
+        u8 pvp = 0x1;
+        u8 notPvp = 0x0;
+
+        writePlayerChanges(8, pvpStatus, AddressList::PVPMode.addr, pvp, notPvp);
+    }
+
+    void writeSwordChanges(MenuEntry* entry) {
+        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; ++iterateThruPlayers) {
+            u32 finalAddress = AddressList::SwordType.addr + (iterateThruPlayers * GameData::playerAddressOffset);
+
+            if (swordType[iterateThruPlayers] != 0xFF) {
+                Process::Write8(finalAddress, swordType[iterateThruPlayers]);
+            }
+        }
+    }
+
+    void writeSizeChanges(MenuEntry* entry) {
+        if (PlayerSizes > 0.0)
+            Process::WriteFloat(AddressList::PlayerModelSize.addr, PlayerSizes);
+    }
+
+    void setSwordChanges(MenuEntry* entry) {
+        if (entry->Name() == "Set custom sword model(s)") {
+            openToggleMenu("Sword Model Type Menu", SWORD);
+            entry->SetName("Disable custom sword model edits");
+            swordEditAuto->Enable();
+        }
+        else {
+            entry->SetName("Set custom sword model(s)");
+            swordEditAuto->Disable();
+        }
+    }
+
+    void setSizeChanges(MenuEntry* entry) {
+        if (entry->Name() == "Set custom player model size") {
+            openToggleMenu("Player Size Menu", PLAYER_SIZE);
+            entry->SetName("Disable custom player size edits");
+            sizeEditAuto->Enable();
+        }
+        else {
+            entry->SetName("Set custom player model size");
+            sizeEditAuto->Disable();
+        }
+    }
+
+    void setJinxChanges(MenuEntry* entry) {
+        std::string intro = "Jinx Model Status Menu\n\nEnable Jinx " + GeneralHelpers::enabledSlider << Color::White << "\nDisable Jinx " + GeneralHelpers::disabledSlider;
+        if (entry->Name() == "Toggle jinxed model edits") {
+            openToggleMenu(intro, NORMAL, &jinxStatus);
+            entry->SetName("Disable jinxed model edits");
+            jinxEditAuto->Enable();
+        }
+        else {
+            entry->SetName("Toggle jinxed model edits");
+            jinxEditAuto->Disable();
+        }
+    }
+
+    void setSpawnChanges(MenuEntry* entry) {
+        std::string intro = "Player Spawn Status Menu\n\nSpawned " + GeneralHelpers::enabledSlider << Color::White << "\nNot spawned " + GeneralHelpers::disabledSlider;
+        if (entry->Name() == "Toggle player spawn edits") {
+            openToggleMenu(intro, NORMAL, &spawnStatus);
+            entry->SetName("Disable player spawn edits");
+            spawnEditAuto->Enable();
+        }
+        else {
+            entry->SetName("Toggle player spawn edits");
+            spawnEditAuto->Disable();
+        }
+    }
+
+    void setVisibilityChanges(MenuEntry* entry) {
+        std::string intro = "Player Model Visibility Menu\n\nVisible " + GeneralHelpers::enabledSlider << Color::White << "\nNot visible " + GeneralHelpers::disabledSlider;
+        if (entry->Name() == "Toggle player visibility edits") {
+            openToggleMenu(intro, NORMAL, &visibleStatus);
+            entry->SetName("Disable player visibility edits");
+            visibleEditAuto->Enable();
+        }
+        else {
+            entry->SetName("Toggle player visibility edits");
+            visibleEditAuto->Disable();
+        }
+    }
+
+    void setInvincibilityChanges(MenuEntry* entry) {
+        std::string intro = "Player Invincibility Status Menu\n\nEnable invincibility " + GeneralHelpers::enabledSlider << Color::White << "\nDisable invincibility " + GeneralHelpers::disabledSlider;
+        if (entry->Name() == "Toggle player invincibility edits") {
+            openToggleMenu(intro, NORMAL, &invinciStatus);
+            entry->SetName("Disable player invincibility edits");
+            invinciEditAuto->Enable();
+        }
+        else {
+            entry->SetName("Toggle player invincibility edits");
+            invinciEditAuto->Disable();
+        }
+    }
+
+    void setAnimStorageChanges(MenuEntry* entry) {
+        std::string intro = "Animation Storage Status Menu\n\nEnable animation storage " + GeneralHelpers::enabledSlider << Color::White << "\nDisable animation storage " + GeneralHelpers::disabledSlider;
+        if (entry->Name() == "Toggle animation storage edits") {
+            openToggleMenu(intro, NORMAL, &animStoreStatus);
+            entry->SetName("Disable animation storage edits");
+            animStoreEditAuto->Enable();
+        }
+        else {
+            entry->SetName("Toggle animation storage edits");
+            animStoreEditAuto->Disable();
+        }
+    }
+
+    void setCollisionChanges(MenuEntry* entry) {
+        std::string intro = "Player Collision Status Menu\n\nDefault collision " + GeneralHelpers::enabledSlider << Color::White << "\nNo collision " + GeneralHelpers::disabledSlider;
+        if (entry->Name() == "Toggle collision edits (experimental!)") {
+            openToggleMenu(intro, NORMAL, &collisionStatus);
+            entry->SetName("Disable collision edits");
+            colEditAuto->Enable();
+        }
+        else {
+            entry->SetName("Toggle collision edits (experimental!)");
+            colEditAuto->Disable();
+        }
+    }
+
+    void setPVPChanges(MenuEntry* entry) {
+        std::string intro = "Player PvP Status Menu\n\nEnable PvP " + GeneralHelpers::enabledSlider << Color::White << "\nDisable PvP " + GeneralHelpers::disabledSlider;
+        if (entry->Name() == "Toggle PvP damage edits") {
+            openToggleMenu(intro, NORMAL, &pvpStatus);
+            entry->SetName("Disable PvP damage edits");
+            pvpEditAuto->Enable();
+        }
+        else {
+            entry->SetName("Toggle PvP damage edits");
+            pvpEditAuto->Disable();
+        }
+    }
+
+    void openToggleMenu(std::string entryTitle, EditType type, u8 *playerStatus) {
+        Keyboard menu("Menu");
+        StringVector bottomScreenOptions;
+
+        bool isMenuOpen = true;
+        menu.CanAbort(false);
+
+        while (isMenuOpen) {
+            u8 status = *playerStatus;
+            bottomScreenOptions.clear();
+
+            switch (type) {
+            case NORMAL:
+                bottomScreenOptions.push_back(std::string("Player 1 ") << (checkPlayerStatus(status, 0) ? GeneralHelpers::enabledSlider : GeneralHelpers::disabledSlider));
+                bottomScreenOptions.push_back(std::string("Player 2 ") << (checkPlayerStatus(status, 1) ? GeneralHelpers::enabledSlider : GeneralHelpers::disabledSlider));
+                bottomScreenOptions.push_back(std::string("Player 3 ") << (checkPlayerStatus(status, 2) ? GeneralHelpers::enabledSlider : GeneralHelpers::disabledSlider));
+                break;
+            case SWORD:
+                bottomScreenOptions.push_back(std::string("Player 1: ") << GameData::getSwordNameFromID(swordType[0]));
+                bottomScreenOptions.push_back(std::string("Player 2: ") << GameData::getSwordNameFromID(swordType[1]));
+                bottomScreenOptions.push_back(std::string("Player 3: ") << GameData::getSwordNameFromID(swordType[2]));
+                break;
+            case PLAYER_SIZE:
+                bottomScreenOptions.push_back(std::string("Player Size: ") << std::to_string(PlayerSizes));
+                break;
+            }
+
+            bottomScreenOptions.push_back("Save and exit");
+
+            menu.GetMessage() = entryTitle;
+            menu.Populate(bottomScreenOptions);
+
+            switch (menu.Open()) {
             case 0:
-            {
-                PlayerStatuses[CurrentStatus][0] = !PlayerStatuses[CurrentStatus][0];
-                break;
-            }
+                if (initEdit(type, 0, greenEnabled, *playerStatus))
+                    break;
             case 1:
-            {
-                PlayerStatuses[CurrentStatus][1] = !PlayerStatuses[CurrentStatus][1];
-                break;
-            }
+                if (type == PLAYER_SIZE) {
+                    isMenuOpen = false;
+                    break;
+                } 
+                if (initEdit(type, 1, blueEnabled, *playerStatus))
+                    break;
             case 2:
-            {
-                PlayerStatuses[CurrentStatus][2] = !PlayerStatuses[CurrentStatus][2];
-                break;
-            }
+                if (initEdit(type, 2, redEnabled, *playerStatus))
+                    break;
             case 3:
-            {
-                // enable address writes
-                setStatus = true;
-
-                // end loop; exit menu
-                loop = false;
+                isMenuOpen = false;
                 break;
-            }
-            default:
-            {
-                // disable address writes
-                setStatus = false;
-
-                // end loop; exit menu
-                loop = false;
-                break;
-            }
             }
         }
     }
 
-    void jinxOpt(MenuEntry* entry) {
-        openToggleMenu(0, "Jinx Options", isJinxEdited, "Jinx model in-use", "Disabled"); // jinx data is located on row 1
-    }
-
-    void spawnOpt(MenuEntry* entry) {
-        openToggleMenu(1, "Player Spawn Options", isSpawnEdited, "Spawned", "Not spawned"); // spawn data is located on row 2
-    }
-
-    void visibilityOpt(MenuEntry* entry) {
-        openToggleMenu(2, "Player Visibility Options", isVisibleEdited, "Not visible", "Visible"); // visibility data is located on row 3
-    }
-
-    void invincibleOpt(MenuEntry* entry) {
-        openToggleMenu(3, "Player Invincibility Options", isInvinciEdited, "Invincible", "Not invincible"); // invinci data is located on row 4
-    }
-
-    void waterStorage(MenuEntry* entry) {
-        openToggleMenu(4, "Water Storage Options ", isWaterEdited, "Water Storage enabled", "Water Storage disabled"); // water storage data is located on row 5
-    }
-
-    void removeCollision(MenuEntry* entry) {
-        openToggleMenu(5, "Player Collision Options (experimental!)", isCollisionEdited, "No collision", "Collision enabled"); // collision data is located on row 6
-    }
-
-    void pvpMode(MenuEntry* entry) {
-        openToggleMenu(6, "PvP Options", isPVPEdited, "PvP enabled", "PvP Disabled"); // pvp data is located on row 7
-    }
-
-    void swordModelOpt(MenuEntry* entry) {
-
-        // placeholders
-        Keyboard kbd("dummy text");
-        std::string title;
-        StringVector opts;
-
-        // this menu stays open regardless of input UNLESS the user specifies they wish to exit
-        bool loop = true;
-        kbd.CanAbort(false);
-
-        while (loop) {
-            // update top screen info
-            title = "Player Sword Options:\n\n";
-            title.append("Player 1: " << ((SwordStatuses[0] == NULL) ? Color::White << "No changes currently set\n" : Color::White << (swordList[SwordStatuses[0]] + "\n")));
-            title.append("Player 2: " << ((SwordStatuses[1] == NULL) ? Color::White << "No changes currently set\n" : Color::White << (swordList[SwordStatuses[1]] + "\n")));
-            title.append("Player 3: " << ((SwordStatuses[2] == NULL) ? Color::White << "No changes currently set\n" : Color::White << (swordList[SwordStatuses[2]] + "\n")));
-
-            // update bottom screen info
-            opts.clear();
-            opts.push_back(std::string("Set Player 1 sword"));
-            opts.push_back(std::string("Set Player 2 sword"));
-            opts.push_back(std::string("Set Player 3 sword"));
-            opts.push_back("Save changes");
-            opts.push_back("Disable entry");
-
-            // display top screen info
-            kbd.GetMessage() = title;
-
-            // populate bottom screen options
-            kbd.Populate(opts);
-
-            // begin watching for changes
-            switch (kbd.Open()) {
-                // toggle functionality -> swaps current status (enabled/disabled)
-            case 0:
-            {
-                SwordStatuses[0] = chooseSword();
-                break;
-            }
-            case 1:
-            {
-                SwordStatuses[1] = chooseSword();
-                break;
-            }
-            case 2:
-            {
-                SwordStatuses[2] = chooseSword();
-                break;
-            }
-            case 3:
-            {
-                // enable address writes
-                isSwordEdited = true;
-                loop = false;
-
-                break;
-            }
-            default:
-            {
-                // disable address writes
-                isSwordEdited = false;
-
-                // end loop = exit the menu
-                loop = false;
-                break;
-            }
-            }
+    bool initEdit(EditType type, int playerID, ColorStatus color, u8 &playerStatus) {
+        switch (type) {
+        case NORMAL:
+            togglePlayerStatus(playerStatus, color);
+            return true;
+        case SWORD:
+            swordType[playerID] = GeneralHelpers::chooseSword();
+            return true;
+        case PLAYER_SIZE:
+            PlayerSizes = setPlayerSize();
+            return true;
+        default:
+            break;
         }
+        return false;
     }
 
-    void linkSize(MenuEntry* entry) {
-        // placeholders 
-        Keyboard kbd("dummy text");
-        std::string title;
-        StringVector opts;
+    float setPlayerSize(void) {
+        float result;
 
-        // this menu stays open regardless of input UNLESS the user specifies they wish to exit
-        bool loop = true;
-        kbd.CanAbort(false);
+        Keyboard sizeKB("Set player size:");
+        sizeKB.IsHexadecimal(false);
+        sizeKB.Open(result);
 
-        while (loop) {
-            // update top screen info
-            title = "Player Size Options Menu:\n\n";
-            title.append("Current size: " << ((PlayerSizes == NULL) ? Color::White << "No changes currently set\n" : Color::White << "Current size: " + std::to_string(PlayerSizes)));
+        if (result < 0.0)
+            MessageBox(Color::Gainsboro << "Error", "Player Sizes cannot be negative.")();
+        else
+            return result;
 
-            // update bottom screen info
-            opts.clear();
-            opts.push_back(std::string("Set size"));
-            opts.push_back("Save changes");
-            opts.push_back("Disable entry");
-
-            // display top screen info
-            kbd.GetMessage() = title;
-
-            // populate bottom screen options
-            kbd.Populate(opts);
-
-            // begin watching for changes
-            switch (kbd.Open()) {
-            case 0:
-            {
-                float result;
-
-                Keyboard sizeKB("Set player size:");
-                sizeKB.IsHexadecimal(false);
-                sizeKB.Open(result);
-
-                if (result < 0.0) {
-                    MessageBox(Color::Gainsboro << "Error", "Player Sizes cannot be negative.")();
-                }
-                else {
-                    PlayerSizes = result;
-                }
-                break;
-
-            }
-            case 1:
-            {
-                // enable address writes
-                isSizeEdited = true;
-
-                // end loop = exit the menu
-                loop = false;
-                break;
-            }
-            default:
-            {
-                // disable address writes
-                isSizeEdited = false;
-
-                // end loop = exit the menu
-                loop = false;
-                break;
-            }
-            }
-        }
+        return 1.0;
     }
 
     void respawnIndicator(MenuEntry* entry) {
         float respawnCoords[3][3] = {
-            {NULL, NULL, NULL}, // green
-            {NULL, NULL, NULL}, // blue
-            {NULL, NULL, NULL}  // red
+            {0.0, 0.0, 0.0}, // green
+            {0.0, 0.0, 0.0}, // blue
+            {0.0, 0.0, 0.0}  // red
+        };
+
+        u32 arrowAddresses[3] = {
+            AddressList::ArrowIndicatorColorTop.addr,
+            AddressList::ArrowIndicatorColorMid.addr,
+            AddressList::ArrowIndicatorColorBot.addr
         };
 
         // grab respawn coords
         for (int iterateColor = 0; iterateColor < 3; iterateColor++) {
-            Process::ReadFloat((AddressList::RespawnPositionX.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][0]);
-            Process::ReadFloat((AddressList::RespawnPositionY.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][1]);
-            Process::ReadFloat((AddressList::RespawnPositionZ.addr + (iterateColor * 0x10000)), respawnCoords[iterateColor][2]);
+            u32 offset = iterateColor * GameData::playerAddressOffset;
+            Process::ReadFloat((AddressList::RespawnPositionX.addr + offset), respawnCoords[iterateColor][0]);
+            Process::ReadFloat((AddressList::RespawnPositionY.addr + offset), respawnCoords[iterateColor][1]);
+            Process::ReadFloat((AddressList::RespawnPositionZ.addr + offset), respawnCoords[iterateColor][2]);
         }
 
-        // top arrow = G, mid arrow = B, bot arrow = R
-        Process::Write8(AddressList::ArrowIndicatorColorTop.addr, 0x0);
-        Process::Write8(AddressList::ArrowIndicatorColorMid.addr, 0x1);
-        Process::Write8(AddressList::ArrowIndicatorColorBot.addr, 0x2);
+        u32 forceVisibility = 0x10FFFF00;
+        u8 coordinateOffset = 0x4;
 
-        Process::Write32(AddressList::ArrowIndicatorVisibilityTop.addr, 0x10FFFF00);
-        Process::Write32(AddressList::ArrowIndicatorVisibilityMid.addr, 0x10FFFF00);
-        Process::Write32(AddressList::ArrowIndicatorVisibilityBot.addr, 0x10FFFF00);
-
-        for (int iterateArray = 0; iterateArray < 3; iterateArray++) {
-            Process::WriteFloat((AddressList::ArrowIndicatorLocationTop.addr + (iterateArray * 0x4)), respawnCoords[0][iterateArray]);
-            Process::WriteFloat((AddressList::ArrowIndicatorLocationMid.addr + (iterateArray * 0x4)), respawnCoords[1][iterateArray]);
-            Process::WriteFloat((AddressList::ArrowIndicatorLocationBot.addr + (iterateArray * 0x4)), respawnCoords[2][iterateArray]);
+        for (int iterateEdits = 0; iterateEdits < 3; iterateEdits++) {
+            Process::Write8(arrowAddresses[iterateEdits], GameData::generalPlayerIDs[iterateEdits]); // set arrow color
+            Process::Write32(arrowAddresses[iterateEdits], forceVisibility);                         // force arrow visibility
+            Process::WriteFloat(arrowAddresses[iterateEdits] + (iterateEdits * coordinateOffset), respawnCoords[0][iterateEdits]); // draw arrow
         }
     }
 
+    void showPosEditorIntroMsg(bool showMsg) {
+        if (showMsg) {
+            OSD::Notify("[POSITION LOAD/SAVE] Use the touchscreen buttons to save/load");
+            OSD::Notify("the current Link's position.");
+        }
+    }
+
+    // TODO create new icons to replace these placeholders 
+    FloatingButton loadBtn(IntRect(100, 210, 15, 15), Icon::DrawCentreOfGravity);
+    FloatingButton saveBtn(IntRect(125, 210, 15, 15), Icon::DrawUnsplash);
+    bool isPositionSaved[3] = { false, false, false };
+
+    float positions[3][3];
+
+    void posEditor(MenuEntry* entry) {
+        showPosEditorIntroMsg(entry->WasJustActivated());
+        resetPositionEditorSaves(entry->WasJustActivated());
+
+        if (GeneralHelpers::isSinglePlayer() && !GeneralHelpers::isLoadingScreen() && Level::getCurrLevel() != Level::getIDFromName("Hytopia Castle")){
+            loadBtn.Draw();
+            saveBtn.Draw();
+
+            if (!GeneralHelpers::isPauseScreen()) {
+                loadBtn.Update(Touch::IsDown(), IntVector(Touch::GetPosition()));
+                saveBtn.Update(Touch::IsDown(), IntVector(Touch::GetPosition()));
+            }
+        }
+
+        resetPositionEditorSaves(GeneralHelpers::isLoadingScreen());
+
+        int currLink = GeneralHelpers::getCurrLink();
+        std::string color = GeneralHelpers::getLinkColorAsStr(currLink);
+
+        if (loadBtn()) {
+            if (isPositionSaved[currLink]) {
+                loadPlayerPos(currLink);
+                OSD::Notify("[POSITION LOAD/SAVE] Loaded " + color + "'s last saved position.");
+            }
+            else 
+                OSD::Notify("[POSITION LOAD/SAVE] No saved position found for " + color + ".");
+        }
+
+        if (saveBtn()) {
+            savePlayerPos(currLink);
+            OSD::Notify("[POSITION LOAD/SAVE] Saved " + color + "'s current position.");
+        }
+    }
+
+    void loadPlayerPos(int playerID) {
+        u32 offset = playerID * GameData::playerAddressOffset;
+
+        Process::WriteFloat(AddressList::PositionX.addr + offset, positions[playerID][0]);
+        Process::WriteFloat(AddressList::PositionY.addr + offset, positions[playerID][1]);
+        Process::WriteFloat(AddressList::PositionZ.addr + offset, positions[playerID][2]);
+    }
+
+    void savePlayerPos(int playerID) {
+        u32 offset = playerID * GameData::playerAddressOffset;
+
+        Process::ReadFloat(AddressList::PositionX.addr + offset, positions[playerID][0]);
+        Process::ReadFloat(AddressList::PositionY.addr + offset, positions[playerID][1]);
+        Process::ReadFloat(AddressList::PositionZ.addr + offset, positions[playerID][2]);
+        
+        isPositionSaved[playerID] = true;
+    }
+
+    void resetPositionEditorSaves(bool reset) {
+        if (reset)
+            std::fill(isPositionSaved, isPositionSaved + 3, false);
+    }
+
     void bypassDoppelDemo(MenuEntry* entry) {
-        u8 currLevelID, currStageID;
-        u32 elapsedTime;
+        if (Level::getCurrLevel() == Level::getIDFromName("Hytopia Castle") && Level::getCurrStage() == 0x2) {
+            GeneralHelpers::forceEnableDoppels();
 
-        Process::Read8(AddressList::CurrLevelID.addr, currLevelID);
-        Process::Read8(AddressList::CurrStageID.addr, currStageID);
-        Process::Read32(AddressList::TimeElapsed.addr, elapsedTime);
+            u32 blueDataOffset = 0x10000;
+            u32 redDataOffset = 0x20000;
 
-        if (currLevelID == 0x01 && currStageID == 0x02) {
-            Process::Write8(AddressList::DoppelsEnabled.addr, 0x01);
+            if (Level::hasStageBegan()) {
+                // set blue location to triforce
+                Process::WriteFloat((AddressList::PositionX.addr + blueDataOffset), -0.8);
+                Process::WriteFloat((AddressList::PositionY.addr + blueDataOffset), 1.1452);
+                Process::WriteFloat((AddressList::PositionZ.addr + blueDataOffset), -9.95);
 
-            if (elapsedTime == 0x00000000) {
-                // set blue to triforce
-                Process::WriteFloat((AddressList::PositionX.addr + 0x10000), -0.8);
-                Process::WriteFloat((AddressList::PositionY.addr + 0x10000), 1.1452);
-                Process::WriteFloat((AddressList::PositionZ.addr + 0x10000), -9.95);
-
-                // set red to triforce
-                Process::WriteFloat((AddressList::PositionX.addr + 0x20000), 0.8);
-                Process::WriteFloat((AddressList::PositionY.addr + 0x20000), 1.1452);
-                Process::WriteFloat((AddressList::PositionZ.addr + 0x20000), -9.95);
+                // set red location to triforce
+                Process::WriteFloat((AddressList::PositionX.addr + redDataOffset), 0.8);
+                Process::WriteFloat((AddressList::PositionY.addr + redDataOffset), 1.1452);
+                Process::WriteFloat((AddressList::PositionZ.addr + redDataOffset), -9.95);
             }
         }
     }

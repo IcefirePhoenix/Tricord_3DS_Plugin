@@ -18,9 +18,10 @@ namespace CTRPluginFramework {
 		static const int generalPlayerIDs[];
 		static const std::vector<u8> emoteIDs;
 
-		static u32 playerAddressOffset;
+		static const u32 playerAddressOffset;
 
-		static int GameData::getPlayerIDFromColor(std::string color);
+		static int getPlayerIDFromColor(std::string color);
+		static std::string getSwordNameFromID(int ID);
 	};
 }
 #endif

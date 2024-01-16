@@ -42,12 +42,20 @@ namespace CTRPluginFramework {
     MenuEntry* autoBeamCooldown;
     MenuEntry* instantTextDisplay;
 
-    MenuEntry* managePlayerCodes;
-
     MenuEntry* menuFreecam;
     MenuEntry* editFreecamControls;
     MenuEntry* editFreecamSen;
     MenuEntry* swapZoom;
+
+    MenuEntry* jinxEditAuto;
+    MenuEntry* spawnEditAuto;
+    MenuEntry* visibleEditAuto;
+    MenuEntry* invinciEditAuto;
+    MenuEntry* pvpEditAuto;
+    MenuEntry* animStoreEditAuto;
+    MenuEntry* colEditAuto;
+    MenuEntry* swordEditAuto;
+    MenuEntry* sizeEditAuto;
 
     MenuFolder* emotes;
     MenuFolder* gameplay;
@@ -215,7 +223,7 @@ namespace CTRPluginFramework {
             Hotkey(Key::A | Key::B | Key::X | Key::Y | Key::L | Key::R , "Button Spammer")
         }));
         
-        *miscellaneous += new MenuEntry("Display photo on top screen", managePhotoDisp);
+        *miscellaneous += new MenuEntry("Use photo viewer touchscreen toggle", managePhotoDisp);
         *miscellaneous += new MenuEntry("Toggle sword beam cooldown", nullptr, selectLinkBeam);
         *miscellaneous += new MenuEntry("Force visibility of Treasure Chest contents", nullptr, seeChestContents);
         *miscellaneous += new MenuEntry("Force instant text boxes", nullptr, instantText);
@@ -226,22 +234,32 @@ namespace CTRPluginFramework {
     void InitPlayerFolder(PluginMenu& menu)
     {
         player = new MenuFolder("Player Codes");
-        // hotkeys -> posEditor (?)
 
         *player += new MenuEntry("Bypass Doppel Master dialogue cutscene", bypassDoppelDemo);
         *player += new MenuEntry("Display current respawn location", respawnIndicator);
-        *player += new MenuEntry("Enable position editor menu", posEditor);
-        *player += new MenuEntry("Disable Collision (experimental!)", nullptr, removeCollision);
-        *player += new MenuEntry("Enable Water Storage", nullptr, waterStorage);
-        *player += new MenuEntry("Spawn/Despawn Links", nullptr, spawnOpt);
-        *player += new MenuEntry("Set Link model size", nullptr, linkSize);
-        *player += new MenuEntry("Set Sword Types", nullptr, swordModelOpt);
-        *player += new MenuEntry("Toggle Jinxed model", nullptr, jinxOpt);
-        *player += new MenuEntry("Toggle Link Visibility", nullptr, visibilityOpt);
-        *player += new MenuEntry("Toggle Link Invincibility", nullptr, invincibleOpt);
-        *player += new MenuEntry("Toggle PvP damage", nullptr, pvpMode);
+        *player += new MenuEntry("Enable position save/load touchscreen toggle", posEditor);
+        *player += new MenuEntry("Toggle collision edits (experimental!)", nullptr, setCollisionChanges);
+        *player += new MenuEntry("Toggle animation storage edits", nullptr, setAnimStorageChanges);
+        *player += new MenuEntry("Toggle player spawn edits", nullptr, setSpawnChanges);
+        *player += new MenuEntry("Toggle jinxed model edits", nullptr, setJinxChanges);
+        *player += new MenuEntry("Toggle player visibility edits", nullptr, setVisibilityChanges);
+        *player += new MenuEntry("Toggle player invincibility edits", nullptr, setInvincibilityChanges);
+        *player += new MenuEntry("Toggle PvP damage edits", nullptr, setPVPChanges);
+        *player += new MenuEntry("Set custom player model size", nullptr, setSizeChanges);
+        *player += new MenuEntry("Set custom sword model(s)", nullptr, setSwordChanges);
+   
+        jinxEditAuto = new MenuEntry("Write Jinx edits (auto)", writeJinxChanges);
+        spawnEditAuto = new MenuEntry("Write Spawn edits (auto)", writeSpawnChanges);
+        visibleEditAuto = new MenuEntry("Write Visibility edits (auto)", writeVisibilityChanges);
+        invinciEditAuto = new MenuEntry("Write Invincibility edits (auto)", writeInvincibilityChanges);
+        pvpEditAuto = new MenuEntry("Write PVP edits (auto)", writePVPChanges);
+        animStoreEditAuto = new MenuEntry("Write Anim edits (auto)", writeAnimStorageChanges);
+        colEditAuto = new MenuEntry("Write Collision edits (auto)", writeCollisionChanges);
+        swordEditAuto = new MenuEntry("Write Sword edits (auto)", writeSwordChanges);
+        sizeEditAuto = new MenuEntry("Write Size edits (auto)", writeSizeChanges);
 
-        managePlayerCodes = new MenuEntry("Set Player edits (auto)", setPlayerChanges);
+
+
     }
 
     void InitEnergyFolder(PluginMenu& menu)
@@ -384,7 +402,6 @@ namespace CTRPluginFramework {
         // init auto functions
         // resetCostume->Enable();
         autoBeamCooldown->Enable();
-        managePlayerCodes->Enable();
 
         menu->Run();
 
