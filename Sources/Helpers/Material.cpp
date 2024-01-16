@@ -167,4 +167,27 @@ namespace CTRPluginFramework {
         chosenMaterial = chosenMaterial + 20; // 0-23 are not materials
         return chosenMaterial;
     }
+
+    std::string Material::getMaterialName(int world, int mat) {
+        switch (world) {
+        case 0:
+            return Material::otherMats[mat];
+        case 1:
+            return Material::woodlandMats[mat - 6];
+        case 2:
+            return Material::riversideMats[mat - 14];
+        case 3:
+            return Material::volcanoMats[mat - 22];
+        case 4:
+            return Material::iceMats[mat - 30];
+        case 5:
+            return Material::fortressMats[mat - 38];
+        case 6:
+            return Material::dunesMats[mat - 46];
+        case 7:
+            return Material::ruinsMats[mat - 54];
+        case 8:
+            return Material::skyMats[mat - 62];
+        }
+    }
 }

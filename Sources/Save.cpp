@@ -1,19 +1,19 @@
 #include "cheats.hpp"
 #include "AddressList.hpp"
+#include "Helpers/GameData.hpp"
 #include "Helpers/Address.hpp"
-#include "Helpers/PlayerHelper.hpp"
-#include "3ds.h"
+#include "Helpers/Material.hpp"
+#include "Helpers/GeneralHelpers.hpp"
 
 namespace CTRPluginFramework
 {
     void useVoiceless(MenuEntry* entry) {
-        // this is a checkbox; auto-overwrites mainVoice
         Process::Write8(AddressList::MainVoice.addr, 0x4);
     }
 
     void mainVoice(MenuEntry* entry) {
         Keyboard voiceMenu("Choose a voice:\n\nThese changes can be observable online. Keep in\nmind your selection will be overwritten by Voiceless,\nif used.");
-        voiceMenu.Populate(voiceList);
+        voiceMenu.Populate(GameData::voiceList);
 
         u8 result = voiceMenu.Open();
         Process::Write8(AddressList::MainVoice.addr, result);
@@ -25,7 +25,6 @@ namespace CTRPluginFramework
         heroPointInput.IsHexadecimal(false);
         heroPointInput.Open(result);
 
-        // no need to check for negatives -- if one is inputted, it automatically turns into the 32-bit positive limit
         if (result > 999) {
             MessageBox(Color::Gainsboro << "Invalid Hero Point count! Cannot be negative OR higher than the maximum of 999.")();
         }
@@ -49,32 +48,38 @@ namespace CTRPluginFramework
     }
 
     void merchantSlotA(MenuEntry* entry) {
-        openMerchantMatMenu(0);
+       int material = openMerchantMatMenu(0);
+       entry->SetName("Set 1st material slot: " << Material::getMaterialName(material));
     }
 
     void merchantSlotB(MenuEntry* entry) {
-        openMerchantMatMenu(2);
+        int material = openMerchantMatMenu(2);
+        entry->SetName("Set 2nd material slot: " << Material::getMaterialName(material));
     }
 
     void merchantSlotC(MenuEntry* entry) {
-        openMerchantMatMenu(4);
+        int material = openMerchantMatMenu(4);
+        entry->SetName("Set 3rd material slot: " << Material::getMaterialName(material));
     }
 
     void merchantSlotD(MenuEntry* entry) {
-        openMerchantMatMenu(6);
+        int material = openMerchantMatMenu(6);
+        entry->SetName("Set 4th material slot: " << Material::getMaterialName(material));
     }
 
     void merchantSlotE(MenuEntry* entry) {
-        openMerchantMatMenu(8);
+        int material = openMerchantMatMenu(8);
+        entry->SetName("Set 5th material slot: " << Material::getMaterialName(material));
     }
     
-    // slot number is just an offset used to navigate between them without having to define 5 separate addresses
-    // note: each slot has a 8-bit spacer between them; increment by 2
-    void openMerchantMatMenu(int slotNumber) {
-        int world = selectMaterialWorld();
-        int material = selectMaterialIndiv(world);
+    // since each slot has a 8-bit spacer between them, slot number is just an offset
+    // used to navigate between them without having to define 5 separate addresses
+    int openMerchantMatMenu(u8 slotNumber) {
+        int world = Material::selectMaterialWorld();
+        int material = Material::selectMaterialIndiv(world);
         
-        Process::Write8((AddressList::EditMerchantStock.addr + static_cast<unsigned char>(slotNumber)), static_cast<unsigned char>(material));
+        Process::Write8(AddressList::EditMerchantStock.addr + slotNumber, static_cast<unsigned char>(material));
+        return material;
     };
 
     void resetMerchant(MenuEntry* entry) {
