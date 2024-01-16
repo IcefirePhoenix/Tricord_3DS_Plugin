@@ -8,6 +8,9 @@ namespace CTRPluginFramework {
 	public:
 		static std::string enabledSlider;
 		static std::string disabledSlider;
+		static std::string getLinkColorAsStr(int ID);
+
+		static int getCurrLink(void);
 
 		static u32 chooseLink(void);
 		static u32 chooseShadowLink(void);
@@ -19,10 +22,9 @@ namespace CTRPluginFramework {
 
 		static void managePlayerLock(bool isLocked);
 		static void forceEnableDoppels(void);
-
+		
 		static bool isSinglePlayer(void);
 		static bool isLoadingScreen(void);
-		static bool isPauseScreen(void);
 		static bool isPauseScreen(void);
 	};
 }

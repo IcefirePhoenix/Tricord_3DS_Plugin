@@ -99,6 +99,6 @@ namespace CTRPluginFramework {
 	}
 
 	bool Level::hasStageBegan(void) {
-		return Level::getElapsedTime >= 0x00000000;
+		return Level::getElapsedTime() >= 0x00000000;
 	}
 }

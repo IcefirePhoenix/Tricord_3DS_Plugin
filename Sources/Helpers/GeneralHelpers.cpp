@@ -79,7 +79,7 @@ namespace CTRPluginFramework
     void GeneralHelpers::forceEnableDoppels(void) {
         Process::Write8(AddressList::DoppelsEnabled.addr, 0x01);
     }
-
+    
     bool GeneralHelpers::isSinglePlayer(void) {
         u8 mode;
         Process::Read8(AddressList::DoppelsEnabled.addr, mode);
@@ -99,6 +99,30 @@ namespace CTRPluginFramework
         Process::Read8(AddressList::PauseStatus.addr, status);
 
         return status == 0x03;
+    }
+
+    std::string GeneralHelpers::getLinkColorAsStr(int ID) {
+        std::string color= "";
+
+        switch (ID) {
+        case 0:
+            color = "Green";
+            break;
+        case 1:
+            color = "Blue";
+            break;
+        case 2:
+            color = "Red";
+            break;
+        }
+        return color;
+    }
+
+    int GeneralHelpers::getCurrLink(void) {
+        u8 currLink;
+        Process::Read8(AddressList::ActiveLink.addr, currLink);
+
+        return static_cast<int>(currLink);
     }
 }
 
