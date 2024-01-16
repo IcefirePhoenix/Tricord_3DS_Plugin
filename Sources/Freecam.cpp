@@ -1,6 +1,8 @@
 #include "cheats.hpp"
 #include "AddressList.hpp"
 #include "Helpers/Address.hpp"
+#include "Helpers/GeneralHelpers.hpp"
+
 #include "CTRPluginFramework/Menu/MenuEntryHotkeys.hpp"
 
 #include "3ds.h"
@@ -45,7 +47,7 @@ namespace CTRPluginFramework
 			OSD::Notify(notif);
 		}
 
-		managePlayerLock();
+		manageFreecamPlayerLock();
 
 		// toggle camera lock
 		if (entry->Hotkeys[1].IsPressed()) {
@@ -273,9 +275,8 @@ namespace CTRPluginFramework
 		Process::Patch(AddressList::RetGameplayCameraInit.addr, edits[3 + index]);
 	}
 
-	void managePlayerLock(void) {
-		int lock = isFreecamInUse ? 0x10 : 0x00;
-		Process::Write8(AddressList::LockMovement.addr, lock);
+	void manageFreecamPlayerLock(void) {
+		GeneralHelpers::managePlayerLock(isFreecamInUse);
 	}
 
 	void editSensitivity(MenuEntry* entry)

@@ -1,7 +1,7 @@
 #include "cheats.hpp"
 #include "AddressList.hpp"
 #include "Helpers/Address.hpp"
-#include "Helpers/PlayerHelper.hpp"
+#include "Helpers/GeneralHelpers.hpp"
 
 #include "3ds.h"
 
@@ -10,7 +10,7 @@ namespace CTRPluginFramework
 
 	void customColor(MenuEntry* entry) {
 
-		int playerID = chooseLink();
+		int playerID = GeneralHelpers::chooseLink();
 		int colorChoice = selCustomLinkColor();
 
 		// TODO: finish...
