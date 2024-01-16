@@ -2,7 +2,8 @@
 #include "csvc.h"
 #include "AddressList.hpp"
 #include "Helpers/Address.hpp"
-#include "Helpers/PlayerHelper.hpp"
+#include "Helpers/GeneralHelpers.hpp"
+#include "Helpers/GameData.hpp"
 
 #include "CTRPluginFramework/Graphics/OSD.hpp"
 #include "CTRPluginFramework/Menu/MessageBox.hpp"
@@ -136,6 +137,7 @@ namespace CTRPluginFramework
 
     void manageCatalogSizeAuto(MenuEntry* entry) {
         u8 isObtained;
+        u8 vanillaCostumeCount = 0x25;
         u32 catalogSizeOffset = 0xE4;
 
         // get catalog dynamic location from pointer
@@ -144,7 +146,7 @@ namespace CTRPluginFramework
         if (!isCatalogPointerNull()) {
             costumeCatalogSize = catalogIncSize = 0;
 
-            for (u32 i = 0x0; i < 0x26; i++) {
+            for (u8 i = 0x0; i <= vanillaCostumeCount; i++) {
                 isObtained = 0;
 
                 Process::Read8((AddressList::CostumeObtainStatus.addr + i), isObtained);
@@ -187,24 +189,28 @@ namespace CTRPluginFramework
         int choice = costumeType.Open();
 
         if (choice == 0) {
-            costumeList.Populate(universalCostumeList);
+            costumeList.Populate(GameData::universalCostumeList);
             result = costumeList.Open();
         }
         else {
-            costumeList.Populate(customCostumeList);
+            costumeList.Populate(GameData::customCostumeList);
             result = costumeList.Open() + unusedRange; // get 0x26-0x29 range
         }
 
-        if (entry->Name() == "   Set custom costume slot A") {
-            CustomSlots[0] = result;
+        if (entry->Name() == menuCostumeSlotA->Name()) {
+            menuCostumeSlotA->SetName("   Set slot A: " << GameData::getCostumeNameFromID(result));
+            CustomSlots[0] = result;  
         }
-        else if (entry->Name() == "   Set custom costume slot B") {
+        else if (entry->Name() == menuCostumeSlotB->Name()) {
+            menuCostumeSlotB->SetName("   Set slot B: " << GameData::getCostumeNameFromID(result));
             CustomSlots[1] = result;
         }
-        else if (entry->Name() == "   Set custom costume slot C") {
+        else if (entry->Name() == menuCostumeSlotC->Name()) {
+            menuCostumeSlotC->SetName("   Set slot C: " << GameData::getCostumeNameFromID(result));
             CustomSlots[2] = result;
         }
-        else if (entry->Name() == "   Set custom costume slot D") {
+        else if (entry->Name() == menuCostumeSlotD->Name()) {
+            menuCostumeSlotD->SetName("   Set slot D: " << GameData::getCostumeNameFromID(result));
             CustomSlots[3] = result;
         }
     }
@@ -262,7 +268,11 @@ namespace CTRPluginFramework
             Process::Write32((AddressList::UnusedCostumeDataPointerList.addr + 0x18), (AddressList::TextToRodata.addr + 0x49));
         else errMsg[3] = "Missing: costume_customD.bch";
 
-        if (std::any_of(errMsg.begin(), errMsg.end(), [](const std::string& entry) { return !entry.empty(); })){
+        bool showErrMsg = std::any_of(errMsg.begin(), errMsg.end(), [](const std::string& index) {
+            return !index.empty();
+        });
+
+        if (showErrMsg){
             OSD::Notify(Color::Red << "ERROR");
             OSD::Notify(Color::Red << "Custom Costume files cannot be found or do");
             OSD::Notify(Color::Red << "not exist in the Tricord directory.");
@@ -283,7 +293,7 @@ namespace CTRPluginFramework
         std::string greatFairyFileName = "costume_highfairy";
         std::string errMsg = "Tricord cannot place Great Fairy Costume into Custom Costume Slot A since it is currently configured to display a different costume.\n\nWould you like to overwrite the current costume in Custom Costume Slot A with Great Fairy?";
         
-        u8 greatFairyID = 0x26;
+        u8 greatFairyID = 0x26; // slot A ID
 
         Process::WriteString(AddressList::TextToRodata.addr, greatFairyFileName, StringFormat::Utf8);
 
@@ -309,12 +319,12 @@ namespace CTRPluginFramework
     }    
 
     void changeLinkCostume(MenuEntry* entry) {
-        u32 playerID = chooseLink();
+        u32 playerID = GeneralHelpers::chooseLink();
         u32 memoryOffset = playerID * 0x10000;
 
         // note 1: currently only uses the OG costume list
         Keyboard costumeList("Choose a costume:\n\nBe sure to load into a new area for changes to fully\ntake effect.");
-        costumeList.Populate(universalCostumeList);
+        costumeList.Populate(GameData::universalCostumeList);
 
         u8 result = costumeList.Open();
         Process::Write8((AddressList::CurrCostume.addr + memoryOffset), result);
