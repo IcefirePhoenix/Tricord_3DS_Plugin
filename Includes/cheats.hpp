@@ -217,9 +217,17 @@ namespace CTRPluginFramework
 
     // Sound functions
     void bgmSet(MenuEntry* entry);
+    void masterVolSet(MenuEntry* entry);
     void bgmVolSet(MenuEntry* entry);
     void lobbyBallSong(MenuEntry* entry);
+    void storeSelSong(u32 song);
+    u32 getSelSong(void);
+    void writeLobbyBallSel(MenuEntry* entry);
+    int selLobbyBallSong(void);
     void voiceVol(MenuEntry* entry);
     void lowHPVol(MenuEntry* entry);
+    std::string getPercentAsStr(int selection);
+    int selVolPreset(void);
+    float getFloatFromPercentSel(int selection);
 }
 #endif

@@ -103,7 +103,7 @@ namespace CTRPluginFramework {
     void AddAllFolders(PluginMenu& menu)
     {
         menu += gameplay;
-        menu += linkcolor;
+        // menu += linkcolor;
         menu += costume;
         menu += miscellaneous;
         menu += player;
@@ -340,12 +340,13 @@ namespace CTRPluginFramework {
     {
         sound = new MenuFolder("BGM and SFX Codes");
 
-        *sound += new MenuEntry("Set current BGM", bgmSet);
-        *sound += new MenuEntry("Set BGM volume", nullptr, bgmVolSet);
-        *sound += new MenuEntry("Choose Lobby Ball song", lobbyBallSong);
+        *sound += new MenuEntry("Master volume: 100%", nullptr, masterVolSet);
+        *sound += new MenuEntry("BGM volume: 100%", nullptr, bgmVolSet);
+        *sound += new MenuEntry("Override current BGM", nullptr, bgmSet);
+        *sound += new MenuEntry("Link Voice volume: 100%", nullptr, voiceVol);
+        *sound += new MenuEntry("Low Health Alert volume: 100%", nullptr, lowHPVol);
         //*sound += new MenuEntry("Set Lobby Ball volume", lobbyBallVol);
-        *sound += new MenuEntry("Set Link Voice volume", nullptr, voiceVol);
-        *sound += new MenuEntry("Set Low Health Alert volume", nullptr, lowHPVol);
+        *sound += new MenuEntry("Choose Lobby Ball song", lobbyBallSong);
         // *sound += new MenuEntry("Set Level Completion Fanfare volume", levelDoneVol);
     }
 
