@@ -275,9 +275,10 @@ namespace CTRPluginFramework {
     {
         items = new MenuFolder("Item Codes");
 
-        *items += new MenuEntry("Set current item", itemOpt);
-        *items += new MenuEntry("Set Shadow Link item", shadowItemOpt);
+        *items += new MenuEntry("Set current item", nullptr, itemOpt);
+        *items += new MenuEntry("Set Shadow Link item", nullptr, shadowItemOpt);
         *items += new MenuEntry("Set strafing speeds", nullptr, strafingSpeedSet);
+        *items += new MenuEntry("Freeze current items", freezeCurrItems);
         *items += new MenuEntry("Always use upgraded Items", upgradeItemAlways);
     }
 

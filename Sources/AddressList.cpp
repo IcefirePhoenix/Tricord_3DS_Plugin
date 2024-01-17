@@ -65,7 +65,6 @@ namespace CTRPluginFramework {
 		TimeElapsed = Address(0x3280EDE0, 0x00000000, 0x00000000, 0x00000000);
 
 		// Items
-		// Note: Strafe refers to speed
 		BowStrafe = Address(0x0038CC7C, 0x00000000, 0x00000000, 0x00000000);
 		FireGloveStrafe = Address(0x003C8FD8, 0x00000000, 0x00000000, 0x00000000);
 		GustStrafe = Address(0x003C85A8, 0x00000000, 0x00000000, 0x00000000);
