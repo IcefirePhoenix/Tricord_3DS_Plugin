@@ -19,6 +19,9 @@ namespace CTRPluginFramework
             bool    justChanged : 1;
             bool    isRadio : 1;
             bool    isUnselectable: 1;
+            // lazy... might rewrite later
+            bool    disableIcon : 1;
+            bool    useControllerIcon : 1;
         };
 
     public:
@@ -32,6 +35,8 @@ namespace CTRPluginFramework
         virtual void    Disable(void);
         // Set the entry as radio, an ID must be provided
         void    SetRadio(int id);
+        // Set an alternative icon
+        void    SetAltIcon(bool noIcon);
         // Set an argument for the entry
         void    SetArg(void *arg);
         // Get the argument

@@ -59,6 +59,11 @@ namespace CTRPluginFramework
         _item->Hide();
     }
 
+    void    MenuEntry::SetAltIcon(bool noIcon) const
+    {
+        _item->SetAltIcon(noIcon);
+    }
+
     void    MenuEntry::HideWithoutDisable(void) const
     {
         _item->HideWithoutDisable();

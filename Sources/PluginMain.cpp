@@ -47,6 +47,12 @@ namespace CTRPluginFramework {
     MenuEntry* editFreecamSen;
     MenuEntry* swapZoom;
 
+    MenuEntry* merchantA;
+    MenuEntry* merchantB;
+    MenuEntry* merchantC;
+    MenuEntry* merchantD;
+    MenuEntry* merchantE;
+
     MenuEntry* jinxEditAuto;
     MenuEntry* spawnEditAuto;
     MenuEntry* visibleEditAuto;
@@ -150,6 +156,8 @@ namespace CTRPluginFramework {
         editFreecamSen = new MenuEntry("Edit sensitivity", nullptr, editSensitivity);
         swapZoom = new MenuEntry("Swap to Orthographic Zoom", nullptr, setZoomType);
 
+        editFreecamControls->SetAltIcon(false);
+
         menu += menuFreecam;
         menu += editFreecamControls;
         menu += editFreecamSen;
@@ -191,6 +199,11 @@ namespace CTRPluginFramework {
         menuCostumeSlotB->Hide();
         menuCostumeSlotC->Hide();
         menuCostumeSlotD->Hide();
+
+        menuCostumeSlotA->SetAltIcon(true);
+        menuCostumeSlotB->SetAltIcon(true);
+        menuCostumeSlotC->SetAltIcon(true);
+        menuCostumeSlotD->SetAltIcon(true);
 
         *costume += new MenuEntry("Change Player Costume", nullptr, changeLinkCostume);
 
@@ -301,12 +314,24 @@ namespace CTRPluginFramework {
         *save += new MenuEntry("Set Coliseum Win count", nullptr, coliseumWinCountSet);
 
         MenuFolder* merchant = new MenuFolder("Street Merchant Codes");
-            *merchant += new MenuEntry("Set 1st material slot", nullptr, merchantSlotA);
-            *merchant += new MenuEntry("Set 2nd material slot", nullptr, merchantSlotB);
-            *merchant += new MenuEntry("Set 3rd material slot", nullptr, merchantSlotC);
-            *merchant += new MenuEntry("Set 4th material slot", nullptr, merchantSlotD);
-            *merchant += new MenuEntry("Set 5th material slot", nullptr, merchantSlotE);
+            merchantA = new MenuEntry("Set 1st material slot", nullptr, merchantSlotA);
+            merchantB = new MenuEntry("Set 2nd material slot", nullptr, merchantSlotB);
+            merchantC = new MenuEntry("Set 3rd material slot", nullptr, merchantSlotC);
+            merchantD = new MenuEntry("Set 4th material slot", nullptr, merchantSlotD);
+            merchantE = new MenuEntry("Set 5th material slot", nullptr, merchantSlotE);
             *merchant += new MenuEntry("Force re-stock Street Merchant stall", nullptr, resetMerchant);
+
+            merchantA->SetAltIcon(true);
+            merchantB->SetAltIcon(true);
+            merchantC->SetAltIcon(true);
+            merchantD->SetAltIcon(true);
+            merchantE->SetAltIcon(true);
+
+            *merchant += merchantA;
+            *merchant += merchantB;
+            *merchant += merchantC;
+            *merchant += merchantD;
+            *merchant += merchantE;
 
         *save += merchant;
     }
