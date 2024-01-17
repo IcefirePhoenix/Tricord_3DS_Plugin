@@ -48,38 +48,38 @@ namespace CTRPluginFramework
     }
 
     void merchantSlotA(MenuEntry* entry) {
-       int material = openMerchantMatMenu(0);
-       entry->SetName("Set 1st material slot: " << Material::getMaterialName(material));
+        std::string material = openMerchantMatMenu(0);
+        entry->SetName("Set 1st material slot: " << material);
     }
 
     void merchantSlotB(MenuEntry* entry) {
-        int material = openMerchantMatMenu(2);
-        entry->SetName("Set 2nd material slot: " << Material::getMaterialName(material));
+        std::string material = openMerchantMatMenu(2);
+        entry->SetName("Set 2nd material slot: " << material);
     }
 
     void merchantSlotC(MenuEntry* entry) {
-        int material = openMerchantMatMenu(4);
-        entry->SetName("Set 3rd material slot: " << Material::getMaterialName(material));
+        std::string material = openMerchantMatMenu(4);
+        entry->SetName("Set 3rd material slot: " << material);
     }
 
     void merchantSlotD(MenuEntry* entry) {
-        int material = openMerchantMatMenu(6);
-        entry->SetName("Set 4th material slot: " << Material::getMaterialName(material));
+        std::string material = openMerchantMatMenu(6);
+        entry->SetName("Set 4th material slot: " << material);
     }
 
     void merchantSlotE(MenuEntry* entry) {
-        int material = openMerchantMatMenu(8);
-        entry->SetName("Set 5th material slot: " << Material::getMaterialName(material));
+        std::string material = openMerchantMatMenu(8);
+        entry->SetName("Set 5th material slot: " << material);
     }
     
     // since each slot has a 8-bit spacer between them, slot number is just an offset
     // used to navigate between them without having to define 5 separate addresses
-    int openMerchantMatMenu(u8 slotNumber) {
+    std::string openMerchantMatMenu(u8 slotNumber) {
         int world = Material::selectMaterialWorld();
         int material = Material::selectMaterialIndiv(world);
         
         Process::Write8(AddressList::EditMerchantStock.addr + slotNumber, static_cast<unsigned char>(material));
-        return material;
+        return Material::getMaterialName(world, material);
     };
 
     void resetMerchant(MenuEntry* entry) {

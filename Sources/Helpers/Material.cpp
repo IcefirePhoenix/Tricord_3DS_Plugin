@@ -169,25 +169,28 @@ namespace CTRPluginFramework {
     }
 
     std::string Material::getMaterialName(int world, int mat) {
+        int finalMatID = mat - 20;
+
         switch (world) {
         case 0:
-            return Material::otherMats[mat];
+            return Material::otherMats[finalMatID];
         case 1:
-            return Material::woodlandMats[mat - 6];
+            return Material::woodlandMats[finalMatID - 6];
         case 2:
-            return Material::riversideMats[mat - 14];
+            return Material::riversideMats[finalMatID - 14];
         case 3:
-            return Material::volcanoMats[mat - 22];
+            return Material::volcanoMats[finalMatID - 22];
         case 4:
-            return Material::iceMats[mat - 30];
+            return Material::iceMats[finalMatID - 30];
         case 5:
-            return Material::fortressMats[mat - 38];
+            return Material::fortressMats[finalMatID - 38];
         case 6:
-            return Material::dunesMats[mat - 46];
+            return Material::dunesMats[finalMatID - 46];
         case 7:
-            return Material::ruinsMats[mat - 54];
+            return Material::ruinsMats[finalMatID - 54];
         case 8:
-            return Material::skyMats[mat - 62];
+            return Material::skyMats[finalMatID - 62];
         }
+        return "";
     }
 }
