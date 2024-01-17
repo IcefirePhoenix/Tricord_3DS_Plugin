@@ -533,15 +533,26 @@ namespace CTRPluginFramework
             {
                 MenuEntryImpl   *entry = reinterpret_cast<MenuEntryImpl *>(item);
 
-                if (entry->GameFunc != nullptr)
-                    Renderer::DrawSysCheckBox(name, posX, posY, 350, Color::Gainsboro, entry->IsActivated(), offset);
-                else
-                {
-                    if (entry->MenuFunc != nullptr && !entry->_flags.isUnselectable)
-                        Icon::DrawSettings(posX, posY);
-
+                // lazy... might rewrite later
+                if (entry->_flags.disableIcon && !entry->_flags.isUnselectable) {
+                    Renderer::DrawSysString(name, posX + 20, posY, 350, Color::Gainsboro, offset);
+                }
+                else if (entry->_flags.useControllerIcon && !entry->_flags.isUnselectable) {
+                    Icon::DrawController(posX, posY);
                     Renderer::DrawSysString(name, posX + 20, posY, 350, Color::Gainsboro, offset);
                     posY += 1;
+                }
+                else {
+                    if (entry->GameFunc != nullptr)
+                        Renderer::DrawSysCheckBox(name, posX, posY, 350, Color::Gainsboro, entry->IsActivated(), offset);
+                    else
+                    {
+                        if (entry->MenuFunc != nullptr && !entry->_flags.isUnselectable)
+                            Icon::DrawSettings(posX, posY);
+
+                        Renderer::DrawSysString(name, posX + 20, posY, 350, Color::Gainsboro, offset);
+                        posY += 1;
+                    }
                 }
             }
             // Draw folder

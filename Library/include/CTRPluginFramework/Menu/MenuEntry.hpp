@@ -57,6 +57,8 @@ namespace CTRPluginFramework
         * \brief Unhide an entry previously hidden
         */
         void    Show(void) const;
+        // Set an alternative icon
+        void    SetAltIcon(bool noIcon) const;
         /**
         * \brief Set the entry as a radio entry and link it to a radio group ID
         * \param id The id of the radio group to be linked to

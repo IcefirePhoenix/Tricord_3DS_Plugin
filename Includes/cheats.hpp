@@ -32,6 +32,12 @@ namespace CTRPluginFramework
     extern MenuEntry* editFreecamSen;
     extern MenuEntry* swapZoom;
 
+    extern MenuEntry* merchantA;
+    extern MenuEntry* merchantB;
+    extern MenuEntry* merchantC;
+    extern MenuEntry* merchantD;
+    extern MenuEntry* merchantE;
+
     extern MenuEntry* jinxEditAuto;
     extern MenuEntry* spawnEditAuto;
     extern MenuEntry* visibleEditAuto;

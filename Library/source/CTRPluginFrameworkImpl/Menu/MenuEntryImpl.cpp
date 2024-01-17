@@ -19,6 +19,8 @@ namespace CTRPluginFramework
         this->_flags.justChanged = false;
         this->_flags.isRadio = false;
         this->_flags.isUnselectable = false;
+        this->_flags.disableIcon = false;
+        this->_flags.useControllerIcon = false;
         this->_radioId = -1;
         this->_owner = owner;
     }
@@ -36,6 +38,8 @@ namespace CTRPluginFramework
         this->_flags.justChanged = false;
         this->_flags.isRadio = false;
         this->_flags.isUnselectable = false;
+        this->_flags.disableIcon = false;
+        this->_flags.useControllerIcon = false;
         this->_radioId = -1;
         this->_owner = owner;
     }
@@ -63,6 +67,19 @@ namespace CTRPluginFramework
     {
         _flags.state = 0;
         _flags.justChanged = 1;
+    }
+
+    void    MenuEntryImpl::SetAltIcon(bool noIcon)
+    {
+        if (noIcon) {
+            _flags.disableIcon = true;
+            _flags.useControllerIcon = false;
+        }
+        else
+        {
+            _flags.disableIcon = false;
+            _flags.useControllerIcon = true;
+        }
     }
 
     void    MenuEntryImpl::SetRadio(int id)
