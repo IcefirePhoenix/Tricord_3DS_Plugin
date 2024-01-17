@@ -81,7 +81,7 @@ namespace CTRPluginFramework {
         "Water Rod",
         "Gust Jar",
         "Gripshot",
-        "Hammer"
+        "Hammer",
         "No item"
     };
 

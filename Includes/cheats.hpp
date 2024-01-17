@@ -180,6 +180,8 @@ namespace CTRPluginFramework
 
     // Item functions
     std::string readCurrItems(u32 address, bool useShadow);
+    void freezeCurrItems(MenuEntry* entry);
+    void initShadowItemList(void);
     void itemOpt(MenuEntry* entry);
     void shadowItemOpt(MenuEntry* entry);
     void strafingSpeedSet(MenuEntry* entry);
@@ -199,7 +201,7 @@ namespace CTRPluginFramework
     void mainVoice(MenuEntry* entry);
     void heroPointCountSet(MenuEntry* entry);
     void coliseumWinCountSet(MenuEntry* entry);
-    void openMerchantMatMenu(int slotNumber);
+    std::string openMerchantMatMenu(u8 slotNumber);
     void merchantSlotA(MenuEntry* entry);
     void merchantSlotB(MenuEntry* entry);
     void merchantSlotC(MenuEntry* entry);
