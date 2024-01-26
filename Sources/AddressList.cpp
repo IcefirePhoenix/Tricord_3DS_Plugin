@@ -136,6 +136,19 @@ namespace CTRPluginFramework {
 
 
 		// Savefile
+		NormalNCCompletion = Address(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+		NormalC1Completion = Address(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+		NormalC2Completion = Address(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+		NormalC3Completion = Address(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+		SoloNCCompletion = Address(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+		SoloC1Completion = Address(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+		SoloC2Completion = Address(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+		SoloC3Completion = Address(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+		MultiNCCompletion = Address(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+		MultiC1Completion = Address(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+		MultiC2Completion = Address(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+		MultiC3Completion = Address(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+
 		CostumeObtainStatus = Address(0x32C8256A, 0x00000000, 0x00000000, 0x00000000);
 		ColiseumWinCount = Address(0x31A062AC, 0x00000000, 0x00000000, 0x00000000);
 		EditMerchantStock = Address(0x31A077A4, 0x00000000, 0x00000000, 0x00000000);
@@ -288,6 +301,20 @@ namespace CTRPluginFramework {
 
 
 	// Savefile
+
+	Address		AddressList::NormalNCCompletion;
+	Address		AddressList::NormalC1Completion;
+	Address		AddressList::NormalC2Completion;
+	Address		AddressList::NormalC3Completion;
+	Address		AddressList::SoloNCCompletion;
+	Address		AddressList::SoloC1Completion;
+	Address		AddressList::SoloC2Completion;
+	Address		AddressList::SoloC3Completion;
+	Address		AddressList::MultiNCCompletion;
+	Address		AddressList::MultiC1Completion;
+	Address		AddressList::MultiC2Completion;
+	Address		AddressList::MultiC3Completion;
+
 	Address		AddressList::CostumeObtainStatus;
 	Address		AddressList::ColiseumWinCount;
 	Address		AddressList::EditMerchantStock;

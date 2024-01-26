@@ -107,7 +107,7 @@ namespace CTRPluginFramework {
         menu += costume;
         menu += miscellaneous;
         menu += player;
-        menu += energy;
+        // menu += energy;
         menu += items;
         menu += render;
         menu += save;
@@ -209,7 +209,7 @@ namespace CTRPluginFramework {
 
         // create costume sub-folders
         MenuFolder* costumeEffects = new MenuFolder("Costume Effect(s)");
-        *costumeEffects += new MenuEntry("Set Costume Effects", nullptr, selCostumeEffect);
+        *costumeEffects += new MenuEntry("(TODO) Set Costume Effects", nullptr, selCostumeEffect);
 
         MenuFolder* extraCustomConfig = new MenuFolder("Additional Customizations");
         // *extraCustomConfig += new MenuEntry("Set number of Tingle Balloons", nullptr, tingleBalloonNumber);
@@ -232,7 +232,7 @@ namespace CTRPluginFramework {
         miscellaneous = new MenuFolder("Miscellaneous Codes");
 
         // broken...
-        *miscellaneous += (EntryWithHotkey(new MenuEntry("Enable button spam", buttonSpammer, "When any of the selected keys are\npressed down, they will automatically spam.\nGood for in-game manuevers that require\nstrict timing of button input(s).\n\nDefault keys: A, B, X, Y, L, R."), {
+        *miscellaneous += (EntryWithHotkey(new MenuEntry("(TODO) Enable button spam", buttonSpammer, "When any of the selected keys are\npressed down, they will automatically spam.\nGood for in-game manuevers that require\nstrict timing of button input(s).\n\nDefault keys: A, B, X, Y, L, R."), {
             Hotkey(Key::A | Key::B | Key::X | Key::Y | Key::L | Key::R , "Button Spammer")
         }));
         
@@ -270,9 +270,6 @@ namespace CTRPluginFramework {
         colEditAuto = new MenuEntry("Write Collision edits (auto)", writeCollisionChanges);
         swordEditAuto = new MenuEntry("Write Sword edits (auto)", writeSwordChanges);
         sizeEditAuto = new MenuEntry("Write Size edits (auto)", writeSizeChanges);
-
-
-
     }
 
     void InitEnergyFolder(PluginMenu& menu)
@@ -292,7 +289,7 @@ namespace CTRPluginFramework {
         *items += new MenuEntry("Set Shadow Link item", nullptr, shadowItemOpt);
         *items += new MenuEntry("Set strafing speeds", nullptr, strafingSpeedSet);
         *items += new MenuEntry("Freeze current items", freezeCurrItems);
-        *items += new MenuEntry("Always use upgraded Items", upgradeItemAlways);
+        // TODO: *items += new MenuEntry("Always use upgraded Items", upgradeItemAlways);
     }
 
     void InitRenderFolder(PluginMenu& menu) 
@@ -312,6 +309,8 @@ namespace CTRPluginFramework {
         *save += new MenuEntry("Set Main Voice", nullptr, mainVoice);
         *save += new MenuEntry("Set Hero Point count", nullptr, heroPointCountSet);
         *save += new MenuEntry("Set Coliseum Win count", nullptr, coliseumWinCountSet);
+        *save += new MenuEntry("Edit Level Completion", nullptr, selLevelCompletion);
+
 
         MenuFolder* merchant = new MenuFolder("Street Merchant Codes");
             merchantA = new MenuEntry("Set 1st material slot", nullptr, merchantSlotA);
@@ -343,8 +342,8 @@ namespace CTRPluginFramework {
         *sound += new MenuEntry("Master volume: 100%", nullptr, masterVolSet);
         *sound += new MenuEntry("BGM volume: 100%", nullptr, bgmVolSet);
         *sound += new MenuEntry("Override current BGM", nullptr, bgmSet);
-        *sound += new MenuEntry("Link Voice volume: 100%", nullptr, voiceVol);
-        *sound += new MenuEntry("Low Health Alert volume: 100%", nullptr, lowHPVol);
+        *sound += new MenuEntry("(TODO) Link Voice volume: 100%", nullptr, voiceVol);
+        *sound += new MenuEntry("(TODO) Low Health Alert volume: 100%", nullptr, lowHPVol);
         //*sound += new MenuEntry("Set Lobby Ball volume", lobbyBallVol);
         *sound += new MenuEntry("Choose Lobby Ball song", lobbyBallSong);
         // *sound += new MenuEntry("Set Level Completion Fanfare volume", levelDoneVol);
@@ -354,6 +353,7 @@ namespace CTRPluginFramework {
     {
         if (PluginMenu::GetRunningInstance()->FreecamToggle) 
         {
+            
             menuFreecam->Show();
             editFreecamControls->Show();
             editFreecamSen->Show();
@@ -362,17 +362,17 @@ namespace CTRPluginFramework {
             costume->HideWithoutDisable();
             gameplay->HideWithoutDisable();
             emotes->HideWithoutDisable();
-            linkcolor->HideWithoutDisable();
+            //linkcolor->HideWithoutDisable();
             miscellaneous->HideWithoutDisable();
             player->HideWithoutDisable();
             energy->HideWithoutDisable();
             items->HideWithoutDisable();
             render->HideWithoutDisable();
             save->HideWithoutDisable();
-            sound->HideWithoutDisable();
+            // sound->HideWithoutDisable();
         }
         else
-        {          
+        {      
             menuFreecam->HideWithoutDisable();
             editFreecamControls->HideWithoutDisable();
             editFreecamSen->HideWithoutDisable();
@@ -382,14 +382,14 @@ namespace CTRPluginFramework {
             {
                 costume->Show();
                 emotes->Show();
-                linkcolor->Show();
+                //linkcolor->Show();
                 miscellaneous->Show();
                 player->Show();
                 energy->Show();
                 items->Show();
                 render->Show();
                 save->Show();
-                sound->Show();
+                //sound->Show();
             }
             else
             {
@@ -401,16 +401,17 @@ namespace CTRPluginFramework {
                 gameplay->Show();
                 costume->HideWithoutDisable();
                 emotes->HideWithoutDisable();
-                linkcolor->HideWithoutDisable();
+                //linkcolor->HideWithoutDisable();
                 miscellaneous->HideWithoutDisable();
                 player->HideWithoutDisable();
                 energy->HideWithoutDisable();
                 items->HideWithoutDisable();
                 render->HideWithoutDisable();
                 save->HideWithoutDisable();
-                sound->HideWithoutDisable();
+                //sound->HideWithoutDisable();
             }
         }
+        
     }
 
     // this function only runs once at plugin startup

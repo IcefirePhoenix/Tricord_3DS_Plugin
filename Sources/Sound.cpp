@@ -14,7 +14,7 @@ namespace CTRPluginFramework
         "50%",
         "25%",
         "10%",
-        "Mute
+        "Mute"
     };
 
     void bgmSet(MenuEntry* entry) {
@@ -25,7 +25,7 @@ namespace CTRPluginFramework
         int sel = selVolPreset();
 
         Process::WriteFloat(AddressList::MasterVolume.addr, getFloatFromPercentSel(sel));
-        entry->SetName("BGM volume: " << getPercentAsStr(sel));
+        entry->SetName("Master volume: " << getPercentAsStr(sel));
     }
 
     void bgmVolSet(MenuEntry* entry) {
@@ -89,15 +89,15 @@ namespace CTRPluginFramework
         case 2:
             return "75%";
         case 3:
-            return "50%;
+            return "50%";
         case 4:
-            return "25%;
+            return "25%";
         case 5:
-            return "10%;
+            return "10%";
         case 6:
             return "Muted";
         default:
-            return "100%;
+            return "100%";
         }
     }
 

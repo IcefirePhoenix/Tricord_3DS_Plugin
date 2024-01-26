@@ -137,6 +137,19 @@ namespace CTRPluginFramework {
 
 
 		// Savefile
+		static Address		NormalNCCompletion;
+		static Address		NormalC1Completion;
+		static Address		NormalC2Completion;
+		static Address		NormalC3Completion;
+		static Address		SoloNCCompletion;
+		static Address		SoloC1Completion;
+		static Address		SoloC2Completion;
+		static Address		SoloC3Completion;
+		static Address		MultiNCCompletion;
+		static Address		MultiC1Completion;
+		static Address		MultiC2Completion;
+		static Address		MultiC3Completion;
+
 		static Address		CostumeObtainStatus;
 		static Address		ColiseumWinCount;
 		static Address		EditMerchantStock;
