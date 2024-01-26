@@ -214,6 +214,8 @@ namespace CTRPluginFramework
     void merchantSlotD(MenuEntry* entry);
     void merchantSlotE(MenuEntry* entry);
     void resetMerchant(MenuEntry* entry);
+    void selLevelCompletion(MenuEntry* entry);
+    int selPlayMode(void);
 
     // Sound functions
     void bgmSet(MenuEntry* entry);
