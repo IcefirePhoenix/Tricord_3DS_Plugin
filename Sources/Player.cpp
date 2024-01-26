@@ -432,7 +432,7 @@ namespace CTRPluginFramework
             u32 blueDataOffset = 0x10000;
             u32 redDataOffset = 0x20000;
 
-            if (Level::hasStageBegan()) {
+            if (Level::hasStageBegan() && Level::getElapsedTime() < 0x5) {
                 // set blue location to triforce
                 Process::WriteFloat((AddressList::PositionX.addr + blueDataOffset), -0.8);
                 Process::WriteFloat((AddressList::PositionY.addr + blueDataOffset), 1.1452);
