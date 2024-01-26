@@ -3,6 +3,7 @@
 #include "Helpers/GameData.hpp"
 #include "Helpers/Address.hpp"
 #include "Helpers/Material.hpp"
+#include "Helpers/LevelStatusEditor.hpp"
 #include "Helpers/GeneralHelpers.hpp"
 
 namespace CTRPluginFramework
@@ -17,6 +18,8 @@ namespace CTRPluginFramework
 
         u8 result = voiceMenu.Open();
         Process::Write8(AddressList::MainVoice.addr, result);
+        
+        entry->SetName("Set Main Voice: " + GameData::getVoiceAsStr(result));
     }
 
     void heroPointCountSet(MenuEntry* entry) {
@@ -30,6 +33,7 @@ namespace CTRPluginFramework
         }
         else {
             Process::Write32(AddressList::HeroPointCount.addr, result);
+            entry->SetName("Set Hero Point count: " + result);
         }
     }
 
@@ -44,6 +48,7 @@ namespace CTRPluginFramework
         }
         else {
             Process::Write32(AddressList::HeroPointCount.addr, result);
+            entry->SetName("Set Coliseum Win count: " + result);
         }
     }
 
@@ -85,5 +90,34 @@ namespace CTRPluginFramework
     void resetMerchant(MenuEntry* entry) {
         Process::Write8(AddressList::ResetMerchantStock.addr, 0x0);
         MessageBox(Color::Gainsboro << "Street Merchant Stall has been re-stocked.")();
+    }
+
+    void selLevelCompletion(MenuEntry* entry) {
+        std::string msg, modeStr;
+        int world = GameData::selWorld(false);
+        int mode = selPlayMode();
+
+        std::string outro = "\n\nPress " + std::string(FONT_B) + " to save and exit this menu.";
+
+        if (mode < 2)
+            modeStr = mode ? "Multiplayer Completion." : "Single-player Completion.";
+        else
+            modeStr = "Multiplayer and Single-player Completion";
+
+        msg = "Currently editing Level Completion statuses\nfor " << GameData::worldIDToStr(world) << ", " << modeStr <<  outro;
+        LevelStatusEditor(msg, GameData::getWorldNamesfromID(world), world, mode)();
+    }
+
+    int selPlayMode(void) {
+        Keyboard mode("Choose a mode:");
+        static const StringVector modeList =
+        {
+            "Single-player",
+            "Multiplayer",
+            "Both"
+        };
+
+        mode.Populate(modeList);
+        return mode.Open();
     }
 }
