@@ -484,6 +484,7 @@ namespace CTRPluginFramework
         // Init sysfont
         Font::Initialize();
         {
+            // TODO: if 
             // If /cheats/ doesn't exists, create it
             const char* dirpath = "/cheats";
             if (!Directory::IsExists(dirpath))
@@ -494,25 +495,28 @@ namespace CTRPluginFramework
         Preferences::CheatsFile = "cheats.txt";
 
         // Default: cheats.txt in cwd
-        if (!File::Exists(Preferences::CheatsFile))
-            Preferences::CheatsFile = Utils::Format("/cheats/%016llX.txt", Process::GetTitleID());
+        if (!File::Exists(Preferences::CheatsFile)) {
+            const std::string cheatPath = Utils::Format("/cheats/%016llX.txt", Process::GetTitleID());
+            Preferences::CheatsFile = cheatPath;
 
-        {
-            // If /Screenshots/ doesn't exists, create it
-            const char* dirpath = "/Screenshots";
-            if (!Directory::IsExists(dirpath))
-                Directory::Create(dirpath);
-
-            // Set default screenshot path
-            Screenshot::Path = dirpath;
-            Screenshot::Path.append("/");
-
-            // Set default screenshot prefix
-            Screenshot::Prefix = "[";
-            Process::GetName(Screenshot::Prefix);
-            Screenshot::Prefix += Utils::Format(" - %08X] - Screenshot", (u32)Process::GetTitleID());
-            Screenshot::Initialize();
+            if (!File::Exists(cheatPath))
+                File::Create(cheatPath);
         }
+
+        // If /Screenshots/ doesn't exists, create it
+        const char* dirpath = "/Screenshots";
+        if (!Directory::IsExists(dirpath))
+            Directory::Create(dirpath);
+
+        // Set default screenshot path
+        Screenshot::Path = dirpath;
+        Screenshot::Path.append("/");
+
+        // Set default screenshot prefix
+        Screenshot::Prefix = "[";
+        Process::GetName(Screenshot::Prefix);
+        Screenshot::Prefix += Utils::Format(" - %08X] - Screenshot", (u32)Process::GetTitleID());
+        Screenshot::Initialize();
     }
 
     // Main thread's start
