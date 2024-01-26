@@ -96,6 +96,70 @@ namespace CTRPluginFramework {
         "Sky Realm"
     };
 
+    const StringVector GameData::woodlandLevelList = {
+        "Deku Forest",
+        "Buzz Blob Cave",
+        "Moblin Base",
+        "Forest Temple"
+    };
+
+    const StringVector GameData::riversideLevelList = {
+        "Secret Fortress",
+        "Abyss of Agony",
+        "Cove of Transition",
+        "Water Temple"
+    };
+
+    const StringVector GameData::volcanoLevelList = {
+        "Blazing Trail",
+        "Hinox Mine",
+        "Den of Flames",
+        "Fire Temple"
+    };
+
+    const StringVector GameData::iceLevelList = {
+        "Frozen Plateau",
+        "Snowball Ravine",
+        "Silver Shrine",
+        "Ice Temple"
+    };
+
+    const StringVector GameData::fortressLevelList = {
+        "Sealed Gateway",
+        "Bomb Storage",
+        "Training Ground",
+        "The Lady's Lair"
+    };
+
+    const StringVector GameData::dunesLevelList = {
+        "Infinity Dunes",
+        "Stone Corridors",
+        "Gibdo Mausoleum",
+        "Desert Temple"
+    };
+
+    const StringVector GameData::ruinsLevelList = {
+        "Illusory Mansion",
+        "Palace Noir",
+        "Gibdo Mausoleum",
+        "Grim Temple"
+    };
+
+    const StringVector GameData::skyLevelList = {
+        "Floating Garden",
+        "Deception Castle",
+        "Dragon Citadel",
+        "Sky Temple"
+    };
+
+    const StringVector GameData::challengeList = {
+        "No challenge",
+        "Challenge 1",
+        "Challenge 2",
+        "Challenge 3"
+    };
+
+
     const StringVector GameData::lobbyBallSongs = {
         "Ballad of the Goddess (SS)",
         "Epona's Song (OoT)",
@@ -174,5 +238,46 @@ namespace CTRPluginFramework {
             return GameData::customCostumeList[ID - 0x26];
         else
             return "N/A";
+    }    
+    
+    StringVector GameData::getWorldNamesfromID(int ID) {
+        switch (ID) {
+        case 0: 
+            return GameData::woodlandLevelList;
+        case 1:
+            return GameData::riversideLevelList;
+        case 2:
+            return GameData::volcanoLevelList;
+        case 3:
+            return GameData::iceLevelList;
+        case 4:
+            return GameData::fortressLevelList;
+        case 5:
+            return GameData::dunesLevelList;
+        case 6:
+            return GameData::ruinsLevelList;
+        default:
+            return GameData::skyLevelList;
+        }
+    }
+
+    int GameData::selWorld(bool useDoT) {
+        StringVector worldSelectionList = GameData::worldList;
+
+        if (useDoT)
+            worldSelectionList.push_back("Den of Trials");
+
+        Keyboard chooseWorld("Select a world:");
+        chooseWorld.Populate(worldSelectionList);
+
+        return chooseWorld.Open();
+    }
+
+    std::string GameData::worldIDToStr(int worldID) {
+        return GameData::worldList[worldID];
+    }
+
+    std::string GameData::getVoiceAsStr(u8 ID) {
+        return GameData::voiceList[ID];
     }
 }
