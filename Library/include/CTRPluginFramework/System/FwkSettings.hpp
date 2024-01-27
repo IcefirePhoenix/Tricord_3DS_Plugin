@@ -115,13 +115,6 @@ namespace CTRPluginFramework
         static void         SetThemeDefault(void);
 
         /**
-         * \brief Set the top screen background image from a bmp file in memory
-         * \param bmpData Pointer to the BMP file in memory
-         * \return 0 if success
-         */
-        static Result       SetTopScreenBackground(void *bmpData);
-
-        /**
          * \brief Set the bottom screen background image from a bmp file in memory
          * \param bmpData Pointer to the BMP file in memory
          * \return 0 if success

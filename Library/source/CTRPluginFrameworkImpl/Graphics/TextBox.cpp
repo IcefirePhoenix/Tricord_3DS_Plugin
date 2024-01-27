@@ -245,15 +245,8 @@ namespace CTRPluginFramework
 
         if (_drawBox)
         {
-            // Draw Background
-            if (Preferences::topBackgroundImage != nullptr
-                && (Preferences::topBackgroundImage->GetDimensions() <= _box.size))
-                Preferences::topBackgroundImage->Draw(_box, -0.3f);
-            else
-            {
-                Renderer::DrawRect2(_box, settings.BackgroundMainColor, settings.BackgroundSecondaryColor);
-                Renderer::DrawRect(_border, settings.BackgroundBorderColor, false);
-            }
+            Renderer::DrawRect2(_box, settings.BackgroundMainColor, settings.BackgroundSecondaryColor);
+            Renderer::DrawRect(_border, settings.BackgroundBorderColor, false);
         }
 
         //Window::TopWindow.Draw(_title);

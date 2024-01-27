@@ -107,7 +107,7 @@ namespace CTRPluginFramework
 
     void    Window::UpdateBackgrounds(void)
     {
-        BottomWindow._image = Preferences::bottomBackgroundImage;
-        TopWindow._image = Preferences::topBackgroundImage;
+        if (Preferences::bottomBackgroundImage != nullptr)
+            BottomWindow._image = Preferences::bottomBackgroundImage;
     }
 }
