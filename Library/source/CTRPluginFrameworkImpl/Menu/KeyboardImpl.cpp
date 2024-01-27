@@ -612,9 +612,8 @@ namespace CTRPluginFramework
     void    KeyboardImpl::_RenderBottom(void)
     {
         static IntRect  background(20, 20, 280, 200);
-        static IntRect  background2(22, 22, 276, 196);
         static IntRect  clampArea(22, 25, 270, 190);
-        KeyboardBG  BottomBox = KeyboardBG(0, 0, 320, 240, true, nullptr);
+        KeyboardBG  BottomBox = KeyboardBG(0, 0, 320, 240, true);
 
         Renderer::SetTarget(BOTTOM);
 
@@ -717,18 +716,9 @@ namespace CTRPluginFramework
                 }
             }
         }
-        // Draw custom keyboard
         else
         {
-
-        // custom background
-            // Renderer::DrawRect2(background, theme.BackgroundMain, theme.BackgroundSecondary);
-            BottomBox._image2 = Preferences::bottomBoxBGImage; // set bottomBG
-            BottomBox._image2->BMPImage::Draw(BottomBox._rect2.leftTop); // draw bottomBG
-
-         // remove background border
-         // Renderer::DrawRect(background2, theme.BackgroundBorder, false);
-    
+            BottomBox.Draw();
 
             size_t max = _strKeys.size();
             int offset = _isIconKeyboard ? 24 : 6;

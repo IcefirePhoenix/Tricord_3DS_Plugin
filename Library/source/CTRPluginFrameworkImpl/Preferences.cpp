@@ -10,7 +10,6 @@ namespace CTRPluginFramework
 {
     using LCDBacklight = Preferences::LCDBacklight;
 
-    BMPImage *  Preferences::topBackgroundImage = nullptr;
     BMPImage *  Preferences::bottomBackgroundImage = nullptr;
     BMPImage *  Preferences::bottomBoxBGImage = nullptr;
 
@@ -210,97 +209,58 @@ namespace CTRPluginFramework
         if (!_bmpCanBeLoaded)
             return;
 
-        Task    task([](void *arg UNUSED)
+        std::string source = "/Tricord/Resources/Background/";
+
+        // Try to load bottom background
+        if (bottomBackgroundImage == nullptr && File::Exists(source + "CustomBottomBG.bmp"))
         {
-            std::string source;
+            BMPImage* image = new BMPImage(source + "CustomBottomBG.bmp");
 
-            source = "/Tricord/Resources/Background/";
-
-            // Try to load top background
-            if (topBackgroundImage == nullptr && File::Exists(source + "CustomTopBG.bmp"))
+            if (image->IsLoaded())
+                image = PostProcess(image, 320, 240);
+            else
             {
-                BMPImage *image = new BMPImage(source + "CustomTopBG.bmp");
-
-                if (image->IsLoaded())
-                    image = PostProcess(image, 340, 200);
-                else
-                {
-                    delete image;
-                    image = nullptr;
-                }
-
-                topBackgroundImage = image;
+                delete image;
+                image = nullptr;
             }
 
-            // Try to load bottom background
-            if (bottomBackgroundImage == nullptr && File::Exists(source + "CustomBottomBG.bmp"))
+            bottomBackgroundImage = image;
+        }
+        else {
+            OSD::Notify("Cannot find CustomBottomBG.bmp background file!");
+        }
+
+        if (File::Exists(source + "CustomBoxBG.bmp")) {
+            BMPImage* image1 = new BMPImage(source + "CustomBoxBG.bmp");
+
+            if (image1->IsLoaded()) 
+                image1 = PostProcess(image1, 320, 240);
+            else
             {
-                BMPImage *image = new BMPImage(source + "CustomBottomBG.bmp");
-
-                if (image->IsLoaded())
-                    image = PostProcess(image, 320, 240);
-                else
-                {
-                    delete image;
-                    image = nullptr;
-                }
-
-                bottomBackgroundImage = image;
+                delete image1;
+                image1 = nullptr;
             }
-            else {
-                OSD::Notify("Cannot find CustomBottomBG.bmp background file!");
-            }
+            bottomBoxBGImage = image1;
+        }
+        else {
+            OSD::Notify("Cannot find CustomBoxBG.bmp background file!");
+        }
 
-            if (bottomBoxBGImage == nullptr && File::Exists(source + "CustomBottomBoxBG.bmp"))
-            {
-                BMPImage* image = new BMPImage(source + "CustomBottomBoxBG.bmp");
-
-                if (image->IsLoaded())
-                    image = PostProcess(image, 320, 240);
-                else
-                {
-                    delete image;
-                    image = nullptr;
-                }
-
-                bottomBoxBGImage = image;
-            }
-            else {
-                OSD::Notify("Cannot find CustomBottomBoxBG.bmp background file!");
-            }
-
-            // Update Window
-            Window::UpdateBackgrounds();
-
-            return (s32)0;
-        });
-
-        task.Start();
+        // Update Window
+        Window::UpdateBackgrounds();
 
         _bmpCanBeLoaded = false;
     }
 
     void    Preferences::UnloadBackgrounds(void)
     {
-        if (bottomBackgroundImage || topBackgroundImage || bottomBoxBGImage)
+        if (bottomBackgroundImage)
             _bmpCanBeLoaded = true;
 
         if (bottomBackgroundImage)
         {
             delete bottomBackgroundImage;
             bottomBackgroundImage = nullptr;
-        }
-
-        if (topBackgroundImage)
-        {
-            delete topBackgroundImage;
-            topBackgroundImage = nullptr;
-        }
-
-        if (bottomBoxBGImage)
-        {
-            delete bottomBoxBGImage;
-            bottomBoxBGImage = nullptr;
         }
 
         // Update Window

@@ -13,20 +13,15 @@ namespace CTRPluginFramework
     {
     public:
 
-        KeyboardBG(u32 posX, u32 posY, u32 width, u32 height, bool closeBtn, BMPImage* image);
+        KeyboardBG(u32 posX, u32 posY, u32 width, u32 height, bool closeBtn);
 
         void    Draw(void) const;
         void    Draw(const std::string& title) const;
 
-        static KeyboardBG   BottomBox;
-
+    private:
         IntRect     _rect2;
         IntRect     _border2;
         BMPImage* _image2;
-        
-
-    private:
-
 
     };
 }

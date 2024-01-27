@@ -48,21 +48,6 @@ namespace CTRPluginFramework
         }
     }
 
-    Result  FwkSettings::SetTopScreenBackground(void *bmpData)
-    {
-        BMPImage *image = new BMPImage(bmpData);
-
-        if (!image->IsLoaded())
-        {
-            delete image;
-            return -1;
-        }
-
-        Preferences::topBackgroundImage = image;
-        Window::UpdateBackgrounds();
-        return 0;
-    }
-
     Result  FwkSettings::SetBottomScreenBackground(void *bmpData)
     {
         BMPImage *image = new BMPImage(bmpData);

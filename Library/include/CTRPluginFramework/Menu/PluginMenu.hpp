@@ -201,13 +201,6 @@ namespace CTRPluginFramework
          */
         static void                ScreenshotSetcallback(OnScreenshotCallback callback);
 
-        /**
-         * @brief Checks if the background images have been loaded successfully.
-         * \param isTopScreen Set to true to check the top screen background, set to false to check the bottom screen.
-         * \return Wether a background image was loaded for the specified screen.
-         */
-        static bool                IsBackgroundLoaded(bool isTopScreen);
-
         bool FreecamToggle;
         bool GameplayToggle;
 

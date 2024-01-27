@@ -116,10 +116,8 @@ namespace CTRPluginFramework
             Flags ^= setting;
         }
 
-        static BMPImage     *topBackgroundImage;
         static BMPImage     *bottomBackgroundImage;
         static BMPImage     *bottomBoxBGImage;
-
 
         static u32          MenuHotkeys;
         static u64          Flags;
