@@ -64,6 +64,7 @@ namespace CTRPluginFramework
     
     // Menu functions
     void InitFreecamCodes(PluginMenu& menu);
+    void InitGameplayCodes(PluginMenu& menu);
     void InitEmoteFolder(PluginMenu& menu);
     void InitColorFolder(PluginMenu& menu);
     void InitCostumeFolder(PluginMenu& menu);

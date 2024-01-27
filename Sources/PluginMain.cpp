@@ -64,7 +64,7 @@ namespace CTRPluginFramework {
     MenuEntry* sizeEditAuto;
 
     MenuFolder* emotes;
-    MenuFolder* gameplay;
+    MenuFolder* chaos;
     MenuFolder* linkcolor;
     MenuFolder* costume;
     MenuFolder* miscellaneous;
@@ -86,6 +86,7 @@ namespace CTRPluginFramework {
     void    InitMenu(PluginMenu& menu)
     {
         InitFreecamCodes(menu);
+        InitGameplayCodes(menu);
         InitEmoteFolder(menu);
         InitColorFolder(menu);
         InitCostumeFolder(menu);
@@ -102,7 +103,8 @@ namespace CTRPluginFramework {
 
     void AddAllFolders(PluginMenu& menu)
     {
-        menu += gameplay;
+        menu += chaos;
+        menu += emotes;
         // menu += linkcolor;
         menu += costume;
         menu += miscellaneous;
@@ -114,6 +116,11 @@ namespace CTRPluginFramework {
         menu += sound;
     }
 
+    void InitGameplayCodes(PluginMenu& menu)
+    {
+        chaos = new MenuFolder("Chaos Mode by Glem");
+    }
+    
     void InitEmoteFolder (PluginMenu& menu) 
     {
         emotes = new MenuFolder("Emote Codes");
@@ -351,7 +358,7 @@ namespace CTRPluginFramework {
 
     void ToggleMenuChange(Time time)
     {
-        if (PluginMenu::GetRunningInstance()->FreecamToggle) 
+        if (PluginMenu::GetRunningInstance()->FreecamToggle)
         {
             
             menuFreecam->Show();
@@ -360,19 +367,19 @@ namespace CTRPluginFramework {
             swapZoom->Show();
 
             costume->HideWithoutDisable();
-            gameplay->HideWithoutDisable();
+            chaos->HideWithoutDisable();
             emotes->HideWithoutDisable();
             //linkcolor->HideWithoutDisable();
             miscellaneous->HideWithoutDisable();
             player->HideWithoutDisable();
-            energy->HideWithoutDisable();
+            //energy->HideWithoutDisable();
             items->HideWithoutDisable();
             render->HideWithoutDisable();
             save->HideWithoutDisable();
-            // sound->HideWithoutDisable();
+            sound->HideWithoutDisable();
         }
         else
-        {      
+        {
             menuFreecam->HideWithoutDisable();
             editFreecamControls->HideWithoutDisable();
             editFreecamSen->HideWithoutDisable();
@@ -380,16 +387,17 @@ namespace CTRPluginFramework {
 
             if (!PluginMenu::GetRunningInstance()->GameplayToggle)
             {
+                chaos->Hide();
                 costume->Show();
                 emotes->Show();
                 //linkcolor->Show();
                 miscellaneous->Show();
                 player->Show();
-                energy->Show();
+                //energy->Show();
                 items->Show();
                 render->Show();
                 save->Show();
-                //sound->Show();
+                sound->Show();
             }
             else
             {
@@ -398,20 +406,19 @@ namespace CTRPluginFramework {
                 editFreecamSen->HideWithoutDisable();
                 swapZoom->HideWithoutDisable();
 
-                gameplay->Show();
+                chaos->Show();
                 costume->HideWithoutDisable();
                 emotes->HideWithoutDisable();
                 //linkcolor->HideWithoutDisable();
                 miscellaneous->HideWithoutDisable();
                 player->HideWithoutDisable();
-                energy->HideWithoutDisable();
+                //energy->HideWithoutDisable();
                 items->HideWithoutDisable();
                 render->HideWithoutDisable();
                 save->HideWithoutDisable();
-                //sound->HideWithoutDisable();
+                sound->HideWithoutDisable();
             }
         }
-        
     }
 
     // this function only runs once at plugin startup
