@@ -348,11 +348,11 @@ namespace CTRPluginFramework {
 
         *sound += new MenuEntry("Master volume: 100%", nullptr, masterVolSet);
         *sound += new MenuEntry("BGM volume: 100%", nullptr, bgmVolSet);
-        *sound += new MenuEntry("Override current BGM", nullptr, bgmSet);
+        //*sound += new MenuEntry("Override current BGM", nullptr, bgmSet);
         *sound += new MenuEntry("(TODO) Link Voice volume: 100%", nullptr, voiceVol);
         *sound += new MenuEntry("(TODO) Low Health Alert volume: 100%", nullptr, lowHPVol);
         //*sound += new MenuEntry("Set Lobby Ball volume", lobbyBallVol);
-        *sound += new MenuEntry("Choose Lobby Ball song", lobbyBallSong);
+        *sound += new MenuEntry("Choose Lobby Ball song", nullptr, lobbyBallSong);
         // *sound += new MenuEntry("Set Level Completion Fanfare volume", levelDoneVol);
     }
 
