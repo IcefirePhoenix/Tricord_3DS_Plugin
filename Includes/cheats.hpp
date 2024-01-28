@@ -47,6 +47,7 @@ namespace CTRPluginFramework
     extern MenuEntry* colEditAuto;
     extern MenuEntry* swordEditAuto;
     extern MenuEntry* sizeEditAuto;
+    extern MenuEntry* lobbyBallAuto;
 
 
     // move to player class later
