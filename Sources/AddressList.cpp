@@ -47,7 +47,7 @@ namespace CTRPluginFramework {
 		EmoteFGraphic = Address(0x32C9489C, 0x00000000, 0x00000000, 0x00000000);
 		EmoteGGraphic = Address(0x32C9522C, 0x00000000, 0x00000000, 0x00000000);
 		EmoteHGraphic = Address(0x32C95BBC, 0x00000000, 0x00000000, 0x00000000);
-		UseDoTLayoutAlways = Address(0x2F0C6C, 0x00000000, 0x00000000, 0x00000000);
+		UseDoTLayoutAlways = Address(0x002F0C6C, 0x00000000, 0x00000000, 0x00000000);
 
 		// Game Data
 		CurrLevelID = Address(0x3280EDC4, 0x00000000, 0x00000000, 0x00000000);

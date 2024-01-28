@@ -163,9 +163,9 @@ namespace CTRPluginFramework {
     const StringVector GameData::lobbyBallSongs = {
         "Ballad of the Goddess (SS)",
         "Epona's Song (OoT)",
-        "Clock Town (MM)"
+        "Clock Town (MM)",
         "Saria's Song/Lost Woods (OoT)",
-        "Overworld (ALttP)"
+        "Overworld (ALttP)",
         "Dark World (ALttP)",
         "Song of Storms (OoT)",
         "Fairy Fountain (OoT)",
@@ -174,12 +174,12 @@ namespace CTRPluginFramework {
         "Full Steam Ahead (ST)",
         "Skyloft (SS)",
         "Follow Fi (SS)",
-        "Title Theme (WW)"
-        "Mother Maiamai (ALBW)"
+        "Title Theme (WW)",
+        "Mother Maiamai (ALBW)",
         "Princess Hilda's Theme (ALBW)",
         "Yuga Battle (ALBW)",
         "Lorule Castle (ALBW)",
-        "Linebeck's Theme (PH)"
+        "Linebeck's Theme (PH)",
         "Title Theme (TFH)",
         "Madame Couture (TFH)",
         "Ballad of the Wind Fish (LA)",

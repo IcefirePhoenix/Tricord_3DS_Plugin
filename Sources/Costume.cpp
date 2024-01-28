@@ -142,8 +142,8 @@ namespace CTRPluginFramework
 
         // get catalog dynamic location from pointer
         Process::Read32(AddressList::CostumeCatalogPointer.addr, CostumeCatalogLocation);
-
-        if (!isCatalogPointerNull()) {
+        
+        if (!GeneralHelpers::isNullPointer(CostumeCatalogLocation)) {
             costumeCatalogSize = catalogIncSize = 0;
 
             for (u8 i = 0x0; i <= vanillaCostumeCount; i++) {
@@ -215,12 +215,8 @@ namespace CTRPluginFramework
         }
     }
 
-    bool isCatalogPointerNull(void) {
-        return CostumeCatalogLocation == 0x00000000;
-    }
-
     void writeCostumeSlot(MenuEntry* entry) {
-        if (!isCatalogPointerNull()) {
+        if (!GeneralHelpers::isNullPointer(CostumeCatalogLocation)) {
             u32 DLCAddressStart = CostumeCatalogLocation + catalogStartOffset + costumeCatalogSize;
 
             for (u32 iterator = 0x0; iterator < 0x4; ++iterator) {
@@ -311,7 +307,7 @@ namespace CTRPluginFramework
             }
         }
         else {
-            if (!isCatalogPointerNull()) {
+            if (!GeneralHelpers::isNullPointer(CostumeCatalogLocation)) {
                 Process::Write32((AddressList::UnusedCostumeDataPointerList.addr), AddressList::TextToRodata.addr);
                 Process::Write8((CostumeCatalogLocation + catalogStartOffset + costumeCatalogSize), greatFairyID);
             }
