@@ -160,7 +160,7 @@ namespace CTRPluginFramework {
 		BGMType = Address(0x005FD3C0, 0x00000000, 0x00000000, 0x00000000);
 		BGMVolume = Address(0x236444, 0x00000000, 0x00000000, 0x00000000);
 		LinkVoiceSpeed = Address(0x3284A25C, 0x00000000, 0x00000000, 0x00000000);
-		MasterVolume = Address(0x004C0AA0, 0x00000000, 0x00000000, 0x00000000);
+		MasterVolume = Address(0x0050BC74, 0x00000000, 0x00000000, 0x00000000);
 
 		}
 
