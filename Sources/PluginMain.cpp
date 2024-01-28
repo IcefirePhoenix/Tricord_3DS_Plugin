@@ -62,6 +62,7 @@ namespace CTRPluginFramework {
     MenuEntry* colEditAuto;
     MenuEntry* swordEditAuto;
     MenuEntry* sizeEditAuto;
+    MenuEntry* lobbyBallAuto;
 
     MenuFolder* emotes;
     MenuFolder* chaos;
@@ -245,7 +246,6 @@ namespace CTRPluginFramework {
         
         *miscellaneous += new MenuEntry("Use photo viewer touchscreen toggle", managePhotoDisp);
         *miscellaneous += new MenuEntry("Toggle sword beam cooldown", nullptr, selectLinkBeam);
-        *miscellaneous += new MenuEntry("Force visibility of Treasure Chest contents", nullptr, seeChestContents);
         *miscellaneous += new MenuEntry("Force instant text boxes", nullptr, instantText);
       
         autoBeamCooldown = new MenuEntry("Set Beam Cooldown (auto)", setBeamCooldown);
@@ -256,7 +256,6 @@ namespace CTRPluginFramework {
         player = new MenuFolder("Player Codes");
 
         *player += new MenuEntry("Bypass Doppel Master dialogue cutscene", bypassDoppelDemo);
-        *player += new MenuEntry("Display current respawn location", respawnIndicator);
         *player += new MenuEntry("Enable position save/load touchscreen toggle", posEditor);
         *player += new MenuEntry("Toggle collision edits (experimental!)", nullptr, setCollisionChanges);
         *player += new MenuEntry("Toggle animation storage edits", nullptr, setAnimStorageChanges);
@@ -305,7 +304,9 @@ namespace CTRPluginFramework {
 
         *render += new MenuEntry("Hide HUD", triggerHideHUD);
         *render += new MenuEntry("Disable fog effects", disableFog);
-        *render += new MenuEntry("Toggle scrolling messages", nullptr, disableScrollingText);
+        *render += new MenuEntry("Display current respawn location", respawnIndicator);
+        *render += new MenuEntry("Disable top screen scrolling text", nullptr, disableScrollingText);
+        *render += new MenuEntry("Force visibility of Treasure Chest contents", nullptr, seeChestContents);
     }
 
     void InitSaveFolder(PluginMenu& menu)
@@ -354,6 +355,8 @@ namespace CTRPluginFramework {
         //*sound += new MenuEntry("Set Lobby Ball volume", lobbyBallVol);
         *sound += new MenuEntry("Choose Lobby Ball song", nullptr, lobbyBallSong);
         // *sound += new MenuEntry("Set Level Completion Fanfare volume", levelDoneVol);
+
+        lobbyBallAuto = new MenuEntry("Write lobby ball edits (auto)", writeLobbyBallSel);
     }
 
     void ToggleMenuChange(Time time)
@@ -494,6 +497,9 @@ namespace CTRPluginFramework {
 
     void    PatchProcess(FwkSettings& settings)
     {
+        // toggle
+        settings.UseGameHidMemory = true;
+
         AddressList::InitAddresses();
 
         ToggleTouchscreenForceOn();

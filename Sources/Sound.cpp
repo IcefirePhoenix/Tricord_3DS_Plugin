@@ -7,6 +7,8 @@
 
 namespace CTRPluginFramework
 {
+    u32 _lobbySong = 0xFFFFFFFF;
+
     StringVector percentages = {
         "125%",
         "100%",
@@ -35,21 +37,21 @@ namespace CTRPluginFramework
         entry->SetName("BGM volume: " << getPercentAsStr(sel));
     }
 
-    u32 _lobbySong = 0xFFFFFFFF;
-
     void lobbyBallSong(MenuEntry* entry) {
         if (getSelSong() == 0xFFFFFFFF) { 
             int selectedSong = selLobbyBallSong();
-            if (selectedSong > 0) {
+            if (selectedSong >= 0) {
                 u32 songEdit = 0xFFFFFF00 | selectedSong;
 
                 storeSelSong(songEdit);
                 entry->SetName("Disable Lobby Ball song selection");
+                lobbyBallAuto->Enable();
             }
         }
         else {
             storeSelSong(0xFFFFFFFF);
             entry->SetName("Choose Lobby Ball song");
+            lobbyBallAuto->Disable();
         }
     }
 
