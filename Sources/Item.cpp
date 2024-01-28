@@ -131,8 +131,18 @@ namespace CTRPluginFramework
 		Process::ReadFloat(AddressList::HammerStrafe.addr, hammerStrafe);
 	}
 
+	void resetAllStrafingSpeeds(void) {
+		Process::WriteFloat(AddressList::BowStrafe.addr, 1.0);
+		Process::WriteFloat(AddressList::FireGloveStrafe.addr, 1.0);
+		Process::WriteFloat(AddressList::WaterRodStrafe.addr, 1.0);
+		Process::WriteFloat(AddressList::GustStrafe.addr, 1.0);
+		Process::WriteFloat(AddressList::RoboStrafe.addr, 1.0);
+		Process::WriteFloat(AddressList::HammerStrafe.addr, 1.0);
+	}
+
 	void strafingSpeedSet(MenuEntry* entry) {
 		const StringVector items = {
+			"Reset all speeds",
 			"Bow",
 			"Fire Gloves",
 			"Water Rod",
@@ -170,26 +180,29 @@ namespace CTRPluginFramework
 		// Alt impl... again not very concise
 		float result = 1.0;
 
-		if (choice >= 0)
+		if (choice > 0)
 			result = setSpeedKB();
 
 		switch (choice) {
-		case 0: 
+		case 0:
+			resetAllStrafingSpeeds();
+			break;
+		case 1: 
 			Process::WriteFloat(AddressList::BowStrafe.addr, result);
 			break;
-		case 1:
+		case 2:
 			Process::WriteFloat(AddressList::FireGloveStrafe.addr, result);
 			break;
-		case 2:
+		case 3:
 			Process::WriteFloat(AddressList::WaterRodStrafe.addr, result);
 			break;
-		case 3:
+		case 4:
 			Process::WriteFloat(AddressList::GustStrafe.addr, result);
 			break;
-		case 4:
+		case 5:
 			Process::WriteFloat(AddressList::RoboStrafe.addr, result);
 			break;
-		case 5:
+		case 6:
 			Process::WriteFloat(AddressList::HammerStrafe.addr, result);
 			break;
 		}
