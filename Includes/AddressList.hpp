@@ -92,6 +92,7 @@ namespace CTRPluginFramework {
 
 		// Player
 		static Address		ActiveLink;
+		static Address		CurrentAnim;
 		static Address		CurrentItem;
 		static Address		Energy;
 		static Address		EnergyMax;
@@ -111,7 +112,8 @@ namespace CTRPluginFramework {
 		static Address		PlayerModelSize;
 		static Address		PositionX;
 		static Address		PositionY;
-		static Address		PositionZ;
+		static Address		PositionZ;	
+		static Address		PreviousAnim;
 		static Address		PVPMode;
 		static Address		RespawnPositionX;
 		static Address		RespawnPositionY;

@@ -90,6 +90,7 @@ namespace CTRPluginFramework {
 
 		// Player
 		ActiveLink = Address(0x31A03879, 0x00000000, 0x00000000, 0x00000000);
+		CurrentAnim = Address(0x32849188, 0x00000000, 0x00000000, 0x00000000);
 		CurrentItem = Address(0x32841A20, 0x00000000, 0x00000000, 0x00000000);
 		Energy = Address(0x328496C4, 0x00000000, 0x00000000, 0x00000000);
 		EnergyMax = Address(0x328496C5, 0x00000000, 0x00000000, 0x00000000);
@@ -111,6 +112,7 @@ namespace CTRPluginFramework {
 		PositionX = Address(0x328412D8, 0x00000000, 0x00000000, 0x00000000);
 		PositionY = Address(0x328412DC, 0x00000000, 0x00000000, 0x00000000);
 		PositionZ = Address(0x328412E0, 0x00000000, 0x00000000, 0x00000000);
+		PreviousAnim = Address(0x32849189, 0x00000000, 0x00000000, 0x00000000);
 		PVPMode = Address(0x32849545, 0x00000000, 0x00000000, 0x00000000);
 		RespawnPositionX = Address(0x32841750, 0x00000000, 0x00000000, 0x00000000);
 		RespawnPositionY = Address(0x32841754, 0x00000000, 0x00000000, 0x00000000);
@@ -255,6 +257,7 @@ namespace CTRPluginFramework {
 
 	// Player
 	Address		AddressList::ActiveLink;
+	Address		AddressList::CurrentAnim;
 	Address		AddressList::CurrentItem;
 	Address		AddressList::Energy;
 	Address		AddressList::EnergyMax;
@@ -275,6 +278,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::PositionX;
 	Address		AddressList::PositionY;
 	Address		AddressList::PositionZ;
+	Address		AddressList::PreviousAnim;
 	Address		AddressList::PVPMode;
 	Address		AddressList::RespawnPositionX;
 	Address		AddressList::RespawnPositionY;
