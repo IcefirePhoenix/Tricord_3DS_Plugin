@@ -1,7 +1,7 @@
 #include "Helpers.hpp"
 #include "Cheats.hpp"
 #include "csvc.h"
-
+#include <3ds.h>
 
 #include "CTRPluginFrameworkImpl/Menu/HotkeysModifier.hpp"
 
@@ -444,9 +444,11 @@ namespace CTRPluginFramework {
     void    PatchProcess(FwkSettings& settings)
     {
         AddressList::InitAddresses();
-        
-        // toggle
-        settings.UseGameHidMemory = true;
+
+        if (Preferences::IsEnabled(Preferences::HIDToggle))
+            settings.UseGameHidMemory = true;
+
+        settings.CachedDrawMode = true;
 
         ToggleTouchscreenForceOn();
 
