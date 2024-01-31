@@ -13,9 +13,16 @@ TARGET		:= 	$(notdir $(CURDIR))
 PLGINFO 	:= 	CTRPluginFramework.plgInfo
 
 BUILD		:= 	Build
-INCLUDES	:= 	Includes 
+INCLUDES	:= 	Includes \
+				Includes/Main \
+				Includes/Main/AltModes \
+				Includes/Helpers \
+				Includes/Helpers/DataHelpers
 SOURCES 	:= 	Sources \
+				Sources/Main \
+				Sources/Main/AltModes \
 				Sources/Helpers \
+				Sources/Helpers/DataHelpers
 
 
 #---------------------------------------------------------------------------------
