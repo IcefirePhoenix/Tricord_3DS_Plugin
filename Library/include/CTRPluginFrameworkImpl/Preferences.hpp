@@ -25,6 +25,7 @@ namespace CTRPluginFramework
             AutoSaveFavorites   = 1 << 3,
             AutoLoadCheats      = 1 << 4,
             AutoLoadFavorites   = 1 << 5,
+            HIDToggle           = 1 << 6,
 
             // Misc
             DisplayLoadedFiles  = 1 << 16,
