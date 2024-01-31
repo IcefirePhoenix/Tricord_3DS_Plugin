@@ -1,8 +1,5 @@
-#include "cheats.hpp"
 #include "AddressList.hpp"
-#include "Helpers/GameData.hpp"
-#include "Helpers/Address.hpp"
-#include "Helpers/GeneralHelpers.hpp"
+#include "Helpers.hpp"
 
 #include <CTRPluginFramework.hpp>
 

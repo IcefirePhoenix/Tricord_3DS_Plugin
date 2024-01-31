@@ -1,7 +1,7 @@
 #ifndef GENERALHELPER_HPP
 #define GENERALHELPER_HPP
 
-#include <CTRPluginFramework.hpp>
+#include "CTRPluginFramework.hpp"
 
 namespace CTRPluginFramework {
 	class GeneralHelpers {

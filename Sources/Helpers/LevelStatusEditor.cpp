@@ -1,4 +1,7 @@
+#include "Helpers.hpp"
 #include "Helpers/LevelStatusEditor.hpp"
+#include "AddressList.hpp"
+
 #include "CTRPluginFrameworkImpl/Graphics/Icon.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/Renderer.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/Window.hpp"
@@ -8,7 +11,6 @@
 #include "CTRPluginFrameworkImpl/System/SystemImpl.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
 #include "CTRPluginFramework/Sound.hpp"
-#include "cheats.hpp"
 
 
 namespace CTRPluginFramework

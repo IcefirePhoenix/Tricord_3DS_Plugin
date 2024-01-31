@@ -1,14 +1,14 @@
 #ifndef ADDRESSLIST_HPP
 #define ADDRESSLIST_HPP
 
-#include <CTRPluginFramework.hpp>
-#include <Helpers/Address.hpp>
+#include "CTRPluginFramework.hpp"
+#include "Helpers/DataHelpers/Address.hpp"
 
 namespace CTRPluginFramework {
 	class AddressList {
 	public:
 		static void     InitAddresses(void);
-
+		
 		// Camera
 		static Address		DynamicCameraCheck;
 		static Address		GameplayCameraCheck;
@@ -36,7 +36,7 @@ namespace CTRPluginFramework {
 		static Address		CostumeCatalogPointer;
 		static Address		PlayerStatus;
 		static Address		TingleBalloons;
-		static Address		UnusedCostumeDataPointerList;
+		static Address		UnusedCostumeDataPointers;
 
 		// Emotes
 		static Address		GameplayEmotes;

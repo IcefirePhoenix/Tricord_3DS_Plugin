@@ -1,13 +1,13 @@
 #ifndef LEVELSTATUSEDITOR_HPP
 #define LEVELSTATUSEDITOR_HPP
 
+#include "Helpers.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/Button.hpp"
-#include "cheats.hpp"
-#include <vector>
-#include <string>
 
 namespace CTRPluginFramework
 {
+    using StringVector = std::vector<std::string>;
+
     class LevelStatusEditor
     {
     public:
