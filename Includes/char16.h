@@ -1,5 +1,4 @@
-
-#include "3DS.h"
+#include "types.h"
 
 #ifdef __cplusplus
 extern "C" {

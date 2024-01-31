@@ -1,25 +1,16 @@
-Author: Nanquitas
+Author: Nanquitas (CTRPF), WinterPhoenix (Tricord)
 
 Version: # Plugin version
     Major: 0
-    Minor: 7
-    Revision: 2
+    Minor: 5
+    Revision: 0
 
-Targets: # Low TitleId of games which are compatibles with this plugin (0 for all)
+MemorySize: 5MiB
 
-Title: CTRPF - Blank Template
+Targets: # Low TitleID of games compatible with this plugin (0 for all)
 
-Summary: A CTRPF Plugin, with a lot of tools
+Title: Tricord
 
-Description: |
-  This plugin gives you access to a set of tools to edit your games
-
-  Features:
-    - Memory searcher
-    - Hex Editor
-    - Code creator
-    - Code import from file
-    - Action Replay engine with extra capabilities
-    - Super fast screenshot engine
+Summary: A CTRPF-based plugin, made specifically for The Legend of Zelda, Tri Force Heroes.
 
 Compatibility: Any
