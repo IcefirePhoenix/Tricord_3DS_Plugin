@@ -5,6 +5,7 @@
 
 #include "CTRPluginFrameworkImpl/Menu/HotkeysModifier.hpp"
 
+#include "CTRPluginFrameworkImpl/Preferences.hpp"
 #include "CTRPluginFramework/Menu/MenuEntry.hpp"
 #include "CTRPluginFrameworkImpl/Menu/MenuEntryTools.hpp"
 #include "CTRPluginFrameworkImpl/Menu/MenuEntryImpl.hpp"
@@ -22,7 +23,8 @@ namespace CTRPluginFramework {
 
     MenuFolder* emotes;
     MenuFolder* chaos;
-    MenuFolder* linkcolor;
+    MenuFolder* effects;
+    MenuFolder* gameplay;
     MenuFolder* costume;
     MenuFolder* miscellaneous;
     MenuFolder* player;
@@ -32,7 +34,8 @@ namespace CTRPluginFramework {
     MenuFolder* save;
     MenuFolder* sound;
 
-    static MenuEntry* EntryWithHotkey(MenuEntry* entry, const std::vector<Hotkey>& hotkeys) {
+    static MenuEntry* EntryWithHotkey(MenuEntry* entry, const std::vector<Hotkey>& hotkeys) 
+    {
         if (entry != nullptr) {
             for (const Hotkey& hotkey : hotkeys)
                 entry->Hotkeys += hotkey;
@@ -43,9 +46,9 @@ namespace CTRPluginFramework {
     void    InitMenu(PluginMenu& menu)
     {
         InitFreecamCodes(menu);
-        InitGameplayCodes(menu);
+        InitGameModes(menu);
+        InitGameplayFolder(menu);
         InitEmoteFolder(menu);
-        InitColorFolder(menu);
         InitCostumeFolder(menu);
         InitMiscFolder(menu);
         InitPlayerFolder(menu);
@@ -62,20 +65,44 @@ namespace CTRPluginFramework {
         menu += chaos;
         menu += costume;
         menu += emotes;
-        // menu += linkcolor;
         menu += miscellaneous;
         menu += player;
-        // menu += energy;
+        menu += gameplay;
         menu += items;
         menu += render;
         menu += save;
         menu += sound;
     }
 
-    void InitGameplayCodes(PluginMenu& menu)
+    void InitGameModes(PluginMenu& menu)
     {
         chaos = new MenuFolder("Chaos Mode by Glem");
+        effects = new MenuFolder("Chaos Events");
+
+        *effects += new MenuEntry("(TODO) View selected events");
+        *effects += new MenuEntry("(TODO) Edit selected events");
+        *effects += new MenuEntry("(TODO) Reset event selection");
+        *chaos += effects;
+
+        *chaos += new MenuEntry("(TODO) Select event trigger interval");
     }
+
+    void InitGameplayFolder(PluginMenu& menu)
+    {
+        gameplay = new MenuFolder("Gameplay Codes");
+
+        *gameplay += new MenuEntry("Infinite health", Gameplay::infHealth);
+        *gameplay += (EntryWithHotkey(new MenuEntry("No health (trigger via hotkey)", Gameplay::noHealth), {
+            Hotkey(Key::L | Key::R, "Set health to 0"),
+        }));
+
+        *gameplay += (EntryWithHotkey(new MenuEntry("Insta-kill all spawned enemies", Gameplay::autoKillEnemy), {
+            Hotkey(Key::L | Key::B, "Insta-kill all spawned enemies"),
+        }));
+
+        *gameplay += (EntryWithHotkey(new MenuEntry("Make all spawned enemies invincible", Gameplay::enemyInvinci), {
+            Hotkey(Key::R | Key::B, "Make all spawned enemies invincible"),
+        }));    }
     
     void InitEmoteFolder (PluginMenu& menu) 
     {
@@ -84,14 +111,12 @@ namespace CTRPluginFramework {
         *emotes += (EntryWithHotkey(new MenuEntry("Enable Drablands Emote Swapper", Emotes::drablandEmoteSwapper), {
             Hotkey(Key::DPadLeft, "Swap to original emote set"),
             Hotkey(Key::DPadRight, "Swap to alternative emote set")
-            }));
+        }));
 
         *emotes += (EntryWithHotkey(new MenuEntry("Enable Lobby Emote Swapper", Emotes::lobbyEmoteSwapper), {
             Hotkey(Key::DPadLeft, "Swap to original emote set"),
             Hotkey(Key::DPadRight, "Swap to alternative emote set")
-            }));
-
-        // *emotes += new MenuEntry("Use Custom Emotes", customEmotes);
+        }));
     }
 
     void InitFreecamCodes(PluginMenu& menu)
@@ -125,17 +150,6 @@ namespace CTRPluginFramework {
         menu += editFreecamControls;
         menu += editFreecamSen;
         menu += swapZoom;
-    }
-
-    void InitColorFolder(PluginMenu& menu)
-    {
-        // presets?
-        linkcolor = new MenuFolder("Custom Link Colors");
-
-        *linkcolor += new MenuEntry("Set Green Link color", nullptr, LinkColor::customColor);
-        *linkcolor += new MenuEntry("Set Blue Link color", nullptr, LinkColor::customColor);
-        *linkcolor += new MenuEntry("Set Red Link color", nullptr, LinkColor::customColor);
-        *linkcolor += new MenuEntry("Use re-colored level textures", LinkColor::recolorLevelTex);
     }
 
     void InitCostumeFolder(PluginMenu& menu)
@@ -202,7 +216,12 @@ namespace CTRPluginFramework {
         *miscellaneous += new MenuEntry("Use photo viewer touchscreen toggle", Miscellaneous::managePhotoDisp);
         *miscellaneous += new MenuEntry("Toggle sword beam cooldown", nullptr, Miscellaneous::selectLinkBeam);
         *miscellaneous += new MenuEntry("Force instant text boxes", nullptr, Miscellaneous::instantText);
-      
+        *miscellaneous += new MenuEntry("Set Lobby Ball counter (TODO)", nullptr, Miscellaneous::setLobbyBallCounter);
+        *miscellaneous += new MenuEntry("Toggle camera on X button: No edits", nullptr, Miscellaneous::toggleCameraButton);
+        *miscellaneous += new MenuEntry("Disable camera shutter", nullptr, Miscellaneous::toggleCameraShutter);
+        
+        autoWriteCameraStatus = new MenuEntry("Toggle camera status (auto)",  Miscellaneous::writeCameraEdits);
+        autoDisableCamShutter = new MenuEntry("Disable camera shutter (auto)", Miscellaneous::writeShutterDisable);
         autoBeamCooldown = new MenuEntry("Set Beam Cooldown (auto)", Miscellaneous::setBeamCooldown);
     }
 
@@ -240,7 +259,9 @@ namespace CTRPluginFramework {
         *items += new MenuEntry("Set current item", nullptr, Item::itemOpt);
         *items += new MenuEntry("Set Shadow Link item", nullptr, Item::shadowItemOpt);
         *items += new MenuEntry("Set strafing speeds", nullptr, Item::strafingSpeedSet);
+        *items += new MenuEntry("Remove current items", nullptr, Item::removeCurrItems);
         *items += new MenuEntry("Freeze current items", Item::freezeCurrItems);
+
         // TODO: *items += new MenuEntry("Always use upgraded Items", Item::upgradeItemAlways);
     }
 
@@ -318,10 +339,9 @@ namespace CTRPluginFramework {
             chaos->HideWithoutDisable();
             costume->HideWithoutDisable();
             emotes->HideWithoutDisable();
-            //linkcolor->HideWithoutDisable();
             miscellaneous->HideWithoutDisable();
             player->HideWithoutDisable();
-            //energy->HideWithoutDisable();
+            gameplay->HideWithoutDisable();
             items->HideWithoutDisable();
             render->HideWithoutDisable();
             save->HideWithoutDisable();
@@ -339,14 +359,14 @@ namespace CTRPluginFramework {
                 chaos->Hide();
                 costume->Show();
                 emotes->Show();
-                //linkcolor->Show();
                 miscellaneous->Show();
                 player->Show();
-                //energy->Show();
+                gameplay->Show();
                 items->Show();
                 render->Show();
                 save->Show();
                 sound->Show();
+                
             }
             else
             {
@@ -358,10 +378,9 @@ namespace CTRPluginFramework {
                 chaos->Show();
                 costume->HideWithoutDisable();
                 emotes->HideWithoutDisable();
-                //linkcolor->HideWithoutDisable();
                 miscellaneous->HideWithoutDisable();
-                player->HideWithoutDisable();
-                //energy->HideWithoutDisable();
+                player->HideWithoutDisable();                
+                gameplay->HideWithoutDisable();
                 items->HideWithoutDisable();
                 render->HideWithoutDisable();
                 save->HideWithoutDisable();
@@ -417,7 +436,7 @@ namespace CTRPluginFramework {
         Handle  processHandle;
         s64     textTotalSize = 0;
         s64     startAddress = 0;
-        u32* found;
+        u32*    found;
 
         if (R_FAILED(svcOpenProcess(&processHandle, 16)))
             return;
@@ -433,7 +452,7 @@ namespace CTRPluginFramework {
         {
             original = found[13];
             patchAddress = (u32*)PA_FROM_VA((found + 13));
-            found[13] = 0xE1A00000;
+            found[13] = 0xE1A00000; // NOP operation
         }
 
         svcUnmapProcessMemoryEx(CUR_PROCESS_HANDLE, 0x14000000, textTotalSize);
@@ -446,12 +465,12 @@ namespace CTRPluginFramework {
         AddressList::InitAddresses();
 
         if (Preferences::IsEnabled(Preferences::HIDToggle))
-            settings.UseGameHidMemory = true;
+             settings.UseGameHidMemory = true;
 
         settings.CachedDrawMode = true;
-
+        settings.ThreadPriority = 0x3E; // try the other end of this range 
+        
         ToggleTouchscreenForceOn();
-
     }
 
     // Called when the process exits

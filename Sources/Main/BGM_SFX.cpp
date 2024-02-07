@@ -3,7 +3,8 @@
 
 namespace CTRPluginFramework
 {
-     MenuEntry* lobbyBallAuto;
+    // add to settings for easy loading
+    MenuEntry* lobbyBallAuto;
 
     u32 _lobbySong = 0xFFFFFFFF;
 
@@ -17,28 +18,34 @@ namespace CTRPluginFramework
         "Mute"
     };
 
-    void BGM_SFX::bgmSet(MenuEntry* entry) {
+    void BGM_SFX::bgmSet(MenuEntry* entry) 
+    {
         // not enough info known for this
     }
 
-    void BGM_SFX::masterVolSet(MenuEntry* entry) {
+    void BGM_SFX::masterVolSet(MenuEntry* entry) 
+    {
         int sel = selVolPreset();
 
         Process::WriteFloat(AddressList::MasterVolume.addr, getFloatFromPercentSel(sel));
         entry->SetName("Master volume: " << getPercentAsStr(sel));
     }
 
-    void BGM_SFX::bgmVolSet(MenuEntry* entry) {
+    void BGM_SFX::bgmVolSet(MenuEntry* entry) 
+    {
         int sel = selVolPreset();
 
         Process::WriteFloat(AddressList::BGMVolume.addr, getFloatFromPercentSel(sel));
         entry->SetName("BGM volume: " << getPercentAsStr(sel));
     }
 
-    void BGM_SFX::lobbyBallSong(MenuEntry* entry) {
-        if (getSelSong() == 0xFFFFFFFF) { 
+    void BGM_SFX::lobbyBallSong(MenuEntry* entry) 
+    {
+        if (getSelSong() == 0xFFFFFFFF) 
+        { 
             int selectedSong = selLobbyBallSong();
-            if (selectedSong >= 0) {
+            if (selectedSong >= 0) 
+            {
                 u32 songEdit = 0xFFFFFF00 | selectedSong;
 
                 storeSelSong(songEdit);
@@ -46,42 +53,65 @@ namespace CTRPluginFramework
                 lobbyBallAuto->Enable();
             }
         }
-        else {
+        else 
+        {
             storeSelSong(0xFFFFFFFF);
             entry->SetName("Choose Lobby Ball song");
             lobbyBallAuto->Disable();
         }
     }
 
-    void BGM_SFX::storeSelSong(u32 song) {
+    void BGM_SFX::storeSelSong(u32 song) 
+    {
         _lobbySong = song;
     }
 
-    u32 BGM_SFX::getSelSong(void) {
+    u32 BGM_SFX::getSelSong(void) 
+    {
         return _lobbySong;
     }
 
-    void BGM_SFX::writeLobbyBallSel(MenuEntry* entry) {
-        Process::Write32(AddressList::LobbyBallSong.addr, getSelSong());
+    u32 BGM_SFX::getLobbyBallSongAddress(void)
+    {
+        u32 lobbyBallSongOffset = 0x6CC;
+        return (GameData::getLobbyBallDataAddress() + lobbyBallSongOffset);
     }
 
-    int BGM_SFX::selLobbyBallSong(void) {
+    void BGM_SFX::writeLobbyBallSel(MenuEntry* entry) 
+    {
+        u32 finalSongAddress = getLobbyBallSongAddress();
+
+        if (!GeneralHelpers::isNullPointer(finalSongAddress))
+            Process::Write32(getLobbyBallSongAddress(), getSelSong());
+    }
+
+    int BGM_SFX::selLobbyBallSong(void) 
+    {
         Keyboard songSel("Select a song.\n\nNote that these changes are client-side only,\nand will not be observable by other players\nonline.");
         songSel.Populate(GameData::lobbyBallSongs);
 
         return songSel.Open();
     }
 
-    void BGM_SFX::voiceVol(MenuEntry* entry) {
+    void BGM_SFX::voiceVol(MenuEntry* entry) 
+    {
         // not enough info known for this
     }
     
-    void BGM_SFX::lowHPVol(MenuEntry* entry) {
+    void BGM_SFX::lowHPVol(MenuEntry* entry) 
+    {
         // not enough info known for this
     }
 
-    std::string BGM_SFX::getPercentAsStr(int selection) {
-        switch (selection) {
+    // void BGM_SFX::emoteVol(MenuEntry* entry)
+    // {
+    //     // not enough info known for this
+    // }
+
+    std::string BGM_SFX::getPercentAsStr(int selection) 
+    {
+        switch (selection) 
+        {
         case 0:
             return "125%";
         case 1:
@@ -101,15 +131,18 @@ namespace CTRPluginFramework
         }
     }
 
-    int BGM_SFX::selVolPreset(void) {
+    int BGM_SFX::selVolPreset(void) 
+    {
         Keyboard vol("Select your desired volume level.\n\nChanges will be reverted upon game restart.");
         vol.Populate(percentages);
 
         return vol.Open();
     }
 
-    float BGM_SFX::getFloatFromPercentSel(int selection) {
-        switch (selection) {
+    float BGM_SFX::getFloatFromPercentSel(int selection) 
+    {
+        switch (selection) 
+        {
         case 0:
             return 1.25;
         case 1:
@@ -128,4 +161,5 @@ namespace CTRPluginFramework
             return 1.0;
         }
     }
+    // Force 8-bit BGMs
 }

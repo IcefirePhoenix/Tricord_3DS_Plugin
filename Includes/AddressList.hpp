@@ -57,6 +57,7 @@ namespace CTRPluginFramework {
 		static Address		CurrSpawnID;
 		static Address		DoppelsEnabled;
 		static Address		DrablandsRupeeCount;
+		static Address		EnemyDataPointer;
 		static Address		HealthCurrent;
 		static Address		HealthMax;
 		static Address		LoadingStatus;
@@ -79,10 +80,10 @@ namespace CTRPluginFramework {
 		static Address		WaterRodStrafe;
 
 		// Miscellaneous
+		static Address		CameraOnX;
+		static Address		CameraShutter;		
 		static Address		CheckPhotoExist;
 		static Address		DisplayTopPhoto;
-		static Address		LobbyBallCounter;
-		static Address		LobbyBallSong;
 		static Address		SeeChestContents;
 		static Address		SwordBeamCD;
 		static Address		TextBoxSpeed;
@@ -124,20 +125,13 @@ namespace CTRPluginFramework {
 		static Address		ArrowIndicatorColorBot;
 		static Address		ArrowIndicatorColorMid;
 		static Address		ArrowIndicatorColorTop;
-		static Address		ArrowIndicatorLocationBot;
-		static Address		ArrowIndicatorLocationMid;
-		static Address		ArrowIndicatorLocationTop;
-		static Address		ArrowIndicatorVisibilityBot;
-		static Address		ArrowIndicatorVisibilityMid;
-		static Address		ArrowIndicatorVisibilityTop;
 		static Address		HUDPointer;
 		static Address		FogA;
 		static Address		FogB;
 		static Address		FogC;
 		static Address		ScrollingTextOpacity;
 		static Address		OffScreenLocation;
-
-
+		
 		// Savefile
 		static Address		NormalNCCompletion;
 		static Address		NormalC1Completion;
@@ -163,6 +157,7 @@ namespace CTRPluginFramework {
 		static Address		BGMType;
 		static Address		BGMVolume;
 		static Address		LinkVoiceSpeed;
+		static Address		LobbyBallPointer;
 		static Address		MasterVolume;
 		
 	};

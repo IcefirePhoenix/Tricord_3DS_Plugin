@@ -53,6 +53,16 @@ If you have come across a consistent crash, please be sure to upload an image of
 
 [screenshot] 
 
+## HID-related ErrDisp
+CTRPF plugins, including Tricord, may conflict with existing installations of wumiibo depending on your console model. If you are consistently running into ErrDisp errors related to the HID module and are NOT a wumiibo user, please contact WinterPhoenix with a screenshot of your ErrDisp details. 
+
+Before troubleshooting, it is recommended to try loading the default plugin found [here] to verify that the issue is independent from Tricord. If the problem persists, it is likely due to wumiibo. From here, you can either:
+
+- Disable wumiibo or uninstall it completely.
+- OR if you do not want to uninstall wumiibo: try toggling **Disable HID memory allocation** in the Settings menu *and* restarting your console.
+
+If the problem still persists, please contact WinterPhoenix with a screenshot of your ErrDisp details.
+
 ## Build instructions:
 The plugin has already been compiled and can be found in the Releases page. However, if you would like to build the plugin yourself, there are Makefiles provided in this repository. One is for building the library, and the other is for building the plugin itself. 
 

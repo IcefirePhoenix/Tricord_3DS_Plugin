@@ -74,12 +74,15 @@ namespace CTRPluginFramework
             togglePlayerStatus(playerStatus, color);
             break;
         case SWORD:
-            swordType[playerID] = GeneralHelpers::chooseSword();
+        {
+            int swordChoice = GeneralHelpers::chooseSword();
+
+            if (swordChoice >= 0)
+                swordType[playerID] = static_cast<u8>(swordChoice);
+        }
             break;
         case PLAYER_SIZE:
             PlayerSizes = setPlayerSize();
-            break;
-        default:
             break;
         }
     }
@@ -93,7 +96,11 @@ namespace CTRPluginFramework
         menu.CanAbort(false);
 
         while (isMenuOpen) {
-            u8 status = *playerStatus;
+            u8 status = 0x0;
+
+            if (playerStatus != nullptr)
+                status = *playerStatus;
+            
             bottomScreenOptions.clear();
 
             switch (type) {
@@ -182,8 +189,10 @@ namespace CTRPluginFramework
         u8 animStoredB = 0x0;
         u8 notStoredB = 0xFF;
 
-        writePlayerChanges(16, animStoreStatus, AddressList::IsWaterStorage.addr, animStoredA, notStoredA);
-        writePlayerChanges(8, animStoreStatus, AddressList::IsWaterStorage.addr + 0x2, animStoredB, notStoredB);
+        if (PlayerAnimation::getCurrAnim(static_cast<u8>(GeneralHelpers::getCurrLink())) == PlayerAnimation::getIDFromName("Link_SwimWait")){
+            writePlayerChanges(16, animStoreStatus, AddressList::IsWaterStorage.addr, animStoredA, notStoredA);
+            writePlayerChanges(8, animStoreStatus, AddressList::IsWaterStorage.addr + 0x2, animStoredB, notStoredB);
+        }
     }
 
     void Player::writeCollisionChanges(MenuEntry* entry) 
@@ -244,6 +253,8 @@ namespace CTRPluginFramework
         else {
             entry->SetName("Set custom player model size");
             sizeEditAuto->Disable();
+
+            Process::WriteFloat(AddressList::PlayerModelSize.addr, 1.0);
         }
     }
 

@@ -72,7 +72,28 @@ namespace CTRPluginFramework
             u32     reserved[100];
         } PACKED;
 
-        using Header = HeaderV11;
+        struct HeaderTricordV12
+        {
+            u8      sig[8];
+            u32     version;
+            u32     pluginVersion;
+            u64     size;
+            u64     flags;
+            u32     hotkeys;
+            u64     lcdbacklights;
+            u32     enabledCheatsCount;
+            u64     enabledCheatsOffset;
+            u32     favoritesCount;
+            u64     favoritesOffset;
+            u32     hotkeysCount;
+            u64     hotkeysOffset;
+            u32     scrollColors[3];
+            u32     freecamValues[6];
+            u32     soundVols[4];
+            u32     reserved[100];
+        } PACKED;
+
+        using Header = HeaderTricordV12;
 
         struct EnabledCheats
         {

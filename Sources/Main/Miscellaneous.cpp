@@ -13,13 +13,17 @@ namespace CTRPluginFramework
 {
     MenuEntry* autoBeamCooldown;
     MenuEntry* instantTextDisplay;
+    MenuEntry* autoWriteCameraStatus;
+    MenuEntry* autoDisableCamShutter;
 
+    bool _cameraToggle;
     bool showPhoto, useInstantText, useBeamCooldown = false;
    
     bool beamStatuses[3] = { false, false, false };
     u32 keys;
 
-    void Miscellaneous::buttonSpammer(MenuEntry* entry) {
+    void Miscellaneous::buttonSpammer(MenuEntry* entry) 
+    {
         // currently a mess; ignore for now
 
         // intnButtons = entry->Hotkeys.Count();
@@ -27,7 +31,8 @@ namespace CTRPluginFramework
         // Controller::InjectKey(Controller::GetKeysDown(true));
     }
 
-    void Miscellaneous::instantText(MenuEntry* entry) {
+    void Miscellaneous::instantText(MenuEntry* entry) 
+    {
         useInstantText = !useInstantText;
 
         // not using absolute max of 0xFF to avoid graphical bugs... 0x2D is fast enough
@@ -39,21 +44,27 @@ namespace CTRPluginFramework
     }
     
     FloatingButton photoBtn(IntRect(120, 50, 32, 32), Icon::DrawUnsplash);
-    void Miscellaneous::managePhotoDisp(MenuEntry* entry) {
+    void Miscellaneous::managePhotoDisp(MenuEntry* entry) 
+    {
         u8 doesPhotoExist;
         Process::Read8(AddressList::CheckPhotoExist.addr, doesPhotoExist);
 
         showPhotoBtnIntroMsg(entry->WasJustActivated());
         
-        if (Level::isInDrablands() && !GeneralHelpers::isLoadingScreen()){
+        if (Level::isInDrablands() && !GeneralHelpers::isLoadingScreen())
+        {
             photoBtn.Draw();
+
             if (!GeneralHelpers::isPauseScreen())
                 photoBtn.Update(Touch::IsDown(), IntVector(Touch::GetPosition()));
         }
 
-        if (photoBtn()) {
-            if (!showPhoto) {
-                if (doesPhotoExist) {
+        if (photoBtn()) 
+        {
+            if (!showPhoto) 
+            {
+                if (doesPhotoExist) 
+                {
                     OSD::Notify("[DISPLAY PHOTO TOGGLE]: Currently viewing stored photo.");
                     showPhoto = !showPhoto;
                 }
@@ -65,21 +76,26 @@ namespace CTRPluginFramework
 
         if (showPhoto) 
             displayPhoto(doesPhotoExist);
-        else {
+        else 
+        {
             Process::Write8(AddressList::DisplayTopPhoto.addr, 0x0);
             GeneralHelpers::managePlayerLock(false);
         }
     }
     
-    void showPhotoBtnIntroMsg(bool showMsg) {
-        if (showMsg) {
+    void showPhotoBtnIntroMsg(bool showMsg) 
+    {
+        if (showMsg) 
+        {
             OSD::Notify("[DISPLAY PHOTO TOGGLE]: In the Drablands, drag the camera");
             OSD::Notify("button on the touchscreen to change its location.");
         }
     }
 
-    void displayPhoto(bool photoCheck) {
-        if (photoCheck) {
+    void displayPhoto(bool photoCheck) 
+    {
+        if (photoCheck) 
+        {
             Process::Write8(AddressList::DisplayTopPhoto.addr, 0xFF);
             
             GeneralHelpers::managePlayerLock(true);
@@ -87,7 +103,8 @@ namespace CTRPluginFramework
         }
     }
 
-    void Miscellaneous::selectLinkBeam(MenuEntry* entry) {
+    void Miscellaneous::selectLinkBeam(MenuEntry* entry) 
+    {
         std::string enSlid = Color::LimeGreen << "\u2282\u25CF";
         std::string disSlid = Color::Red << "\u25CF\u2283";
         std::string title;
@@ -98,7 +115,8 @@ namespace CTRPluginFramework
         kbd.CanAbort(false);
 
         bool loop = true;
-        while (loop) {
+        while (loop) 
+        {
             title = "Use the toggles to disable the Sword Beam cooldown period:\n\n";
 
             bottomScreenOptions.clear();
@@ -111,7 +129,8 @@ namespace CTRPluginFramework
             kbd.GetMessage() = title;
             kbd.Populate(bottomScreenOptions);
 
-            switch (kbd.Open()) {
+            switch (kbd.Open()) 
+            {
             case 0:
                 beamStatuses[0] = !beamStatuses[0];
                 break;
@@ -123,24 +142,110 @@ namespace CTRPluginFramework
                 break;
             case 3:
                 autoBeamCooldown->Enable();
-
                 loop = false;
                 break;
             default:
                 autoBeamCooldown->Disable();
-
                 loop = false;
                 break;
             }
         }
     }
 
-    void Miscellaneous::setBeamCooldown(MenuEntry* entry) {
+    void Miscellaneous::setBeamCooldown(MenuEntry* entry) 
+    {
         u32 playerOffset = 0x10000;
 
-        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; ++iterateThruPlayers) {
+        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; ++iterateThruPlayers) 
+        {
             if (beamStatuses[iterateThruPlayers])
                 Process::Write8(AddressList::SwordBeamCD.addr + (playerOffset * iterateThruPlayers), 0x1E);
         }  
     }
+
+    void Miscellaneous::setLobbyBallCounter (MenuEntry* entry)
+    {
+        // checkbox entry
+        // check location
+        // verify data pointer
+        // open keyboard
+        // write edits
+    }
+
+    void Miscellaneous::toggleCameraButton(MenuEntry* entry)
+    {
+        StringVector camOpts = {
+            "Disable camera on X",
+            "Enable camera on X",
+            "Reset changes"
+        };
+
+        Keyboard selCamOpt("Select X button's camera function:");
+        selCamOpt.Populate(camOpts);
+
+        int choice = selCamOpt.Open();
+
+        switch (choice)
+        {
+        case 0:
+            setCameraEdits(false);
+            autoWriteCameraStatus->Enable();
+            entry->SetName("Toggle camera on X button: Disabled");
+            break;
+        case 1:
+            setCameraEdits(true);
+            autoWriteCameraStatus->Enable();
+            entry->SetName("Toggle camera on X button: Enabled");
+            break;
+        case 2:
+            autoWriteCameraStatus->Disable();
+            entry->SetName("Toggle camera on X button: No edits");
+            break;
+        default:
+            break;
+        }
+    }
+
+    void setCameraEdits(bool useCamera)
+    {
+        _cameraToggle = useCamera;
+    }
+
+    bool getCameraStatus(void)
+    {
+        return _cameraToggle;
+    }
+
+    void Miscellaneous::writeCameraEdits(MenuEntry* entry)
+    {
+        if (Level::isInDrablands)
+            Process::Write8(AddressList::CameraOnX.addr, getCameraStatus());
+    }
+
+    // TODO: proper variable names
+    void Miscellaneous::toggleCameraShutter(MenuEntry* entry)
+    {
+        if (entry->Name() == "Disable camera shutter") 
+        {
+            autoDisableCamShutter->Enable();
+            entry->SetName("Enable camera shutter");
+        }
+        else 
+        {
+            autoDisableCamShutter->Disable();
+            entry->SetName("Disable camera shutter");
+            Process::Write32(AddressList::CameraShutter.addr, 0x1);
+        }
+    }
+
+    void Miscellaneous::writeShutterDisable(MenuEntry* entry)
+    {
+        if (Level::isInDrablands())
+            Process::Write8(AddressList::CameraShutter.addr, 0x0);
+        
+        // very last execution when entry is disabled
+        if (!entry->IsActivated())
+            Process::Write32(AddressList::CameraShutter.addr, 0x1);
+    }
+
 }

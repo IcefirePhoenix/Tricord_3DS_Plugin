@@ -11,11 +11,9 @@ namespace CTRPluginFramework {
 		static std::string getLinkColorAsStr(int ID);
 
 		static int getCurrLink(void);
-
-		static u32 chooseLink(void);
-		static u32 chooseShadowLink(void);
-
-		static u8 chooseSword(void);
+		static int chooseLink(void);
+		static int chooseShadowLink(void);
+		static int chooseSword(void);
 
 		static bool showMsgKbd(std::string text, DialogType digtype);
 		static bool isNullPointer(u32 address);
@@ -23,6 +21,7 @@ namespace CTRPluginFramework {
 		static void managePlayerLock(bool isLocked);
 		static void forceEnableDoppels(void);
 		
+		static bool isTitleScreen(void);
 		static bool isSinglePlayer(void);
 		static bool isLoadingScreen(void);
 		static bool isPauseScreen(void);

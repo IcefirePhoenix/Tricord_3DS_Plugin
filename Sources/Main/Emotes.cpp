@@ -3,6 +3,9 @@
 
 namespace CTRPluginFramework
 {
+	// layout A: over here, bye, lets go, hello, cheer, frown, no, thumbs up
+	// layout B: item, throw, totem, yawn, cheer, frown, nooo, blank
+
 	u32 blankEmotePointer = 0x2070A780;
 
 	// sorted by region... may break if custom files are loaded
@@ -59,7 +62,8 @@ namespace CTRPluginFramework
 	//	Process::Patch(AddressList::UseDoTLayoutAlways.addr, 0x0A00000D);
 	//}
 
-	void refreshEmoteGraphics(const u32 color[][4], std::vector<u8>& layout, bool useBlank) {
+	void refreshEmoteGraphics(const u32 color[][4], std::vector<u8>& layout, bool useBlank) 
+	{
 		u32 graphicsAddresses[8] = {
 			AddressList::EmoteAGraphic.addr,
 			AddressList::EmoteBGraphic.addr,
@@ -72,7 +76,8 @@ namespace CTRPluginFramework
 		};
 
 		int region;
-		switch (Process::GetTitleID()) {
+		switch (Process::GetTitleID()) 
+		{
 		case TID_USA:
 			region = 0;
 			break;
@@ -95,21 +100,22 @@ namespace CTRPluginFramework
 		}
 
 		// write graphic pointers
-		for (int i = 0; i < 8; i++) {
-			if (useBlank && i == 7) {
+		for (int i = 0; i < 8; i++) 
+		{
+			if (useBlank && i == 7)
 				Process::Write32(graphicsAddresses[i], blankEmotePointer);
-			}
-			else {
+			else 
 				Process::Write32(graphicsAddresses[i], color[layout[i]][region]);
-			}
 		}
 	}
 
 	std::vector<u8> currentEmoteLayout;
 	bool useBlankEmote;
 
-	void initGraphicsRefresh(u8 &currentLink) {
-		switch (currentLink) {
+	void initGraphicsRefresh(bool useBlankEmote) 
+	{
+		switch (GeneralHelpers::getCurrLink()) 
+		{
 		case 0:
 			refreshEmoteGraphics(greenEmotePointers, currentEmoteLayout, useBlankEmote);
 			break;
@@ -122,76 +128,55 @@ namespace CTRPluginFramework
 		}
 	}
 
-	// this is broken on citra...
-	void Emotes::drablandEmoteSwapper(MenuEntry* entry) {
-		// disable default drablands emotes
-		Process::Patch(AddressList::UseDoTLayoutAlways.addr, 0xEA00000D);
+	void initEmoteValueLayout(u32 address, u32 buttonID_A, u32 buttonID_B, bool isBlankEmote, std::vector<u8> pointerVector)
+	{
+		Process::Patch(address, buttonID_A); 		// edit button IDs (1st half)
+		Process::Patch(address + 0x4, buttonID_B); 	// edit button IDs (2nd half)
+		
+		currentEmoteLayout = pointerVector; 		// config pointers to emote graphics 
 
-		// get active link color
-		u8 currentLink;
-		Process::Read8(AddressList::ActiveLink.addr, currentLink);
+		initGraphicsRefresh(isBlankEmote);			// update emote graphics
+	}
 
-		// layout A: over here, bye, lets go, hello, cheer, frown, no, thumbs up
-		if (entry->Hotkeys[0].IsPressed()) {
-			Process::Patch(AddressList::GameplayEmotes.addr, 0x080A0B00); // edit button IDs (1st half)
-			Process::Patch(AddressList::GameplayEmotes.addr + 0x4, 0x07060504); // edit button IDs (2nd half)
-			
-			currentEmoteLayout = { 0, 11, 6, 5, 8, 3, 4, 9 }; // config pointers
-			useBlankEmote = false;
+	void disableDefaultEmotes(void)
+	{
+		u32 forceDotLayoutEdit = 0xEA00000D;
+		Process::Patch(AddressList::UseDoTLayoutAlways.addr, forceDotLayoutEdit);
+	}
 
-			initGraphicsRefresh(currentLink);
-		}
 
-		// layout B: item, throw, totem, yawn, cheer, frown, nooo, blank
-		else if (entry->Hotkeys[1].IsPressed()) {
-			Process::Patch(AddressList::GameplayEmotes.addr, 0x09030201);
-			Process::Patch(AddressList::GameplayEmotes.addr + 0x4, 0x0C060504);
+	void Emotes::drablandEmoteSwapper(MenuEntry* entry) 
+	{
+		disableDefaultEmotes();
 
-			currentEmoteLayout = { 1, 2, 7, 10, 8, 3, 4 };
-			useBlankEmote = true;
-
-			initGraphicsRefresh(currentLink);
-		}
+		if (entry->Hotkeys[0].IsPressed()) 
+			initEmoteValueLayout(AddressList::GameplayEmotes.addr, 0x080A0B00, 0x07060504, false, { 0, 11, 6, 5, 8, 3, 4, 9 });
+		else if (entry->Hotkeys[1].IsPressed()) 
+			initEmoteValueLayout(AddressList::GameplayEmotes.addr, 0x09030201, 0x0C060504, true, { 1, 2, 7, 10, 8, 3, 4 });	
 	}
 
 	// TODO: add blank emote?
-	void Emotes::lobbyEmoteSwapper(MenuEntry* entry) {
-		// disable default drablands emotes
-		Process::Patch(AddressList::UseDoTLayoutAlways.addr, 0xEA00000D);
+	void Emotes::lobbyEmoteSwapper(MenuEntry* entry) 
+	{
+		disableDefaultEmotes();
 
-		u8 currentArea;
-		Process::Read8(AddressList::CurrLevelID.addr, currentArea);
-
-		if (currentArea == 0x1) {
-			// get active link color
-			u8 currentLink;
-			Process::Read8(AddressList::ActiveLink.addr, currentLink);
-
-			// layout A: over here, bye, lets go, hello, cheer, frown, no, thumbs up
-			if (entry->Hotkeys[0].IsPressed()) {
-				Process::Patch(AddressList::LobbyEmotes.addr, 0x04090100); // edit button IDs
-				Process::Patch(AddressList::LobbyEmotes.addr + 0x4, 0x0C060302); // edit button IDs
-				currentEmoteLayout = { 0, 1, 10, 8, 2, 7, 4 }; // config pointers
-
-				useBlankEmote = true;
-				initGraphicsRefresh(currentLink);
+		if (Level::getCurrLevel() == Level::getIDFromName("Hytopia Castle")) 
+		{
+			// temporary workaround for when previous location is not drablands 
+			if (Level::getPrevLevel() < Level::getIDFromName("Deku Forest"))
+			{
+				if (entry->Hotkeys[0].IsPressed()) 
+					initEmoteValueLayout(AddressList::GameplayEmotes.addr, 0x080A0B00, 0x07060504, false, { 0, 11, 6, 5, 8, 3, 4, 9 });					
+				else if (entry->Hotkeys[1].IsPressed()) 
+					initEmoteValueLayout(AddressList::GameplayEmotes.addr, 0x09030201, 0x0C060504, true, { 1, 2, 7, 10, 8, 3, 4 });					
 			}
-
-			// layout B: item, throw, totem, yawn, cheer, frown, nooo, blank
-			else if (entry->Hotkeys[1].IsPressed()) {
-				Process::Patch(AddressList::LobbyEmotes.addr, 0x05080A0B);
-				Process::Patch(AddressList::LobbyEmotes.addr + 0x4, 0x0C000706);
-				currentEmoteLayout = { 11, 6, 5, 3, 4, 9, 0 }; // config pointers
-
-				useBlankEmote = true;
-				initGraphicsRefresh(currentLink);
+			else 
+			{
+				if (entry->Hotkeys[0].IsPressed())
+					initEmoteValueLayout(AddressList::LobbyEmotes.addr, 0x04090100, 0x0C060302, true, { 0, 1, 10, 8, 2, 7, 4 });					
+				else if (entry->Hotkeys[1].IsPressed()) 
+					initEmoteValueLayout(AddressList::LobbyEmotes.addr, 0x05080A0B, 0x0C000706, true, { 11, 6, 5, 3, 4, 9, 0 });					
 			}
 		}
-	}
-
-	void Emotes::customEmotes(MenuEntry* entry) {
-		// TODO: 
-		// 1) verify .ctpk edits 
-		// 2) TBD
 	}
 } 

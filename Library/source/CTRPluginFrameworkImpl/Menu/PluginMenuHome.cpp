@@ -812,6 +812,18 @@ namespace CTRPluginFramework
     {
         static int bak = 0;
         std::swap(bak, _selector);
+        
+        if (_starMode)
+        {
+            _gameModeBtn.Lock();
+            _freecamBtn.Lock();
+        } 
+        else 
+        {
+            _gameModeBtn.Unlock();
+            _freecamBtn.Unlock();
+        }
+
         _starMode = !_starMode;
 
         MenuFolderImpl* f = _starMode ? _starred : _folder;

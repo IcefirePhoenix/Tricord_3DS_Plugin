@@ -65,10 +65,6 @@ namespace CTRPluginFramework
 
         Flags.isVisible = false;
 
-        // If the item is starred
-        if (Flags.isStarred)
-            PluginMenuImpl::UnStar(this);
-
         // Else refresh the menu to be sure that we're not currently in a hidden folder
         if (_type == MenuType::Folder)
         {

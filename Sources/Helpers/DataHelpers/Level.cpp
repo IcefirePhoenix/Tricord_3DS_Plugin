@@ -3,8 +3,8 @@
 
 #include <CTRPluginFramework.hpp>
 
-namespace CTRPluginFramework {
-
+namespace CTRPluginFramework 
+{
 	Level::Level(u8 ID, std::string externalName, std::string internalName, bool dummyStatus) :
 		_levelID(ID), _extName(externalName), _intName(internalName), _isDummy(dummyStatus)
 	{
@@ -61,42 +61,61 @@ namespace CTRPluginFramework {
 		// Memory(?) issues with Citra when this array exceeded 0x5E elements...
 	};
 
-	u8 Level::getIDFromName(const std::string& name) {
-		for (int iterator = 0; iterator < 45; ++iterator) {
-			if (levelList[iterator]._extName == name) {
+	u8 Level::getIDFromName(const std::string& name) 
+	{
+		for (int iterator = 0; iterator < 45; ++iterator) 
+		{
+			if (levelList[iterator]._extName == name) 
 				return levelList[iterator]._levelID;
-			}
 		}
 		return -1; // wasn't found
 	}
-	
-	u8 Level::getCurrLevel(void) {
+
+	u8 Level::getPrevLevel(void) 
+	{
+		u8 levelID;
+		Process::Read8(AddressList::PreviousLevelID.addr, levelID);
+
+		return levelID;
+	}
+
+	u8 Level::getCurrLevel(void) 
+	{
 		u8 levelID;
 		Process::Read8(AddressList::CurrLevelID.addr, levelID);
 
 		return levelID;
 	}
 
-	u8 Level::getCurrStage(void) {
+	u8 Level::getCurrStage(void) 
+	{
 		u8 stageID;
 		Process::Read8(AddressList::CurrStageID.addr, stageID);
 
 		return stageID;
 	}
 
-	u32 Level::getElapsedTime(void) {
+	u32 Level::getElapsedTime(void)
+	{
 		u32 elapsedTime;
 		Process::Read32(AddressList::TimeElapsed.addr, elapsedTime);
 
 		return elapsedTime;
 	}
 
-	bool Level::isInDrablands(void) {
+	bool Level::isInDrablands(void) 
+	{
 		u8 level = getCurrLevel();
-		return (getCurrLevel() > 0x3) && (level < 0x62);
+		return (level >= getIDFromName("Deku Forest")) && (level <= getIDFromName("Baneful Zone"));
 	}
 
-	bool Level::hasStageBegan(void) {
-		return Level::getElapsedTime() >= 0x00000000;
+	bool Level::hasStageBegan(void) 
+	{
+		return Level::getElapsedTime() >= 0x0;
+	}
+
+	bool Level::hasCertainTimeElapsed(int time)
+	{
+		return Level::getElapsedTime() >= static_cast<u32>(time);	
 	}
 }

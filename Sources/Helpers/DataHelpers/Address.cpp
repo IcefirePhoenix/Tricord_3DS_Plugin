@@ -2,9 +2,10 @@
 #include "CTRPluginFramework/System/Process.hpp"
 
 namespace CTRPluginFramework {
-	Address::Address(u32 usa, u32 eur, u32 jpn, u32 kor) {
-		switch (Process::GetTitleID()) {
-
+	Address::Address(u32 usa, u32 eur, u32 jpn, u32 kor) 
+	{
+		switch (Process::GetTitleID()) 
+		{
 			case TID_USA:
 				addr = usa; 
 				break;
@@ -30,12 +31,24 @@ namespace CTRPluginFramework {
 		}
 	}
 
-	Address::Address(u32 address) {
+	Address::Address(u32 address) 
+	{
 		addr = address;
 	};
 
-	Address::Address(void) {
+	// this might need to be removed
+	// null addresses aren't needed for Tricord
+	Address::Address(void) 
+	{
 		addr = 0;
 	};
 
+	// TODO: review this
+	void Address::InitMemoryRange(void)
+	{
+		// Address startAddress (0x30000000);
+		// u32 dataRange = 0x10000000;
+
+		// _memOffset = Process::CheckRegion(startAddress.addr, dataRange) ? 0x0 : 0x14000000;
+	}
 }
