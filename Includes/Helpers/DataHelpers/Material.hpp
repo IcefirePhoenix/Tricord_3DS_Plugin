@@ -19,6 +19,8 @@ namespace CTRPluginFramework {
         static int selectMaterialIndiv(int selectedWorld);
         static int selectMaterialWorld(void);
         static std::string getMaterialName(int world, int mat);
+        static int getMaterialCount(int materialID);
+
     };
 }
 #endif

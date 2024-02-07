@@ -6,7 +6,6 @@
 #include "Main/Emotes.hpp"
 #include "Main/Gameplay.hpp"
 #include "Main/Item.hpp"
-#include "Main/LinkColor.hpp"
 #include "Main/Miscellaneous.hpp"
 #include "Main/Player.hpp"
 #include "Main/Rendering.hpp"
@@ -18,9 +17,9 @@
 
 namespace CTRPluginFramework {
     void InitFreecamCodes(PluginMenu& menu);
-    void InitGameplayCodes(PluginMenu& menu);
+    void InitGameModes(PluginMenu& menu);
+    void InitGameplayFolder(PluginMenu& menu);
     void InitEmoteFolder(PluginMenu& menu);
-    void InitColorFolder(PluginMenu& menu);
     void InitCostumeFolder(PluginMenu& menu);
     void InitMiscFolder(PluginMenu& menu);
     void InitPlayerFolder(PluginMenu& menu);

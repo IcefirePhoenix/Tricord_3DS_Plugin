@@ -27,6 +27,8 @@ namespace CTRPluginFramework
 	float heightSensitivity = 0.6;
 	float zoomSensitivity = 0.03;
 	float rotationSensitivity = 0.5;
+	// float CS_DP_ShiftDistance;
+	// 
 
 	u32 cameraXrawValue;
 	u32 cameraZrawValue;

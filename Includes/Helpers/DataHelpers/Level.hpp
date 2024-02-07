@@ -11,12 +11,14 @@ namespace CTRPluginFramework {
 		static const Level levelList[];
 
 		static u8 getIDFromName(const std::string& name);
+		static u8 getPrevLevel(void);
 		static u8 getCurrLevel(void);
 		static u8 getCurrStage(void);
 		static u32 getElapsedTime(void);
 
 		static bool isInDrablands(void);
 		static bool hasStageBegan(void);
+		static bool hasCertainTimeElapsed(int time);
 
 	private:
 		u8				_levelID;

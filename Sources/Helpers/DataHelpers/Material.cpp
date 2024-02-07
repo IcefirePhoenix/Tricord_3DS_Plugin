@@ -1,4 +1,5 @@
 #include "Helpers.hpp"
+#include "AddressList.hpp"
 
 #include <CTRPluginFramework.hpp>
 
@@ -100,7 +101,8 @@ namespace CTRPluginFramework {
         "Fabled Butterfly"
     };
 
-    int Material::selectMaterialWorld(void) {
+    int Material::selectMaterialWorld(void) 
+    {
         StringVector worldSelectionList = GameData::worldList;
 
         worldSelectionList.insert(worldSelectionList.begin(), "Other");
@@ -111,7 +113,8 @@ namespace CTRPluginFramework {
         return chooseWorld.Open();
     }
 
-    int Material::selectMaterialIndiv(int selectedWorld) {
+    int Material::selectMaterialIndiv(int selectedWorld) 
+    {
         u8 chosenMaterial;
         Keyboard chooseMaterial("Select a material:");
 
@@ -166,7 +169,8 @@ namespace CTRPluginFramework {
         return chosenMaterial;
     }
 
-    std::string Material::getMaterialName(int world, int mat) {
+    std::string Material::getMaterialName(int world, int mat) 
+    {
         int finalMatID = mat - 20;
 
         switch (world) {
@@ -190,5 +194,12 @@ namespace CTRPluginFramework {
             return Material::skyMats[finalMatID - 62];
         }
         return "";
+    }
+
+    // TODO: review this 
+    int Material::getMaterialCount(int materialID)
+    {
+        // is this needed
+        return 0;
     }
 }

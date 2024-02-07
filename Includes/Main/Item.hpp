@@ -10,6 +10,7 @@ namespace CTRPluginFramework {
     float setSpeedKB(void);
     u32 getShadowItemAddress(void);
     void saveCurrItems(void);
+    void initItemAddresses(void);
     void initShadowItemList(void);
     void readCurrStrafingSpeeds(void);
     void resetCurrStrafingSpeeds(void);
@@ -17,6 +18,7 @@ namespace CTRPluginFramework {
 
     class Item {
     public:
+    	static void removeCurrItems(MenuEntry* entry);
         static void freezeCurrItems(MenuEntry* entry);
         static void itemOpt(MenuEntry* entry);
         static void shadowItemOpt(MenuEntry* entry);

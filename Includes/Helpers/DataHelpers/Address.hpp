@@ -8,6 +8,12 @@
 #define TID_JPN 		0x0004000000176E00
 #define TID_KOR 		0x0004000000182B00
 
+// add alternate titleIDs
+#define TID_TWN 		0x0004000000FFFFFF
+#define TID_CHN 		0x0004000000FFFFFF
+#define TID_DEMO 		0x0004000000FFFFFF
+
+
 namespace CTRPluginFramework {
 	class Address {
 	public:		
@@ -23,7 +29,11 @@ namespace CTRPluginFramework {
 		T Call(Args ...args) {
 			return((T(*)(Args...))(addr))(args...);
 		};
-	
+
+		void InitMemoryRange(void);
+
+	private:
+		s32		_memOffset;
 	};
 }
 #endif

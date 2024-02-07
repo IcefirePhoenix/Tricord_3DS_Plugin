@@ -7,6 +7,8 @@
 #include "Unicode.h"
 
 namespace CTRPluginFramework {
+    void manageEnemy(bool keepAlive);
+
     class Gameplay {
     public:
         static void infEnergy(MenuEntry* entry);

@@ -14,6 +14,7 @@ namespace CTRPluginFramework
         LevelStatusEditor(const std::string &message, StringVector levelNames, int world, int _playMode);
         ~LevelStatusEditor(void);
 
+        void    initBitstringAddresses(void);
         void    operator()(void);
         void    setCheckboxes(int world);
         int     getBit(int index, int rowNum);
@@ -26,6 +27,7 @@ namespace CTRPluginFramework
         void    _DrawTop(void) const;
         void    _DrawBottom(void);
         void    _Update(void);
+        void    _EditDoTCompletion(void);
 
         int                     _world;
         int                     _playMode;

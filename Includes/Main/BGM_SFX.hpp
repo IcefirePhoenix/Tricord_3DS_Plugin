@@ -17,6 +17,7 @@ namespace CTRPluginFramework {
         static void bgmVolSet(MenuEntry* entry);
         static void lobbyBallSong(MenuEntry* entry);
         static void storeSelSong(u32 song);
+        static u32 getLobbyBallSongAddress(void);
         static u32 getSelSong(void);
         static void writeLobbyBallSel(MenuEntry* entry);
         static int selLobbyBallSong(void);

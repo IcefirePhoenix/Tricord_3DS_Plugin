@@ -38,6 +38,7 @@ namespace CTRPluginFramework {
 		static int selWorld(bool useDoT);
 		static std::string worldIDToStr(int worldID);
 		static std::string getVoiceAsStr(u8 ID);
+		static u32 getLobbyBallDataAddress(void);
 	};
 }
 #endif

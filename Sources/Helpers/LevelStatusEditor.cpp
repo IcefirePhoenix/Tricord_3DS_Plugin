@@ -17,12 +17,8 @@ namespace CTRPluginFramework
 {
     /* loosely based on HotkeyModifier class */
 
-    const u32 bitstringLocations[3][4] = {
-        AddressList::SoloNCCompletion.addr, AddressList::SoloC1Completion.addr, AddressList::SoloC2Completion.addr, AddressList::SoloC3Completion.addr,
-        AddressList::MultiNCCompletion.addr, AddressList::MultiC1Completion.addr, AddressList::MultiC2Completion.addr, AddressList::MultiC3Completion.addr,
-        AddressList::NormalNCCompletion.addr, AddressList::NormalC1Completion.addr, AddressList::NormalC2Completion.addr, AddressList::NormalC3Completion.addr
-    };
-
+    u32 bitstringLocations[3][4];
+    
     LevelStatusEditor::LevelStatusEditor(const std::string &message, StringVector levelNames, int world, int playMode) :
         _message(message), _levelNames(levelNames), _world(world), _playMode(playMode)
     {
@@ -47,6 +43,7 @@ namespace CTRPluginFramework
             _checkboxes.push_back(newButton);
         }
 
+        initBitstringAddresses();
         setCheckboxes(world);
     }
 
@@ -56,22 +53,43 @@ namespace CTRPluginFramework
 
     u64 challenge[4]; // array elements: noChallenge, challenge1, challenge2, challenge3
 
-    void LevelStatusEditor::copyBitstrings(int playMode) {
-        for (int iterator = 0; iterator < 4; ++iterator) {
-            challenge[iterator] = bitstringLocations[playMode][iterator];
+    void LevelStatusEditor::initBitstringAddresses(void)
+    {
+        Address bitstringArray[3][4] = {
+            {AddressList::SoloNCCompletion, AddressList::SoloC1Completion, AddressList::SoloC2Completion, AddressList::SoloC3Completion},
+            {AddressList::MultiNCCompletion, AddressList::MultiC1Completion, AddressList::MultiC2Completion, AddressList::MultiC3Completion},
+            {AddressList::NormalNCCompletion, AddressList::NormalC1Completion, AddressList::NormalC2Completion, AddressList::NormalC3Completion}
+        };
+
+        for (int i = 0; i < 3; ++i) 
+        {
+            for (int j = 0; j < 4; ++j) 
+                bitstringLocations[i][j] = bitstringArray[i][j].addr;
         }
     }
 
-    void LevelStatusEditor::setCheckboxes(int world) {
+    void LevelStatusEditor::copyBitstrings(int playMode) 
+    {
+        for (int iterator = 0; iterator < 4; ++iterator) 
+        {
+            Process::Read64(bitstringLocations[playMode][iterator], challenge[iterator]);
+            OSD::Notify(std::to_string(bitstringLocations[playMode][iterator]) + "," + std::to_string(challenge[iterator]));
+        }
+    }
+
+    void LevelStatusEditor::setCheckboxes(int world) 
+    {
         int lowRange = 1;
-        int highRange = 4;
+        int highRange = 5;
         int offset = world * 4; // each world takes up 4 bits = 4 levels
 
         copyBitstrings(_playMode);
 
         // reflect current bitstring statuses onto checkboxes during init
-        for (int iterateThruLevels = lowRange + offset; iterateThruLevels < highRange + offset; ++iterateThruLevels) {
-            for (int iterateThruChal = 0; iterateThruChal < 4; ++iterateThruChal) {
+        for (int iterateThruLevels = lowRange + offset; iterateThruLevels < highRange + offset; ++iterateThruLevels) 
+        {
+            for (int iterateThruChal = 0; iterateThruChal < 4; ++iterateThruChal) 
+            {
                 int currRow = iterateThruLevels - (lowRange + offset) + 1;
                 int currCol = iterateThruChal + 1;
 
@@ -83,7 +101,8 @@ namespace CTRPluginFramework
         }
     }
 
-    u32     LevelStatusEditor::getBitstringAddress(int bitstringID, int playMode) {
+    u32     LevelStatusEditor::getBitstringAddress(int bitstringID, int playMode) 
+    {
         return bitstringLocations[playMode][bitstringID];
     }
 
@@ -105,11 +124,13 @@ namespace CTRPluginFramework
             _Update();
 
             // 16 total boxes, loop through columns->rows
-            for (int challengeCol = 0; challengeCol < 4; ++challengeCol) {
-                for (int levelRow = 0; levelRow < 4; ++levelRow) {
+            for (int challengeCol = 0; challengeCol < 4; ++challengeCol) 
+            {
+                for (int levelRow = 0; levelRow < 4; ++levelRow) 
+                {
                     int index = challengeCol * 4 + levelRow;
-
-                    if (_checkboxes[index].GetState()) {
+                    if (_checkboxes[index].GetState()) 
+                    {
                         int bit = getBit(index, levelRow);
                         challenge[challengeCol] |= (1 << bit);
                     }
@@ -119,17 +140,20 @@ namespace CTRPluginFramework
         }
     }
 
-    void    LevelStatusEditor::writeUpdates(int bitstringID) {
-        if (_playMode == 0)  // solo
+    void    LevelStatusEditor::writeUpdates(int bitstringID) 
+    {
+        if (_playMode == 0)         // solo
             Process::Write64(getBitstringAddress(bitstringID, 0), challenge[bitstringID]);
-        else if (_playMode == 1 )// multi
+        else if (_playMode == 1)    // multi
             Process::Write64(getBitstringAddress(bitstringID, 1), challenge[bitstringID]);
 
         // general completion
         Process::Write64(getBitstringAddress(bitstringID, 2), challenge[bitstringID]);
     }
 
-    int     LevelStatusEditor::getBit(int index, int rowNum) {
+// remove index param'
+    int     LevelStatusEditor::getBit(int index, int rowNum) 
+    {
         return (_world * 4) + rowNum;
     }
 
@@ -142,7 +166,8 @@ namespace CTRPluginFramework
         Renderer::DrawSysStringReturn((const u8*)_message.c_str(), 40, posY, 335, Preferences::Settings.MainTextColor);
     }
 
-    const StringVector labels = {
+    const StringVector labels = 
+    {
         "NC",
         "C1",
         "C2",
@@ -170,9 +195,8 @@ namespace CTRPluginFramework
         Renderer::DrawSysString(labels[2].c_str(), 238, yPositions[2], 290, Preferences::Settings.MainTextColor);
         Renderer::DrawSysString(labels[3].c_str(), 268, yPositions[3], 290, Preferences::Settings.MainTextColor);
 
-        for (int i = 0, lvlY = 100; i < 4; ++i, lvlY += 15) {
+        for (int i = 0, lvlY = 100; i < 4; ++i, lvlY += 15) 
             Renderer::DrawSysString(_levelNames[i].c_str(), 38, lvlY, 290, Preferences::Settings.MainTextColor);
-        }
     }
 
     void    LevelStatusEditor::_Update(void)
@@ -184,5 +208,10 @@ namespace CTRPluginFramework
             (*it).Update(isTouched, touchPos);
 
         Window::BottomWindow.Update(isTouched, touchPos);
+    }
+
+    void    LevelStatusEditor::_EditDoTCompletion(void)
+    {
+        // review later...
     }
 }
