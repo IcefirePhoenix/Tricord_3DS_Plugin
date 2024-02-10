@@ -255,10 +255,9 @@ namespace CTRPluginFramework
     void    Preferences::UnloadBackgrounds(void)
     {
         if (bottomBackgroundImage)
-            _bmpCanBeLoaded = true;
-
-        if (bottomBackgroundImage)
         {
+            _bmpCanBeLoaded = true;
+            
             delete bottomBackgroundImage;
             bottomBackgroundImage = nullptr;
         }

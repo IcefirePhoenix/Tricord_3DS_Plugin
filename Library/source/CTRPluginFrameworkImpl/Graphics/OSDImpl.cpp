@@ -133,13 +133,6 @@ namespace CTRPluginFramework
 
     void    OSDImpl::Update(void)
     {
-        if (Preferences::IsEnabled(Preferences::UseFloatingBtn))
-        {
-            FloatingBtn.Update(Touch::IsDown(), IntVector(Touch::GetPosition()));
-            if (FloatingBtn())
-                PluginMenuImpl::ForceOpen();
-        }
-
         if (TryLock())
             return;
 
@@ -270,10 +263,6 @@ namespace CTRPluginFramework
 
     Result      OSDImpl::OnBottomScreenFrame(void)
     {
-        // Floating button
-        if (Preferences::IsEnabled(Preferences::UseFloatingBtn))
-            FloatingBtn.Draw();
-
         // Touch cursor and / or position
         if (Touch::IsDown())
         {

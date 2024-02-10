@@ -584,6 +584,21 @@ namespace CTRPluginFramework
 
         Window::BottomWindow.Draw();
 
+        //int posY = 205;
+
+        /*if (framework)
+            Renderer::DrawString(g_ctrpfText, g_textXpos[0], posY, blank);
+        else
+            Renderer::DrawString(g_copyrightText, g_textXpos[1], posY, blank);
+
+        if (creditClock.HasTimePassed(Seconds(5)))
+        {
+            creditClock.Restart();
+            framework = !framework;
+        }
+
+        posY = 35;*/
+        
         // Draw buttons
         if (ShowNoteBottom)
         {
@@ -813,7 +828,7 @@ namespace CTRPluginFramework
         static int bak = 0;
         std::swap(bak, _selector);
         
-        if (_starMode)
+        if (!_starMode)
         {
             _gameModeBtn.Lock();
             _freecamBtn.Lock();
