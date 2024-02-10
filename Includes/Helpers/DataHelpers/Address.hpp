@@ -30,10 +30,7 @@ namespace CTRPluginFramework {
 			return((T(*)(Args...))(addr))(args...);
 		};
 
-		void InitMemoryRange(void);
-
-	private:
-		s32		_memOffset;
+		static void InitMemoryRange(void);
 	};
 }
 #endif

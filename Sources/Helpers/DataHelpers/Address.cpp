@@ -2,6 +2,8 @@
 #include "CTRPluginFramework/System/Process.hpp"
 
 namespace CTRPluginFramework {
+	u32 _memOffset = 0x0;
+
 	Address::Address(u32 usa, u32 eur, u32 jpn, u32 kor) 
 	{
 		switch (Process::GetTitleID()) 
@@ -29,6 +31,8 @@ namespace CTRPluginFramework {
 				OSD::Notify("Addresses cannot be initialized.", Color::Red);
 				break;
 		}
+
+		addr -= _memOffset;
 	}
 
 	Address::Address(u32 address) 
@@ -43,12 +47,11 @@ namespace CTRPluginFramework {
 		addr = 0;
 	};
 
-	// TODO: review this
 	void Address::InitMemoryRange(void)
 	{
-		// Address startAddress (0x30000000);
-		// u32 dataRange = 0x10000000;
+		u32 startAddress = 0x30000000;
+		u32 dataRange;
 
-		// _memOffset = Process::CheckRegion(startAddress.addr, dataRange) ? 0x0 : 0x14000000;
+		_memOffset = Process::CheckRegion(startAddress, dataRange) ? 0x0 : 0x1C000000;
 	}
 }
