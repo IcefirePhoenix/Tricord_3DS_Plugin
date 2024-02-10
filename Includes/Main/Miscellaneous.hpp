@@ -21,7 +21,7 @@ namespace CTRPluginFramework {
     public:
         static void buttonSpammer(MenuEntry* entry);
         static void managePhotoDisp(MenuEntry* entry);
-        static void instantText(MenuEntry* entry);
+        static void manageInstantText(MenuEntry* entry);
         static void selectLinkBeam(MenuEntry* entry);
         static void setBeamCooldown(MenuEntry* entry);
         static void toggleCameraButton(MenuEntry* entry);

@@ -31,7 +31,7 @@ namespace CTRPluginFramework
         // Controller::InjectKey(Controller::GetKeysDown(true));
     }
 
-    void Miscellaneous::instantText(MenuEntry* entry) 
+    void Miscellaneous::manageInstantText(MenuEntry* entry) 
     {
         useInstantText = !useInstantText;
 
@@ -155,11 +155,12 @@ namespace CTRPluginFramework
     void Miscellaneous::setBeamCooldown(MenuEntry* entry) 
     {
         u32 playerOffset = 0x10000;
+        u8 minBeamCooldownTimer = 0x1E;
 
         for (int iterateThruPlayers = 0; iterateThruPlayers < 3; ++iterateThruPlayers) 
         {
             if (beamStatuses[iterateThruPlayers])
-                Process::Write8(AddressList::SwordBeamCD.addr + (playerOffset * iterateThruPlayers), 0x1E);
+                Process::Write8(AddressList::SwordBeamCD.addr + (playerOffset * iterateThruPlayers), minBeamCooldownTimer);
         }  
     }
 
@@ -222,9 +223,10 @@ namespace CTRPluginFramework
             Process::Write8(AddressList::CameraOnX.addr, getCameraStatus());
     }
 
-    // TODO: proper variable names
     void Miscellaneous::toggleCameraShutter(MenuEntry* entry)
     {
+        u32 shutterVisible = 0x1;
+
         if (entry->Name() == "Disable camera shutter") 
         {
             autoDisableCamShutter->Enable();
@@ -234,18 +236,21 @@ namespace CTRPluginFramework
         {
             autoDisableCamShutter->Disable();
             entry->SetName("Disable camera shutter");
-            Process::Write32(AddressList::CameraShutter.addr, 0x1);
+            Process::Write32(AddressList::CameraShutter.addr, shutterVisible);
         }
     }
 
     void Miscellaneous::writeShutterDisable(MenuEntry* entry)
     {
+        u32 shutterNotVisible = 0x0;
+        u32 shutterVisible = 0x1;
+
         if (Level::isInDrablands())
-            Process::Write8(AddressList::CameraShutter.addr, 0x0);
+            Process::Write8(AddressList::CameraShutter.addr, shutterNotVisible);
         
-        // very last execution when entry is disabled
+        // reset during very last execution after entry is disabled
         if (!entry->IsActivated())
-            Process::Write32(AddressList::CameraShutter.addr, 0x1);
+            Process::Write32(AddressList::CameraShutter.addr, shutterVisible);
     }
 
 }
