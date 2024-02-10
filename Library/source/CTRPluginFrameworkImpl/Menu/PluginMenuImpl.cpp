@@ -208,7 +208,7 @@ namespace CTRPluginFramework
 
                 // If it's a KeyPressed event
                 if (event.type == Event::KeyPressed && inputClock.HasTimePassed(Milliseconds(500))
-                    && (!Preferences::IsEnabled(Preferences::UseFloatingBtn) || _isOpen) && Controller::GetKeysDown() != SystemImpl::RosalinaHotkey)
+                    && Controller::GetKeysDown() != SystemImpl::RosalinaHotkey)
                 {
                     if (Controller::IsKeysPressed(Preferences::MenuHotkeys))
                         isHotkeysDown = true;
