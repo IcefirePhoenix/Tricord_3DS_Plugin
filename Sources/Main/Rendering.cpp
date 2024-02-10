@@ -82,13 +82,19 @@ namespace CTRPluginFramework
         }
 
         u32 forceVisibility = 0x10FFFF00;
-        u8 coordinateOffset = 0x4;
+        u8 visibilityOffset = 0x4, indivCoordinateOffset = 0x4;
+        u8 coordinateOffsetStart = 0x3C;
 
         for (int iterateEdits = 0; iterateEdits < 3; iterateEdits++) 
         {
             Process::Write8(arrowAddresses[iterateEdits], GameData::generalPlayerIDs[iterateEdits]); // set arrow color
-            Process::Write32(arrowAddresses[iterateEdits], forceVisibility);                         // force arrow visibility
-            Process::WriteFloat(arrowAddresses[iterateEdits] + (iterateEdits * coordinateOffset), respawnCoords[0][iterateEdits]); // draw arrow
+            Process::Write32(arrowAddresses[iterateEdits] + visibilityOffset, forceVisibility);      // force arrow visibility
+        }
+
+        for (int iterateArray = 0; iterateArray < 3; iterateArray++) {
+            Process::WriteFloat((arrowAddresses[0] + (iterateArray * 0x4) - coordinateOffsetStart), respawnCoords[0][iterateArray]);
+            Process::WriteFloat((arrowAddresses[1] + (iterateArray * 0x4) - coordinateOffsetStart), respawnCoords[1][iterateArray]);
+            Process::WriteFloat((arrowAddresses[2] + (iterateArray * 0x4) - coordinateOffsetStart), respawnCoords[2][iterateArray]);
         }
     }
 
