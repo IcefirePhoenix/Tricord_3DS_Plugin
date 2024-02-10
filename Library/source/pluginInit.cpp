@@ -239,7 +239,7 @@ namespace CTRPluginFramework
         settings.AllowSearchEngine = true;
         settings.WaitTimeToBoot = Seconds(5.f);
         settings.AreN3DSButtonsAvailable = true;
-        settings.TryLoadSDSounds = true;
+        settings.TryLoadSDSounds = false;
 
         // Set default theme
         FwkSettings::SetThemeDefault();
