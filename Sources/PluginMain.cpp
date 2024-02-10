@@ -215,11 +215,11 @@ namespace CTRPluginFramework {
         
         *miscellaneous += new MenuEntry("Use photo viewer touchscreen toggle", Miscellaneous::managePhotoDisp);
         *miscellaneous += new MenuEntry("Toggle sword beam cooldown", nullptr, Miscellaneous::selectLinkBeam);
-        *miscellaneous += new MenuEntry("Force instant text boxes", nullptr, Miscellaneous::instantText);
+        *miscellaneous += new MenuEntry("Force instant text boxes", nullptr, Miscellaneous::manageInstantText);
         *miscellaneous += new MenuEntry("Set Lobby Ball counter (TODO)", nullptr, Miscellaneous::setLobbyBallCounter);
         *miscellaneous += new MenuEntry("Toggle camera on X button: No edits", nullptr, Miscellaneous::toggleCameraButton);
         *miscellaneous += new MenuEntry("Disable camera shutter", nullptr, Miscellaneous::toggleCameraShutter);
-        
+
         autoWriteCameraStatus = new MenuEntry("Toggle camera status (auto)",  Miscellaneous::writeCameraEdits);
         autoDisableCamShutter = new MenuEntry("Disable camera shutter (auto)", Miscellaneous::writeShutterDisable);
         autoBeamCooldown = new MenuEntry("Set Beam Cooldown (auto)", Miscellaneous::setBeamCooldown);
@@ -330,7 +330,6 @@ namespace CTRPluginFramework {
     {
         if (PluginMenu::GetRunningInstance()->FreecamToggle)
         {
-            
             menuFreecam->Show();
             editFreecamControls->Show();
             editFreecamSen->Show();
@@ -402,9 +401,7 @@ namespace CTRPluginFramework {
         // allows ANY menu-based change to render on new frame
         menu->OnNewFrame = ToggleMenuChange;
 
-        // init auto functions
-        // resetCostume->Enable();
-        autoBeamCooldown->Enable();
+        autoBeamCooldown->Enable(); // TODO: move this
 
         menu->Run();
 
@@ -463,12 +460,13 @@ namespace CTRPluginFramework {
     void    PatchProcess(FwkSettings& settings)
     {
         AddressList::InitAddresses();
+        Address::InitMemoryRange();
 
         if (Preferences::IsEnabled(Preferences::HIDToggle))
-             settings.UseGameHidMemory = true;
+            settings.UseGameHidMemory = true;
 
-        settings.CachedDrawMode = true;
-        settings.ThreadPriority = 0x3E; // try the other end of this range 
+        //settings.CachedDrawMode = true;
+        settings.ThreadPriority = 0x3E;
         
         ToggleTouchscreenForceOn();
     }
