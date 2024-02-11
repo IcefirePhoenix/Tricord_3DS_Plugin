@@ -50,7 +50,6 @@ namespace CTRPluginFramework {
 
 
         static void writeSwordChanges(MenuEntry* entry);
-        static void writeSizeChanges(MenuEntry* entry);
         static void writeJinxChanges(MenuEntry* entry);
         static void writeSpawnChanges(MenuEntry* entry);
         static void writeVisibilityChanges(MenuEntry* entry);

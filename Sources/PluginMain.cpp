@@ -249,7 +249,6 @@ namespace CTRPluginFramework {
         animStoreEditAuto = new MenuEntry("Write Anim edits (auto)", Player::writeAnimStorageChanges);
         colEditAuto = new MenuEntry("Write Collision edits (auto)", Player::writeCollisionChanges);
         swordEditAuto = new MenuEntry("Write Sword edits (auto)", Player::writeSwordChanges);
-        sizeEditAuto = new MenuEntry("Write Size edits (auto)", Player::writeSizeChanges);
     }
 
     void InitItemsFolder(PluginMenu& menu)
