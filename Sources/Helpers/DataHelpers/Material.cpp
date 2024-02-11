@@ -115,7 +115,7 @@ namespace CTRPluginFramework {
 
     int Material::selectMaterialIndiv(int selectedWorld) 
     {
-        u8 chosenMaterial;
+        int chosenMaterial = -1;
         Keyboard chooseMaterial("Select a material:");
 
         switch (selectedWorld) {
@@ -165,7 +165,8 @@ namespace CTRPluginFramework {
             break;
         }
 
-        chosenMaterial = chosenMaterial + 20; // 0-23 are not materials
+        if (chosenMaterial >= 0)
+            chosenMaterial = chosenMaterial + 20; // 0-23 are not materials
         return chosenMaterial;
     }
 

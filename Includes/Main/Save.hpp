@@ -22,11 +22,7 @@ namespace CTRPluginFramework {
         static void mainVoice(MenuEntry* entry);
         static void heroPointCountSet(MenuEntry* entry);
         static void coliseumWinCountSet(MenuEntry* entry);
-        static void merchantSlotA(MenuEntry* entry);
-        static void merchantSlotB(MenuEntry* entry);
-        static void merchantSlotC(MenuEntry* entry);
-        static void merchantSlotD(MenuEntry* entry);
-        static void merchantSlotE(MenuEntry* entry);
+        static void selMerchantSlot(MenuEntry* entry);
         static void resetMerchant(MenuEntry* entry);
         static void selLevelCompletion(MenuEntry* entry);
     };
