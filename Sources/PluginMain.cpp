@@ -287,24 +287,27 @@ namespace CTRPluginFramework {
 
 
         MenuFolder* merchant = new MenuFolder("Street Merchant Codes");
-            merchantA = new MenuEntry("Set 1st material slot", nullptr, Save::merchantSlotA);
-            merchantB = new MenuEntry("Set 2nd material slot", nullptr, Save::merchantSlotB);
-            merchantC = new MenuEntry("Set 3rd material slot", nullptr, Save::merchantSlotC);
-            merchantD = new MenuEntry("Set 4th material slot", nullptr, Save::merchantSlotD);
-            merchantE = new MenuEntry("Set 5th material slot", nullptr, Save::merchantSlotE);
+            merchantA = new MenuEntry("Set 1st material slot", nullptr, Save::selMerchantSlot);
+            merchantB = new MenuEntry("Set 2nd material slot", nullptr, Save::selMerchantSlot);
+            merchantC = new MenuEntry("Set 3rd material slot", nullptr, Save::selMerchantSlot);
+            merchantD = new MenuEntry("Set 4th material slot", nullptr, Save::selMerchantSlot);
+            merchantE = new MenuEntry("Set 5th material slot", nullptr, Save::selMerchantSlot);
             *merchant += new MenuEntry("Force re-stock Street Merchant stall", nullptr, Save::resetMerchant);
 
-            merchantA->SetAltIcon(true);
-            merchantB->SetAltIcon(true);
-            merchantC->SetAltIcon(true);
-            merchantD->SetAltIcon(true);
-            merchantE->SetAltIcon(true);
+            MenuEntry* slots[5] = {
+                merchantA,
+                merchantB,
+                merchantC,
+                merchantD,
+                merchantE
+            };
 
-            *merchant += merchantA;
-            *merchant += merchantB;
-            *merchant += merchantC;
-            *merchant += merchantD;
-            *merchant += merchantE;
+            for (int iterator = 0; iterator < 5; ++iterator)
+            {
+                slots[iterator]->SetAltIcon(true);      // remove icon
+                slots[iterator]->SetArg(reinterpret_cast<void*>(iterator * 2));  // slot IDs are even numbers
+                *merchant += slots[iterator];
+            }
 
         *save += merchant;
     }
