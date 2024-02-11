@@ -222,12 +222,6 @@ namespace CTRPluginFramework
         }
     }
 
-    void Player::writeSizeChanges(MenuEntry* entry) 
-    {
-        if (PlayerSizes > 0.0)
-            Process::WriteFloat(AddressList::PlayerModelSize.addr, PlayerSizes);
-    }
-
     /*-------------------------*/
 
     void Player::setSwordChanges(MenuEntry* entry) 
@@ -248,12 +242,12 @@ namespace CTRPluginFramework
         if (entry->Name() == "Set custom player model size") {
             openToggleMenu("Player Size Menu", PLAYER_SIZE);
             entry->SetName("Disable custom player size edits");
-            sizeEditAuto->Enable();
+
+            if (PlayerSizes > 0.0)
+                Process::WriteFloat(AddressList::PlayerModelSize.addr, PlayerSizes);
         }
         else {
             entry->SetName("Set custom player model size");
-            sizeEditAuto->Disable();
-
             Process::WriteFloat(AddressList::PlayerModelSize.addr, 1.0);
         }
     }
