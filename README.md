@@ -1,4 +1,4 @@
-A multipurpose cheat plugin for The Legend of Zelda: Tri Force Heroes. Based on the CTRPluginFramework written by Nanquitas and managed by ThePixellizer group. The original framework library can be found [here](https://gitlab.com/thepixellizeross/ctrpluginframework/-/tree/develop/Library?ref_type=heads) for reference.
+A multipurpose cheat utility plugin for The Legend of Zelda: Tri Force Heroes. Based on the CTRPluginFramework written by Nanquitas and managed by ThePixellizer group. The original framework library can be found [here](https://gitlab.com/thepixellizeross/ctrpluginframework/-/tree/develop/Library?ref_type=heads) for reference.
 
 Compatible with all major regional releases of TFH on version 2.1.0:
 - North America
@@ -10,14 +10,14 @@ Runnable on:
 - Nintendo 2/3DS hardware running Luma3DS, preferably v13.0 or higher.
 - Citra emulator 
   - Canary build: version 2765 or higher
-  -  Nightly build: version 2087 or higher
+  - Nightly build: version 2087 or higher
 
 Online Play is currently supported on Nintendo Network, and will continue to be supported until official server shutdown on April 8, 2024. Pretendo Network support is TBD.
 
 Major features include:
 - Custom level map loader (requires additional configuration detailed in the wiki)
-- Freecam, with touchscreen or button-based controls
-- Custom gameplay modes, which are also playable via online multiplayer
+- Freecam with button-based controls
+- Custom gameplay modes, some of which are also playable via online multiplayer
 - Visual and UI improvement option(s) for vanilla gameplay
 - Ability to edit the default emote selector(s)
 - Live/real-time respawn location trackers
@@ -56,7 +56,7 @@ If you have come across a consistent crash, please be sure to upload an image of
 ## HID-related ErrDisp
 CTRPF plugins, including Tricord, may conflict with existing installations of wumiibo depending on your console model. If you are consistently running into ErrDisp errors related to the HID module and are NOT a wumiibo user, please contact WinterPhoenix with a screenshot of your ErrDisp details. 
 
-Before troubleshooting, it is recommended to try loading the default plugin found [here] to verify that the issue is independent from Tricord. If the problem persists, it is likely due to wumiibo. From here, you can either:
+Before troubleshooting, it is recommended to try loading the default plugin found [here](https://github.com/PabloMK7/CTRPluginFramework-BlankTemplate/releases/tag/v0.7.4) to verify that the issue is not Tricord-specific. If the problem persists, it is likely due to wumiibo. From here, you can either:
 
 - Disable wumiibo or uninstall it completely.
 - OR if you do not want to uninstall wumiibo: try toggling **Disable HID memory allocation** in the Settings menu *and* restarting your console.
