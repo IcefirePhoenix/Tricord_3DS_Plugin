@@ -9,7 +9,7 @@ include $(DEVKITARM)/3ds_rules
 
 CTRPFLIB	?=	$(CURDIR)/Library
 
-TARGET		:= 	$(notdir $(CURDIR))
+TARGET		:= 	Tricord
 PLGINFO 	:= 	CTRPluginFramework.plgInfo
 
 BUILD		:= 	Build
