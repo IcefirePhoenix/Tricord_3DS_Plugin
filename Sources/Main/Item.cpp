@@ -33,25 +33,18 @@ namespace CTRPluginFramework
 		}
 	}
 
-	void Item::freezeCurrItems(MenuEntry* entry) 
+	void Item::manageItems(MenuEntry* entry) 
 	{
-		if (entry->WasJustActivated()) saveCurrItems();
+		if (entry->WasJustActivated()) 
+			saveCurrItems();
 
-		for (int iterateThruPlayers = 0; iterateThruPlayers < 3; ++iterateThruPlayers) 
-		{
-			u32 playerOffset = iterateThruPlayers * GameData::playerAddressOffset;
-			Process::Write8(AddressList::CurrentItem.addr + playerOffset, currItems[iterateThruPlayers]);
-		}
-	}
-
-	void Item::removeCurrItems(MenuEntry* entry) 
-	{
 		u8 noItem = 0x9;
-
 		for (int iterateThruPlayers = 0; iterateThruPlayers < 3; ++iterateThruPlayers) 
 		{
 			u32 playerOffset = iterateThruPlayers * GameData::playerAddressOffset;
-			Process::Write8(AddressList::CurrentItem.addr + playerOffset, noItem);
+			u8 item = (entry->Name() == "Remove current items") ? noItem : currItems[iterateThruPlayers];
+
+			Process::Write8(AddressList::CurrentItem.addr + playerOffset, item);
 		}
 	}
 
@@ -78,7 +71,6 @@ namespace CTRPluginFramework
 
 			if (useShadow)
 			{
-				// TODO: fix indexing 
 				std::string itemIndex = (currItems[checkItems] == 0x9) ?  itemList[0] : itemList[currItems[checkItems]]; 
 				str.append(prefix + letter + ": " + itemIndex);
 			}

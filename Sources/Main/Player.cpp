@@ -189,7 +189,7 @@ namespace CTRPluginFramework
         u8 animStoredB = 0x0;
         u8 notStoredB = 0xFF;
 
-        if (PlayerAnimation::getCurrAnim(static_cast<u8>(GeneralHelpers::getCurrLink())) == PlayerAnimation::getIDFromName("Link_SwimWait")){
+        if (PlayerAnimation::getAnim(static_cast<u8>(GeneralHelpers::getCurrLink()), false) == PlayerAnimation::getIDFromName("Link_SwimWait")){
             writePlayerChanges(16, animStoreStatus, AddressList::IsWaterStorage.addr, animStoredA, notStoredA);
             writePlayerChanges(8, animStoreStatus, AddressList::IsWaterStorage.addr + 0x2, animStoredB, notStoredB);
         }

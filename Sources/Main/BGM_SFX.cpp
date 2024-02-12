@@ -3,7 +3,11 @@
 
 namespace CTRPluginFramework
 {
-    // add to settings for easy loading
+    MenuEntry* masterVol;
+    MenuEntry* BGMVol;
+    MenuEntry* voiceVol;
+    MenuEntry* lowHPVol;
+    MenuEntry* emoteVol;
     MenuEntry* lobbyBallAuto;
 
     u32 _lobbySong = 0xFFFFFFFF;
@@ -23,22 +27,57 @@ namespace CTRPluginFramework
         // not enough info known for this
     }
 
-    void BGM_SFX::masterVolSet(MenuEntry* entry) 
+    u32 getSoundAddress(int entryID) 
     {
-        int sel = selVolPreset();
-
-        Process::WriteFloat(AddressList::MasterVolume.addr, getFloatFromPercentSel(sel));
-        entry->SetName("Master volume: " << getPercentAsStr(sel));
+        switch(entryID)
+        {
+        case 0:
+            return AddressList::MasterVolume.addr;
+        case 1:
+            return AddressList::BGMVolume.addr;
+        case 2:
+        case 3:
+        case 4:
+        default:
+            return 0;
+        }
     }
 
-    void BGM_SFX::bgmVolSet(MenuEntry* entry) 
+    std::string getEntryShortName(int entryID)
     {
-        int sel = selVolPreset();
-
-        Process::WriteFloat(AddressList::BGMVolume.addr, getFloatFromPercentSel(sel));
-        entry->SetName("BGM volume: " << getPercentAsStr(sel));
+        switch(entryID)
+        {
+        case 0:
+            return "Master volume";
+        case 1:
+            return "BGM volume";
+        case 2:
+            return "Link Voice volume";
+        case 3:
+            return "Low Health Alert volume";
+        case 4:
+            return "Emote volume";
+        default:
+            return "";
+        }
     }
 
+    void BGM_SFX::volSet(MenuEntry* entry) 
+    {
+        int sel = selVolPreset();
+        if (sel >= 0)
+        {
+            int entryID = reinterpret_cast<int>(entry->GetArg());
+
+            std::string originalName = getEntryShortName(entryID); 
+            u32 address = getSoundAddress(entryID); 
+        
+            Process::WriteFloat(address, getFloatFromPercentSel(sel));
+            entry->SetName(originalName << ": " << getPercentAsStr(sel));
+        }
+    }
+
+    // TODO: bug fix
     void BGM_SFX::lobbyBallSong(MenuEntry* entry) 
     {
         if (getSelSong() == 0xFFFFFFFF) 
@@ -92,21 +131,6 @@ namespace CTRPluginFramework
 
         return songSel.Open();
     }
-
-    void BGM_SFX::voiceVol(MenuEntry* entry) 
-    {
-        // not enough info known for this
-    }
-    
-    void BGM_SFX::lowHPVol(MenuEntry* entry) 
-    {
-        // not enough info known for this
-    }
-
-    // void BGM_SFX::emoteVol(MenuEntry* entry)
-    // {
-    //     // not enough info known for this
-    // }
 
     std::string BGM_SFX::getPercentAsStr(int selection) 
     {

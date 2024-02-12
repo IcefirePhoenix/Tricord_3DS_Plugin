@@ -18,8 +18,7 @@ namespace CTRPluginFramework {
 
     class Item {
     public:
-    	static void removeCurrItems(MenuEntry* entry);
-        static void freezeCurrItems(MenuEntry* entry);
+	    static void manageItems(MenuEntry* entry);
         static void itemOpt(MenuEntry* entry);
         static void shadowItemOpt(MenuEntry* entry);
         static void strafingSpeedSet(MenuEntry* entry);
