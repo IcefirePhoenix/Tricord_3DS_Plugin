@@ -102,7 +102,12 @@ namespace CTRPluginFramework {
 
         *gameplay += (EntryWithHotkey(new MenuEntry("Make all spawned enemies invincible", Gameplay::enemyInvinci), {
             Hotkey(Key::R | Key::B, "Make all spawned enemies invincible"),
-        }));    }
+        }));
+        
+        *gameplay += new MenuEntry("Infinite energy", Gameplay::infEnergy);
+        *gameplay += new MenuEntry("Set maximum energy", nullptr, Gameplay::maxEnergySet);
+        *gameplay += new MenuEntry("Set energy consumption multiplier", nullptr, Gameplay::energyConsumeMultiplier);
+            }
     
     void InitEmoteFolder (PluginMenu& menu) 
     {

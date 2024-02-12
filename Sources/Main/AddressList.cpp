@@ -57,6 +57,10 @@ namespace CTRPluginFramework {
 		EnemyDataPointer			= Address(0x32989188, 0x00000000, 0x00000000, 0x00000000);
 		HealthCurrent 				= Address(0x32C824F4, 0x32C82574, 0x00000000, 0x00000000);
 		HealthMax 					= Address(0x32C824F5, 0x32C82575, 0x00000000, 0x00000000);
+		EnergyCurrent               = Address(0x328496C4, 0x00000000, 0x00000000, 0x00000000);
+		EnergyMax                   = Address(0x00192644, 0x00000000, 0x00000000, 0x00000000);
+		EnergyMaxPitRecovery        = Address(0x001925F8, 0x00000000, 0x00000000, 0x00000000);
+		EnergyMaxMultiplicand       = Address(0x00192684, 0x00000000, 0x00000000, 0x00000000);
 		LoadingStatus 				= Address(0x319FE1D0, 0x00000000, 0x00000000, 0x00000000);
 		PauseStatus 				= Address(0x3280ED8C, 0x3280EE0C, 0x00000000, 0x00000000);
 		PreviousLevelID				= Address(0x3280EDBC, 0x3280EE3C, 0x00000000, 0x00000000);
@@ -92,9 +96,6 @@ namespace CTRPluginFramework {
 		ActiveLink 					= Address(0x31A03879, 0x31A038D1, 0x00000000, 0x00000000);
 		CurrentAnim 				= Address(0x32849188, 0x32849208, 0x00000000, 0x00000000);
 		CurrentItem 				= Address(0x32841A20, 0x32841AA0, 0x00000000, 0x00000000);
-		Energy 						= Address(0x328496C4, 0x32849744, 0x00000000, 0x00000000);
-		EnergyMax 					= Address(0x328496C5, 0x32849745, 0x00000000, 0x00000000);
-		EnergyMultiplier 			= Address(0x328496CC, 0x00000000, 0x00000000, 0x00000000);
 		//check if jinxed is model or effects also
 		IsInvincible 				= Address(0x32849544, 0x328495C4, 0x00000000, 0x00000000);
 		IsJinxed 					= Address(0x328495AC, 0x3284962C, 0x00000000, 0x00000000);
@@ -210,6 +211,10 @@ namespace CTRPluginFramework {
 	Address		AddressList::EnemyDataPointer;
 	Address		AddressList::HealthCurrent;
 	Address		AddressList::HealthMax;
+	Address     AddressList::EnergyCurrent;
+	Address     AddressList::EnergyMax;
+	Address     AddressList::EnergyMaxPitRecovery;
+	Address     AddressList::EnergyMaxMultiplicand;
 	Address		AddressList::LoadingStatus;
 	Address		AddressList::PauseStatus;
 	Address		AddressList::PreviousLevelID;
@@ -245,9 +250,6 @@ namespace CTRPluginFramework {
 	Address		AddressList::ActiveLink;
 	Address		AddressList::CurrentAnim;
 	Address		AddressList::CurrentItem;
-	Address		AddressList::Energy;
-	Address		AddressList::EnergyMax;
-	Address		AddressList::EnergyMultiplier;
 	Address		AddressList::IsInvincible;
 	Address		AddressList::IsJinxed;
 	Address		AddressList::IsSpawned;
