@@ -5,19 +5,44 @@ namespace CTRPluginFramework
 {
     void Gameplay::infEnergy(MenuEntry* entry) 
     {
-        // TODO: simple 32-bit (8-bit??) write to infinite energy address and repeat for all Links
-        // Note: verify spreadsheet data...
+        // Write 900 since this is the max for the big energy gauge
+        Process::WriteFloat(AddressList::EnergyCurrent.addr, 900);
     }
 
     void Gameplay::maxEnergySet(MenuEntry* entry)
     {
-        // TODO: simple 8-bit write to max energy address and repeat for all Links
-        // Note: verify spreadsheet data...
+        if (entry->Name() == "Set maximum energy") {
+            float newMaxEnergy;
+            Keyboard editMaxEnergy("Maximum energy\n\nDefault value for normal gauge is 600\nDefault value for large gauge is 900");
+            editMaxEnergy.IsHexadecimal(false);
+            if (editMaxEnergy.Open(newMaxEnergy) == 0){
+                entry->SetName("Disable custom maximum energy edits");
+                Process::WriteFloat(AddressList::EnergyMax.addr, newMaxEnergy);
+                Process::WriteFloat(AddressList::EnergyMaxPitRecovery.addr, newMaxEnergy);
+            }
+        }
+        else {
+            entry->SetName("Set maximum energy");
+            Process::WriteFloat(AddressList::EnergyMax.addr, 600);
+            Process::WriteFloat(AddressList::EnergyMaxPitRecovery.addr, 600);
+        }
     }
 
     void Gameplay::energyConsumeMultiplier(MenuEntry* entry)
     {
-        // TODO: simple 32-bit write to energy consumption address and repeat for all Links
+        if (entry->Name() == "Set energy consumption multiplier") {
+            float newMultiplier = 1;
+            Keyboard editEnergyConsumeMultiplier("Energy consumption multiplier");
+            editEnergyConsumeMultiplier.IsHexadecimal(false);
+            if (editEnergyConsumeMultiplier.Open(newMultiplier) == 0 && newMultiplier > 0){
+                entry->SetName("Disable custom energy consumption edits");
+                Process::WriteFloat(AddressList::EnergyMaxMultiplicand.addr, 600*newMultiplier);
+            }
+        }
+        else {
+            entry->SetName("Set energy consumption multiplier");
+            Process::WriteFloat(AddressList::EnergyMaxMultiplicand.addr, 600);
+        }
     }
 
     // checkbox

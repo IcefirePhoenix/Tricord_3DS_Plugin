@@ -60,6 +60,10 @@ namespace CTRPluginFramework {
 		static Address		EnemyDataPointer;
 		static Address		HealthCurrent;
 		static Address		HealthMax;
+		static Address      EnergyCurrent;
+		static Address      EnergyMax;
+		static Address      EnergyMaxPitRecovery;
+		static Address      EnergyMaxMultiplicand;
 		static Address		LoadingStatus;
 		static Address		PauseStatus;
 		static Address		PreviousLevelID;
@@ -95,9 +99,6 @@ namespace CTRPluginFramework {
 		static Address		ActiveLink;
 		static Address		CurrentAnim;
 		static Address		CurrentItem;
-		static Address		Energy;
-		static Address		EnergyMax;
-		static Address		EnergyMultiplier;
 		static Address		IsInvincible;
 		static Address		IsJinxed;
 		static Address		IsSpawned;
