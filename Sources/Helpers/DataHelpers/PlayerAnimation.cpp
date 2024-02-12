@@ -54,21 +54,13 @@ namespace CTRPluginFramework {
 		return -1; // wasn't found
 	}
 
-	u8 PlayerAnimation::getCurrAnim(int playerID) 
+	u8 PlayerAnimation::getAnim(int playerID, bool getPrevAnim) 
 	{
 		u8 anim;
 		u32 addressOffset = playerID * GameData::playerAddressOffset;
+		u32 animAddress = getPrevAnim ? AddressList::PreviousAnim.addr : AddressList::CurrentAnim.addr;
 
-		Process::Read8(AddressList::CurrentAnim.addr + addressOffset, anim);
-		return anim;
-	}
-
-	u8 PlayerAnimation::getPrevAnim(int playerID) 
-	{
-		u8 anim;
-		u32 addressOffset = playerID * GameData::playerAddressOffset;
-
-		Process::Read8(AddressList::PreviousAnim.addr + addressOffset, anim);
+		Process::Read8(animAddress + addressOffset, anim);
 		return anim;
 	}
 }

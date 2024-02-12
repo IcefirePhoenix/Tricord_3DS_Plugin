@@ -263,8 +263,8 @@ namespace CTRPluginFramework {
         *items += new MenuEntry("Set current item", nullptr, Item::itemOpt);
         *items += new MenuEntry("Set Shadow Link item", nullptr, Item::shadowItemOpt);
         *items += new MenuEntry("Set strafing speeds", nullptr, Item::strafingSpeedSet);
-        *items += new MenuEntry("Remove current items", nullptr, Item::removeCurrItems);
-        *items += new MenuEntry("Freeze current items", Item::freezeCurrItems);
+        *items += new MenuEntry("Remove current items", nullptr, Item::manageItems);
+        *items += new MenuEntry("Freeze current items", Item::manageItems);
 
         // TODO: *items += new MenuEntry("Always use upgraded Items", Item::upgradeItemAlways);
     }
@@ -289,7 +289,6 @@ namespace CTRPluginFramework {
         *save += new MenuEntry("Set Hero Point count", nullptr, Save::heroPointCountSet);
         *save += new MenuEntry("Set Coliseum Win count", nullptr, Save::coliseumWinCountSet);
         *save += new MenuEntry("Edit Level Completion", nullptr, Save::selLevelCompletion);
-
 
         MenuFolder* merchant = new MenuFolder("Street Merchant Codes");
             merchantA = new MenuEntry("Set 1st material slot", nullptr, Save::selMerchantSlot);
@@ -321,14 +320,28 @@ namespace CTRPluginFramework {
     {
         sound = new MenuFolder("BGM and SFX Codes");
 
-        *sound += new MenuEntry("Master volume: 100%", nullptr, BGM_SFX::masterVolSet);
-        *sound += new MenuEntry("BGM volume: 100%", nullptr, BGM_SFX::bgmVolSet);
+        masterVol = new MenuEntry("Master volume: 100%", nullptr, BGM_SFX::volSet);
+        BGMVol = new MenuEntry("BGM volume: 100%", nullptr, BGM_SFX::volSet);
         //*sound += new MenuEntry("Override current BGM", nullptr, BGM_SFX::bgmSet);
-        *sound += new MenuEntry("(TODO) Link Voice volume: 100%", nullptr, BGM_SFX::voiceVol);
-        *sound += new MenuEntry("(TODO) Low Health Alert volume: 100%", nullptr, BGM_SFX::lowHPVol);
-        //*sound += new MenuEntry("Set Lobby Ball volume", BGM_SFX::lobbyBallVol);
+        voiceVol = new MenuEntry("(TODO) Link Voice volume: 100%", nullptr, BGM_SFX::volSet);
+        lowHPVol = new MenuEntry("(TODO) Low Health Alert volume: 100%", nullptr, BGM_SFX::volSet);
+        // emoteVol += new MenuEntry("(TODO) Emote volume: 100%", nullptr, BGM_SFX::volSet);
+        //*sound += new MenuEntry("Set Lobby Ball volume", BGM_SFX::volSet);
         *sound += new MenuEntry("Choose Lobby Ball song", nullptr, BGM_SFX::lobbyBallSong);
-        // *sound += new MenuEntry("Set Level Completion Fanfare volume", BGM_SFX::levelDoneVol);
+
+        MenuEntry* soundEntries[4] = {
+            masterVol, 
+            BGMVol,
+            voiceVol,
+            lowHPVol,
+            //emoteVol
+        };
+
+        for (int iterator = 0; iterator < 4; ++iterator)
+        {
+            soundEntries[iterator]->SetArg(reinterpret_cast<void*>(iterator));  // store entry IDs
+            *sound += soundEntries[iterator];   
+        }
 
         lobbyBallAuto = new MenuEntry("Write lobby ball edits (auto)", BGM_SFX::writeLobbyBallSel);
     }

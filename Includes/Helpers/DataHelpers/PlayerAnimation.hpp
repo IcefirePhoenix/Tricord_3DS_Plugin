@@ -13,8 +13,7 @@ namespace CTRPluginFramework {
 		static const PlayerAnimation animList[];
 
 		static u8 getIDFromName(const std::string& name);
-		static u8 getCurrAnim(int playerID);
-		static u8 getPrevAnim(int playerID);
+		static u8 getAnim(int playerID, bool getPrevAnim);
 
 	private:
 		u8				_animID;
