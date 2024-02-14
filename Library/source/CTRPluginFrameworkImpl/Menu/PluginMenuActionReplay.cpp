@@ -197,27 +197,32 @@ namespace CTRPluginFramework
             "Create New", "Duplicate", "Open Editor", "", "Delete", "Read Note"
         };
 
-        if (_clipboard == nullptr) {
-            _newBtn.Draw();
-            _noteBtn.Draw();
-            _editorBtn.Draw();
-            _duplicateBtn.Draw();
-            _trashBtn.Draw();
+        Renderer::DrawSysString(labels[0], 205, yCoordA, 290, Preferences::Settings.MainTextColor);
+        _newBtn.Draw();
 
-            Renderer::DrawSysString(labels[0], 205, yCoordA, 290, Preferences::Settings.MainTextColor);
-            Renderer::DrawSysString(labels[1], 205, yCoordB, 290, Preferences::Settings.MainTextColor);
-           
-            if (!_topMenu.GetSelectedItem()->note.empty())
-                Renderer::DrawSysString(labels[5], 75, yCoordB -= 17, 290, Preferences::Settings.MainTextColor);
+        if (_topMenu.GetSelectedItem())
+        {
+            if (_clipboard == nullptr) {
+                _newBtn.Draw();
+                _noteBtn.Draw();
+                _editorBtn.Draw();
+                _duplicateBtn.Draw();
+                _trashBtn.Draw();
 
-            for (int i = 2, yCoord2 = 95; i < 5; ++i, yCoord2 += 28)
-                Renderer::DrawSysString(labels[i], 75, yCoord2, 290, Preferences::Settings.MainTextColor);
+                Renderer::DrawSysString(labels[1], 205, yCoordB, 290, Preferences::Settings.MainTextColor);
+            
+                if (!_topMenu.GetSelectedItem()->note.empty())
+                    Renderer::DrawSysString(labels[5], 75, yCoordB -= 17, 290, Preferences::Settings.MainTextColor);
+
+                for (int i = 2, yCoord2 = 95; i < 5; ++i, yCoord2 += 28)
+                    Renderer::DrawSysString(labels[i], 75, yCoord2, 290, Preferences::Settings.MainTextColor);
+            }
+
+            // cut/paste label
+            const char* swapLabel = (_clipboard != nullptr) ? "Paste" : "Cut";
+            Renderer::DrawSysString(swapLabel, 205, cutPasteY, 290, Preferences::Settings.MainTextColor);
         }
 
-
-        // cut/paste label
-        const char* swapLabel = (_clipboard != nullptr) ? "Paste" : "Cut";
-        Renderer::DrawSysString(swapLabel, 205, cutPasteY, 290, Preferences::Settings.MainTextColor);
     }
 
     void    PluginMenuActionReplay::_ProcessEvent(EventList &eventList)
@@ -460,6 +465,7 @@ namespace CTRPluginFramework
 
         writer.Close();
 
+        // TODO: add ability to restore last saved file
         // If we're here, it means that everything went fine, so delete old file and rename the temporary file
         ActionReplay_OpenCheatsFile(file, true);
 
