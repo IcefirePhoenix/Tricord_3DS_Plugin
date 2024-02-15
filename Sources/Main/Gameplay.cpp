@@ -3,6 +3,9 @@
 
 namespace CTRPluginFramework
 {
+    MenuEntry* physicsEditAuto;
+    u16 physicsStatus;
+
     void Gameplay::infEnergy(MenuEntry* entry) 
     {
         // Write 900 since this is the max for the big energy gauge
@@ -61,7 +64,8 @@ namespace CTRPluginFramework
     // checkbox
     void Gameplay::infFairy(MenuEntry* entry)
     {
-        // do find the correct pointer
+        // Still uncertain if the second address (32D81EE4) is relevant
+        Process::Write8(AddressList::FairiesCurrent.addr, 0xA);
     }
 
     void manageEnemy(bool keepAlive)
@@ -123,15 +127,71 @@ namespace CTRPluginFramework
         Process::Write8(AddressList::ActiveLink.addr, 0x3);
     }
 
-    // or maybe changePhysics (if other similar changes are discovered)
-    void Gameplay::icePhysicsEverywhere(MenuEntry* entry)
+    // gearbox
+    void Gameplay::changePhysics(MenuEntry* entry)
     {
-        
+        if (entry->Name() == "Change ground physics") {
+            Keyboard Physics("Choose a type of physics:");
+            static const StringVector physicsList =
+            {
+                "Water",
+                "Lava",
+                "Ice",
+                "Quicksand"
+            };
+
+            Physics.Populate(physicsList);
+
+            switch(Physics.Open()){
+                case 0:
+                    physicsStatus = 0x0187;
+                    break;
+                case 1:
+                    physicsStatus = 0x0167;
+                    break;
+                case 2:
+                    physicsStatus = 0x0121;
+                    break;
+                case 3:
+                    physicsStatus = 0x00C1;
+                    break;
+                default:
+                    return;
+            }
+
+            entry->SetName("Disable custom ground physics edits");
+            physicsEditAuto->Enable();
+        }
+        else {
+            entry->SetName("Change ground physics");
+            physicsEditAuto->Disable();
+        }
     }
 
-    void Gameplay::infTIme(MenuEntry* entry)
+    void Gameplay::writePhysicsChanges(MenuEntry* entry)
     {
+        // if Link is airborne (anim 02), do not freeze collision (ensures fall zones work properly)
+        // if Link is sinking in quicksand, do not freeze collision (otherwise you sink endlessly)
+        int Link;
+        u32 targetaddr;
+        u32 sinkingaddr;
+        for (Link = 0, targetaddr = AddressList::CollisionCurrent.addr, sinkingaddr = AddressList::CostumeAttrD.addr;
+            Link < 3; Link++, targetaddr += GameData::playerAddressOffset, sinkingaddr += GameData::playerAddressOffset){
+            u8 sinkingval;
+            Process::Read8(sinkingaddr, sinkingval);
+            bool sinking = (sinkingval & 0x80) == 0x80;
+            if (PlayerAnimation::getAnim(Link, false) != 0x2 && !sinking){
+                Process::Write16(targetaddr, physicsStatus);
+            }
+        }
+    }
 
+    void Gameplay::infTime(MenuEntry* entry)
+    {
+        // 0xEA61 --> 1000:0(1)
+        // If the rightmost seconds digit is visible, it always flickers whenever the game tries to tick the timer down
+        // However, we can avoid this flicker by pushing this digit offscreen, by setting the minutes to have 4 digits
+        Process::Write16(AddressList::TimeLeft.addr, 0xEA61);
     }
 
 

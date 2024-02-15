@@ -8,6 +8,7 @@
 
 namespace CTRPluginFramework {
     void manageEnemy(bool keepAlive);
+    extern MenuEntry* physicsEditAuto;
 
     class Gameplay {
     public:
@@ -20,8 +21,9 @@ namespace CTRPluginFramework {
         static void autoKillEnemy(MenuEntry* entry);
         static void enemyInvinci(MenuEntry* entry);
         static void controlAllPlayers(MenuEntry* entry);
-        static void icePhysicsEverywhere(MenuEntry* entry);
-        static void infTIme(MenuEntry* entry);
+        static void changePhysics(MenuEntry* entry);
+        static void writePhysicsChanges(MenuEntry* entry);
+        static void infTime(MenuEntry* entry);
     }; 
 }
 #endif
