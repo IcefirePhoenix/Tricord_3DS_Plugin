@@ -25,10 +25,12 @@ namespace CTRPluginFramework {
     MenuFolder* chaos;
     MenuFolder* effects;
     MenuFolder* gameplay;
+    MenuFolder* healthFairies;
+    MenuFolder* energy;
+    MenuFolder* enemies;
     MenuFolder* costume;
     MenuFolder* miscellaneous;
     MenuFolder* player;
-    MenuFolder* energy;
     MenuFolder* items;
     MenuFolder* render;
     MenuFolder* save;
@@ -90,23 +92,37 @@ namespace CTRPluginFramework {
     void InitGameplayFolder(PluginMenu& menu)
     {
         gameplay = new MenuFolder("Gameplay Codes");
+        healthFairies = new MenuFolder("Health & Fairies");
+        energy = new MenuFolder("Energy");
+        enemies = new MenuFolder("Enemies");
 
-        *gameplay += new MenuEntry("Infinite health", Gameplay::infHealth);
-        *gameplay += (EntryWithHotkey(new MenuEntry("No health (trigger via hotkey)", Gameplay::noHealth), {
+        *healthFairies += new MenuEntry("Infinite health", Gameplay::infHealth);
+        *healthFairies += (EntryWithHotkey(new MenuEntry("No health (trigger via hotkey)", Gameplay::noHealth), {
             Hotkey(Key::L | Key::R, "Set health to 0"),
         }));
+        *healthFairies += new MenuEntry("Infinite fairies", Gameplay::infFairy);
 
-        *gameplay += (EntryWithHotkey(new MenuEntry("Insta-kill all spawned enemies", Gameplay::autoKillEnemy), {
+        *energy += new MenuEntry("Infinite energy", Gameplay::infEnergy);
+        *energy += new MenuEntry("Set maximum energy", nullptr, Gameplay::maxEnergySet);
+        *energy += new MenuEntry("Set energy consumption multiplier", nullptr, Gameplay::energyConsumeMultiplier);
+
+        *enemies += (EntryWithHotkey(new MenuEntry("Insta-kill all spawned enemies", Gameplay::autoKillEnemy), {
             Hotkey(Key::L | Key::B, "Insta-kill all spawned enemies"),
         }));
 
-        *gameplay += (EntryWithHotkey(new MenuEntry("Make all spawned enemies invincible", Gameplay::enemyInvinci), {
+        *enemies += (EntryWithHotkey(new MenuEntry("Make all spawned enemies invincible", Gameplay::enemyInvinci), {
             Hotkey(Key::R | Key::B, "Make all spawned enemies invincible"),
         }));
         
-        *gameplay += new MenuEntry("Infinite energy", Gameplay::infEnergy);
-        *gameplay += new MenuEntry("Set maximum energy", nullptr, Gameplay::maxEnergySet);
-        *gameplay += new MenuEntry("Set energy consumption multiplier", nullptr, Gameplay::energyConsumeMultiplier);
+        *gameplay += healthFairies;
+        *gameplay += energy;
+        *gameplay += enemies;
+
+        *gameplay += new MenuEntry("Control all players", Gameplay::controlAllPlayers);
+        *gameplay += new MenuEntry("Change ground physics", nullptr, Gameplay::changePhysics);
+        *gameplay += new MenuEntry("Infinite time", Gameplay::infTime);
+
+        physicsEditAuto = new MenuEntry("Write physics edit (auto)", Gameplay::writePhysicsChanges);
             }
     
     void InitEmoteFolder (PluginMenu& menu) 

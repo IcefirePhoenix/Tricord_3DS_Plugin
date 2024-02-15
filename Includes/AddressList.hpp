@@ -32,6 +32,7 @@ namespace CTRPluginFramework {
 		static Address		CostumeAttrA;
 		static Address		CostumeAttrB;
 		static Address		CostumeAttrC;
+		static Address		CostumeAttrD;
 		static Address		CurrCostume;
 		static Address		CostumeCatalogPointer;
 		static Address		PlayerStatus;
@@ -61,9 +62,12 @@ namespace CTRPluginFramework {
 		static Address		HealthCurrent;
 		static Address		HealthMax;
 		static Address      EnergyCurrent;
-		static Address      EnergyMax;
-		static Address      EnergyMaxPitRecovery;
-		static Address      EnergyMaxMultiplicand;
+		static Address		EnergyMax;
+		static Address		EnergyMaxPitRecovery;
+		static Address		EnergyMaxMultiplicand;
+		static Address		FairiesCurrent;
+		static Address		TimeLeft;
+		static Address		CollisionCurrent;
 		static Address		LoadingStatus;
 		static Address		PauseStatus;
 		static Address		PreviousLevelID;
