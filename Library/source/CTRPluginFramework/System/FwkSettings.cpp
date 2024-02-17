@@ -28,7 +28,7 @@ namespace CTRPluginFramework
 
             kb.KeyBackground = kb.Background = Color::Magenta;
             kb.KeyBackgroundPressed = Color::Maroon;
-            kb.Input = kb.KeyTextPressed = kb.KeyText = Color::Gainsboro;
+            kb.Input = kb.Cursor = kb.KeyTextPressed = kb.KeyText = Color::Gainsboro;
             kb.KeyTextDisabled = Color::DimGrey;
         }
 
