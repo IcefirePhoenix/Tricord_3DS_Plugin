@@ -113,4 +113,79 @@ namespace CTRPluginFramework
             entry->SetName("Force visibility of Treasure Chest contents");
         }
     }
+
+    void Rendering::swapLinkTexture(MenuEntry* entry)
+    {
+        int Link, Tex;
+        std::string linkName;
+        static const StringVector linkList =
+        {
+            "Hytopia Link",
+            "Green Link",
+            "Blue Link",
+            "Red Link"
+        };
+
+        Keyboard ChooseLink("Choose which Link's texture to edit:");
+        ChooseLink.Populate(linkList);
+        switch(ChooseLink.Open()){
+            case 0:
+                Link = 0; linkName = "Hytopia";
+                break;
+            case 1:
+                Link = 1; linkName = "Green";
+                break;
+            case 2:
+                Link = 2; linkName = "Blue";
+                break;
+            case 3:
+                Link = 3; linkName = "Red";
+                break;
+            default:
+                return;
+        }
+        
+        Keyboard Texture("Choose a texture to load for "+linkName+" Link:");
+        Texture.Populate(linkList);
+        Tex = Texture.Open();
+        if (Tex >= 0){
+            u32 targetaddr = AddressList::TextureName.addr + Link*0x7;
+            u8 towrite = 0x30 + Tex;
+            Process::Write8(targetaddr, towrite);
+        }
+    }
+
+    void Rendering::swapSPLoadingScreen(MenuEntry* entry)
+    {
+        Keyboard lsType("Choose an appearance for the single player\nno-challenge loading screen:");
+        static const StringVector lsTypeList = 
+        {
+            "Default",
+            "Multiplayer",
+            "Coliseum V1",
+            "Coliseum V2"
+        };
+        lsType.Populate(lsTypeList);
+
+        switch(lsType.Open()){
+            case 0:
+                Process::WriteFloat(AddressList::LoadingScreenSPNoChal.addr, 3);
+                Process::WriteFloat(AddressList::LoadingScreenSPIcons.addr, 3);
+                break;
+            case 1:
+                Process::WriteFloat(AddressList::LoadingScreenSPNoChal.addr, 3);
+                Process::WriteFloat(AddressList::LoadingScreenSPIcons.addr, 0);
+                break;
+            case 2:
+                // Blue and Green panels
+                Process::WriteFloat(AddressList::LoadingScreenSPNoChal.addr, 6);
+                Process::WriteFloat(AddressList::LoadingScreenSPIcons.addr, 5);
+                break;
+            case 3:
+                // Red and Blue panels
+                Process::WriteFloat(AddressList::LoadingScreenSPNoChal.addr, 6);
+                Process::WriteFloat(AddressList::LoadingScreenSPIcons.addr, 6);
+                break;
+        }
+    }
 }

@@ -16,6 +16,8 @@ namespace CTRPluginFramework {
         static void disableScrollingText(MenuEntry* entry);
         static void respawnIndicator(MenuEntry* entry);
         static void seeChestContents(MenuEntry* entry);
+        static void swapLinkTexture(MenuEntry* entry);
+        static void swapSPLoadingScreen(MenuEntry* entry);
     };
 }
 #endif
