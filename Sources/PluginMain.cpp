@@ -28,6 +28,8 @@ namespace CTRPluginFramework {
     MenuFolder* healthFairies;
     MenuFolder* energy;
     MenuFolder* enemies;
+    MenuFolder* physics;
+    MenuFolder* moonJumpFlight;
     MenuFolder* costume;
     MenuFolder* miscellaneous;
     MenuFolder* player;
@@ -95,6 +97,8 @@ namespace CTRPluginFramework {
         healthFairies = new MenuFolder("Health & Fairies");
         energy = new MenuFolder("Energy");
         enemies = new MenuFolder("Enemies");
+        physics = new MenuFolder("Ground Physics");
+        moonJumpFlight = new MenuFolder("Moon Jump & Flight");
 
         *healthFairies += new MenuEntry("Infinite health", Gameplay::infHealth);
         *healthFairies += (EntryWithHotkey(new MenuEntry("No health (trigger via hotkey)", Gameplay::noHealth), {
@@ -113,16 +117,45 @@ namespace CTRPluginFramework {
         *enemies += (EntryWithHotkey(new MenuEntry("Make all spawned enemies invincible", Gameplay::enemyInvinci), {
             Hotkey(Key::R | Key::B, "Make all spawned enemies invincible"),
         }));
+
+        *physics += new MenuEntry("Player 1 (Green): None", nullptr, Gameplay::changePhysicsG);
+        *physics += new MenuEntry("Player 2 (Blue): None", nullptr, Gameplay::changePhysicsB);
+        *physics += new MenuEntry("Player 3 (Red): None", nullptr, Gameplay::changePhysicsR);
+
+        physicsEditAutoG = new MenuEntry("Write physics edit G (auto)", Gameplay::physicsChangeG);
+        physicsEditAutoB = new MenuEntry("Write physics edit B (auto)", Gameplay::physicsChangeB);
+        physicsEditAutoR = new MenuEntry("Write physics edit R (auto)", Gameplay::physicsChangeR);
+
+        moonJumpEntry = (EntryWithHotkey(new MenuEntry("Enable Moon Jump", Gameplay::moonJump), {
+            Hotkey(Key::CPadUp, "Move North"),
+            Hotkey(Key::CPadDown, "Move South"),
+            Hotkey(Key::CPadRight, "Move East"),
+            Hotkey(Key::CPadLeft, "Move West"),
+            Hotkey(Key::X, "Ascend")
+        }));
+        flightEntry = (EntryWithHotkey(new MenuEntry("Enable Flight", Gameplay::flight), {
+            Hotkey(Key::CPadUp, "Move North"),
+            Hotkey(Key::CPadDown, "Move South"),
+            Hotkey(Key::CPadRight, "Move East"),
+            Hotkey(Key::CPadLeft, "Move West"),
+            Hotkey(Key::X, "Ascend"),
+            Hotkey(Key::B, "Descend")
+        }));
+
+        *moonJumpFlight += moonJumpEntry;
+        *moonJumpFlight += flightEntry;
+        *moonJumpFlight += new MenuEntry("Adjust ascent speed: Medium", nullptr, Gameplay::adjustAscentSpeed);
+        *moonJumpFlight += new MenuEntry("Adjust descent speed: Medium", nullptr, Gameplay::adjustDescentSpeed);
+        *moonJumpFlight += new MenuEntry("Adjust lateral speed: Medium", nullptr, Gameplay::adjustLateralSpeed);
         
         *gameplay += healthFairies;
         *gameplay += energy;
         *gameplay += enemies;
+        *gameplay += physics;
+        *gameplay += moonJumpFlight;
 
         *gameplay += new MenuEntry("Control all players", Gameplay::controlAllPlayers);
-        *gameplay += new MenuEntry("Change ground physics", nullptr, Gameplay::changePhysics);
         *gameplay += new MenuEntry("Infinite time", Gameplay::infTime);
-
-        physicsEditAuto = new MenuEntry("Write physics edit (auto)", Gameplay::writePhysicsChanges);
             }
     
     void InitEmoteFolder (PluginMenu& menu) 
@@ -294,6 +327,8 @@ namespace CTRPluginFramework {
         *render += new MenuEntry("Display current respawn location", Rendering::respawnIndicator);
         *render += new MenuEntry("Disable top screen scrolling text", nullptr, Rendering::disableScrollingText);
         *render += new MenuEntry("Force visibility of Treasure Chest contents", nullptr, Rendering::seeChestContents);
+        *render += new MenuEntry("Swap Link textures", nullptr, Rendering::swapLinkTexture);
+        *render += new MenuEntry("Swap single player loading screen", nullptr, Rendering::swapSPLoadingScreen);
     }
 
     void InitSaveFolder(PluginMenu& menu)

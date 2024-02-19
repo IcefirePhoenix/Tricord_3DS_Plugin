@@ -65,6 +65,11 @@ namespace CTRPluginFramework {
 		FairiesCurrent				= Address(0x32D81F14, 0x00000000, 0x00000000, 0x00000000);
 		TimeLeft					= Address(0x32D81F18, 0x00000000, 0x00000000, 0x00000000);
 		CollisionCurrent			= Address(0x328416A4, 0x00000000, 0x00000000, 0x00000000);
+		SpeedX						= Address(0x32841650, 0x00000000, 0x00000000, 0x00000000);
+		SpeedY						= Address(0x32841654, 0x00000000, 0x00000000, 0x00000000);
+		SpeedZ						= Address(0x32841658, 0x00000000, 0x00000000, 0x00000000);
+		TotemCarrying				= Address(0x32849520, 0x00000000, 0x00000000, 0x00000000);
+		TotemCarriedBy				= Address(0x32849524, 0x00000000, 0x00000000, 0x00000000);
 		LoadingStatus 				= Address(0x319FE1D0, 0x00000000, 0x00000000, 0x00000000);
 		PauseStatus 				= Address(0x3280ED8C, 0x3280EE0C, 0x00000000, 0x00000000);
 		PreviousLevelID				= Address(0x3280EDBC, 0x3280EE3C, 0x00000000, 0x00000000);
@@ -134,6 +139,9 @@ namespace CTRPluginFramework {
 		FogC 						= Address(0x31B31BE0, 0x00000000, 0x00000000, 0x00000000);
 		ScrollingTextOpacity 		= Address(0x00151C40, 0x00000000, 0x00000000, 0x00000000);
 		OffScreenLocation 			= Address(0x32D83094, 0x00000000, 0x00000000, 0x00000000);
+		TextureName					= Address(0x3033D7C3, 0x00000000, 0x00000000, 0x00000000);
+		LoadingScreenSPNoChal		= Address(0x002B1410, 0x00000000, 0x00000000, 0x00000000);
+		LoadingScreenSPIcons		= Address(0x00390C08, 0x00000000, 0x00000000, 0x00000000);
 
 		/* Savefile */ 
 		NormalNCCompletion 			= Address(0x31A060EC, 0x00000000, 0x00000000, 0x00000000);
@@ -223,6 +231,11 @@ namespace CTRPluginFramework {
 	Address		AddressList::FairiesCurrent;
 	Address		AddressList::TimeLeft;
 	Address		AddressList::CollisionCurrent;
+	Address		AddressList::SpeedX;
+	Address		AddressList::SpeedY;
+	Address		AddressList::SpeedZ;
+	Address		AddressList::TotemCarrying;
+	Address		AddressList::TotemCarriedBy;
 	Address		AddressList::LoadingStatus;
 	Address		AddressList::PauseStatus;
 	Address		AddressList::PreviousLevelID;
@@ -291,6 +304,9 @@ namespace CTRPluginFramework {
 	Address		AddressList::FogC;
 	Address		AddressList::ScrollingTextOpacity;
 	Address		AddressList::OffScreenLocation;
+	Address		AddressList::TextureName;
+	Address		AddressList::LoadingScreenSPNoChal;
+	Address		AddressList::LoadingScreenSPIcons;
 
 	// Savefile
 	Address		AddressList::NormalNCCompletion;
