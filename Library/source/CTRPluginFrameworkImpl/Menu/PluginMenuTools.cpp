@@ -91,14 +91,14 @@ namespace CTRPluginFramework
         if (Preferences::IsEnabled(Preferences::AutoSaveCheats)) (*item++)->AsMenuEntryImpl().Enable();
         else (*item++)->AsMenuEntryImpl().Disable();
 
-        if (Preferences::IsEnabled(Preferences::AutoSaveFavorites)) (*item++)->AsMenuEntryImpl().Enable();
-        else (*item++)->AsMenuEntryImpl().Disable();
+        // if (Preferences::IsEnabled(Preferences::AutoSaveFavorites)) (*item++)->AsMenuEntryImpl().Enable();
+        // else (*item++)->AsMenuEntryImpl().Disable();
 
-        if (Preferences::IsEnabled(Preferences::AutoLoadCheats)) (*item++)->AsMenuEntryImpl().Enable();
-        else (*item++)->AsMenuEntryImpl().Disable();
+        // if (Preferences::IsEnabled(Preferences::AutoLoadCheats)) (*item++)->AsMenuEntryImpl().Enable(); // unused now
+        // else (*item++)->AsMenuEntryImpl().Disable();
 
-        if (Preferences::IsEnabled(Preferences::AutoLoadFavorites)) (*item)->AsMenuEntryImpl().Enable();
-        else (*item)->AsMenuEntryImpl().Disable();
+        // if (Preferences::IsEnabled(Preferences::AutoLoadFavorites)) (*item)->AsMenuEntryImpl().Enable();
+        // else (*item)->AsMenuEntryImpl().Disable();
 
         item = _miscellaneousMenu.begin();
 
@@ -567,7 +567,7 @@ namespace CTRPluginFramework
 
         // Miscellaneous menu
         _miscellaneousMenu.Append(new MenuEntryTools("Display loaded game files on-screen", _DisplayLoadedFiles, true));
-        _miscellaneousMenu.Append(new MenuEntryTools("Log loaded files to .txt file", _WriteLoadedFiles, true));
+        _miscellaneousMenu.Append(new MenuEntryTools("Log loaded filenames to .txt file (breaks with mods installed)", _WriteLoadedFiles, true));
         _miscellaneousMenu.Append(new MenuEntryTools("Display touchscreen cursor", [] { Preferences::Toggle(Preferences::DrawTouchCursor); }, true, Preferences::IsEnabled(Preferences::DrawTouchCursor)));
         _miscellaneousMenu.Append(new MenuEntryTools("Display touchcreen cursor coordinates", [] { Preferences::Toggle(Preferences::DrawTouchPosition); }, true, Preferences::IsEnabled(Preferences::DrawTouchPosition)));
         _miscellaneousMenu.Append(new MenuEntryTools("Display top screen FPS", [] { Preferences::Toggle(Preferences::ShowTopFps); }, true, Preferences::IsEnabled(Preferences::ShowTopFps)));
@@ -577,12 +577,12 @@ namespace CTRPluginFramework
         _settingsMenu.Append(new MenuEntryTools("Change Tricord menu hotkeys", MenuHotkeyModifier, Icon::DrawGameController));
         _settingsMenu.Append(new MenuEntryTools("Set backlight (Experimental)", EditBacklight, false, false));
         _settingsMenu.Append(new MenuEntryTools("Disable HID memory allocation", [] { Preferences::Toggle(Preferences::HIDToggle); }, true, Preferences::IsEnabled(Preferences::HIDToggle)));
-        _settingsMenu.Append(new MenuEntryTools("Auto-save enabled cheats", [] { Preferences::Toggle(Preferences::AutoSaveCheats); }, true, Preferences::IsEnabled(Preferences::AutoSaveCheats)));
-        _settingsMenu.Append(new MenuEntryTools("Auto-save favorites", [] { Preferences::Toggle(Preferences::AutoSaveFavorites); }, true, Preferences::IsEnabled(Preferences::AutoSaveFavorites)));
-        _settingsMenu.Append(new MenuEntryTools("Auto-load enabled cheats at start-up", [] { Preferences::Toggle(Preferences::AutoLoadCheats); }, true, Preferences::IsEnabled(Preferences::AutoLoadCheats)));
-        _settingsMenu.Append(new MenuEntryTools("Auto-load favorites at start-up", [] { Preferences::Toggle(Preferences::AutoLoadFavorites); }, true, Preferences::IsEnabled(Preferences::AutoSaveFavorites)));
-        _settingsMenu.Append(new MenuEntryTools("Load enabled cheats now", [] { Preferences::LoadSavedEnabledCheats(); }, nullptr));
-        _settingsMenu.Append(new MenuEntryTools("Load favorites now", [] { Preferences::LoadSavedFavorites(); }, nullptr));
+        _settingsMenu.Append(new MenuEntryTools("Automatically re-enable currently active cheats on launch", [] { Preferences::Toggle(Preferences::AutoSaveCheats); Preferences::Toggle(Preferences::AutoLoadCheats); }, true, Preferences::IsEnabled(Preferences::AutoSaveCheats)));
+        //_settingsMenu.Append(new MenuEntryTools("Auto-save favorites", [] { Preferences::Toggle(Preferences::AutoSaveFavorites); }, true, Preferences::IsEnabled(Preferences::AutoSaveFavorites)));
+        //_settingsMenu.Append(new MenuEntryTools("Auto-load enabled cheats at start-up", [] { Preferences::Toggle(Preferences::AutoLoadCheats); }, true, Preferences::IsEnabled(Preferences::AutoLoadCheats)));
+        //_settingsMenu.Append(new MenuEntryTools("Auto-load favorites at start-up", [] { Preferences::Toggle(Preferences::AutoLoadFavorites); }, true, Preferences::IsEnabled(Preferences::AutoSaveFavorites)));
+        //_settingsMenu.Append(new MenuEntryTools("Load enabled cheats now", [] { Preferences::LoadSavedEnabledCheats(); }, nullptr));
+        //_settingsMenu.Append(new MenuEntryTools("Load favorites now", [] { Preferences::LoadSavedFavorites(); }, nullptr));
 
 
         // Get strings x position

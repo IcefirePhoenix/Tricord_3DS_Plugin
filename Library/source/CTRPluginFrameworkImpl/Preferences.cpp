@@ -161,7 +161,7 @@ namespace CTRPluginFramework
 
         if (_cheatsAlreadyLoaded)
         {
-            MessageBox("Error\nCheats already loaded")();
+            //MessageBox("Error\nCheats already loaded")();
             return;
         }
 
@@ -169,7 +169,7 @@ namespace CTRPluginFramework
         {
             if (header.enabledCheatsCount != 0)
                 PluginMenuImpl::LoadEnabledCheatsFromFile(header, settings);
-            _cheatsAlreadyLoaded = true;
+           _cheatsAlreadyLoaded = true;
         }
     }
 
@@ -180,7 +180,7 @@ namespace CTRPluginFramework
 
         if (_favoritesAlreadyLoaded)
         {
-            MessageBox("Error\nFavorites already loaded")();
+            //MessageBox("Error\nFavorites already loaded")();
             return;
         }
 
@@ -190,7 +190,7 @@ namespace CTRPluginFramework
                 PluginMenuImpl::LoadFavoritesFromFile(header, settings);
             _favoritesAlreadyLoaded = true;
         }
-    }
+                    }
 
     void    Preferences::LoadHotkeysFromFile(void)
     {
@@ -286,9 +286,8 @@ namespace CTRPluginFramework
 
             if (IsEnabled(AutoSaveCheats))
                 PluginMenuExecuteLoop::WriteEnabledCheatsToFile(header, settings);
-            if (IsEnabled(AutoSaveFavorites))
-                PluginMenuImpl::WriteFavoritesToFile(header, settings);
 
+            PluginMenuImpl::WriteFavoritesToFile(header, settings);
             PluginMenuImpl::WriteHotkeysToFile(header, settings);
 
             header.size = settings.Tell();
