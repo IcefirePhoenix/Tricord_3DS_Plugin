@@ -68,6 +68,11 @@ namespace CTRPluginFramework {
 		static Address		FairiesCurrent;
 		static Address		TimeLeft;
 		static Address		CollisionCurrent;
+		static Address		SpeedX;
+		static Address		SpeedY;
+		static Address		SpeedZ;
+		static Address		TotemCarrying;
+		static Address		TotemCarriedBy;
 		static Address		LoadingStatus;
 		static Address		PauseStatus;
 		static Address		PreviousLevelID;
@@ -136,6 +141,9 @@ namespace CTRPluginFramework {
 		static Address		FogC;
 		static Address		ScrollingTextOpacity;
 		static Address		OffScreenLocation;
+		static Address		TextureName;
+		static Address		LoadingScreenSPNoChal;
+		static Address		LoadingScreenSPIcons;
 		
 		// Savefile
 		static Address		NormalNCCompletion;
