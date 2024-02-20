@@ -132,10 +132,10 @@ namespace CTRPluginFramework
         std::string result = physicsSelectMenu(0);
         if (result != ""){
             if (result == "None"){
-                entry->SetName("Player 1 (Green): None");
+                entry->SetName("Physics - Player 1 (Green): None");
                 physicsEditAutoG->Disable();
             } else {
-                entry->SetName("Player 1 (Green): "+result);
+                entry->SetName("Physics - Player 1 (Green): "+result);
                 physicsEditAutoG->Enable();
             }
         }
@@ -147,10 +147,10 @@ namespace CTRPluginFramework
         std::string result = physicsSelectMenu(1);
         if (result != ""){
             if (result == "None"){
-                entry->SetName("Player 2 (Blue): None");
+                entry->SetName("Physics - Player 2 (Blue): None");
                 physicsEditAutoB->Disable();
             } else {
-                entry->SetName("Player 2 (Blue): "+result);
+                entry->SetName("Physics - Player 2 (Blue): "+result);
                 physicsEditAutoB->Enable();
             }
         }
@@ -162,10 +162,10 @@ namespace CTRPluginFramework
         std::string result = physicsSelectMenu(2);
         if (result != ""){
             if (result == "None"){
-                entry->SetName("Player 3 (Red): None");
+                entry->SetName("Physics - Player 3 (Red): None");
                 physicsEditAutoR->Disable();
             } else {
-                entry->SetName("Player 3 (Red): "+result);
+                entry->SetName("Physics - Player 3 (Red): "+result);
                 physicsEditAutoR->Enable();
             }
         }
@@ -207,23 +207,19 @@ namespace CTRPluginFramework
 
     void writePhysicsChanges(int Link)
     {
-        // if Link is airborne (anim 02), do not freeze collision (ensures fall zones work properly)
-        // if Link is sinking in quicksand, do not freeze collision (otherwise you sink endlessly if quicksand is active)
-        // if Link is in a totem, do not freeze collision (otherwise you sink immediately when thrown if quicksand is active)
-        // if touching water or lava, do not freeze collision (prevents you from being able to walk on water/lava)
         u16 towrite = physicsStatus[Link];
         u32 offset = Link*GameData::playerAddressOffset;
+        // if Link is sinking in quicksand, do not freeze collision (otherwise you sink endlessly if quicksand is active)
         u8 sinkingval;
         Process::Read8(AddressList::CostumeAttrD.addr + offset, sinkingval);
         bool sinking = (sinkingval & 0x80) == 0x80;
-        u8 totemval;
-        Process::Read8(AddressList::TotemCarriedBy.addr + offset, totemval);
-        bool notCarried = totemval == 0x0;
+        // if Link is airborne (coll 0x1F or 0xA), do not freeze collision
+        // (ensures fall zones work properly, and collision doesn't apply while carried in a totem)
+        // if touching water or lava, do not freeze collision (ensures water/lava acts normally)
         u16 currentcoll;
         Process::Read16(AddressList::CollisionCurrent.addr + offset, currentcoll);
-        bool swimCheck = currentcoll != 0x0187 && currentcoll != 0x0167;
-        u8 currentanim = PlayerAnimation::getAnim(Link, false);
-        if (currentanim != 0x2 && !sinking && notCarried && swimCheck){
+        bool collCheck = currentcoll != 0x0187 && currentcoll != 0x0167 && currentcoll != 0x1F && currentcoll != 0xA;
+        if (!sinking && collCheck){
             Process::Write16(AddressList::CollisionCurrent.addr + offset, towrite);
         }
     }

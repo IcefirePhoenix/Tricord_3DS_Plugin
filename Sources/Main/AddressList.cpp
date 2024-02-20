@@ -33,6 +33,8 @@ namespace CTRPluginFramework {
 		PlayerStatus 				= Address(0x32849511, 0x32849591, 0x00000000, 0x00000000);
 		TingleBalloons 				= Address(0x32849680, 0x32849700, 0x00000000, 0x00000000);
 		UnusedCostumeDataPointers 	= Address(0x0075C390, 0x0075C398, 0x00000000, 0x00000000);
+		BearMinMaxCheckA			= Address(0x005FAACC, 0x00000000, 0x00000000, 0x00000000);
+		BearMinMaxCheckB			= Address(0x005FAAD0, 0x00000000, 0x00000000, 0x00000000);
 
 		/* Console */ 
 
@@ -109,13 +111,13 @@ namespace CTRPluginFramework {
 		IsInvincible 				= Address(0x32849544, 0x328495C4, 0x00000000, 0x00000000);
 		IsJinxed 					= Address(0x328495AC, 0x3284962C, 0x00000000, 0x00000000);
 		IsSpawned 					= Address(0x32841410, 0x32841490, 0x00000000, 0x00000000);
-		IsSwapping 					= Address(0x31A04610, 0x031A04668, 0x00000000, 0x00000000);
+		IsSwapping 					= Address(0x31A04610, 0x31A04668, 0x00000000, 0x00000000);
 		IsWaterStorage				= Address(0x32849231, 0x328492B1, 0x00000000, 0x00000000);
 		IsVisible 					= Address(0x32849550, 0x328495D0, 0x00000000, 0x00000000);
 		LinkVoice 					= Address(0x3284A260, 0x3284A2E0, 0x00000000, 0x00000000);
-		LiveNameColorG 				= Address(0x007767F0, 0x007767F8, 0x00000000, 0x00000000);
-		LiveNameColorB 				= Address(0x007767F4, 0x007767FC, 0x00000000, 0x00000000);
-		LiveNameColorR 				= Address(0x007767F8, 0x00776800, 0x00000000, 0x00000000);
+		LiveNameColorG 				= Address(0x007767F0, 0x007767F8, 0x007767E8, 0x007757D8);
+		LiveNameColorB 				= Address(0x007767F4, 0x007767FC, 0x007767EC, 0x007757DC);
+		LiveNameColorR 				= Address(0x007767F8, 0x00776800, 0x007767F0, 0x007757E0);
 		LockMovement 				= Address(0x31A0115B, 0x31A011B3, 0x00000000, 0x00000000);
 		NoCollision 				= Address(0x32849508, 0x32849588, 0x00000000, 0x00000000);
 		PlayerModelSize 			= Address(0x001FAC64, 0x001FACF4, 0x00000000, 0x00000000);
@@ -201,6 +203,8 @@ namespace CTRPluginFramework {
 	Address		AddressList::UnusedCostumeDataPointers;
 	Address		AddressList::PlayerStatus;
 	Address		AddressList::TingleBalloons;
+	Address		AddressList::BearMinMaxCheckA;
+	Address		AddressList::BearMinMaxCheckB;
 
 	// Emotes
 	Address		AddressList::GameplayEmotes;

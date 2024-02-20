@@ -38,6 +38,8 @@ namespace CTRPluginFramework {
 		static Address		PlayerStatus;
 		static Address		TingleBalloons;
 		static Address		UnusedCostumeDataPointers;
+		static Address		BearMinMaxCheckA;
+		static Address		BearMinMaxCheckB;
 
 		// Emotes
 		static Address		GameplayEmotes;

@@ -69,13 +69,13 @@ namespace CTRPluginFramework {
         menu += chaos;
         menu += costume;
         menu += emotes;
-        menu += miscellaneous;
         menu += player;
         menu += gameplay;
         menu += items;
         menu += render;
         menu += save;
         menu += sound;
+        menu += miscellaneous;
     }
 
     void InitGameModes(PluginMenu& menu)
@@ -93,7 +93,7 @@ namespace CTRPluginFramework {
 
     void InitGameplayFolder(PluginMenu& menu)
     {
-        gameplay = new MenuFolder("Gameplay Codes");
+        gameplay = new MenuFolder("Gameplay");
         healthFairies = new MenuFolder("Health & Fairies");
         energy = new MenuFolder("Energy");
         enemies = new MenuFolder("Enemies");
@@ -118,9 +118,9 @@ namespace CTRPluginFramework {
             Hotkey(Key::R | Key::B, "Make all spawned enemies invincible"),
         }));
 
-        *physics += new MenuEntry("Player 1 (Green): None", nullptr, Gameplay::changePhysicsG);
-        *physics += new MenuEntry("Player 2 (Blue): None", nullptr, Gameplay::changePhysicsB);
-        *physics += new MenuEntry("Player 3 (Red): None", nullptr, Gameplay::changePhysicsR);
+        *physics += new MenuEntry("Physics - Player 1 (Green): None", nullptr, Gameplay::changePhysicsG);
+        *physics += new MenuEntry("Physics - Player 2 (Blue): None", nullptr, Gameplay::changePhysicsB);
+        *physics += new MenuEntry("Physics - Player 3 (Red): None", nullptr, Gameplay::changePhysicsR);
 
         physicsEditAutoG = new MenuEntry("Write physics edit G (auto)", Gameplay::physicsChangeG);
         physicsEditAutoB = new MenuEntry("Write physics edit B (auto)", Gameplay::physicsChangeB);
@@ -160,7 +160,7 @@ namespace CTRPluginFramework {
     
     void InitEmoteFolder (PluginMenu& menu) 
     {
-        emotes = new MenuFolder("Emote Codes");
+        emotes = new MenuFolder("Emotes");
 
         *emotes += (EntryWithHotkey(new MenuEntry("Enable Drablands Emote Swapper", Emotes::drablandEmoteSwapper), {
             Hotkey(Key::DPadLeft, "Swap to original emote set"),
@@ -208,7 +208,7 @@ namespace CTRPluginFramework {
 
     void InitCostumeFolder(PluginMenu& menu)
     {
-        costume = new MenuFolder("Costume Codes");
+        costume = new MenuFolder("Costumes");
 
         triggerCostumeSlots = new MenuEntry("Open Custom Costume Slots", nullptr, Costume::openCustomCostumeSlots);
         menuCostumeSlotA = new MenuEntry("   Set custom costume slot A", nullptr, Costume::selectCostumeID, 
@@ -256,11 +256,13 @@ namespace CTRPluginFramework {
         manageCatalogSize = new MenuEntry("Manage Catalog Size (auto)", Costume::manageCatalogSizeAuto);
         initCustomCostumes = new MenuEntry("Init Custom Costume list (auto)", Costume::initCustomCostumesAuto);
         writeCostumeIDToSlot = new MenuEntry("Write to costume slots (auto)", Costume::writeCostumeSlot);
+
+        *costume += new MenuEntry("Force Bear Minimum / Maximum", nullptr, Costume::forceBearMinMax);
     }
 
     void InitMiscFolder(PluginMenu& menu)
     {
-        miscellaneous = new MenuFolder("Miscellaneous Codes");
+        miscellaneous = new MenuFolder("Miscellaneous");
 
         // broken...
         *miscellaneous += (EntryWithHotkey(new MenuEntry("(TODO) Enable button spam", Miscellaneous::buttonSpammer, "When any of the selected keys are\npressed down, they will automatically spam.\nGood for in-game manuevers that require\nstrict timing of button input(s).\n\nDefault keys: A, B, X, Y, L, R."), {
@@ -281,7 +283,7 @@ namespace CTRPluginFramework {
 
     void InitPlayerFolder(PluginMenu& menu)
     {
-        player = new MenuFolder("Player Codes");
+        player = new MenuFolder("Player");
 
         *player += new MenuEntry("Bypass Doppel Master dialogue cutscene", Player::bypassDoppelDemo);
         *player += new MenuEntry("Enable position save/load touchscreen toggle", Player::posEditor);
@@ -307,7 +309,7 @@ namespace CTRPluginFramework {
 
     void InitItemsFolder(PluginMenu& menu)
     {
-        items = new MenuFolder("Item Codes");
+        items = new MenuFolder("Items");
 
         *items += new MenuEntry("Set current item", nullptr, Item::itemOpt);
         *items += new MenuEntry("Set Shadow Link item", nullptr, Item::shadowItemOpt);
@@ -320,12 +322,13 @@ namespace CTRPluginFramework {
 
     void InitRenderFolder(PluginMenu& menu) 
     {
-        render = new MenuFolder("Rendering Codes");
+        render = new MenuFolder("Rendering");        
 
+        *render += new MenuEntry("Edit top screen scrolling text colors", nullptr, Rendering::editLiveMsgColor);
+        *render += new MenuEntry("Disable top screen scrolling text", nullptr, Rendering::disableScrollingText);
         *render += new MenuEntry("Hide HUD", Rendering::triggerHideHUD);
         *render += new MenuEntry("Disable fog effects", Rendering::disableFog);
         *render += new MenuEntry("Display current respawn location", Rendering::respawnIndicator);
-        *render += new MenuEntry("Disable top screen scrolling text", nullptr, Rendering::disableScrollingText);
         *render += new MenuEntry("Force visibility of Treasure Chest contents", nullptr, Rendering::seeChestContents);
         *render += new MenuEntry("Swap Link textures", nullptr, Rendering::swapLinkTexture);
         *render += new MenuEntry("Swap single player loading screen", nullptr, Rendering::swapSPLoadingScreen);
@@ -333,7 +336,7 @@ namespace CTRPluginFramework {
 
     void InitSaveFolder(PluginMenu& menu)
     {
-        save = new MenuFolder("Savefile Codes");
+        save = new MenuFolder("Save Data Editors");
 
         *save += new MenuEntry("Use Voiceless", Save::useVoiceless);
         *save += new MenuEntry("Set Main Voice", nullptr, Save::mainVoice);
@@ -369,7 +372,7 @@ namespace CTRPluginFramework {
 
     void InitSoundFolder(PluginMenu& menu)
     {
-        sound = new MenuFolder("BGM and SFX Codes");
+        sound = new MenuFolder("BGM & SFX");
 
         masterVol = new MenuEntry("Master volume: 100%", nullptr, BGM_SFX::volSet);
         BGMVol = new MenuEntry("BGM volume: 100%", nullptr, BGM_SFX::volSet);
