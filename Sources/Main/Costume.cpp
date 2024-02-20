@@ -368,4 +368,30 @@ namespace CTRPluginFramework
     {
         // currently unimplemented, ignore for now...
     }
+
+    void Costume::forceBearMinMax(MenuEntry* entry)
+    {
+        Keyboard Bear("Force Bear Minimum or Bear Maximum, or\nReset to restore the Hero Point check.");
+        static const StringVector bearOptions = 
+        {
+            "Reset",
+            "Bear Minimum",
+            "Bear Maximum"
+        };
+        Bear.Populate(bearOptions, true);
+        switch (Bear.Open()){
+            case 0:
+                Process::Patch(AddressList::BearMinMaxCheckA.addr, 0xA3A00001);
+                Process::Patch(AddressList::BearMinMaxCheckB.addr, 0xB3A00000);
+                break;
+            case 1:
+                Process::Patch(AddressList::BearMinMaxCheckA.addr, 0xA3A00000);
+                Process::Patch(AddressList::BearMinMaxCheckB.addr, 0xB3A00000);
+                break;
+            case 2:
+                Process::Patch(AddressList::BearMinMaxCheckA.addr, 0xA3A00001);
+                Process::Patch(AddressList::BearMinMaxCheckB.addr, 0xB3A00001);
+                break;
+        }
+    }
 }

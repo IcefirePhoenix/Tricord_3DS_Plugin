@@ -31,7 +31,7 @@ namespace CTRPluginFramework
         _InfoBtn(Button::Icon | Button::Toggle, IntRect(90, 30, 25, 25), Icon::DrawInfo)
 
     {
-        _root = _folder = new MenuFolderImpl("Main Menu");
+        _root = _folder = new MenuFolderImpl("Main Menu - Code Collection");
         _starredConst = _starred = new MenuFolderImpl("Favorites");
 
         _starMode = false;

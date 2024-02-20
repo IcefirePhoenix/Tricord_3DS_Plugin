@@ -18,6 +18,7 @@ namespace CTRPluginFramework {
         static void seeChestContents(MenuEntry* entry);
         static void swapLinkTexture(MenuEntry* entry);
         static void swapSPLoadingScreen(MenuEntry* entry);
+        static void editLiveMsgColor(MenuEntry* entry);
     };
 }
 #endif

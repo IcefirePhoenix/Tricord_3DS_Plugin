@@ -182,10 +182,40 @@ namespace CTRPluginFramework
                 Process::WriteFloat(AddressList::LoadingScreenSPIcons.addr, 5);
                 break;
             case 3:
-                // Red and Blue panels
+                // Red and Blue panels(
                 Process::WriteFloat(AddressList::LoadingScreenSPNoChal.addr, 6);
                 Process::WriteFloat(AddressList::LoadingScreenSPIcons.addr, 6);
                 break;
         }
     }
+
+    void Rendering::editLiveMsgColor(MenuEntry* entry)
+    {
+        u32 targetaddr;
+        switch (GeneralHelpers::chooseLink()){
+            case 0:
+                targetaddr = AddressList::LiveNameColorG.addr;
+                break;
+            case 1:
+                targetaddr = AddressList::LiveNameColorB.addr;
+                break;
+            case 2:
+                targetaddr = AddressList::LiveNameColorR.addr;
+                break;
+            default:
+                return;
+        }
+
+        Keyboard HexColor("Enter a 6-digit RGB hex code:");
+        HexColor.IsHexadecimal(true);
+        u32 result, newColor;
+        if (HexColor.Open(result) == 0){
+            u8 r = result >> 16;
+            u8 g = result >> 8;
+            u8 b = result;
+            newColor = r + (g << 8) + (b << 16) + (0xFF << 24);
+            Process::Write32(targetaddr, newColor);
+        }
+    }
+
 }
