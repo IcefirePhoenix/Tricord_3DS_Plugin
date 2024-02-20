@@ -484,7 +484,6 @@ namespace CTRPluginFramework
         // Init sysfont
         Font::Initialize();
         {
-            // TODO: if 
             // If /cheats/ doesn't exists, create it
             const char* dirpath = "/cheats";
             if (!Directory::IsExists(dirpath))

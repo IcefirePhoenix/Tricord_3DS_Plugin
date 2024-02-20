@@ -141,7 +141,7 @@ namespace CTRPluginFramework
         _flags.justChanged = true;
         return (true);
     }
-    // Implement a 
+
     bool    MenuEntryImpl::_MustBeRemoved(void) const
     {
         if (_flags.state)

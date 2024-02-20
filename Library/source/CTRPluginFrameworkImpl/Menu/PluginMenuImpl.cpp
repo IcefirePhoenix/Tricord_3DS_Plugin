@@ -162,6 +162,8 @@ namespace CTRPluginFramework
         // Refresh hid
         Controller::Update();
 
+        // set preferences here -> autosaveloadcheats and favorites
+
         // If Start is pressed, don't auto enable the cheats
         if (Controller::IsKeyPressed(Key::Start) || Controller::IsKeyDown(Key::Start))
             Preferences::Clear(Preferences::AutoLoadCheats);
@@ -169,10 +171,9 @@ namespace CTRPluginFramework
         _tools->UpdateSettings();
 
         // Load favorites
-        if (Preferences::IsEnabled(Preferences::AutoLoadFavorites))
-            Preferences::LoadSavedFavorites();
+        Preferences::LoadSavedFavorites();
 
-         // Enable cheats
+        // Enable cheats
         if (Preferences::IsEnabled(Preferences::AutoLoadCheats))
             Preferences::LoadSavedEnabledCheats();
 
@@ -548,8 +549,8 @@ namespace CTRPluginFramework
                 header.favoritesCount = uids.size();
                 header.favoritesOffset = offset;
             }
-        }
-    }
+                            }
+            }
 
     void    PluginMenuImpl::ExtractHotkeys(HotkeysVector &hotkeys, MenuFolderImpl *folder, u32 &size)
     {
