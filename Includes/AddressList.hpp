@@ -81,6 +81,11 @@ namespace CTRPluginFramework {
 		static Address		PreviousStageID;
 		static Address		PreviousSpawnID;
 		static Address		TimeElapsed;
+		static Address		TargetLevelID;
+		static Address		TargetStageID;
+		static Address		TargetSpawnID;
+		static Address		Warp;
+		static Address		ChallengeID;
 
 		// Items
 		static Address		BowStrafe;

@@ -25,6 +25,7 @@ namespace CTRPluginFramework {
     MenuFolder* chaos;
     MenuFolder* effects;
     MenuFolder* gameplay;
+    MenuFolder* warp;
     MenuFolder* healthFairies;
     MenuFolder* energy;
     MenuFolder* enemies;
@@ -94,11 +95,17 @@ namespace CTRPluginFramework {
     void InitGameplayFolder(PluginMenu& menu)
     {
         gameplay = new MenuFolder("Gameplay");
+        warp = new MenuFolder("Instant Warp");
         healthFairies = new MenuFolder("Health & Fairies");
         energy = new MenuFolder("Energy");
         enemies = new MenuFolder("Enemies");
         physics = new MenuFolder("Ground Physics");
         moonJumpFlight = new MenuFolder("Moon Jump & Flight");
+
+        *warp += new MenuEntry("Warp to any location", nullptr, Gameplay::instantWarp);
+        *warp += new MenuEntry("Warp to any stage in current Drablands level", nullptr, Gameplay::stageWarp);
+        doppelEnableAuto = new MenuEntry("Mid-warp Doppel Enable (auto)", Gameplay::midWarpDoppelEnable);
+        challengeEditAuto = new MenuEntry("Challenge ID edit (auto)", Gameplay::writeChallengeEdit);
 
         *healthFairies += new MenuEntry("Infinite health", Gameplay::infHealth);
         *healthFairies += (EntryWithHotkey(new MenuEntry("No health (trigger via hotkey)", Gameplay::noHealth), {
@@ -148,6 +155,7 @@ namespace CTRPluginFramework {
         *moonJumpFlight += new MenuEntry("Adjust descent speed: Medium", nullptr, Gameplay::adjustDescentSpeed);
         *moonJumpFlight += new MenuEntry("Adjust lateral speed: Medium", nullptr, Gameplay::adjustLateralSpeed);
         
+        *gameplay += warp;
         *gameplay += healthFairies;
         *gameplay += energy;
         *gameplay += enemies;
