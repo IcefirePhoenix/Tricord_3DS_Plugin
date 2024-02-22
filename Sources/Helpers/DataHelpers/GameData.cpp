@@ -85,6 +85,27 @@ namespace CTRPluginFramework {
         "No item"
     };
 
+    const StringVector GameData::hytopiaLevelList = {
+        "Hytopia",
+        "Hytopia Shops",
+        "Hytopia Castle"
+    };
+
+    const StringVector GameData::hytopiaShopsStageList = {
+        "Miiverse Gallery",
+        "Madame Couture's",
+        "Daily Riches"
+    };
+
+    const StringVector GameData::hytopiaCastleStageList = {
+        "Entrance",
+        "Single Player Lobby",
+        "Multiplayer Lobby",
+        "Throne Room",
+        "Coliseum Hallway",
+        "Coliseum Lobby"
+    };
+
     const StringVector GameData::worldList = {
         "Woodlands",
         "Riverside",
@@ -157,6 +178,17 @@ namespace CTRPluginFramework {
         "Challenge 1",
         "Challenge 2",
         "Challenge 3"
+    };
+
+    const StringVector GameData::dotZoneList = {
+        "Forest Zone",
+        "Flooded Zone",
+        "Scorching Zone",
+        "Frozen Zone",
+        "Fortified Zone",
+        "Desert Zone",
+        "Shadow Zone",
+        "Baneful Zone"
     };
 
 
@@ -262,8 +294,12 @@ namespace CTRPluginFramework {
             return GameData::dunesLevelList;
         case 6:
             return GameData::ruinsLevelList;
-        default:
+        case 7:
             return GameData::skyLevelList;
+        case 8:
+            return GameData::dotZoneList;
+        default:
+            return {};
         }
     }
 

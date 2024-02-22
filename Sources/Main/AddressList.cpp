@@ -78,6 +78,11 @@ namespace CTRPluginFramework {
 		PreviousStageID				= Address(0x3280EDC0, 0x3280EE40, 0x00000000, 0x00000000);
 		PreviousSpawnID 			= Address(0x3280EDC2, 0x3280EE42, 0x00000000, 0x00000000);
 		TimeElapsed 				= Address(0x3280EDE0, 0x3280EE60, 0x00000000, 0x00000000);
+		TargetLevelID				= Address(0x32C81F10, 0x00000000, 0x00000000, 0x00000000);
+		TargetStageID				= Address(0x32C81F14, 0x00000000, 0x00000000, 0x00000000);
+		TargetSpawnID				= Address(0x32C81F16, 0x00000000, 0x00000000, 0x00000000);
+		Warp						= Address(0x3282C4EC, 0x00000000, 0x00000000, 0x00000000);
+		ChallengeID					= Address(0x32D81E3C, 0x00000000, 0x00000000, 0x00000000);
 
 		/* Items */ 
 		BowStrafe 					= Address(0x0038CC7C, 0x0038D024, 0x00000000, 0x00000000);
@@ -246,6 +251,11 @@ namespace CTRPluginFramework {
 	Address		AddressList::PreviousStageID;
 	Address		AddressList::PreviousSpawnID;	
 	Address		AddressList::TimeElapsed;
+	Address		AddressList::TargetLevelID;
+	Address		AddressList::TargetStageID;
+	Address		AddressList::TargetSpawnID;
+	Address		AddressList::Warp;
+	Address		AddressList::ChallengeID;
 
 	// Items
 	Address		AddressList::BowStrafe;

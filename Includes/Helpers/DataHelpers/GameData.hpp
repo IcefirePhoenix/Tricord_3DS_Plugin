@@ -12,6 +12,10 @@ namespace CTRPluginFramework {
 		static const StringVector swordList;
 		static const StringVector voiceList;
 
+		static const StringVector hytopiaLevelList;
+		static const StringVector hytopiaShopsStageList;
+		static const StringVector hytopiaCastleStageList;
+
 		static const StringVector worldList;
 		static const StringVector woodlandLevelList;
 		static const StringVector riversideLevelList;
@@ -22,6 +26,7 @@ namespace CTRPluginFramework {
 		static const StringVector ruinsLevelList;
 		static const StringVector skyLevelList;
 		static const StringVector challengeList;
+		static const StringVector dotZoneList;
 
 		static const StringVector itemList;
 		static const StringVector lobbyBallSongs;

@@ -15,6 +15,9 @@ namespace CTRPluginFramework {
     void writePhysicsChanges(int Link);
     extern MenuEntry* moonJumpEntry;
     extern MenuEntry* flightEntry;
+    extern MenuEntry* doppelEnableAuto;
+    extern MenuEntry* challengeEditAuto;
+    int chooseDrablandsStage();
 
     class Gameplay {
     public:
@@ -39,6 +42,10 @@ namespace CTRPluginFramework {
         static void adjustDescentSpeed(MenuEntry* entry);
         static void adjustLateralSpeed(MenuEntry* entry);
         static void infTime(MenuEntry* entry);
+        static void instantWarp(MenuEntry* entry);
+        static void stageWarp(MenuEntry* entry);
+        static void midWarpDoppelEnable(MenuEntry* entry);
+        static void writeChallengeEdit(MenuEntry* entry);
     }; 
 }
 #endif

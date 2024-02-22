@@ -8,8 +8,11 @@ namespace CTRPluginFramework
     MenuEntry* physicsEditAutoR;
     MenuEntry* moonJumpEntry;
     MenuEntry* flightEntry;
+    MenuEntry* doppelEnableAuto;
+    MenuEntry* challengeEditAuto;
     u16 physicsStatus[3];
     float ascentSpeed = 0.5, descentSpeed = -0.5, lateralSpeed = 0.09;
+    u8 targetlevel = 1; u8 chalID;
 
     void Gameplay::infEnergy(MenuEntry* entry) 
     {
@@ -410,5 +413,190 @@ namespace CTRPluginFramework
         Process::Write16(AddressList::TimeLeft.addr, 0xEA61);
     }
 
+    void Gameplay::instantWarp(MenuEntry* entry)
+    {
+        u8 targetstage = 1, targetspawn = 0;
+        bool challenge = false; // EXPERIMENTAL - CHALLENGE CHOICE
 
+        Keyboard Location("Choose a location:");
+        static const StringVector locationList =
+        {
+            "Hytopia",
+            "Coliseum",
+            "Drablands",
+            "Den of Trials"
+        };
+        static StringVector levelList;
+
+        Location.Populate(locationList, true);
+
+        switch(Location.Open()){
+            case 0:
+            {
+                // Hytopia Village, Shops, Castle
+                Keyboard HytopiaLevel("Choose a level in Hytopia:");
+                static const StringVector hytopiaLevels = GameData::hytopiaLevelList;
+                HytopiaLevel.Populate(hytopiaLevels, true);
+                int result = HytopiaLevel.Open();
+                if (result < 0) return;
+                targetlevel = Level::getIDFromName(hytopiaLevels[result]);
+                switch(result){
+                    case 0:
+                        // Hytopia Village
+                        targetstage = 1;
+                        break;
+                    case 1:
+                    {
+                        // Hytopia Shops
+                        Keyboard HytopiaShopStage("Choose a stage in Hytopia Shops:");
+                        HytopiaShopStage.Populate(GameData::hytopiaShopsStageList, true);
+                        targetstage = HytopiaShopStage.Open() + 1;
+                        break;
+                    }
+                    case 2:
+                    {
+                        // Hytopia Castle
+                        Keyboard HytopiaCastleStage("Choose a stage in Hytopia Castle:");
+                        HytopiaCastleStage.Populate(GameData::hytopiaCastleStageList, true);
+                        targetstage = HytopiaCastleStage.Open() + 1;
+                        break;
+                    }
+                }
+                break;
+            }
+            case 1:
+            {
+                // Coliseum stages
+                targetlevel = Level::getIDFromName("Coliseum");
+                Keyboard ColiseumStage("Choose a stage in the Coliseum:");
+                ColiseumStage.Populate(GameData::worldList, true);
+                targetstage = ColiseumStage.Open() + 1;
+                break;
+            }
+            case 2:
+            {
+                // Drablands locations
+                int world = GameData::selWorld(false);
+                if (world < 0) return;
+                Keyboard Level("Choose a level:");
+                levelList = GameData::getWorldNamesfromID(world);
+                Level.Populate(levelList, true);
+                int level = Level.Open();
+                if (level < 0) return;
+                targetlevel = Level::getIDFromName(levelList[level]);
+
+                // EXPERIMENTAL - CHALLENGE CHOICE
+                Keyboard Challenge("Choose a challenge:");
+                static const StringVector chalList = GameData::challengeList;
+                Challenge.Populate(chalList, true);
+                chalID = Challenge.Open();
+                if (chalID < 0) return;
+                else if (chalID > 0) challenge = true;
+
+                targetstage = chooseDrablandsStage();
+                break;
+            }
+            case 3:
+            {
+                // Den of Trials lobby and zones
+                Keyboard DoT("Choose an area in the Den of Trials:");
+                static const StringVector dotList = {
+                    "Den of Trials Lobby",
+                    "Forest Zone",
+                    "Flooded Zone",
+                    "Scorching Zone",
+                    "Frozen Zone",
+                    "Fortified Zone",
+                    "Desert Zone",
+                    "Shadow Zone",
+                    "Baneful Zone"
+                };
+                DoT.Populate(dotList, true);
+                int result = DoT.Open();
+                if (result < 0) return;
+                else if (result == 0){
+                    targetlevel = Level::getIDFromName("Den of Trials");
+                    targetstage = 1;
+                } else {
+                    targetlevel = Level::getIDFromName(dotList[result]);
+                    targetstage = chooseDrablandsStage();
+                }
+                break;
+            }
+            default:
+                return;
+        }
+        // Check stage selection (the last step) was successful, if not, abort
+        if (targetstage < 1){
+            return;
+        }
+
+        // Write target level, stage and spawn IDs
+        // Write pointer to warp address
+        Process::Write8(AddressList::TargetLevelID.addr, targetlevel);
+        Process::Write8(AddressList::TargetStageID.addr, targetstage);
+        // TODO: Process::Write8(AddressList::TargetSpawnID.addr, targetspawn);
+        Process::Write32(AddressList::Warp.addr, 0x32C81E28);
+
+        // If a challenge is chosen, write that challenge
+        if (challenge){
+            challengeEditAuto->Enable();
+        }
+
+        // Mid-warp Doppel enable
+        doppelEnableAuto->Enable();
+    }
+
+    void Gameplay::stageWarp(MenuEntry* entry)
+    {
+        // Can only be used if in a Drablands level
+        // Assumption: Current level and stage IDs are still stored as targets
+        // Only need to edit target stage ID and spawn ID and then activate warp
+        u8 currentlevel = Level::getCurrLevel();
+        if ((currentlevel >= Level::getIDFromName("Deku Forest") && currentlevel <= Level::getIDFromName("Sky Temple")) || 
+            (currentlevel >= Level::getIDFromName("Forest Zone") && currentlevel <= Level::getIDFromName("Baneful Zone"))){
+            // Keyboard
+            u8 targetstage = chooseDrablandsStage();
+            Process::Write8(AddressList::TargetLevelID.addr, currentlevel);
+            Process::Write8(AddressList::TargetStageID.addr, targetstage);
+            Process::Write32(AddressList::Warp.addr, 0x32C81E28);
+        }
+    }
+
+    int chooseDrablandsStage()
+    {
+        Keyboard Stage("Choose a stage:");
+        static const StringVector stages =
+        {
+            "Stage 1",
+            "Stage 2",
+            "Stage 3",
+            "Stage 4",
+            "Treasure Room"
+        };
+        Stage.Populate(stages, true);
+        return Stage.Open() + 1;
+    }
+
+    void Gameplay::midWarpDoppelEnable(MenuEntry* entry)
+    {
+        u8 loading;
+        Process::Read8(AddressList::LoadingStatus.addr, loading);
+        if (loading){
+            if (targetlevel >= 4){
+                Process::Write8(AddressList::DoppelsEnabled.addr, 0x1);
+            } else {
+                Process::Write8(AddressList::DoppelsEnabled.addr, 0x0);
+            }
+            entry->Disable();
+        }
+    }
+
+    void Gameplay::writeChallengeEdit(MenuEntry* entry)
+    {
+        Process::Write8(AddressList::ChallengeID.addr, chalID);
+        if (Level::hasStageBegan()){
+            entry->Disable();
+        }
+    }
 }
