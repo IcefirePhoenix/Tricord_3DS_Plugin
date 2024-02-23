@@ -18,6 +18,7 @@ namespace CTRPluginFramework {
     extern MenuEntry* doppelEnableAuto;
     extern MenuEntry* challengeEditAuto;
     int chooseDrablandsStage();
+    extern MenuEntry* controlAllAuto;
 
     class Gameplay {
     public:
@@ -46,6 +47,7 @@ namespace CTRPluginFramework {
         static void stageWarp(MenuEntry* entry);
         static void midWarpDoppelEnable(MenuEntry* entry);
         static void writeChallengeEdit(MenuEntry* entry);
+        static void writePlayerControl(MenuEntry* entry);
     }; 
 }
 #endif

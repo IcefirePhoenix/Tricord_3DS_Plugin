@@ -10,9 +10,11 @@ namespace CTRPluginFramework
     MenuEntry* flightEntry;
     MenuEntry* doppelEnableAuto;
     MenuEntry* challengeEditAuto;
+    MenuEntry* controlAllAuto;
     u16 physicsStatus[3];
     float ascentSpeed = 0.5, descentSpeed = -0.5, lateralSpeed = 0.09;
     u8 targetlevel = 1; u8 chalID;
+    bool controlAuto = false;
 
     void Gameplay::infEnergy(MenuEntry* entry) 
     {
@@ -399,10 +401,27 @@ namespace CTRPluginFramework
         }
     }
 
-    // checkbox
+    // gearbox
     void Gameplay::controlAllPlayers(MenuEntry* entry)
     {
-        Process::Write8(AddressList::ActiveLink.addr, 0x3);
+        if (entry->Name() == "Control all players"){
+            controlAuto = true;
+            controlAllAuto->Enable();
+            entry->SetName("Reset control to Player 1 (Green)");
+        } else {
+            controlAuto = false;
+            controlAllAuto->Disable();
+            Process::Write8(AddressList::ActiveLink.addr, 0x0);
+            Process::Write8(AddressList::CameraLinkFocus.addr, 0x0);
+            entry->SetName("Control all players");
+        }
+    }
+
+    void Gameplay::writePlayerControl(MenuEntry* entry)
+    {
+        if (controlAuto){
+            Process::Write8(AddressList::ActiveLink.addr, 0x3);
+        }
     }
 
     void Gameplay::infTime(MenuEntry* entry)

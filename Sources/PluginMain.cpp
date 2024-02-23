@@ -162,7 +162,9 @@ namespace CTRPluginFramework {
         *gameplay += physics;
         *gameplay += moonJumpFlight;
 
-        *gameplay += new MenuEntry("Control all players", Gameplay::controlAllPlayers);
+        *gameplay += new MenuEntry("Control all players", nullptr, Gameplay::controlAllPlayers);
+        controlAllAuto = new MenuEntry("Control all players (auto)", Gameplay::writePlayerControl);
+
         *gameplay += new MenuEntry("Infinite time", Gameplay::infTime);
             }
     
@@ -332,11 +334,11 @@ namespace CTRPluginFramework {
     {
         render = new MenuFolder("Rendering");        
 
-        *render += new MenuEntry("Edit top screen scrolling text colors", nullptr, Rendering::editLiveMsgColor);
-        *render += new MenuEntry("Disable top screen scrolling text", nullptr, Rendering::disableScrollingText);
         *render += new MenuEntry("Hide HUD", Rendering::triggerHideHUD);
         *render += new MenuEntry("Disable fog effects", Rendering::disableFog);
         *render += new MenuEntry("Display current respawn location", Rendering::respawnIndicator);
+        *render += new MenuEntry("Edit top screen scrolling text colors", nullptr, Rendering::editLiveMsgColor);
+        *render += new MenuEntry("Disable top screen scrolling text", nullptr, Rendering::disableScrollingText);
         *render += new MenuEntry("Force visibility of Treasure Chest contents", nullptr, Rendering::seeChestContents);
         *render += new MenuEntry("Swap Link textures", nullptr, Rendering::swapLinkTexture);
         *render += new MenuEntry("Swap single player loading screen", nullptr, Rendering::swapSPLoadingScreen);
