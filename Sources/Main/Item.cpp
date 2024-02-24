@@ -15,7 +15,7 @@ namespace CTRPluginFramework
     {
         Address temp[6] = {
 			AddressList::BowStrafe, AddressList::FireGloveStrafe, AddressList::WaterRodStrafe,
-			AddressList::GustStrafe, AddressList::RoboStrafe, AddressList::HammerStrafe
+			AddressList::GustStrafe, AddressList::GripshotStrafe, AddressList::HammerStrafe
 		};
 
         for (int iterator = 0; iterator < 3; ++iterator) 
