@@ -304,7 +304,7 @@ namespace CTRPluginFramework {
         *player += new MenuEntry("Enable position save/load touchscreen toggle", Player::posEditor);
 
         *player += (EntryWithHotkey(new MenuEntry("Bring Doppels to your position (with hotkey)", Player::doppelsToPlayer), {
-            Hotkey(Key::L | Key::A, "Bring Doppels to you"),
+            Hotkey(Key::X | Key::DPadDown, "Bring Doppels to you"),
         }));
 
         *player += new MenuEntry("Toggle collision edits (experimental!)", nullptr, Player::setCollisionChanges);
@@ -430,15 +430,16 @@ namespace CTRPluginFramework {
             swapZoom->Show();
 
             chaos->HideWithoutDisable();
+            turbo->HideWithoutDisable();
             costume->HideWithoutDisable();
             emotes->HideWithoutDisable();
-            miscellaneous->HideWithoutDisable();
             player->HideWithoutDisable();
             gameplay->HideWithoutDisable();
             items->HideWithoutDisable();
             render->HideWithoutDisable();
             save->HideWithoutDisable();
             sound->HideWithoutDisable();
+            miscellaneous->HideWithoutDisable();
         }
         else
         {
@@ -450,16 +451,16 @@ namespace CTRPluginFramework {
             if (!PluginMenu::GetRunningInstance()->GameplayToggle)
             {
                 chaos->Hide();
+                turbo->Hide();
                 costume->Show();
                 emotes->Show();
-                miscellaneous->Show();
                 player->Show();
                 gameplay->Show();
                 items->Show();
                 render->Show();
                 save->Show();
                 sound->Show();
-                
+                miscellaneous->Show();
             }
             else
             {
@@ -469,15 +470,16 @@ namespace CTRPluginFramework {
                 swapZoom->HideWithoutDisable();
 
                 chaos->Show();
+                turbo->Show();
                 costume->HideWithoutDisable();
                 emotes->HideWithoutDisable();
-                miscellaneous->HideWithoutDisable();
                 player->HideWithoutDisable();                
                 gameplay->HideWithoutDisable();
                 items->HideWithoutDisable();
                 render->HideWithoutDisable();
                 save->HideWithoutDisable();
                 sound->HideWithoutDisable();
+                miscellaneous->HideWithoutDisable();
             }
         }
     }
