@@ -569,8 +569,6 @@ namespace CTRPluginFramework
     void Gameplay::stageWarp(MenuEntry* entry)
     {
         // Can only be used if in a Drablands level
-        // Assumption: Current level and stage IDs are still stored as targets
-        // Only need to edit target stage ID and spawn ID and then activate warp
         u8 currentlevel = Level::getCurrLevel();
         if ((currentlevel >= Level::getIDFromName("Deku Forest") && currentlevel <= Level::getIDFromName("Sky Temple")) || 
             (currentlevel >= Level::getIDFromName("Forest Zone") && currentlevel <= Level::getIDFromName("Baneful Zone"))){

@@ -72,6 +72,7 @@ namespace CTRPluginFramework {
 
         static void bypassDoppelDemo(MenuEntry* entry);
 
+        static void doppelsToPlayer(MenuEntry* entry);
     };
 }
 #endif
