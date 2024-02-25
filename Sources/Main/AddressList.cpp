@@ -192,7 +192,7 @@ namespace CTRPluginFramework {
 		LiveMsgSpeed				= Address(0x00152180, 0x00000000, 0x00000000, 0x00000000);
 		SwordBeamSpeed				= Address(0x001BD9EC, 0x00000000, 0x00000000, 0x00000000);
 		SpeedDamageUndo				= Address(0x0031663C, 0x00000000, 0x00000000, 0x00000000);
-		BGMSpeed					= Address(0x0050BA48, 0x00000000, 0x00000000, 0x00000000);
+		BGMSFXSpeed					= Address(0x0050BA48, 0x00000000, 0x00000000, 0x00000000);
 		EnergyBarStretch			= Address(0x005AEBDC, 0x00000000, 0x00000000, 0x00000000);
 		SpeedMultiplierNormal		= Address(0x003166A4, 0x00000000, 0x00000000, 0x00000000);
 		SpeedMultiplierCheetah		= Address(0x003166B0, 0x00000000, 0x00000000, 0x00000000);
@@ -211,8 +211,7 @@ namespace CTRPluginFramework {
 		SwimTurnaroundSpeed			= Address(0x003A2294, 0x00000000, 0x00000000, 0x00000000);
 		SwimSpeed					= Address(0x003A2298, 0x00000000, 0x00000000, 0x00000000);
 		ArrowSpeedPlayer			= Address(0x0057E084, 0x00000000, 0x00000000, 0x00000000);
-		FireballHeightA				= Address(0x001854F4, 0x00000000, 0x00000000, 0x00000000);
-		FireballHeightB				= Address(0x001855E0, 0x00000000, 0x00000000, 0x00000000);
+		FireballHeight				= Address(0x001855E0, 0x00000000, 0x00000000, 0x00000000);
 		FireballSpeed				= Address(0x001855DC, 0x00000000, 0x00000000, 0x00000000);
 		FireballBounceHeight		= Address(0x00185DAC, 0x00000000, 0x00000000, 0x00000000);
 		FireballThrowHeight			= Address(0x00186AE8, 0x00000000, 0x00000000, 0x00000000);
@@ -523,7 +522,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::LiveMsgSpeed;
 	Address		AddressList::SwordBeamSpeed;
 	Address		AddressList::SpeedDamageUndo;
-	Address		AddressList::BGMSpeed;
+	Address		AddressList::BGMSFXSpeed;
 	Address		AddressList::EnergyBarStretch;
 	Address		AddressList::SpeedMultiplierNormal;
 	Address		AddressList::SpeedMultiplierCheetah;
@@ -542,8 +541,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::SwimTurnaroundSpeed;
 	Address		AddressList::SwimSpeed;
 	Address		AddressList::ArrowSpeedPlayer;
-	Address		AddressList::FireballHeightA;
-	Address		AddressList::FireballHeightB;
+	Address		AddressList::FireballHeight;
 	Address		AddressList::FireballSpeed;
 	Address		AddressList::FireballBounceHeight;
 	Address		AddressList::FireballThrowHeight;

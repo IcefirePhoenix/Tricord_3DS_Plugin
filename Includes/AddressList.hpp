@@ -194,7 +194,7 @@ namespace CTRPluginFramework {
 		static Address		LiveMsgSpeed;
 		static Address		SwordBeamSpeed;
 		static Address		SpeedDamageUndo;
-		static Address		BGMSpeed;
+		static Address		BGMSFXSpeed;
 		static Address		EnergyBarStretch;
 		static Address		SpeedMultiplierNormal;
 		static Address		SpeedMultiplierCheetah;
@@ -213,8 +213,7 @@ namespace CTRPluginFramework {
 		static Address		SwimTurnaroundSpeed;
 		static Address		SwimSpeed;
 		static Address		ArrowSpeedPlayer;
-		static Address		FireballHeightA;
-		static Address		FireballHeightB;
+		static Address		FireballHeight;
 		static Address		FireballSpeed;
 		static Address		FireballBounceHeight;
 		static Address		FireballThrowHeight;

@@ -23,6 +23,7 @@ namespace CTRPluginFramework {
 
     MenuFolder* emotes;
     MenuFolder* chaos;
+    MenuFolder* turbo;
     MenuFolder* effects;
     MenuFolder* gameplay;
     MenuFolder* warp;
@@ -68,6 +69,7 @@ namespace CTRPluginFramework {
     void AddAllFolders(PluginMenu& menu)
     {
         menu += chaos;
+        menu += turbo;
         menu += costume;
         menu += emotes;
         menu += player;
@@ -90,6 +92,9 @@ namespace CTRPluginFramework {
         *chaos += effects;
 
         *chaos += new MenuEntry("(TODO) Select event trigger interval");
+
+        turbo = new MenuFolder("Turbo Mode by Peanut");
+        *turbo += new MenuEntry("Enable Turbo Mode", nullptr, TurboMode::enableTurboMode);
     }
 
     void InitGameplayFolder(PluginMenu& menu)
@@ -297,6 +302,11 @@ namespace CTRPluginFramework {
 
         *player += new MenuEntry("Bypass Doppel Master dialogue cutscene", Player::bypassDoppelDemo);
         *player += new MenuEntry("Enable position save/load touchscreen toggle", Player::posEditor);
+
+        *player += (EntryWithHotkey(new MenuEntry("Bring Doppels to your position (with hotkey)", Player::doppelsToPlayer), {
+            Hotkey(Key::L | Key::A, "Bring Doppels to you"),
+        }));
+
         *player += new MenuEntry("Toggle collision edits (experimental!)", nullptr, Player::setCollisionChanges);
         *player += new MenuEntry("Toggle animation storage edits", nullptr, Player::setAnimStorageChanges);
         *player += new MenuEntry("Toggle player spawn edits", nullptr, Player::setSpawnChanges);

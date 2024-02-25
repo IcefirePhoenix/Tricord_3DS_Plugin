@@ -14,6 +14,7 @@
 
 #include "Main/AltModes/Chaos.hpp"
 #include "Main/AltModes/Freecam.hpp"
+#include "Main/AltModes/TurboMode.hpp"
 
 namespace CTRPluginFramework {
     void InitFreecamCodes(PluginMenu& menu);

@@ -468,5 +468,27 @@ namespace CTRPluginFramework
         }
     }
 
+    void Player::doppelsToPlayer(MenuEntry* entry)
+    {
+        if (entry->Hotkeys[0].IsPressed()){
+            // Read active Link's position data
+            int Link = GeneralHelpers::getCurrLink();
+            u32 offset = Link*GameData::playerAddressOffset;
+            float x, y, z;
+            Process::ReadFloat(AddressList::PositionX.addr + offset, x);
+            Process::ReadFloat(AddressList::PositionY.addr + offset, y);
+            Process::ReadFloat(AddressList::PositionZ.addr + offset, z);
+
+            // Write position data to all Links with for loop
+            u32 xaddr, yaddr, zaddr;
+            for (Link = 0, xaddr = AddressList::PositionX.addr, yaddr = AddressList::PositionY.addr, zaddr = AddressList::PositionZ.addr;
+            Link < 3; Link++, xaddr += GameData::playerAddressOffset, yaddr += GameData::playerAddressOffset, zaddr += GameData::playerAddressOffset){
+                Process::WriteFloat(xaddr, x);
+                Process::WriteFloat(yaddr, y);
+                Process::WriteFloat(zaddr, z);
+            }
+        }
+    }
+
     // TODO: player face selector
 }
