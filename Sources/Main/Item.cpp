@@ -18,7 +18,7 @@ namespace CTRPluginFramework
 			AddressList::GustStrafe, AddressList::GripshotStrafe, AddressList::HammerStrafe
 		};
 
-        for (int iterator = 0; iterator < 3; ++iterator) 
+        for (int iterator = 0; iterator < 6; ++iterator) 
 		{
             addresses[iterator] = temp[iterator].addr;
         }
