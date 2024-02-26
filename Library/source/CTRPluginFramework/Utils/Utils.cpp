@@ -166,9 +166,10 @@ namespace CTRPluginFramework
         return kb.Open(out, out) != -1;
     }
 
-    static int     SDExplorerInternal(std::string &out, const std::string &filter, bool selDirectory)
+    static int     SDExplorerInternal(std::string &out, const std::string &filter, bool selDirectory, std::string forBackup = "")
     {
-        const char *    opendir =   FONT_A ": Open folder";
+        std::string     backupStatus = "\n\nLast auto-backup created: " + forBackup;
+        const char *    opendir =   "\n\n\n" FONT_A ": Open folder";
         const char *    selFile =   " / Select file\n";
         const char *    selDir =    "\nStart : Select the current folder\n";
         const char *    commands =  FONT_B ": Close folder\n" \
@@ -181,6 +182,7 @@ namespace CTRPluginFramework
 
         footer += selDirectory ? selDir : selFile;
         footer += commands;
+        footer += forBackup.empty() ? "" : backupStatus;
         footer_cstr = (u8 *)footer.c_str();
 
         // Ensure the process is paused
@@ -346,7 +348,9 @@ namespace CTRPluginFramework
 
             Window::BottomWindow.Draw();
             int posY = 55;
-            Renderer::DrawSysStringReturn(footer_cstr, 50, posY, 300, Preferences::Settings.MainTextColor);
+            int posX = forBackup.empty() ? 50 : 35;
+
+            Renderer::DrawSysStringReturn(footer_cstr, posX, posY, 300, Preferences::Settings.MainTextColor);
 
             // Swap buffers
             Renderer::EndFrame();
@@ -370,15 +374,15 @@ namespace CTRPluginFramework
             if (entry)
                 out.append(entry->name);
         }
-
+        
         // Release the process
         Process::Play();
         return 0;
     }
 
-    int     Utils::FilePicker(std::string &out, const std::string &filter)
+    int     Utils::FilePicker(std::string &out, const std::string &filter, std::string forBackup)
     {
-        return SDExplorerInternal(out, filter, false);
+        return SDExplorerInternal(out, filter, false, forBackup);
     }
 
     int     Utils::DirectoryPicker(std::string &out)

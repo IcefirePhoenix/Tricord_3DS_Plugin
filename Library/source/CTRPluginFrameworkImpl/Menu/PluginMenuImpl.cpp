@@ -187,9 +187,15 @@ namespace CTRPluginFramework
         if (Preferences::Settings.AllowSearchEngine)
             search.RestoreSearchState();
 
+        if (!Directory::IsExists("/cheats/TricordBackup/"))
+            Directory::Create("/cheats/TricordBackup/");
+            
         // Load AR Cheats
         if (Preferences::Settings.AllowActionReplay)
+        {
             ar.Initialize();
+            PluginMenuActionReplay::BackupCodes(false);
+        }
 
         if (_showMsg)
         {
@@ -548,9 +554,9 @@ namespace CTRPluginFramework
             {
                 header.favoritesCount = uids.size();
                 header.favoritesOffset = offset;
-            }
-                            }
-            }
+            }                 
+        }
+    }
 
     void    PluginMenuImpl::ExtractHotkeys(HotkeysVector &hotkeys, MenuFolderImpl *folder, u32 &size)
     {

@@ -75,9 +75,10 @@ namespace CTRPluginFramework
          * \brief Open a menu which allow to browse the SD card to select a file
          * \param out The absolute path of the selected file
          * \param filter If the files must be filtered (can be an extension or a pattern that must be present in the filename)
+         * \param forBackup If this is being used for opening a backup cheat file to restore -- display last modified date of auto-backup cheat file 
          * \return -1 if the user aborted the operation, 0 on success
          */
-        static int          FilePicker(std::string &out, const std::string &filter = "");
+        static int          FilePicker(std::string &out, const std::string &filter = "", std::string forBackup = "");
 
         /**
          * \brief Open a menu which allow to browse the SD card to select a Directory
