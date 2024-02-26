@@ -1,3 +1,5 @@
+#include <string>
+
 #ifndef CTRPLUGINFRAMEWORK_TIME_HPP
 #define CTRPLUGINFRAMEWORK_TIME_HPP
 
@@ -15,6 +17,10 @@ namespace CTRPluginFramework
         int             AsMilliseconds(void) const;
 
         s64             AsMicroseconds(void) const;
+
+        static std::string     GetDate(void);
+        static std::string     ParseDate(std::string date);
+
 
         inline s64      AsTicks(void) const { return _ticks; }
 
