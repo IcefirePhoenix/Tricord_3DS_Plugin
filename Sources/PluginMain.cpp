@@ -352,6 +352,8 @@ namespace CTRPluginFramework {
         *render += new MenuEntry("Force visibility of Treasure Chest contents", nullptr, Rendering::seeChestContents);
         *render += new MenuEntry("Swap Link textures", nullptr, Rendering::swapLinkTexture);
         *render += new MenuEntry("Swap single player loading screen", nullptr, Rendering::swapSPLoadingScreen);
+        *render += new MenuEntry("Force visibility of Cheer Outfit pom poms", nullptr, Rendering::forcePomPom);
+        *render += new MenuEntry("Force visibility of a costume aura", nullptr, Rendering::forceAura);
     }
 
     void InitSaveFolder(PluginMenu& menu)
@@ -418,6 +420,10 @@ namespace CTRPluginFramework {
         }
 
         lobbyBallAuto = new MenuEntry("Write lobby ball edits (auto)", BGM_SFX::writeLobbyBallSel);
+
+        *sound += new MenuEntry("Force normal or 8-bit BGM", nullptr, BGM_SFX::forceNormal8bit);
+        *sound += new MenuEntry("Disable Timeless Tunic voice filter", nullptr, BGM_SFX::disable8bitVoice,
+        "You will be voiceless in Hytopia, but retain a normal voice in the Drablands.");
     }
 
     void ToggleMenuChange(Time time)

@@ -28,6 +28,8 @@ namespace CTRPluginFramework {
         static std::string getPercentAsStr(int selection);
         static int selVolPreset(void);
         static float getFloatFromPercentSel(int selection);
+        static void forceNormal8bit(MenuEntry* entry);
+        static void disable8bitVoice(MenuEntry* entry);
     };
 }
 #endif

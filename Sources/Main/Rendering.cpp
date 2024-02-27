@@ -218,4 +218,43 @@ namespace CTRPluginFramework
         }
     }
 
+    void Rendering::forcePomPom(MenuEntry* entry)
+    {
+        if (entry->Name() == "Force visibility of Cheer Outfit pom poms"){
+            Process::Patch(AddressList::CheerPomPom.addr, 0x1A000009);
+            entry->SetName("Hide Cheer Outfit pom poms outside Couture's");
+        } else {
+            Process::Patch(AddressList::CheerPomPom.addr, 0x0A000009);
+            entry->SetName("Force visibility of Cheer Outfit pom poms");
+        }
+    }
+
+    void Rendering::forceAura(MenuEntry* entry)
+    {
+        // Assumption: Every region's version of this function is structured identically
+        // and changes to branch target addresses are consistent
+        Keyboard AuraType("Select a costume aura, or reset to restore\ncostume checks.");
+        static const StringVector Auras =
+        {
+            "Reset",
+            "Bear Maximum",
+            "Showstopper",
+            "Fierce Deity Armor"
+        };
+        AuraType.Populate(Auras);
+        switch(AuraType.Open()){
+            case 0:
+                Process::Patch(AddressList::Aura.addr, 0x0A000018);
+                break;
+            case 1:
+                Process::Patch(AddressList::Aura.addr, 0xEA00001B);
+                break;
+            case 2:
+                Process::Patch(AddressList::Aura.addr, 0xEA000004);
+                break;
+            case 3:
+                Process::Patch(AddressList::Aura.addr, 0xEA00000E);
+                break;
+        }
+    }
 }

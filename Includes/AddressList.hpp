@@ -85,6 +85,7 @@ namespace CTRPluginFramework {
 		static Address		TargetStageID;
 		static Address		TargetSpawnID;
 		static Address		Warp;
+		static Address		WarpPointer;
 		static Address		ChallengeID;
 
 		// Items
@@ -151,6 +152,8 @@ namespace CTRPluginFramework {
 		static Address		TextureName;
 		static Address		LoadingScreenSPNoChal;
 		static Address		LoadingScreenSPIcons;
+		static Address		CheerPomPom;
+		static Address		Aura;
 		
 		// Savefile
 		static Address		NormalNCCompletion;
@@ -177,6 +180,7 @@ namespace CTRPluginFramework {
 		static Address		BGMType;
 		static Address		BGMVolume;
 		static Address		LinkVoiceSpeed;
+		static Address		Voice8bit;
 		static Address		LobbyBallPointer;
 		static Address		MasterVolume;
 
