@@ -82,6 +82,7 @@ namespace CTRPluginFramework {
 		TargetStageID				= Address(0x32C81F14, 0x32C81F94, 0x32CCC954, 0x00000000);
 		TargetSpawnID				= Address(0x32C81F16, 0x32C81F96, 0x32CCC956, 0x00000000);
 		Warp						= Address(0x3282C4EC, 0x3282C56C, 0x32876F2C, 0x00000000);
+		WarpPointer					= Address(0x32C81E28, 0x00000000, 0x00000000, 0x00000000);
 		ChallengeID					= Address(0x32D81E3C, 0x32D81EBC, 0x32DD4660, 0x00000000);
 
 		/* Items */ 
@@ -149,6 +150,8 @@ namespace CTRPluginFramework {
 		TextureName					= Address(0x3033D7C3, 0x30363E43, 0x3037F5C3, 0x00000000);
 		LoadingScreenSPNoChal		= Address(0x002B1410, 0x002B17B4, 0x002B2338, 0x00000000);
 		LoadingScreenSPIcons		= Address(0x00390C08, 0x00390FB0, 0x00391B88, 0x00000000);
+		CheerPomPom					= Address(0x001F9AFC, 0x00000000, 0x00000000, 0x00000000);
+		Aura						= Address(0x001C3030, 0x00000000, 0x00000000, 0x00000000);
 
 		/* Savefile */ 
 		NormalNCCompletion 			= Address(0x31A060EC, 0x31A06144, 0x31A05E38, 0x00000000);
@@ -172,10 +175,11 @@ namespace CTRPluginFramework {
 		ResetMerchantStock 			= Address(0x31A077AE, 0x31A07806, 0x31A074FA, 0x00000000);
 
 		// SFX and BGM
-		BGMType 					= Address(0x005FD3C0, 0x005FD7F0, 0x005FE358, 0x00000000);
+		BGMType 				= Address(0x005FD3C0, 0x005FD7F0, 0x005FE358, 0x00000000);
 		BGMVolume 					= Address(0x00236444, 0x002364D4, 0x00237170, 0x00000000);
 		LobbyBallPointer			= Address(0x32DCAA60, 0x32DCAAE0, 0x32E277F4, 0x00000000);
 		LinkVoiceSpeed 				= Address(0x3284A25C, 0x3284A2DC, 0x32894C9C, 0x00000000);
+		Voice8bit	 				= Address(0x00194630, 0x00000000, 0x00000000, 0x00000000);
 		MasterVolume 				= Address(0x0050BC74, 0x0050BDF0, 0x0050C9C4, 0x00000000);
 
 		// Turbo Mode
@@ -413,6 +417,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::TargetStageID;
 	Address		AddressList::TargetSpawnID;
 	Address		AddressList::Warp;
+	Address		AddressList::WarpPointer;
 	Address		AddressList::ChallengeID;
 
 	// Items
@@ -479,6 +484,8 @@ namespace CTRPluginFramework {
 	Address		AddressList::TextureName;
 	Address		AddressList::LoadingScreenSPNoChal;
 	Address		AddressList::LoadingScreenSPIcons;
+	Address		AddressList::CheerPomPom;
+	Address		AddressList::Aura;
 
 	// Savefile
 	Address		AddressList::NormalNCCompletion;
@@ -505,6 +512,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::BGMType;
 	Address		AddressList::BGMVolume;
 	Address		AddressList::LinkVoiceSpeed;
+	Address		AddressList::Voice8bit;
 	Address		AddressList::LobbyBallPointer;
 	Address		AddressList::MasterVolume;
 

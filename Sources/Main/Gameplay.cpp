@@ -555,7 +555,7 @@ namespace CTRPluginFramework
         Process::Write8(AddressList::TargetLevelID.addr, targetlevel);
         Process::Write8(AddressList::TargetStageID.addr, targetstage);
         // TODO: Process::Write8(AddressList::TargetSpawnID.addr, targetspawn);
-        Process::Write32(AddressList::Warp.addr, 0x32C81E28);
+        Process::Write32(AddressList::Warp.addr, AddressList::WarpPointer.addr);
 
         // If a challenge is chosen, write that challenge
         if (challenge){
@@ -576,7 +576,7 @@ namespace CTRPluginFramework
             u8 targetstage = chooseDrablandsStage();
             Process::Write8(AddressList::TargetLevelID.addr, currentlevel);
             Process::Write8(AddressList::TargetStageID.addr, targetstage);
-            Process::Write32(AddressList::Warp.addr, 0x32C81E28);
+            Process::Write32(AddressList::Warp.addr, AddressList::WarpPointer.addr);
         }
     }
 
