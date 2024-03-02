@@ -109,6 +109,9 @@ namespace CTRPluginFramework {
 
         *warp += new MenuEntry("Warp to any location", nullptr, Gameplay::instantWarp);
         *warp += new MenuEntry("Warp to any stage in current Drablands level", nullptr, Gameplay::stageWarp);
+        reWarp = new MenuEntry("Return to previous warp: None", nullptr, Gameplay::warpAgain);
+        *warp += reWarp;
+
         doppelEnableAuto = new MenuEntry("Mid-warp Doppel Enable (auto)", Gameplay::midWarpDoppelEnable);
         challengeEditAuto = new MenuEntry("Challenge ID edit (auto)", Gameplay::writeChallengeEdit);
 

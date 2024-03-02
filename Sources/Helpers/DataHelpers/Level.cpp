@@ -47,7 +47,7 @@ namespace CTRPluginFramework
 		Level(0x51, "Deception Castle", "SkyQuebec", false),
 		Level(0x52, "Dragon Citadel", "SkyHotel", false),
 		Level(0x53, "Sky Temple", "SkyAlpha", false),
-		Level(0x59, "Den of Trials", "AbyssPortal", false),
+		Level(0x59, "DoT Warp Room", "AbyssPortal", false),
 		Level(0x5A, "Forest Zone", "AbyssAlpha", false),
 		Level(0x5B, "Flooded Zone", "AbyssBravo", false),
 		Level(0x5C, "Scorching Zone", "AbyssCharlie", false),
@@ -61,7 +61,196 @@ namespace CTRPluginFramework
 		// Memory(?) issues with Citra when this array exceeded 0x5E elements...
 	};
 
-	u8 Level::getIDFromName(const std::string& name) 
+	const StringVector Level::hytopiaLevelList = {
+        "Hytopia",
+        "Hytopia Shops",
+        "Hytopia Castle"
+    };
+
+    const StringVector Level::hytopiaShopsStageList = {
+        "Miiverse Gallery",
+        "Madame Couture's",
+        "Daily Riches"
+    };
+
+    const StringVector Level::hytopiaCastleStageList = {
+        "Entrance",
+        "Single Player Lobby",
+        "Multiplayer Lobby",
+        "Throne Room",
+        "Coliseum Hallway",
+        "Coliseum Lobby"
+    };
+
+    const StringVector Level::worldList = {
+        "Woodlands",
+        "Riverside",
+        "Volcano",
+        "Ice Cavern",
+        "Fortress",
+        "The Dunes",
+        "The Ruins",
+        "Sky Realm"
+    };
+
+    const StringVector Level::woodlandLevelList = {
+        "Deku Forest",
+        "Buzz Blob Cave",
+        "Moblin Base",
+        "Forest Temple"
+    };
+
+    const StringVector Level::riversideLevelList = {
+        "Secret Fortress",
+        "Abyss of Agony",
+        "Cove of Transition",
+        "Water Temple"
+    };
+
+    const StringVector Level::volcanoLevelList = {
+        "Blazing Trail",
+        "Hinox Mine",
+        "Den of Flames",
+        "Fire Temple"
+    };
+
+    const StringVector Level::iceLevelList = {
+        "Frozen Plateau",
+        "Snowball Ravine",
+        "Silver Shrine",
+        "Ice Temple"
+    };
+
+    const StringVector Level::fortressLevelList = {
+        "Sealed Gateway",
+        "Bomb Storage",
+        "Training Ground",
+        "The Lady's Lair"
+    };
+
+    const StringVector Level::dunesLevelList = {
+        "Infinity Dunes",
+        "Stone Corridors",
+        "Gibdo Mausoleum",
+        "Desert Temple"
+    };
+
+    const StringVector Level::ruinsLevelList = {
+        "Illusory Mansion",
+        "Palace Noir",
+        "Gibdo Mausoleum",
+        "Grim Temple"
+    };
+
+    const StringVector Level::skyLevelList = {
+        "Floating Garden",
+        "Deception Castle",
+        "Dragon Citadel",
+        "Sky Temple"
+    };
+
+    const StringVector Level::challengeList = {
+        "No challenge",
+        "Challenge 1",
+        "Challenge 2",
+        "Challenge 3"
+    };
+
+    const StringVector Level::dotZoneList = {
+        "Forest Zone",
+        "Flooded Zone",
+        "Scorching Zone",
+        "Frozen Zone",
+        "Fortified Zone",
+        "Desert Zone",
+        "Shadow Zone",
+        "Baneful Zone"
+    };
+
+    const StringVector Level::arenaList = {
+        "Woodlands Arena",
+        "Riverside Arena",
+        "Volcano Arena",
+        "Ice Cavern Arena",
+        "Fortress Arena",
+        "Dunes Arena",
+        "Ruins Arena",
+        "Sky Realm Arena"
+    };
+
+    
+    StringVector Level::getWorldNamesfromID(int ID, bool useNonLevels)
+    {
+        if (!useNonLevels)
+            ID = ID + 2;
+
+        switch (ID) 
+        {
+        case 0:
+            return Level::hytopiaLevelList;
+        case 1:
+            return Level::arenaList;
+        case 2: 
+            return Level::woodlandLevelList;
+        case 3:
+            return Level::riversideLevelList;
+        case 4:
+            return Level::volcanoLevelList;
+        case 5:
+            return Level::iceLevelList;
+        case 6:
+            return Level::fortressLevelList;
+        case 7:
+            return Level::dunesLevelList;
+        case 8:
+            return Level::ruinsLevelList;
+        case 9:
+            return Level::skyLevelList;
+        case 10:
+            return Level::dotZoneList;
+        default:
+            return StringVector();
+        }
+    }
+
+    int Level::selWorld(bool useDoT, bool useNonLevels) 
+    {
+        StringVector worldSelectionList = Level::worldList;
+
+        if (useNonLevels)
+        {   
+            worldSelectionList.clear();
+            worldSelectionList.insert(worldSelectionList.begin(), "Levels");
+		    worldSelectionList.insert(worldSelectionList.begin(), "Coliseum");
+       		worldSelectionList.insert(worldSelectionList.begin(), "Hytopia");
+        }
+
+        if (useDoT)
+            worldSelectionList.push_back("Den of Trials");
+
+        Keyboard chooseWorld("Select a world:");
+        chooseWorld.Populate(worldSelectionList);
+
+        return chooseWorld.Open();
+    }
+
+    // TODO: right now this only uses woodlands-sky
+    std::string Level::worldIDToStr(int worldID) 
+    {
+        return Level::worldList[worldID];
+    }
+
+	std::string Level::levelNameFromID(u8 levelID) 
+	{
+		for (int iterator = 0; iterator < 45; ++iterator) 
+		{
+			if (levelList[iterator]._levelID == levelID) 
+				return levelList[iterator]._extName;
+		}
+		return ""; // wasn't found
+	}
+
+	u8 Level::levelIDFromName(std::string name) 
 	{
 		for (int iterator = 0; iterator < 45; ++iterator) 
 		{
@@ -95,6 +284,14 @@ namespace CTRPluginFramework
 		return stageID;
 	}
 
+	u8 Level::getCurrChallenge(void) 
+	{
+		u8 chalID;
+		Process::Read8(AddressList::ChallengeID.addr, chalID);
+
+		return chalID;
+	}
+
 	u32 Level::getElapsedTime(void)
 	{
 		u32 elapsedTime;
@@ -103,10 +300,25 @@ namespace CTRPluginFramework
 		return elapsedTime;
 	}
 
+	void Level::setCurrLevel(u8 levelID) 
+	{
+		Process::Write8(AddressList::CurrLevelID.addr, levelID);
+	}
+
+	void Level::setCurrStage(u8 stageID) 
+	{
+		Process::Write8(AddressList::CurrStageID.addr, stageID);
+	}
+
+	void Level::setCurrChal(u8 chalID) 
+	{
+		Process::Write8(AddressList::ChallengeID.addr, chalID);
+	}
+
 	bool Level::isInDrablands(void) 
 	{
 		u8 level = getCurrLevel();
-		return (level >= getIDFromName("Deku Forest")) && (level <= getIDFromName("Baneful Zone"));
+		return (level >= levelIDFromName("Deku Forest")) && (level <= levelIDFromName("Baneful Zone"));
 	}
 
 	bool Level::hasStageBegan(void) 
@@ -117,5 +329,20 @@ namespace CTRPluginFramework
 	bool Level::hasCertainTimeElapsed(int time)
 	{
 		return Level::getElapsedTime() >= static_cast<u32>(time);	
+	}
+
+	int Level::selBasicStage(void)
+	{
+		StringVector stages = {
+			"Stage 1",
+			"Stage 2",
+			"Stage 3",
+			"Stage 4",
+			"Treasure Room"
+		};
+
+		Keyboard selStage("Select a stage:");
+        selStage.Populate(stages);
+        return selStage.Open() + 1;
 	}
 }

@@ -16,21 +16,32 @@ namespace CTRPluginFramework {
     extern MenuEntry* moonJumpEntry;
     extern MenuEntry* flightEntry;
     extern MenuEntry* doppelEnableAuto;
+    extern MenuEntry* reWarp;
     extern MenuEntry* challengeEditAuto;
     int chooseDrablandsStage();
     extern MenuEntry* controlAllAuto;
 
+    
+    std::string warpSelLevel(StringVector locNames);
+    int warpGetLevel(int locCategory);
+    int warpGetStage(int levelID);
+    int warpSelStage(StringVector stageNames);
+    int warpSelChallenge(void);
     class Gameplay {
     public:
         static void infEnergy(MenuEntry* entry);
         static void maxEnergySet(MenuEntry* entry);
         static void energyConsumeMultiplier(MenuEntry* entry);
+
         static void infHealth(MenuEntry* entry);
         static void noHealth(MenuEntry* entry);
         static void infFairy(MenuEntry* entry);
+
         static void autoKillEnemy(MenuEntry* entry);
         static void enemyInvinci(MenuEntry* entry);
+
         static void controlAllPlayers(MenuEntry* entry);
+
         static void changePhysicsG(MenuEntry* entry);
         static void changePhysicsB(MenuEntry* entry);
         static void changePhysicsR(MenuEntry* entry);
@@ -42,9 +53,12 @@ namespace CTRPluginFramework {
         static void adjustAscentSpeed(MenuEntry* entry);
         static void adjustDescentSpeed(MenuEntry* entry);
         static void adjustLateralSpeed(MenuEntry* entry);
+
         static void infTime(MenuEntry* entry);
+
         static void instantWarp(MenuEntry* entry);
         static void stageWarp(MenuEntry* entry);
+        static void warpAgain(MenuEntry* entry);
         static void midWarpDoppelEnable(MenuEntry* entry);
         static void writeChallengeEdit(MenuEntry* entry);
         static void writePlayerControl(MenuEntry* entry);
