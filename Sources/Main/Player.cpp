@@ -387,7 +387,7 @@ namespace CTRPluginFramework
         showPosEditorIntroMsg(entry->WasJustActivated());
         resetPositionEditorSaves(entry->WasJustActivated());
 
-        if (GeneralHelpers::isSinglePlayer() && !GeneralHelpers::isLoadingScreen() && Level::getCurrLevel() != Level::getIDFromName("Hytopia Castle")){
+        if (GeneralHelpers::isSinglePlayer() && !GeneralHelpers::isLoadingScreen() && Level::getCurrLevel() != Level::levelIDFromName("Hytopia Castle")){
             loadBtn.Draw();
             saveBtn.Draw();
 
@@ -448,8 +448,8 @@ namespace CTRPluginFramework
 
     void Player::bypassDoppelDemo(MenuEntry* entry) 
     {
-        if (Level::getCurrLevel() == Level::getIDFromName("Hytopia Castle") && Level::getCurrStage() == 0x2) {
-            GeneralHelpers::forceEnableDoppels();
+        if (Level::getCurrLevel() == Level::levelIDFromName("Hytopia Castle") && Level::getCurrStage() == 0x2) {
+            GeneralHelpers::forceDoppelStatus(true);
 
             u32 blueDataOffset = 0x10000;
             u32 redDataOffset = 0x20000;

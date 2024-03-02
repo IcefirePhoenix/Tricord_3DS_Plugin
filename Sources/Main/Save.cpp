@@ -140,7 +140,7 @@ namespace CTRPluginFramework
     void Save::selLevelCompletion(MenuEntry* entry) 
     {
         std::string msg, modeStr;
-        int world = GameData::selWorld(false);
+        int world = Level::selWorld(false, false);
 
         if (world >= 0) 
         {
@@ -154,8 +154,8 @@ namespace CTRPluginFramework
                 else
                     modeStr = "Multiplayer and Single-player\nCompletion";
 
-                msg = "Currently editing Level Completion statuses\nfor " << GameData::worldIDToStr(world) << ", " << modeStr << outro;
-                LevelStatusEditor(msg, GameData::getWorldNamesfromID(world), world, mode)();
+                msg = "Currently editing Level Completion statuses\nfor " << Level::worldIDToStr(world) << ", " << modeStr << outro;
+                LevelStatusEditor(msg, Level::getWorldNamesfromID(world, false), world, mode)();
             }
         }
     }

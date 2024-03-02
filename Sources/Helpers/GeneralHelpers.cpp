@@ -79,9 +79,10 @@ namespace CTRPluginFramework
         Process::Write8(AddressList::LockMovement.addr, lock);
     }
 
-    void GeneralHelpers::forceEnableDoppels(void) 
+    void GeneralHelpers::forceDoppelStatus(bool enable) 
     {
-        Process::Write8(AddressList::DoppelsEnabled.addr, 0x01);
+        u8 status = enable ? 0x1 : 0x0;
+        Process::Write8(AddressList::DoppelsEnabled.addr, status);
     }
     
     bool GeneralHelpers::isSinglePlayer(void) 
