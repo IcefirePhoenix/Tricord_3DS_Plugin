@@ -85,113 +85,6 @@ namespace CTRPluginFramework {
         "No item"
     };
 
-    const StringVector GameData::hytopiaLevelList = {
-        "Hytopia",
-        "Hytopia Shops",
-        "Hytopia Castle"
-    };
-
-    const StringVector GameData::hytopiaShopsStageList = {
-        "Miiverse Gallery",
-        "Madame Couture's",
-        "Daily Riches"
-    };
-
-    const StringVector GameData::hytopiaCastleStageList = {
-        "Entrance",
-        "Single Player Lobby",
-        "Multiplayer Lobby",
-        "Throne Room",
-        "Coliseum Hallway",
-        "Coliseum Lobby"
-    };
-
-    const StringVector GameData::worldList = {
-        "Woodlands",
-        "Riverside",
-        "Volcano",
-        "Ice Cavern",
-        "Fortress",
-        "The Dunes",
-        "The Ruins",
-        "Sky Realm"
-    };
-
-    const StringVector GameData::woodlandLevelList = {
-        "Deku Forest",
-        "Buzz Blob Cave",
-        "Moblin Base",
-        "Forest Temple"
-    };
-
-    const StringVector GameData::riversideLevelList = {
-        "Secret Fortress",
-        "Abyss of Agony",
-        "Cove of Transition",
-        "Water Temple"
-    };
-
-    const StringVector GameData::volcanoLevelList = {
-        "Blazing Trail",
-        "Hinox Mine",
-        "Den of Flames",
-        "Fire Temple"
-    };
-
-    const StringVector GameData::iceLevelList = {
-        "Frozen Plateau",
-        "Snowball Ravine",
-        "Silver Shrine",
-        "Ice Temple"
-    };
-
-    const StringVector GameData::fortressLevelList = {
-        "Sealed Gateway",
-        "Bomb Storage",
-        "Training Ground",
-        "The Lady's Lair"
-    };
-
-    const StringVector GameData::dunesLevelList = {
-        "Infinity Dunes",
-        "Stone Corridors",
-        "Gibdo Mausoleum",
-        "Desert Temple"
-    };
-
-    const StringVector GameData::ruinsLevelList = {
-        "Illusory Mansion",
-        "Palace Noir",
-        "Gibdo Mausoleum",
-        "Grim Temple"
-    };
-
-    const StringVector GameData::skyLevelList = {
-        "Floating Garden",
-        "Deception Castle",
-        "Dragon Citadel",
-        "Sky Temple"
-    };
-
-    const StringVector GameData::challengeList = {
-        "No challenge",
-        "Challenge 1",
-        "Challenge 2",
-        "Challenge 3"
-    };
-
-    const StringVector GameData::dotZoneList = {
-        "Forest Zone",
-        "Flooded Zone",
-        "Scorching Zone",
-        "Frozen Zone",
-        "Fortified Zone",
-        "Desert Zone",
-        "Shadow Zone",
-        "Baneful Zone"
-    };
-
-
     const StringVector GameData::lobbyBallSongs = {
         "Ballad of the Goddess (SS)",
         "Epona's Song (OoT)",
@@ -243,7 +136,7 @@ namespace CTRPluginFramework {
         0x0C   // blank
     };
 
-    const int GameData::generalPlayerIDs[3] = {0, 1, 2};
+    const int GameData::generalPlayerIDs[3] = { 0, 1, 2 };
     const u32 GameData::playerAddressOffset = 0x10000;
 
     int GameData::getPlayerIDFromColor(std::string color) 
@@ -275,51 +168,6 @@ namespace CTRPluginFramework {
         else
             return "N/A";
     }    
-    
-    StringVector GameData::getWorldNamesfromID(int ID) 
-    {
-        switch (ID) 
-        {
-        case 0: 
-            return GameData::woodlandLevelList;
-        case 1:
-            return GameData::riversideLevelList;
-        case 2:
-            return GameData::volcanoLevelList;
-        case 3:
-            return GameData::iceLevelList;
-        case 4:
-            return GameData::fortressLevelList;
-        case 5:
-            return GameData::dunesLevelList;
-        case 6:
-            return GameData::ruinsLevelList;
-        case 7:
-            return GameData::skyLevelList;
-        case 8:
-            return GameData::dotZoneList;
-        default:
-            return {};
-        }
-    }
-
-    int GameData::selWorld(bool useDoT) 
-    {
-        StringVector worldSelectionList = GameData::worldList;
-
-        if (useDoT)
-            worldSelectionList.push_back("Den of Trials");
-
-        Keyboard chooseWorld("Select a world:");
-        chooseWorld.Populate(worldSelectionList);
-
-        return chooseWorld.Open();
-    }
-
-    std::string GameData::worldIDToStr(int worldID) 
-    {
-        return GameData::worldList[worldID];
-    }
 
     std::string GameData::getVoiceAsStr(u8 ID) 
     {

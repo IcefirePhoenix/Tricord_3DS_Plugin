@@ -12,22 +12,6 @@ namespace CTRPluginFramework {
 		static const StringVector swordList;
 		static const StringVector voiceList;
 
-		static const StringVector hytopiaLevelList;
-		static const StringVector hytopiaShopsStageList;
-		static const StringVector hytopiaCastleStageList;
-
-		static const StringVector worldList;
-		static const StringVector woodlandLevelList;
-		static const StringVector riversideLevelList;
-		static const StringVector volcanoLevelList;
-		static const StringVector iceLevelList;
-		static const StringVector fortressLevelList;
-		static const StringVector dunesLevelList;
-		static const StringVector ruinsLevelList;
-		static const StringVector skyLevelList;
-		static const StringVector challengeList;
-		static const StringVector dotZoneList;
-
 		static const StringVector itemList;
 		static const StringVector lobbyBallSongs;
 
@@ -39,9 +23,6 @@ namespace CTRPluginFramework {
 		static int getPlayerIDFromColor(std::string color);
 		static std::string getSwordNameFromID(int ID);
 		static std::string getCostumeNameFromID(int ID);
-		static StringVector getWorldNamesfromID(int ID);
-		static int selWorld(bool useDoT);
-		static std::string worldIDToStr(int worldID);
 		static std::string getVoiceAsStr(u8 ID);
 		static u32 getLobbyBallDataAddress(void);
 	};
