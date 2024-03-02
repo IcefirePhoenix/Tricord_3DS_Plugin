@@ -19,7 +19,7 @@ namespace CTRPluginFramework {
 		static bool isNullPointer(u32 address);
 
 		static void managePlayerLock(bool isLocked);
-		static void forceEnableDoppels(void);
+		static void forceDoppelStatus(bool enable);
 		
 		static bool isTitleScreen(void);
 		static bool isSinglePlayer(void);

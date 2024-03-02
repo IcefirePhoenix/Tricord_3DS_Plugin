@@ -160,10 +160,10 @@ namespace CTRPluginFramework
 	{
 		disableDefaultEmotes();
 
-		if (Level::getCurrLevel() == Level::getIDFromName("Hytopia Castle")) 
+		if (Level::getCurrLevel() == Level::levelIDFromName("Hytopia Castle")) 
 		{
 			// temporary workaround for when previous location is not drablands 
-			if (Level::getPrevLevel() < Level::getIDFromName("Deku Forest"))
+			if (Level::getPrevLevel() < Level::levelIDFromName("Deku Forest"))
 			{
 				if (entry->Hotkeys[0].IsPressed()) 
 					initEmoteValueLayout(AddressList::GameplayEmotes.addr, 0x080A0B00, 0x07060504, false, { 0, 11, 6, 5, 8, 3, 4, 9 });					

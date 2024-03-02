@@ -133,7 +133,7 @@ namespace CTRPluginFramework
 
 			u32 shadowDataAddress = getShadowItemAddress() + shadowItemPointerOffset; // get dynamic address via pointer
 
-			bool isInBaneful = (Level::getCurrLevel() == Level::getIDFromName("Baneful Zone")) && (Level::getCurrStage() == 4);
+			bool isInBaneful = (Level::getCurrLevel() == Level::levelIDFromName("Baneful Zone")) && (Level::getCurrStage() == 4);
 			std::string msg = isInBaneful ? "Select an item." : "Error\n\nThe current level is not Baneful Zone - 4. Please\nenter Baneful Zone and try again.";
 
 			if (isInBaneful) 

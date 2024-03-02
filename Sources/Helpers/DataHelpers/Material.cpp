@@ -103,7 +103,7 @@ namespace CTRPluginFramework {
 
     int Material::selectMaterialWorld(void) 
     {
-        StringVector worldSelectionList = GameData::worldList;
+        StringVector worldSelectionList = Level::worldList;
 
         worldSelectionList.insert(worldSelectionList.begin(), "Other");
 
