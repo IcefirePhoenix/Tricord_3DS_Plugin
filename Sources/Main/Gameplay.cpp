@@ -3,6 +3,9 @@
 
 namespace CTRPluginFramework
 {
+    MenuEntry* physicsSelG;
+    MenuEntry* physicsSelB;
+    MenuEntry* physicsSelR;
     MenuEntry* physicsEditAutoG;
     MenuEntry* physicsEditAutoB;
     MenuEntry* physicsEditAutoR;
@@ -134,53 +137,37 @@ namespace CTRPluginFramework
     }
 
     // gearbox
-    void Gameplay::changePhysicsG(MenuEntry* entry)
+    void Gameplay::changePhysics(MenuEntry* entry)
     {
-        std::string result = physicsSelectMenu(0);
-        if (result != ""){
-            if (result == "None"){
-                entry->SetName("Physics - Player 1 (Green): None");
-                physicsEditAutoG->Disable();
-            } else {
-                entry->SetName("Physics - Player 1 (Green): "+result);
-                physicsEditAutoG->Enable();
-            }
+        MenuEntry* physicsEntries[3] = {
+            physicsEditAutoG,
+            physicsEditAutoB,
+            physicsEditAutoR
+        };
+
+        int player = reinterpret_cast<int>(entry->GetArg());
+        std::string baseEntryName, result = physicsSelectMenu(player);
+
+        // get the entry's base name -- everything before the colon
+        std::string longName = entry->Name();
+        std::size_t colonPosition = longName.find(':');
+        if (colonPosition != std::string::npos)
+        { 
+            baseEntryName = longName.substr(0, colonPosition); 
+        }
+
+        if (!result.empty())
+        {
+            if (result == "Not edited") { physicsEntries[player]->Disable(); } 
+            else { physicsEntries[player]->Enable(); }
+
+            entry->SetName(baseEntryName + ": " + result);
         }
     }
 
-    // gearbox
-    void Gameplay::changePhysicsB(MenuEntry* entry)
+    std::string physicsSelectMenu(int player)
     {
-        std::string result = physicsSelectMenu(1);
-        if (result != ""){
-            if (result == "None"){
-                entry->SetName("Physics - Player 2 (Blue): None");
-                physicsEditAutoB->Disable();
-            } else {
-                entry->SetName("Physics - Player 2 (Blue): "+result);
-                physicsEditAutoB->Enable();
-            }
-        }
-    }
-
-    // gearbox
-    void Gameplay::changePhysicsR(MenuEntry* entry)
-    {
-        std::string result = physicsSelectMenu(2);
-        if (result != ""){
-            if (result == "None"){
-                entry->SetName("Physics - Player 3 (Red): None");
-                physicsEditAutoR->Disable();
-            } else {
-                entry->SetName("Physics - Player 3 (Red): "+result);
-                physicsEditAutoR->Enable();
-            }
-        }
-    }
-
-    std::string physicsSelectMenu(int Link)
-    {
-        Keyboard Physics("Choose a type of physics:");
+        Keyboard physics("Choose a type of physics:");
         static const StringVector physicsList =
         {
             "Reset",
@@ -190,60 +177,55 @@ namespace CTRPluginFramework
             "Quicksand"
         };
 
-        Physics.Populate(physicsList);
+        physics.Populate(physicsList);
 
-        switch(Physics.Open()){
+        switch (physics.Open())
+        {
             case 0:
-                return "None";
+                return "Not edited";
             case 1:
-                physicsStatus[Link] = 0x0187;
+                physicsStatus[player] = Collision::colIDFromName("Water");
                 return "Water";
             case 2:
-                physicsStatus[Link] = 0x0167;
+                physicsStatus[player] = Collision::colIDFromName("Lava");
                 return "Lava";
             case 3:
-                physicsStatus[Link] = 0x0121;
+                physicsStatus[player] = Collision::colIDFromName("Ice");
                 return "Ice";
             case 4:
-                physicsStatus[Link] = 0x00C1;
+                physicsStatus[player] = Collision::colIDFromName("Quicksand_plane");
                 return "Quicksand";
             default:
                 return "";
         }
     }
 
-    void writePhysicsChanges(int Link)
+    // Note: do not freeze collision if:
+    // 1) Link is airborne -- ensures fall zones works properly
+    // 2) if Link is swimming -- ensures water/lava acts properly
+    // 3) if Link is sinking in quicksand -- prevents infinite sinking if quicksand is active
+    void Gameplay::writePhysicsChanges(MenuEntry* entry)
     {
-        u16 towrite = physicsStatus[Link];
-        u32 offset = Link*GameData::playerAddressOffset;
-        // if Link is sinking in quicksand, do not freeze collision (otherwise you sink endlessly if quicksand is active)
-        u8 sinkingval;
-        Process::Read8(AddressList::CostumeAttrD.addr + offset, sinkingval);
-        bool sinking = (sinkingval & 0x80) == 0x80;
-        // if Link is airborne (coll 0x1F or 0xA), do not freeze collision
-        // (ensures fall zones work properly, and collision doesn't apply while carried in a totem)
-        // if touching water or lava, do not freeze collision (ensures water/lava acts normally)
-        u16 currentcoll;
-        Process::Read16(AddressList::CollisionCurrent.addr + offset, currentcoll);
-        bool collCheck = currentcoll != 0x0187 && currentcoll != 0x0167 && currentcoll != 0x1F && currentcoll != 0xA;
-        if (!sinking && collCheck){
-            Process::Write16(AddressList::CollisionCurrent.addr + offset, towrite);
+        int player = reinterpret_cast<int>(entry->GetArg());
+
+        u8 sinkingStatus;
+        u16 currentCol, targetCol = physicsStatus[player]; 
+        u32 addressOffset = player * GameData::playerAddressOffset;
+
+        Process::Read8(AddressList::CostumeAttrD.addr + addressOffset, sinkingStatus);
+        bool isSinking = (sinkingStatus & 0x80) == 0x80;
+
+        currentCol = Collision::getCurrCol(player);
+        bool checkValidColWrite = 
+            currentCol != Collision::colIDFromName("Water") && 
+            currentCol != Collision::colIDFromName("Lava") && 
+            currentCol != Collision::colIDFromName("Air") && 
+            currentCol != Collision::colIDFromName("Fall_plane");
+
+        if (!isSinking && checkValidColWrite) 
+        { 
+            Collision::setCurrCol(player, targetCol); 
         }
-    }
-
-    void Gameplay::physicsChangeG(MenuEntry* entry)
-    {
-        writePhysicsChanges(0);
-    }
-
-    void Gameplay::physicsChangeB(MenuEntry* entry)
-    {
-        writePhysicsChanges(1);
-    }
-
-    void Gameplay::physicsChangeR(MenuEntry* entry)
-    {
-        writePhysicsChanges(2);
     }
 
     // Moon Jump - Auto descent

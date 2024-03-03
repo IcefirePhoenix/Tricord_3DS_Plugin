@@ -133,13 +133,37 @@ namespace CTRPluginFramework {
             Hotkey(Key::R | Key::B, "Make all spawned enemies invincible"),
         }));
 
-        *physics += new MenuEntry("Physics - Player 1 (Green): None", nullptr, Gameplay::changePhysicsG);
-        *physics += new MenuEntry("Physics - Player 2 (Blue): None", nullptr, Gameplay::changePhysicsB);
-        *physics += new MenuEntry("Physics - Player 3 (Red): None", nullptr, Gameplay::changePhysicsR);
+        /* ------------------------------ */
 
-        physicsEditAutoG = new MenuEntry("Write physics edit G (auto)", Gameplay::physicsChangeG);
-        physicsEditAutoB = new MenuEntry("Write physics edit B (auto)", Gameplay::physicsChangeB);
-        physicsEditAutoR = new MenuEntry("Write physics edit R (auto)", Gameplay::physicsChangeR);
+        physicsSelG = new MenuEntry("Player 1 (Green): Not edited", nullptr, Gameplay::changePhysics);
+        physicsSelB = new MenuEntry("Player 2 (Blue): Not edited", nullptr, Gameplay::changePhysics);
+        physicsSelR = new MenuEntry("Player 3 (Red): Not edited", nullptr, Gameplay::changePhysics);
+
+        physicsEditAutoG = new MenuEntry("Write physics edit G (auto)", Gameplay::writePhysicsChanges);
+        physicsEditAutoB = new MenuEntry("Write physics edit B (auto)", Gameplay::writePhysicsChanges);
+        physicsEditAutoR = new MenuEntry("Write physics edit R (auto)", Gameplay::writePhysicsChanges);
+        
+        MenuEntry* physicsSlots[6] = {
+            physicsEditAutoG,
+            physicsSelG,
+            physicsEditAutoB,
+            physicsSelB,
+            physicsEditAutoR,
+            physicsSelR
+        };
+
+        for (int iterator = 0; iterator < 6; ++iterator)
+        {
+            // assign ArgIDs for EditAuto and Sel -> green = 0, blue = 1, red = 2
+            // integer division always rounds up, so iterator / 2 should always result in 0-2 values
+            physicsSlots[iterator]->SetArg(reinterpret_cast<void*>(iterator / 2));  
+
+            // add the physicsSel entries to the menu
+            if (iterator % 2 == 1)
+                *physics += physicsSlots[iterator];
+        }
+
+        /* ------------------------------ */
 
         moonJumpEntry = (EntryWithHotkey(new MenuEntry("Enable Moon Jump", Gameplay::moonJump), {
             Hotkey(Key::CPadUp, "Move North"),

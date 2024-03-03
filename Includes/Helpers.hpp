@@ -12,6 +12,8 @@
 #include "Helpers/Wrappers.hpp"
 
 #include "Helpers/DataHelpers/Address.hpp"
+#include "Helpers/DataHelpers/Collision.hpp"
+#include "Helpers/DataHelpers/Control.hpp"
 #include "Helpers/DataHelpers/GameData.hpp"
 #include "Helpers/DataHelpers/Level.hpp"
 #include "Helpers/DataHelpers/Material.hpp"
