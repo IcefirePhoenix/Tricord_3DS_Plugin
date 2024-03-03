@@ -7,26 +7,33 @@
 #include "Unicode.h"
 
 namespace CTRPluginFramework {
-    void manageEnemy(bool keepAlive);
     extern MenuEntry* physicsEditAutoG;
     extern MenuEntry* physicsEditAutoB;
     extern MenuEntry* physicsEditAutoR;
-    std::string physicsSelectMenu(int Link);
-    void writePhysicsChanges(int Link);
+    extern MenuEntry* physicsSelG;
+    extern MenuEntry* physicsSelB;
+    extern MenuEntry* physicsSelR;
+
     extern MenuEntry* moonJumpEntry;
     extern MenuEntry* flightEntry;
-    extern MenuEntry* doppelEnableAuto;
+
     extern MenuEntry* reWarp;
+    extern MenuEntry* doppelEnableAuto;
     extern MenuEntry* challengeEditAuto;
-    int chooseDrablandsStage();
+
     extern MenuEntry* controlAllAuto;
 
-    
+    std::string physicsSelectMenu(int Link);
+    void writePhysicsChanges(int player);
+
+    void manageEnemy(bool keepAlive);
+
     std::string warpSelLevel(StringVector locNames);
     int warpGetLevel(int locCategory);
     int warpGetStage(int levelID);
     int warpSelStage(StringVector stageNames);
     int warpSelChallenge(void);
+
     class Gameplay {
     public:
         static void infEnergy(MenuEntry* entry);
@@ -42,12 +49,9 @@ namespace CTRPluginFramework {
 
         static void controlAllPlayers(MenuEntry* entry);
 
-        static void changePhysicsG(MenuEntry* entry);
-        static void changePhysicsB(MenuEntry* entry);
-        static void changePhysicsR(MenuEntry* entry);
-        static void physicsChangeG(MenuEntry* entry);
-        static void physicsChangeB(MenuEntry* entry);
-        static void physicsChangeR(MenuEntry* entry);
+        static void changePhysics(MenuEntry* entry);
+        static void writePhysicsChanges(MenuEntry* entry);
+
         static void moonJump(MenuEntry* entry);
         static void flight(MenuEntry* entry);
         static void adjustAscentSpeed(MenuEntry* entry);
