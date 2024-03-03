@@ -552,6 +552,9 @@ namespace CTRPluginFramework {
         menu->OnNewFrame = ToggleMenuChange;
 
         autoBeamCooldown->Enable(); // TODO: move this
+        
+        Address::InitMemoryRange();
+        AddressList::InitAddresses();
 
         menu->Run();
 
@@ -609,9 +612,6 @@ namespace CTRPluginFramework {
 
     void    PatchProcess(FwkSettings& settings)
     {
-        AddressList::InitAddresses();
-        Address::InitMemoryRange();
-
         if (Preferences::IsEnabled(Preferences::HIDToggle))
             settings.UseGameHidMemory = true;
 

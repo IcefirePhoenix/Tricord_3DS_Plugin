@@ -51,8 +51,11 @@ namespace CTRPluginFramework {
 	void Address::InitMemoryRange(void)
 	{
 		u32 startAddress = 0x30000000;
-		u32 dataRange;
+		u32 temp;
 
-		_memOffset = Process::CheckRegion(startAddress, dataRange) ? 0x0 : 0x1C000000;
+		_memOffset = Process::CheckRegion(startAddress, temp) ? 0x0 : 0x1C000000;
+			
+		if (_memOffset == 0x1C000000)
+			OSD::Notify("Alternate address set loaded.");
 	}
 }
