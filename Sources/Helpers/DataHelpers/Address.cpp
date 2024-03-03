@@ -1,4 +1,5 @@
 #include "Helpers/DataHelpers/Address.hpp"
+#include "Helpers/GeneralHelpers.hpp"
 #include "CTRPluginFramework/System/Process.hpp"
 
 namespace CTRPluginFramework {
