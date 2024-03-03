@@ -64,6 +64,8 @@ namespace CTRPluginFramework {
         InitSoundFolder(menu);
 
         AddAllFolders(menu);
+
+        HideRegionEntries(menu);
     }
 
     void AddAllFolders(PluginMenu& menu)
@@ -451,6 +453,25 @@ namespace CTRPluginFramework {
         *sound += new MenuEntry("Force normal or 8-bit BGM", nullptr, BGM_SFX::forceNormal8bit);
         *sound += new MenuEntry("Disable Timeless Tunic voice filter", nullptr, BGM_SFX::disable8bitVoice,
         "You will be voiceless in Hytopia, but retain a normal voice in the Drablands.");
+    }
+
+    void HideRegionEntries(PluginMenu& menu)
+    {
+        switch (Process::GetTitleID()) 
+		{
+			case TID_USA:
+                break;
+
+            case TID_EUR:
+                break;
+
+            case TID_JPN:
+                break;
+
+            case TID_KOR:
+                restoreGreatFairy->Hide();
+                break;
+        }
     }
 
     void ToggleMenuChange(Time time)

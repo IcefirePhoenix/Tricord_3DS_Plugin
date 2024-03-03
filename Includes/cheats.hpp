@@ -30,6 +30,7 @@ namespace CTRPluginFramework {
     void InitSaveFolder(PluginMenu& menu);
     void InitSoundFolder(PluginMenu& menu);
     void AddAllFolders(PluginMenu& menu);
+    void HideRegionEntries(PluginMenu& menu);
 }
 
 #endif
