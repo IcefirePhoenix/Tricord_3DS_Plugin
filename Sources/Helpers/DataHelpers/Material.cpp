@@ -20,7 +20,7 @@ namespace CTRPluginFramework {
         "Sweet Shroom",
         "Blin Bling",
         "Gohma's Eye",
-        "Mystery Jade"
+        "Mystery Jade",
         "Supple Leaf"
     };
 
@@ -54,7 +54,7 @@ namespace CTRPluginFramework {
         "Freezard Water",
         "Chill Stone",
         "Ice Rose",
-        "Beastie Patch",
+        "Beastie Patch"
     };
 
     const StringVector Material::fortressMats = {
@@ -64,7 +64,7 @@ namespace CTRPluginFramework {
         "Ancient Coin",
         "Fancy Fabric",
         "Exquisite Lace",
-        "Vibrant Brooch"
+        "Vibrant Brooch",
         "Brittle Papyrus"
     };
 
@@ -101,7 +101,7 @@ namespace CTRPluginFramework {
         "Fabled Butterfly"
     };
 
-    int Material::selectMaterialWorld(void) 
+    int Material::selectMaterialWorld(void)
     {
         StringVector worldSelectionList = Level::worldList;
 
@@ -113,64 +113,65 @@ namespace CTRPluginFramework {
         return chooseWorld.Open();
     }
 
-    int Material::selectMaterialIndiv(int selectedWorld) 
+    int Material::selectMaterialIndiv(int selectedWorld)
     {
-        int chosenMaterial = -1;
+        int materialOffset = 0, chosenMaterial = -1;
         Keyboard chooseMaterial("Select a material:");
 
         switch (selectedWorld) {
         case 0:
             chooseMaterial.Populate(otherMats);
-            chosenMaterial = chooseMaterial.Open();
+            materialOffset = 0;
             break;
 
         case 1:
             chooseMaterial.Populate(woodlandMats);
-            chosenMaterial = chooseMaterial.Open() + 6;
+            materialOffset = 6;
             break;
 
         case 2:
             chooseMaterial.Populate(riversideMats);
-            chosenMaterial = chooseMaterial.Open() + 14;
+            materialOffset = 14;
             break;
 
         case 3:
             chooseMaterial.Populate(volcanoMats);
-            chosenMaterial = chooseMaterial.Open() + 22;
+            materialOffset = 22;
             break;
 
         case 4:
             chooseMaterial.Populate(iceMats);
-            chosenMaterial = chooseMaterial.Open() + 30;
+            materialOffset = 30;
             break;
 
         case 5:
             chooseMaterial.Populate(fortressMats);
-            chosenMaterial = chooseMaterial.Open() + 38;
+            materialOffset = 38;
             break;
 
         case 6:
             chooseMaterial.Populate(dunesMats);
-            chosenMaterial = chooseMaterial.Open() + 46;
+            materialOffset = 46;
             break;
 
         case 7:
             chooseMaterial.Populate(ruinsMats);
-            chosenMaterial = chooseMaterial.Open() + 54;
+            materialOffset = 54;
             break;
 
         case 8:
             chooseMaterial.Populate(skyMats);
-            chosenMaterial = chooseMaterial.Open() + 62;
+            materialOffset = 62;
             break;
         }
-
+        chosenMaterial = chooseMaterial.Open();
         if (chosenMaterial >= 0)
-            chosenMaterial = chosenMaterial + 20; // 0-23 are not materials
+            chosenMaterial += (materialOffset + 20); // 0-23 are not materials
+
         return chosenMaterial;
     }
 
-    std::string Material::getMaterialName(int world, int mat) 
+    std::string Material::getMaterialName(int world, int mat)
     {
         int finalMatID = mat - 20;
 
@@ -197,7 +198,7 @@ namespace CTRPluginFramework {
         return "";
     }
 
-    // TODO: review this 
+    // TODO: review this
     int Material::getMaterialCount(int materialID)
     {
         // is this needed
