@@ -57,26 +57,31 @@ namespace CTRPluginFramework
 		{ 0x20C8F080, 0x0, 0x0, 0x0 } // bye
 	};
 
-	// reset
-	//if (!entry->IsActivated()) {
-	//	Process::Patch(AddressList::UseDoTLayoutAlways.addr, 0x0A00000D);
-	//}
+	u32 graphicsAddresses[8];
 
-	void refreshEmoteGraphics(const u32 color[][4], std::vector<u8>& layout, bool useBlank) 
+	void initEmoteAddresses(void)
 	{
-		u32 graphicsAddresses[8] = {
+		Address temp[8] = {
 			AddressList::EmoteAGraphic.addr,
 			AddressList::EmoteBGraphic.addr,
 			AddressList::EmoteCGraphic.addr,
 			AddressList::EmoteDGraphic.addr,
 			AddressList::EmoteEGraphic.addr,
-			AddressList::EmoteFGraphic.addr, 
+			AddressList::EmoteFGraphic.addr,
 			AddressList::EmoteGGraphic.addr,
 			AddressList::EmoteHGraphic.addr
 		};
 
+		for (int iterator = 0; iterator < 8; ++iterator)
+		{
+			graphicsAddresses[iterator] = temp[iterator].addr;
+		}
+	}
+
+	void refreshEmoteGraphics(const u32 color[][4], std::vector<u8>& layout, bool useBlank)
+	{
 		int region;
-		switch (Process::GetTitleID()) 
+		switch (Process::GetTitleID())
 		{
 		case TID_USA:
 			region = 0;
@@ -100,11 +105,11 @@ namespace CTRPluginFramework
 		}
 
 		// write graphic pointers
-		for (int i = 0; i < 8; i++) 
+		for (int i = 0; i < 8; i++)
 		{
 			if (useBlank && i == 7)
 				Process::Write32(graphicsAddresses[i], blankEmotePointer);
-			else 
+			else
 				Process::Write32(graphicsAddresses[i], color[layout[i]][region]);
 		}
 	}
@@ -112,9 +117,9 @@ namespace CTRPluginFramework
 	std::vector<u8> currentEmoteLayout;
 	bool useBlankEmote;
 
-	void initGraphicsRefresh(bool useBlankEmote) 
+	void initGraphicsRefresh(bool useBlankEmote)
 	{
-		switch (GeneralHelpers::getCurrLink()) 
+		switch (GeneralHelpers::getCurrLink())
 		{
 		case 0:
 			refreshEmoteGraphics(greenEmotePointers, currentEmoteLayout, useBlankEmote);
@@ -132,51 +137,77 @@ namespace CTRPluginFramework
 	{
 		Process::Patch(address, buttonID_A); 		// edit button IDs (1st half)
 		Process::Patch(address + 0x4, buttonID_B); 	// edit button IDs (2nd half)
-		
-		currentEmoteLayout = pointerVector; 		// config pointers to emote graphics 
+
+		currentEmoteLayout = pointerVector; 		// config pointers to emote graphics
 
 		initGraphicsRefresh(isBlankEmote);			// update emote graphics
 	}
 
-	void disableDefaultEmotes(void)
+	void toggleDefaultEmotes(bool shouldDisable)
 	{
-		u32 forceDotLayoutEdit = 0xEA00000D;
+		u32 forceDotLayoutEdit = shouldDisable ? 0xEA00000D : 0x0A00000D; // edit : default
 		Process::Patch(AddressList::UseDoTLayoutAlways.addr, forceDotLayoutEdit);
 	}
 
 
-	void Emotes::drablandEmoteSwapper(MenuEntry* entry) 
+	void Emotes::drablandEmoteSwapper(MenuEntry* entry)
 	{
-		disableDefaultEmotes();
+		if (entry->WasJustActivated())
+			initEmoteAddresses();
 
-		if (entry->Hotkeys[0].IsPressed()) 
-			initEmoteValueLayout(AddressList::GameplayEmotes.addr, 0x080A0B00, 0x07060504, false, { 0, 11, 6, 5, 8, 3, 4, 9 });
-		else if (entry->Hotkeys[1].IsPressed()) 
-			initEmoteValueLayout(AddressList::GameplayEmotes.addr, 0x09030201, 0x0C060504, true, { 1, 2, 7, 10, 8, 3, 4 });	
+		if (GeneralHelpers::isLoadingScreen())
+		{
+			initEmoteValueLayout(AddressList::GameplayEmotes.addr, 0x03020100, 0x07060504, false, {0, 1, 2, 7, 8, 3, 4, 9});
+			toggleDefaultEmotes(false);
+			return;
+		}
+
+		if (entry->Hotkeys[0].IsPressed())
+		{
+			initEmoteValueLayout(AddressList::GameplayEmotes.addr, 0x03020100, 0x07060504, false, {0, 1, 2, 7, 8, 3, 4, 9});
+			toggleDefaultEmotes(true);
+		}
+		else if (entry->Hotkeys[1].IsPressed())
+		{
+			initEmoteValueLayout(AddressList::GameplayEmotes.addr, 0x09080A0B, 0x0C060504, true, {11, 6, 5, 10, 8, 3, 4});
+			toggleDefaultEmotes(true);
+		}
 	}
 
 	// TODO: add blank emote?
-	void Emotes::lobbyEmoteSwapper(MenuEntry* entry) 
+	void Emotes::lobbyEmoteSwapper(MenuEntry* entry)
 	{
-		disableDefaultEmotes();
+		u32 finalAddress = (Level::getPrevLevel() < Level::levelIDFromName("Deku Forest")) ? AddressList::GameplayEmotes.addr : AddressList::LobbyEmotes.addr;
 
-		if (Level::getCurrLevel() == Level::levelIDFromName("Hytopia Castle")) 
+		if (entry->WasJustActivated())
+			initEmoteAddresses();
+
+		if (GeneralHelpers::isLoadingScreen())
 		{
-			// temporary workaround for when previous location is not drablands 
-			if (Level::getPrevLevel() < Level::levelIDFromName("Deku Forest"))
+			initEmoteValueLayout(finalAddress, 0x05080A0B, 0x00000706, true, {11, 6, 5, 3, 4, 9, 0});
+			toggleDefaultEmotes(false);
+			return;
+		}
+
+		if (Level::getCurrLevel() == Level::levelIDFromName("Hytopia Castle"))
+		{
+			// temporary workaround for when previous location is not drablands
+			if (entry->Hotkeys[0].IsPressed())
 			{
-				if (entry->Hotkeys[0].IsPressed()) 
-					initEmoteValueLayout(AddressList::GameplayEmotes.addr, 0x080A0B00, 0x07060504, false, { 0, 11, 6, 5, 8, 3, 4, 9 });					
-				else if (entry->Hotkeys[1].IsPressed()) 
-					initEmoteValueLayout(AddressList::GameplayEmotes.addr, 0x09030201, 0x0C060504, true, { 1, 2, 7, 10, 8, 3, 4 });					
+				initEmoteValueLayout(finalAddress, 0x05080A0B, 0x00000706, true, {11, 6, 5, 3, 4, 9, 0});
+				toggleDefaultEmotes(true);
 			}
-			else 
+			else if (entry->Hotkeys[1].IsPressed())
 			{
-				if (entry->Hotkeys[0].IsPressed())
-					initEmoteValueLayout(AddressList::LobbyEmotes.addr, 0x04090100, 0x0C060302, true, { 0, 1, 10, 8, 2, 7, 4 });					
-				else if (entry->Hotkeys[1].IsPressed()) 
-					initEmoteValueLayout(AddressList::LobbyEmotes.addr, 0x05080A0B, 0x0C000706, true, { 11, 6, 5, 3, 4, 9, 0 });					
+				initEmoteValueLayout(finalAddress, 0x04090100, 0x00000302, true, {0, 1, 10, 8, 2, 7, 0});
+				toggleDefaultEmotes(true);
+			}
+			else if (entry->Hotkeys[2].IsPressed())
+			{
+				Process::Write32(graphicsAddresses[5], blankEmotePointer);
+				Process::Write8(finalAddress + 0x5, 0xC);
+				toggleDefaultEmotes(true);
 			}
 		}
 	}
-} 
+}
