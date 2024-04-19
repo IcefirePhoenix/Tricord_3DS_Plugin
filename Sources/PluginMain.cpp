@@ -40,7 +40,7 @@ namespace CTRPluginFramework {
     MenuFolder* save;
     MenuFolder* sound;
 
-    static MenuEntry* EntryWithHotkey(MenuEntry* entry, const std::vector<Hotkey>& hotkeys) 
+    static MenuEntry* EntryWithHotkey(MenuEntry* entry, const std::vector<Hotkey>& hotkeys)
     {
         if (entry != nullptr) {
             for (const Hotkey& hotkey : hotkeys)
@@ -113,6 +113,7 @@ namespace CTRPluginFramework {
         *warp += new MenuEntry("Warp to any stage in current Drablands level", nullptr, Gameplay::stageWarp);
         reWarp = new MenuEntry("Return to previous warp: None", nullptr, Gameplay::warpAgain);
         *warp += reWarp;
+        *warp += new MenuEntry("Reset the current area", nullptr, Gameplay::resetRoom);
 
         doppelEnableAuto = new MenuEntry("Mid-warp Doppel Enable (auto)", Gameplay::midWarpDoppelEnable);
         challengeEditAuto = new MenuEntry("Challenge ID edit (auto)", Gameplay::writeChallengeEdit);
@@ -144,7 +145,7 @@ namespace CTRPluginFramework {
         physicsEditAutoG = new MenuEntry("Write physics edit G (auto)", Gameplay::writePhysicsChanges);
         physicsEditAutoB = new MenuEntry("Write physics edit B (auto)", Gameplay::writePhysicsChanges);
         physicsEditAutoR = new MenuEntry("Write physics edit R (auto)", Gameplay::writePhysicsChanges);
-        
+
         MenuEntry* physicsSlots[6] = {
             physicsEditAutoG,
             physicsSelG,
@@ -158,7 +159,7 @@ namespace CTRPluginFramework {
         {
             // assign ArgIDs for EditAuto and Sel -> green = 0, blue = 1, red = 2
             // integer division always rounds up, so iterator / 2 should always result in 0-2 values
-            physicsSlots[iterator]->SetArg(reinterpret_cast<void*>(iterator / 2));  
+            physicsSlots[iterator]->SetArg(reinterpret_cast<void*>(iterator / 2));
 
             // add the physicsSel entries to the menu
             if (iterator % 2 == 1)
@@ -188,11 +189,11 @@ namespace CTRPluginFramework {
         *moonJumpFlight += new MenuEntry("Adjust ascent speed: Medium", nullptr, Gameplay::adjustAscentSpeed);
         *moonJumpFlight += new MenuEntry("Adjust descent speed: Medium", nullptr, Gameplay::adjustDescentSpeed);
         *moonJumpFlight += new MenuEntry("Adjust lateral speed: Medium", nullptr, Gameplay::adjustLateralSpeed);
-        
+
         *gameplay += warp;
         *gameplay += healthFairies;
         *gameplay += energy;
-        *gameplay += enemies;
+        //*gameplay += enemies;
         *gameplay += physics;
         *gameplay += moonJumpFlight;
 
@@ -200,9 +201,9 @@ namespace CTRPluginFramework {
         controlAllAuto = new MenuEntry("Control all players (auto)", Gameplay::writePlayerControl);
 
         *gameplay += new MenuEntry("Infinite time", Gameplay::infTime);
-            }
-    
-    void InitEmoteFolder (PluginMenu& menu) 
+        }
+
+    void InitEmoteFolder (PluginMenu& menu)
     {
         emotes = new MenuFolder("Emotes");
 
@@ -213,7 +214,8 @@ namespace CTRPluginFramework {
 
         *emotes += (EntryWithHotkey(new MenuEntry("Enable Lobby Emote Swapper", Emotes::lobbyEmoteSwapper), {
             Hotkey(Key::DPadLeft, "Swap to original emote set"),
-            Hotkey(Key::DPadRight, "Swap to alternative emote set")
+            Hotkey(Key::DPadRight, "Swap to alternative emote set"),
+            Hotkey(Key::DPadUp, "Use blank emote")
         }));
     }
 
@@ -255,7 +257,7 @@ namespace CTRPluginFramework {
         costume = new MenuFolder("Costumes");
 
         triggerCostumeSlots = new MenuEntry("Open Custom Costume Slots", nullptr, Costume::openCustomCostumeSlots);
-        menuCostumeSlotA = new MenuEntry("   Set custom costume slot A", nullptr, Costume::selectCostumeID, 
+        menuCostumeSlotA = new MenuEntry("   Set custom costume slot A", nullptr, Costume::selectCostumeID,
             "This setting is not accessible if Restore Great Fairy Costume is enabled.");
         menuCostumeSlotB = new MenuEntry("   Set custom costume slot B", nullptr, Costume::selectCostumeID);
         menuCostumeSlotC = new MenuEntry("   Set custom costume slot C", nullptr, Costume::selectCostumeID);
@@ -312,7 +314,7 @@ namespace CTRPluginFramework {
         *miscellaneous += (EntryWithHotkey(new MenuEntry("(TODO) Enable button spam", Miscellaneous::buttonSpammer, "When any of the selected keys are\npressed down, they will automatically spam.\nGood for in-game manuevers that require\nstrict timing of button input(s).\n\nDefault keys: A, B, X, Y, L, R."), {
             Hotkey(Key::A | Key::B | Key::X | Key::Y | Key::L | Key::R , "Button Spammer")
         }));
-        
+
         *miscellaneous += new MenuEntry("Use photo viewer touchscreen toggle", Miscellaneous::managePhotoDisp);
         *miscellaneous += new MenuEntry("Toggle sword beam cooldown", nullptr, Miscellaneous::selectLinkBeam);
         *miscellaneous += new MenuEntry("Force instant text boxes", nullptr, Miscellaneous::manageInstantText);
@@ -345,7 +347,7 @@ namespace CTRPluginFramework {
         *player += new MenuEntry("Toggle PvP damage edits", nullptr, Player::setPVPChanges);
         *player += new MenuEntry("Set custom player model size", nullptr, Player::setSizeChanges);
         *player += new MenuEntry("Set custom sword model(s)", nullptr, Player::setSwordChanges);
-   
+
         jinxEditAuto = new MenuEntry("Write Jinx edits (auto)", Player::writeJinxChanges);
         spawnEditAuto = new MenuEntry("Write Spawn edits (auto)", Player::writeSpawnChanges);
         visibleEditAuto = new MenuEntry("Write Visibility edits (auto)", Player::writeVisibilityChanges);
@@ -369,9 +371,9 @@ namespace CTRPluginFramework {
         // TODO: *items += new MenuEntry("Always use upgraded Items", Item::upgradeItemAlways);
     }
 
-    void InitRenderFolder(PluginMenu& menu) 
+    void InitRenderFolder(PluginMenu& menu)
     {
-        render = new MenuFolder("Rendering");        
+        render = new MenuFolder("Rendering");
 
         *render += new MenuEntry("Hide HUD", Rendering::triggerHideHUD);
         *render += new MenuEntry("Disable fog effects", Rendering::disableFog);
@@ -393,7 +395,7 @@ namespace CTRPluginFramework {
         *save += new MenuEntry("Set Main Voice", nullptr, Save::mainVoice);
         *save += new MenuEntry("Set Hero Point count", nullptr, Save::heroPointCountSet);
         *save += new MenuEntry("Set Coliseum Win count", nullptr, Save::coliseumWinCountSet);
-        *save += new MenuEntry("Edit Level Completion", nullptr, Save::selLevelCompletion);
+        //*save += new MenuEntry("Edit Level Completion (BROKEN)", nullptr, Save::selLevelCompletion);
 
         MenuFolder* merchant = new MenuFolder("Street Merchant Codes");
             merchantA = new MenuEntry("Set 1st material slot", nullptr, Save::selMerchantSlot);
@@ -435,7 +437,7 @@ namespace CTRPluginFramework {
         *sound += new MenuEntry("Choose Lobby Ball song", nullptr, BGM_SFX::lobbyBallSong);
 
         MenuEntry* soundEntries[4] = {
-            masterVol, 
+            masterVol,
             BGMVol,
             voiceVol,
             lowHPVol,
@@ -445,7 +447,7 @@ namespace CTRPluginFramework {
         for (int iterator = 0; iterator < 4; ++iterator)
         {
             soundEntries[iterator]->SetArg(reinterpret_cast<void*>(iterator));  // store entry IDs
-            *sound += soundEntries[iterator];   
+            *sound += soundEntries[iterator];
         }
 
         lobbyBallAuto = new MenuEntry("Write lobby ball edits (auto)", BGM_SFX::writeLobbyBallSel);
@@ -457,7 +459,7 @@ namespace CTRPluginFramework {
 
     void HideRegionEntries(PluginMenu& menu)
     {
-        switch (Process::GetTitleID()) 
+        switch (Process::GetTitleID())
 		{
 			case TID_USA:
                 break;
@@ -527,7 +529,7 @@ namespace CTRPluginFramework {
                 turbo->Show();
                 costume->HideWithoutDisable();
                 emotes->HideWithoutDisable();
-                player->HideWithoutDisable();                
+                player->HideWithoutDisable();
                 gameplay->HideWithoutDisable();
                 items->HideWithoutDisable();
                 render->HideWithoutDisable();
@@ -552,7 +554,7 @@ namespace CTRPluginFramework {
         menu->OnNewFrame = ToggleMenuChange;
 
         autoBeamCooldown->Enable(); // TODO: move this
-        
+
         Address::InitMemoryRange();
         AddressList::InitAddresses();
 
@@ -617,7 +619,7 @@ namespace CTRPluginFramework {
 
         //settings.CachedDrawMode = true;
         settings.ThreadPriority = 0x3E;
-        
+
         ToggleTouchscreenForceOn();
     }
 
