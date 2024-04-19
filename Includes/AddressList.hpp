@@ -8,7 +8,7 @@ namespace CTRPluginFramework {
 	class AddressList {
 	public:
 		static void     InitAddresses(void);
-		
+
 		// Camera
 		static Address		DynamicCameraCheck;
 		static Address		GameplayCameraCheck;
@@ -85,6 +85,7 @@ namespace CTRPluginFramework {
 		static Address		TargetStageID;
 		static Address		TargetSpawnID;
 		static Address		Warp;
+		static Address 		WarpActivation;
 		static Address		WarpPointer;
 		static Address		ChallengeID;
 
@@ -102,7 +103,7 @@ namespace CTRPluginFramework {
 
 		// Miscellaneous
 		static Address		CameraOnX;
-		static Address		CameraShutter;		
+		static Address		CameraShutter;
 		static Address		CheckPhotoExist;
 		static Address		DisplayTopPhoto;
 		static Address		SeeChestContents;
@@ -131,7 +132,7 @@ namespace CTRPluginFramework {
 		static Address		PlayerModelSize;
 		static Address		PositionX;
 		static Address		PositionY;
-		static Address		PositionZ;	
+		static Address		PositionZ;
 		static Address		PreviousAnim;
 		static Address		PVPMode;
 		static Address		RespawnPositionX;
@@ -154,7 +155,7 @@ namespace CTRPluginFramework {
 		static Address		LoadingScreenSPIcons;
 		static Address		CheerPomPom;
 		static Address		Aura;
-		
+
 		// Savefile
 		static Address		NormalNCCompletion;
 		static Address		NormalC1Completion;
@@ -341,7 +342,7 @@ namespace CTRPluginFramework {
 		static Address		Link_EdYorokeTotem2;
 		static Address		Link_EdWaitTotem2;
 		static Address		Link_WaitPinch;
-		
+
 	};
 }
 

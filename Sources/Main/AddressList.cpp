@@ -4,7 +4,7 @@
 namespace CTRPluginFramework {
 
 	void AddressList::InitAddresses(void) {
-		/* Camera */ 
+		/* Camera */
 		DynamicCameraCheck 			= Address(0x00143810, 0x0014382C, 0x001439FC, 0x001435DC);
 		GameplayCameraCheck 		= Address(0x00143A7C, 0x00143A98, 0x00143C68, 0x00143848);
 		GameplayCameraInit 			= Address(0x00143A80, 0x00143A9C, 0x00143C6C, 0x0014384C);
@@ -20,10 +20,10 @@ namespace CTRPluginFramework {
 		OrthographicZoom 			= Address(0x32C81528, 0x32C815A8, 0x32CCBF68, 0x32C80C28);
 		PerspectiveZoom 			= Address(0x005F529C, 0x005F56CC, 0x005F621C, 0x005F5204);
 
-		/* Chaos */ 
+		/* Chaos */
 		HeartsTakeHealth 			= Address(0x0015CA04, 0x0015CA20, 0x0015CEF0, 0x0015C8AC);
 
-		/* Costume */ 
+		/* Costume */
 		CostumeAttrA 				= Address(0x32849510, 0x32849590, 0x32893F50, 0x32848C10);
 		CostumeAttrB 				= Address(0x32849512, 0x32849592, 0x32893F52, 0x32848C12);
 		CostumeAttrC 				= Address(0x32849513, 0x32849593, 0x32893F53, 0x32848C13);
@@ -36,9 +36,9 @@ namespace CTRPluginFramework {
 		BearMinMaxCheckA			= Address(0x005FAACC, 0x005FAEFC, 0x005FBA64, 0x005FAA4C);
 		BearMinMaxCheckB			= Address(0x005FAAD0, 0x005FAF00, 0x005FBA68, 0x005FAA50);
 
-		/* Console */ 
+		/* Console */
 
-		/* Emotes */ 
+		/* Emotes */
 		GameplayEmotes 				= Address(0x006B6E98, 0x006B6E98, 0x006B6E98, 0x006B5E98);
 		LobbyEmotes 				= Address(0x006B6EA0, 0x006B6EA0, 0x006B6EA0, 0x006B5EA0);
 		EmoteAGraphic 				= Address(0x32C91830, 0x32C918B0, 0x32CDC420, 0x32C90F30);
@@ -51,7 +51,7 @@ namespace CTRPluginFramework {
 		EmoteHGraphic 				= Address(0x32C95BBC, 0x32C95C3C, 0x32CE07AC, 0x32C952BC);
 		UseDoTLayoutAlways 			= Address(0x002F0C6C, 0x002F1010, 0x002F1B94, 0x002F0EDC);
 
-		/* Game Data */ 
+		/* Game Data */
 		CurrLevelID 				= Address(0x3280EDC4, 0x3280EE44, 0x32859804, 0x3280E4C4);
 		CurrStageID 				= Address(0x3280EDC8, 0x3280EE48, 0x32859808, 0x3280E4C8);
 		CurrSpawnID 				= Address(0x3280EDCA, 0x3280EE4A, 0x3285980A, 0x3280E4CA);
@@ -82,10 +82,11 @@ namespace CTRPluginFramework {
 		TargetStageID				= Address(0x32C81F14, 0x32C81F94, 0x32CCC954, 0x32C81614);
 		TargetSpawnID				= Address(0x32C81F16, 0x32C81F96, 0x32CCC956, 0x32C81616);
 		Warp						= Address(0x3282C4EC, 0x3282C56C, 0x32876F2C, 0x3282BBEC);
+		WarpActivation 				= Address(0x32C81F00, 0x0, 0x0, 0x0);
 		WarpPointer					= Address(0x32C81E28, 0x32C81EA8, 0x32CCC868, 0x32C81528);
 		ChallengeID					= Address(0x32D81E3C, 0x32D81EBC, 0x32DD4660, 0x32D8153C);
 
-		/* Items */ 
+		/* Items */
 		BowStrafe 					= Address(0x0038CC7C, 0x0038D024, 0x0038DC00, 0x0038CECC);
 		FireGloveStrafe 			= Address(0x003C8FD8, 0x003C9380, 0x003C9F5C, 0x003C9228);
 		GustStrafe 					= Address(0x003C85A8, 0x003C8950, 0x003C952C, 0x003C87F8);
@@ -97,19 +98,19 @@ namespace CTRPluginFramework {
 		GripshotStrafe 				= Address(0x003C214C, 0x003C24F4, 0x003C30D0, 0x003C239C);
 		WaterRodStrafe 				= Address(0x003C59C0, 0x003C5D68, 0x003C6944, 0x003C5C10);
 
-		/* Miscellaneous */ 
+		/* Miscellaneous */
 		CameraOnX 					= Address(0x32D92920, 0x32D929A0, 0x32DE5220, 0x32D92020);
-		CameraShutter 				= Address(0x32D92E9C, 0x32D92F1C, 0x32DE579C, 0x32D9259C);		
+		CameraShutter 				= Address(0x32D92E9C, 0x32D92F1C, 0x32DE579C, 0x32D9259C);
 		CheckPhotoExist 			= Address(0x31B2FE3D, 0x31B2FEBD, 0x31B2FBBD, 0x31B2E6BD);
 		DisplayTopPhoto 			= Address(0x31B2FE21, 0x31B2FEA1, 0x31B2FBA1, 0x31B2E6A1);
 		SeeChestContents 			= Address(0x0022FFB8, 0x00230040, 0x00230CDC, 0x0023016C);
 		SwordBeamCD 				= Address(0x328495A0, 0x32849620, 0x32893FE0, 0x32848CA0);
 		TextBoxSpeed 				= Address(0x0018122C, 0x001812BC, 0x001817AC, 0x0018116C);
 
-		/* Padding */ 
+		/* Padding */
 		TextToRodata 				= Address(0x006A9168, 0x006A9598, 0x006A9FE4, 0x006A8FDC);
 
-		/* Player */ 
+		/* Player */
 		ActiveLink 					= Address(0x31A03879, 0x31A038D1, 0x31A035C5, 0x31A02129);
 		CurrentAnim 				= Address(0x32849188, 0x32849208, 0x32893BC8, 0x32848888);
 		CurrentItem 				= Address(0x32841A20, 0x32841AA0, 0x3288C460, 0x32841120);
@@ -137,7 +138,7 @@ namespace CTRPluginFramework {
 		RespawnPositionZ 			= Address(0x32841758, 0x328417D8, 0x3288C198, 0x32840E58);
 		SwordType 					= Address(0x328419EC, 0x32841A6C, 0x3288C42C, 0x328410EC);
 
-		/* Rendering */ 
+		/* Rendering */
 		ArrowIndicatorColorBot 		= Address(0x32D91B24, 0x32D91BA4, 0x32DE4424, 0x32D91224);
 		ArrowIndicatorColorMid 		= Address(0x32D91A04, 0x32D91A84, 0x32DE4304, 0x32D91104);
 		ArrowIndicatorColorTop 		= Address(0x32D918E4, 0x32D91964, 0x32DE41E4, 0x32D90FE4);
@@ -153,7 +154,7 @@ namespace CTRPluginFramework {
 		CheerPomPom					= Address(0x001F9AFC, 0x001F9B8C, 0x001FA7A0, 0x001F99B4);
 		Aura						= Address(0x001C3030, 0x001C30C0, 0x001C35B4, 0x001C2F74);
 
-		/* Savefile */ 
+		/* Savefile */
 		NormalNCCompletion 			= Address(0x31A060EC, 0x31A06144, 0x31A05E38, 0x31A0499C);
 		NormalC1Completion 			= Address(0x31A060F4, 0x31A0614C, 0x31A05E40, 0x31A049A4);
 		NormalC2Completion 			= Address(0x31A060FC, 0x31A06154, 0x31A05E48, 0x31A049AC);
@@ -341,7 +342,7 @@ namespace CTRPluginFramework {
 		Link_WaitPinch				= Address(0x00731A58, 0x00000000, 0x00000000, 0x00000000);
 	}
 
-	// Camera	
+	// Camera
 	Address		AddressList::DynamicCameraCheck;
 	Address		AddressList::GameplayCameraCheck;
 	Address		AddressList::GameplayCameraInit;
@@ -411,12 +412,13 @@ namespace CTRPluginFramework {
 	Address		AddressList::PauseStatus;
 	Address		AddressList::PreviousLevelID;
 	Address		AddressList::PreviousStageID;
-	Address		AddressList::PreviousSpawnID;	
+	Address		AddressList::PreviousSpawnID;
 	Address		AddressList::TimeElapsed;
 	Address		AddressList::TargetLevelID;
 	Address		AddressList::TargetStageID;
 	Address		AddressList::TargetSpawnID;
 	Address		AddressList::Warp;
+	Address 	AddressList::WarpActivation;
 	Address		AddressList::WarpPointer;
 	Address		AddressList::ChallengeID;
 
@@ -440,7 +442,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::SeeChestContents;
 	Address		AddressList::SwordBeamCD;
 	Address		AddressList::TextBoxSpeed;
-	
+
 	// Padding
 	Address		AddressList::TextToRodata;
 
