@@ -3,13 +3,13 @@
 
 #include <CTRPluginFramework.hpp>
 
-namespace CTRPluginFramework 
+namespace CTRPluginFramework
 {
 	Level::Level(u8 ID, std::string externalName, std::string internalName, bool dummyStatus) :
 		_levelID(ID), _extName(externalName), _intName(internalName), _isDummy(dummyStatus)
 	{
 	}
-	
+
 	const Level Level::levelList[45] = {
 		Level(0x1, "Hytopia Castle", "StartCastle", false),
 		Level(0x2, "Hytopia", "StartVillage", false),
@@ -178,19 +178,19 @@ namespace CTRPluginFramework
         "Sky Realm Arena"
     };
 
-    
+
     StringVector Level::getWorldNamesfromID(int ID, bool useNonLevels)
     {
         if (!useNonLevels)
             ID = ID + 2;
 
-        switch (ID) 
+        switch (ID)
         {
         case 0:
             return Level::hytopiaLevelList;
         case 1:
             return Level::arenaList;
-        case 2: 
+        case 2:
             return Level::woodlandLevelList;
         case 3:
             return Level::riversideLevelList;
@@ -213,12 +213,12 @@ namespace CTRPluginFramework
         }
     }
 
-    int Level::selWorld(bool useDoT, bool useNonLevels) 
+    int Level::selWorld(bool useDoT, bool useNonLevels)
     {
         StringVector worldSelectionList = Level::worldList;
 
         if (useNonLevels)
-        {   
+        {
             worldSelectionList.clear();
             worldSelectionList.insert(worldSelectionList.begin(), "Levels");
 		    worldSelectionList.insert(worldSelectionList.begin(), "Coliseum");
@@ -235,32 +235,32 @@ namespace CTRPluginFramework
     }
 
     // TODO: right now this only uses woodlands-sky
-    std::string Level::worldIDToStr(int worldID) 
+    std::string Level::worldIDToStr(int worldID)
     {
         return Level::worldList[worldID];
     }
 
-	std::string Level::levelNameFromID(u8 levelID) 
+	std::string Level::levelNameFromID(u8 levelID)
 	{
-		for (int iterator = 0; iterator < 45; ++iterator) 
+		for (int iterator = 0; iterator < 45; ++iterator)
 		{
-			if (levelList[iterator]._levelID == levelID) 
+			if (levelList[iterator]._levelID == levelID)
 				return levelList[iterator]._extName;
 		}
 		return ""; // wasn't found
 	}
 
-	u8 Level::levelIDFromName(std::string name) 
+	u8 Level::levelIDFromName(std::string name)
 	{
-		for (int iterator = 0; iterator < 45; ++iterator) 
+		for (int iterator = 0; iterator < 45; ++iterator)
 		{
-			if (levelList[iterator]._extName == name) 
+			if (levelList[iterator]._extName == name)
 				return levelList[iterator]._levelID;
 		}
 		return -1; // wasn't found
 	}
 
-	u8 Level::getPrevLevel(void) 
+	u8 Level::getPrevLevel(void)
 	{
 		u8 levelID;
 		Process::Read8(AddressList::PreviousLevelID.addr, levelID);
@@ -268,7 +268,7 @@ namespace CTRPluginFramework
 		return levelID;
 	}
 
-	u8 Level::getCurrLevel(void) 
+	u8 Level::getCurrLevel(void)
 	{
 		u8 levelID;
 		Process::Read8(AddressList::CurrLevelID.addr, levelID);
@@ -276,7 +276,7 @@ namespace CTRPluginFramework
 		return levelID;
 	}
 
-	u8 Level::getCurrStage(void) 
+	u8 Level::getCurrStage(void)
 	{
 		u8 stageID;
 		Process::Read8(AddressList::CurrStageID.addr, stageID);
@@ -284,7 +284,7 @@ namespace CTRPluginFramework
 		return stageID;
 	}
 
-	u8 Level::getCurrChallenge(void) 
+	u8 Level::getCurrChallenge(void)
 	{
 		u8 chalID;
 		Process::Read8(AddressList::ChallengeID.addr, chalID);
@@ -300,35 +300,41 @@ namespace CTRPluginFramework
 		return elapsedTime;
 	}
 
-	void Level::setCurrLevel(u8 levelID) 
+	void Level::setCurrLevel(u8 levelID)
 	{
 		Process::Write8(AddressList::CurrLevelID.addr, levelID);
 	}
 
-	void Level::setCurrStage(u8 stageID) 
+	void Level::setCurrStage(u8 stageID)
 	{
 		Process::Write8(AddressList::CurrStageID.addr, stageID);
 	}
 
-	void Level::setCurrChal(u8 chalID) 
+	void Level::setCurrChal(u8 chalID)
 	{
 		Process::Write8(AddressList::ChallengeID.addr, chalID);
 	}
 
-	bool Level::isInDrablands(void) 
+	bool Level::isInDrablands(u8 optionalLevel)
 	{
-		u8 level = getCurrLevel();
+		u8 level = optionalLevel == 0x0 ? getCurrLevel() : optionalLevel;
 		return (level >= levelIDFromName("Deku Forest")) && (level <= levelIDFromName("Baneful Zone"));
 	}
 
-	bool Level::hasStageBegan(void) 
+    bool Level::isInDoT(u8 optionalLevel)
+    {
+        u8 level = optionalLevel == 0x0 ? getCurrLevel() : optionalLevel;
+        return (level >= levelIDFromName("Forest Zone")) && (level <= levelIDFromName("Baneful Zone"));
+    }
+
+    bool Level::hasStageBegan(void)
 	{
 		return Level::getElapsedTime() >= 0x0;
 	}
 
 	bool Level::hasCertainTimeElapsed(int time)
 	{
-		return Level::getElapsedTime() >= static_cast<u32>(time);	
+		return Level::getElapsedTime() >= static_cast<u32>(time);
 	}
 
 	int Level::selBasicStage(void)
@@ -343,6 +349,12 @@ namespace CTRPluginFramework
 
 		Keyboard selStage("Select a stage:");
         selStage.Populate(stages);
-        return selStage.Open() + 1;
-	}
+
+        int result = selStage.Open();
+
+        if (result >= 0)
+            return result + 1;
+        else
+            return result;
+    }
 }

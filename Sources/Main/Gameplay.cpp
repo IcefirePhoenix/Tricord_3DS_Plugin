@@ -15,13 +15,13 @@ namespace CTRPluginFramework
     MenuEntry* doppelEnableAuto;
     MenuEntry* challengeEditAuto;
     MenuEntry* controlAllAuto;
-    
+
     u16 physicsStatus[3];
     int warpData[3] = { -1, -1, -1 };
     float ascentSpeed = 0.5, descentSpeed = -0.5, lateralSpeed = 0.09;
     bool controlAuto = false;
 
-    void Gameplay::infEnergy(MenuEntry* entry) 
+    void Gameplay::infEnergy(MenuEntry* entry)
     {
         // Write 900 since this is the max for the big energy gauge
         Process::WriteFloat(AddressList::EnergyCurrent.addr, 900);
@@ -68,11 +68,11 @@ namespace CTRPluginFramework
     {
         Process::Write8(AddressList::HealthCurrent.addr, 0x24);
     }
-    
+
     // hotkey entry
     void Gameplay::noHealth(MenuEntry* entry)
     {
-        if (entry->Hotkeys[0].IsPressed()) 
+        if (entry->Hotkeys[0].IsPressed())
             Process::Write8(AddressList::HealthCurrent.addr, 0x0);
     }
 
@@ -95,17 +95,17 @@ namespace CTRPluginFramework
         u32 enemyDataStartAddress, enemyDataNextAddress, enemyCurrStatus;
 
         Process::Read32(AddressList::EnemyDataPointer.addr, enemyDataStartAddress); // get start of enemy data
-        
+
         if (!GeneralHelpers::isNullPointer(enemyDataStartAddress))
             Process::Read32(enemyDataStartAddress, enemyDataNextAddress);           // get next enemy data block
 
         // this is how we know a full iteration has occurred -> stop the loop
-        while (enemyDataNextAddress != (enemyDataNextAddress || AddressList::EnemyDataPointer.addr))            
+        while (enemyDataNextAddress != (enemyDataNextAddress || AddressList::EnemyDataPointer.addr))
         {
             if (!GeneralHelpers::isNullPointer(enemyDataNextAddress))
             {
                 Process::Read32(enemyDataNextAddress + enemyStatusOffset, enemyCurrStatus);
-                if (enemyCurrStatus != defeatedStatus) // there needs to be additional checks here -> whether the data blocks are enemy related 
+                if (enemyCurrStatus != defeatedStatus) // there needs to be additional checks here -> whether the data blocks are enemy related
                     Process::Write32(enemyDataNextAddress + enemyHealthOffset, healthEdit);
 
                 // update with new address
@@ -115,11 +115,11 @@ namespace CTRPluginFramework
     }
 
     void Gameplay::autoKillEnemy(MenuEntry* entry)
-    {	
-        if (entry->Hotkeys[0].IsPressed()       && 
-            Level::isInDrablands()              && 
-            GeneralHelpers::isSinglePlayer()    && 
-            !GeneralHelpers::isPauseScreen()    && 
+    {
+        if (entry->Hotkeys[0].IsPressed()       &&
+            Level::isInDrablands()              &&
+            GeneralHelpers::isSinglePlayer()    &&
+            !GeneralHelpers::isPauseScreen()    &&
             !GeneralHelpers::isLoadingScreen())
 
             manageEnemy(false);
@@ -127,10 +127,10 @@ namespace CTRPluginFramework
 
     void Gameplay::enemyInvinci(MenuEntry* entry)
     {
-        if (entry->Hotkeys[0].IsPressed()       && 
-            Level::isInDrablands()              &&  
-            GeneralHelpers::isSinglePlayer()    && 
-            !GeneralHelpers::isPauseScreen()    && 
+        if (entry->Hotkeys[0].IsPressed()       &&
+            Level::isInDrablands()              &&
+            GeneralHelpers::isSinglePlayer()    &&
+            !GeneralHelpers::isPauseScreen()    &&
             !GeneralHelpers::isLoadingScreen())
 
             manageEnemy(true);
@@ -152,13 +152,13 @@ namespace CTRPluginFramework
         std::string longName = entry->Name();
         std::size_t colonPosition = longName.find(':');
         if (colonPosition != std::string::npos)
-        { 
-            baseEntryName = longName.substr(0, colonPosition); 
+        {
+            baseEntryName = longName.substr(0, colonPosition);
         }
 
         if (!result.empty())
         {
-            if (result == "Not edited") { physicsEntries[player]->Disable(); } 
+            if (result == "Not edited") { physicsEntries[player]->Disable(); }
             else { physicsEntries[player]->Enable(); }
 
             entry->SetName(baseEntryName + ": " + result);
@@ -209,22 +209,22 @@ namespace CTRPluginFramework
         int player = reinterpret_cast<int>(entry->GetArg());
 
         u8 sinkingStatus;
-        u16 currentCol, targetCol = physicsStatus[player]; 
+        u16 currentCol, targetCol = physicsStatus[player];
         u32 addressOffset = player * GameData::playerAddressOffset;
 
         Process::Read8(AddressList::CostumeAttrD.addr + addressOffset, sinkingStatus);
         bool isSinking = (sinkingStatus & 0x80) == 0x80;
 
         currentCol = Collision::getCurrCol(player);
-        bool checkValidColWrite = 
-            currentCol != Collision::colIDFromName("Water") && 
-            currentCol != Collision::colIDFromName("Lava") && 
-            currentCol != Collision::colIDFromName("Air") && 
+        bool checkValidColWrite =
+            currentCol != Collision::colIDFromName("Water") &&
+            currentCol != Collision::colIDFromName("Lava") &&
+            currentCol != Collision::colIDFromName("Air") &&
             currentCol != Collision::colIDFromName("Fall_plane");
 
-        if (!isSinking && checkValidColWrite) 
-        { 
-            Collision::setCurrCol(player, targetCol); 
+        if (!isSinking && checkValidColWrite)
+        {
+            Collision::setCurrCol(player, targetCol);
         }
     }
 
@@ -427,11 +427,11 @@ namespace CTRPluginFramework
         switch (locCategory)
         {
             case 0: // choose from village, shops, castle
-                chosenLevel = warpSelLevel(Level::getWorldNamesfromID(0, true)); 
+                chosenLevel = warpSelLevel(Level::getWorldNamesfromID(0, true));
                 break;
-            case 1: // coliseum 
+            case 1: // coliseum
                 chosenLevel = "Coliseum";
-                break; 
+                break;
             case 2: // choose world level
                 worldID = Level::selWorld(false, false);
                 if (worldID >= 0)
@@ -473,7 +473,7 @@ namespace CTRPluginFramework
             return warpSelStage(Level::arenaList);
         else if (levelID == Level::levelIDFromName("DoT Warp Room"))
             return 1;
-        else 
+        else
             return Level::selBasicStage();
     }
 
@@ -487,36 +487,41 @@ namespace CTRPluginFramework
     int warpSelChallenge(void)
     {
         Keyboard challenge("Choose a challenge:");
-        challenge.Populate(Level::challengeList, true);
-        return challenge.Open(); 
+        challenge.Populate(Level::challengeList);
+        return challenge.Open();
     }
 
-    // TODO: locate loading screen init data to allow warp from hytopia-start
     void Gameplay::instantWarp(MenuEntry* entry)
     {
-        int targetLevel = -1, targetStage = -1, targetChallenge = -1, targetSpawn = 0;
+        int targetLevel = -3, targetStage = -3, targetChallenge = -3, targetSpawn = 0;
+        targetLevel = warpGetLevel(Level::selWorld(true, true)); // Level::selWorld() returns 0-3 given the params (use DoT and nonLevels)
 
-        // Level::selWorld() returns 0-3 given the params (use DoT and nonLevels)
-        targetLevel = warpGetLevel(Level::selWorld(true, true)); 
-        if (targetLevel >= 0x0) 
+        if (targetLevel >= 0x0)
             targetStage = warpGetStage((u8) targetLevel);
-        
-        if (targetStage >= 0x0)
+        else
+            return;
+
+        if (targetStage >= 0x1)
         {
-            if ((u8) targetLevel >= Level::levelIDFromName("Deku Forest") && targetLevel <= Level::levelIDFromName("Sky Temple"))
+            if (Level::isInDrablands(targetLevel) && !Level::isInDoT(targetLevel))
+            {
                 targetChallenge = warpSelChallenge();
-            
+                if (targetChallenge == -1)
+                return;
+            }
+
             // proceed with warp
-            Process::Write8(AddressList::TargetLevelID.addr, (u8) targetLevel);
-            Process::Write8(AddressList::TargetStageID.addr, (u8) targetStage);
+            Process::Write8(AddressList::TargetLevelID.addr, (u8)targetLevel);
+            Process::Write8(AddressList::TargetStageID.addr, (u8)targetStage);
             // TODO: Process::Write8(AddressList::TargetSpawnID.addr, targetspawn);
-            Process::Write32(AddressList::Warp.addr, AddressList::WarpPointer.addr);
+
+            startWarp();
 
             doppelEnableAuto->Enable();
 
             if (targetChallenge >= 0x1)
             {
-                Level::setCurrChal((u8) targetChallenge);
+                Level::setCurrChal((u8)targetChallenge);
                 challengeEditAuto->Enable();
             }
 
@@ -534,10 +539,24 @@ namespace CTRPluginFramework
         {
             Process::Write8(AddressList::TargetLevelID.addr, warpData[0]);
             Process::Write8(AddressList::TargetStageID.addr, warpData[1]);
-            Process::Write32(AddressList::Warp.addr, AddressList::WarpPointer.addr);
+
+            startWarp();
         }
-        else 
+        else
             MessageBox("Error", "Previous warp data not set!")();
+    }
+
+    void Gameplay::resetRoom(MenuEntry *entry)
+    {
+        Process::Write8(AddressList::TargetLevelID.addr, Level::getCurrLevel());
+        Process::Write8(AddressList::TargetStageID.addr, Level::getCurrStage());
+        startWarp();
+    }
+
+    void startWarp(void)
+    {
+        Process::Write16(AddressList::WarpActivation.addr, 0x001E);
+        Process::Write32(AddressList::Warp.addr, AddressList::WarpPointer.addr);
     }
 
     void Gameplay::stageWarp(MenuEntry* entry)
@@ -545,11 +564,13 @@ namespace CTRPluginFramework
         u8 targetLevel = Level::getCurrLevel();
         if (Level::isInDrablands()){
             u8 targetStage = warpGetStage(targetLevel);
+
             Process::Write8(AddressList::TargetLevelID.addr, targetLevel);
             Process::Write8(AddressList::TargetStageID.addr, targetStage);
-            Process::Write32(AddressList::Warp.addr, AddressList::WarpPointer.addr);
+
+            startWarp();
         }
-        else 
+        else
             MessageBox("Error", "Currently not in Drablands!")();
     }
 
@@ -558,9 +579,9 @@ namespace CTRPluginFramework
         if (GeneralHelpers::isLoadingScreen()){
             if (Level::getCurrLevel() >= Level::levelIDFromName("Coliseum"))
                 GeneralHelpers::forceDoppelStatus(true);
-            else 
+            else
                 GeneralHelpers::forceDoppelStatus(false);
-            
+
             entry->Disable();
         }
     }

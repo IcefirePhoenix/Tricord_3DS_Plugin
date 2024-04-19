@@ -9,7 +9,7 @@ namespace CTRPluginFramework {
 		Level(u8 ID, std::string externalName, std::string internalName, bool dummyStatus);
 
 		static const Level levelList[];
-	
+
 		static const StringVector hytopiaLevelList;
 		static const StringVector hytopiaShopsStageList;
 		static const StringVector hytopiaCastleStageList;
@@ -41,11 +41,12 @@ namespace CTRPluginFramework {
 		static u8 getCurrChallenge(void);
 		static u32 getElapsedTime(void);
 
-		static void setCurrLevel(u8 levelID); 
-		static void setCurrStage(u8 stageID); 
-		static void setCurrChal(u8 chalID); 
+		static void setCurrLevel(u8 levelID);
+		static void setCurrStage(u8 stageID);
+		static void setCurrChal(u8 chalID);
 
-		static bool isInDrablands(void);
+		static bool isInDrablands(u8 optionalLevel = 0x0);
+		static bool isInDoT(u8 optionalLevel = 0x0);
 		static bool hasStageBegan(void);
 		static bool hasCertainTimeElapsed(int time);
 

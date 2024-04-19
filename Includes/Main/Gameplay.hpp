@@ -27,6 +27,7 @@ namespace CTRPluginFramework {
     void writePhysicsChanges(int player);
 
     void manageEnemy(bool keepAlive);
+    void startWarp(void);
 
     std::string warpSelLevel(StringVector locNames);
     int warpGetLevel(int locCategory);
@@ -63,9 +64,10 @@ namespace CTRPluginFramework {
         static void instantWarp(MenuEntry* entry);
         static void stageWarp(MenuEntry* entry);
         static void warpAgain(MenuEntry* entry);
+        static void resetRoom(MenuEntry *entry);
         static void midWarpDoppelEnable(MenuEntry* entry);
         static void writeChallengeEdit(MenuEntry* entry);
         static void writePlayerControl(MenuEntry* entry);
-    }; 
+    };
 }
 #endif
