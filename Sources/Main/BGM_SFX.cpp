@@ -85,7 +85,7 @@ namespace CTRPluginFramework
             int selectedSong = selLobbyBallSong();
             if (selectedSong >= 0) 
             {
-                u32 songEdit = 0xFFFFFF00 | selectedSong;
+                u32 songEdit = 0x00000000 | selectedSong;
 
                 storeSelSong(songEdit);
                 entry->SetName("Disable Lobby Ball song selection");
