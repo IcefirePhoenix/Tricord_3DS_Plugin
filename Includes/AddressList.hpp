@@ -37,9 +37,86 @@ namespace CTRPluginFramework {
 		static Address		CostumeCatalogPointer;
 		static Address		PlayerStatus;
 		static Address		TingleBalloons;
+		static Address		DapperSwingCountdown;
+		static Address		DapperSpinCheck;
+		static Address		HeartDropRate;
+		static Address		BearDodge;
 		static Address		UnusedCostumeDataPointers;
 		static Address		BearMinMaxCheckA;
 		static Address		BearMinMaxCheckB;
+		static Address		DoppelStageResetA;
+		static Address		DoppelStageResetB;
+		static Address		DoppelStageResetC;
+		static Address		DoppelLobbyReset;
+		static Address		CostumeIDOffsetAura;
+		static Address		CostumeIDOffsetSwordA;
+		static Address		CostumeIDOffsetSwordB;
+		static Address		CostumeIDOffsetSwordC;
+		static Address		CostumeIDOffsetCheetah;
+		static Address		CostumeIDOffsetDune;
+		static Address		CostumeIDOffsetCheer;
+		static Address		CostumeIDOffsetModel;
+		static Address		KokiriA;
+		static Address		KokiriB;
+		static Address		KokiriC;
+		static Address		KokiriD;
+		static Address		KokiriE;
+		static Address		BigBombA;
+		static Address		BigBombB;
+		static Address		BigBombC;
+		static Address		BoomerangerA;
+		static Address		BoomerangerB;
+		static Address		BoomerangerC;
+		static Address		BoomerangerD;
+		static Address		BoomerangerE;
+		static Address		BoomerangerF;
+		static Address		TorrentA;
+		static Address		TorrentB;
+		static Address		TorrentC;
+		static Address		TorrentD;
+		static Address		TorrentE;
+		static Address		GustGarbA;
+		static Address		GustGarbB;
+		static Address		GustGarbC;
+		static Address		GustGarbD;
+		static Address		GustGarbE;
+		static Address		GustGarbF;
+		static Address		GustGarbG;
+		static Address		HammerwearA;
+		static Address		HammerwearB;
+		static Address		HammerwearC;
+		static Address		HammerwearD;
+		static Address		HammerwearE;
+		static Address		HammerwearF;
+		static Address		HammerwearG;
+		static Address		RobowearA;
+		static Address		RobowearB;
+		static Address		RobowearC;
+		static Address		FireBlazerA;
+		static Address		FireBlazerB;
+		static Address		FireBlazerC;
+		static Address		FireBlazerD;
+		static Address		LightArmorA;
+		static Address		LightArmorB;
+		static Address		LinebeckTimeA;
+		static Address		LinebeckTimeB;
+		static Address		LinebeckTimeC;
+		static Address		CheetahA;
+		static Address		CheetahB;
+		static Address		CheetahC;
+		static Address		SwordDamageBoostA;
+		static Address		SwordDamageBoostB;
+		static Address		SwordBeamAbility;
+		static Address		QuadBeamA;
+		static Address		QuadBeamB;
+		static Address		QuadBeamC;
+		static Address		QuadBeamSpinA;
+		static Address		QuadBeamSpinB;
+		static Address		QuadBeamSpinC;
+		static Address		KnockbackImmunity;
+		static Address		SwordHammerDmgBoost;
+		static Address		SwordBeamHealthCheckA;
+		static Address		SwordBeamHealthCheckB;
 
 		// Emotes
 		static Address		GameplayEmotes;
@@ -67,6 +144,7 @@ namespace CTRPluginFramework {
 		static Address		EnergyMax;
 		static Address		EnergyMaxPitRecovery;
 		static Address		EnergyMaxMultiplicand;
+		static Address		LargeEnergyGauge;
 		static Address		FairiesCurrent;
 		static Address		TimeLeft;
 		static Address		CollisionCurrent;
@@ -88,6 +166,7 @@ namespace CTRPluginFramework {
 		static Address 		WarpActivation;
 		static Address		WarpPointer;
 		static Address		ChallengeID;
+		static Address		SpeedMultiplierAlt;
 
 		// Items
 		static Address		BowStrafe;
@@ -95,9 +174,6 @@ namespace CTRPluginFramework {
 		static Address		GustStrafe;
 		static Address		HammerStrafe;
 		static Address		ShadowLinkItemPointer;
-		static Address		RoboNiceAtk;
-		static Address		RoboNiceSFX;
-		static Address		RoboNiceSpeed;
 		static Address		GripshotStrafe;
 		static Address		WaterRodStrafe;
 
@@ -155,6 +231,10 @@ namespace CTRPluginFramework {
 		static Address		LoadingScreenSPIcons;
 		static Address		CheerPomPom;
 		static Address		Aura;
+		static Address		SandRippleAnyCostume;
+		static Address		SandRippleAllTimes;
+		static Address		PlayerLuminanceNormal;
+		static Address		PlayerLuminanceLightArmor;
 
 		// Savefile
 		static Address		NormalNCCompletion;
@@ -184,6 +264,9 @@ namespace CTRPluginFramework {
 		static Address		Voice8bit;
 		static Address		LobbyBallPointer;
 		static Address		MasterVolume;
+		static Address		SwordSwipe8bit;
+		static Address		SwordCharge8bit;
+		static Address		SwordSpin8bit;
 
 		// Turbo Mode
 		static Address		DashTimerNormal;
