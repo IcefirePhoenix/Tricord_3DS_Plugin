@@ -32,9 +32,86 @@ namespace CTRPluginFramework {
 		CostumeCatalogPointer 		= Address(0x32C828E8, 0x32C82968, 0x32CCD328, 0x32C81FE8);
 		PlayerStatus 				= Address(0x32849511, 0x32849591, 0x32893F51, 0x32848C11);
 		TingleBalloons 				= Address(0x32849680, 0x32849700, 0x328940C0, 0x32848D80);
+		DapperSwingCountdown		= Address(0x3284968C, 0x00000000, 0x00000000, 0x00000000);
+		DapperSpinCheck				= Address(0x32849690, 0x00000000, 0x00000000, 0x00000000);
+		HeartDropRate				= Address(0x32849553, 0x00000000, 0x00000000, 0x00000000);
+		BearDodge					= Address(0x3284959F, 0x00000000, 0x00000000, 0x00000000);
 		UnusedCostumeDataPointers 	= Address(0x0075C390, 0x0075C398, 0x0075C388, 0x0075B378);
 		BearMinMaxCheckA			= Address(0x005FAACC, 0x005FAEFC, 0x005FBA64, 0x005FAA4C);
 		BearMinMaxCheckB			= Address(0x005FAAD0, 0x005FAF00, 0x005FBA68, 0x005FAA50);
+		DoppelStageResetA			= Address(0x00315B94, 0x00000000, 0x00000000, 0x00000000);
+		DoppelStageResetB			= Address(0x00315B98, 0x00000000, 0x00000000, 0x00000000);
+		DoppelStageResetC			= Address(0x00315B9C, 0x00000000, 0x00000000, 0x00000000);
+		DoppelLobbyReset			= Address(0x0058C314, 0x00000000, 0x00000000, 0x00000000);
+		CostumeIDOffsetAura			= Address(0x001C3028, 0x00000000, 0x00000000, 0x00000000);
+		CostumeIDOffsetSwordA		= Address(0x001C31CC, 0x00000000, 0x00000000, 0x00000000);
+		CostumeIDOffsetSwordB		= Address(0x001FB05C, 0x00000000, 0x00000000, 0x00000000);
+		CostumeIDOffsetSwordC		= Address(0x003B31C8, 0x00000000, 0x00000000, 0x00000000);
+		CostumeIDOffsetCheetah		= Address(0x001C32C4, 0x00000000, 0x00000000, 0x00000000);
+		CostumeIDOffsetDune			= Address(0x001C41C8, 0x00000000, 0x00000000, 0x00000000);
+		CostumeIDOffsetCheer		= Address(0x001F9AB4, 0x00000000, 0x00000000, 0x00000000);
+		CostumeIDOffsetModel		= Address(0x005BBBE4, 0x00000000, 0x00000000, 0x00000000);
+		KokiriA						= Address(0x0031637C, 0x00000000, 0x00000000, 0x00000000);
+		KokiriB						= Address(0x00316380, 0x00000000, 0x00000000, 0x00000000);
+		KokiriC						= Address(0x00316384, 0x00000000, 0x00000000, 0x00000000);
+		KokiriD						= Address(0x0057CBEC, 0x00000000, 0x00000000, 0x00000000);
+		KokiriE						= Address(0x0057CBF0, 0x00000000, 0x00000000, 0x00000000);
+		BigBombA					= Address(0x0057F334, 0x00000000, 0x00000000, 0x00000000);
+		BigBombB					= Address(0x0057F70C, 0x00000000, 0x00000000, 0x00000000);
+		BigBombC					= Address(0x0057F710, 0x00000000, 0x00000000, 0x00000000);
+		BoomerangerA				= Address(0x00316568, 0x00000000, 0x00000000, 0x00000000);
+		BoomerangerB				= Address(0x0031656C, 0x00000000, 0x00000000, 0x00000000);
+		BoomerangerC				= Address(0x00316570, 0x00000000, 0x00000000, 0x00000000);
+		BoomerangerD				= Address(0x001B5AA8, 0x00000000, 0x00000000, 0x00000000);
+		BoomerangerE				= Address(0x001B5AAC, 0x00000000, 0x00000000, 0x00000000);
+		BoomerangerF				= Address(0x003C883C, 0x00000000, 0x00000000, 0x00000000);
+		TorrentA					= Address(0x00316514, 0x00000000, 0x00000000, 0x00000000);
+		TorrentB					= Address(0x00316518, 0x00000000, 0x00000000, 0x00000000);
+		TorrentC					= Address(0x0031651C, 0x00000000, 0x00000000, 0x00000000);
+		TorrentD					= Address(0x002311E0, 0x00000000, 0x00000000, 0x00000000);
+		TorrentE					= Address(0x002311E4, 0x00000000, 0x00000000, 0x00000000);
+		GustGarbA					= Address(0x003164CC, 0x00000000, 0x00000000, 0x00000000);
+		GustGarbB					= Address(0x003164D0, 0x00000000, 0x00000000, 0x00000000);
+		GustGarbC					= Address(0x003164D4, 0x00000000, 0x00000000, 0x00000000);
+		GustGarbD					= Address(0x001B2490, 0x00000000, 0x00000000, 0x00000000);
+		GustGarbE					= Address(0x001B2494, 0x00000000, 0x00000000, 0x00000000);
+		GustGarbF					= Address(0x001B2884, 0x00000000, 0x00000000, 0x00000000);
+		GustGarbG					= Address(0x001B2888, 0x00000000, 0x00000000, 0x00000000);
+		HammerwearA					= Address(0x003164FC, 0x00000000, 0x00000000, 0x00000000);
+		HammerwearB					= Address(0x00316500, 0x00000000, 0x00000000, 0x00000000);
+		HammerwearC					= Address(0x00316504, 0x00000000, 0x00000000, 0x00000000);
+		HammerwearD					= Address(0x00316654, 0x00000000, 0x00000000, 0x00000000);
+		HammerwearE					= Address(0x00316658, 0x00000000, 0x00000000, 0x00000000);
+		HammerwearF					= Address(0x0059AC80, 0x00000000, 0x00000000, 0x00000000);
+		HammerwearG					= Address(0x0059AC84, 0x00000000, 0x00000000, 0x00000000);
+		RobowearA					= Address(0x0031652C, 0x00000000, 0x00000000, 0x00000000);
+		RobowearB					= Address(0x00155C6C, 0x00000000, 0x00000000, 0x00000000);
+		RobowearC					= Address(0x00155C70, 0x00000000, 0x00000000, 0x00000000);
+		FireBlazerA					= Address(0x00316540, 0x00000000, 0x00000000, 0x00000000);
+		FireBlazerB					= Address(0x00316544, 0x00000000, 0x00000000, 0x00000000);
+		FireBlazerC					= Address(0x00316548, 0x00000000, 0x00000000, 0x00000000);
+		FireBlazerD					= Address(0x00185AC0, 0x00000000, 0x00000000, 0x00000000);
+		LightArmorA					= Address(0x00378B94, 0x00000000, 0x00000000, 0x00000000);
+		LightArmorB					= Address(0x00378B98, 0x00000000, 0x00000000, 0x00000000);
+		LinebeckTimeA				= Address(0x00295934, 0x00000000, 0x00000000, 0x00000000);
+		LinebeckTimeB				= Address(0x00295AF8, 0x00000000, 0x00000000, 0x00000000);
+		LinebeckTimeC				= Address(0x005A01E8, 0x00000000, 0x00000000, 0x00000000);
+		CheetahA					= Address(0x00316660, 0x00000000, 0x00000000, 0x00000000);
+		CheetahB					= Address(0x00316668, 0x00000000, 0x00000000, 0x00000000);
+		CheetahC					= Address(0x0031666C, 0x00000000, 0x00000000, 0x00000000);
+		SwordDamageBoostA			= Address(0x00316634, 0x00000000, 0x00000000, 0x00000000);
+		SwordDamageBoostB			= Address(0x00316638, 0x00000000, 0x00000000, 0x00000000);
+		SwordBeamAbility			= Address(0x005CC990, 0x00000000, 0x00000000, 0x00000000);
+		QuadBeamA					= Address(0x003B1258, 0x00000000, 0x00000000, 0x00000000);
+		QuadBeamB					= Address(0x003B125C, 0x00000000, 0x00000000, 0x00000000);
+		QuadBeamC					= Address(0x003B1260, 0x00000000, 0x00000000, 0x00000000);
+		QuadBeamSpinA				= Address(0x003B20A0, 0x00000000, 0x00000000, 0x00000000);
+		QuadBeamSpinB				= Address(0x003B20A4, 0x00000000, 0x00000000, 0x00000000);
+		QuadBeamSpinC				= Address(0x003B20A8, 0x00000000, 0x00000000, 0x00000000);
+		KnockbackImmunity			= Address(0x003BAE6C, 0x00000000, 0x00000000, 0x00000000);
+		SwordHammerDmgBoost			= Address(0x003166A0, 0x00000000, 0x00000000, 0x00000000);
+		SwordBeamHealthCheckA		= Address(0x005CC9BC, 0x00000000, 0x00000000, 0x00000000);
+		SwordBeamHealthCheckB		= Address(0x005CC9C0, 0x00000000, 0x00000000, 0x00000000);
 
 		/* Console */
 
@@ -64,6 +141,7 @@ namespace CTRPluginFramework {
 		EnergyMax					= Address(0x00192644, 0x001926D4, 0x00192BC8, 0x00192588);
 		EnergyMaxPitRecovery		= Address(0x001925F8, 0x00192688, 0x00192B7C, 0x0019253C);
 		EnergyMaxMultiplicand		= Address(0x00192684, 0x00192714, 0x00192C08, 0x001925C8);
+		LargeEnergyGauge			= Address(0x002F26CC, 0x00000000, 0x00000000, 0x00000000);
 		FairiesCurrent				= Address(0x32D81F14, 0x32D81F94, 0x32DD4738, 0x32D81614);
 		TimeLeft					= Address(0x32D81F18, 0x32D81F98, 0x32DD473C, 0x32D81618);
 		CollisionCurrent			= Address(0x328416A4, 0x32841724, 0x3288C0E4, 0x32840DA4);
@@ -85,6 +163,7 @@ namespace CTRPluginFramework {
 		WarpActivation 				= Address(0x32C81F00, 0x32C81F80, 0x32CCC940, 0x32C81600);
 		WarpPointer					= Address(0x32C81E28, 0x32C81EA8, 0x32CCC868, 0x32C81528);
 		ChallengeID					= Address(0x32D81E3C, 0x32D81EBC, 0x32DD4660, 0x32D8153C);
+		SpeedMultiplierAlt			= Address(0x001928C0, 0x00000000, 0x00000000, 0x00000000);
 
 		/* Items */
 		BowStrafe 					= Address(0x0038CC7C, 0x0038D024, 0x0038DC00, 0x0038CECC);
@@ -92,9 +171,6 @@ namespace CTRPluginFramework {
 		GustStrafe 					= Address(0x003C85A8, 0x003C8950, 0x003C952C, 0x003C87F8);
 		HammerStrafe 				= Address(0x003C03E0, 0x003C0788, 0x003C1364, 0x003C0630);
 		ShadowLinkItemPointer 		= Address(0x32D81DEC, 0x32D81E6C, 0x32DD4610, 0x32D814EC);
-		RoboNiceAtk 				= Address(0x00156AB4, 0x00156AD0, 0x00156FA0, 0x0015695C);
-		RoboNiceSFX 				= Address(0x003C2030, 0x003C23D8, 0x003C2FB4, 0x003C2280);
-		RoboNiceSpeed 				= Address(0x00156898, 0x001568B4, 0x00156D84, 0x00156740);
 		GripshotStrafe 				= Address(0x003C214C, 0x003C24F4, 0x003C30D0, 0x003C239C);
 		WaterRodStrafe 				= Address(0x003C59C0, 0x003C5D68, 0x003C6944, 0x003C5C10);
 
@@ -153,6 +229,10 @@ namespace CTRPluginFramework {
 		LoadingScreenSPIcons		= Address(0x00390C08, 0x00390FB0, 0x00391B88, 0x00390E58);
 		CheerPomPom					= Address(0x001F9AFC, 0x001F9B8C, 0x001FA7A0, 0x001F99B4);
 		Aura						= Address(0x001C3030, 0x001C30C0, 0x001C35B4, 0x001C2F74);
+		SandRippleAnyCostume		= Address(0x001C41D0, 0x00000000, 0x00000000, 0x00000000);
+		SandRippleAllTimes			= Address(0x001C4224, 0x00000000, 0x00000000, 0x00000000);
+		PlayerLuminanceNormal		= Address(0x00378F94, 0x00000000, 0x00000000, 0x00000000);
+		PlayerLuminanceLightArmor	= Address(0x00378F98, 0x00000000, 0x00000000, 0x00000000);
 
 		/* Savefile */
 		NormalNCCompletion 			= Address(0x31A060EC, 0x31A06144, 0x31A05E38, 0x31A0499C);
@@ -176,12 +256,15 @@ namespace CTRPluginFramework {
 		ResetMerchantStock 			= Address(0x31A077AE, 0x31A07806, 0x31A074FA, 0x31A0605E);
 
 		// SFX and BGM
-		BGMType 				= Address(0x005FD3C0, 0x005FD7F0, 0x005FE358, 0x005FD340);
+		BGMType 					= Address(0x005FD3C0, 0x005FD7F0, 0x005FE358, 0x005FD340);
 		BGMVolume 					= Address(0x00236444, 0x002364D4, 0x00237170, 0x00236600);
 		LobbyBallPointer			= Address(0x32DCAA60, 0x32DCAAE0, 0x32E277F4, 0x32DCA160);
 		LinkVoiceSpeed 				= Address(0x3284A25C, 0x3284A2DC, 0x32894C9C, 0x3284995C);
 		Voice8bit	 				= Address(0x00194630, 0x001946C0, 0x00194BB4, 0x00194574);
 		MasterVolume 				= Address(0x0050BC74, 0x0050C01C, 0x0050CBF0, 0x0050BEC4);
+		SwordSwipe8bit				= Address(0x003B0FB4, 0x00000000, 0x00000000, 0x00000000);
+		SwordCharge8bit				= Address(0x003B1AD4, 0x00000000, 0x00000000, 0x00000000);
+		SwordSpin8bit				= Address(0x003B1FD4, 0x00000000, 0x00000000, 0x00000000);
 
 		// Turbo Mode
 		DashTimerNormal				= Address(0x0039CE08, 0x00000000, 0x00000000, 0x00000000);
@@ -371,8 +454,85 @@ namespace CTRPluginFramework {
 	Address		AddressList::UnusedCostumeDataPointers;
 	Address		AddressList::PlayerStatus;
 	Address		AddressList::TingleBalloons;
+	Address		AddressList::DapperSwingCountdown;
+	Address		AddressList::DapperSpinCheck;
+	Address		AddressList::HeartDropRate;
+	Address		AddressList::BearDodge;
 	Address		AddressList::BearMinMaxCheckA;
 	Address		AddressList::BearMinMaxCheckB;
+	Address		AddressList::DoppelStageResetA;
+	Address		AddressList::DoppelStageResetB;
+	Address		AddressList::DoppelStageResetC;
+	Address		AddressList::DoppelLobbyReset;
+	Address		AddressList::CostumeIDOffsetAura;
+	Address		AddressList::CostumeIDOffsetSwordA;
+	Address		AddressList::CostumeIDOffsetSwordB;
+	Address		AddressList::CostumeIDOffsetSwordC;
+	Address		AddressList::CostumeIDOffsetCheetah;
+	Address		AddressList::CostumeIDOffsetDune;
+	Address		AddressList::CostumeIDOffsetCheer;
+	Address		AddressList::CostumeIDOffsetModel;
+	Address		AddressList::KokiriA;
+	Address		AddressList::KokiriB;
+	Address		AddressList::KokiriC;
+	Address		AddressList::KokiriD;
+	Address		AddressList::KokiriE;
+	Address		AddressList::BigBombA;
+	Address		AddressList::BigBombB;
+	Address		AddressList::BigBombC;
+	Address		AddressList::BoomerangerA;
+	Address		AddressList::BoomerangerB;
+	Address		AddressList::BoomerangerC;
+	Address		AddressList::BoomerangerD;
+	Address		AddressList::BoomerangerE;
+	Address		AddressList::BoomerangerF;
+	Address		AddressList::TorrentA;
+	Address		AddressList::TorrentB;
+	Address		AddressList::TorrentC;
+	Address		AddressList::TorrentD;
+	Address		AddressList::TorrentE;
+	Address		AddressList::GustGarbA;
+	Address		AddressList::GustGarbB;
+	Address		AddressList::GustGarbC;
+	Address		AddressList::GustGarbD;
+	Address		AddressList::GustGarbE;
+	Address		AddressList::GustGarbF;
+	Address		AddressList::GustGarbG;
+	Address		AddressList::HammerwearA;
+	Address		AddressList::HammerwearB;
+	Address		AddressList::HammerwearC;
+	Address		AddressList::HammerwearD;
+	Address		AddressList::HammerwearE;
+	Address		AddressList::HammerwearF;
+	Address		AddressList::HammerwearG;
+	Address		AddressList::RobowearA;
+	Address		AddressList::RobowearB;
+	Address		AddressList::RobowearC;
+	Address		AddressList::FireBlazerA;
+	Address		AddressList::FireBlazerB;
+	Address		AddressList::FireBlazerC;
+	Address		AddressList::FireBlazerD;
+	Address		AddressList::LightArmorA;
+	Address		AddressList::LightArmorB;
+	Address		AddressList::LinebeckTimeA;
+	Address		AddressList::LinebeckTimeB;
+	Address		AddressList::LinebeckTimeC;
+	Address		AddressList::CheetahA;
+	Address		AddressList::CheetahB;
+	Address		AddressList::CheetahC;
+	Address		AddressList::SwordDamageBoostA;
+	Address		AddressList::SwordDamageBoostB;
+	Address		AddressList::SwordBeamAbility;
+	Address		AddressList::QuadBeamA;
+	Address		AddressList::QuadBeamB;
+	Address		AddressList::QuadBeamC;
+	Address		AddressList::QuadBeamSpinA;
+	Address		AddressList::QuadBeamSpinB;
+	Address		AddressList::QuadBeamSpinC;
+	Address		AddressList::KnockbackImmunity;
+	Address		AddressList::SwordHammerDmgBoost;
+	Address		AddressList::SwordBeamHealthCheckA;
+	Address		AddressList::SwordBeamHealthCheckB;
 
 	// Emotes
 	Address		AddressList::GameplayEmotes;
@@ -400,6 +560,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::EnergyMax;
 	Address		AddressList::EnergyMaxPitRecovery;
 	Address		AddressList::EnergyMaxMultiplicand;
+	Address		AddressList::LargeEnergyGauge;
 	Address		AddressList::FairiesCurrent;
 	Address		AddressList::TimeLeft;
 	Address		AddressList::CollisionCurrent;
@@ -421,6 +582,7 @@ namespace CTRPluginFramework {
 	Address 	AddressList::WarpActivation;
 	Address		AddressList::WarpPointer;
 	Address		AddressList::ChallengeID;
+	Address		AddressList::SpeedMultiplierAlt;
 
 	// Items
 	Address		AddressList::BowStrafe;
@@ -428,9 +590,6 @@ namespace CTRPluginFramework {
 	Address		AddressList::GustStrafe;
 	Address		AddressList::HammerStrafe;
 	Address		AddressList::ShadowLinkItemPointer;
-	Address		AddressList::RoboNiceAtk;
-	Address		AddressList::RoboNiceSFX;
-	Address		AddressList::RoboNiceSpeed;
 	Address		AddressList::GripshotStrafe;
 	Address		AddressList::WaterRodStrafe;
 
@@ -488,6 +647,10 @@ namespace CTRPluginFramework {
 	Address		AddressList::LoadingScreenSPIcons;
 	Address		AddressList::CheerPomPom;
 	Address		AddressList::Aura;
+	Address		AddressList::SandRippleAnyCostume;
+	Address		AddressList::SandRippleAllTimes;
+	Address		AddressList::PlayerLuminanceNormal;
+	Address		AddressList::PlayerLuminanceLightArmor;
 
 	// Savefile
 	Address		AddressList::NormalNCCompletion;
@@ -517,6 +680,9 @@ namespace CTRPluginFramework {
 	Address		AddressList::Voice8bit;
 	Address		AddressList::LobbyBallPointer;
 	Address		AddressList::MasterVolume;
+	Address		AddressList::SwordSwipe8bit;
+	Address		AddressList::SwordCharge8bit;
+	Address		AddressList::SwordSpin8bit;
 
 	// Turbo Mode
 	Address		AddressList::DashTimerNormal;
