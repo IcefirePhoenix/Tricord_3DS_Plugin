@@ -364,11 +364,6 @@ namespace CTRPluginFramework
         }
     }
 
-    void Costume::selCostumeEffect(MenuEntry* entry) 
-    {
-        // currently unimplemented, ignore for now...
-    }
-
     void Costume::forceBearMinMax(MenuEntry* entry)
     {
         Keyboard Bear("Force Bear Minimum or Bear Maximum, or\nReset to restore the Hero Point check.");
@@ -392,6 +387,20 @@ namespace CTRPluginFramework
                 Process::Patch(AddressList::BearMinMaxCheckA.addr, 0xA3A00001);
                 Process::Patch(AddressList::BearMinMaxCheckB.addr, 0xB3A00001);
                 break;
+        }
+    }
+
+    void Costume::preventLobbyReset(MenuEntry* entry)
+    {
+        if (entry->Name() == "Preserve Doppel costume edits in single player lobby")
+        {
+            Process::Patch(AddressList::DoppelLobbyReset.addr, 0xEA000007);
+            entry->SetName("Reset Doppel costume edits in single player lobby");
+        }
+        else
+        {
+            Process::Patch(AddressList::DoppelLobbyReset.addr, 0x1A000007);
+            entry->SetName("Preserve Doppel costume edits in single player lobby");
         }
     }
 }

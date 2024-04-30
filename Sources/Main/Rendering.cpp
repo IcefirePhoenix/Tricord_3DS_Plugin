@@ -257,4 +257,36 @@ namespace CTRPluginFramework
                 break;
         }
     }
+
+    void Rendering::forceBlueSwordParticles(MenuEntry* entry)
+    {
+        if (entry->Name() == "Force Sword Suit blue sword particles")
+        {
+            Process::Patch(AddressList::SwordParticle.addr, 0xEA000038);
+            entry->SetName("Reset sword particles");
+        }
+        else
+        {
+            Process::Patch(AddressList::SwordParticle.addr, 0x0A000062);
+            entry->SetName("Force Sword Suit blue sword particles");
+        }
+    }
+
+    void Rendering::disablePlayerLight(MenuEntry* entry)
+    {
+        if (entry->Name() == "Disable player light sources in dark stages")
+        {
+            Process::WriteFloat(AddressList::PlayerLuminanceNormalA.addr, 0);
+            Process::WriteFloat(AddressList::PlayerLuminanceNormalB.addr, 0);
+            Process::WriteFloat(AddressList::PlayerLuminanceLightArmor.addr, 0);
+            entry->SetName("Enable player light sources in dark stages");
+        }
+        else
+        {
+            Process::WriteFloat(AddressList::PlayerLuminanceNormalA.addr, 1);
+            Process::WriteFloat(AddressList::PlayerLuminanceNormalB.addr, 0.5);
+            Process::WriteFloat(AddressList::PlayerLuminanceLightArmor.addr, 0.89);
+            entry->SetName("Disable player light sources in dark stages");
+        }
+    }
 }

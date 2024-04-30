@@ -7,6 +7,8 @@
 #include "Unicode.h"
 
 namespace CTRPluginFramework {
+    extern MenuEntry* healthMaxAuto;
+
     extern MenuEntry* physicsEditAutoG;
     extern MenuEntry* physicsEditAutoB;
     extern MenuEntry* physicsEditAutoR;
@@ -40,9 +42,11 @@ namespace CTRPluginFramework {
         static void infEnergy(MenuEntry* entry);
         static void maxEnergySet(MenuEntry* entry);
         static void energyConsumeMultiplier(MenuEntry* entry);
+        static void useLargeEnergyGauge(MenuEntry* entry);
 
+        static void maxHealthSet(MenuEntry* entry);
+        static void writeMaxHealth(MenuEntry* entry);
         static void infHealth(MenuEntry* entry);
-        static void noHealth(MenuEntry* entry);
         static void infFairy(MenuEntry* entry);
 
         static void autoKillEnemy(MenuEntry* entry);
@@ -55,6 +59,7 @@ namespace CTRPluginFramework {
 
         static void moonJump(MenuEntry* entry);
         static void flight(MenuEntry* entry);
+        static void hover(MenuEntry* entry);
         static void adjustAscentSpeed(MenuEntry* entry);
         static void adjustDescentSpeed(MenuEntry* entry);
         static void adjustLateralSpeed(MenuEntry* entry);
@@ -68,6 +73,8 @@ namespace CTRPluginFramework {
         static void midWarpDoppelEnable(MenuEntry* entry);
         static void writeChallengeEdit(MenuEntry* entry);
         static void writePlayerControl(MenuEntry* entry);
+
+        static void customSpeed(MenuEntry* entry);
     };
 }
 #endif

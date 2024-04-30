@@ -21,6 +21,8 @@ namespace CTRPluginFramework {
         static void editLiveMsgColor(MenuEntry* entry);
         static void forcePomPom(MenuEntry* entry);
         static void forceAura(MenuEntry* entry);
+        static void forceBlueSwordParticles(MenuEntry* entry);
+        static void disablePlayerLight(MenuEntry* entry);
     };
 }
 #endif

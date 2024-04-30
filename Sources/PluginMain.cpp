@@ -113,20 +113,25 @@ namespace CTRPluginFramework {
         *warp += new MenuEntry("Warp to any stage in current Drablands level", nullptr, Gameplay::stageWarp);
         reWarp = new MenuEntry("Return to previous warp: None", nullptr, Gameplay::warpAgain);
         *warp += reWarp;
-        *warp += new MenuEntry("Reset the current area", nullptr, Gameplay::resetRoom);
+        *warp += (EntryWithHotkey(new MenuEntry("Reset the current area (trigger via hotkey)", Gameplay::resetRoom), {
+            Hotkey(Key::L | Key::R, "Reset current area"),
+        }));
 
         doppelEnableAuto = new MenuEntry("Mid-warp Doppel Enable (auto)", Gameplay::midWarpDoppelEnable);
         challengeEditAuto = new MenuEntry("Challenge ID edit (auto)", Gameplay::writeChallengeEdit);
 
-        *healthFairies += new MenuEntry("Infinite health", Gameplay::infHealth);
-        *healthFairies += (EntryWithHotkey(new MenuEntry("No health (trigger via hotkey)", Gameplay::noHealth), {
-            Hotkey(Key::L | Key::R, "Set health to 0"),
-        }));
+        *healthFairies += new MenuEntry("Set maximum heart containers", nullptr, Gameplay::maxHealthSet,
+        "Affects your base heart containers. Costume effects that add or remove heart containers still apply.");
+        healthMaxAuto = new MenuEntry("Set max heart containers (auto)", Gameplay::writeMaxHealth);
+        *healthFairies += new MenuEntry("Infinite health", Gameplay::infHealth,
+        "Freezes your health to match your maximum heart containers. May not be consistent if a costume that adds or removes heart containers is worn.");
         *healthFairies += new MenuEntry("Infinite fairies", Gameplay::infFairy);
 
         *energy += new MenuEntry("Infinite energy", Gameplay::infEnergy);
         *energy += new MenuEntry("Set maximum energy", nullptr, Gameplay::maxEnergySet);
         *energy += new MenuEntry("Set energy consumption multiplier", nullptr, Gameplay::energyConsumeMultiplier);
+        *energy += new MenuEntry("Use large energy gauge graphic", nullptr, Gameplay::useLargeEnergyGauge, 
+        "Switches the energy gauge in the UI to the Energy Gear / Cheer Outfit / Tri Suit energy gauge. Does not affect your max energy.");
 
         *enemies += (EntryWithHotkey(new MenuEntry("Insta-kill all spawned enemies", Gameplay::autoKillEnemy), {
             Hotkey(Key::L | Key::B, "Insta-kill all spawned enemies"),
@@ -168,14 +173,15 @@ namespace CTRPluginFramework {
 
         /* ------------------------------ */
 
-        moonJumpEntry = (EntryWithHotkey(new MenuEntry("Enable Moon Jump", Gameplay::moonJump), {
+        // Radio group 1 for mutual exclusivity
+        moonJumpEntry = (EntryWithHotkey(new MenuEntry(1, "Enable Moon Jump", Gameplay::moonJump), {
             Hotkey(Key::CPadUp, "Move North"),
             Hotkey(Key::CPadDown, "Move South"),
             Hotkey(Key::CPadRight, "Move East"),
             Hotkey(Key::CPadLeft, "Move West"),
             Hotkey(Key::X, "Ascend")
         }));
-        flightEntry = (EntryWithHotkey(new MenuEntry("Enable Flight", Gameplay::flight), {
+        flightEntry = (EntryWithHotkey(new MenuEntry(1, "Enable Flight", Gameplay::flight), {
             Hotkey(Key::CPadUp, "Move North"),
             Hotkey(Key::CPadDown, "Move South"),
             Hotkey(Key::CPadRight, "Move East"),
@@ -186,6 +192,7 @@ namespace CTRPluginFramework {
 
         *moonJumpFlight += moonJumpEntry;
         *moonJumpFlight += flightEntry;
+        *moonJumpFlight += new MenuEntry("Keep uncontrolled players hovering in place", Gameplay::hover);
         *moonJumpFlight += new MenuEntry("Adjust ascent speed: Medium", nullptr, Gameplay::adjustAscentSpeed);
         *moonJumpFlight += new MenuEntry("Adjust descent speed: Medium", nullptr, Gameplay::adjustDescentSpeed);
         *moonJumpFlight += new MenuEntry("Adjust lateral speed: Medium", nullptr, Gameplay::adjustLateralSpeed);
@@ -201,6 +208,9 @@ namespace CTRPluginFramework {
         controlAllAuto = new MenuEntry("Control all players (auto)", Gameplay::writePlayerControl);
 
         *gameplay += new MenuEntry("Infinite time", Gameplay::infTime);
+
+        *gameplay += new MenuEntry("Set custom movement speed", nullptr, Gameplay::customSpeed, 
+        "Work in progress. Currently only affects walking speed.");
         }
 
     void InitEmoteFolder (PluginMenu& menu)
@@ -284,19 +294,14 @@ namespace CTRPluginFramework {
 
         *costume += new MenuEntry("Change Player Costume", nullptr, Costume::changeLinkCostume);
 
-        // create costume sub-folders
-        MenuFolder* costumeEffects = new MenuFolder("Costume Effect(s)");
-        *costumeEffects += new MenuEntry("(TODO) Set Costume Effects", nullptr, Costume::selCostumeEffect);
+        *costume += new MenuEntry("Preserve Doppel costume edits in single player lobby", nullptr, Costume::preventLobbyReset,
+        "Determines whether Doppel costumes reset to the Hero's Tunic when entering or returning to the single player lobby.");
 
-        MenuFolder* extraCustomConfig = new MenuFolder("Additional Customizations");
-        // *extraCustomConfig += new MenuEntry("Set number of Tingle Balloons", nullptr, tingleBalloonNumber);
-        // *extraCustomConfig += new MenuEntry("Set Cheetah walking speed", nullptr, cheetahSpeed);
-        // *extraCustomConfig += new MenuEntry("Set luck percentage", nullptr, luckPercent);
-        // *extraCustomConfig += new MenuEntry("Set number of additional Hearts", nullptr, addHeart);
-        // *extraCustomConfig += new MenuEntry("Set sword beam type", nullptr, swordBeamConfig);
+        // create costume sub-folders
+        MenuFolder* costumeEffects = new MenuFolder("Costume Effects");
+        // *costumeEffects += new MenuEntry("(TODO) Set Costume Effects", nullptr, Costume::selCostumeEffect);
 
         *costume += costumeEffects;
-        *extraCustomConfig += costumeEffects;
 
         // NOT added to main menu -- these are auto-managed by the plugin and don't need to be accessed by the user
         manageCatalogSize = new MenuEntry("Manage Catalog Size (auto)", Costume::manageCatalogSizeAuto);
@@ -385,6 +390,8 @@ namespace CTRPluginFramework {
         *render += new MenuEntry("Swap single player loading screen", nullptr, Rendering::swapSPLoadingScreen);
         *render += new MenuEntry("Force visibility of Cheer Outfit pom poms", nullptr, Rendering::forcePomPom);
         *render += new MenuEntry("Force visibility of a costume aura", nullptr, Rendering::forceAura);
+        *render += new MenuEntry("Force Sword Suit blue sword particles", nullptr, Rendering::forceBlueSwordParticles);
+        *render += new MenuEntry("Disable player light sources in dark stages", nullptr, Rendering::disablePlayerLight);
     }
 
     void InitSaveFolder(PluginMenu& menu)
@@ -455,6 +462,7 @@ namespace CTRPluginFramework {
         *sound += new MenuEntry("Force normal or 8-bit BGM", nullptr, BGM_SFX::forceNormal8bit);
         *sound += new MenuEntry("Disable Timeless Tunic voice filter", nullptr, BGM_SFX::disable8bitVoice,
         "You will be voiceless in Hytopia, but retain a normal voice in the Drablands.");
+        *sound += new MenuEntry("Force 8-bit sword SFX", nullptr, BGM_SFX::force8bitSword);
     }
 
     void HideRegionEntries(PluginMenu& menu)
@@ -557,6 +565,12 @@ namespace CTRPluginFramework {
 
         Address::InitMemoryRange();
         AddressList::InitAddresses();
+
+        // Patch executable on boot
+        // Disable Doppel between-stage costume reset
+        Process::Patch(AddressList::DoppelStageResetA.addr, 0xE320F000);
+        Process::Patch(AddressList::DoppelStageResetB.addr, 0xE320F000);
+        Process::Patch(AddressList::DoppelStageResetC.addr, 0xE320F000);
 
         menu->Run();
 
