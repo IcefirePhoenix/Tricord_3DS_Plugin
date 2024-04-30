@@ -224,4 +224,23 @@ namespace CTRPluginFramework
             entry->SetName("Disable Timeless Tunic voice filter");
         }
     }
+
+    // Force Timeless Tunic's sword SFX
+    void BGM_SFX::force8bitSword(MenuEntry* entry)
+    {
+        if (entry->Name() == "Force 8-bit sword SFX")
+        {
+            Process::Patch(AddressList::SwordSwipe8bit.addr, 0xEA00000B);
+            Process::Patch(AddressList::SwordCharge8bit.addr, 0xEA00000B);
+            Process::Patch(AddressList::SwordSpin8bit.addr, 0xEA000021);
+            entry->SetName("Reset sword SFX");
+        }
+        else
+        {
+            Process::Patch(AddressList::SwordSwipe8bit.addr, 0x0A00000B);
+            Process::Patch(AddressList::SwordCharge8bit.addr, 0x0A00000B);
+            Process::Patch(AddressList::SwordSpin8bit.addr, 0x0A000021);
+            entry->SetName("Force 8-bit sword SFX");
+        }
+    }
 }

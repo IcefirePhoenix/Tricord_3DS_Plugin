@@ -30,6 +30,7 @@ namespace CTRPluginFramework {
         static float getFloatFromPercentSel(int selection);
         static void forceNormal8bit(MenuEntry* entry);
         static void disable8bitVoice(MenuEntry* entry);
+        static void force8bitSword(MenuEntry* entry);
     };
 }
 #endif

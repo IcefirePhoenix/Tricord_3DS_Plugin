@@ -231,9 +231,9 @@ namespace CTRPluginFramework {
 		static Address		LoadingScreenSPIcons;
 		static Address		CheerPomPom;
 		static Address		Aura;
-		static Address		SandRippleAnyCostume;
-		static Address		SandRippleAllTimes;
-		static Address		PlayerLuminanceNormal;
+		static Address		SwordParticle;
+		static Address		PlayerLuminanceNormalA;
+		static Address		PlayerLuminanceNormalB;
 		static Address		PlayerLuminanceLightArmor;
 
 		// Savefile

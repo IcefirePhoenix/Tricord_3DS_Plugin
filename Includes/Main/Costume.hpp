@@ -36,8 +36,8 @@ namespace CTRPluginFramework {
         static void changeLinkCostume(MenuEntry* entry);
         static void selectCostumeID(MenuEntry* entry);
         static void initCustomCostumesAuto(MenuEntry* entry);
-        static void selCostumeEffect(MenuEntry* entry);
         static void forceBearMinMax(MenuEntry* entry);
+        static void preventLobbyReset(MenuEntry* entry);
     };
 }
 #endif

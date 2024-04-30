@@ -3,6 +3,7 @@
 
 namespace CTRPluginFramework
 {
+    MenuEntry* healthMaxAuto;
     MenuEntry* physicsSelG;
     MenuEntry* physicsSelB;
     MenuEntry* physicsSelR;
@@ -17,9 +18,10 @@ namespace CTRPluginFramework
     MenuEntry* controlAllAuto;
 
     u16 physicsStatus[3];
-    int warpData[3] = { -1, -1, -1 };
+    int warpData[3] = { -1, -1, -1 }; bool firstWarp = true;
     float ascentSpeed = 0.5, descentSpeed = -0.5, lateralSpeed = 0.09;
     bool controlAuto = false;
+    u8 customMaxHealth = 0x24; bool healthAuto = false;
 
     void Gameplay::infEnergy(MenuEntry* entry)
     {
@@ -37,12 +39,17 @@ namespace CTRPluginFramework
                 entry->SetName("Disable custom maximum energy edits");
                 Process::WriteFloat(AddressList::EnergyMax.addr, newMaxEnergy);
                 Process::WriteFloat(AddressList::EnergyMaxPitRecovery.addr, newMaxEnergy);
+                if (newMaxEnergy < 600)
+                {
+                    Process::WriteFloat(AddressList::EnergyBarStretch.addr, 600/newMaxEnergy);
+                }
             }
         }
         else {
             entry->SetName("Set maximum energy");
             Process::WriteFloat(AddressList::EnergyMax.addr, 600);
             Process::WriteFloat(AddressList::EnergyMaxPitRecovery.addr, 600);
+            Process::WriteFloat(AddressList::EnergyBarStretch.addr, 1);
         }
     }
 
@@ -63,17 +70,92 @@ namespace CTRPluginFramework
         }
     }
 
+    void Gameplay::useLargeEnergyGauge(MenuEntry* entry)
+    {
+        if (entry->Name() == "Use large energy gauge graphic")
+        {
+            Process::Patch(AddressList::LargeEnergyGauge.addr, 0xEA000004);
+            entry->SetName("Reset energy gauge graphic");
+        }
+        else
+        {
+            Process::Patch(AddressList::LargeEnergyGauge.addr, 0x0A000004);
+            entry->SetName("Use large energy gauge graphic");
+        }
+    }
+
+    void Gameplay::maxHealthSet(MenuEntry* entry)
+    {
+        if (entry->Name() == "Set maximum heart containers") {
+            float newMaxHealth;
+            Keyboard editMaxHealth("Maximum heart containers\n\nEnter a positive integer.\nThe value can be from 1 to 63,\nbut only up to 18 hearts can be displayed.");
+            editMaxHealth.IsHexadecimal(false);
+            if (editMaxHealth.Open(newMaxHealth) == 0)
+            {
+                if ((int)newMaxHealth > 63)
+                {
+                    newMaxHealth = 63;
+                }
+                else if ((int)newMaxHealth <= 0)
+                {
+                    newMaxHealth = 1;
+                }
+                // Convert from quarter hearts to full hearts
+                customMaxHealth = ((u8)newMaxHealth)*4;
+                healthAuto = true;
+                healthMaxAuto->Enable();
+                entry->SetName("Reset to 9 heart containers");
+
+                u8 currentHealth;
+                Process::Read8(AddressList::HealthCurrent.addr, currentHealth);
+                if (currentHealth < customMaxHealth)
+                {
+                    Keyboard refill("Refill hearts?");
+                    static const StringVector refillOptions = 
+                    {
+                        "Yes",
+                        "No"
+                    };
+                    refill.Populate(refillOptions);
+                    if (refill.Open() == 0)
+                    {
+                        Process::Write8(AddressList::HealthCurrent.addr, customMaxHealth);
+                    }
+                }
+                else if (currentHealth > customMaxHealth)
+                {
+                    Process::Write8(AddressList::HealthCurrent.addr, customMaxHealth);
+                }                
+            }
+        }
+        else {
+            healthAuto = false;
+            healthMaxAuto->Disable();
+            Process::Write8(AddressList::HealthMax.addr, 0x24);
+            u8 currentHealth;
+            Process::Read8(AddressList::HealthCurrent.addr, currentHealth);
+            if (currentHealth > 0x24)
+            {
+                Process::Write8(AddressList::HealthCurrent.addr, 0x24);
+            }
+            entry->SetName("Set maximum heart containers");
+        }
+    }
+
+    void Gameplay::writeMaxHealth(MenuEntry* entry)
+    {
+        if (healthAuto)
+        {
+            Process::Write8(AddressList::HealthMax.addr, customMaxHealth);
+        }
+    }
+
     // checkbox
     void Gameplay::infHealth(MenuEntry* entry)
     {
-        Process::Write8(AddressList::HealthCurrent.addr, 0x24);
-    }
-
-    // hotkey entry
-    void Gameplay::noHealth(MenuEntry* entry)
-    {
-        if (entry->Hotkeys[0].IsPressed())
-            Process::Write8(AddressList::HealthCurrent.addr, 0x0);
+        u8 maxHealth;
+        Process::Read8(AddressList::HealthMax.addr, maxHealth);
+        Process::Write8(AddressList::HealthCurrent.addr, maxHealth);
     }
 
     // checkbox
@@ -231,9 +313,12 @@ namespace CTRPluginFramework
     // Moon Jump - Auto descent
     void Gameplay::moonJump(MenuEntry* entry)
     {
+        /*
         if (flightEntry->WasJustActivated()){
             flightEntry->Disable();
         }
+        */
+        Process::Write8(AddressList::CameraOnX.addr, 0x00);
         int Link = GeneralHelpers::getCurrLink();
         u32 offset = Link*GameData::playerAddressOffset;
         u32 addrX = AddressList::SpeedX.addr + offset;
@@ -241,19 +326,24 @@ namespace CTRPluginFramework
         u32 addrZ = AddressList::SpeedZ.addr + offset;
         // Hotkeys: North, South, East, West, Ascend
         // Note: South and East are positive, North and West are negative
-        if (entry->Hotkeys[0].IsDown()){
-            Process::WriteFloat(addrZ, lateralSpeed*-1);
-        } else if (entry->Hotkeys[1].IsDown()){
-            Process::WriteFloat(addrZ, lateralSpeed);
-        } else {
-            Process::WriteFloat(addrZ, 0);
-        }
-        if (entry->Hotkeys[2].IsDown()){
-            Process::WriteFloat(addrX, lateralSpeed);
-        } else if (entry->Hotkeys[3].IsDown()){
-            Process::WriteFloat(addrX, lateralSpeed*-1);
-        } else {
-            Process::WriteFloat(addrX, 0);
+        u16 currColl;
+        Process::Read16(AddressList::CollisionCurrent.addr + offset, currColl);
+        if (currColl == 0x001F)
+        {
+            if (entry->Hotkeys[0].IsDown()){
+                Process::WriteFloat(addrZ, lateralSpeed*-1);
+            } else if (entry->Hotkeys[1].IsDown()){
+                Process::WriteFloat(addrZ, lateralSpeed);
+            } else {
+                Process::WriteFloat(addrZ, 0);
+            }
+            if (entry->Hotkeys[2].IsDown()){
+                Process::WriteFloat(addrX, lateralSpeed);
+            } else if (entry->Hotkeys[3].IsDown()){
+                Process::WriteFloat(addrX, lateralSpeed*-1);
+            } else {
+                Process::WriteFloat(addrX, 0);
+            }
         }
         if (entry->Hotkeys[4].IsDown()){
             Process::WriteFloat(addrY, ascentSpeed);
@@ -265,9 +355,12 @@ namespace CTRPluginFramework
     // Flight - All manual
     void Gameplay::flight(MenuEntry* entry)
     {
+        /*
         if (moonJumpEntry->WasJustActivated()){
             moonJumpEntry->Disable();
         }
+        */
+        Process::Write8(AddressList::CameraOnX.addr, 0x00);
         int Link = GeneralHelpers::getCurrLink();
         u32 offset = Link*GameData::playerAddressOffset;
         u32 addrX = AddressList::SpeedX.addr + offset;
@@ -295,6 +388,21 @@ namespace CTRPluginFramework
             Process::WriteFloat(addrY, descentSpeed);
         } else {
             Process::WriteFloat(addrY, 0.025); // Results in Link maintaining Y position
+        }
+    }
+
+    // Keep the two players you aren't currently controlling hovering in place
+    void Gameplay::hover(MenuEntry* entry)
+    {
+        int Link = GeneralHelpers::getCurrLink();
+        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
+        {
+            if (iterateThruPlayers != Link)
+            {
+                Process::WriteFloat(AddressList::SpeedX.addr + iterateThruPlayers*GameData::playerAddressOffset, 0);
+                Process::WriteFloat(AddressList::SpeedY.addr + iterateThruPlayers*GameData::playerAddressOffset, 0.025);
+                Process::WriteFloat(AddressList::SpeedZ.addr + iterateThruPlayers*GameData::playerAddressOffset, 0);
+            }
         }
     }
 
@@ -493,7 +601,7 @@ namespace CTRPluginFramework
 
     void Gameplay::instantWarp(MenuEntry* entry)
     {
-        int targetLevel = -3, targetStage = -3, targetChallenge = -3, targetSpawn = 0;
+        int targetLevel = -3, targetStage = -3, targetChallenge = 0, targetSpawn = 0;
         targetLevel = warpGetLevel(Level::selWorld(true, true)); // Level::selWorld() returns 0-3 given the params (use DoT and nonLevels)
 
         if (targetLevel >= 0x0)
@@ -519,17 +627,32 @@ namespace CTRPluginFramework
 
             doppelEnableAuto->Enable();
 
-            if (targetChallenge >= 0x1)
-            {
-                Level::setCurrChal((u8)targetChallenge);
-                challengeEditAuto->Enable();
-            }
+            Level::setCurrChal((u8)targetChallenge);
+            challengeEditAuto->Enable();
 
             warpData[0] = targetLevel;
             warpData[1] = targetStage;
             warpData[2] = targetChallenge;
 
             reWarp->SetName("Return to last warp: " + Level::levelNameFromID(warpData[0]) + " - " + std::to_string(warpData[1]));
+
+            if (firstWarp)
+            {
+                Keyboard fW("This is your first warp. Make sure Doppels are wearing Hero's Tunics?");
+                static const StringVector yn = 
+                {
+                    "Yes",
+                    "No"
+                };
+                fW.Populate(yn);
+                if (fW.Open() == 0)
+                {
+                    // Set Doppel costumes to Hero's Tunic
+                    Process::Write8(AddressList::CurrCostume.addr + GameData::playerAddressOffset, 0x18);
+                    Process::Write8(AddressList::CurrCostume.addr + 2*GameData::playerAddressOffset, 0x18);
+                }
+                firstWarp = false;
+            }
         }
     }
 
@@ -548,9 +671,12 @@ namespace CTRPluginFramework
 
     void Gameplay::resetRoom(MenuEntry *entry)
     {
-        Process::Write8(AddressList::TargetLevelID.addr, Level::getCurrLevel());
-        Process::Write8(AddressList::TargetStageID.addr, Level::getCurrStage());
-        startWarp();
+        if (entry->Hotkeys[0].IsPressed())
+        {
+            Process::Write8(AddressList::TargetLevelID.addr, Level::getCurrLevel());
+            Process::Write8(AddressList::TargetStageID.addr, Level::getCurrStage());
+            startWarp();
+        }
     }
 
     void startWarp(void)
@@ -593,6 +719,26 @@ namespace CTRPluginFramework
 
         if (Level::hasStageBegan()){
             entry->Disable();
+        }
+    }
+
+    void Gameplay::customSpeed(MenuEntry* entry)
+    {
+        if (entry->Name() == "Set custom movement speed")
+        {
+            float newSpeed = 1;
+            Keyboard editSpeed("Enter a custom speed value.\n\nThe default value is 0.095.\nNegative values will invert movement.");
+            editSpeed.IsHexadecimal(false);
+            if (editSpeed.Open(newSpeed) == 0)
+            {
+                entry->SetName("Disable custom movement speed edits");
+                Process::WriteFloat(AddressList::SpeedMultiplierAlt.addr, newSpeed);
+            }
+        }
+        else
+        {
+            entry->SetName("Set custom movement speed");
+            Process::WriteFloat(AddressList::SpeedMultiplierAlt.addr, 0.095);
         }
     }
 }

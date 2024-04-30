@@ -163,7 +163,7 @@ namespace CTRPluginFramework {
 		WarpActivation 				= Address(0x32C81F00, 0x32C81F80, 0x32CCC940, 0x32C81600);
 		WarpPointer					= Address(0x32C81E28, 0x32C81EA8, 0x32CCC868, 0x32C81528);
 		ChallengeID					= Address(0x32D81E3C, 0x32D81EBC, 0x32DD4660, 0x32D8153C);
-		SpeedMultiplierAlt			= Address(0x001928C0, 0x00000000, 0x00000000, 0x00000000);
+		SpeedMultiplierAlt			= Address(0x0039B56C, 0x00000000, 0x00000000, 0x00000000);
 
 		/* Items */
 		BowStrafe 					= Address(0x0038CC7C, 0x0038D024, 0x0038DC00, 0x0038CECC);
@@ -229,10 +229,10 @@ namespace CTRPluginFramework {
 		LoadingScreenSPIcons		= Address(0x00390C08, 0x00390FB0, 0x00391B88, 0x00390E58);
 		CheerPomPom					= Address(0x001F9AFC, 0x001F9B8C, 0x001FA7A0, 0x001F99B4);
 		Aura						= Address(0x001C3030, 0x001C30C0, 0x001C35B4, 0x001C2F74);
-		SandRippleAnyCostume		= Address(0x001C41D0, 0x00000000, 0x00000000, 0x00000000);
-		SandRippleAllTimes			= Address(0x001C4224, 0x00000000, 0x00000000, 0x00000000);
-		PlayerLuminanceNormal		= Address(0x00378F94, 0x00000000, 0x00000000, 0x00000000);
+		PlayerLuminanceNormalA		= Address(0x00378F94, 0x00000000, 0x00000000, 0x00000000);
+		PlayerLuminanceNormalB		= Address(0x00378F9C, 0x00000000, 0x00000000, 0x00000000);
 		PlayerLuminanceLightArmor	= Address(0x00378F98, 0x00000000, 0x00000000, 0x00000000);
+		SwordParticle				= Address(0x003B31D0, 0x00000000, 0x00000000, 0x00000000);
 
 		/* Savefile */
 		NormalNCCompletion 			= Address(0x31A060EC, 0x31A06144, 0x31A05E38, 0x31A0499C);
@@ -647,10 +647,10 @@ namespace CTRPluginFramework {
 	Address		AddressList::LoadingScreenSPIcons;
 	Address		AddressList::CheerPomPom;
 	Address		AddressList::Aura;
-	Address		AddressList::SandRippleAnyCostume;
-	Address		AddressList::SandRippleAllTimes;
-	Address		AddressList::PlayerLuminanceNormal;
+	Address		AddressList::PlayerLuminanceNormalA;
+	Address		AddressList::PlayerLuminanceNormalB;
 	Address		AddressList::PlayerLuminanceLightArmor;
+	Address		AddressList::SwordParticle;
 
 	// Savefile
 	Address		AddressList::NormalNCCompletion;
