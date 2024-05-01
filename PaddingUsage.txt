@@ -28,3 +28,7 @@ Text -> Rodata
 	[Start: 0x49; End: 0x57; Padding: 0x3]
 	[0x0E bytes | 15 bytes]
 	
+6) Costume::enableCosmeticCostume()
+	[Custom function, 3 lines]
+	[Start: 0x64; End: 0x6F]
+	[0x0C bytes | 12 bytes]
