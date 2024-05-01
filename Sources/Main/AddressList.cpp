@@ -29,6 +29,7 @@ namespace CTRPluginFramework {
 		CostumeAttrC 				= Address(0x32849513, 0x32849593, 0x32893F53, 0x32848C13);
 		CostumeAttrD				= Address(0x32849514, 0x32849594, 0x32893F54, 0x32848C14);
 		CurrCostume 				= Address(0x32849564, 0x328495E4, 0x32893FA4, 0x32848C64);
+		CurrCostumeAlt 				= Address(0x3284A261, 0x3284A2E1, 0x32894CA1, 0x32849961);
 		CostumeCatalogPointer 		= Address(0x32C828E8, 0x32C82968, 0x32CCD328, 0x32C81FE8);
 		PlayerStatus 				= Address(0x32849511, 0x32849591, 0x32893F51, 0x32848C11);
 		TingleBalloons 				= Address(0x32849680, 0x32849700, 0x328940C0, 0x32848D80);
@@ -43,14 +44,15 @@ namespace CTRPluginFramework {
 		DoppelStageResetB			= Address(0x00315B98, 0x00000000, 0x00000000, 0x00000000);
 		DoppelStageResetC			= Address(0x00315B9C, 0x00000000, 0x00000000, 0x00000000);
 		DoppelLobbyReset			= Address(0x0058C314, 0x00000000, 0x00000000, 0x00000000);
-		CostumeIDOffsetAura			= Address(0x001C3028, 0x00000000, 0x00000000, 0x00000000);
-		CostumeIDOffsetSwordA		= Address(0x001C31CC, 0x00000000, 0x00000000, 0x00000000);
-		CostumeIDOffsetSwordB		= Address(0x001FB05C, 0x00000000, 0x00000000, 0x00000000);
-		CostumeIDOffsetSwordC		= Address(0x003B31C8, 0x00000000, 0x00000000, 0x00000000);
+		CostumeIDOffsetAuraA		= Address(0x001C3028, 0x00000000, 0x00000000, 0x00000000);
+		CostumeIDOffsetAuraB		= Address(0x001C33FC, 0x00000000, 0x00000000, 0x00000000);
+		CostumeIDOffsetAuraC		= Address(0x001C34E8, 0x00000000, 0x00000000, 0x00000000);
+		CostumeIDOffsetAuraD		= Address(0x001C360C, 0x00000000, 0x00000000, 0x00000000);
 		CostumeIDOffsetCheetah		= Address(0x001C32C4, 0x00000000, 0x00000000, 0x00000000);
 		CostumeIDOffsetDune			= Address(0x001C41C8, 0x00000000, 0x00000000, 0x00000000);
 		CostumeIDOffsetCheer		= Address(0x001F9AB4, 0x00000000, 0x00000000, 0x00000000);
-		CostumeIDOffsetModel		= Address(0x005BBBE4, 0x00000000, 0x00000000, 0x00000000);
+		CostumeIDOffsetSwordPtcl	= Address(0x003B31C8, 0x00000000, 0x00000000, 0x00000000);
+		CostumeIDFunBLModel			= Address(0x001C47F8, 0x00000000, 0x00000000, 0x00000000);
 		KokiriA						= Address(0x0031637C, 0x00000000, 0x00000000, 0x00000000);
 		KokiriB						= Address(0x00316380, 0x00000000, 0x00000000, 0x00000000);
 		KokiriC						= Address(0x00316384, 0x00000000, 0x00000000, 0x00000000);
@@ -112,6 +114,7 @@ namespace CTRPluginFramework {
 		SwordHammerDmgBoost			= Address(0x003166A0, 0x00000000, 0x00000000, 0x00000000);
 		SwordBeamHealthCheckA		= Address(0x005CC9BC, 0x00000000, 0x00000000, 0x00000000);
 		SwordBeamHealthCheckB		= Address(0x005CC9C0, 0x00000000, 0x00000000, 0x00000000);
+		SwordType 					= Address(0x328419EC, 0x32841A6C, 0x3288C42C, 0x328410EC);
 
 		/* Console */
 
@@ -212,7 +215,6 @@ namespace CTRPluginFramework {
 		RespawnPositionX 			= Address(0x32841750, 0x328417D0, 0x3288C190, 0x32840E50);
 		RespawnPositionY 			= Address(0x32841754, 0x328417D4, 0x3288C194, 0x32840E54);
 		RespawnPositionZ 			= Address(0x32841758, 0x328417D8, 0x3288C198, 0x32840E58);
-		SwordType 					= Address(0x328419EC, 0x32841A6C, 0x3288C42C, 0x328410EC);
 
 		/* Rendering */
 		ArrowIndicatorColorBot 		= Address(0x32D91B24, 0x32D91BA4, 0x32DE4424, 0x32D91224);
@@ -451,6 +453,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::CostumeAttrD;
 	Address		AddressList::CostumeCatalogPointer;
 	Address		AddressList::CurrCostume;
+	Address		AddressList::CurrCostumeAlt;
 	Address		AddressList::UnusedCostumeDataPointers;
 	Address		AddressList::PlayerStatus;
 	Address		AddressList::TingleBalloons;
@@ -464,14 +467,15 @@ namespace CTRPluginFramework {
 	Address		AddressList::DoppelStageResetB;
 	Address		AddressList::DoppelStageResetC;
 	Address		AddressList::DoppelLobbyReset;
-	Address		AddressList::CostumeIDOffsetAura;
-	Address		AddressList::CostumeIDOffsetSwordA;
-	Address		AddressList::CostumeIDOffsetSwordB;
-	Address		AddressList::CostumeIDOffsetSwordC;
+	Address		AddressList::CostumeIDOffsetAuraA;
+	Address		AddressList::CostumeIDOffsetAuraB;
+	Address		AddressList::CostumeIDOffsetAuraC;
+	Address		AddressList::CostumeIDOffsetAuraD;
 	Address		AddressList::CostumeIDOffsetCheetah;
 	Address		AddressList::CostumeIDOffsetDune;
 	Address		AddressList::CostumeIDOffsetCheer;
-	Address		AddressList::CostumeIDOffsetModel;
+	Address		AddressList::CostumeIDOffsetSwordPtcl;
+	Address		AddressList::CostumeIDFunBLModel;
 	Address		AddressList::KokiriA;
 	Address		AddressList::KokiriB;
 	Address		AddressList::KokiriC;
@@ -533,6 +537,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::SwordHammerDmgBoost;
 	Address		AddressList::SwordBeamHealthCheckA;
 	Address		AddressList::SwordBeamHealthCheckB;
+	Address		AddressList::SwordType;
 
 	// Emotes
 	Address		AddressList::GameplayEmotes;
@@ -630,7 +635,6 @@ namespace CTRPluginFramework {
 	Address		AddressList::RespawnPositionX;
 	Address		AddressList::RespawnPositionY;
 	Address		AddressList::RespawnPositionZ;
-	Address		AddressList::SwordType;
 
 	// Rendering
 	Address		AddressList::ArrowIndicatorColorTop;

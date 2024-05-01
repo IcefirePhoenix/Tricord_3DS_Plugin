@@ -313,11 +313,6 @@ namespace CTRPluginFramework
     // Moon Jump - Auto descent
     void Gameplay::moonJump(MenuEntry* entry)
     {
-        /*
-        if (flightEntry->WasJustActivated()){
-            flightEntry->Disable();
-        }
-        */
         Process::Write8(AddressList::CameraOnX.addr, 0x00);
         int Link = GeneralHelpers::getCurrLink();
         u32 offset = Link*GameData::playerAddressOffset;
@@ -355,11 +350,6 @@ namespace CTRPluginFramework
     // Flight - All manual
     void Gameplay::flight(MenuEntry* entry)
     {
-        /*
-        if (moonJumpEntry->WasJustActivated()){
-            moonJumpEntry->Disable();
-        }
-        */
         Process::Write8(AddressList::CameraOnX.addr, 0x00);
         int Link = GeneralHelpers::getCurrLink();
         u32 offset = Link*GameData::playerAddressOffset;

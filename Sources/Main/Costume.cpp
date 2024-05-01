@@ -26,6 +26,8 @@ namespace CTRPluginFramework
     MenuEntry* initCustomCostumes;
     MenuEntry* writeCostumeIDToSlot;
 
+    MenuEntry* writeCosmeticCostumeID;
+
     bool showSlots = false;
     bool isCostumeFail = false;
 
@@ -34,6 +36,8 @@ namespace CTRPluginFramework
     u32 catalogStartOffset = 0xE8;
     u32 CostumeCatalogLocation;
     u8 costumeCatalogSize, catalogIncSize;
+
+    u8 cosmeticIDs[3] = {0xFF, 0xFF, 0xFF};
 
     void Costume::openCustomCostumeSlots(MenuEntry* entry) 
     {
@@ -401,6 +405,119 @@ namespace CTRPluginFramework
         {
             Process::Patch(AddressList::DoppelLobbyReset.addr, 0x1A000007);
             entry->SetName("Preserve Doppel costume edits in single player lobby");
+        }
+    }
+
+    void Costume::enableCosmeticCostume(MenuEntry* entry)
+    {
+        if (entry->Name() == "Enable Cosmetic Costumes") {
+            // Edit all LDRB instructions in graphics functions to direct to the alt costume address
+            Process::Patch(AddressList::CostumeIDOffsetAuraA.addr, 0xE5D00D61);
+            Process::Patch(AddressList::CostumeIDOffsetAuraB.addr, 0xE5D01D61);
+            Process::Patch(AddressList::CostumeIDOffsetAuraC.addr, 0xE5D01D61);
+            Process::Patch(AddressList::CostumeIDOffsetAuraD.addr, 0xE5D01D61);
+            Process::Patch(AddressList::CostumeIDOffsetCheetah.addr, 0xE5D01D61);
+            Process::Patch(AddressList::CostumeIDOffsetDune.addr, 0xE5D00D61);
+            Process::Patch(AddressList::CostumeIDOffsetCheer.addr, 0xE5D00D61);
+            Process::Patch(AddressList::CostumeIDOffsetSwordPtcl.addr, 0xE5D00D61);
+
+            // Add custom function to text->rodata padding and redirect model loader bl to it
+            u32 custFuncStart = AddressList::TextToRodata.addr + 0x64;
+            Process::Patch(custFuncStart, 0xE5900008);
+            Process::Patch(custFuncStart + 0x4, 0xE5D00D61);
+            Process::Patch(custFuncStart + 0x8, 0xE12FFF1E);
+            u32 blOffset = (custFuncStart - 0x8 - AddressList::CostumeIDFunBLModel.addr) / 4;
+            Process::Patch(AddressList::CostumeIDFunBLModel.addr, 0xEB000000 + blOffset);
+
+            writeCosmeticCostumeID->Enable();
+            entry->SetName("Disable Cosmetic Costumes");
+        }
+        else {
+            // Edit all LDRB instructions back to normal
+            Process::Patch(AddressList::CostumeIDOffsetAuraA.addr, 0xE5D00064);
+            Process::Patch(AddressList::CostumeIDOffsetAuraB.addr, 0xE5D01064);
+            Process::Patch(AddressList::CostumeIDOffsetAuraC.addr, 0xE5D01064);
+            Process::Patch(AddressList::CostumeIDOffsetAuraD.addr, 0xE5D01064);
+            Process::Patch(AddressList::CostumeIDOffsetCheetah.addr, 0xE5D01064);
+            Process::Patch(AddressList::CostumeIDOffsetDune.addr, 0xE5D00064);
+            Process::Patch(AddressList::CostumeIDOffsetCheer.addr, 0xE5D00064);
+            Process::Patch(AddressList::CostumeIDOffsetSwordPtcl.addr, 0xE5D00064);
+
+            // Reset bl in model loader
+            // Need to know: Does this hold the same offset value in all regions, or not?
+            Process::Patch(AddressList::CostumeIDFunBLModel.addr, 0xEB0FDCF8);
+
+            writeCosmeticCostumeID->Disable();
+            entry->SetName("Enable Cosmetic Costumes");
+        }
+    }
+
+    void Costume::setCosmeticCostume(MenuEntry* entry)
+    {
+        int linkChoice = GeneralHelpers::chooseLink();
+
+        if (linkChoice >= 0) {
+            u32 playerID = static_cast<u32>(linkChoice);   
+            u32 memoryOffset = playerID * GameData::playerAddressOffset;
+            u8 currEffectCostumeID; u8 currCosmeticCostumeID;
+            Process::Read8(AddressList::CurrCostume.addr + memoryOffset, currEffectCostumeID);
+            if (cosmeticIDs[linkChoice] != 0xFF) {
+                currCosmeticCostumeID = cosmeticIDs[linkChoice];
+            }
+            else {
+                currCosmeticCostumeID = currEffectCostumeID;
+            }
+            std::string currEffectCostume = GameData::getCostumeNameFromID(currEffectCostumeID);
+            std::string currCosmeticCostume = GameData::getCostumeNameFromID(currCosmeticCostumeID);
+            std::string selectedPlayer = "";
+            switch (linkChoice) {
+                case 0:
+                    selectedPlayer = "Player 1 (Green)";
+                    break;
+                case 1:
+                    selectedPlayer = "Player 2 (Blue)";
+                    break;
+                case 2:
+                    selectedPlayer = "Player 3 (Red)";
+                    break;
+            }
+
+            std::string topscreenMessage = 
+            "Set new cosmetic costume?\nOr reset to the effective costume?\n\nSelected: " + selectedPlayer
+            + "\n\nCurrent effective costume: " + currEffectCostume
+            + "\nCurrent cosmetic costume: " + currCosmeticCostume;
+
+            Keyboard setReset(topscreenMessage);
+            StringVector setResetOptions = 
+            {
+                "Set new",
+                "Reset"
+            };
+            setReset.Populate(setResetOptions);
+            int setResetResult = setReset.Open();
+
+            if (setResetResult == 0) {
+                Keyboard costumeList("Choose a costume:\n\nBe sure to load into a new area for changes to fully\ntake effect.");
+                costumeList.Populate(GameData::universalCostumeList);
+
+                u8 result = costumeList.Open();
+                if (result >= 0){
+                    cosmeticIDs[linkChoice] = result;
+                }
+            }
+            else if (setResetResult == 1) {
+                cosmeticIDs[linkChoice] = 0xFF;
+                Process::Write8(AddressList::CurrCostumeAlt.addr + memoryOffset, currEffectCostumeID);
+            }
+        }
+    }
+
+    void Costume::writeCosmeticCostume(MenuEntry* entry)
+    {
+        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++) {
+            if (cosmeticIDs[iterateThruPlayers] != 0xFF) {
+                Process::Write8(AddressList::CurrCostumeAlt.addr + iterateThruPlayers*GameData::playerAddressOffset, cosmeticIDs[iterateThruPlayers]);
+            }
         }
     }
 }
