@@ -297,6 +297,14 @@ namespace CTRPluginFramework {
         *costume += new MenuEntry("Preserve Doppel costume edits in single player lobby", nullptr, Costume::preventLobbyReset,
         "Determines whether Doppel costumes reset to the Hero's Tunic when entering or returning to the single player lobby.");
 
+        *costume += new MenuEntry("Enable Cosmetic Costumes", nullptr, Costume::enableCosmeticCostume,
+        "Determines whether choices under Set Cosmetic Costume get applied or not.");
+        *costume += new MenuEntry("Set Cosmetic Costume", nullptr, Costume::setCosmeticCostume,
+        "Select a costume to gain the cosmetics of without changing the effects of the currently worn costume hiding underneath. Any usages of the \"Change Player Costume\" code or normal in-game costume changes after activating this will only change your costume's effect.");
+        writeCosmeticCostumeID = new MenuEntry("Write cosmetic costumes (auto)", Costume::writeCosmeticCostume);
+        *costume += new MenuEntry("Set custom sword model(s)", nullptr, Player::setSwordChanges);
+        swordEditAuto = new MenuEntry("Write Sword edits (auto)", Player::writeSwordChanges);
+
         // create costume sub-folders
         MenuFolder* costumeEffects = new MenuFolder("Costume Effects");
         // *costumeEffects += new MenuEntry("(TODO) Set Costume Effects", nullptr, Costume::selCostumeEffect);
@@ -351,7 +359,6 @@ namespace CTRPluginFramework {
         *player += new MenuEntry("Toggle player invincibility edits", nullptr, Player::setInvincibilityChanges);
         *player += new MenuEntry("Toggle PvP damage edits", nullptr, Player::setPVPChanges);
         *player += new MenuEntry("Set custom player model size", nullptr, Player::setSizeChanges);
-        *player += new MenuEntry("Set custom sword model(s)", nullptr, Player::setSwordChanges);
 
         jinxEditAuto = new MenuEntry("Write Jinx edits (auto)", Player::writeJinxChanges);
         spawnEditAuto = new MenuEntry("Write Spawn edits (auto)", Player::writeSpawnChanges);
@@ -360,7 +367,6 @@ namespace CTRPluginFramework {
         pvpEditAuto = new MenuEntry("Write PVP edits (auto)", Player::writePVPChanges);
         animStoreEditAuto = new MenuEntry("Write Anim edits (auto)", Player::writeAnimStorageChanges);
         colEditAuto = new MenuEntry("Write Collision edits (auto)", Player::writeCollisionChanges);
-        swordEditAuto = new MenuEntry("Write Sword edits (auto)", Player::writeSwordChanges);
     }
 
     void InitItemsFolder(PluginMenu& menu)

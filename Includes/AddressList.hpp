@@ -34,6 +34,7 @@ namespace CTRPluginFramework {
 		static Address		CostumeAttrC;
 		static Address		CostumeAttrD;
 		static Address		CurrCostume;
+		static Address		CurrCostumeAlt;
 		static Address		CostumeCatalogPointer;
 		static Address		PlayerStatus;
 		static Address		TingleBalloons;
@@ -48,14 +49,15 @@ namespace CTRPluginFramework {
 		static Address		DoppelStageResetB;
 		static Address		DoppelStageResetC;
 		static Address		DoppelLobbyReset;
-		static Address		CostumeIDOffsetAura;
-		static Address		CostumeIDOffsetSwordA;
-		static Address		CostumeIDOffsetSwordB;
-		static Address		CostumeIDOffsetSwordC;
+		static Address		CostumeIDOffsetAuraA;
+		static Address		CostumeIDOffsetAuraB;
+		static Address		CostumeIDOffsetAuraC;
+		static Address		CostumeIDOffsetAuraD;
 		static Address		CostumeIDOffsetCheetah;
 		static Address		CostumeIDOffsetDune;
 		static Address		CostumeIDOffsetCheer;
-		static Address		CostumeIDOffsetModel;
+		static Address		CostumeIDOffsetSwordPtcl;
+		static Address		CostumeIDFunBLModel;
 		static Address		KokiriA;
 		static Address		KokiriB;
 		static Address		KokiriC;
@@ -117,6 +119,7 @@ namespace CTRPluginFramework {
 		static Address		SwordHammerDmgBoost;
 		static Address		SwordBeamHealthCheckA;
 		static Address		SwordBeamHealthCheckB;
+		static Address		SwordType;
 
 		// Emotes
 		static Address		GameplayEmotes;
@@ -214,7 +217,6 @@ namespace CTRPluginFramework {
 		static Address		RespawnPositionX;
 		static Address		RespawnPositionY;
 		static Address		RespawnPositionZ;
-		static Address		SwordType;
 
 		// Rendering
 		static Address		ArrowIndicatorColorBot;

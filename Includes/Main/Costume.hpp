@@ -20,6 +20,8 @@ namespace CTRPluginFramework {
     extern MenuEntry* initCustomCostumes;
     extern MenuEntry* writeCostumeIDToSlot;
 
+    extern MenuEntry* writeCosmeticCostumeID;
+
     int chooseSlotAddNum(void);
     void disableCustomCostumeMenuOpt(void);
     void enableCustomCostumeOpt(void);
@@ -38,6 +40,9 @@ namespace CTRPluginFramework {
         static void initCustomCostumesAuto(MenuEntry* entry);
         static void forceBearMinMax(MenuEntry* entry);
         static void preventLobbyReset(MenuEntry* entry);
+        static void enableCosmeticCostume(MenuEntry* entry);
+        static void setCosmeticCostume(MenuEntry* entry);
+        static void writeCosmeticCostume(MenuEntry* entry);
     };
 }
 #endif
