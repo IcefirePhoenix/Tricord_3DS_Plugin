@@ -84,6 +84,7 @@ namespace CTRPluginFramework {
 		static Address		GustGarbE;
 		static Address		GustGarbF;
 		static Address		GustGarbG;
+		static Address		GustGarbH;
 		static Address		HammerwearA;
 		static Address		HammerwearB;
 		static Address		HammerwearC;

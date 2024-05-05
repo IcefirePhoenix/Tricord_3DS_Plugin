@@ -43,6 +43,29 @@ namespace CTRPluginFramework {
         static void enableCosmeticCostume(MenuEntry* entry);
         static void setCosmeticCostume(MenuEntry* entry);
         static void writeCosmeticCostume(MenuEntry* entry);
+
+        // Individual costume effects
+        /*
+        static void zora(MenuEntry* entry);
+        static void goron(MenuEntry* entry);
+        static void parka(MenuEntry* entry);
+        static void ninja(MenuEntry* entry);
+        static void spinAttack(MenuEntry* entry);
+        static void rupee(MenuEntry* entry);
+        static void doubleDmg(MenuEntry* entry);
+        static void dune(MenuEntry* entry);
+        static void dapper(MenuEntry* entry);
+        static void serpent(MenuEntry* entry);
+        static void master(MenuEntry* entry);
+        static void cacto(MenuEntry* entry);
+        */
+
+        static void luckyDodge(MenuEntry* entry);
+        static void tingle(MenuEntry* entry);
+        static void dapperInstant(MenuEntry* entry);
+
+        static void setIndCostumeEffect(MenuEntry* entry);
+        static void writeIndCostumeEffects(MenuEntry* entry);
     };
 }
 #endif

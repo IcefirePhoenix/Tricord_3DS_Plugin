@@ -79,6 +79,7 @@ namespace CTRPluginFramework {
 		GustGarbE					= Address(0x001B2494, 0x00000000, 0x00000000, 0x00000000);
 		GustGarbF					= Address(0x001B2884, 0x00000000, 0x00000000, 0x00000000);
 		GustGarbG					= Address(0x001B2888, 0x00000000, 0x00000000, 0x00000000);
+		GustGarbH					= Address(0x00189764, 0x00000000, 0x00000000, 0x00000000);
 		HammerwearA					= Address(0x003164FC, 0x00000000, 0x00000000, 0x00000000);
 		HammerwearB					= Address(0x00316500, 0x00000000, 0x00000000, 0x00000000);
 		HammerwearC					= Address(0x00316504, 0x00000000, 0x00000000, 0x00000000);
@@ -502,6 +503,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::GustGarbE;
 	Address		AddressList::GustGarbF;
 	Address		AddressList::GustGarbG;
+	Address		AddressList::GustGarbH;
 	Address		AddressList::HammerwearA;
 	Address		AddressList::HammerwearB;
 	Address		AddressList::HammerwearC;

@@ -10,7 +10,9 @@
 #include <CTRPluginFramework.hpp>
 
 #include <array>
+#include <bitset>
 #include "csvc.h"
+#include "pIDindex.h"
 
 namespace CTRPluginFramework
 {
@@ -38,6 +40,17 @@ namespace CTRPluginFramework
     u8 costumeCatalogSize, catalogIncSize;
 
     u8 cosmeticIDs[3] = {0xFF, 0xFF, 0xFF};
+
+    /*
+    std::bitset<32> indCostumeEffectsA[3];
+    std::bitset<8> indCostumeEffectsB[3];
+    u8 legendary[3];
+    u8 bearDodge[3];
+    */
+    
+    std::bitset<42> indCostumeEffects[3];
+    u8 tingleBalloons[3];
+    u8 dapperSpinA[3]; u8 dapperSpinB[3];
 
     void Costume::openCustomCostumeSlots(MenuEntry* entry) 
     {
@@ -520,4 +533,204 @@ namespace CTRPluginFramework
             }
         }
     }
+
+    /* --------------------------------- */
+
+    void Costume::setIndCostumeEffect(MenuEntry* entry)
+    {
+        pIDindex args = *reinterpret_cast<pIDindex*>(entry->GetArg());
+        int player = args.playerID;
+        int i = args.index;
+        std::string longName = entry->Name();
+        std::string prefix = longName.substr(0, 4);
+        std::string baseName = longName.substr(4, std::string::npos);
+        if (prefix == "( ) ") {
+            indCostumeEffects[player].set(i);
+            entry->SetName("(X) " + baseName);
+        }
+        else {
+            indCostumeEffects[player].reset(i);
+            entry->SetName("( ) " + baseName);
+        }
+    }
+
+    void Costume::luckyDodge(MenuEntry* entry)
+    {
+        int player = reinterpret_cast<int>(entry->GetArg());
+        if (entry->Name() == "( ) Lucky Dodge") {
+            // Select between 3 dodge chances
+            Keyboard dodge("Select the dodge rate:");
+            StringVector dodgeChances = 
+            {
+                "25%",
+                "50%",
+                "75%"
+            };
+            dodge.Populate(dodgeChances);
+            switch (dodge.Open()) {
+                case 0:
+                    indCostumeEffects[player].set(6);
+                    entry->SetName("(X) Lucky Dodge - 25%");
+                    break;
+                case 1:
+                    indCostumeEffects[player].set(7);
+                    entry->SetName("(X) Lucky Dodge - 50%");
+                    break;
+                case 2:
+                    indCostumeEffects[player].set(41);
+                    entry->SetName("(X) Lucky Dodge - 75%");
+                    break;
+            }
+        }
+        else {
+            indCostumeEffects[player].reset(6);
+            indCostumeEffects[player].reset(7);
+            indCostumeEffects[player].reset(41);
+            entry->SetName("( ) Lucky Dodge");
+        }
+    }
+
+    void Costume::writeIndCostumeEffects(MenuEntry* entry)
+    {
+        int player = reinterpret_cast<int>(entry->GetArg());
+        u32 attributesA;
+        u8 attributesB;
+        u32 addrA = AddressList::CostumeAttrA.addr + player*GameData::playerAddressOffset;
+        u32 addrB = AddressList::CostumeAttrD.addr + player*GameData::playerAddressOffset;
+        Process::Read32(addrA, attributesA);
+        Process::Read8(addrB, attributesB);
+
+        std::bitset<42> fullset = indCostumeEffects[player];
+        std::bitset<42> subset = fullset >> 32;
+        u32 attrToWriteA = attributesA | fullset.to_ulong();
+        u8 attrToWriteB = attributesB | subset.to_ulong();
+
+        Process::Write32(addrA, attrToWriteA);
+        Process::Write32(addrB, attrToWriteB);
+
+        // If statements for the attributes with distant addresses
+        if (fullset.test(40)) {
+            Process::Write8(AddressList::HeartDropRate.addr, 0x1);
+        }
+        if (fullset.test(41)) {
+            Process::Write8(AddressList::BearDodge.addr, 0x1);
+        }
+    }
+
+    void Costume::tingle(MenuEntry* entry)
+    {
+        // TODO
+    }
+
+    void Costume::dapperInstant(MenuEntry* entry)
+    {
+        // TODO
+    }
+
+    /*
+    void Costume::zora(MenuEntry* entry)
+    {
+        int player = reinterpret_cast<int>(entry->GetArg());
+        if (entry->Name() == "( ) Zora Costume - Enhanced swimming") {
+            indCostumeEffectsA[player].set(1);
+            entry->SetName("(X) Zora Costume - Enhanced swimming");
+        }
+        else {
+            indCostumeEffectsA[player].reset(1);
+            entry->SetName("( ) Zora Costume - Enhanced swimming");
+        }
+    }
+
+    void Costume::goron(MenuEntry* entry)
+    {
+        int player = reinterpret_cast<int>(entry->GetArg());
+        if (entry->Name() == "( ) Goron Garb - Burn immunity and lava swimming") {
+            indCostumeEffectsA[player].set(2);
+            entry->SetName("(X) Goron Garb - Burn immunity and lava swimming");
+        }
+        else {
+            indCostumeEffectsA[player].reset(2);
+            entry->SetName("( ) Goron Garb - Burn immunity and lava swimming");
+        }
+    }
+
+    void Costume::parka(MenuEntry* entry)
+    {
+        int player = reinterpret_cast<int>(entry->GetArg());
+        if (entry->Name() == "( ) Cozy Parka - Freeze and ice slip immunity") {
+            indCostumeEffectsA[player].set(3);
+            entry->SetName("(X) Cozy Parka - Freeze and ice slip immunity");
+        }
+        else {
+            indCostumeEffectsA[player].reset(3);
+            entry->SetName("( ) Cozy Parka - Freeze and ice slip immunity");
+        }
+    }
+
+    void Costume::ninja(MenuEntry* entry)
+    {
+        int player = reinterpret_cast<int>(entry->GetArg());
+        if (entry->Name() == "( ) Ninja Gi - Instant triple damage dash") {
+            indCostumeEffectsA[player].set(4);
+            entry->SetName("(X) Ninja Gi - Instant triple damage dash");
+        }
+        else {
+            indCostumeEffectsA[player].reset(4);
+            entry->SetName("( ) Ninja Gi - Instant triple damage dash");
+        }
+    }
+
+    void Costume::spinAttack(MenuEntry* entry)
+    {
+        int player = reinterpret_cast<int>(entry->GetArg());
+        if (entry->Name() == "( ) Spin Attack Attire - Great Spin Attack") {
+            indCostumeEffectsA[player].set(5);
+            entry->SetName("(X) Spin Attack Attire - Great Spin Attack");
+        }
+        else {
+            indCostumeEffectsA[player].reset(5);
+            entry->SetName("( ) Spin Attack Attire - Great Spin Attack");
+        }
+    }
+
+    void Costume::rupee(MenuEntry* entry)
+    {
+        int player = reinterpret_cast<int>(entry->GetArg());
+        if (entry->Name() == "( ) Rupee Regalia - Increased rupee drop rate") {
+            indCostumeEffectsA[player].set(11);
+            entry->SetName("(X) Rupee Regalia - Increased rupee drop rate");
+        }
+        else {
+            indCostumeEffectsA[player].reset(11);
+            entry->SetName("( ) Rupee Regalia - Increased rupee drop rate");
+        }
+    }
+
+    void Costume::doubleDmg(MenuEntry* entry)
+    {
+        int player = reinterpret_cast<int>(entry->GetArg());
+        if (entry->Name() == "( ) Bear / Cursed - Double damage taken") {
+            indCostumeEffectsA[player].set(19);
+            entry->SetName("(X) Bear / Cursed - Double damage taken");
+        }
+        else {
+            indCostumeEffectsA[player].reset(19);
+            entry->SetName("( ) Bear / Cursed - Double damage taken");
+        }
+    }
+
+    void Costume::template(MenuEntry* entry)
+    {
+        int player = reinterpret_cast<int>(entry->GetArg());
+        if (entry->Name() == "( ) ") {
+            indCostumeEffectsA[player].set(#);
+            entry->SetName("(X) ");
+        }
+        else {
+            indCostumeEffectsA[player].reset(#);
+            entry->SetName("( ) ");
+        }
+    }
+    */
+
 }

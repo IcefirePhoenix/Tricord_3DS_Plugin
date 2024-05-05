@@ -1,6 +1,7 @@
 #include "Helpers.hpp"
 #include "Cheats.hpp"
 #include "csvc.h"
+#include "pIDindex.h"
 #include <3ds.h>
 
 #include "CTRPluginFrameworkImpl/Menu/HotkeysModifier.hpp"
@@ -174,14 +175,14 @@ namespace CTRPluginFramework {
         /* ------------------------------ */
 
         // Radio group 1 for mutual exclusivity
-        moonJumpEntry = (EntryWithHotkey(new MenuEntry(1, "Enable Moon Jump", Gameplay::moonJump), {
+        *moonJumpFlight += (EntryWithHotkey(new MenuEntry(1, "Enable Moon Jump", Gameplay::moonJump), {
             Hotkey(Key::CPadUp, "Move North"),
             Hotkey(Key::CPadDown, "Move South"),
             Hotkey(Key::CPadRight, "Move East"),
             Hotkey(Key::CPadLeft, "Move West"),
             Hotkey(Key::X, "Ascend")
         }));
-        flightEntry = (EntryWithHotkey(new MenuEntry(1, "Enable Flight", Gameplay::flight), {
+        *moonJumpFlight += (EntryWithHotkey(new MenuEntry(1, "Enable Flight", Gameplay::flight), {
             Hotkey(Key::CPadUp, "Move North"),
             Hotkey(Key::CPadDown, "Move South"),
             Hotkey(Key::CPadRight, "Move East"),
@@ -190,8 +191,6 @@ namespace CTRPluginFramework {
             Hotkey(Key::B, "Descend")
         }));
 
-        *moonJumpFlight += moonJumpEntry;
-        *moonJumpFlight += flightEntry;
         *moonJumpFlight += new MenuEntry("Keep uncontrolled players hovering in place", Gameplay::hover);
         *moonJumpFlight += new MenuEntry("Adjust ascent speed: Medium", nullptr, Gameplay::adjustAscentSpeed);
         *moonJumpFlight += new MenuEntry("Adjust descent speed: Medium", nullptr, Gameplay::adjustDescentSpeed);
@@ -306,8 +305,120 @@ namespace CTRPluginFramework {
         swordEditAuto = new MenuEntry("Write Sword edits (auto)", Player::writeSwordChanges);
 
         // create costume sub-folders
-        MenuFolder* costumeEffects = new MenuFolder("Costume Effects");
-        // *costumeEffects += new MenuEntry("(TODO) Set Costume Effects", nullptr, Costume::selCostumeEffect);
+        MenuFolder* costumeEffects = new MenuFolder("Costume Effects", 
+        "Any combination of these costume effects can be selected and will be applied to the chosen player. This does not overwrite any existing costume effects the player may have.");
+        
+        //MenuFolder* indCostumeEffectsG = new MenuFolder("Costume Effects - Player 1 (Green)");
+        //MenuFolder* indCostumeEffectsB = new MenuFolder("Costume Effects - Player 2 (Blue)");
+        //MenuFolder* indCostumeEffectsR = new MenuFolder("Costume Effects - Player 3 (Red)");
+
+        MenuFolder* indCostumeEffects[3] = {
+            new MenuFolder("Costume Effects - Player 1 (Green)"),
+            new MenuFolder("Costume Effects - Player 2 (Blue)"),
+            new MenuFolder("Costume Effects - Player 3 (Red)")
+        };
+
+        MenuEntry* subEntries[3][15];
+
+        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++) {
+            pIDindex args;
+            args.playerID = iterateThruPlayers;
+
+            // Checkbox to apply effects
+            subEntries[iterateThruPlayers][0] = new MenuEntry("Apply costume effects", Costume::writeIndCostumeEffects);
+            subEntries[iterateThruPlayers][0]->SetArg(reinterpret_cast<void*>(iterateThruPlayers));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][0];
+
+            // Double damage
+            args.index = 19;
+            subEntries[iterateThruPlayers][1] = new MenuEntry("( ) Bear / Cursed - Double damage taken", nullptr, Costume::setIndCostumeEffect);
+            subEntries[iterateThruPlayers][1]->SetArg(reinterpret_cast<void*>(&args));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][1];
+
+            // Lucky dodge
+            subEntries[iterateThruPlayers][2] = new MenuEntry("( ) Lucky Dodge", nullptr, Costume::luckyDodge);
+            subEntries[iterateThruPlayers][2]->SetArg(reinterpret_cast<void*>(iterateThruPlayers));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][2];
+
+            // Zora
+            args.index = 1;
+            subEntries[iterateThruPlayers][3] = new MenuEntry("( ) Zora Costume - Enhanced swimming", nullptr, Costume::setIndCostumeEffect);
+            subEntries[iterateThruPlayers][3]->SetArg(reinterpret_cast<void*>(&args));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][3];
+
+            // Goron
+            args.index = 2;
+            subEntries[iterateThruPlayers][4] = new MenuEntry("( ) Goron Garb - Burn immunity and lava swimming", nullptr, Costume::setIndCostumeEffect,
+            "Does not prevent you from taking damage from lava pillars. Does not allow you to walk through flame walls. Does not allow you to pick up flaming rupees.");
+            subEntries[iterateThruPlayers][4]->SetArg(reinterpret_cast<void*>(&args));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][4];
+
+            // Parka
+            args.index = 3;
+            subEntries[iterateThruPlayers][5] = new MenuEntry("( ) Cozy Parka - Freeze and ice slip immunity", nullptr, Costume::setIndCostumeEffect);
+            subEntries[iterateThruPlayers][5]->SetArg(reinterpret_cast<void*>(&args));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][5];
+
+            // Dune
+            args.index = 21;
+            subEntries[iterateThruPlayers][6] = new MenuEntry("( ) Dunewalker Duds - Quicksand immunity", nullptr, Costume::setIndCostumeEffect,
+            "Does not some with the sand ripple effect.");
+            subEntries[iterateThruPlayers][6]->SetArg(reinterpret_cast<void*>(&args));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][6];
+
+            // Legendary
+            args.index = 40;
+            subEntries[iterateThruPlayers][7] = new MenuEntry("( ) Legendary Dress - Increased heart drop rate", nullptr, Costume::setIndCostumeEffect);
+            subEntries[iterateThruPlayers][7]->SetArg(reinterpret_cast<void*>(&args));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][7];
+
+            // Rupee
+            args.index = 11;
+            subEntries[iterateThruPlayers][8] = new MenuEntry("( ) Rupee Regalia - Increased rupee drop rate", nullptr, Costume::setIndCostumeEffect);
+            subEntries[iterateThruPlayers][8]->SetArg(reinterpret_cast<void*>(&args));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][8];
+
+            // Serpent
+            args.index = 29;
+            subEntries[iterateThruPlayers][9] = new MenuEntry("( ) Serpent's Toga - Invincibility when standing still", nullptr, Costume::setIndCostumeEffect);
+            subEntries[iterateThruPlayers][9]->SetArg(reinterpret_cast<void*>(&args));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][9];
+
+            // Cacto
+            args.index = 33;
+            subEntries[iterateThruPlayers][10] = new MenuEntry("( ) Cacto Clothes - Damage enemies on contact", nullptr, Costume::setIndCostumeEffect);
+            subEntries[iterateThruPlayers][10]->SetArg(reinterpret_cast<void*>(&args));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][10];
+
+            // Dapper
+            args.index = 28;
+            subEntries[iterateThruPlayers][11] = new MenuEntry("( ) Dapper Spinner - 3x"+std::string(FONT_B)+" to spin attack", nullptr, Costume::setIndCostumeEffect,
+            "This spin attack is not affected by the Spin Attack Attire's effect.");
+            subEntries[iterateThruPlayers][11]->SetArg(reinterpret_cast<void*>(&args));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][11];
+
+            // Ninja
+            args.index = 4;
+            subEntries[iterateThruPlayers][12] = new MenuEntry("( ) Ninja Gi - Instant triple damage dash", nullptr, Costume::setIndCostumeEffect);
+            subEntries[iterateThruPlayers][12]->SetArg(reinterpret_cast<void*>(&args));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][12];
+
+            // Spin Attack
+            args.index = 5;
+            subEntries[iterateThruPlayers][13] = new MenuEntry("( ) Spin Attack Attire - Great Spin Attack", nullptr, Costume::setIndCostumeEffect);
+            subEntries[iterateThruPlayers][13]->SetArg(reinterpret_cast<void*>(&args));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][13];
+
+            // Master
+            args.index = 32;
+            subEntries[iterateThruPlayers][14] = new MenuEntry("( ) Sword Master Suit - Big sword beam", nullptr, Costume::setIndCostumeEffect,
+            "Only has an effect if you are wearing another sword beam costume (Sword Suit or Fierce Deity Armor), or if you have enabled a sword beam effect from the All-Player Costume Effects folder.");
+            subEntries[iterateThruPlayers][14]->SetArg(reinterpret_cast<void*>(&args));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][14];
+
+            // Add to superfolder
+            *costumeEffects += indCostumeEffects[iterateThruPlayers];
+        }
 
         *costume += costumeEffects;
 
