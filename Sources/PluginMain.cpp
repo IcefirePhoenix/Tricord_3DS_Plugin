@@ -312,6 +312,7 @@ namespace CTRPluginFramework {
         //MenuFolder* indCostumeEffectsB = new MenuFolder("Costume Effects - Player 2 (Blue)");
         //MenuFolder* indCostumeEffectsR = new MenuFolder("Costume Effects - Player 3 (Red)");
 
+        /* Commenting out for now because it is broken
         MenuFolder* indCostumeEffects[3] = {
             new MenuFolder("Costume Effects - Player 1 (Green)"),
             new MenuFolder("Costume Effects - Player 2 (Blue)"),
@@ -419,6 +420,18 @@ namespace CTRPluginFramework {
             // Add to superfolder
             *costumeEffects += indCostumeEffects[iterateThruPlayers];
         }
+        */
+
+       MenuFolder* allPCostumeEffects = new MenuFolder("All-Player Costume Effects");
+       *allPCostumeEffects += new MenuEntry("(  ) Kokiri Clothes - Bow upgrade", nullptr, Costume::kokiri);
+       *allPCostumeEffects += new MenuEntry("(  ) Big Bomb Outfit - Bomb upgrade", nullptr,  Costume::bigBomb);
+       *allPCostumeEffects += new MenuEntry("(  ) Torrent Robe - Water Rod upgrade", nullptr, Costume::torrent);
+       *allPCostumeEffects += new MenuEntry("(  ) Boomeranger - Boomerang upgrade", nullptr, Costume::boomeranger);
+       *allPCostumeEffects += new MenuEntry("(  ) Fire Blazer - Fire Gloves upgrade", nullptr, Costume::fireBlazer);
+       *allPCostumeEffects += new MenuEntry("(  ) Gust Garb - Gust Jar upgrade", nullptr, Costume::gustGarb);
+       *allPCostumeEffects += new MenuEntry("(  ) Robowear - Gripshot upgrade", nullptr, Costume::robowear);
+       *allPCostumeEffects += new MenuEntry("(  ) Hammerwear - Hammer upgrade", nullptr, Costume::hammerwear);
+       *costumeEffects += allPCostumeEffects;
 
         *costume += costumeEffects;
 

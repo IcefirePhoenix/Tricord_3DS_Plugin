@@ -760,7 +760,7 @@ namespace CTRPluginFramework
         // Draw Framework version
         {
             //static const char *version = VersionStr;
-            static const char *tagVersion = "0.5.0";
+            static const char *tagVersion = "0.5.1";
             static const char *commit = "0.7.4";
             static const char *compilationDate = COMPILE_DATE;
 

@@ -733,4 +733,184 @@ namespace CTRPluginFramework
     }
     */
 
+    // All-Player Costume Effects
+
+    void Costume::kokiri(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Kokiri Clothes - Bow upgrade") {
+            Process::Patch(AddressList::KokiriA.addr, 0xE3811001);
+            Process::Patch(AddressList::KokiriB.addr, 0xE5841010);
+            Process::Patch(AddressList::KokiriC.addr, 0xEA000005);
+            Process::Patch(AddressList::KokiriD.addr, 0xE3A00002);
+            Process::Patch(AddressList::KokiriE.addr, 0xE1CD03BC);
+            Process::Patch(AddressList::KokiriIcon.addr, 0xE320F000);
+            entry->SetName("(X) Kokiri Clothes - Bow upgrade");
+        }
+        else {
+            Process::Patch(AddressList::KokiriA.addr, 0x03811001);
+            Process::Patch(AddressList::KokiriB.addr, 0x05841010);
+            Process::Patch(AddressList::KokiriC.addr, 0x0A000005);
+            Process::Patch(AddressList::KokiriD.addr, 0x03A00002);
+            Process::Patch(AddressList::KokiriE.addr, 0x01CD03BC);
+            Process::Patch(AddressList::KokiriIcon.addr, 0x1AFFFFFB);
+            entry->SetName("(  ) Kokiri Clothes - Bow upgrade");
+        }
+    }
+
+    void Costume::bigBomb(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Big Bomb Outfit - Bomb upgrade") {
+            Process::Patch(AddressList::BigBombA.addr, 0xE5C454FE);
+            Process::Patch(AddressList::BigBombB.addr, 0xE1CD63BC);
+            Process::Patch(AddressList::BigBombC.addr, 0xEA000000);
+            Process::Patch(AddressList::BigBombIcon.addr, 0xE320F000);
+            entry->SetName("(X) Big Bomb Outfit - Bomb upgrade");
+        }
+        else {
+            Process::Patch(AddressList::BigBombA.addr, 0x05C454FE);
+            Process::Patch(AddressList::BigBombB.addr, 0x01CD63BC);
+            Process::Patch(AddressList::BigBombC.addr, 0x0A000000);
+            Process::Patch(AddressList::BigBombIcon.addr, 0x1A000001);
+            entry->SetName("(  ) Big Bomb Outfit - Bomb upgrade");
+        }
+    }
+
+    void Costume::torrent(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Torrent Robe - Water Rod upgrade") {
+            Process::Patch(AddressList::TorrentA.addr, 0xE3811301);
+            Process::Patch(AddressList::TorrentB.addr, 0xE5841010);
+            Process::Patch(AddressList::TorrentC.addr, 0xEA000003);
+            Process::Patch(AddressList::TorrentD.addr, 0xE3A00001);
+            Process::Patch(AddressList::TorrentE.addr, 0xEA000000);
+            Process::Patch(AddressList::TorrentIcon.addr, 0xE320F000);
+            entry->SetName("(X) Torrent Robe - Water Rod upgrade");
+        }
+        else {
+            Process::Patch(AddressList::TorrentA.addr, 0x03811301);
+            Process::Patch(AddressList::TorrentB.addr, 0x05841010);
+            Process::Patch(AddressList::TorrentC.addr, 0x0A000003);
+            Process::Patch(AddressList::TorrentD.addr, 0x03A00001);
+            Process::Patch(AddressList::TorrentE.addr, 0x0A000000);
+            Process::Patch(AddressList::TorrentIcon.addr, 0x1AFFFFF2);
+            entry->SetName("(  ) Torrent Robe - Water Rod upgrade");
+        }
+    }
+
+    void Costume::boomeranger(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Boomeranger - Boomerang upgrade") {
+            Process::Patch(AddressList::BoomerangerA.addr, 0xE3811602);
+            Process::Patch(AddressList::BoomerangerB.addr, 0xE5841014);
+            Process::Patch(AddressList::BoomerangerC.addr, 0xEA000003);
+            Process::Patch(AddressList::BoomerangerD.addr, 0xE3A00001);
+            Process::Patch(AddressList::BoomerangerE.addr, 0xEA000000);
+            Process::Patch(AddressList::BoomerangerF.addr, 0xEA000007);
+            Process::Patch(AddressList::BoomerangerIcon.addr, 0xE320F000);
+            entry->SetName("(X) Boomeranger - Boomerang upgrade");
+        }
+        else {
+            Process::Patch(AddressList::BoomerangerA.addr, 0x03811602);
+            Process::Patch(AddressList::BoomerangerB.addr, 0x05841014);
+            Process::Patch(AddressList::BoomerangerC.addr, 0x0A000003);
+            Process::Patch(AddressList::BoomerangerD.addr, 0x03A00001);
+            Process::Patch(AddressList::BoomerangerE.addr, 0x0A000000);
+            Process::Patch(AddressList::BoomerangerF.addr, 0x0A000007);
+            Process::Patch(AddressList::BoomerangerIcon.addr, 0x1AFFFFF5);
+            entry->SetName("(  ) Boomeranger - Boomerang upgrade");
+        }
+    }
+
+    void Costume::fireBlazer(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Fire Blazer - Fire Gloves upgrade") {
+            Process::Patch(AddressList::FireBlazerA.addr, 0xE3811008);
+            Process::Patch(AddressList::FireBlazerB.addr, 0xE5841014);
+            Process::Patch(AddressList::FireBlazerC.addr, 0xEA000009);
+            Process::Patch(AddressList::FireBlazerD.addr, 0xEA000007);
+            Process::Patch(AddressList::FireBlazerIcon.addr, 0xE320F000);
+            entry->SetName("(X) Fire Blazer - Fire Gloves upgrade");
+        }
+        else {
+            Process::Patch(AddressList::FireBlazerA.addr, 0x03811008);
+            Process::Patch(AddressList::FireBlazerB.addr, 0x05841014);
+            Process::Patch(AddressList::FireBlazerC.addr, 0x0A000009);
+            Process::Patch(AddressList::FireBlazerD.addr, 0x0A000007);
+            Process::Patch(AddressList::FireBlazerIcon.addr, 0x1AFFFFF8);
+            entry->SetName("(  ) Fire Blazer - Fire Gloves upgrade");
+        }
+    }
+
+    void Costume::gustGarb(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Gust Garb - Gust Jar upgrade") {
+            Process::Patch(AddressList::GustGarbA.addr, 0xE3811601);
+            Process::Patch(AddressList::GustGarbB.addr, 0xE5841010);
+            Process::Patch(AddressList::GustGarbC.addr, 0xEA000005);
+            Process::Patch(AddressList::GustGarbD.addr, 0xE28F0034);
+            Process::Patch(AddressList::GustGarbE.addr, 0xE320F000);
+            Process::Patch(AddressList::GustGarbF.addr, 0xE3A00001);
+            Process::Patch(AddressList::GustGarbG.addr, 0xEA000000);
+            Process::Patch(AddressList::GustGarbH.addr, 0xE320F000);
+            Process::Patch(AddressList::GustGarbIcon.addr, 0xE320F000);
+            entry->SetName("(X) Gust Garb - Gust Jar upgrade");
+        }
+        else {
+            Process::Patch(AddressList::GustGarbA.addr, 0x03811601);
+            Process::Patch(AddressList::GustGarbB.addr, 0x05841010);
+            Process::Patch(AddressList::GustGarbC.addr, 0x0A000005);
+            Process::Patch(AddressList::GustGarbD.addr, 0x028F0034);
+            Process::Patch(AddressList::GustGarbE.addr, 0x128F0044);
+            Process::Patch(AddressList::GustGarbF.addr, 0x03A00001);
+            Process::Patch(AddressList::GustGarbG.addr, 0x0A000000);
+            Process::Patch(AddressList::GustGarbH.addr, 0x1A000005);
+            Process::Patch(AddressList::GustGarbIcon.addr, 0x1AFFFFEF);
+            entry->SetName("(  ) Gust Garb - Gust Jar upgrade");
+        }
+    }
+
+    void Costume::robowear(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Robowear - Gripshot upgrade") {
+            Process::Patch(AddressList::RobowearA.addr, 0xEA000007);
+            Process::Patch(AddressList::RobowearB.addr, 0xE3A00001);
+            Process::Patch(AddressList::RobowearC.addr, 0xEA000000);
+            Process::Patch(AddressList::RobowearIcon.addr, 0xE320F000);
+            entry->SetName("(X) Robowear - Gripshot upgrade");
+        }
+        else {
+            Process::Patch(AddressList::RobowearA.addr, 0x0A000007);
+            Process::Patch(AddressList::RobowearB.addr, 0x03A00001);
+            Process::Patch(AddressList::RobowearC.addr, 0x0A000000);
+            Process::Patch(AddressList::RobowearIcon.addr, 0x1AFFFFEC);
+            entry->SetName("(  ) Robowear - Gripshot upgrade");
+        }
+    }
+
+    void Costume::hammerwear(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Hammerwear - Hammer upgrade") {
+            Process::Patch(AddressList::HammerwearA.addr, 0xE3811501);
+            Process::Patch(AddressList::HammerwearB.addr, 0xE5841010);
+            Process::Patch(AddressList::HammerwearC.addr, 0xEA000005);
+            Process::Patch(AddressList::HammerwearD.addr, 0xED848A1C);
+            Process::Patch(AddressList::HammerwearE.addr, 0xEA000004);
+            Process::Patch(AddressList::HammerwearF.addr, 0xE3A00001);
+            Process::Patch(AddressList::HammerwearG.addr, 0xEA000000);
+            Process::Patch(AddressList::HammerwearIcon.addr, 0xE320F000);
+            entry->SetName("(X) Hammerwear - Hammer upgrade");
+        }
+        else {
+            Process::Patch(AddressList::HammerwearA.addr, 0x03811501);
+            Process::Patch(AddressList::HammerwearB.addr, 0x05841010);
+            Process::Patch(AddressList::HammerwearC.addr, 0x0A000005);
+            Process::Patch(AddressList::HammerwearD.addr, 0x0D848A1C);
+            Process::Patch(AddressList::HammerwearE.addr, 0x0A000004);
+            Process::Patch(AddressList::HammerwearF.addr, 0x03A00001);
+            Process::Patch(AddressList::HammerwearG.addr, 0x0A000000);
+            Process::Patch(AddressList::HammerwearIcon.addr, 0x1AFFFFE9);
+            entry->SetName("(  ) Hammerwear - Hammer upgrade");
+        }
+    }
+
 }

@@ -66,6 +66,18 @@ namespace CTRPluginFramework {
 
         static void setIndCostumeEffect(MenuEntry* entry);
         static void writeIndCostumeEffects(MenuEntry* entry);
+
+        // All-player costume effects
+
+        // Item costumes
+        static void kokiri(MenuEntry* entry);
+        static void bigBomb(MenuEntry* entry);
+        static void torrent(MenuEntry* entry);
+        static void boomeranger(MenuEntry* entry);
+        static void fireBlazer(MenuEntry* entry);
+        static void gustGarb(MenuEntry* entry);
+        static void robowear(MenuEntry* entry);
+        static void hammerwear(MenuEntry* entry);
     };
 }
 #endif
