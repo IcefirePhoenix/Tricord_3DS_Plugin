@@ -47,26 +47,26 @@ namespace CTRPluginFramework
     u8 legendary[3];
     u8 bearDodge[3];
     */
-    
+
     std::bitset<42> indCostumeEffects[3];
     u8 tingleBalloons[3];
     u8 dapperSpinA[3]; u8 dapperSpinB[3];
 
-    void Costume::openCustomCostumeSlots(MenuEntry* entry) 
+    void Costume::openCustomCostumeSlots(MenuEntry* entry)
     {
-        if (showSlots) 
+        if (showSlots)
         {
             disableCustomCostumeMenuOpt();
             resetCostumeArray();
 
             entry->SetName("Open Custom Costume Slots");
         }
-        else 
+        else
         {
             int openedCustomSlots = chooseSlotAddNum();
 
             addCustomSlotsToMenu(openedCustomSlots);
-            isCustomCostumeConflict(openedCustomSlots);      
+            isCustomCostumeConflict(openedCustomSlots);
             enableCustomCostumeOpt();
 
             entry->SetName("Close Custom Costume Slots");
@@ -74,7 +74,7 @@ namespace CTRPluginFramework
         showSlots = !showSlots;
     }
 
-    void disableCustomCostumeMenuOpt(void) 
+    void disableCustomCostumeMenuOpt(void)
     {
         menuCostumeSlotA->Hide();
         menuCostumeSlotB->Hide();
@@ -85,7 +85,7 @@ namespace CTRPluginFramework
         writeCostumeIDToSlot->Disable();
     }
 
-    void enableCustomCostumeOpt(void) 
+    void enableCustomCostumeOpt(void)
     {
         manageCatalogSize->Enable();
         writeCostumeIDToSlot->Enable();
@@ -94,9 +94,9 @@ namespace CTRPluginFramework
             initCustomCostumes->Enable();
     }
 
-    bool isCustomCostumeConflict(int openSlots) 
+    bool isCustomCostumeConflict(int openSlots)
     {
-        if (restoreGreatFairy->IsActivated() && openSlots >= 0) 
+        if (restoreGreatFairy->IsActivated() && openSlots >= 0)
         {
             menuCostumeSlotA->CanBeSelected(false);
 
@@ -110,22 +110,22 @@ namespace CTRPluginFramework
         return false;
     }
 
-    void addCustomSlotsToMenu(int openSlots) 
+    void addCustomSlotsToMenu(int openSlots)
     {
         menuCostumeSlotA->Show();
         menuCostumeSlotA->CanBeSelected(true);
 
         // redundant; using a switch statement jumbles the entire menu's entry order...
-        if (openSlots == 1) 
+        if (openSlots == 1)
             menuCostumeSlotB->Show();
-        
-        else if (openSlots == 2) 
+
+        else if (openSlots == 2)
         {
             menuCostumeSlotB->Show();
             menuCostumeSlotC->Show();
         }
-        
-        else if (openSlots == 3) 
+
+        else if (openSlots == 3)
         {
             menuCostumeSlotB->Show();
             menuCostumeSlotC->Show();
@@ -150,11 +150,11 @@ namespace CTRPluginFramework
 
     void resetCostumeArray(void)
     {
-        for (int i = 0; i < 4; i++) 
+        for (int i = 0; i < 4; i++)
             CustomSlots[i] = 255;
     }
 
-    int chooseSlotAddNum(void) 
+    int chooseSlotAddNum(void)
     {
         const StringVector slotCount =
         {
@@ -170,7 +170,7 @@ namespace CTRPluginFramework
         return addSlots.Open();
     }
 
-    void Costume::manageCatalogSizeAuto(MenuEntry* entry) 
+    void Costume::manageCatalogSizeAuto(MenuEntry* entry)
     {
         u8 isObtained;
         u8 vanillaCostumeCount = 0x25;
@@ -178,11 +178,11 @@ namespace CTRPluginFramework
 
         // get catalog dynamic location from pointer
         Process::Read32(AddressList::CostumeCatalogPointer.addr, CostumeCatalogLocation);
-        
-        if (!GeneralHelpers::isNullPointer(CostumeCatalogLocation)) 
+
+        if (!GeneralHelpers::isNullPointer(CostumeCatalogLocation))
         {
             costumeCatalogSize = catalogIncSize = 0;
-            for (u8 i = 0x0; i <= vanillaCostumeCount; i++) 
+            for (u8 i = 0x0; i <= vanillaCostumeCount; i++)
             {
                 isObtained = 0;
                 Process::Read8((AddressList::CostumeObtainStatus.addr + i), isObtained);
@@ -192,21 +192,21 @@ namespace CTRPluginFramework
             }
 
             // increase catalog size to accommodate custom costume slots B-D
-            for (int i = 3; i > 0; --i) 
+            for (int i = 3; i > 0; --i)
             {
-                if (CustomSlots[i] != 255) 
+                if (CustomSlots[i] != 255)
                     catalogIncSize++;
             }
 
             // check if slot A is in-use
             if (CustomSlots[0] != 255 || restoreGreatFairy->IsActivated() == true)
                 catalogIncSize++;
-            
+
             Process::Write8((CostumeCatalogLocation + catalogSizeOffset), (costumeCatalogSize + catalogIncSize));
         }
     }
 
-    void Costume::selectCostumeID(MenuEntry *entry) 
+    void Costume::selectCostumeID(MenuEntry *entry)
     {
         u8 result;
         u8 unusedRange = 0x26;
@@ -227,40 +227,40 @@ namespace CTRPluginFramework
             costumeList.Populate(GameData::universalCostumeList);
             result = costumeList.Open();
         }
-        else 
+        else
         {
             costumeList.Populate(GameData::customCostumeList);
             result = costumeList.Open() + unusedRange; // get 0x26-0x29 range
         }
 
-        if (entry->Name() == menuCostumeSlotA->Name()) 
+        if (entry->Name() == menuCostumeSlotA->Name())
         {
             menuCostumeSlotA->SetName("   Set slot A: " << GameData::getCostumeNameFromID(result));
-            CustomSlots[0] = result;  
+            CustomSlots[0] = result;
         }
-        else if (entry->Name() == menuCostumeSlotB->Name()) 
+        else if (entry->Name() == menuCostumeSlotB->Name())
         {
             menuCostumeSlotB->SetName("   Set slot B: " << GameData::getCostumeNameFromID(result));
             CustomSlots[1] = result;
         }
-        else if (entry->Name() == menuCostumeSlotC->Name()) 
+        else if (entry->Name() == menuCostumeSlotC->Name())
         {
             menuCostumeSlotC->SetName("   Set slot C: " << GameData::getCostumeNameFromID(result));
             CustomSlots[2] = result;
         }
-        else if (entry->Name() == menuCostumeSlotD->Name()) 
+        else if (entry->Name() == menuCostumeSlotD->Name())
         {
             menuCostumeSlotD->SetName("   Set slot D: " << GameData::getCostumeNameFromID(result));
             CustomSlots[3] = result;
         }
     }
 
-    void Costume::writeCostumeSlot(MenuEntry* entry) 
+    void Costume::writeCostumeSlot(MenuEntry* entry)
     {
-        if (!GeneralHelpers::isNullPointer(CostumeCatalogLocation)) 
+        if (!GeneralHelpers::isNullPointer(CostumeCatalogLocation))
         {
             u32 DLCAddressStart = CostumeCatalogLocation + catalogStartOffset + costumeCatalogSize;
-            for (u32 iterator = 0x0; iterator < 0x4; ++iterator) 
+            for (u32 iterator = 0x0; iterator < 0x4; ++iterator)
             {
                 if (CustomSlots[iterator] != 255)
                     Process::Write8(DLCAddressStart + iterator, CustomSlots[iterator]);
@@ -273,7 +273,7 @@ namespace CTRPluginFramework
     // Custom Costume #1
     // "A custom costume imported in-game via the Tricord plugin!
     // This otherworldly garb comes with no powers, but it looks quite dapper!"
-    void Costume::initCustomCostumesAuto(MenuEntry* entry) 
+    void Costume::initCustomCostumesAuto(MenuEntry* entry)
     {
         std::string customCostumeDirectory = "/Tricord/Custom/Costumes/";
         std::string fileNames = "costume_customA\0\0\0costume_customB\0\0\0costume_customC\0\0\0costume_customD";
@@ -284,7 +284,7 @@ namespace CTRPluginFramework
         Process::WriteString(AddressList::TextToRodata.addr + RODataOffset, fileNames, StringFormat::Utf8);
 
         // restore Slot A pointer -> directs to costume_customA rather than costume_highfairy
-        if (!restoreGreatFairy->IsActivated()) 
+        if (!restoreGreatFairy->IsActivated())
         {
             Process::Write32((AddressList::UnusedCostumeDataPointers.addr), (AddressList::TextToRodata.addr + 0x14));
             menuCostumeSlotA->CanBeSelected(true);
@@ -299,11 +299,11 @@ namespace CTRPluginFramework
             Process::Write32((AddressList::UnusedCostumeDataPointers.addr + 0x08), (AddressList::TextToRodata.addr + 0x26));
         else errMsg[1] = "Missing: costume_customB.bch";
 
-        if (File::Exists(customCostumeDirectory + "costume_customC.bch")) 
+        if (File::Exists(customCostumeDirectory + "costume_customC.bch"))
             Process::Write32((AddressList::UnusedCostumeDataPointers.addr + 0x10), (AddressList::TextToRodata.addr + 0x38));
         else errMsg[2] = "Missing: costume_customC.bch";
 
-        if (File::Exists(customCostumeDirectory + "costume_customD.bch")) 
+        if (File::Exists(customCostumeDirectory + "costume_customD.bch"))
             Process::Write32((AddressList::UnusedCostumeDataPointers.addr + 0x18), (AddressList::TextToRodata.addr + 0x49));
         else errMsg[3] = "Missing: costume_customD.bch";
 
@@ -319,21 +319,21 @@ namespace CTRPluginFramework
             OSD::Notify(Color::Gainsboro << "Custom Costume loading will now be CANCELLED.");
 
 
-            for (int iterator = 0; iterator < 4; ++iterator) 
+            for (int iterator = 0; iterator < 4; ++iterator)
             {
-                if (!errMsg[iterator].empty()) 
+                if (!errMsg[iterator].empty())
                     OSD::Notify(Color::Yellow << errMsg[iterator]);
             }
             entry->Disable();
             isCostumeFail = true;
-        } 
+        }
     }
-       
-    void Costume::greatFairyEnable(MenuEntry* entry) 
+
+    void Costume::greatFairyEnable(MenuEntry* entry)
     {
         std::string greatFairyFileName = "costume_highfairy";
         std::string errMsg = "Tricord cannot place Great Fairy Costume into Custom Costume Slot A since it is currently configured to display a different costume.\n\nWould you like to overwrite the current costume in Custom Costume Slot A with Great Fairy?";
-        
+
         u8 greatFairyID = 0x26; // slot A ID
 
         Process::WriteString(AddressList::TextToRodata.addr, greatFairyFileName, StringFormat::Utf8);
@@ -341,35 +341,35 @@ namespace CTRPluginFramework
         manageCatalogSize->Enable();
 
         // if Slot 1 is already in-use -> this entry is auto-disabled
-        if (CustomSlots[0] != 255) 
+        if (CustomSlots[0] != 255)
         {
-            if (MessageBox(Color::Gainsboro << "Error", errMsg, DialogType::DialogYesNo)()) 
+            if (MessageBox(Color::Gainsboro << "Error", errMsg, DialogType::DialogYesNo)())
             {
                 menuCostumeSlotA->CanBeSelected(false);
                 CustomSlots[0] = 255;
             }
-            else 
+            else
             {
                 entry->Disable();
                 return;
             }
         }
-        else 
+        else
         {
-            if (!GeneralHelpers::isNullPointer(CostumeCatalogLocation)) 
+            if (!GeneralHelpers::isNullPointer(CostumeCatalogLocation))
             {
                 Process::Write32((AddressList::UnusedCostumeDataPointers.addr), AddressList::TextToRodata.addr);
                 Process::Write8((CostumeCatalogLocation + catalogStartOffset + costumeCatalogSize), greatFairyID);
             }
         }
-    }    
+    }
 
-    void Costume::changeLinkCostume(MenuEntry* entry) 
+    void Costume::changeLinkCostume(MenuEntry* entry)
     {
         int linkChoice = GeneralHelpers::chooseLink();
 
         if (linkChoice >= 0) {
-            u32 playerID = static_cast<u32>(linkChoice);   
+            u32 playerID = static_cast<u32>(linkChoice);
             u32 memoryOffset = playerID * 0x10000;
 
             // note 1: currently only uses the OG costume list
@@ -384,7 +384,7 @@ namespace CTRPluginFramework
     void Costume::forceBearMinMax(MenuEntry* entry)
     {
         Keyboard Bear("Force Bear Minimum or Bear Maximum, or\nReset to restore the Hero Point check.");
-        static const StringVector bearOptions = 
+        static const StringVector bearOptions =
         {
             "Reset",
             "Bear Minimum",
@@ -470,7 +470,7 @@ namespace CTRPluginFramework
         int linkChoice = GeneralHelpers::chooseLink();
 
         if (linkChoice >= 0) {
-            u32 playerID = static_cast<u32>(linkChoice);   
+            u32 playerID = static_cast<u32>(linkChoice);
             u32 memoryOffset = playerID * GameData::playerAddressOffset;
             u8 currEffectCostumeID; u8 currCosmeticCostumeID;
             Process::Read8(AddressList::CurrCostume.addr + memoryOffset, currEffectCostumeID);
@@ -495,13 +495,13 @@ namespace CTRPluginFramework
                     break;
             }
 
-            std::string topscreenMessage = 
+            std::string topscreenMessage =
             "Set new cosmetic costume?\nOr reset to the effective costume?\n\nSelected: " + selectedPlayer
             + "\n\nCurrent effective costume: " + currEffectCostume
             + "\nCurrent cosmetic costume: " + currCosmeticCostume;
 
             Keyboard setReset(topscreenMessage);
-            StringVector setResetOptions = 
+            StringVector setResetOptions =
             {
                 "Set new",
                 "Reset"
@@ -538,9 +538,14 @@ namespace CTRPluginFramework
 
     void Costume::setIndCostumeEffect(MenuEntry* entry)
     {
+        // process of retrieving the arg values was unchanged here
         pIDindex args = *reinterpret_cast<pIDindex*>(entry->GetArg());
         int player = args.playerID;
         int i = args.index;
+
+        // debug string -- was gonna remove but figured you might need it
+        OSD::Notify(std::to_string(player) + " " + std::to_string(i));
+
         std::string longName = entry->Name();
         std::string prefix = longName.substr(0, 4);
         std::string baseName = longName.substr(4, std::string::npos);
@@ -560,7 +565,7 @@ namespace CTRPluginFramework
         if (entry->Name() == "( ) Lucky Dodge") {
             // Select between 3 dodge chances
             Keyboard dodge("Select the dodge rate:");
-            StringVector dodgeChances = 
+            StringVector dodgeChances =
             {
                 "25%",
                 "50%",

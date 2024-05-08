@@ -131,7 +131,7 @@ namespace CTRPluginFramework {
         *energy += new MenuEntry("Infinite energy", Gameplay::infEnergy);
         *energy += new MenuEntry("Set maximum energy", nullptr, Gameplay::maxEnergySet);
         *energy += new MenuEntry("Set energy consumption multiplier", nullptr, Gameplay::energyConsumeMultiplier);
-        *energy += new MenuEntry("Use large energy gauge graphic", nullptr, Gameplay::useLargeEnergyGauge, 
+        *energy += new MenuEntry("Use large energy gauge graphic", nullptr, Gameplay::useLargeEnergyGauge,
         "Switches the energy gauge in the UI to the Energy Gear / Cheer Outfit / Tri Suit energy gauge. Does not affect your max energy.");
 
         *enemies += (EntryWithHotkey(new MenuEntry("Insta-kill all spawned enemies", Gameplay::autoKillEnemy), {
@@ -208,7 +208,7 @@ namespace CTRPluginFramework {
 
         *gameplay += new MenuEntry("Infinite time", Gameplay::infTime);
 
-        *gameplay += new MenuEntry("Set custom movement speed", nullptr, Gameplay::customSpeed, 
+        *gameplay += new MenuEntry("Set custom movement speed", nullptr, Gameplay::customSpeed,
         "Work in progress. Currently only affects walking speed.");
         }
 
@@ -305,14 +305,13 @@ namespace CTRPluginFramework {
         swordEditAuto = new MenuEntry("Write Sword edits (auto)", Player::writeSwordChanges);
 
         // create costume sub-folders
-        MenuFolder* costumeEffects = new MenuFolder("Costume Effects", 
+        MenuFolder* costumeEffects = new MenuFolder("Costume Effects",
         "Any combination of these costume effects can be selected and will be applied to the chosen player. This does not overwrite any existing costume effects the player may have.");
-        
-        //MenuFolder* indCostumeEffectsG = new MenuFolder("Costume Effects - Player 1 (Green)");
-        //MenuFolder* indCostumeEffectsB = new MenuFolder("Costume Effects - Player 2 (Blue)");
-        //MenuFolder* indCostumeEffectsR = new MenuFolder("Costume Effects - Player 3 (Red)");
 
-        /* Commenting out for now because it is broken
+        // MenuFolder* indCostumeEffectsG = new MenuFolder("Costume Effects - Player 1 (Green)");
+        // MenuFolder* indCostumeEffectsB = new MenuFolder("Costume Effects - Player 2 (Blue)");
+        // MenuFolder* indCostumeEffectsR = new MenuFolder("Costume Effects - Player 3 (Red)");
+
         MenuFolder* indCostumeEffects[3] = {
             new MenuFolder("Costume Effects - Player 1 (Green)"),
             new MenuFolder("Costume Effects - Player 2 (Blue)"),
@@ -321,7 +320,17 @@ namespace CTRPluginFramework {
 
         MenuEntry* subEntries[3][15];
 
+
         for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++) {
+            // the only thing that was changed here was editing all memory references to args,
+            // previously &args, to new pIDindex(args), which will allocate new memory for each arg obj created
+
+            // these new arg objs are essentially copies of the original args obj, except the difference
+            // is that these aren't inaccessible after the loop
+
+            // the original args obj will be destroyed, but its values will persist in the new one passed in SetArg
+            // resulting in an obj copy of sorts
+
             pIDindex args;
             args.playerID = iterateThruPlayers;
 
@@ -333,7 +342,7 @@ namespace CTRPluginFramework {
             // Double damage
             args.index = 19;
             subEntries[iterateThruPlayers][1] = new MenuEntry("( ) Bear / Cursed - Double damage taken", nullptr, Costume::setIndCostumeEffect);
-            subEntries[iterateThruPlayers][1]->SetArg(reinterpret_cast<void*>(&args));
+            subEntries[iterateThruPlayers][1]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
             *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][1];
 
             // Lucky dodge
@@ -344,83 +353,83 @@ namespace CTRPluginFramework {
             // Zora
             args.index = 1;
             subEntries[iterateThruPlayers][3] = new MenuEntry("( ) Zora Costume - Enhanced swimming", nullptr, Costume::setIndCostumeEffect);
-            subEntries[iterateThruPlayers][3]->SetArg(reinterpret_cast<void*>(&args));
+            subEntries[iterateThruPlayers][3]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
             *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][3];
 
             // Goron
             args.index = 2;
             subEntries[iterateThruPlayers][4] = new MenuEntry("( ) Goron Garb - Burn immunity and lava swimming", nullptr, Costume::setIndCostumeEffect,
             "Does not prevent you from taking damage from lava pillars. Does not allow you to walk through flame walls. Does not allow you to pick up flaming rupees.");
-            subEntries[iterateThruPlayers][4]->SetArg(reinterpret_cast<void*>(&args));
+            subEntries[iterateThruPlayers][4]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
             *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][4];
 
             // Parka
             args.index = 3;
             subEntries[iterateThruPlayers][5] = new MenuEntry("( ) Cozy Parka - Freeze and ice slip immunity", nullptr, Costume::setIndCostumeEffect);
-            subEntries[iterateThruPlayers][5]->SetArg(reinterpret_cast<void*>(&args));
+            subEntries[iterateThruPlayers][5]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
             *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][5];
 
             // Dune
             args.index = 21;
             subEntries[iterateThruPlayers][6] = new MenuEntry("( ) Dunewalker Duds - Quicksand immunity", nullptr, Costume::setIndCostumeEffect,
             "Does not some with the sand ripple effect.");
-            subEntries[iterateThruPlayers][6]->SetArg(reinterpret_cast<void*>(&args));
+            subEntries[iterateThruPlayers][6]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
             *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][6];
 
             // Legendary
             args.index = 40;
             subEntries[iterateThruPlayers][7] = new MenuEntry("( ) Legendary Dress - Increased heart drop rate", nullptr, Costume::setIndCostumeEffect);
-            subEntries[iterateThruPlayers][7]->SetArg(reinterpret_cast<void*>(&args));
+            subEntries[iterateThruPlayers][7]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
             *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][7];
 
             // Rupee
             args.index = 11;
             subEntries[iterateThruPlayers][8] = new MenuEntry("( ) Rupee Regalia - Increased rupee drop rate", nullptr, Costume::setIndCostumeEffect);
-            subEntries[iterateThruPlayers][8]->SetArg(reinterpret_cast<void*>(&args));
+            subEntries[iterateThruPlayers][8]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
             *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][8];
 
             // Serpent
             args.index = 29;
             subEntries[iterateThruPlayers][9] = new MenuEntry("( ) Serpent's Toga - Invincibility when standing still", nullptr, Costume::setIndCostumeEffect);
-            subEntries[iterateThruPlayers][9]->SetArg(reinterpret_cast<void*>(&args));
+            subEntries[iterateThruPlayers][9]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
             *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][9];
 
             // Cacto
             args.index = 33;
             subEntries[iterateThruPlayers][10] = new MenuEntry("( ) Cacto Clothes - Damage enemies on contact", nullptr, Costume::setIndCostumeEffect);
-            subEntries[iterateThruPlayers][10]->SetArg(reinterpret_cast<void*>(&args));
+            subEntries[iterateThruPlayers][10]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
             *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][10];
 
             // Dapper
             args.index = 28;
             subEntries[iterateThruPlayers][11] = new MenuEntry("( ) Dapper Spinner - 3x"+std::string(FONT_B)+" to spin attack", nullptr, Costume::setIndCostumeEffect,
             "This spin attack is not affected by the Spin Attack Attire's effect.");
-            subEntries[iterateThruPlayers][11]->SetArg(reinterpret_cast<void*>(&args));
+            subEntries[iterateThruPlayers][11]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
             *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][11];
 
             // Ninja
             args.index = 4;
             subEntries[iterateThruPlayers][12] = new MenuEntry("( ) Ninja Gi - Instant triple damage dash", nullptr, Costume::setIndCostumeEffect);
-            subEntries[iterateThruPlayers][12]->SetArg(reinterpret_cast<void*>(&args));
+            subEntries[iterateThruPlayers][12]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
             *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][12];
 
             // Spin Attack
             args.index = 5;
             subEntries[iterateThruPlayers][13] = new MenuEntry("( ) Spin Attack Attire - Great Spin Attack", nullptr, Costume::setIndCostumeEffect);
-            subEntries[iterateThruPlayers][13]->SetArg(reinterpret_cast<void*>(&args));
+            subEntries[iterateThruPlayers][13]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
             *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][13];
 
             // Master
             args.index = 32;
             subEntries[iterateThruPlayers][14] = new MenuEntry("( ) Sword Master Suit - Big sword beam", nullptr, Costume::setIndCostumeEffect,
             "Only has an effect if you are wearing another sword beam costume (Sword Suit or Fierce Deity Armor), or if you have enabled a sword beam effect from the All-Player Costume Effects folder.");
-            subEntries[iterateThruPlayers][14]->SetArg(reinterpret_cast<void*>(&args));
+            subEntries[iterateThruPlayers][14]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
             *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][14];
 
             // Add to superfolder
             *costumeEffects += indCostumeEffects[iterateThruPlayers];
         }
-        */
+
 
        MenuFolder* allPCostumeEffects = new MenuFolder("All-Player Costume Effects");
        *allPCostumeEffects += new MenuEntry("(  ) Kokiri Clothes - Bow upgrade", nullptr, Costume::kokiri);
