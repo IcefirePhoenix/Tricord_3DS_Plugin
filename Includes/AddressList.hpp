@@ -29,10 +29,11 @@ namespace CTRPluginFramework {
 		static Address		HeartsTakeHealth;
 
 		// Costume
-		static Address		CostumeAttrA;
-		static Address		CostumeAttrB;
-		static Address		CostumeAttrC;
-		static Address		CostumeAttrD;
+		static Address		StatusBitsA;
+		static Address		StatusBitsB;
+		static Address		StatusBitsC;
+		static Address		StatusBitsD;
+		static Address		StatusBitsE;
 		static Address		CurrCostume;
 		static Address		CurrCostumeAlt;
 		static Address		CostumeCatalogPointer;
@@ -152,6 +153,7 @@ namespace CTRPluginFramework {
 		static Address		EnemyDataPointer;
 		static Address		HealthCurrent;
 		static Address		HealthMax;
+		static Address		HealthMaxCostumeEffect;
 		static Address      EnergyCurrent;
 		static Address		EnergyMax;
 		static Address		EnergyMaxPitRecovery;
@@ -167,6 +169,7 @@ namespace CTRPluginFramework {
 		static Address		TotemCarriedBy;
 		static Address		LoadingStatus;
 		static Address		PauseStatus;
+		static Address		RespawningStatus;
 		static Address		PreviousLevelID;
 		static Address		PreviousStageID;
 		static Address		PreviousSpawnID;

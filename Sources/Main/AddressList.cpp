@@ -24,10 +24,11 @@ namespace CTRPluginFramework {
 		HeartsTakeHealth 			= Address(0x0015CA04, 0x0015CA20, 0x0015CEF0, 0x0015C8AC);
 
 		/* Costume */
-		CostumeAttrA 				= Address(0x32849510, 0x32849590, 0x32893F50, 0x32848C10);
-		CostumeAttrB 				= Address(0x32849512, 0x32849592, 0x32893F52, 0x32848C12);
-		CostumeAttrC 				= Address(0x32849513, 0x32849593, 0x32893F53, 0x32848C13);
-		CostumeAttrD				= Address(0x32849514, 0x32849594, 0x32893F54, 0x32848C14);
+		StatusBitsA 				= Address(0x32849510, 0x32849590, 0x32893F50, 0x32848C10);
+		StatusBitsB 				= Address(0x32849511, 0x32849591, 0x32893F51, 0x32848C11);
+		StatusBitsC 				= Address(0x32849512, 0x32849592, 0x32893F52, 0x32848C12);
+		StatusBitsD 				= Address(0x32849513, 0x32849593, 0x32893F53, 0x32848C13);
+		StatusBitsE					= Address(0x32849514, 0x32849594, 0x32893F54, 0x32848C14);
 		CurrCostume 				= Address(0x32849564, 0x328495E4, 0x32893FA4, 0x32848C64);
 		CurrCostumeAlt 				= Address(0x3284A261, 0x3284A2E1, 0x32894CA1, 0x32849961);
 		CostumeCatalogPointer 		= Address(0x32C828E8, 0x32C82968, 0x32CCD328, 0x32C81FE8);
@@ -149,6 +150,7 @@ namespace CTRPluginFramework {
 		EnemyDataPointer			= Address(0x32989188, 0x32989208, 0x329D3BC8, 0x32988888);
 		HealthCurrent 				= Address(0x32C824F4, 0x32C82574, 0x32CCCF34, 0x32C81BF4);
 		HealthMax 					= Address(0x32C824F5, 0x32C82575, 0x32CCCF35, 0x32C81BF5);
+		HealthMaxCostumeEffect		= Address(0x32C824F6, 0x32C82576, 0x32CCCF36, 0x32C81BF6);
 		EnergyCurrent				= Address(0x328496C4, 0x32849744, 0x32894104, 0x32848DC4);
 		EnergyMax					= Address(0x00192644, 0x001926D4, 0x00192BC8, 0x00192588);
 		EnergyMaxPitRecovery		= Address(0x001925F8, 0x00192688, 0x00192B7C, 0x0019253C);
@@ -164,6 +166,7 @@ namespace CTRPluginFramework {
 		TotemCarriedBy				= Address(0x32849524, 0x328495A4, 0x32893F64, 0x32848C24);
 		LoadingStatus 				= Address(0x319FE1D0, 0x319FE228, 0x319FDF1C, 0x319FCA80);
 		PauseStatus 				= Address(0x3280ED8C, 0x3280EE0C, 0x328597CC, 0x3280E48C);
+		RespawningStatus			= Address(0x3284196C, 0x00000000, 0x00000000, 0x00000000);
 		PreviousLevelID				= Address(0x3280EDBC, 0x3280EE3C, 0x328597FC, 0x3280E4BC);
 		PreviousStageID				= Address(0x3280EDC0, 0x3280EE40, 0x32859800, 0x3280E4C0);
 		PreviousSpawnID 			= Address(0x3280EDC2, 0x3280EE42, 0x32859802, 0x3280E4C2);
@@ -456,10 +459,11 @@ namespace CTRPluginFramework {
 	Address		AddressList::HeartsTakeHealth;
 
 	// Costume
-	Address		AddressList::CostumeAttrA;
-	Address		AddressList::CostumeAttrB;
-	Address		AddressList::CostumeAttrC;
-	Address		AddressList::CostumeAttrD;
+	Address		AddressList::StatusBitsA;
+	Address		AddressList::StatusBitsB;
+	Address		AddressList::StatusBitsC;
+	Address		AddressList::StatusBitsD;
+	Address		AddressList::StatusBitsE;
 	Address		AddressList::CostumeCatalogPointer;
 	Address		AddressList::CurrCostume;
 	Address		AddressList::CurrCostumeAlt;
@@ -579,6 +583,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::EnemyDataPointer;
 	Address		AddressList::HealthCurrent;
 	Address		AddressList::HealthMax;
+	Address		AddressList::HealthMaxCostumeEffect;
 	Address		AddressList::EnergyCurrent;
 	Address		AddressList::EnergyMax;
 	Address		AddressList::EnergyMaxPitRecovery;
@@ -594,6 +599,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::TotemCarriedBy;
 	Address		AddressList::LoadingStatus;
 	Address		AddressList::PauseStatus;
+	Address		AddressList::RespawningStatus;
 	Address		AddressList::PreviousLevelID;
 	Address		AddressList::PreviousStageID;
 	Address		AddressList::PreviousSpawnID;

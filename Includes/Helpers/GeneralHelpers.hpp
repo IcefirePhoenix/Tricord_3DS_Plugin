@@ -14,6 +14,7 @@ namespace CTRPluginFramework {
 		static std::string enabledSlider;
 		static std::string disabledSlider;
 		static std::string getLinkColorAsStr(int ID);
+		static std::string getPlayerAsStr(int ID);
 
 		static int getCurrLink(void);
 		static int chooseLink(void);

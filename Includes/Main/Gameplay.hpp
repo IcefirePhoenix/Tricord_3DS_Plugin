@@ -37,6 +37,8 @@ namespace CTRPluginFramework {
     int warpSelStage(StringVector stageNames);
     int warpSelChallenge(void);
 
+    bool canApplyYSpeed(int player);
+
     class Gameplay {
     public:
         static void infEnergy(MenuEntry* entry);

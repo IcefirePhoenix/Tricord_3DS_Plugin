@@ -135,6 +135,23 @@ namespace CTRPluginFramework
         return color;
     }
 
+    std::string GeneralHelpers::getPlayerAsStr(int ID)
+    {
+        std::string player = "";
+        switch (ID) {
+            case 0:
+                player = "Player 1 (Green)";
+                break;
+            case 1:
+                player = "Player 2 (Blue)";
+                break;
+            case 2:
+                player = "Player 3 (Red)";
+                break;
+        }
+        return player;
+    }
+
     int GeneralHelpers::getCurrLink(void) 
     {
         u8 currLink;

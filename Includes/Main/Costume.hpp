@@ -22,12 +22,19 @@ namespace CTRPluginFramework {
 
     extern MenuEntry* writeCosmeticCostumeID;
 
+    extern MenuEntry* autoInfBalloons;
+    extern MenuEntry* autoDapper;
+    extern MenuEntry* autoBeamCooldown;
+
+    extern MenuEntry* autoCostumeRandomizer;
+
     int chooseSlotAddNum(void);
     void disableCustomCostumeMenuOpt(void);
     void enableCustomCostumeOpt(void);
     bool isCustomCostumeConflict(int openSlots);
     void addCustomSlotsToMenu(int openSlots);
     void resetCostumeArray(void);
+    void anyTrue(bool arr[]);
 
     class Costume {
     public:
@@ -45,24 +52,14 @@ namespace CTRPluginFramework {
         static void writeCosmeticCostume(MenuEntry* entry);
 
         // Individual costume effects
-        /*
-        static void zora(MenuEntry* entry);
-        static void goron(MenuEntry* entry);
-        static void parka(MenuEntry* entry);
-        static void ninja(MenuEntry* entry);
-        static void spinAttack(MenuEntry* entry);
-        static void rupee(MenuEntry* entry);
-        static void doubleDmg(MenuEntry* entry);
-        static void dune(MenuEntry* entry);
-        static void dapper(MenuEntry* entry);
-        static void serpent(MenuEntry* entry);
-        static void master(MenuEntry* entry);
-        static void cacto(MenuEntry* entry);
-        */
 
         static void luckyDodge(MenuEntry* entry);
         static void tingle(MenuEntry* entry);
+        static void writeBalloons(MenuEntry* entry);
         static void dapperInstant(MenuEntry* entry);
+        static void writeDapper(MenuEntry* entry);
+        static void selectLinkBeam(MenuEntry* entry);
+        static void setBeamCooldown(MenuEntry* entry);
 
         static void setIndCostumeEffect(MenuEntry* entry);
         static void writeIndCostumeEffects(MenuEntry* entry);
@@ -78,6 +75,12 @@ namespace CTRPluginFramework {
         static void gustGarb(MenuEntry* entry);
         static void robowear(MenuEntry* entry);
         static void hammerwear(MenuEntry* entry);
+
+        // Other
+
+        // Costume Randomizers
+        static void costumeRandomizer(MenuEntry* entry);
+        static void writeRandomCostume(MenuEntry* entry);
     };
 }
 #endif

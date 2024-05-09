@@ -147,15 +147,29 @@ namespace CTRPluginFramework
         if (healthAuto)
         {
             Process::Write8(AddressList::HealthMax.addr, customMaxHealth);
+            Process::Write8(AddressList::HealthMaxCostumeEffect.addr, 0x0);
+
+            // Also make sure current health doesn't exceed max health,
+            // which can happen sometimes when loading into a level with heart costumes on
+            if (Level::getElapsedTime() == 0) {
+                u8 currentHealth;
+                Process::Read8(AddressList::HealthCurrent.addr, currentHealth);
+                if (currentHealth > customMaxHealth)
+                {
+                    Process::Write8(AddressList::HealthCurrent.addr, customMaxHealth);
+                }
+            }
         }
     }
 
     // checkbox
     void Gameplay::infHealth(MenuEntry* entry)
     {
-        u8 maxHealth;
+        u8 maxHealth, maxHealthCostumeEffect;
         Process::Read8(AddressList::HealthMax.addr, maxHealth);
-        Process::Write8(AddressList::HealthCurrent.addr, maxHealth);
+        Process::Read8(AddressList::HealthMaxCostumeEffect.addr, maxHealthCostumeEffect);
+        u8 healthToWrite = maxHealth + (s8)maxHealthCostumeEffect;
+        Process::Write8(AddressList::HealthCurrent.addr, healthToWrite);
     }
 
     // checkbox
@@ -294,7 +308,7 @@ namespace CTRPluginFramework
         u16 currentCol, targetCol = physicsStatus[player];
         u32 addressOffset = player * GameData::playerAddressOffset;
 
-        Process::Read8(AddressList::CostumeAttrD.addr + addressOffset, sinkingStatus);
+        Process::Read8(AddressList::StatusBitsE.addr + addressOffset, sinkingStatus);
         bool isSinking = (sinkingStatus & 0x80) == 0x80;
 
         currentCol = Collision::getCurrCol(player);
@@ -323,28 +337,22 @@ namespace CTRPluginFramework
         // Note: South and East are positive, North and West are negative
         u16 currColl;
         Process::Read16(AddressList::CollisionCurrent.addr + offset, currColl);
-        if (currColl == 0x001F)
-        {
-            if (entry->Hotkeys[0].IsDown()){
+        if (currColl == 0x001F) {
+            if (entry->Hotkeys[0].IsDown())
                 Process::WriteFloat(addrZ, lateralSpeed*-1);
-            } else if (entry->Hotkeys[1].IsDown()){
+            else if (entry->Hotkeys[1].IsDown())
                 Process::WriteFloat(addrZ, lateralSpeed);
-            } else {
+            else
                 Process::WriteFloat(addrZ, 0);
-            }
-            if (entry->Hotkeys[2].IsDown()){
+            if (entry->Hotkeys[2].IsDown())
                 Process::WriteFloat(addrX, lateralSpeed);
-            } else if (entry->Hotkeys[3].IsDown()){
+            else if (entry->Hotkeys[3].IsDown())
                 Process::WriteFloat(addrX, lateralSpeed*-1);
-            } else {
+            else
                 Process::WriteFloat(addrX, 0);
-            }
         }
-        if (entry->Hotkeys[4].IsDown()){
+        if (entry->Hotkeys[4].IsDown())
             Process::WriteFloat(addrY, ascentSpeed);
-        } else {
-            Process::WriteFloat(addrY, descentSpeed);
-        }
     }
 
     // Flight - All manual
@@ -358,37 +366,32 @@ namespace CTRPluginFramework
         u32 addrZ = AddressList::SpeedZ.addr + offset;
         // Hotkeys: North, South, East, West, Ascend, Descend
         // Note: South and East are positive, North and West are negative
-        if (entry->Hotkeys[0].IsDown()){
+        if (entry->Hotkeys[0].IsDown())
             Process::WriteFloat(addrZ, lateralSpeed*-1);
-        } else if (entry->Hotkeys[1].IsDown()){
+        else if (entry->Hotkeys[1].IsDown())
             Process::WriteFloat(addrZ, lateralSpeed);
-        } else {
+        else
             Process::WriteFloat(addrZ, 0);
-        }
-        if (entry->Hotkeys[2].IsDown()){
+        if (entry->Hotkeys[2].IsDown())
             Process::WriteFloat(addrX, lateralSpeed);
-        } else if (entry->Hotkeys[3].IsDown()){
+        else if (entry->Hotkeys[3].IsDown())
             Process::WriteFloat(addrX, lateralSpeed*-1);
-        } else {
+        else
             Process::WriteFloat(addrX, 0);
-        }
-        if (entry->Hotkeys[4].IsDown()){
+        if (entry->Hotkeys[4].IsDown())
             Process::WriteFloat(addrY, ascentSpeed);
-        } else if (entry->Hotkeys[5].IsDown()){
+        else if (entry->Hotkeys[5].IsDown())
             Process::WriteFloat(addrY, descentSpeed);
-        } else {
+        else if (canApplyYSpeed(Link))
             Process::WriteFloat(addrY, 0.025); // Results in Link maintaining Y position
-        }
     }
 
     // Keep the two players you aren't currently controlling hovering in place
     void Gameplay::hover(MenuEntry* entry)
     {
         int Link = GeneralHelpers::getCurrLink();
-        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
-        {
-            if (iterateThruPlayers != Link)
-            {
+        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++) {
+            if (iterateThruPlayers != Link && canApplyYSpeed(iterateThruPlayers)) {
                 Process::WriteFloat(AddressList::SpeedX.addr + iterateThruPlayers*GameData::playerAddressOffset, 0);
                 Process::WriteFloat(AddressList::SpeedY.addr + iterateThruPlayers*GameData::playerAddressOffset, 0.025);
                 Process::WriteFloat(AddressList::SpeedZ.addr + iterateThruPlayers*GameData::playerAddressOffset, 0);
@@ -481,6 +484,15 @@ namespace CTRPluginFramework
                 entry->SetName("Adjust lateral speed: Strong");
                 break;
         }
+    }
+
+    // Returns true if the player is not currently spawning into a stage, respawning from a fall
+    // For the purpose of not applying y axis speed during these times
+    bool canApplyYSpeed(int player)
+    {
+        u8 respawning;
+        Process::Read8(AddressList::RespawningStatus.addr + player*GameData::playerAddressOffset, respawning);
+        return respawning == 0 && Level::hasCertainTimeElapsed(100);
     }
 
     // gearbox

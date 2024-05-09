@@ -30,6 +30,11 @@ namespace CTRPluginFramework
 
     MenuEntry* writeCosmeticCostumeID;
 
+    MenuEntry* autoInfBalloons;
+    MenuEntry* autoDapper;
+    MenuEntry* autoBeamCooldown;
+    MenuEntry* autoCostumeRandomizer;
+
     bool showSlots = false;
     bool isCostumeFail = false;
 
@@ -41,16 +46,15 @@ namespace CTRPluginFramework
 
     u8 cosmeticIDs[3] = {0xFF, 0xFF, 0xFF};
 
-    /*
-    std::bitset<32> indCostumeEffectsA[3];
-    std::bitset<8> indCostumeEffectsB[3];
-    u8 legendary[3];
-    u8 bearDodge[3];
-    */
+    bool useBeamCooldown = false;
+    bool beamStatuses[3] = { false, false, false };
 
     std::bitset<42> indCostumeEffects[3];
-    u8 tingleBalloons[3];
-    u8 dapperSpinA[3]; u8 dapperSpinB[3];
+    bool infTingleBalloons[3] = { false, false, false };
+    bool dapperSpinA[3] = { false, false, false }; bool dapperSpinB[3] = { false, false, false };
+
+    bool randomizers[2][3] = { { false, false, false }, { false, false, false } };
+    bool canRandomize = true; // Used to ensure only one write during loading screens
 
     void Costume::openCustomCostumeSlots(MenuEntry* entry)
     {
@@ -482,18 +486,7 @@ namespace CTRPluginFramework
             }
             std::string currEffectCostume = GameData::getCostumeNameFromID(currEffectCostumeID);
             std::string currCosmeticCostume = GameData::getCostumeNameFromID(currCosmeticCostumeID);
-            std::string selectedPlayer = "";
-            switch (linkChoice) {
-                case 0:
-                    selectedPlayer = "Player 1 (Green)";
-                    break;
-                case 1:
-                    selectedPlayer = "Player 2 (Blue)";
-                    break;
-                case 2:
-                    selectedPlayer = "Player 3 (Red)";
-                    break;
-            }
+            std::string selectedPlayer = GeneralHelpers::getPlayerAsStr(linkChoice);
 
             std::string topscreenMessage =
             "Set new cosmetic costume?\nOr reset to the effective costume?\n\nSelected: " + selectedPlayer
@@ -538,31 +531,28 @@ namespace CTRPluginFramework
 
     void Costume::setIndCostumeEffect(MenuEntry* entry)
     {
-        // process of retrieving the arg values was unchanged here
         pIDindex args = *reinterpret_cast<pIDindex*>(entry->GetArg());
         int player = args.playerID;
         int i = args.index;
 
-        // debug string -- was gonna remove but figured you might need it
-        OSD::Notify(std::to_string(player) + " " + std::to_string(i));
-
         std::string longName = entry->Name();
-        std::string prefix = longName.substr(0, 4);
-        std::string baseName = longName.substr(4, std::string::npos);
-        if (prefix == "( ) ") {
+        std::string prefix = longName.substr(0, 5);
+        if (prefix == "(  ) ") {
+            std::string baseName = longName.substr(5, std::string::npos);
             indCostumeEffects[player].set(i);
             entry->SetName("(X) " + baseName);
         }
         else {
+            std::string baseName = longName.substr(4, std::string::npos);
             indCostumeEffects[player].reset(i);
-            entry->SetName("( ) " + baseName);
+            entry->SetName("(  ) " + baseName);
         }
     }
 
     void Costume::luckyDodge(MenuEntry* entry)
     {
         int player = reinterpret_cast<int>(entry->GetArg());
-        if (entry->Name() == "( ) Lucky Dodge") {
+        if (entry->Name() == "(  ) Lucky Dodge") {
             // Select between 3 dodge chances
             Keyboard dodge("Select the dodge rate:");
             StringVector dodgeChances =
@@ -591,7 +581,7 @@ namespace CTRPluginFramework
             indCostumeEffects[player].reset(6);
             indCostumeEffects[player].reset(7);
             indCostumeEffects[player].reset(41);
-            entry->SetName("( ) Lucky Dodge");
+            entry->SetName("(  ) Lucky Dodge");
         }
     }
 
@@ -600,8 +590,8 @@ namespace CTRPluginFramework
         int player = reinterpret_cast<int>(entry->GetArg());
         u32 attributesA;
         u8 attributesB;
-        u32 addrA = AddressList::CostumeAttrA.addr + player*GameData::playerAddressOffset;
-        u32 addrB = AddressList::CostumeAttrD.addr + player*GameData::playerAddressOffset;
+        u32 addrA = AddressList::StatusBitsA.addr + player*GameData::playerAddressOffset;
+        u32 addrB = AddressList::StatusBitsE.addr + player*GameData::playerAddressOffset;
         Process::Read32(addrA, attributesA);
         Process::Read8(addrB, attributesB);
 
@@ -611,7 +601,7 @@ namespace CTRPluginFramework
         u8 attrToWriteB = attributesB | subset.to_ulong();
 
         Process::Write32(addrA, attrToWriteA);
-        Process::Write32(addrB, attrToWriteB);
+        Process::Write8(addrB, attrToWriteB);
 
         // If statements for the attributes with distant addresses
         if (fullset.test(40)) {
@@ -622,121 +612,6 @@ namespace CTRPluginFramework
         }
     }
 
-    void Costume::tingle(MenuEntry* entry)
-    {
-        // TODO
-    }
-
-    void Costume::dapperInstant(MenuEntry* entry)
-    {
-        // TODO
-    }
-
-    /*
-    void Costume::zora(MenuEntry* entry)
-    {
-        int player = reinterpret_cast<int>(entry->GetArg());
-        if (entry->Name() == "( ) Zora Costume - Enhanced swimming") {
-            indCostumeEffectsA[player].set(1);
-            entry->SetName("(X) Zora Costume - Enhanced swimming");
-        }
-        else {
-            indCostumeEffectsA[player].reset(1);
-            entry->SetName("( ) Zora Costume - Enhanced swimming");
-        }
-    }
-
-    void Costume::goron(MenuEntry* entry)
-    {
-        int player = reinterpret_cast<int>(entry->GetArg());
-        if (entry->Name() == "( ) Goron Garb - Burn immunity and lava swimming") {
-            indCostumeEffectsA[player].set(2);
-            entry->SetName("(X) Goron Garb - Burn immunity and lava swimming");
-        }
-        else {
-            indCostumeEffectsA[player].reset(2);
-            entry->SetName("( ) Goron Garb - Burn immunity and lava swimming");
-        }
-    }
-
-    void Costume::parka(MenuEntry* entry)
-    {
-        int player = reinterpret_cast<int>(entry->GetArg());
-        if (entry->Name() == "( ) Cozy Parka - Freeze and ice slip immunity") {
-            indCostumeEffectsA[player].set(3);
-            entry->SetName("(X) Cozy Parka - Freeze and ice slip immunity");
-        }
-        else {
-            indCostumeEffectsA[player].reset(3);
-            entry->SetName("( ) Cozy Parka - Freeze and ice slip immunity");
-        }
-    }
-
-    void Costume::ninja(MenuEntry* entry)
-    {
-        int player = reinterpret_cast<int>(entry->GetArg());
-        if (entry->Name() == "( ) Ninja Gi - Instant triple damage dash") {
-            indCostumeEffectsA[player].set(4);
-            entry->SetName("(X) Ninja Gi - Instant triple damage dash");
-        }
-        else {
-            indCostumeEffectsA[player].reset(4);
-            entry->SetName("( ) Ninja Gi - Instant triple damage dash");
-        }
-    }
-
-    void Costume::spinAttack(MenuEntry* entry)
-    {
-        int player = reinterpret_cast<int>(entry->GetArg());
-        if (entry->Name() == "( ) Spin Attack Attire - Great Spin Attack") {
-            indCostumeEffectsA[player].set(5);
-            entry->SetName("(X) Spin Attack Attire - Great Spin Attack");
-        }
-        else {
-            indCostumeEffectsA[player].reset(5);
-            entry->SetName("( ) Spin Attack Attire - Great Spin Attack");
-        }
-    }
-
-    void Costume::rupee(MenuEntry* entry)
-    {
-        int player = reinterpret_cast<int>(entry->GetArg());
-        if (entry->Name() == "( ) Rupee Regalia - Increased rupee drop rate") {
-            indCostumeEffectsA[player].set(11);
-            entry->SetName("(X) Rupee Regalia - Increased rupee drop rate");
-        }
-        else {
-            indCostumeEffectsA[player].reset(11);
-            entry->SetName("( ) Rupee Regalia - Increased rupee drop rate");
-        }
-    }
-
-    void Costume::doubleDmg(MenuEntry* entry)
-    {
-        int player = reinterpret_cast<int>(entry->GetArg());
-        if (entry->Name() == "( ) Bear / Cursed - Double damage taken") {
-            indCostumeEffectsA[player].set(19);
-            entry->SetName("(X) Bear / Cursed - Double damage taken");
-        }
-        else {
-            indCostumeEffectsA[player].reset(19);
-            entry->SetName("( ) Bear / Cursed - Double damage taken");
-        }
-    }
-
-    void Costume::template(MenuEntry* entry)
-    {
-        int player = reinterpret_cast<int>(entry->GetArg());
-        if (entry->Name() == "( ) ") {
-            indCostumeEffectsA[player].set(#);
-            entry->SetName("(X) ");
-        }
-        else {
-            indCostumeEffectsA[player].reset(#);
-            entry->SetName("( ) ");
-        }
-    }
-    */
 
     // All-Player Costume Effects
 
@@ -918,4 +793,317 @@ namespace CTRPluginFramework
         }
     }
 
+    // Bonus Effects
+
+    void Costume::tingle(MenuEntry* entry)
+    {
+        int linkChoice = GeneralHelpers::chooseLink();
+
+        if (linkChoice >= 0)
+        {
+            std::string selectedPlayer = GeneralHelpers::getPlayerAsStr(linkChoice);
+            std::string currentBalloons;
+            if (infTingleBalloons[linkChoice])
+            {
+                currentBalloons = "Infinite";
+            }
+            else
+            {
+                u8 balloons;
+                Process::Read8(AddressList::TingleBalloons.addr + linkChoice*GameData::playerAddressOffset, balloons);
+                currentBalloons = std::to_string(balloons);
+            }
+                
+            std::string topscreenMessage = "Enter a positive number of balloons:\n\n";
+            topscreenMessage += "Enter 256 or higher for infinite balloons.\nEnter 0 to reset for this player.\nYou must reset to switch from infinite to fixed balloons.\n\n";
+            topscreenMessage += "Selected: " + selectedPlayer + " - " + currentBalloons;
+            Keyboard balloons(topscreenMessage);
+            balloons.IsHexadecimal(false);
+            float result;
+            balloons.Open(result);
+            if ((int)result >= 256)
+            {
+                infTingleBalloons[linkChoice] = true;
+                autoInfBalloons->Enable();
+            }
+            else if ((int)result == 0)
+            {
+                infTingleBalloons[linkChoice] = false;
+                Process::Write8(AddressList::TingleBalloons.addr + linkChoice*GameData::playerAddressOffset, 0);
+                if (!infTingleBalloons[0] && !infTingleBalloons[1] && !infTingleBalloons[2])
+                    autoInfBalloons->Disable();
+            }
+            else if ((int)result > 0)
+            {
+                Process::Write8(AddressList::TingleBalloons.addr + linkChoice*GameData::playerAddressOffset, result);
+            }
+        }
+    }
+
+    void Costume::writeBalloons(MenuEntry* entry)
+    {
+        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
+        {
+            if (infTingleBalloons[iterateThruPlayers])
+            {
+                // Constantly overwrite 1 balloon
+                // When disabled, only one extra balloon to pop before back to normal
+                Process::Write8(AddressList::TingleBalloons.addr + iterateThruPlayers*GameData::playerAddressOffset, 1);
+            }
+        }
+    }
+
+    void Costume::dapperInstant(MenuEntry* entry)
+    {
+        int linkChoice = GeneralHelpers::chooseLink();
+
+        if (linkChoice >= 0)
+        {
+            std::string selectedPlayer = GeneralHelpers::getPlayerAsStr(linkChoice);
+            std::string currentDapperStatus;
+            if (dapperSpinA[linkChoice])
+            {
+                if (dapperSpinB[linkChoice])
+                    currentDapperStatus = "One swing";
+                else
+                    currentDapperStatus = "Two swings";
+            }
+            else
+            {
+                currentDapperStatus = "Not edited";
+            }
+
+            std::string topscreenMessage = "Spin attack in one swing, two swings, or reset to three swings?\n\n";
+            topscreenMessage += "Selected: " + selectedPlayer + " - " + currentDapperStatus;
+            Keyboard dapperSwing(topscreenMessage);
+            StringVector dapperOptions =
+            {
+                "One swing",
+                "Two swings",
+                "Reset"
+            };
+            dapperSwing.Populate(dapperOptions);
+
+            switch(dapperSwing.Open())
+            {
+                case 0:
+                    dapperSpinA[linkChoice] = true;
+                    dapperSpinB[linkChoice] = true;
+                    autoDapper->Enable();
+                    break;
+                case 1:
+                    dapperSpinA[linkChoice] = true;
+                    dapperSpinB[linkChoice] = false;
+                    autoDapper->Enable();
+                    break;
+                case 2:
+                    dapperSpinA[linkChoice] = false;
+                    dapperSpinB[linkChoice] = false;
+                    if (!dapperSpinA[0] && !dapperSpinA[1] && !dapperSpinA[2] && !dapperSpinB[0] && !dapperSpinB[1] && !dapperSpinB[2])
+                        autoDapper->Disable();
+                    break;
+            }
+        }
+    }
+
+    void Costume::writeDapper(MenuEntry* entry)
+    {
+        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
+        {
+            if (dapperSpinA[iterateThruPlayers])
+            {
+                // Initialize "Two swings in a row"; player needs to swing once to reset the countdown and then a second time within 30ms to spin attack
+                Process::Write8(AddressList::DapperSpinCheck.addr + iterateThruPlayers*GameData::playerAddressOffset, 1);
+            }
+            if (dapperSpinB[iterateThruPlayers])
+            {
+                // Freeze countdown at 0x1E (30ms) so you have infinite time for your next swing to count
+                // When combined with the above, your first swing is always a spin attack
+                Process::Write8(AddressList::DapperSwingCountdown.addr + iterateThruPlayers*GameData::playerAddressOffset, 0x1E);
+            }
+        }
+    }
+
+    void Costume::selectLinkBeam(MenuEntry* entry) 
+    {
+        std::string enSlid = Color::LimeGreen << "\u2282\u25CF";
+        std::string disSlid = Color::Red << "\u25CF\u2283";
+        std::string title;
+
+        StringVector bottomScreenOptions;
+
+        Keyboard kbd("Menu");
+        kbd.CanAbort(false);
+
+        bool loop = true;
+        while (loop) 
+        {
+            title = "Use the toggles to disable the Sword Beam cooldown period:\n\n";
+
+            bottomScreenOptions.clear();
+            bottomScreenOptions.push_back(std::string("Player 1 ") << (beamStatuses[0] ? enSlid : disSlid));
+            bottomScreenOptions.push_back(std::string("Player 2 ") << (beamStatuses[1] ? enSlid : disSlid));
+            bottomScreenOptions.push_back(std::string("Player 3 ") << (beamStatuses[2] ? enSlid : disSlid));
+            bottomScreenOptions.push_back("Save changes");
+            bottomScreenOptions.push_back("Disable entry");
+
+            kbd.GetMessage() = title;
+            kbd.Populate(bottomScreenOptions);
+
+            switch (kbd.Open()) 
+            {
+            case 0:
+                beamStatuses[0] = !beamStatuses[0];
+                break;
+            case 1:
+                beamStatuses[1] = !beamStatuses[1];
+                break;
+            case 2:
+                beamStatuses[2] = !beamStatuses[2];
+                break;
+            case 3:
+                if (beamStatuses[0] || beamStatuses[1] || beamStatuses[2])
+                    autoBeamCooldown->Enable();
+                else
+                    autoBeamCooldown->Disable();
+                loop = false;
+                break;
+            default:
+                autoBeamCooldown->Disable();
+                loop = false;
+                break;
+            }
+        }
+    }
+
+    void Costume::setBeamCooldown(MenuEntry* entry) 
+    {
+        u8 minBeamCooldownTimer = 0x1E;
+
+        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; ++iterateThruPlayers) 
+        {
+            if (beamStatuses[iterateThruPlayers])
+                Process::Write8(AddressList::SwordBeamCD.addr + iterateThruPlayers*GameData::playerAddressOffset, minBeamCooldownTimer);
+        }
+    }
+
+    /* --------------------------------- */
+
+    // Costume Randomizers
+
+    void Costume::costumeRandomizer(MenuEntry* entry)
+    {
+        Keyboard costumeType("Select which type of costume to randomize,\nor disable this entry.");
+        StringVector costumeTypeOptions = 
+        {
+            "Effective",
+            "Cosmetic",
+            "Disable entry"
+        };
+        costumeType.Populate(costumeTypeOptions);
+        int i = costumeType.Open();
+        if (i < 0)
+            return;
+        if (i == 2)
+        {
+            autoCostumeRandomizer->Disable();
+            for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
+            {
+                if (randomizers[1][iterateThruPlayers])
+                {
+                    // Reset cosmetic costume
+                    cosmeticIDs[iterateThruPlayers] = 0xFF;
+                }
+            }
+            return;
+        }
+        
+        std::string enSlid = Color::LimeGreen << "\u2282\u25CF";
+        std::string disSlid = Color::Red << "\u25CF\u2283";
+        std::string title;
+
+        StringVector bottomScreenOptions;
+
+        Keyboard kbd("Menu");
+        kbd.CanAbort(false);
+
+        bool loop = true;
+        while (loop) 
+        {
+            if (i == 0)
+                title = "Use the toggles to enable the\nEffective Costume Randomizers:\n\n";
+            else
+                title = "Use the toggles to enable the\nCosmetic Costume Randomizers:\n\n";
+
+            bottomScreenOptions.clear();
+            bottomScreenOptions.push_back(std::string("Player 1 ") << (randomizers[i][0] ? enSlid : disSlid));
+            bottomScreenOptions.push_back(std::string("Player 2 ") << (randomizers[i][1] ? enSlid : disSlid));
+            bottomScreenOptions.push_back(std::string("Player 3 ") << (randomizers[i][2] ? enSlid : disSlid));
+            bottomScreenOptions.push_back("Save changes");
+
+            kbd.GetMessage() = title;
+            kbd.Populate(bottomScreenOptions);
+
+            switch (kbd.Open()) 
+            {
+            case 0:
+                randomizers[i][0] = !randomizers[i][0];
+                break;
+            case 1:
+                randomizers[i][1] = !randomizers[i][1];
+                break;
+            case 2:
+                randomizers[i][2] = !randomizers[i][2];
+                break;
+            case 3:
+                if (randomizers[0][0] || randomizers[0][1] || randomizers[0][2] || randomizers[1][0] || randomizers[1][1] || randomizers[1][2])
+                    autoCostumeRandomizer->Enable();
+                else
+                    autoCostumeRandomizer->Disable();
+                loop = false;
+                break;
+            default:
+                loop = false;
+                break;
+            }
+        }
+    }
+
+    void Costume::writeRandomCostume(MenuEntry* entry)
+    {
+        // Loading zone flag is too late and causes delays in the model loaded
+        // Instead we check if three Links are on the triforce portal
+        u8 triforceG, triforceB, triforceR;
+        Process::Read8(AddressList::StatusBitsB.addr, triforceG);
+        Process::Read8(AddressList::StatusBitsB.addr + GameData::playerAddressOffset, triforceB);
+        Process::Read8(AddressList::StatusBitsB.addr + 2*GameData::playerAddressOffset, triforceR);
+        bool aboutToWarp = ((triforceG & 0x20) == 0x20) && ((triforceB & 0x20) == 0x20) && ((triforceR & 0x20) == 0x20);
+        if (aboutToWarp && canRandomize)
+        {
+            canRandomize = false;
+            // Effective costume - Write directly to address
+            for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
+            {
+                if (randomizers[0][iterateThruPlayers])
+                {
+                    // Generate new random costume
+                    Process::Write8(AddressList::CurrCostume.addr + iterateThruPlayers*GameData::playerAddressOffset, rand() % 38);
+                }
+            }
+            
+            // Cosmetic costume - Let it be managed by the Enable Cosmetic Costumes entry
+            for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
+            {
+                if (randomizers[1][iterateThruPlayers])
+                {
+                    // Generate new random costume
+                    cosmeticIDs[iterateThruPlayers] = rand() % 38;
+                }
+            }
+        }
+        if (Level::getElapsedTime() == 100)
+        {
+            canRandomize = true;
+        }
+    }
 }
