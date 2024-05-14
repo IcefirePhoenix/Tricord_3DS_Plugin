@@ -793,6 +793,172 @@ namespace CTRPluginFramework
         }
     }
 
+    void Costume::goron(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Goron Garb - Full fire/lava immunity")
+        {
+            Process::Patch(AddressList::GoronA.addr, 0xEA00000B);
+            Process::Patch(AddressList::GoronB.addr, 0xE320F000);
+            Process::Patch(AddressList::GoronC.addr, 0xE320F000);
+            Process::Patch(AddressList::GoronD.addr, 0xE3A00000);
+            Process::Patch(AddressList::GoronE.addr, 0xEA000000);
+            Process::Patch(AddressList::GoronF.addr, 0xE3811004);
+            Process::Patch(AddressList::GoronG.addr, 0xE5841010);
+            Process::Patch(AddressList::GoronH.addr, 0xEA000005);
+            Process::Patch(AddressList::GoronI.addr, 0xE3A00000);
+            Process::Patch(AddressList::GoronJ.addr, 0xEA000000);
+            entry->SetName("(X) Goron Garb - Full fire/lava immunity");
+        }
+        else
+        {
+            Process::Patch(AddressList::GoronA.addr, 0x0A00000B);
+            Process::Patch(AddressList::GoronB.addr, 0x13A00001);
+            Process::Patch(AddressList::GoronC.addr, 0x1A000000);
+            Process::Patch(AddressList::GoronD.addr, 0x03A00000);
+            Process::Patch(AddressList::GoronE.addr, 0x0A000000);
+            Process::Patch(AddressList::GoronF.addr, 0x03811004);
+            Process::Patch(AddressList::GoronG.addr, 0x05841010);
+            Process::Patch(AddressList::GoronH.addr, 0x0A000005);
+            Process::Patch(AddressList::GoronI.addr, 0x03A00000);
+            Process::Patch(AddressList::GoronJ.addr, 0x0A000000);
+            entry->SetName("(  ) Goron Garb - Full fire/lava immunity");
+        }
+    }
+
+    void Costume::lightArmor(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Light Armor - Glow & burn foes")
+        {
+            Process::Patch(AddressList::LightArmorA.addr, 0xE3A00001);
+            Process::Patch(AddressList::LightArmorB.addr, 0xEA000000);
+            Process::Patch(AddressList::LightArmorC.addr, 0xE3810A01);
+            Process::Patch(AddressList::LightArmorD.addr, 0xE5840014);
+            Process::Patch(AddressList::LightArmorE.addr, 0xE320F000);
+            Process::Patch(AddressList::LightArmorF.addr, 0xEA000006);
+            entry->SetName("(X) Light Armor - Glow & burn foes");
+        }
+        else
+        {
+            Process::Patch(AddressList::LightArmorA.addr, 0x03A00001);
+            Process::Patch(AddressList::LightArmorB.addr, 0x0A000000);
+            Process::Patch(AddressList::LightArmorC.addr, 0x03810A01);
+            Process::Patch(AddressList::LightArmorD.addr, 0x05840014);
+            Process::Patch(AddressList::LightArmorE.addr, 0x11A00001);
+            Process::Patch(AddressList::LightArmorF.addr, 0x0A000006);
+            entry->SetName("(  ) Light Armor - Glow & burn foes");
+        }
+    }
+
+    void Costume::linebeck(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Linebeck's Uniform - Time bonuses")
+        {
+            Process::Patch(AddressList::LinebeckTimeA.addr, 0xE286600A);
+            Process::Patch(AddressList::LinebeckTimeB.addr, 0xEA00000F);
+            Process::Patch(AddressList::LinebeckTimeC.addr, 0xE3A04001);
+            entry->SetName("(X) Linebeck's Uniform - Time bonuses");
+        }
+        else
+        {
+            Process::Patch(AddressList::LinebeckTimeA.addr, 0x0286600A);
+            Process::Patch(AddressList::LinebeckTimeB.addr, 0x0A00000F);
+            Process::Patch(AddressList::LinebeckTimeC.addr, 0x03A04001);
+            entry->SetName("(  ) Linebeck's Uniform - Time bonuses");
+        }
+    }
+
+    void Costume::cheetah(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Cheetah Costume - Faster walk speed")
+        {
+            Process::Patch(AddressList::CheetahA.addr, 0xED9F0A12);
+            Process::Patch(AddressList::CheetahB.addr, 0xED840A41);
+            Process::Patch(AddressList::CheetahC.addr, 0xEA000000);
+            entry->SetName("(X) Cheetah Costume - Faster walk speed");
+        }
+        else
+        {
+            Process::Patch(AddressList::CheetahA.addr, 0x0D9F0A12);
+            Process::Patch(AddressList::CheetahB.addr, 0x0D840A41);
+            Process::Patch(AddressList::CheetahC.addr, 0x0A000000);
+            entry->SetName("(  ) Cheetah Costume - Faster walk speed");
+        }
+    }
+
+    void Costume::swordDmgBoost(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Sword Suits - Sword damage boost")
+        {
+            Process::Patch(AddressList::SwordDamageBoostA.addr, 0xED848A1B);
+            Process::Patch(AddressList::SwordDamageBoostB.addr, 0xEA000000);
+            entry->SetName("(X) Sword Suits - Sword damage boost");
+        }
+        else
+        {
+            Process::Patch(AddressList::SwordDamageBoostA.addr, 0x0D848A1B);
+            Process::Patch(AddressList::SwordDamageBoostB.addr, 0x0A000000);
+            entry->SetName("(  ) Sword Suits - Sword damage boost");
+        }
+    }
+
+    void Costume::swordBeam(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Sword Suits - Set sword beam")
+        {
+            Keyboard beamTypes("Select a beam type:\n\nFor Sword Master Suit's large sword beams, see the\nindividual costume effects subfolders.");
+            StringVector beamOptions =
+            {
+                "Single sword beam",
+                "Quad sword beam"
+            };
+            beamTypes.Populate(beamOptions);
+            int result = beamTypes.Open();
+            if (result >= 0)
+            {
+                Process::Patch(AddressList::SwordBeamAbility.addr, 0xE320F000);
+                if (result == 0)
+                {
+                    entry->SetName("(X) Sword Suits - Single sword beam");
+                }
+                else
+                {
+                    Process::Patch(AddressList::QuadBeamA.addr, 0xE3A05000);
+                    Process::Patch(AddressList::QuadBeamB.addr, 0xE1A06005);
+                    Process::Patch(AddressList::QuadBeamC.addr, 0xEA00000D);
+                    Process::Patch(AddressList::QuadBeamSpinA.addr, 0xE3A05000);
+                    Process::Patch(AddressList::QuadBeamSpinB.addr, 0xE1A06005);
+                    Process::Patch(AddressList::QuadBeamSpinC.addr, 0xEA000016);
+                    entry->SetName("(X) Sword Suits - Quad sword beam");
+                }
+            }
+        }
+        else
+        {
+            Process::Patch(AddressList::SwordBeamAbility.addr, 0x1A00000B);
+            Process::Patch(AddressList::QuadBeamA.addr, 0x03A05000);
+            Process::Patch(AddressList::QuadBeamB.addr, 0x01A06005);
+            Process::Patch(AddressList::QuadBeamC.addr, 0x0A00000D);
+            Process::Patch(AddressList::QuadBeamSpinA.addr, 0x03A05000);
+            Process::Patch(AddressList::QuadBeamSpinB.addr, 0x01A06005);
+            Process::Patch(AddressList::QuadBeamSpinC.addr, 0x0A000016);
+            entry->SetName("(  ) Sword Suits - Set sword beam");
+        }
+    }
+
+    void Costume::knockbackImmunity(MenuEntry* entry)
+    {
+        if (entry->Name() == "(  ) Fierce Deity Armor - Knockback immunity")
+        {
+            Process::Patch(AddressList::KnockbackImmunity.addr, 0xEA00002C);
+            entry->SetName("(X) Fierce Deity Armor - Knockback immunity");
+        }
+        else
+        {
+            Process::Patch(AddressList::KnockbackImmunity.addr, 0x0A00002C);
+            entry->SetName("(  ) Fierce Deity Armor - Knockback immunity");
+        }
+    }
+    
     // Bonus Effects
 
     void Costume::tingle(MenuEntry* entry)
@@ -815,7 +981,7 @@ namespace CTRPluginFramework
             }
                 
             std::string topscreenMessage = "Enter a positive number of balloons:\n\n";
-            topscreenMessage += "Enter 256 or higher for infinite balloons.\nEnter 0 to reset for this player.\nYou must reset to switch from infinite to fixed balloons.\n\n";
+            topscreenMessage += "Enter 256 or higher for infinite balloons.\nEnter 0 to reset for this player.\nYou must reset to disable infinite balloons.\n\n";
             topscreenMessage += "Selected: " + selectedPlayer + " - " + currentBalloons;
             Keyboard balloons(topscreenMessage);
             balloons.IsHexadecimal(false);
@@ -873,7 +1039,7 @@ namespace CTRPluginFramework
                 currentDapperStatus = "Not edited";
             }
 
-            std::string topscreenMessage = "Spin attack in one swing, two swings, or reset to three swings?\n\n";
+            std::string topscreenMessage = "Spin attack in one swing, two swings, or reset to\nthree swings?\n\n";
             topscreenMessage += "Selected: " + selectedPlayer + " - " + currentDapperStatus;
             Keyboard dapperSwing(topscreenMessage);
             StringVector dapperOptions =
@@ -984,6 +1150,70 @@ namespace CTRPluginFramework
         {
             if (beamStatuses[iterateThruPlayers])
                 Process::Write8(AddressList::SwordBeamCD.addr + iterateThruPlayers*GameData::playerAddressOffset, minBeamCooldownTimer);
+        }
+    }
+
+    void Costume::setCheetahMultiplier(MenuEntry* entry)
+    {
+        float newSpeed = 1;
+        Keyboard editSpeed("Enter a custom speed multiplier.\n\nThe default value is 1.5.\nNegative values will invert movement.");
+        editSpeed.IsHexadecimal(false);
+        if (editSpeed.Open(newSpeed) == 0)
+        {
+            entry->SetName("Cheetah Costume - Set speed mult.: "+std::to_string(newSpeed)+"x");
+            Process::WriteFloat(AddressList::SpeedMultiplierCheetah.addr, newSpeed);
+        }
+    }
+
+    void Costume::setCactoDmg(MenuEntry* entry)
+    {
+        float newDmg = 1;
+        Keyboard editDmg("Enter a custom damage amount as a positive integer\nrepresenting the number of hearts of damage.\n\nThe default value is 2.\nNegative values equate to 0 damage.");
+        editDmg.IsHexadecimal(false);
+        if (editDmg.Open(newDmg) == 0)
+        {
+            // Integer value as # hearts to write in entry name
+            u8 dmgToWrite = (u8)newDmg;
+            std::string unit = "";
+            if (dmgToWrite == 1)
+            {
+                unit = " heart";
+            }
+            else
+            {
+                unit = " hearts";
+            }
+            entry->SetName("Cacto Clothes - Set damage: "+std::to_string(dmgToWrite)+unit);
+            // Write to address in terms of quarter hearts
+            Process::Write8(AddressList::CactoDamageDrablands.addr, dmgToWrite*4);
+        }
+    }
+
+    void Costume::setSwordHammerDmgMult(MenuEntry* entry)
+    {
+        float newDmg = 1;
+        Keyboard editDmg("Enter a custom damage multiplier.\n\nThe default value is 2.\nNegative values equate to 0 damage.");
+        editDmg.IsHexadecimal(false);
+        if (editDmg.Open(newDmg) == 0)
+        {
+            entry->SetName("Set boosted sword & hammer dmg mult.: "+std::to_string(newDmg)+"x");
+            Process::WriteFloat(AddressList::SwordHammerDmgBoost.addr, newDmg);
+        }
+    }
+
+    void Costume::swordBeamsAnyHealth(MenuEntry* entry)
+    {
+        if (entry->Name() == "Enable sword beams at any health")
+        {
+            Process::Patch(AddressList::SwordBeamHealthCheckA.addr, 0xE3A00001);
+            Process::Patch(AddressList::SwordBeamHealthCheckB.addr, 0xEA000000);
+            entry->SetName("Reset to sword beams only at max health");
+        }
+        else
+        {
+            Process::Patch(AddressList::SwordBeamHealthCheckA.addr, 0x03A00001);
+            Process::Patch(AddressList::SwordBeamHealthCheckB.addr, 0x0A000000);
+            entry->SetName("Enable sword beams at any health");
         }
     }
 

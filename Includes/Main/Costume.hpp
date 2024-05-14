@@ -34,7 +34,6 @@ namespace CTRPluginFramework {
     bool isCustomCostumeConflict(int openSlots);
     void addCustomSlotsToMenu(int openSlots);
     void resetCostumeArray(void);
-    void anyTrue(bool arr[]);
 
     class Costume {
     public:
@@ -77,6 +76,19 @@ namespace CTRPluginFramework {
         static void hammerwear(MenuEntry* entry);
 
         // Other
+        static void goron(MenuEntry* entry);
+        static void lightArmor(MenuEntry* entry);
+        static void linebeck(MenuEntry* entry);
+        static void cheetah(MenuEntry* entry);
+        static void swordDmgBoost(MenuEntry* entry);
+        static void swordBeam(MenuEntry* entry);
+        static void knockbackImmunity(MenuEntry* entry);
+
+        // Bonus - Exe
+        static void setCheetahMultiplier(MenuEntry* entry);
+        static void setCactoDmg(MenuEntry* entry);
+        static void setSwordHammerDmgMult(MenuEntry* entry);
+        static void swordBeamsAnyHealth(MenuEntry* entry);
 
         // Costume Randomizers
         static void costumeRandomizer(MenuEntry* entry);

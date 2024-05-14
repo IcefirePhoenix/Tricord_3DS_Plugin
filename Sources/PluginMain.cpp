@@ -427,17 +427,35 @@ namespace CTRPluginFramework {
         *allPCostumeEffects += new MenuEntry("(  ) Gust Garb - Gust Jar upgrade", nullptr, Costume::gustGarb);
         *allPCostumeEffects += new MenuEntry("(  ) Robowear - Gripshot upgrade", nullptr, Costume::robowear);
         *allPCostumeEffects += new MenuEntry("(  ) Hammerwear - Hammer upgrade", nullptr, Costume::hammerwear);
+        *allPCostumeEffects += new MenuEntry("(  ) Goron Garb - Full fire/lava immunity", nullptr, Costume::goron,
+        "Includes burn immunity, lava swimming, no damage from lava pillars, walking through flame walls and picking up flaming rupees.");
+        *allPCostumeEffects += new MenuEntry("(  ) Light Armor - Glow & burn foes", nullptr, Costume::lightArmor,
+        "Increases the light source provided in \"Adventure in the dark!\" challenges and a few other dark stages. Also allows you to burn opponents on contact in the Coliseum.");
+        *allPCostumeEffects += new MenuEntry("(  ) Linebeck's Uniform - Time bonuses", nullptr, Costume::linebeck,
+        "Grants +30 seconds at the start of a timed challenge, and grants 1.5x time for collected hourglasses. For chest visibility, see the Rendering folder.");
+        *allPCostumeEffects += new MenuEntry("(  ) Cheetah Costume - Faster walk speed", nullptr, Costume::cheetah,
+        "1.5x speed by default. Affected by \"Cheetah Costume - Set speed multiplier\" found in the Bonus Effects folder.");
+        *allPCostumeEffects += new MenuEntry("(  ) Sword Suits - Sword damage boost", nullptr, Costume::swordDmgBoost,
+        "2x damage by default. Affected by \"Set boosted sword and hammer damage multiplier\" found in the Bonus Effects folder.");
+        *allPCostumeEffects += new MenuEntry("(  ) Sword Suits - Set sword beam", nullptr, Costume::swordBeam,
+        "\"Quad sword beam\" includes both the normal sword attack quad sword beam, as well as the spin attack quad sword beam.");
+        *allPCostumeEffects += new MenuEntry("(  ) Fierce Deity Armor - Knockback immunity", nullptr, Costume::knockbackImmunity);
         *costumeEffects += allPCostumeEffects;
 
         MenuFolder* bonusEffects = new MenuFolder("Bonus Effects", "A collection of codes that tweak the effect of some costumes.");
-        
-        // TODO - Other bonus effects
         *bonusEffects += new MenuEntry("Tingle Tights - Set number of balloons", nullptr, Costume::tingle,
         "You do not need to be wearing Tingle Tights.");
         autoInfBalloons = new MenuEntry("Infinite tingle balloons (auto)", Costume::writeBalloons);
         *bonusEffects += new MenuEntry("Dapper Spinner - Reduce # swings to spin", nullptr, Costume::dapperInstant,
         "Must be wearing Dapper Spinner or have its effect forced on.");
         autoDapper = new MenuEntry("Dapper faster spins (auto)", Costume::writeDapper);
+        *bonusEffects += new MenuEntry("Cheetah Costume - Set speed mult.: 1.5x", nullptr, Costume::setCheetahMultiplier,
+        "Sets the multiplier for Link's walking speed when it is boosted by the Cheetah Costume.");
+        *bonusEffects += new MenuEntry("Cacto Clothes - Set damage: 2 hearts", nullptr, Costume::setCactoDmg,
+        "Only effective in the Coliseum if not wearing Cacto Clothes, and forcing the Cacto Clothes' effect via the individual costume effect.");
+        *bonusEffects += new MenuEntry("Set boosted sword & hammer dmg mult.: 2x", nullptr, Costume::setSwordHammerDmgMult,
+        "Sets the multiplier that is used for calculating sword damage dealt when your sword is boosted by the Sword Suit, Sword Master Suit or Fierce Deity Armor; also used for calculating the damage dealt by the hammer when it is upgraded by the Hammerwear.");
+        *bonusEffects += new MenuEntry("Enable sword beams at any health", nullptr, Costume::swordBeamsAnyHealth);
         *bonusEffects += new MenuEntry("Toggle sword beam cooldown", nullptr, Costume::selectLinkBeam);
         autoBeamCooldown = new MenuEntry("Set Beam Cooldown (auto)", Costume::setBeamCooldown);
         *costumeEffects += bonusEffects;
