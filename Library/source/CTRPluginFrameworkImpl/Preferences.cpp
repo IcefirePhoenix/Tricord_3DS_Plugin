@@ -209,54 +209,46 @@ namespace CTRPluginFramework
         if (!_bmpCanBeLoaded)
             return;
 
-        Task task([](void *arg UNUSED)
+        std::string source = "/Tricord/Resources/Background/";
+
+        // Try to load bottom background
+        if (bottomBackgroundImage == nullptr && File::Exists(source + "CustomBottomBG.bmp"))
         {
-            std::string source = "/Tricord/Resources/Background/";
+            BMPImage* image = new BMPImage(source + "CustomBottomBG.bmp");
 
-            // Try to load bottom background
-            if (bottomBackgroundImage == nullptr && File::Exists(source + "CustomBottomBG.bmp"))
-            {
-                BMPImage* image = new BMPImage(source + "CustomBottomBG.bmp");
-
-                if (image->IsLoaded())
-                    image = PostProcess(image, 320, 240);
-                else
-                {
-                    delete image;
-                    image = nullptr;
-                }
-
-                bottomBackgroundImage = image;
-            }
+            if (image->IsLoaded())
+                image = PostProcess(image, 320, 240);
             else
             {
-                OSD::Notify("Cannot find CustomBottomBG.bmp background file!");
+                delete image;
+                image = nullptr;
             }
 
-            if (bottomBoxBGImage == nullptr && File::Exists(source + "CustomBoxBG.bmp"))
-            {
-                BMPImage* image1 = new BMPImage(source + "CustomBoxBG.bmp");
+            bottomBackgroundImage = image;
+        }
+        else {
+            OSD::Notify("Cannot find CustomBottomBG.bmp background file!");
+        }
 
-                if (image1->IsLoaded())
-                    image1 = PostProcess(image1, 320, 240);
-                else
-                {
-                    delete image1;
-                    image1 = nullptr;
-                }
-                bottomBoxBGImage = image1;
-            }
+        if (File::Exists(source + "CustomBoxBG.bmp")) {
+            BMPImage* image1 = new BMPImage(source + "CustomBoxBG.bmp");
+
+            if (image1->IsLoaded()) 
+                image1 = PostProcess(image1, 320, 240);
             else
             {
-                OSD::Notify("Cannot find CustomBoxBG.bmp background file!");
+                delete image1;
+                image1 = nullptr;
             }
+            bottomBoxBGImage = image1;
+        }
+        else {
+            OSD::Notify("Cannot find CustomBoxBG.bmp background file!");
+        }
 
-            // Update Window
-            Window::UpdateBackgrounds();
-            return (s32)0;
-        });
+        // Update Window
+        Window::UpdateBackgrounds();
 
-        task.Start();
         _bmpCanBeLoaded = false;
     }
 
@@ -265,7 +257,7 @@ namespace CTRPluginFramework
         if (bottomBackgroundImage)
         {
             _bmpCanBeLoaded = true;
-
+            
             delete bottomBackgroundImage;
             bottomBackgroundImage = nullptr;
         }
