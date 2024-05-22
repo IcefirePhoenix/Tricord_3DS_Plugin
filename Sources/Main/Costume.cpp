@@ -592,23 +592,33 @@ namespace CTRPluginFramework
         u8 attributesB;
         u32 addrA = AddressList::StatusBitsA.addr + player*GameData::playerAddressOffset;
         u32 addrB = AddressList::StatusBitsE.addr + player*GameData::playerAddressOffset;
-        Process::Read32(addrA, attributesA);
-        Process::Read8(addrB, attributesB);
 
-        std::bitset<42> fullset = indCostumeEffects[player];
-        std::bitset<42> subset = fullset >> 32;
-        u32 attrToWriteA = attributesA | fullset.to_ulong();
-        u8 attrToWriteB = attributesB | subset.to_ulong();
+        if (Process::Read32(addrA, attributesA) && Process::Read8(addrB, attributesB))
+        {
+            std::bitset<42> fullset = indCostumeEffects[player]; // contains bit for 9510
+            std::bitset<42> subset = fullset >> 32;              // contains bits for 9514
+            std::bitset<42> bitmask("00000000001111111111111111111111111111111");
 
-        Process::Write32(addrA, attrToWriteA);
-        Process::Write8(addrB, attrToWriteB);
+            fullset &= bitmask; // zero out everything to the left of fullset, leaving 32 bits of data
+            bitmask >> 23;      // add more zeroes to the left of bitmask
+            subset &= bitmask;  // zero out everything to the left of subset, leaving 8 bits of data
+            // note: we lose 2 bits of data, originally at indexes 40-41
 
-        // If statements for the attributes with distant addresses
-        if (fullset.test(40)) {
-            Process::Write8(AddressList::HeartDropRate.addr, 0x1);
-        }
-        if (fullset.test(41)) {
-            Process::Write8(AddressList::BearDodge.addr, 0x1);
+            u32 attrToWriteA = attributesA | (u32) fullset.to_ulong();
+            u8 attrToWriteB = attributesB | (u8) subset.to_ulong();
+
+            Process::Write32(addrA, attrToWriteA);
+            Process::Write8(addrB, attrToWriteB);
+
+            // If statements for the attributes with distant addresses
+            if (fullset.test(40))
+            {
+                Process::Write8(AddressList::HeartDropRate.addr, 0x1);
+            }
+            if (fullset.test(41))
+            {
+                Process::Write8(AddressList::BearDodge.addr, 0x1);
+            }
         }
     }
 
@@ -958,7 +968,7 @@ namespace CTRPluginFramework
             entry->SetName("(  ) Fierce Deity Armor - Knockback immunity");
         }
     }
-    
+
     // Bonus Effects
 
     void Costume::tingle(MenuEntry* entry)
@@ -979,7 +989,7 @@ namespace CTRPluginFramework
                 Process::Read8(AddressList::TingleBalloons.addr + linkChoice*GameData::playerAddressOffset, balloons);
                 currentBalloons = std::to_string(balloons);
             }
-                
+
             std::string topscreenMessage = "Enter a positive number of balloons:\n\n";
             topscreenMessage += "Enter 256 or higher for infinite balloons.\nEnter 0 to reset for this player.\nYou must reset to disable infinite balloons.\n\n";
             topscreenMessage += "Selected: " + selectedPlayer + " - " + currentBalloons;
@@ -1090,7 +1100,7 @@ namespace CTRPluginFramework
         }
     }
 
-    void Costume::selectLinkBeam(MenuEntry* entry) 
+    void Costume::selectLinkBeam(MenuEntry* entry)
     {
         std::string enSlid = Color::LimeGreen << "\u2282\u25CF";
         std::string disSlid = Color::Red << "\u25CF\u2283";
@@ -1102,7 +1112,7 @@ namespace CTRPluginFramework
         kbd.CanAbort(false);
 
         bool loop = true;
-        while (loop) 
+        while (loop)
         {
             title = "Use the toggles to disable the Sword Beam cooldown period:\n\n";
 
@@ -1116,7 +1126,7 @@ namespace CTRPluginFramework
             kbd.GetMessage() = title;
             kbd.Populate(bottomScreenOptions);
 
-            switch (kbd.Open()) 
+            switch (kbd.Open())
             {
             case 0:
                 beamStatuses[0] = !beamStatuses[0];
@@ -1142,11 +1152,11 @@ namespace CTRPluginFramework
         }
     }
 
-    void Costume::setBeamCooldown(MenuEntry* entry) 
+    void Costume::setBeamCooldown(MenuEntry* entry)
     {
         u8 minBeamCooldownTimer = 0x1E;
 
-        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; ++iterateThruPlayers) 
+        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; ++iterateThruPlayers)
         {
             if (beamStatuses[iterateThruPlayers])
                 Process::Write8(AddressList::SwordBeamCD.addr + iterateThruPlayers*GameData::playerAddressOffset, minBeamCooldownTimer);
@@ -1224,7 +1234,7 @@ namespace CTRPluginFramework
     void Costume::costumeRandomizer(MenuEntry* entry)
     {
         Keyboard costumeType("Select which type of costume to randomize,\nor disable this entry.");
-        StringVector costumeTypeOptions = 
+        StringVector costumeTypeOptions =
         {
             "Effective",
             "Cosmetic",
@@ -1247,7 +1257,7 @@ namespace CTRPluginFramework
             }
             return;
         }
-        
+
         std::string enSlid = Color::LimeGreen << "\u2282\u25CF";
         std::string disSlid = Color::Red << "\u25CF\u2283";
         std::string title;
@@ -1258,7 +1268,7 @@ namespace CTRPluginFramework
         kbd.CanAbort(false);
 
         bool loop = true;
-        while (loop) 
+        while (loop)
         {
             if (i == 0)
                 title = "Use the toggles to enable the\nEffective Costume Randomizers:\n\n";
@@ -1274,7 +1284,7 @@ namespace CTRPluginFramework
             kbd.GetMessage() = title;
             kbd.Populate(bottomScreenOptions);
 
-            switch (kbd.Open()) 
+            switch (kbd.Open())
             {
             case 0:
                 randomizers[i][0] = !randomizers[i][0];
@@ -1320,7 +1330,7 @@ namespace CTRPluginFramework
                     Process::Write8(AddressList::CurrCostume.addr + iterateThruPlayers*GameData::playerAddressOffset, rand() % 38);
                 }
             }
-            
+
             // Cosmetic costume - Let it be managed by the Enable Cosmetic Costumes entry
             for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
             {
