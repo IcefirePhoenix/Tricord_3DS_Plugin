@@ -5,7 +5,7 @@
 namespace CTRPluginFramework {
 	u32 _memOffset = 0x0;
 
-	Address::Address(u32 usa, u32 eur, u32 jpn, u32 kor)
+	Address::Address(u32 usa, u32 eur, u32 jpn)
 	{
 		switch (Process::GetTitleID())
 		{
@@ -19,10 +19,6 @@ namespace CTRPluginFramework {
 
 			case TID_JPN:
 				addr = jpn;
-				break;
-
-			case TID_KOR:
-				addr = kor;
 				break;
 
 			default:
