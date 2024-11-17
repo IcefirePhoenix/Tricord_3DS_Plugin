@@ -26,11 +26,12 @@ namespace CTRPluginFramework {
 				break;
 
 			default:
-				addr = 0;
 				OSD::Notify("The current title is not a supported retail version of TFH!", Color::Red);
 				OSD::Notify("Supported TFH regions include NA, EU/AUS, JP, and KOR.", Color::Red);
-				OSD::Notify("Addresses cannot be initialized.", Color::Red);
-				break;
+				OSD::Notify("Addresses cannot be initialized. Plugin will now abort.", Color::Red);
+
+				svcSleepThread(150);
+				abort();	// TODO: not sure?
 		}
 
 		if (addr >= 0x14000000) addr -= _memOffset;
