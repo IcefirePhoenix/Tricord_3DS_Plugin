@@ -11,97 +11,113 @@
 #include "CTRPluginFrameworkImpl/System/SystemImpl.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
 #include "CTRPluginFramework/Sound.hpp"
+#include <bitset>
 
 
 namespace CTRPluginFramework
 {
     /* loosely based on HotkeyModifier class */
 
+    u8 backupFirstBitSet[4];
     u32 bitstringLocations[3][4];
-    
+    u64 bitstring[4]; // array elements: noChallenge, challenge1, challenge2, challenge3
+
     LevelStatusEditor::LevelStatusEditor(const std::string &message, StringVector levelNames, int world, int playMode) :
         _message(message), _levelNames(levelNames), _world(world), _playMode(playMode)
     {
-        for (int iterateLvl1 = 0, posY = 100; iterateLvl1 < 4; ++iterateLvl1, posY += 32)
+        int posY = 100;
+        for (int rowNum = 0; rowNum < 4; ++rowNum)
         {
-            Button newButton(Button::Icon | Button::Toggle, IntRect(180, posY, 20, 20), Icon::DrawCheckBox);
-            _checkboxes.push_back(newButton);
-        }
-        for (int iterateLvl2 = 0, posY = 100; iterateLvl2 < 4; ++iterateLvl2, posY += 32)
-        {
-            Button newButton(Button::Icon | Button::Toggle, IntRect(210, posY, 20, 20), Icon::DrawCheckBox);
-            _checkboxes.push_back(newButton);
-        }
-        for (int iterateLvl3 = 0, posY = 100; iterateLvl3 < 4; ++iterateLvl3, posY += 32)
-        {
-            Button newButton(Button::Icon | Button::Toggle, IntRect(240, posY, 20, 20), Icon::DrawCheckBox);
-            _checkboxes.push_back(newButton);
-        }
-        for (int iterateLvl4 = 0, posY = 100; iterateLvl4 < 4; ++iterateLvl4, posY += 32)
-        {
-            Button newButton(Button::Icon | Button::Toggle, IntRect(270, posY, 20, 20), Icon::DrawCheckBox);
-            _checkboxes.push_back(newButton);
+            int posX = 180;
+            for (int columnNum = 0; columnNum < 4; ++columnNum)
+            {
+                Button newButton(Button::Icon | Button::Toggle, IntRect(posX, posY, 20, 20), Icon::DrawCheckBox);
+                _checkboxes.push_back(newButton);
+
+                posX += 30;
+            }
+            posY += 32;
         }
 
         initBitstringAddresses();
-        setCheckboxes(world);
+        setCheckboxes();
     }
 
     LevelStatusEditor::~LevelStatusEditor()
     {
-    }
+        for (int index = 0; index < 16; ++index)
+        {
+            int rowNum = index / 4;
+            int columnNum = index % 4;
+            int editedBit = getBit(rowNum);
 
-    u64 challenge[4]; // array elements: noChallenge, challenge1, challenge2, challenge3
+            if (_checkboxes[index].GetState())
+                bitstring[columnNum] |= (1 << editedBit);
+            else
+                bitstring[columnNum] &= ~(1 << editedBit);
+        }
+
+        // addresses should only be updated one time -> once the menu is closed
+        // attempting to edit memory in real-time while the menu is still open -> multiple, concurrent edits -> corrupted edits
+        for (int bitstringIterator = 0; bitstringIterator < 4; ++bitstringIterator)
+        {
+            writeUpdates(bitstringIterator);
+        }
+    }
 
     void LevelStatusEditor::initBitstringAddresses(void)
     {
-        Address bitstringArray[3][4] = {
+        Address bitstringArray[3][4] =
+        {
             {AddressList::SoloNCCompletion, AddressList::SoloC1Completion, AddressList::SoloC2Completion, AddressList::SoloC3Completion},
             {AddressList::MultiNCCompletion, AddressList::MultiC1Completion, AddressList::MultiC2Completion, AddressList::MultiC3Completion},
             {AddressList::NormalNCCompletion, AddressList::NormalC1Completion, AddressList::NormalC2Completion, AddressList::NormalC3Completion}
         };
 
-        for (int i = 0; i < 3; ++i) 
+        for (int modeIndex = 0; modeIndex < 3; ++modeIndex)
         {
-            for (int j = 0; j < 4; ++j) 
-                bitstringLocations[i][j] = bitstringArray[i][j].addr;
+            for (int levelIndex = 0; levelIndex < 4; ++levelIndex)
+                bitstringLocations[modeIndex][levelIndex] = bitstringArray[modeIndex][levelIndex].addr;
         }
     }
 
-    void LevelStatusEditor::copyBitstrings(int playMode) 
+    void LevelStatusEditor::copyBitstrings(int modeIndex)
     {
-        for (int iterator = 0; iterator < 4; ++iterator) 
+        for (int bitstringIterator = 0; bitstringIterator < 4; ++bitstringIterator)
         {
-            Process::Read64(bitstringLocations[playMode][iterator], challenge[iterator]);
-            OSD::Notify(std::to_string(bitstringLocations[playMode][iterator]) + "," + std::to_string(challenge[iterator]));
+            Process::Read64(bitstringLocations[modeIndex][bitstringIterator], bitstring[bitstringIterator]);
+
+            // right-shift to remove unknown-purpose first bit (but save it somewhere beforehand...)
+            backupFirstBitSet[bitstringIterator] = bitstring[bitstringIterator] & 1;
+            bitstring[bitstringIterator] = bitstring[bitstringIterator] >> 1;
         }
     }
 
-    void LevelStatusEditor::setCheckboxes(int world) 
+    void LevelStatusEditor::setCheckboxes()
     {
-        int lowRange = 1;
-        int highRange = 5;
-        int offset = world * 4; // each world takes up 4 bits = 4 levels
+        int minimumLevelIndex = 0;
+        int maxLevelIndex = 4;
+        int offset = _world * 4; // each world takes up 4 bits = 4 levels
 
         copyBitstrings(_playMode);
 
         // reflect current bitstring statuses onto checkboxes during init
-        for (int iterateThruLevels = lowRange + offset; iterateThruLevels < highRange + offset; ++iterateThruLevels) 
+        for (int iterateThruLevels = minimumLevelIndex + offset; iterateThruLevels < maxLevelIndex + offset; ++iterateThruLevels)
         {
-            for (int iterateThruChal = 0; iterateThruChal < 4; ++iterateThruChal) 
+            for (int iterateThruChal = 0; iterateThruChal < 4; ++iterateThruChal)
             {
-                int currRow = iterateThruLevels - (lowRange + offset) + 1;
-                int currCol = iterateThruChal + 1;
+                int currRow = iterateThruLevels - offset;
+                int currCol = iterateThruChal;
 
                 int index = (currRow * 4) + currCol;
 
-                if (challenge[iterateThruChal] & (1u << iterateThruLevels))
+                if (bitstring[iterateThruChal] & (1 << iterateThruLevels))
                     _checkboxes[index].SetState(true);
             }
         }
     }
 
-    u32     LevelStatusEditor::getBitstringAddress(int bitstringID, int playMode) 
+    u32     LevelStatusEditor::getBitstringAddress(int bitstringID, int playMode)
     {
         return bitstringLocations[playMode][bitstringID];
     }
@@ -122,37 +138,34 @@ namespace CTRPluginFramework
 
             Renderer::EndFrame();
             _Update();
-
-            // 16 total boxes, loop through columns->rows
-            for (int challengeCol = 0; challengeCol < 4; ++challengeCol) 
-            {
-                for (int levelRow = 0; levelRow < 4; ++levelRow) 
-                {
-                    int index = challengeCol * 4 + levelRow;
-                    if (_checkboxes[index].GetState()) 
-                    {
-                        int bit = getBit(index, levelRow);
-                        challenge[challengeCol] |= (1 << bit);
-                    }
-                    writeUpdates(challengeCol);
-                }
-            }
         }
     }
 
-    void    LevelStatusEditor::writeUpdates(int bitstringID) 
+    // bitwise operation requires _playMode to be 1-indexed -> saved to new var editQueue:
+    // editQueue = 1 -> solo edits only (1&1 = true)
+    // editQueue = 2 -> multi edits only (2&2 = true)
+    // editQueue = 3 -> both edited (3&1 = true and 3&2 = true)
+    void    LevelStatusEditor::writeUpdates(int bitstringID)
     {
-        if (_playMode == 0)         // solo
-            Process::Write64(getBitstringAddress(bitstringID, 0), challenge[bitstringID]);
-        else if (_playMode == 1)    // multi
-            Process::Write64(getBitstringAddress(bitstringID, 1), challenge[bitstringID]);
+        u64 finalMultiProgress, finalSoloProgress;
+        int editQueue = _playMode + 1;
 
-        // general completion
-        Process::Write64(getBitstringAddress(bitstringID, 2), challenge[bitstringID]);
+        bitstring[bitstringID] = bitstring[bitstringID] << 1;
+        bitstring[bitstringID] |= backupFirstBitSet[bitstringID];
+
+        if (editQueue & 1)
+            Process::Write64(getBitstringAddress(bitstringID, 0), bitstring[bitstringID]);
+
+        if (editQueue & 2)
+            Process::Write64(getBitstringAddress(bitstringID, 1), bitstring[bitstringID]);
+
+        // regardless of edits above, update the *general* completion board (solo and multi progress combined via AND)
+        Process::Read64(getBitstringAddress(bitstringID, 0), finalSoloProgress);
+        Process::Read64(getBitstringAddress(bitstringID, 1), finalMultiProgress);
+        Process::Write64(getBitstringAddress(bitstringID, _playMode), finalSoloProgress & finalMultiProgress);
     }
 
-// remove index param'
-    int     LevelStatusEditor::getBit(int index, int rowNum) 
+    int     LevelStatusEditor::getBit(int rowNum)
     {
         return (_world * 4) + rowNum;
     }
@@ -166,7 +179,7 @@ namespace CTRPluginFramework
         Renderer::DrawSysStringReturn((const u8*)_message.c_str(), 40, posY, 335, Preferences::Settings.MainTextColor);
     }
 
-    const StringVector labels = 
+    const StringVector labels =
     {
         "NC",
         "C1",
@@ -195,7 +208,7 @@ namespace CTRPluginFramework
         Renderer::DrawSysString(labels[2].c_str(), 238, yPositions[2], 290, Preferences::Settings.MainTextColor);
         Renderer::DrawSysString(labels[3].c_str(), 268, yPositions[3], 290, Preferences::Settings.MainTextColor);
 
-        for (int i = 0, lvlY = 100; i < 4; ++i, lvlY += 15) 
+        for (int i = 0, lvlY = 100; i < 4; ++i, lvlY += 15)
             Renderer::DrawSysString(_levelNames[i].c_str(), 38, lvlY, 290, Preferences::Settings.MainTextColor);
     }
 
