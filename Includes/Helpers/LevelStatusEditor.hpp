@@ -16,8 +16,8 @@ namespace CTRPluginFramework
 
         void    initBitstringAddresses(void);
         void    operator()(void);
-        void    setCheckboxes(int world);
-        int     getBit(int index, int rowNum);
+        void    setCheckboxes(void);
+        int     getBit(int rowNum);
         void    copyBitstrings(int playMode);
         u32     getBitstringAddress(int bitstringID, int playMode);
         void    writeUpdates(int bitstringID);

@@ -408,7 +408,7 @@ namespace CTRPluginFramework {
         *save += new MenuEntry("Set Main Voice", nullptr, Save::mainVoice);
         *save += new MenuEntry("Set Hero Point count", nullptr, Save::heroPointCountSet);
         *save += new MenuEntry("Set Coliseum Win count", nullptr, Save::coliseumWinCountSet);
-        //*save += new MenuEntry("Edit Level Completion (BROKEN)", nullptr, Save::selLevelCompletion);
+        *save += new MenuEntry("Edit Level Completion", nullptr, Save::selLevelCompletion);
 
         MenuFolder* merchant = new MenuFolder("Street Merchant Codes");
             merchantA = new MenuEntry("Set 1st material slot", nullptr, Save::selMerchantSlot);
