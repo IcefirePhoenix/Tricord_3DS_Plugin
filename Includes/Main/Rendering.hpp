@@ -1,15 +1,17 @@
 #ifndef RENDERING_HPP
 #define RENDERING_HPP
 
-#include "CTRPluginFramework.hpp"
-#include "Helpers.hpp"
+#include "CTRPF.hpp"
 #include "Cheats.hpp"
+#include "Helpers.hpp"
 #include "Unicode.h"
 
-namespace CTRPluginFramework {
+namespace CTRPluginFramework
+{
     void hideHUD(void);
 
-    class Rendering {
+    class Rendering
+    {
     public:
         static void triggerHideHUD(MenuEntry* entry);
         static void disableFog(MenuEntry* entry);
@@ -23,6 +25,8 @@ namespace CTRPluginFramework {
         static void forceAura(MenuEntry* entry);
         static void forceBlueSwordParticles(MenuEntry* entry);
         static void disablePlayerLight(MenuEntry* entry);
+        static void editFaceExpr(MenuEntry *entry);
+        static void forceCustomFaceExpr(MenuEntry *entry);
     };
 }
 #endif
