@@ -1,8 +1,5 @@
 #include "Helpers.hpp"
 #include "Cheats.hpp"
-#include "Main/AltModes/Freecam.hpp"
-
-#include "CTRPluginFramework/Menu/MenuEntryHotkeys.hpp"
 
 namespace CTRPluginFramework
 {
@@ -28,7 +25,7 @@ namespace CTRPluginFramework
 	float zoomSensitivity = 0.03;
 	float rotationSensitivity = 0.5;
 	// float CS_DP_ShiftDistance;
-	// 
+	//
 
 	u32 cameraXrawValue;
 	u32 cameraZrawValue;
@@ -65,7 +62,7 @@ namespace CTRPluginFramework
 
 		// reset camera
 		if (entry->Hotkeys[2].IsPressed()) {
-			Process::Write8(AddressList::CameraMode.addr, static_cast<int>(GAMEPLAY)); // use GAMEPLAY cam to re-orient camera back to player 
+			Process::Write8(AddressList::CameraMode.addr, static_cast<int>(GAMEPLAY)); // use GAMEPLAY cam to re-orient camera back to player
 
 			// reset rotation and perspective zoom as this doesn't happen automatically
 			Process::WriteFloat(AddressList::PerspectiveZoom.addr, 1.0);
@@ -313,22 +310,22 @@ namespace CTRPluginFramework
 			kbd.Populate(opts);
 
 			switch (kbd.Open()) {
-			case 0:
-				shiftSensitivity = setSensitivity("Shift Sensitivity Value\n\nRecommended values: [0.05 - 0.30]");
-				break;
-			case 1:
-				heightSensitivity = setSensitivity("Height Sensitivity Value\n\nRecommended values : [0.40 - 1.00] ");
-				break;
-			case 2:
-				zoomSensitivity = setSensitivity("Zoom Sensitivity Value\n\nRecommended values: [0.02 - 0.04]");
-				break;
-			case 3:
-				rotationSensitivity = setSensitivity("Rotation Sensitivity Value\n\nRecommended values: [0.10 - 0.50]");
-				break;
-			default:
-				// end loop = exit the menu
-				loop = false;
-				break;
+				case 0:
+					shiftSensitivity = setSensitivity("Shift Sensitivity Value\n\nRecommended values: [0.05 - 0.30]");
+					break;
+				case 1:
+					heightSensitivity = setSensitivity("Height Sensitivity Value\n\nRecommended values : [0.40 - 1.00] ");
+					break;
+				case 2:
+					zoomSensitivity = setSensitivity("Zoom Sensitivity Value\n\nRecommended values: [0.02 - 0.04]");
+					break;
+				case 3:
+					rotationSensitivity = setSensitivity("Rotation Sensitivity Value\n\nRecommended values: [0.10 - 0.50]");
+					break;
+				default:
+					// end loop = exit the menu...
+					loop = false;
+					break;
 			}
 		}
 	}
