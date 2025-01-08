@@ -1,14 +1,8 @@
-#include "AddressList.hpp"
 #include "Helpers.hpp"
-
-#include <CTRPluginFramework.hpp>
 
 namespace CTRPluginFramework
 {
-    std::string GeneralHelpers::enabledSlider = Color::LimeGreen << "\u2282\u25CF";
-    std::string GeneralHelpers::disabledSlider = Color::Red << "\u25CF\u2283";
-
-    int GeneralHelpers::chooseLink(void) 
+    int GeneralHelpers::chooseLink(void)
     {
         Keyboard player("Choose a Link:");
         static const StringVector linkList =
@@ -22,7 +16,7 @@ namespace CTRPluginFramework
         return player.Open();
     }
 
-    int GeneralHelpers::chooseShadowLink(void) 
+    int GeneralHelpers::chooseShadowLink(void)
     {
         Keyboard shadow("Choose a Shadow Link:");
         static const StringVector shadowList =
@@ -36,7 +30,7 @@ namespace CTRPluginFramework
         return shadow.Open();
     }
 
-    int GeneralHelpers::chooseSword(void) 
+    int GeneralHelpers::chooseSword(void)
     {
         Keyboard swordMenu("Choose a sword:");
         swordMenu.Populate(GameData::swordList);
@@ -45,47 +39,47 @@ namespace CTRPluginFramework
     }
 
     // borrowed from OnionFS
-    bool GeneralHelpers::showMsgKbd(std::string text, DialogType digtype) 
+    bool GeneralHelpers::showMsgKbd(std::string text, DialogType digtype)
     {
         Keyboard kbd(text);
         StringVector opts;
 
         switch (digtype)
         {
-        case CTRPluginFramework::DialogType::DialogOk:
-            opts = { "Ok" };
-            break;
-        case CTRPluginFramework::DialogType::DialogOkCancel:
-            opts = { "Ok", "Cancel" };
-            break;
-        case CTRPluginFramework::DialogType::DialogYesNo:
-            opts = { "Yes", "No" };
-            break;
-        default:
-            break;
+            case CTRPluginFramework::DialogType::DialogOk:
+                opts = { "Ok" };
+                break;
+            case CTRPluginFramework::DialogType::DialogOkCancel:
+                opts = { "Ok", "Cancel" };
+                break;
+            case CTRPluginFramework::DialogType::DialogYesNo:
+                opts = { "Yes", "No" };
+                break;
+            default:
+                break;
         }
         kbd.Populate(opts);
         return kbd.Open() == 0;
     }
 
-    bool GeneralHelpers::isNullPointer(u32 address) 
+    bool GeneralHelpers::isNullPointer(u32 address)
     {
         return address == 0x00000000;
     }
 
-    void GeneralHelpers::managePlayerLock(bool isLocked) 
+    void GeneralHelpers::managePlayerLock(bool isLocked)
     {
         int lock = isLocked ? 0x10 : 0x00;
         Process::Write8(AddressList::LockMovement.addr, lock);
     }
 
-    void GeneralHelpers::forceDoppelStatus(bool enable) 
+    void GeneralHelpers::forceDoppelStatus(bool enable)
     {
         u8 status = enable ? 0x1 : 0x0;
         Process::Write8(AddressList::DoppelsEnabled.addr, status);
     }
-    
-    bool GeneralHelpers::isSinglePlayer(void) 
+
+    bool GeneralHelpers::isSinglePlayer(void)
     {
         u8 mode;
         Process::Read8(AddressList::DoppelsEnabled.addr, mode);
@@ -93,7 +87,7 @@ namespace CTRPluginFramework
         return mode == 0x01;
     }
 
-    bool GeneralHelpers::isLoadingScreen(void) 
+    bool GeneralHelpers::isLoadingScreen(void)
     {
         u8 type;
         Process::Read8(AddressList::LoadingStatus.addr, type);
@@ -101,7 +95,7 @@ namespace CTRPluginFramework
         return type == 0x01;
     }
 
-    bool GeneralHelpers::isPauseScreen(void) 
+    bool GeneralHelpers::isPauseScreen(void)
     {
         u8 status;
         Process::Read8(AddressList::PauseStatus.addr, status);
@@ -117,30 +111,49 @@ namespace CTRPluginFramework
         return true;
     }
 
-    std::string GeneralHelpers::getLinkColorAsStr(int ID) 
+    std::string GeneralHelpers::getLinkColorAsStr(int ID)
     {
         std::string color= "";
 
-        switch (ID) {
-        case 0:
-            color = "Green";
-            break;
-        case 1:
-            color = "Blue";
-            break;
-        case 2:
-            color = "Red";
-            break;
+        switch (ID)
+        {
+            case 0:
+                color = "Green";
+                break;
+            case 1:
+                color = "Blue";
+                break;
+            case 2:
+                color = "Red";
+                break;
         }
         return color;
     }
 
-    int GeneralHelpers::getCurrLink(void) 
+    int GeneralHelpers::getCurrLink(void)
     {
         u8 currLink;
         Process::Read8(AddressList::ActiveLink.addr, currLink);
 
         return static_cast<int>(currLink);
+    }
+
+    int GeneralHelpers::getHP(void)
+    {
+        u8 currHP;
+        Process::Read8(AddressList::HealthCurrent.addr, currHP);
+
+        return static_cast<int>(currHP);
+    }
+
+    void GeneralHelpers::setCurrLink(int playerID)
+    {
+        Process::Write8(AddressList::ActiveLink.addr, playerID);
+    }
+
+    void GeneralHelpers::setPlayerCam(int playerID)
+    {
+        Process::Write8(AddressList::CameraLinkFocus.addr, playerID);
     }
 }
 
