@@ -1,6 +1,4 @@
-#include "Helpers/DataHelpers/Address.hpp"
-#include "Helpers/GeneralHelpers.hpp"
-#include "CTRPluginFramework/System/Process.hpp"
+#include "Helpers.hpp"
 
 namespace CTRPluginFramework {
 	u32 _memOffset = 0x0;

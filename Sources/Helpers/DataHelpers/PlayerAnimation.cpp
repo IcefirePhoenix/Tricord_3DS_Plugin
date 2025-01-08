@@ -1,7 +1,5 @@
-#include "AddressList.hpp"
 #include "Helpers.hpp"
 
-#include <CTRPluginFramework.hpp>
 
 namespace CTRPluginFramework {
 
@@ -44,17 +42,17 @@ namespace CTRPluginFramework {
 		PlayerAnimation(0x6A, "Link_CarryAway")
 	};
 
-	u8 PlayerAnimation::getIDFromName(const std::string& name) 
+	u8 PlayerAnimation::getIDFromName(const std::string& name)
 	{
-		for (int iterator = 0; iterator < 30; ++iterator) 
+		for (int iterator = 0; iterator < 30; iterator++)
 		{
-			if (animList[iterator]._animName == name) 
+			if (animList[iterator]._animName == name)
 				return animList[iterator]._animID;
 		}
 		return -1; // wasn't found
 	}
 
-	u8 PlayerAnimation::getAnim(int playerID, bool getPrevAnim) 
+	u8 PlayerAnimation::getAnim(int playerID, bool getPrevAnim)
 	{
 		u8 anim;
 		u32 addressOffset = playerID * GameData::playerAddressOffset;

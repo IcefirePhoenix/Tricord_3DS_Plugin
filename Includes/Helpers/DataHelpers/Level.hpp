@@ -1,10 +1,12 @@
 #ifndef LEVEL_HPP
 #define LEVEL_HPP
 
-#include "CTRPluginFramework.hpp"
+#include "CTRPF.hpp"
 
-namespace CTRPluginFramework {
-	class Level {
+
+    namespace CTRPluginFramework
+{
+    class Level {
 	public:
 		Level(u8 ID, std::string externalName, std::string internalName, bool dummyStatus);
 

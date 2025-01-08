@@ -1,11 +1,11 @@
 #ifndef HOLDKEY_HPP
 #define HOLDKEY_HPP
 
-#include "CTRPluginFramework.hpp"
+#include "CTRPF.hpp"
 
 namespace CTRPluginFramework
 {
-    class   HoldKey
+    class HoldKey
     {
     public:
         /**

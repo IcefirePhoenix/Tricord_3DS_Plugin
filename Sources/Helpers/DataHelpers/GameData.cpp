@@ -1,7 +1,4 @@
-#include "AddressList.hpp"
 #include "Helpers.hpp"
-
-#include <CTRPluginFramework.hpp>
 
 namespace CTRPluginFramework {
     const StringVector GameData::universalCostumeList =
@@ -139,7 +136,7 @@ namespace CTRPluginFramework {
     const int GameData::generalPlayerIDs[3] = { 0, 1, 2 };
     const u32 GameData::playerAddressOffset = 0x10000;
 
-    int GameData::getPlayerIDFromColor(std::string color) 
+    int GameData::getPlayerIDFromColor(std::string color)
     {
         if (color == "Green")
             return 0;
@@ -147,11 +144,13 @@ namespace CTRPluginFramework {
             return 1;
         else if (color == "Red")
             return 2;
+        else if (color == "All")
+            return 3;
         else
             return -1;
     }
 
-    std::string GameData::getSwordNameFromID(int ID) 
+    std::string GameData::getSwordNameFromID(int ID)
     {
         if (ID < 0xD)
             return GameData::swordList[ID];
@@ -159,7 +158,7 @@ namespace CTRPluginFramework {
             return "N/A";
     }
 
-    std::string GameData::getCostumeNameFromID(int ID) 
+    std::string GameData::getCostumeNameFromID(int ID)
     {
         if (ID < 0x26)
             return GameData::universalCostumeList[ID];
@@ -167,18 +166,20 @@ namespace CTRPluginFramework {
             return GameData::customCostumeList[ID - 0x26];
         else
             return "N/A";
-    }    
-
-    std::string GameData::getVoiceAsStr(u8 ID) 
-    {
-        return GameData::voiceList[ID];
     }
 
-    u32 GameData::getLobbyBallDataAddress(void)
+    int GameData::getCostumeIDFromName(std::string costumeName)
     {
-        u32 address;
-        Process::Read32(AddressList::LobbyBallPointer.addr, address);
+        for (int iterator = 0; iterator < 38; iterator++)
+        {
+            if (universalCostumeList[iterator] == costumeName)
+                return iterator;
+        }
+        return -1; // wasn't found
+    }
 
-        return (address);
+    std::string GameData::getVoiceAsStr(u8 ID)
+    {
+        return GameData::voiceList[ID];
     }
 }

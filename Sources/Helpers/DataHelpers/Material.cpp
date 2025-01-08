@@ -1,7 +1,4 @@
 #include "Helpers.hpp"
-#include "AddressList.hpp"
-
-#include <CTRPluginFramework.hpp>
 
 namespace CTRPluginFramework {
     const StringVector Material::otherMats = {
@@ -118,53 +115,55 @@ namespace CTRPluginFramework {
         int materialOffset = 0, chosenMaterial = -1;
         Keyboard chooseMaterial("Select a material:");
 
-        switch (selectedWorld) {
-        case 0:
-            chooseMaterial.Populate(otherMats);
-            materialOffset = 0;
-            break;
+        switch (selectedWorld)
+        {
+            case 0:
+                chooseMaterial.Populate(otherMats);
+                materialOffset = 0;
+                break;
 
-        case 1:
-            chooseMaterial.Populate(woodlandMats);
-            materialOffset = 6;
-            break;
+            case 1:
+                chooseMaterial.Populate(woodlandMats);
+                materialOffset = 6;
+                break;
 
-        case 2:
-            chooseMaterial.Populate(riversideMats);
-            materialOffset = 14;
-            break;
+            case 2:
+                chooseMaterial.Populate(riversideMats);
+                materialOffset = 14;
+                break;
 
-        case 3:
-            chooseMaterial.Populate(volcanoMats);
-            materialOffset = 22;
-            break;
+            case 3:
+                chooseMaterial.Populate(volcanoMats);
+                materialOffset = 22;
+                break;
 
-        case 4:
-            chooseMaterial.Populate(iceMats);
-            materialOffset = 30;
-            break;
+            case 4:
+                chooseMaterial.Populate(iceMats);
+                materialOffset = 30;
+                break;
 
-        case 5:
-            chooseMaterial.Populate(fortressMats);
-            materialOffset = 38;
-            break;
+            case 5:
+                chooseMaterial.Populate(fortressMats);
+                materialOffset = 38;
+                break;
 
-        case 6:
-            chooseMaterial.Populate(dunesMats);
-            materialOffset = 46;
-            break;
+            case 6:
+                chooseMaterial.Populate(dunesMats);
+                materialOffset = 46;
+                break;
 
-        case 7:
-            chooseMaterial.Populate(ruinsMats);
-            materialOffset = 54;
-            break;
+            case 7:
+                chooseMaterial.Populate(ruinsMats);
+                materialOffset = 54;
+                break;
 
-        case 8:
-            chooseMaterial.Populate(skyMats);
-            materialOffset = 62;
-            break;
+            case 8:
+                chooseMaterial.Populate(skyMats);
+                materialOffset = 62;
+                break;
         }
         chosenMaterial = chooseMaterial.Open();
+
         if (chosenMaterial >= 0)
             chosenMaterial += (materialOffset + 20); // 0-23 are not materials
 
@@ -176,24 +175,24 @@ namespace CTRPluginFramework {
         int finalMatID = mat - 20;
 
         switch (world) {
-        case 0:
-            return Material::otherMats[finalMatID];
-        case 1:
-            return Material::woodlandMats[finalMatID - 6];
-        case 2:
-            return Material::riversideMats[finalMatID - 14];
-        case 3:
-            return Material::volcanoMats[finalMatID - 22];
-        case 4:
-            return Material::iceMats[finalMatID - 30];
-        case 5:
-            return Material::fortressMats[finalMatID - 38];
-        case 6:
-            return Material::dunesMats[finalMatID - 46];
-        case 7:
-            return Material::ruinsMats[finalMatID - 54];
-        case 8:
-            return Material::skyMats[finalMatID - 62];
+            case 0:
+                return Material::otherMats[finalMatID];
+            case 1:
+                return Material::woodlandMats[finalMatID - 6];
+            case 2:
+                return Material::riversideMats[finalMatID - 14];
+            case 3:
+                return Material::volcanoMats[finalMatID - 22];
+            case 4:
+                return Material::iceMats[finalMatID - 30];
+            case 5:
+                return Material::fortressMats[finalMatID - 38];
+            case 6:
+                return Material::dunesMats[finalMatID - 46];
+            case 7:
+                return Material::ruinsMats[finalMatID - 54];
+            case 8:
+                return Material::skyMats[finalMatID - 62];
         }
         return "";
     }

@@ -1,10 +1,10 @@
-#include "Helpers/KeySequence.hpp"
+#include "Helpers/BuiltIn/KeySequence.hpp"
 
 namespace CTRPluginFramework
 {
-    KeySequence::KeySequence(KeyVector sequence) : 
+    KeySequence::KeySequence(KeyVector sequence) :
     _sequence(sequence), _indexInSequence(0)
-    {            
+    {
     }
 
     bool  KeySequence::operator()(void)

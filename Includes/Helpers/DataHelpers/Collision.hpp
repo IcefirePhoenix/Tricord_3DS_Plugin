@@ -1,7 +1,7 @@
 #ifndef COLLISION_HPP
 #define COLLISION_HPP
 
-#include "CTRPluginFramework.hpp"
+#include "CTRPF.hpp"
 
 namespace CTRPluginFramework {
 	class Collision {
@@ -10,9 +10,9 @@ namespace CTRPluginFramework {
 
         static const Collision colList[];
 
-        static u16 colIDFromName(std::string name); 
-        static u16 getCurrCol(int player); 
-        static void setCurrCol(int player, u16 targetCol); 
+        static u16 colIDFromName(std::string name);
+        static u16 getCurrCol(int player);
+        static void setCurrCol(int player, u16 targetCol);
 
 	private:
 		u16				_ID;

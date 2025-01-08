@@ -1,4 +1,4 @@
-#include "Helpers/OSDManager.hpp"
+#include "Helpers/BuiltIn/OSDManager.hpp"
 
 namespace CTRPluginFramework
 {
@@ -56,7 +56,7 @@ namespace CTRPluginFramework
 
     OSDMI::OSDMI(OSDMITuple &tuple) : data(tuple)
     {
-       
+
     }
 
     _OSDManager::~_OSDManager(void)
@@ -106,7 +106,7 @@ namespace CTRPluginFramework
     bool    _OSDManager::OSDCallback(const Screen &screen)
     {
         _OSDManager &manager = OSDManager;
-        
+
         manager.Lock();
 
         // If there's no item to draw
@@ -130,7 +130,7 @@ namespace CTRPluginFramework
 
             // If wanted screen correspond to the screen received, draw the item
             if (std::get<0>(t) == screen.IsTop)
-            {                
+            {
                 screen.Draw(str, std::get<2>(t), std::get<3>(t));
                 fbEdited = true;
             }
