@@ -1,6 +1,5 @@
 #include "Helpers.hpp"
 #include "Cheats.hpp"
-#include "Main/AltModes/Chaos.hpp"
 
 namespace CTRPluginFramework
 {
@@ -18,7 +17,7 @@ namespace CTRPluginFramework
 	}
 
 
-	// any options chosen here should be added to a list whose values are 
+	// any options chosen here should be added to a list whose values are
 	// randomly selected from when a stage is started
 	void selOptions(MenuEntry* entry)
 	{
@@ -31,21 +30,21 @@ namespace CTRPluginFramework
 
 	}
 
-	// set the effect either by calling the effect function in the Chaos class or calling a 
+	// set the effect either by calling the effect function in the Chaos class or calling a
 	// function from another class
 	// effects should be grouped up for organization and readability purposes
 	void setEffect(int effectID)
 	{
-		// this means some effect IDs will be moved around 
+		// this means some effect IDs will be moved around
 		// shouldn't matter since this doesn't affect the percent chances
 		// group 1:
 		// group 2:
-	
+
 	}
 
 	void getAllActiveEffects(void)
 	{
-		
+
 	}
 
 }
