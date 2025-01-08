@@ -503,14 +503,21 @@ namespace CTRPluginFramework
 
             for (char c : input)
             {
-                size--;
-                if (!size)
+                if (size == 0)
                 {
-                    *p = 0;
                     break;
                 }
-                *p++ = c;
+                *p++ = static_cast<u8>(c);
+                size--;
             }
+
+            // Zero out remaining buffer space if any
+            while (size > 0)
+            {
+                *p++ = 0;
+                size--;
+            }
+
             return (true);
         }
         else if (outFmt == StringFormat::Utf16)
