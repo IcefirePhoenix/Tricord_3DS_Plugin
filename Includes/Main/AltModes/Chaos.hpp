@@ -1,13 +1,15 @@
 #ifndef CHAOS_HPP
 #define CHAOS_HPP
 
-#include "CTRPluginFramework.hpp"
-#include "Helpers.hpp"
+#include "CTRPF.hpp"
 #include "Cheats.hpp"
+#include "Helpers.hpp"
 #include "Unicode.h"
 
-namespace CTRPluginFramework {
-    class Chaos {
+namespace CTRPluginFramework
+{
+    class Chaos
+    {
     public:
 
     };
