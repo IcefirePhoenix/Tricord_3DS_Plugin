@@ -76,7 +76,7 @@ namespace CTRPluginFramework
             AddressList::EmoteHGraphic.addr
         };
 
-        for (int iterator = 0; iterator < 8; ++iterator)
+        for (int iterator = 0; iterator < 8; iterator++)
         {
             Emotes::graphicsAddresses[iterator] = temp[iterator].addr;
         }
