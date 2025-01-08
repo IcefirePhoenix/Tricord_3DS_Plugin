@@ -1,12 +1,13 @@
 #ifndef GAMEPLAY_HPP
 #define GAMEPLAY_HPP
 
-#include "CTRPluginFramework.hpp"
-#include "Helpers.hpp"
+#include "CTRPF.hpp"
 #include "Cheats.hpp"
+#include "Helpers.hpp"
 #include "Unicode.h"
 
-namespace CTRPluginFramework {
+namespace CTRPluginFramework
+{
     extern MenuEntry* healthMaxAuto;
 
     extern MenuEntry* physicsEditAutoG;
@@ -15,6 +16,8 @@ namespace CTRPluginFramework {
     extern MenuEntry* physicsSelG;
     extern MenuEntry* physicsSelB;
     extern MenuEntry* physicsSelR;
+    extern MenuEntry* ascentSpeedSet;
+    extern MenuEntry* descentSpeedSet;
 
     extern MenuEntry* moonJumpEntry;
     extern MenuEntry* flightEntry;
@@ -27,6 +30,7 @@ namespace CTRPluginFramework {
 
     std::string physicsSelectMenu(int Link);
     void writePhysicsChanges(int player);
+    float setHeightAdjustmentSpeed(float originalSpeed);
 
     void manageEnemy(bool keepAlive);
     void startWarp(void);
@@ -37,7 +41,11 @@ namespace CTRPluginFramework {
     int warpSelStage(StringVector stageNames);
     int warpSelChallenge(void);
 
-    class Gameplay {
+    void promptHP_Refill(int maxHP);
+    void preventOverflowHP(int maxHP);
+
+    class Gameplay
+    {
     public:
         static void infEnergy(MenuEntry* entry);
         static void maxEnergySet(MenuEntry* entry);
@@ -57,12 +65,10 @@ namespace CTRPluginFramework {
         static void changePhysics(MenuEntry* entry);
         static void writePhysicsChanges(MenuEntry* entry);
 
-        static void moonJump(MenuEntry* entry);
-        static void flight(MenuEntry* entry);
-        static void hover(MenuEntry* entry);
-        static void adjustAscentSpeed(MenuEntry* entry);
-        static void adjustDescentSpeed(MenuEntry* entry);
-        static void adjustLateralSpeed(MenuEntry* entry);
+        static void moonJumpAndFlight(MenuEntry *entry);
+        static void forceHover(MenuEntry* entry);
+        static void selAscentDescentEdit(MenuEntry *entry);
+        static void adjustLateralSpeed(MenuEntry *entry);
 
         static void infTime(MenuEntry* entry);
 
