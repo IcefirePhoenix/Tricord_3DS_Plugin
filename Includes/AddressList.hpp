@@ -1,7 +1,7 @@
 #ifndef ADDRESSLIST_HPP
 #define ADDRESSLIST_HPP
 
-#include "CTRPluginFramework.hpp"
+#include "CTRPF.hpp"
 #include "Helpers/DataHelpers/Address.hpp"
 
 namespace CTRPluginFramework {
@@ -121,6 +121,11 @@ namespace CTRPluginFramework {
 		static Address		SwordBeamHealthCheckB;
 		static Address		SwordType;
 
+		// Console
+		static Address 		ABXY;
+		static Address 		StartSelLRTouch;
+		static Address 		DPadCPad;
+
 		// Emotes
 		static Address		GameplayEmotes;
 		static Address		LobbyEmotes;
@@ -181,7 +186,7 @@ namespace CTRPluginFramework {
 		static Address		WaterRodStrafe;
 
 		// Miscellaneous
-		static Address		CameraOnX;
+		static Address		CameraXButtonToggle;
 		static Address		CameraShutter;
 		static Address		CheckPhotoExist;
 		static Address		DisplayTopPhoto;
@@ -428,6 +433,16 @@ namespace CTRPluginFramework {
 		static Address		Link_EdWaitTotem2;
 		static Address		Link_WaitPinch;
 
+		// facial expression data
+		static Address FileTableRewrite;
+		static Address FileTableStart;
+		static Address CustomInfoHeaders;
+		static Address		CustomFacePointerList;
+		static Address		EditFaceStatusBit;
+		static Address 		EyeTitleReference;
+		static Address 		HytopiaPMAStart;
+		static Address 		IndivPMAStart;
+		static Address 		CustomAnimData;
 	};
 }
 

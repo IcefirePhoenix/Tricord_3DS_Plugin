@@ -117,6 +117,9 @@ namespace CTRPluginFramework {
 		SwordType 					= Address(0x328419EC, 0x32841A6C, 0x3288C42C);
 
 		/* Console */
+		ABXY 						= Address(0x31A0110C, 0x0, 0x0);
+		StartSelLRTouch 			= Address(0x31A0110D, 0x0, 0x0);
+		DPadCPad 					= Address(0x31A0110E, 0x0, 0x0);
 
 		/* Emotes */
 		GameplayEmotes				= Address(0x006B6E98, 0x006B6E98, 0x006B6E98);
@@ -178,7 +181,7 @@ namespace CTRPluginFramework {
 		WaterRodStrafe              = Address(0x003C59C0, 0x003C5D68, 0x003C6944);
 
 		/* Miscellaneous */
-		CameraOnX                   = Address(0x32D92920, 0x32D929A0, 0x32DE5220);
+		CameraXButtonToggle         = Address(0x32D92920, 0x32D929A0, 0x32DE5220);
 		CameraShutter               = Address(0x32D92E9C, 0x32D92F1C, 0x32DE579C);
 		CheckPhotoExist             = Address(0x31B2FE3D, 0x31B2FEBD, 0x31B2FBBD);
 		DisplayTopPhoto             = Address(0x31B2FE21, 0x31B2FEA1, 0x31B2FBA1);
@@ -256,7 +259,7 @@ namespace CTRPluginFramework {
 		HeroPointCount 				= Address(0x31A0611C, 0x31A06174, 0x31A05E68);
 		MainVoice 					= Address(0x31A06118, 0x31A06170, 0x31A05E64);
 		ResetMerchantStock 			= Address(0x31A077AE, 0x31A07806, 0x31A074FA);
-		
+
 		// SFX and BGM
 		BGMType 					= Address(0x005FD3C0, 0x005FD7F0, 0x005FE358);
 		BGMVolume 					= Address(0x00236444, 0x002364D4, 0x00237170);
@@ -426,6 +429,16 @@ namespace CTRPluginFramework {
 		Link_EdWaitTotem2           = Address(0x00731A40, 0x00731A44, 0x00731A38);
 		Link_WaitPinch              = Address(0x00731A58, 0x00731A5C, 0x00731A50);
 
+		// facial expression data
+		FileTableRewrite            = Address(0x006A9600, 0x0, 0x0);
+		FileTableStart              = Address(0x32DD7434, 0x0, 0x0);
+		CustomInfoHeaders           = Address(0x006A9350, 0x0, 0x0);
+		CustomAnimData              = Address(0x006A922C, 0x0, 0x0);
+		CustomFacePointerList       = Address(0x006A91DC, 0x0, 0x0);
+		EditFaceStatusBit           = Address(0x006A91D8, 0x0, 0x0);
+		EyeTitleReference           = Address(0x3033D761, 0x0, 0x0);
+		HytopiaPMAStart             = Address(0x302123FC, 0x0, 0x0);
+		IndivPMAStart               = Address(0x32C81A78, 0x0, 0x0);
 	}
 
 	// Camera
@@ -540,6 +553,11 @@ namespace CTRPluginFramework {
 	Address		AddressList::SwordBeamHealthCheckB;
 	Address		AddressList::SwordType;
 
+	// Console
+	Address		AddressList::ABXY;
+	Address		AddressList::StartSelLRTouch;
+	Address		AddressList::DPadCPad;
+
 	// Emotes
 	Address		AddressList::GameplayEmotes;
 	Address		AddressList::LobbyEmotes;
@@ -600,7 +618,7 @@ namespace CTRPluginFramework {
 	Address		AddressList::WaterRodStrafe;
 
 	// Miscellaneous
-	Address		AddressList::CameraOnX;
+	Address		AddressList::CameraXButtonToggle;
 	Address		AddressList::CameraShutter;
 	Address		AddressList::CheckPhotoExist;
 	Address		AddressList::DisplayTopPhoto;
@@ -846,4 +864,15 @@ namespace CTRPluginFramework {
 	Address		AddressList::Link_EdYorokeTotem2;
 	Address		AddressList::Link_EdWaitTotem2;
 	Address		AddressList::Link_WaitPinch;
+
+	// facial expression data
+	Address 	AddressList::CustomInfoHeaders;
+	Address		AddressList::CustomFacePointerList;
+	Address		AddressList::EditFaceStatusBit;
+	Address 	AddressList::EyeTitleReference;
+	Address 	AddressList::HytopiaPMAStart;
+	Address 	AddressList::FileTableStart;
+	Address 	AddressList::FileTableRewrite;
+	Address 	AddressList::IndivPMAStart;
+	Address 	AddressList::CustomAnimData;
 }
