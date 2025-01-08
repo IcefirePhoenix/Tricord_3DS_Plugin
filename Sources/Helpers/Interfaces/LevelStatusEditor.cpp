@@ -1,18 +1,4 @@
 #include "Helpers.hpp"
-#include "Helpers/LevelStatusEditor.hpp"
-#include "AddressList.hpp"
-
-#include "CTRPluginFrameworkImpl/Graphics/Icon.hpp"
-#include "CTRPluginFrameworkImpl/Graphics/Renderer.hpp"
-#include "CTRPluginFrameworkImpl/Graphics/Window.hpp"
-#include "CTRPluginFramework/System/Controller.hpp"
-#include "Unicode.h"
-#include "CTRPluginFramework/System/System.hpp"
-#include "CTRPluginFrameworkImpl/System/SystemImpl.hpp"
-#include "CTRPluginFrameworkImpl/Preferences.hpp"
-#include "CTRPluginFramework/Sound.hpp"
-#include <bitset>
-
 
 namespace CTRPluginFramework
 {
@@ -26,10 +12,10 @@ namespace CTRPluginFramework
         _message(message), _levelNames(levelNames), _world(world), _playMode(playMode)
     {
         int posY = 100;
-        for (int rowNum = 0; rowNum < 4; ++rowNum)
+        for (int rowNum = 0; rowNum < 4; rowNum++)
         {
             int posX = 180;
-            for (int columnNum = 0; columnNum < 4; ++columnNum)
+            for (int columnNum = 0; columnNum < 4; columnNum++)
             {
                 Button newButton(Button::Icon | Button::Toggle, IntRect(posX, posY, 20, 20), Icon::DrawCheckBox);
                 _checkboxes.push_back(newButton);
@@ -45,7 +31,7 @@ namespace CTRPluginFramework
 
     LevelStatusEditor::~LevelStatusEditor()
     {
-        for (int index = 0; index < 16; ++index)
+        for (int index = 0; index < 16; index++)
         {
             int rowNum = index / 4;
             int columnNum = index % 4;
@@ -59,7 +45,7 @@ namespace CTRPluginFramework
 
         // addresses should only be updated one time -> once the menu is closed
         // attempting to edit memory in real-time while the menu is still open -> multiple, concurrent edits -> corrupted edits
-        for (int bitstringIterator = 0; bitstringIterator < 4; ++bitstringIterator)
+        for (int bitstringIterator = 0; bitstringIterator < 4; bitstringIterator++)
         {
             writeUpdates(bitstringIterator);
         }
@@ -74,16 +60,16 @@ namespace CTRPluginFramework
             {AddressList::NormalNCCompletion, AddressList::NormalC1Completion, AddressList::NormalC2Completion, AddressList::NormalC3Completion}
         };
 
-        for (int modeIndex = 0; modeIndex < 3; ++modeIndex)
+        for (int modeIndex = 0; modeIndex < 3; modeIndex++)
         {
-            for (int levelIndex = 0; levelIndex < 4; ++levelIndex)
+            for (int levelIndex = 0; levelIndex < 4; levelIndex++)
                 bitstringLocations[modeIndex][levelIndex] = bitstringArray[modeIndex][levelIndex].addr;
         }
     }
 
     void LevelStatusEditor::copyBitstrings(int modeIndex)
     {
-        for (int bitstringIterator = 0; bitstringIterator < 4; ++bitstringIterator)
+        for (int bitstringIterator = 0; bitstringIterator < 4; bitstringIterator++)
         {
             Process::Read64(bitstringLocations[modeIndex][bitstringIterator], bitstring[bitstringIterator]);
 
@@ -102,9 +88,9 @@ namespace CTRPluginFramework
         copyBitstrings(_playMode);
 
         // reflect current bitstring statuses onto checkboxes during init
-        for (int iterateThruLevels = minimumLevelIndex + offset; iterateThruLevels < maxLevelIndex + offset; ++iterateThruLevels)
+        for (int iterateThruLevels = minimumLevelIndex + offset; iterateThruLevels < maxLevelIndex + offset; iterateThruLevels++)
         {
-            for (int iterateThruChal = 0; iterateThruChal < 4; ++iterateThruChal)
+            for (int iterateThruChal = 0; iterateThruChal < 4; iterateThruChal++)
             {
                 int currRow = iterateThruLevels - offset;
                 int currCol = iterateThruChal;
@@ -208,7 +194,7 @@ namespace CTRPluginFramework
         Renderer::DrawSysString(labels[2].c_str(), 238, yPositions[2], 290, Preferences::Settings.MainTextColor);
         Renderer::DrawSysString(labels[3].c_str(), 268, yPositions[3], 290, Preferences::Settings.MainTextColor);
 
-        for (int i = 0, lvlY = 100; i < 4; ++i, lvlY += 15)
+        for (int i = 0, lvlY = 100; i < 4; i++, lvlY += 15)
             Renderer::DrawSysString(_levelNames[i].c_str(), 38, lvlY, 290, Preferences::Settings.MainTextColor);
     }
 
@@ -225,6 +211,8 @@ namespace CTRPluginFramework
 
     void    LevelStatusEditor::_EditDoTCompletion(void)
     {
-        // review later...
+        // TODO:
+        // no challenge only = bitstring[0]
+        // design new menu with 8 checkboxes only
     }
 }
