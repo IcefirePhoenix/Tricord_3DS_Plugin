@@ -1,12 +1,11 @@
 #ifndef FREECAM_HPP
 #define FREECAM_HPP
 
-#include "CTRPluginFramework.hpp"
 #include "Helpers.hpp"
 #include "Cheats.hpp"
-#include "Unicode.h"
 
-namespace CTRPluginFramework {
+namespace CTRPluginFramework
+{
     extern MenuEntry* menuFreecam;
     extern MenuEntry* editFreecamControls;
     extern MenuEntry* editFreecamSen;
@@ -30,7 +29,8 @@ namespace CTRPluginFramework {
 
     float setSensitivity(std::string message);
 
-    class Freecam {
+    class Freecam
+    {
     public:
         static void useFreecam(MenuEntry* entry);
         static void editHotkeys(MenuEntry* entry);
