@@ -14,15 +14,22 @@ PLGINFO 	:= 	CTRPluginFramework.plgInfo
 
 BUILD		:= 	Build
 INCLUDES	:= 	Includes \
+				Includes/General \
+				Includes/Helpers \
+				Includes/Helpers/BuiltIn \
+				Includes/Helpers/DataHelpers \
+				Includes/Helpers/Interfaces \
 				Includes/Main \
 				Includes/Main/AltModes \
-				Includes/Helpers \
-				Includes/Helpers/DataHelpers
+
 SOURCES 	:= 	Sources \
 				Sources/Main \
-				Sources/Main/AltModes \
+				$(wildcard Sources/Main/*) \
+				$(wildcard Sources/Main/*/*) \
 				Sources/Helpers \
-				Sources/Helpers/DataHelpers
+				Sources/Helpers/BuiltIn \
+				Sources/Helpers/DataHelpers \
+				Sources/Helpers/Interfaces
 
 
 #---------------------------------------------------------------------------------
@@ -80,7 +87,7 @@ $(BUILD):
 
 #---------------------------------------------------------------------------------
 clean:
-	@echo clean ... 
+	@echo clean ...
 	@rm -fr $(BUILD) $(OUTPUT).3gx $(OUTPUT).elf
 
 re: clean all
