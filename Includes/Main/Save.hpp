@@ -1,12 +1,13 @@
 #ifndef SAVE_HPP
 #define SAVE_HPP
 
-#include "CTRPluginFramework.hpp"
-#include "Helpers.hpp"
+#include "CTRPF.hpp"
 #include "Cheats.hpp"
+#include "Helpers.hpp"
 #include "Unicode.h"
 
-namespace CTRPluginFramework {
+namespace CTRPluginFramework
+{
     extern MenuEntry* merchantA;
     extern MenuEntry* merchantB;
     extern MenuEntry* merchantC;
@@ -16,7 +17,8 @@ namespace CTRPluginFramework {
     std::string openMerchantMatMenu(u8 slotNumber);
     int selPlayMode(void);
 
-    class Save {
+    class Save
+    {
     public:
         static void useVoiceless(MenuEntry* entry);
         static void mainVoice(MenuEntry* entry);
