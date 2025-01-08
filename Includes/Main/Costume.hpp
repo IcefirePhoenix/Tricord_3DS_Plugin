@@ -1,12 +1,8 @@
-#ifndef COSTUME_HPP
-#define COSTUME_HPP
+#pragma once
 
-#include "CTRPluginFramework.hpp"
-#include "Helpers.hpp"
-#include "Cheats.hpp"
-#include "Unicode.h"
 
-namespace CTRPluginFramework {
+namespace CTRPluginFramework
+{
     // MenuEntry* resetCostume;
     extern MenuEntry* menuCostumeSlotA;
     extern MenuEntry* menuCostumeSlotB;
@@ -23,17 +19,19 @@ namespace CTRPluginFramework {
     extern MenuEntry* writeCosmeticCostumeID;
 
     int chooseSlotAddNum(void);
+    void selCosmeticCostume(int player);
     void disableCustomCostumeMenuOpt(void);
     void enableCustomCostumeOpt(void);
-    bool isCustomCostumeConflict(int openSlots);
+    void checkCustomCostumeConflict(void);
     void addCustomSlotsToMenu(int openSlots);
     void resetCostumeArray(void);
 
-    class Costume {
+    class Costume
+    {
     public:
         static void manageCatalogSizeAuto(MenuEntry* entry);
         static void openCustomCostumeSlots(MenuEntry* entry);
-        static void writeCostumeSlot(MenuEntry* entry);
+        static void writeToCostumeSlot(MenuEntry* entry);
         static void greatFairyEnable(MenuEntry* entry);
         static void changeLinkCostume(MenuEntry* entry);
         static void selectCostumeID(MenuEntry* entry);
@@ -43,6 +41,9 @@ namespace CTRPluginFramework {
         static void enableCosmeticCostume(MenuEntry* entry);
         static void setCosmeticCostume(MenuEntry* entry);
         static void writeCosmeticCostume(MenuEntry* entry);
+        static void changeSlotMappings(MenuEntry *entry);
+
+        static const int unusedDLC_slotIDs[4];
+        static const StringVector BCH_fileNames;
     };
 }
-#endif
