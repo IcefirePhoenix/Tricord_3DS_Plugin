@@ -23,7 +23,7 @@ namespace CTRPluginFramework
     public:
         PluginMenuTools(std::string &about, HexEditor &hexEditor);
         void UpdateSettings();
-        void InitMenu();
+        void CreateMenu();
         ~PluginMenuTools(){}
 
         // Return true if the Close Button is pressed, else false
