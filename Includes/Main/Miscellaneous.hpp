@@ -1,12 +1,11 @@
 #ifndef MISCELLANEOUS_HPP
 #define MISCELLANEOUS_HPP
 
-#include "CTRPluginFramework.hpp"
 #include "Helpers.hpp"
 #include "Cheats.hpp"
-#include "Unicode.h"
 
-namespace CTRPluginFramework {
+namespace CTRPluginFramework
+{
     extern MenuEntry* autoBeamCooldown;
     extern MenuEntry* instantTextDisplay;
     extern MenuEntry* autoWriteCameraStatus;
@@ -39,7 +38,8 @@ namespace CTRPluginFramework {
         Key::Touchpad
     };
 
-    class Miscellaneous {
+    class Miscellaneous
+    {
     public:
         static void buttonSpammer(MenuEntry* entry);
         static void selSpamInterval(MenuEntry *entry);
