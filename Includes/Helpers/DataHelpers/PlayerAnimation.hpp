@@ -1,13 +1,13 @@
 #ifndef PLAYERANIMATION_HPP
 #define PLAYERANIMATION_HPP
 
-#include "CTRPluginFramework.hpp"
+#include "CTRPF.hpp"
 
 namespace CTRPluginFramework {
 	class PlayerAnimation {
 	public:
 		// may add a field for anim speed
-		// add option for multiple animation names 
+		// add option for multiple animation names
 		PlayerAnimation (u8 ID, std::string name);
 
 		static const PlayerAnimation animList[];

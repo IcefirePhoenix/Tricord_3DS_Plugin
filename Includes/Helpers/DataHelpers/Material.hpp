@@ -1,7 +1,7 @@
 #ifndef MATERIAL_HPP
 #define MATERIAL_HPP
 
-#include "CTRPluginFramework.hpp"
+#include "CTRPF.hpp"
 
 namespace CTRPluginFramework {
     class Material {

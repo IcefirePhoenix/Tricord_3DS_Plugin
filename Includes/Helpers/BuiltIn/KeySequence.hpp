@@ -11,7 +11,7 @@ namespace CTRPluginFramework
 {
     using KeyVector = std::vector<Key>;
 
-    class   KeySequence
+    class KeySequence
     {
     public:
 
@@ -29,7 +29,7 @@ namespace CTRPluginFramework
         KeyVector   _sequence;
         Clock       _timer;
         int         _indexInSequence;
-        
+
     };
 }
 

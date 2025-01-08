@@ -1,7 +1,7 @@
 #ifndef GAMEDATA_HPP
 #define GAMEDATA_HPP
 
-#include "CTRPluginFramework.hpp"
+#include "CTRPF.hpp"
 
 namespace CTRPluginFramework {
 	class GameData {
@@ -21,6 +21,7 @@ namespace CTRPluginFramework {
 		static const u32 playerAddressOffset;
 
 		static int getPlayerIDFromColor(std::string color);
+		static int getCostumeIDFromName(std::string costumeName);
 		static std::string getSwordNameFromID(int ID);
 		static std::string getCostumeNameFromID(int ID);
 		static std::string getVoiceAsStr(u8 ID);

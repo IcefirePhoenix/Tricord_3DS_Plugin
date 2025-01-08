@@ -1,5 +1,5 @@
 #include <CTRPluginFramework/Menu/PluginMenu.hpp>
-#include "Helpers/QuickMenu.hpp"
+#include "Helpers/BuiltIn/QuickMenu.hpp"
 #include <algorithm>
 
 namespace CTRPluginFramework
@@ -100,7 +100,7 @@ namespace CTRPluginFramework
         for (auto *item : _root)
             options.push_back(item->name);
 
-        // Pass it to our keyboard 
+        // Pass it to our keyboard
         keyboard.Populate(options);
         options.clear();
         while (true)
@@ -163,7 +163,7 @@ namespace CTRPluginFramework
                 // Else if we're on root, close quickmenu
                 else
                     break;
-            }           
+            }
         }
     }
 

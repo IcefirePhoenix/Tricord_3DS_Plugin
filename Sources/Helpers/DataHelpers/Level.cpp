@@ -1,7 +1,4 @@
 #include "Helpers.hpp"
-#include "AddressList.hpp"
-
-#include <CTRPluginFramework.hpp>
 
 namespace CTRPluginFramework
 {
@@ -186,30 +183,30 @@ namespace CTRPluginFramework
 
         switch (ID)
         {
-        case 0:
-            return Level::hytopiaLevelList;
-        case 1:
-            return Level::arenaList;
-        case 2:
-            return Level::woodlandLevelList;
-        case 3:
-            return Level::riversideLevelList;
-        case 4:
-            return Level::volcanoLevelList;
-        case 5:
-            return Level::iceLevelList;
-        case 6:
-            return Level::fortressLevelList;
-        case 7:
-            return Level::dunesLevelList;
-        case 8:
-            return Level::ruinsLevelList;
-        case 9:
-            return Level::skyLevelList;
-        case 10:
-            return Level::dotZoneList;
-        default:
-            return StringVector();
+            case 0:
+                return Level::hytopiaLevelList;
+            case 1:
+                return Level::arenaList;
+            case 2:
+                return Level::woodlandLevelList;
+            case 3:
+                return Level::riversideLevelList;
+            case 4:
+                return Level::volcanoLevelList;
+            case 5:
+                return Level::iceLevelList;
+            case 6:
+                return Level::fortressLevelList;
+            case 7:
+                return Level::dunesLevelList;
+            case 8:
+                return Level::ruinsLevelList;
+            case 9:
+                return Level::skyLevelList;
+            case 10:
+                return Level::dotZoneList;
+            default:
+                return StringVector();
         }
     }
 
@@ -242,7 +239,7 @@ namespace CTRPluginFramework
 
 	std::string Level::levelNameFromID(u8 levelID)
 	{
-		for (int iterator = 0; iterator < 45; ++iterator)
+		for (int iterator = 0; iterator < 45; iterator++)
 		{
 			if (levelList[iterator]._levelID == levelID)
 				return levelList[iterator]._extName;
@@ -252,7 +249,7 @@ namespace CTRPluginFramework
 
 	u8 Level::levelIDFromName(std::string name)
 	{
-		for (int iterator = 0; iterator < 45; ++iterator)
+		for (int iterator = 0; iterator < 45; iterator++)
 		{
 			if (levelList[iterator]._extName == name)
 				return levelList[iterator]._levelID;
@@ -339,7 +336,8 @@ namespace CTRPluginFramework
 
 	int Level::selBasicStage(void)
 	{
-		StringVector stages = {
+		StringVector stages =
+        {
 			"Stage 1",
 			"Stage 2",
 			"Stage 3",
@@ -352,9 +350,10 @@ namespace CTRPluginFramework
 
         int result = selStage.Open();
 
+        // stages are not 0-indexed...
         if (result >= 0)
             return result + 1;
         else
-            return result;
+            return result; // failure
     }
 }

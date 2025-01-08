@@ -1,8 +1,8 @@
 #ifndef OSD_MANAGER_HPP
 #define OSD_MANAGER_HPP
 
+#include "CTRPF.hpp"
 #include <3ds.h>
-#include "CTRPluginFramework.hpp"
 
 #include <map>
 #include <string>
@@ -33,8 +33,8 @@ namespace CTRPluginFramework
     public:
         ~_OSDManager(void);
 
-        static _OSDManager  *GetInstance(void);      
-        
+        static _OSDManager  *GetInstance(void);
+
         OSDMI   operator[](const std::string &key);
         void    Remove(const std::string &key);
         void    Lock(void);
