@@ -1,12 +1,13 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "CTRPluginFramework.hpp"
-#include "Helpers.hpp"
+#include "CTRPF.hpp"
 #include "Cheats.hpp"
+#include "Helpers.hpp"
 #include "Unicode.h"
 
-namespace CTRPluginFramework {
+namespace CTRPluginFramework
+{
     extern MenuEntry* jinxEditAuto;
     extern MenuEntry* spawnEditAuto;
     extern MenuEntry* visibleEditAuto;
@@ -17,38 +18,34 @@ namespace CTRPluginFramework {
     extern MenuEntry* swordEditAuto;
     extern MenuEntry* sizeEditAuto;
 
-    enum ColorStatus {
+    enum ColorStatus
+    {
         greenEnabled = 1 << 0, // 0001
         blueEnabled = 1 << 1,  // 0010
         redEnabled = 1 << 2    // 0100
     };
 
-    enum EditType {
+    enum EditType
+    {
         NORMAL,
         SWORD,
         PLAYER_SIZE
     };
 
-    template <typename T>
-    void writePlayerChanges(int editSize, u8& playerStatus, u32 address, T trueValue, T falseValue);
-    void loadPlayerPos(int playerID);
-    void savePlayerPos(int playerID);
-    void resetPositionEditorSaves(bool reset);
     void openToggleMenu(std::string entryTitle, EditType type, u8* playerStatus = nullptr);
     void togglePlayerStatus(u8& playerStatus, ColorStatus color);
     void initEdit(EditType type, int playerID, ColorStatus color, u8& playerStatus);
-
-    bool checkPlayerStatus(u8& playerStatus, int playerID);
-
+    bool checkPlayerStatus(u8 &playerStatus, int playerID);
     float setPlayerSize(void);
 
-    // TODO: subclasses for organization?
+    void loadPlayerPos(int playerID);
+    void savePlayerPos(int playerID);
+    void resetPositionEditorSaves(bool reset);
+    void showPosEditorIntroMsg(bool showMsg);
 
-    class Player {
+    class Player
+    {
     public:
-
-
-
         static void writeSwordChanges(MenuEntry* entry);
         static void writeJinxChanges(MenuEntry* entry);
         static void writeSpawnChanges(MenuEntry* entry);
@@ -71,8 +68,14 @@ namespace CTRPluginFramework {
         static void posEditor(MenuEntry* entry);
 
         static void bypassDoppelDemo(MenuEntry* entry);
-
         static void doppelsToPlayer(MenuEntry* entry);
+
+        template <typename T>
+        static void writePlayerChanges(int editSize, u8 &playerStatus, u32 address, T trueValue, T falseValue);
+
+        static u8 jinxStatus, spawnStatus, visibleStatus, invinciStatus, animStoreStatus, collisionStatus, pvpStatus;
+        static u8 swordType[3];
+        static float PlayerSizes;
     };
 }
 #endif
