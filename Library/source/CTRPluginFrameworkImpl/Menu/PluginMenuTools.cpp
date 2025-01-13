@@ -67,7 +67,7 @@ namespace CTRPluginFramework
         _abouttb("About", _about, IntRect(30, 20, 340, 200)),
         _exit(false)
     {
-        InitMenu();
+        CreateMenu();
     }
 
     static void    MenuHotkeyModifier(void)
@@ -544,7 +544,7 @@ namespace CTRPluginFramework
         }
     }
 
-    void    PluginMenuTools::InitMenu(void)
+    void PluginMenuTools::CreateMenu(void)
     {
         // Main menu
         _mainMenu.Append(new MenuEntryTools("About", [] { g_mode = ABOUT; }, Icon::DrawAbout));
