@@ -58,8 +58,9 @@ namespace CTRPluginFramework
         _about(about),
         _mainMenu("Tools"),
         _miscellaneousMenu("Miscellaneous"),
-        _screenshotMenu("Screenshots"),
-        _settingsMenu("Settings"),
+        _screenshotMenu("Screenshot Options"),
+        _TFH_settingsMenu("TFH Settings"),
+        _tricordSettingsMenu("Tricord Settings"),
         _hexEditorEntry(nullptr),
         _hexEditor(hexEditor),
         _menu(&_mainMenu, nullptr),
@@ -81,10 +82,8 @@ namespace CTRPluginFramework
 
     void    PluginMenuTools::UpdateSettings(void)
     {
-        //using MenuItemIter =  MenuFolderImpl::MenuItemIter;
-
         // Settings
-        auto item = _settingsMenu.begin() + 2;
+        auto item = _tricordSettingsMenu.begin() + 2; // skip first two entries -> NOT checkboxes w/saved status
 
         if (Preferences::IsEnabled(Preferences::HIDToggle)) (*item++)->AsMenuEntryImpl().Enable();
         else (*item++)->AsMenuEntryImpl().Disable();
@@ -92,19 +91,8 @@ namespace CTRPluginFramework
         if (Preferences::IsEnabled(Preferences::AutoSaveCheats)) (*item++)->AsMenuEntryImpl().Enable();
         else (*item++)->AsMenuEntryImpl().Disable();
 
-        // if (Preferences::IsEnabled(Preferences::AutoSaveFavorites)) (*item++)->AsMenuEntryImpl().Enable();
-        // else (*item++)->AsMenuEntryImpl().Disable();
-
-        // if (Preferences::IsEnabled(Preferences::AutoLoadCheats)) (*item++)->AsMenuEntryImpl().Enable(); // unused now
-        // else (*item++)->AsMenuEntryImpl().Disable();
-
-        // if (Preferences::IsEnabled(Preferences::AutoLoadFavorites)) (*item)->AsMenuEntryImpl().Enable();
-        // else (*item)->AsMenuEntryImpl().Disable();
-
-        item = _miscellaneousMenu.begin();
-
         // Misc.
-
+        item = _miscellaneousMenu.begin();
 
         if (Preferences::IsEnabled(Preferences::DisplayLoadedFiles)) (*item++)->AsMenuEntryTools().Enable();
         else (*item++)->AsMenuEntryTools().Disable();
@@ -122,6 +110,15 @@ namespace CTRPluginFramework
         else (*item++)->AsMenuEntryTools().Disable();
 
         if (Preferences::IsEnabled(Preferences::ShowBottomFps)) (*item)->AsMenuEntryTools().Enable();
+        else (*item)->AsMenuEntryTools().Disable();
+
+        // TFH Settings
+        item = _TFH_settingsMenu.begin();
+
+        if (Preferences::IsEnabled(Preferences::PretendoPatch)) (*item)->AsMenuEntryTools().Enable();
+        else (*item)->AsMenuEntryTools().Disable();
+
+        if (Preferences::IsEnabled(Preferences::DisableMoveOffset)) (*item)->AsMenuEntryTools().Enable();
         else (*item)->AsMenuEntryTools().Disable();
     }
 
@@ -555,9 +552,10 @@ namespace CTRPluginFramework
         _hexEditorEntry = new MenuEntryTools("Hex Editor", [] { g_mode = HEXEDITOR; }, Icon::DrawGrid);
         _mainMenu.Append(_hexEditorEntry);
         _mainMenu.Append(new MenuEntryTools("Gateway RAM Dumper", [] { g_mode = GWRAMDUMP; }, Icon::DrawRAM));
-        _mainMenu.Append(new MenuEntryTools("Screenshots", nullptr, Icon::DrawUnsplash, new u32(SCREENSHOT)));
+        _mainMenu.Append(new MenuEntryTools("Screenshot Options", nullptr, Icon::DrawUnsplash, new u32(SCREENSHOT)));
         _mainMenu.Append(new MenuEntryTools("Miscellaneous", nullptr, Icon::DrawMore, new u32(MISCELLANEOUS)));
-        _mainMenu.Append(new MenuEntryTools("Settings", nullptr, Icon::DrawSettings, this));
+        _mainMenu.Append(new MenuEntryTools("TFH Settings", nullptr, Icon::DrawSettings, this));
+        _mainMenu.Append(new MenuEntryTools("Tricord Settings", nullptr, Icon::DrawSettings, this));
         _mainMenu.Append(new MenuEntryTools("Shutdown", Shutdown, Icon::DrawShutdown));
         _mainMenu.Append(new MenuEntryTools("Reboot", Reboot, Icon::DrawRestart));
 
@@ -575,18 +573,17 @@ namespace CTRPluginFramework
         _miscellaneousMenu.Append(new MenuEntryTools("Display bottom screen FPS", [] { Preferences::Toggle(Preferences::ShowBottomFps); }, true, Preferences::IsEnabled(Preferences::ShowBottomFps)));
 
         // Settings menu
-        _settingsMenu.Append(new MenuEntryTools("Change Tricord menu hotkeys", MenuHotkeyModifier, Icon::DrawGameController));
-        _settingsMenu.Append(new MenuEntryTools("Set backlight (Experimental)", EditBacklight, false, false));
-        _settingsMenu.Append(new MenuEntryTools("Disable HID memory allocation", [] { Preferences::Toggle(Preferences::HIDToggle); }, true, Preferences::IsEnabled(Preferences::HIDToggle)));
-        _settingsMenu.Append(new MenuEntryTools("Automatically re-enable currently active cheats on launch", [] { Preferences::Toggle(Preferences::AutoSaveCheats); Preferences::Toggle(Preferences::AutoLoadCheats); }, true, Preferences::IsEnabled(Preferences::AutoSaveCheats)));
-        _settingsMenu.Append(new MenuEntryTools("Back-up Action Replay codes now", [] { PluginMenuActionReplay::BackupCodes(true); }, nullptr));
-        _settingsMenu.Append(new MenuEntryTools("Restore Action Replay codes from back-up", [] { PluginMenuActionReplay::RestoreFromBackup(false); }, nullptr));
+        _tricordSettingsMenu.Append(new MenuEntryTools("Change Tricord menu hotkeys", MenuHotkeyModifier, Icon::DrawGameController));
+        _tricordSettingsMenu.Append(new MenuEntryTools("Set backlight (Experimental)", EditBacklight, false, false));
+        _tricordSettingsMenu.Append(new MenuEntryTools("Disable HID memory allocation", [] { Preferences::Toggle(Preferences::HIDToggle); }, true, Preferences::IsEnabled(Preferences::HIDToggle)));
+        _tricordSettingsMenu.Append(new MenuEntryTools("Automatically re-enable currently active cheats on launch", [] { Preferences::Toggle(Preferences::AutoSaveCheats); Preferences::Toggle(Preferences::AutoLoadCheats); }, true, Preferences::IsEnabled(Preferences::AutoSaveCheats)));
+        _tricordSettingsMenu.Append(new MenuEntryTools("Back-up Action Replay codes now", [] { PluginMenuActionReplay::BackupCodes(true); }, nullptr));
+        _tricordSettingsMenu.Append(new MenuEntryTools("Restore Action Replay codes from back-up", [] { PluginMenuActionReplay::RestoreFromBackup(false); }, nullptr));
 
-        //_settingsMenu.Append(new MenuEntryTools("Auto-save favorites", [] { Preferences::Toggle(Preferences::AutoSaveFavorites); }, true, Preferences::IsEnabled(Preferences::AutoSaveFavorites)));
-        //_settingsMenu.Append(new MenuEntryTools("Auto-load enabled cheats at start-up", [] { Preferences::Toggle(Preferences::AutoLoadCheats); }, true, Preferences::IsEnabled(Preferences::AutoLoadCheats)));
-        //_settingsMenu.Append(new MenuEntryTools("Auto-load favorites at start-up", [] { Preferences::Toggle(Preferences::AutoLoadFavorites); }, true, Preferences::IsEnabled(Preferences::AutoSaveFavorites)));
-        //_settingsMenu.Append(new MenuEntryTools("Load enabled cheats now", [] { Preferences::LoadSavedEnabledCheats(); }, nullptr));
-        //_settingsMenu.Append(new MenuEntryTools("Load favorites now", [] { Preferences::LoadSavedFavorites(); }, nullptr));
+        // TFH Settings
+        // TODO: formatting for this
+        _TFH_settingsMenu.Append(new MenuEntryTools("Apply bug fix patches for cross-region online gameplay via Pretendo", [] { Preferences::Toggle(Preferences::PretendoPatch); Preferences::Toggle(Preferences::PretendoPatch); }, true, Preferences::IsEnabled(Preferences::PretendoPatch)));
+        _TFH_settingsMenu.Append(new MenuEntryTools("Disable 5-degree rotation offset", [] { Preferences::Toggle(Preferences::DisableMoveOffset); Preferences::Toggle(Preferences::DisableMoveOffset); }, true, Preferences::IsEnabled(Preferences::DisableMoveOffset)));
 
 
         // Get strings x position
@@ -682,7 +679,7 @@ namespace CTRPluginFramework
             if (arg == this)
             {
                 selector = _menu._selector;
-                _menu.Open(&_settingsMenu);
+                _menu.Open(&_tricordSettingsMenu);
             }
             else if (arg != nullptr && *(u32 *)arg == MISCELLANEOUS)
             {
