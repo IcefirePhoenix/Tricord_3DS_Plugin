@@ -17,6 +17,7 @@ namespace CTRPluginFramework
 
         #define SETTINGS_VERSION SETTINGS_VERSION11
     public:
+        // Preferences::Flags = u64 = 64 bits available to use
         enum
         {
             // Settings
@@ -33,6 +34,10 @@ namespace CTRPluginFramework
             DrawTouchPosition   = 1 << 19,
             ShowTopFps          = 1 << 20,
             ShowBottomFps       = 1 << 21,
+
+            // TFH Settings
+            PretendoPatch       = 1 << 22,
+            DisableMoveOffset   = 1 << 23
         };
 
         /*struct HeaderV1
