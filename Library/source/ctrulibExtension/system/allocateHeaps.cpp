@@ -45,7 +45,7 @@ namespace CTRPluginFramework
         mappableInit(0x11000000, 0x14000000);
 
         // Map Hook memory + shared page
-        Result res = svcMapProcessMemoryEx(CUR_PROCESS_HANDLE, 0x1E80000, CUR_PROCESS_HANDLE, __ctru_heap + __ctru_heap_size, 0x2000);
+        Result res = svcMapProcessMemoryEx(CUR_PROCESS_HANDLE, 0x1E80000, CUR_PROCESS_HANDLE, __ctru_heap + __ctru_heap_size, 0x2000, static_cast<MapExFlags>(0));
 
         if (R_FAILED(res))
             Fail(res);

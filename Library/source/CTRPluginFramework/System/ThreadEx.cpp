@@ -151,6 +151,25 @@ namespace CTRPluginFramework
         return res;
     }
 
+    Result ThreadEx::JoinTimeout(bool releaseResources, u64 timeoutns)
+    {
+        Result res = threadJoin(_thread, timeoutns);
+        if (res != 0)
+            return res;
+        if (releaseResources)
+        {
+            threadFree(_thread);
+            _thread = nullptr;
+        }
+        _state = FINISHED;
+        return res;
+    }
+
+    void ThreadEx::Exit(int rc)
+    {
+        threadExit(rc);
+    }
+
     Handle ThreadEx::GetHandle(void)
     {
         if (_thread)

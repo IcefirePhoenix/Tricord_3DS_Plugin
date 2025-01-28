@@ -16,12 +16,14 @@
 extern "C"
 {
     u32     g_gspEventThreadPriority;
+    void*   g_temporaryInitLibStack;
 
     void    LoadCROHooked(void);
     void    OnLoadCro(void);
     void    abort(void);
     void    initSystem(void);
     void    initLib(void);
+    void    __ctru_exit(int rc);
     Result  __sync_init(void);
     void    __system_initSyscalls(void);
 
@@ -50,13 +52,12 @@ namespace CTRPluginFramework
     Handle      g_keepThreadHandle;
     Handle      g_keepEvent = 0;
     Handle      g_resumeEvent = 0;
-    bool        g_keepRunning = true;
 
-    void    ThreadInit(void* arg);
-    void    ThreadExit(void);
+    void    MainThreadInit(void* arg);
+    void    MainThreadExit(void);
     void    InstallOSD(void); ///< OSDImpl
     void    InitializeRandomEngine(void);
-    static ThreadEx g_mainThread(ThreadInit, 0x4000, 0x19, -1);
+    static ThreadEx g_mainThread(MainThreadInit, 0x4000, 0x19, -1);
 
     // From main.cpp
     int     main(void);
@@ -73,14 +74,15 @@ static LightLock    g_onLoadCroLock;
 
 void abort(void)
 {
+    void *lr = __builtin_return_address(0);
+
     if (CTRPluginFramework::System::OnAbort)
         CTRPluginFramework::System::OnAbort();
 
-    CTRPluginFramework::Color c(255, 69, 0);
-    CTRPluginFramework::ScreenImpl::Top->Flash(c);
-    CTRPluginFramework::ScreenImpl::Bottom->Flash(c);
+    PLGLDR__DisplayErrMessage("Fatal plugin error", "abort() called from the following location:", (u32)lr);
+    svcSleepThread(500000000ULL);
 
-    CTRPluginFramework::ThreadExit();
+    svcBreak(USERBREAK_PANIC);
     while (true);
 }
 
@@ -136,6 +138,7 @@ namespace CTRPluginFramework
 {
     void WEAK_SYMBOL    PatchProcess(FwkSettings& settings) {}
     void WEAK_SYMBOL    EarlyCallback(u32* savedInstructions);
+    void WEAK_SYMBOL    UseGameStackToInit();
 
     namespace Heap
     {
@@ -191,7 +194,7 @@ namespace CTRPluginFramework
         Heap::__ctrpf_heap = static_cast<u8*>(::operator new(size));
     }
 
-    void    KeepThreadMain(void* arg UNUSED)
+    void NORETURN KeepThreadMain(void *arg UNUSED)
     {
         // Initialize the synchronization subsystem
         __sync_init();
@@ -221,9 +224,6 @@ namespace CTRPluginFramework
 
         // Init Framework's system constants
         SystemImpl::Initialize();
-
-        // Initialize Globals settings
-        InitializeRandomEngine();
 
         // Init Process info
         ProcessImpl::Initialize();
@@ -306,6 +306,9 @@ namespace CTRPluginFramework
         // Init System::Heap
         InitHeap();
 
+        // Initialize random engine
+        InitializeRandomEngine();
+
         // Patch process before it starts & let the dev init some settings
         PatchProcess(settings);
 
@@ -348,7 +351,8 @@ namespace CTRPluginFramework
         g_mainThread.Start(nullptr);
 
         // Reduce priority
-        while (R_FAILED(svcSetThreadPriority(g_keepThreadHandle, settings.ThreadPriority - 1)));
+        if (R_FAILED(svcSetThreadPriority(g_keepThreadHandle, settings.ThreadPriority - 1)))
+            abort();
 
         // Wait until Main Thread finished all it's initializing
         svcWaitSynchronization(g_keepEvent, U64_MAX);
@@ -358,12 +362,13 @@ namespace CTRPluginFramework
         bool isSleeping = false;
         bool ncsndInitialised = true;
 
+        s32 event;
         svcControlProcess(CUR_PROCESS_HANDLE, PROCESSOP_GET_ON_MEMORY_CHANGE_EVENT, (u32)&memLayoutChanged, 0);
         while (true)
         {
             if (svcWaitSynchronization(memLayoutChanged, 250000000ULL) == 0x09401BFE) // 0.25s
             {
-                s32 event = PLGLDR__FetchEvent();
+                event = PLGLDR__FetchEvent();
 
                 if (event == PLG_SLEEP_ENTRY || event == PLG_HOME_ENTER)
                 {
@@ -415,7 +420,7 @@ namespace CTRPluginFramework
 
                     // Re-map hook memory
                     svcMapProcessMemoryEx(CUR_PROCESS_HANDLE, 0x1E80000, CUR_PROCESS_HANDLE,
-                        __ctru_heap + __ctru_heap_size, 0x2000);
+                        __ctru_heap + __ctru_heap_size, 0x2000, static_cast<MapExFlags>(0));
 
                     HookManager::RecoverFromUnmapMemory();
                     HookManager::Unlock();
@@ -432,40 +437,7 @@ namespace CTRPluginFramework
                 }
                 else if (event == PLG_ABOUT_TO_EXIT)
                 {
-                    ProcessImpl::UserProcessEventCallback(Process::Event::EXIT);
-                    ProcessImpl::SignalExit();
-
-                    SoundEngineImpl::NotifyAptEvent(APT_HookType::APTHOOK_ONEXIT);
-                    SoundEngineImpl::ClearMenuSounds();
-
-                    SystemImpl::AptStatus |= BIT(3);
-                    Scheduler::Exit();
-
-                    // Close PluginMenu to quit main thread
-                    PluginMenuImpl::ForceExit();
-
-                    // Close some handles
-                    if (ncsndInitialised) {
-                        ncsndInitialised = false;
-                        ncsndExit();
-                    }
-                    if (settings.UseGameHidMemory)
-                        hidExitFake();
-                    else
-                        hidExit();
-                    cfguExit();
-                    fsExit();
-                    amExit();
-                    acExit();
-                    srvExit();
-
-                    // Un-map hook wrapper memory
-                    HookManager::Lock();
-                    HookManager::PrepareToUnmapMemory();
-                    svcUnmapProcessMemoryEx(CUR_PROCESS_HANDLE, 0x01E80000, 0x2000);
-
-                    // This function do not return and exit the thread
-                    PLGLDR__Reply(event);
+                    break;
                 }
                 continue;
             }
@@ -474,8 +446,41 @@ namespace CTRPluginFramework
         }
 
         // exit
-        svcCloseHandle(g_keepEvent);
-        svcExitThread();
+        ProcessImpl::UserProcessEventCallback(Process::Event::EXIT);
+        ProcessImpl::SignalExit();
+
+        SoundEngineImpl::NotifyAptEvent(APT_HookType::APTHOOK_ONEXIT);
+        SoundEngineImpl::ClearMenuSounds();
+
+        SystemImpl::AptStatus |= BIT(3);
+        Scheduler::Exit();
+
+        // Close PluginMenu to quit main thread
+        PluginMenuImpl::ForceExit();
+        g_mainThread.JoinTimeout(true, 1000000000ULL);
+
+        // Close some handles
+        if (ncsndInitialised) {
+            ncsndInitialised = false;
+            ncsndExit();
+        }
+        if (settings.UseGameHidMemory)
+            hidExitFake();
+        else
+            hidExit();
+
+        // Un-map hook wrapper memory
+        HookManager::Lock();
+        HookManager::PrepareToUnmapMemory();
+        svcUnmapProcessMemoryEx(CUR_PROCESS_HANDLE, 0x01E80000, 0x2000);
+
+        ProcessImpl::DisableExceptionHandlers();
+
+        __ctru_exit(0);
+
+        // This function does not return and exit the thread
+        PLGLDR__Reply(event);
+        for(;;);
     }
 
     // Initialize most subsystem / Global variables
@@ -519,7 +524,7 @@ namespace CTRPluginFramework
     }
 
     // Main thread's start
-    void  ThreadInit(void* arg)
+    void MainThreadInit(void *arg)
     {
         Initialize();
 
@@ -535,49 +540,33 @@ namespace CTRPluginFramework
         // Start plugin
         main();
 
-        ThreadExit();
+        MainThreadExit();
     }
 
-    void  ThreadExit(void)
+    void MainThreadExit(void)
     {
-        // In which thread are we ?
-        if (reinterpret_cast<u32>(((Thread_tag*)threadGetCurrent())->stacktop) < 0x07000000)
-        {
-            // ## Main Thread ##
+        // ## Main Thread ##
 
-            // Remove the OSD Hook
-            OSDImpl::OSDHook.Disable();
+        // Remove the OSD Hook
+        OSDImpl::OSDHook.Disable();
 
-            // Release process in case it's currently paused
-            ProcessImpl::IsPaused = std::min((u32)ProcessImpl::IsPaused, (u32)1);
-            ProcessImpl::Play(true);
+        // Release process in case it's currently paused
+        ProcessImpl::IsPaused = std::min((u32)ProcessImpl::IsPaused, (u32)1);
+        ProcessImpl::Play(true);
 
-            // Exit services
-            gspExit();
+        // Exit services
+        gspExit();
 
-            // Exit loop in keep thread
-            g_keepRunning = false;
-            svcSignalEvent(g_keepEvent);
-
-            threadExit(1);
-            return;
-        }
-
-        // ## Keep Thread ##
-        if (g_mainThread.GetStatus() == ThreadEx::RUNNING)
-        {
-            ProcessImpl::Play(true);
-            PluginMenuImpl::ForceExit();
-            g_mainThread.Join(false);
-        }
-        else // We aborted in a very early stage, so just release the game and exit
-            svcSignalEvent(g_continueGameEvent);
-        svcExitThread();
+        g_mainThread.Exit(1);
+        return;
     }
 
     extern "C"
-        int   __entrypoint(int arg)
+    int __entrypoint(int arg, void *temporaryStack)
     {
+        // Store temporary stack to use by initlib
+        g_temporaryInitLibStack = UseGameStackToInit ? temporaryStack : nullptr;
+
         // Set ProcessImpl::MainThreadTls
         ProcessImpl::MainThreadTls = (u32)getThreadLocalStorage();
 

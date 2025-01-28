@@ -1,26 +1,31 @@
 /*   This paricular file is licensed under the following terms: */
 
 /*
-*   This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable
-*   for any damages arising from the use of this software.
-*
-*   Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it
-*   and redistribute it freely, subject to the following restrictions:
-*
-*    The origin of this software must not be misrepresented; you must not claim that you wrote the original software.
-*    If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-*
-*    Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-*    This notice may not be removed or altered from any source distribution.
-*/
+ *   This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable
+ *   for any damages arising from the use of this software.
+ *
+ *   Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it
+ *   and redistribute it freely, subject to the following restrictions:
+ *
+ *    The origin of this software must not be misrepresented; you must not claim that you wrote the original software.
+ *    If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ *
+ *    Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ *    This notice may not be removed or altered from any source distribution.
+ */
 
 #pragma once
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #include <types.h>
+
+/// Allows or disables thread redirection patches for the new thread if specified in the affinity field in svcCreateThread
+#define AFFINITY_DISABLE_THREAD_REDIRECTION(x) ((x >= 0) ? (x | 0x40) : x)
+#define AFFINITY_ALLOW_THREAD_REDIRECTION(x) ((x >= 0) ? (x & ~0x40) : x)
 
 inline u32 PA_RWX(u32 addr) { return (addr == 0 ? 0 : (addr < 0x30000000 ? (u32)((addr) | (1u << 31)) : addr)); }
 #define PA_FROM_VA(addr) (PA_RWX(svcConvertVAToPA((void *)addr, false)))
@@ -36,7 +41,7 @@ typedef enum ServiceOp
  * @brief Executes a function in supervisor mode, using the supervisor-mode stack.
  * @param func Function to execute.
  * @param ... Function parameters, up to 3 registers.
-*/
+ */
 Result svcCustomBackdoor(void *func, ...);
 
 ///@name I/O
@@ -46,36 +51,43 @@ Result svcCustomBackdoor(void *func, ...);
  * @param VA Virtual address.
  * @param writeCheck whether to check if the VA is writable in supervisor mode
  * @return The corresponding physical address, or NULL.
-*/
+ */
 u32 svcConvertVAToPA(const void *VA, bool writeCheck);
 
 /**
  * @brief Flushes a range of the data cache (L2C included).
  * @param addr Start address.
  * @param len Length of the range.
-*/
+ */
 void svcFlushDataCacheRange(void *addr, u32 len);
 
 /**
  * @brief Flushes the data cache entirely (L2C included).
-*/
+ */
 void svcFlushEntireDataCache(void);
 
 /**
  * @brief Invalidates a range of the instruction cache.
  * @param addr Start address.
  * @param len Length of the range.
-*/
+ */
 void svcInvalidateInstructionCacheRange(void *addr, u32 len);
 
 /**
  * @brief Invalidates the data cache entirely.
-*/
+ */
 void svcInvalidateEntireInstructionCache(void);
 ///@}
 
 ///@name Memory management
 ///@{
+
+/// Flags for svcMapProcessMemoryEx
+typedef enum MapExFlags
+{
+    MAPEXFLAGS_PRIVATE = BIT(0), ///< Maps the memory as PRIVATE (0xBB05) instead of SHARED (0x5806)
+} MapExFlags;
+
 /**
  * @brief Maps a block of process memory.
  * @param dstProcessHandle Handle of the process to map the memory in (destination)
@@ -83,8 +95,9 @@ void svcInvalidateEntireInstructionCache(void);
  * @param srcProcessHandle Handle of the process to map the memory from (source)
  * @param srcAddress Start address of the memory block in the source process
  * @param size Size of the block of the memory to map (truncated to a multiple of 0x1000 bytes)
-*/
-Result svcMapProcessMemoryEx(Handle dstProcessHandle, u32 destAddress, Handle srcProcessHandle, u32 srcAddress, u32 size);
+ * @param flags Extended flags for mapping the memory (see MapExFlags)
+ */
+Result svcMapProcessMemoryEx(Handle dstProcessHandle, u32 destAddress, Handle srcProcessHandle, u32 srcAddress, u32 size, MapExFlags flags);
 
 /**
  * @brief Unmaps a block of process memory.
@@ -112,7 +125,7 @@ Result svcUnmapProcessMemoryEx(Handle process, u32 destAddress, u32 size);
  *
  * @sa svcControlMemory
  */
-Result svcControlMemoryEx(u32* addr_out, u32 addr0, u32 addr1, u32 size, MemOp op, MemPerm perm, bool isLoader);
+Result svcControlMemoryEx(u32 *addr_out, u32 addr0, u32 addr1, u32 size, MemOp op, MemPerm perm, bool isLoader);
 
 /**
  * @brief Controls memory mapping, this version removes all checks which were being done
@@ -147,7 +160,7 @@ Result svcControlService(ServiceOp op, ...);
  * @param outProcess Handle of the process of the output handle.
  * @param in The input handle. Pseudo-handles are not accepted.
  * @param inProcess Handle of the process of the input handle.
-*/
+ */
 Result svcCopyHandle(Handle *out, Handle outProcess, Handle in, Handle inProcess);
 
 /**
@@ -155,41 +168,41 @@ Result svcCopyHandle(Handle *out, Handle outProcess, Handle in, Handle inProcess
  * @param[out] outKAddr The output kernel address.
  * @param[out] outName Output class name. The buffer should be large enough to contain it.
  * @param in The input handle.
-*/
+ */
 Result svcTranslateHandle(u32 *outKAddr, char *outClassName, Handle in);
 
 /// Operations for svcControlProcess
 typedef enum ProcessOp
 {
-    PROCESSOP_GET_ALL_HANDLES,  ///< List all handles of the process, varg3 can be either 0 to fetch all handles, or token of the type to fetch
-                                ///< s32 count = svcControlProcess(handle, PROCESSOP_GET_ALL_HANDLES, (u32)&outBuf, 0)
-                                ///< Returns how many handles were found
+    PROCESSOP_GET_ALL_HANDLES, ///< List all handles of the process, varg3 can be either 0 to fetch all handles, or token of the type to fetch
+                               ///< s32 count = svcControlProcess(handle, PROCESSOP_GET_ALL_HANDLES, (u32)&outBuf, 0)
+                               ///< Returns how many handles were found
 
-    PROCESSOP_SET_MMU_TO_RWX,   ///< Set the whole memory of the process with rwx access (in the mmu table only)
-                                ///< svcControlProcess(handle, PROCESSOP_SET_MMU_TO_RWX, 0, 0)
+    PROCESSOP_SET_MMU_TO_RWX, ///< Set the whole memory of the process with rwx access (in the mmu table only)
+                              ///< svcControlProcess(handle, PROCESSOP_SET_MMU_TO_RWX, 0, 0)
 
     PROCESSOP_GET_ON_MEMORY_CHANGE_EVENT, ///< Get the handle of an event which will be signaled each time the memory layout of this process changes
                                           ///< svcControlProcess(handle, PROCESSOP_GET_ON_MEMORY_CHANGE_EVENT, &eventHandleOut, 0)
 
-    PROCESSOP_SIGNAL_ON_EXIT,   ///< Set a flag to be signaled when the process will be exited
-                                ///< svcControlProcess(handle, PROCESSOP_SIGNAL_ON_EXIT, 0, 0)
-    PROCESSOP_GET_PA_FROM_VA,   ///< Get the physical address of the VAddr within the process
-                                ///< svcControlProcess(handle, PROCESSOP_GET_PA_FROM_VA, (u32)&PAOut, VAddr)
+    PROCESSOP_SIGNAL_ON_EXIT, ///< Set a flag to be signaled when the process will be exited
+                              ///< svcControlProcess(handle, PROCESSOP_SIGNAL_ON_EXIT, 0, 0)
+    PROCESSOP_GET_PA_FROM_VA, ///< Get the physical address of the VAddr within the process
+                              ///< svcControlProcess(handle, PROCESSOP_GET_PA_FROM_VA, (u32)&PAOut, VAddr)
 
-    PROCESSOP_SCHEDULE_THREADS, ///< Lock / Unlock the process's threads
-                                ///< svcControlProcess(handle, PROCESSOP_SCHEDULE_THREADS, lock, threadPredicate)
-                                ///< lock: 0 to unlock threads, any other value to lock threads
-                                ///< threadPredicate: can be NULL or a funcptr to a predicate (typedef bool (*ThreadPredicate)(KThread *thread);)
-                                ///< The predicate must return true to operate on the thread
+    PROCESSOP_SCHEDULE_THREADS,                   ///< Lock / Unlock the process's threads
+                                                  ///< svcControlProcess(handle, PROCESSOP_SCHEDULE_THREADS, lock, threadPredicate)
+                                                  ///< lock: 0 to unlock threads, any other value to lock threads
+                                                  ///< threadPredicate: can be NULL or a funcptr to a predicate (typedef bool (*ThreadPredicate)(KThread *thread);)
+                                                  ///< The predicate must return true to operate on the thread
     PROCESSOP_SCHEDULE_THREADS_WITHOUT_TLS_MAGIC, ///< Lock / Unlock the process's threads
-                                                ///< svcControlProcess(handle, PROCESSOP_SCHEDULE_THREADS, lock, tlsvalue)
-                                                ///< lock: 0 to unlock threads, any other value to lock threads
-                                                ///< tlsvalue: threads with this tls value won't be affected
+                                                  ///< svcControlProcess(handle, PROCESSOP_SCHEDULE_THREADS, lock, tlsvalue)
+                                                  ///< lock: 0 to unlock threads, any other value to lock threads
+                                                  ///< tlsvalue: threads with this tls value won't be affected
     PROCESSOP_DISABLE_CREATE_THREAD_RESTRICTIONS, ///< Disable any thread creation restrictions, such as priority value
                                                   ///< or allowed cores
 } ProcessOp;
 
-Result  svcControlProcess(Handle process, ProcessOp op, u32 varg2, u32 varg3);
+Result svcControlProcess(Handle process, ProcessOp op, u32 varg2, u32 varg3);
 ///@}
 
 #ifdef __cplusplus
