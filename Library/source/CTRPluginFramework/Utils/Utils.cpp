@@ -22,6 +22,25 @@
 
 namespace CTRPluginFramework
 {
+    class DefaultRandomBackend : public Utils::RandomBackend
+    {
+    public:
+        void Seed(u64 seed) override
+        {
+            g_rng.seed(seed);
+        }
+        u32 Random(void) override
+        {
+            return g_rng();
+        }
+
+    private:
+        std::mt19937 g_rng; ///< Engine
+    };
+
+    static bool g_randomBackendDefault = false;
+    Utils::RandomBackend *Utils::randomBackend = nullptr;
+
     std::string Utils::Format(const char* fmt, ...)
     {
         char        buffer[0x100] = { 0 };
@@ -48,9 +67,31 @@ namespace CTRPluginFramework
         return (fpval > 999999.f || fpval < -999999.f ? Format(Format("%%.%de", precision).c_str(), fpval) : Format(Format("%%.%df", precision).c_str(), fpval));
     }
 
-    static std::mt19937    g_rng; ///< Engine
+    void Utils::UseRandomBackend(RandomBackend *backend)
+    {
+        if (g_randomBackendDefault)
+        {
+            delete randomBackend;
+            g_randomBackendDefault = false;
+        }
 
-    void    InitializeRandomEngine(void)
+        if (backend == nullptr)
+        {
+            g_randomBackendDefault = true;
+            randomBackend = new DefaultRandomBackend();
+        }
+        else
+        {
+            randomBackend = backend;
+        }
+    }
+
+    void Utils::SeedRandom(u64 seed)
+    {
+        randomBackend->Seed(seed);
+    }
+
+    void Utils::AutoSeedRandom()
     {
         // Init the engine with a random seed
         if (SystemImpl::IsCitra) {
@@ -58,24 +99,32 @@ namespace CTRPluginFramework
             u32 data = 0;
             sslcGenerateRandomData(reinterpret_cast<u8*>(&data), sizeof(data));
             sslcExit();
-            g_rng.seed(data);
-        } else {
-            g_rng.seed(svcGetSystemTick());
+            randomBackend->Seed(data);
+        }
+        else
+        {
+            randomBackend->Seed(svcGetSystemTick());
         }
     }
 
     u32     Utils::Random(void)
     {
-        return (Random(0, 0));
+        return randomBackend->Random();
     }
 
     u32     Utils::Random(u32 min, u32 max)
     {
-        if (max == 0)
-            max = UINT32_MAX;
-        std::uniform_int_distribution<u32>  uniform(min, max);
+        u32 rnd = Random();
+        u32 range = (max + 1) - min;
+        // Grab the high 32 bits of the multiply operation
+        u32 newRnd = (u32)(((u64)rnd * (u64)range) >> 32);
+        return newRnd + min;
+    }
 
-        return (uniform(g_rng));
+    void InitializeRandomEngine(void)
+    {
+        Utils::UseRandomBackend(nullptr);
+        Utils::AutoSeedRandom();
     }
 
     u32     Utils::GetSize(const std::string &str)
@@ -374,7 +423,7 @@ namespace CTRPluginFramework
             if (entry)
                 out.append(entry->name);
         }
-        
+
         // Release the process
         Process::Play();
         return 0;
