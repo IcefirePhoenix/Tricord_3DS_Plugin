@@ -7,7 +7,8 @@ namespace CTRPluginFramework
 	{
 	}
 
-	const Level Level::levelList[45] = {
+	const Level Level::levelList[45] =
+    {
 		Level(0x1, "Hytopia Castle", "StartCastle", false),
 		Level(0x2, "Hytopia", "StartVillage", false),
 		Level(0x3, "Hytopia Shops", "IndoorVillage", false),
@@ -58,19 +59,22 @@ namespace CTRPluginFramework
 		// Memory(?) issues with Citra when this array exceeded 0x5E elements...
 	};
 
-	const StringVector Level::hytopiaLevelList = {
+	const StringVector Level::hytopiaLevelList =
+    {
         "Hytopia",
         "Hytopia Shops",
         "Hytopia Castle"
     };
 
-    const StringVector Level::hytopiaShopsStageList = {
+    const StringVector Level::hytopiaShopsStageList =
+    {
         "Miiverse Gallery",
         "Madame Couture's",
         "Daily Riches"
     };
 
-    const StringVector Level::hytopiaCastleStageList = {
+    const StringVector Level::hytopiaCastleStageList =
+    {
         "Entrance",
         "Single Player Lobby",
         "Multiplayer Lobby",
@@ -79,7 +83,8 @@ namespace CTRPluginFramework
         "Coliseum Lobby"
     };
 
-    const StringVector Level::worldList = {
+    const StringVector Level::worldList =
+    {
         "Woodlands",
         "Riverside",
         "Volcano",
@@ -90,70 +95,80 @@ namespace CTRPluginFramework
         "Sky Realm"
     };
 
-    const StringVector Level::woodlandLevelList = {
+    const StringVector Level::woodlandLevelList =
+    {
         "Deku Forest",
         "Buzz Blob Cave",
         "Moblin Base",
         "Forest Temple"
     };
 
-    const StringVector Level::riversideLevelList = {
+    const StringVector Level::riversideLevelList =
+    {
         "Secret Fortress",
         "Abyss of Agony",
         "Cove of Transition",
         "Water Temple"
     };
 
-    const StringVector Level::volcanoLevelList = {
+    const StringVector Level::volcanoLevelList =
+    {
         "Blazing Trail",
         "Hinox Mine",
         "Den of Flames",
         "Fire Temple"
     };
 
-    const StringVector Level::iceLevelList = {
+    const StringVector Level::iceLevelList =
+    {
         "Frozen Plateau",
         "Snowball Ravine",
         "Silver Shrine",
         "Ice Temple"
     };
 
-    const StringVector Level::fortressLevelList = {
+    const StringVector Level::fortressLevelList =
+    {
         "Sealed Gateway",
         "Bomb Storage",
         "Training Ground",
         "The Lady's Lair"
     };
 
-    const StringVector Level::dunesLevelList = {
+    const StringVector Level::dunesLevelList =
+    {
         "Infinity Dunes",
         "Stone Corridors",
         "Gibdo Mausoleum",
         "Desert Temple"
     };
 
-    const StringVector Level::ruinsLevelList = {
+    const StringVector Level::ruinsLevelList =
+    {
         "Illusory Mansion",
         "Palace Noir",
-        "Gibdo Mausoleum",
+        "Lone Labyrinth",
         "Grim Temple"
     };
 
-    const StringVector Level::skyLevelList = {
+    const StringVector Level::skyLevelList =
+    {
         "Floating Garden",
         "Deception Castle",
         "Dragon Citadel",
         "Sky Temple"
     };
 
-    const StringVector Level::challengeList = {
+    const StringVector Level::challengeList =
+    {
         "No challenge",
         "Challenge 1",
         "Challenge 2",
         "Challenge 3"
     };
 
-    const StringVector Level::dotZoneList = {
+    const StringVector Level::dotZoneList =
+    {
         "Forest Zone",
         "Flooded Zone",
         "Scorching Zone",
@@ -164,7 +179,8 @@ namespace CTRPluginFramework
         "Baneful Zone"
     };
 
-    const StringVector Level::arenaList = {
+    const StringVector Level::arenaList =
+    {
         "Woodlands Arena",
         "Riverside Arena",
         "Volcano Arena",
