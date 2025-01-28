@@ -28,6 +28,7 @@ startup:
 
     @ Jump to plugin init code
     ldr     R0, [SP]
+    sub     R1, SP, #0x100
     bl      __entrypoint
 
     @ Jump back to plugin loader hook
