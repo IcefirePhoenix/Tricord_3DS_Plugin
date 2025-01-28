@@ -3,8 +3,7 @@
 
 #include "CTRPF.hpp"
 
-
-    namespace CTRPluginFramework
+namespace CTRPluginFramework
 {
     class Level {
 	public:
