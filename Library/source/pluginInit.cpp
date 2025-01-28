@@ -44,7 +44,7 @@ using namespace CTRPluginFrameworkImpl::Services;
 namespace CTRPluginFramework
 {
     // Threads stacks
-    static u8  keepThreadStack[0x1000] ALIGN(8);
+    static u8  keepThreadStack[0x1000] ALIGN(8) = {0};
 
     // Some globals
     FS_Archive  _sdmcArchive;
