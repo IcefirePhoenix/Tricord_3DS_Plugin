@@ -25,6 +25,17 @@ namespace CTRPluginFramework
     {
     public:
         /**
+         * @brief Abstract class to implement a random backend.
+         */
+        class RandomBackend
+        {
+        public:
+            virtual void Seed(u64 seed) = 0; ///< Initialize the random backend with the given seed
+            virtual u32 Random(void) = 0;    ///< Produce a random u32 value
+            virtual ~RandomBackend() {}
+        };
+
+        /**
          * \brief Get a string formatted with format specifier from printf
          * \param fmt String to be formatted
          * \param ... Additional arguments
@@ -50,16 +61,39 @@ namespace CTRPluginFramework
         static std::string  ToString(float fpval, int precision = 2);
 
         /**
-         * \brief Get a random number
-         * \return A random number
+         * \brief Replaces the current random backend with the provided one.
+         * \note This operation does not seed the backend.
+         *
+         * \param backend The random backend to use. If null is passed, the default backend is used.
+         */
+        static void UseRandomBackend(RandomBackend *backend);
+
+        /**
+         * \brief Initializes the current random backend with the given seed
+         *
+         * \param seed Seed to initialize the random backend.
+         */
+        static void SeedRandom(u64 seed);
+
+        /**
+         * \brief Automatically initializes the random backend using a random source as the seed:
+         *      On console, the seed is svcGetSystemTick()
+         *      On emulator, the seed is sslcGenerateRandomData()
+         */
+        static void AutoSeedRandom();
+
+        /**
+         * \brief Get a random number using the current random backend
+         * \return A random number X in the range (0 <= X <= 0xFFFFFFFF)
          */
         static u32          Random(void);
 
         /**
-         * \brief Get a random number
+         * \brief Get a random number using the current random backend
          * \param min Minimum value for the random number
          * \param max Maximum value for the random number
-         * \return A random number between min & max
+         * \return A random number X in the range (min <= x <= max)
+         * \note Calling Random(0, 0xFFFFFFFF) produces incorrect results
          */
         static u32          Random(u32 min, u32 max);
 
@@ -75,7 +109,7 @@ namespace CTRPluginFramework
          * \brief Open a menu which allow to browse the SD card to select a file
          * \param out The absolute path of the selected file
          * \param filter If the files must be filtered (can be an extension or a pattern that must be present in the filename)
-         * \param forBackup If this is being used for opening a backup cheat file to restore -- display last modified date of auto-backup cheat file 
+         * \param forBackup If this is being used for opening a backup cheat file to restore -- display last modified date of auto-backup cheat file
          * \return -1 if the user aborted the operation, 0 on success
          */
         static int          FilePicker(std::string &out, const std::string &filter = "", std::string forBackup = "");
@@ -242,6 +276,7 @@ namespace CTRPluginFramework
         static void ToIntegerImpl(const char* cstr, char** parsed, int base, uint64_t& out) {out = std::strtoull(cstr, parsed, base);}
         static void ToIntegerImpl(const char* cstr, char** parsed, int base, float& out) {out = std::strtof(cstr, parsed);}
         static void ToIntegerImpl(const char* cstr, char** parsed, int base, double& out) {out = std::strtod(cstr, parsed);}
+        static RandomBackend *randomBackend;
     };
 }
 
