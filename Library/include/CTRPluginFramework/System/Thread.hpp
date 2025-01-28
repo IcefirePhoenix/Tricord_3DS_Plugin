@@ -21,6 +21,8 @@ namespace CTRPluginFramework
 
         Result  Start(void *arg);
         Result  Join(bool releaseResources);
+        Result JoinTimeout(bool releaseResources, u64 timeoutns);
+        void Exit(int rc); // Do not call from other threads
         Handle  GetHandle(void);
         u32     GetStatus(void);
 

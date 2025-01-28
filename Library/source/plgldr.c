@@ -324,7 +324,10 @@ void    PLGLDR__Reply(s32 event)
         svcArbitrateAddress(plgLdrArbiter, (u32)plgEvent, ARBITRATION_WAIT_IF_LESS_THAN, PLG_OK, 0);
     }
     else if (event == PLG_ABOUT_TO_EXIT)
+    {
+        plgLdrExit();
         svcExitThread();
+    }
     else
     {
         __strex__(plgEvent, PLG_OK);

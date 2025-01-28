@@ -16,18 +16,4 @@ Result __sync_init(void);
 void __libctru_init(void)
 {
     return;
-	// Store the return address
-	//__system_retAddr = NULL;//envIsHomebrew() ? retAddr : NULL;
-
-	// Initialize the synchronization subsystem
-	//__sync_init();
-
-	// Initialize newlib support system calls
-	//__system_initSyscalls();
-
-	// Allocate application and linear heaps
-	__system_allocateHeaps();
-
-	// Build argc/argv if present
-	//__system_initArgv();
 }
