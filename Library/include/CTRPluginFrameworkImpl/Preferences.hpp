@@ -37,7 +37,8 @@ namespace CTRPluginFramework
 
             // TFH Settings
             PretendoPatch       = 1 << 22,
-            DisableMoveOffset   = 1 << 23
+            DisableMoveOffset   = 1 << 23,
+            DoppelStageCostumeReset   = 1 << 24
         };
 
         /*struct HeaderV1

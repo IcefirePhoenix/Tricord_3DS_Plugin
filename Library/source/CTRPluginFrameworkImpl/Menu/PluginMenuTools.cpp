@@ -120,6 +120,9 @@ namespace CTRPluginFramework
 
         if (Preferences::IsEnabled(Preferences::DisableMoveOffset)) (*item)->AsMenuEntryTools().Enable();
         else (*item)->AsMenuEntryTools().Disable();
+
+        if (Preferences::IsEnabled(Preferences::DoppelStageCostumeReset)) (*item)->AsMenuEntryTools().Enable();
+        else (*item)->AsMenuEntryTools().Disable();
     }
 
     using   FsTryOpenFileType = u32(*)(u32, u16*, u32);
@@ -584,6 +587,7 @@ namespace CTRPluginFramework
         // TODO: formatting for this
         _TFH_settingsMenu.Append(new MenuEntryTools("Apply bug fix patches for cross-region online gameplay via Pretendo", [] { Preferences::Toggle(Preferences::PretendoPatch); Preferences::Toggle(Preferences::PretendoPatch); }, true, Preferences::IsEnabled(Preferences::PretendoPatch)));
         _TFH_settingsMenu.Append(new MenuEntryTools("Disable 5-degree rotation offset", [] { Preferences::Toggle(Preferences::DisableMoveOffset); Preferences::Toggle(Preferences::DisableMoveOffset); }, true, Preferences::IsEnabled(Preferences::DisableMoveOffset)));
+        _TFH_settingsMenu.Append(new MenuEntryTools("Disable Doppel costume resets between stages", [] { Preferences::Toggle(Preferences::DoppelStageCostumeReset); Preferences::Toggle(Preferences::DoppelStageCostumeReset); }, true, Preferences::IsEnabled(Preferences::DoppelStageCostumeReset)));
 
 
         // Get strings x position
