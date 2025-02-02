@@ -134,7 +134,6 @@ namespace CTRPluginFramework {
     };
 
     const int GameData::generalPlayerIDs[3] = { 0, 1, 2 };
-    const u32 GameData::playerAddressOffset = 0x10000;
 
     int GameData::getPlayerIDFromColor(std::string color)
     {

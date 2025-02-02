@@ -31,7 +31,7 @@ namespace CTRPluginFramework
     u16 Collision::getCurrCol(int player)
 	{
 		u16 colID;
-        u32 addressOffset = player * GameData::playerAddressOffset;
+        u32 addressOffset = player * PLAYER_OFFSET;
 
 		Process::Read16(AddressList::CollisionCurrent.addr + addressOffset, colID);
 		return colID;
@@ -39,7 +39,7 @@ namespace CTRPluginFramework
 
     void Collision::setCurrCol(int player, u16 targetCol)
 	{
-        u32 addressOffset = player * GameData::playerAddressOffset;
+		u32 addressOffset = player * PLAYER_OFFSET;
 		Process::Write16(AddressList::CollisionCurrent.addr + addressOffset, targetCol);
 	}
 }
