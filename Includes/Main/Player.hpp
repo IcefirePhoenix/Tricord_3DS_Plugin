@@ -17,6 +17,7 @@ namespace CTRPluginFramework
     extern MenuEntry* colEditAuto;
     extern MenuEntry* swordEditAuto;
     extern MenuEntry* sizeEditAuto;
+    extern MenuEntry* rotationOffsetManager;
 
     enum ColorStatus
     {
@@ -69,6 +70,11 @@ namespace CTRPluginFramework
 
         static void bypassDoppelDemo(MenuEntry* entry);
         static void doppelsToPlayer(MenuEntry* entry);
+
+        static void disableOffset(MenuEntry *entry);
+        static void adjustOffset(MenuEntry *entry);
+        static void resetOffset(void);
+        static void overwriteOffset(float adjustment);
 
         template <typename T>
         static void writePlayerChanges(int editSize, u8 &playerStatus, u32 address, T trueValue, T falseValue);

@@ -10,6 +10,7 @@ namespace CTRPluginFramework
     extern MenuEntry* instantTextDisplay;
     extern MenuEntry* autoWriteCameraStatus;
     extern MenuEntry* autoDisableCamShutter;
+    extern MenuEntry *pretendoOnlinePatchManager;
 
     void showPhotoBtnIntroMsg(bool showMsg);
     void displayPhoto(bool photoCheck);
@@ -53,6 +54,7 @@ namespace CTRPluginFramework
         static void setLobbyBallCounter(MenuEntry* entry);
         static void toggleCameraShutter (MenuEntry* entry);
         static void writeShutterDisable(MenuEntry* entry);
+        static void applyPretendoPatch(MenuEntry *entry);
     };
 }
 #endif

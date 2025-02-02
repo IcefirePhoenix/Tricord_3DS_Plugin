@@ -17,6 +17,7 @@ namespace CTRPluginFramework
     extern MenuEntry* writeCostumeIDToSlot;
 
     extern MenuEntry* writeCosmeticCostumeID;
+    extern MenuEntry *doppelCostumeStageResetManager;
 
     int chooseSlotAddNum(void);
     void selCosmeticCostume(int player);
@@ -37,7 +38,8 @@ namespace CTRPluginFramework
         static void selectCostumeID(MenuEntry* entry);
         static void initCustomCostumesAuto(MenuEntry* entry);
         static void forceBearMinMax(MenuEntry* entry);
-        static void preventLobbyReset(MenuEntry* entry);
+        static void preventDoppelLobbyReset(MenuEntry* entry);
+        static void preventDoppelStageReset(MenuEntry* entry);
         static void enableCosmeticCostume(MenuEntry* entry);
         static void setCosmeticCostume(MenuEntry* entry);
         static void writeCosmeticCostume(MenuEntry* entry);

@@ -3,6 +3,10 @@
 
 namespace CTRPluginFramework
 {
+    MenuEntry *doppelCostumeStageResetManager;
+
+    /* ------------------ */
+
     // TODO: edit plugin menu layout to have current costumes as separate menu entries with dynamic titles
 
     // Driver code for changing the current costume for a specific player | TODO: add support for custom costumes IF they are enabled...
@@ -91,7 +95,7 @@ namespace CTRPluginFramework
     }
 
     // Allows edits made to Doppel costumes to persist after entering the single-player lobby
-    void Costume::preventLobbyReset(MenuEntry *entry)
+    void Costume::preventDoppelLobbyReset(MenuEntry *entry)
     {
         u32 forceDisableReset = 0xEA000007;
         u32 defaultResetBehavior = 0x1A000007;
@@ -105,6 +109,23 @@ namespace CTRPluginFramework
         {
             Process::Patch(AddressList::DoppelLobbyReset.addr, defaultResetBehavior);
             entry->SetName("Prevent Doppel Costume resets");
+        }
+    }
+
+    void Costume::preventDoppelStageReset(MenuEntry *entry)
+    {
+        // TODO: impl using Process::Patch w/buffer ptr + CopyMem to reset
+        if (!entry->IsActivated())
+        {
+            Process::Patch(AddressList::DoppelStageResetA.addr, 0xE3500000);
+            Process::Patch(AddressList::DoppelStageResetB.addr, 0x13A00018);
+            Process::Patch(AddressList::DoppelStageResetC.addr, 0x15C40064);
+        }
+        else
+        {
+            Process::Patch(AddressList::DoppelStageResetA.addr, 0xE320F000);
+            Process::Patch(AddressList::DoppelStageResetB.addr, 0xE320F000);
+            Process::Patch(AddressList::DoppelStageResetC.addr, 0xE320F000);
         }
     }
 }
