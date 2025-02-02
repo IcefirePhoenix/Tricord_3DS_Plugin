@@ -15,7 +15,7 @@ namespace CTRPluginFramework
     void Gameplay::maxHealthSet(MenuEntry *entry)
     {
         u8 newMaxHealth;
-        std::string maxHealthIntro = "Maximum heart containers\n\nEnter a positive integer.\nThe number of heart containers can range from 1 to 63,\nbut only up to 18 heart containers can be displayed on the HUD."; // TODO: check line breaks here
+        std::string maxHealthIntro = "Maximum heart containers\n\nEnter a positive integer. The number of heart containers can range from 1 to 63, but only up to 18 heart containers can be displayed on the HUD.";
 
         if (entry->Name() == "Set maximum heart containers")
         {
@@ -98,7 +98,6 @@ namespace CTRPluginFramework
     // Freezes current number of fairies to 9 (0xA because 0 fairies starts at 0x1)
     void Gameplay::infFairy(MenuEntry *entry)
     {
-        // TODO: Still uncertain if the second address (32D81EE4) is relevant
         Process::Write8(AddressList::FairiesCurrent.addr, 0xA);
     }
 }

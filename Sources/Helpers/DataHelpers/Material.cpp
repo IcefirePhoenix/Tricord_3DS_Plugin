@@ -1,7 +1,9 @@
 #include "Helpers.hpp"
 
-namespace CTRPluginFramework {
-    const StringVector Material::otherMats = {
+namespace CTRPluginFramework
+{
+    const StringVector Material::otherMats =
+    {
         "Lady's Glasses",
         "Lady's Collar",
         "Lady's Parasol",
@@ -10,7 +12,8 @@ namespace CTRPluginFramework {
         "Freebie"
     };
 
-    const StringVector Material::woodlandMats = {
+    const StringVector Material::woodlandMats =
+    {
         "Blob Jelly",
         "Armos Spirit",
         "Tektite Shell",
@@ -21,7 +24,8 @@ namespace CTRPluginFramework {
         "Supple Leaf"
     };
 
-    const StringVector Material::riversideMats = {
+    const StringVector Material::riversideMats =
+    {
         "Fresh Kelp",
         "Zora Scale",
         "Hytopia Silk",
@@ -32,7 +36,8 @@ namespace CTRPluginFramework {
         "Thornberry"
     };
 
-    const StringVector Material::volcanoMats = {
+    const StringVector Material::volcanoMats =
+    {
         "Goron Ore",
         "Monster Guts",
         "Demon Fossil",
@@ -43,7 +48,8 @@ namespace CTRPluginFramework {
         "Divine Whiskers"
     };
 
-    const StringVector Material::iceMats = {
+    const StringVector Material::iceMats =
+    {
         "Fluffy Fuzz",
         "Tiny Snowflake",
         "Serpent Fangs",
@@ -54,7 +60,8 @@ namespace CTRPluginFramework {
         "Beastie Patch"
     };
 
-    const StringVector Material::fortressMats = {
+    const StringVector Material::fortressMats =
+    {
         "Stiff Puff",
         "Silver Thread",
         "Royal Ring",
@@ -65,7 +72,8 @@ namespace CTRPluginFramework {
         "Brittle Papyrus"
     };
 
-    const StringVector Material::dunesMats = {
+    const StringVector Material::dunesMats =
+    {
         "Palm Cone",
         "Ancient Fin",
         "Vintage Linen",
@@ -76,7 +84,8 @@ namespace CTRPluginFramework {
         "Golden Insect"
     };
 
-    const StringVector Material::ruinsMats = {
+    const StringVector Material::ruinsMats =
+    {
         "Carrumpkin",
         "Mystery Extract",
         "Spider Silk Lace",
@@ -87,7 +96,8 @@ namespace CTRPluginFramework {
         "Gold Dust"
     };
 
-    const StringVector Material::skyMats = {
+    const StringVector Material::skyMats =
+    {
         "Cucco Feathers",
         "Carmine Pearl",
         "Sky Dragon Tail",

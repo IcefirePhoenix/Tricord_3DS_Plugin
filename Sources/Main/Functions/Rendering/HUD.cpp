@@ -42,12 +42,12 @@ namespace CTRPluginFramework
 
         if (isScrollTextDisabled)
         {
-            Process::Write32(AddressList::ScrollingTextOpacity.addr, 0x00000000);
+            Process::WriteFloat(AddressList::ScrollingTextOpacity.addr, 0.0);
             entry->SetName("Enable top screen scrolling text");
         }
         else
         {
-            Process::Write32(AddressList::ScrollingTextOpacity.addr, 0x3F800000);
+            Process::WriteFloat(AddressList::ScrollingTextOpacity.addr, 1.0);
             entry->SetName("Disable top screen scrolling text");
         }
     }
@@ -111,7 +111,7 @@ namespace CTRPluginFramework
         // grab respawn coords...
         for (int iterateColor = 0; iterateColor < 3; iterateColor++)
         {
-            u32 offset = iterateColor * GameData::playerAddressOffset;
+            u32 offset = iterateColor * PLAYER_OFFSET;
             Process::ReadFloat((AddressList::RespawnPositionX.addr + offset), respawnCoords[iterateColor][0]);
             Process::ReadFloat((AddressList::RespawnPositionY.addr + offset), respawnCoords[iterateColor][1]);
             Process::ReadFloat((AddressList::RespawnPositionZ.addr + offset), respawnCoords[iterateColor][2]);
