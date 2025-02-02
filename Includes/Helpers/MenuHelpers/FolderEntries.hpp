@@ -1,5 +1,5 @@
-#ifndef MENUHELPER_HPP
-#define MENUHELPER_HPP
+#ifndef FOLDERENTRIES_HPP
+#define FOLDERENTRIES_HPP
 
 #include "CTRPF.hpp"
 
@@ -36,17 +36,21 @@ namespace CTRPluginFramework
     void InitRenderFolder(PluginMenu &menu);
     void InitSaveFolder(PluginMenu &menu);
     void InitSoundFolder(PluginMenu &menu);
+    void InitTFH_Settings(PluginMenu &menu);
     void AddAllFolders(PluginMenu &menu);
 
     void ToggleMenuChange(Time time);
     void CreateMenu(PluginMenu &menu);
 
-    // class MenuHelper
-    // {
-    // public:
-    //     static void ToggleMenuChange(Time time);
-    //     static void CreateMenu(PluginMenu &menu);
-    // };
+    static MenuEntry *EntryWithHotkey(MenuEntry *entry, const std::vector<Hotkey> &hotkeys)
+    {
+        if (entry != nullptr)
+        {
+            for (const Hotkey &hotkey : hotkeys)
+                entry->Hotkeys += hotkey;
+        }
+        return entry;
+    }
 }
 
 #endif

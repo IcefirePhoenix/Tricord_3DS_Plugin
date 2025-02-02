@@ -19,6 +19,7 @@ INCLUDES	:= 	Includes \
 				Includes/Helpers/BuiltIn \
 				Includes/Helpers/DataHelpers \
 				Includes/Helpers/Interfaces \
+				Includes/Helpers/MenuHelpers \
 				Includes/Main \
 				Includes/Main/AltModes \
 
@@ -67,9 +68,10 @@ export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 CFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
 CPPFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
 SFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
+JSONFILES		:=	Sources/Main/EntryDescList.json
 
-export LD 		:= 	$(CXX)
-export OFILES	:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
+export LD 		:=	$(CXX)
+export OFILES	:=	$(CFILES:.c=.o) $(CPPFILES:.cpp=.o) $(SFILES:.s=.o)
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I $(CURDIR)/$(dir) ) \
 					$(foreach dir,$(LIBDIRS),-I $(dir)/include) \
 					-I $(CURDIR)/$(BUILD)
@@ -83,6 +85,7 @@ all: $(BUILD)
 
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
+	@xxd -i -n $(notdir $(JSONFILES)) $(JSONFILES) > Build/EntryDescList.json.h
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
 #---------------------------------------------------------------------------------

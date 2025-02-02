@@ -79,15 +79,15 @@ namespace CTRPluginFramework
         "",
         "Touchscreen", // unused for now
         "",
-        "",   
         "",
-        "\uE04A Right", 
-        "\uE04A Left", 
-        "\uE04A Up", 
+        "",
+        "\uE04A Right",
+        "\uE04A Left",
+        "\uE04A Up",
         "\uE04A Down",
-        "\uE077 Right", 
-        "\uE077 Left", 
-        "\uE077 Up", 
+        "\uE077 Right",
+        "\uE077 Left",
+        "\uE077 Up",
         "\uE077 Down"
     };
 
@@ -115,7 +115,7 @@ namespace CTRPluginFramework
     {
         FwkSettings& settings = FwkSettings::Get();
         std::string lockKeys = (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable) ? "\n\n\nNote: o2/3DS detected; checkboxes for\nn2/3DS buttons havebeen disabled and\ncannot be selected in this menu." : "";
-        
+
         HotkeysModifier(_keys, "Select new Hotkeys for the following entry:\n\n" + _name + lockKeys)();
     }
 
@@ -123,7 +123,7 @@ namespace CTRPluginFramework
     std::string     Hotkey::ToString(bool withName) const
     {
         if (withName)
-            return (_name + ": " + KeysToString(_keys));
+            return (KeysToString(_keys) + ": " + _name);
 
         return (KeysToString(_keys));
     }

@@ -1,5 +1,5 @@
-#include "Helpers/MenuHelper.hpp"
 #include "Cheats.hpp"
+#include "Helpers/MenuHelpers/FolderEntries.hpp"
 
 namespace CTRPluginFramework
 {
@@ -35,6 +35,7 @@ namespace CTRPluginFramework
         InitRenderFolder(menu);
         InitSaveFolder(menu);
         InitSoundFolder(menu);
+        InitTFH_Settings(menu);
 
         AddAllFolders(menu);
     }
