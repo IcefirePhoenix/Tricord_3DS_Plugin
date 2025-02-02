@@ -189,7 +189,7 @@ namespace CTRPluginFramework
 
         if (!Directory::IsExists("/cheats/TricordBackup/"))
             Directory::Create("/cheats/TricordBackup/");
-            
+
         // Load AR Cheats
         if (Preferences::Settings.AllowActionReplay)
         {
@@ -554,7 +554,7 @@ namespace CTRPluginFramework
             {
                 header.favoritesCount = uids.size();
                 header.favoritesOffset = offset;
-            }                 
+            }
         }
     }
 
@@ -641,7 +641,11 @@ namespace CTRPluginFramework
     void    PluginMenuImpl::ForceExit(void)
     {
         if (_runningInstance != nullptr)
+        {
             _runningInstance->_pluginRun = false;
+            if (_runningInstance->SyncOnFrame && !ProcessImpl::IsPaused)
+                LightEvent_Signal(&OSDImpl::OnNewFrameEvent);
+        }
     }
 
     void    PluginMenuImpl::ForceOpen(void)

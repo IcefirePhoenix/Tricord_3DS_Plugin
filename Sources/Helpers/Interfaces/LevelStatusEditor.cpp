@@ -2,11 +2,19 @@
 
 namespace CTRPluginFramework
 {
-    /* loosely based on HotkeyModifier class */
-
     u8 backupFirstBitSet[4];
     u32 bitstringLocations[3][4];
     u64 bitstring[4]; // array elements: noChallenge, challenge1, challenge2, challenge3
+
+    const StringVector labels =
+    {
+        "NC",
+        "C1",
+        "C2",
+        "C3"
+    };
+
+    /* ------------------ */
 
     LevelStatusEditor::LevelStatusEditor(const std::string &message, StringVector levelNames, int world, int playMode) :
         _message(message), _levelNames(levelNames), _world(world), _playMode(playMode)
@@ -103,12 +111,12 @@ namespace CTRPluginFramework
         }
     }
 
-    u32     LevelStatusEditor::getBitstringAddress(int bitstringID, int playMode)
+    u32 LevelStatusEditor::getBitstringAddress(int bitstringID, int playMode)
     {
         return bitstringLocations[playMode][bitstringID];
     }
 
-    void    LevelStatusEditor::operator()(void)
+    void LevelStatusEditor::operator()(void)
     {
         bool mustclose = false;
         bool sleepClose = false;
@@ -131,7 +139,7 @@ namespace CTRPluginFramework
     // editQueue = 1 -> solo edits only (1&1 = true)
     // editQueue = 2 -> multi edits only (2&2 = true)
     // editQueue = 3 -> both edited (3&1 = true and 3&2 = true)
-    void    LevelStatusEditor::writeUpdates(int bitstringID)
+    void LevelStatusEditor::writeUpdates(int bitstringID)
     {
         u64 finalMultiProgress, finalSoloProgress;
         int editQueue = _playMode + 1;
@@ -151,12 +159,12 @@ namespace CTRPluginFramework
         Process::Write64(getBitstringAddress(bitstringID, _playMode), finalSoloProgress & finalMultiProgress);
     }
 
-    int     LevelStatusEditor::getBit(int rowNum)
+    int LevelStatusEditor::getBit(int rowNum)
     {
         return (_world * 4) + rowNum;
     }
 
-    void    LevelStatusEditor::_DrawTop(void) const
+    void LevelStatusEditor::_DrawTop(void) const
     {
         Renderer::SetTarget(TOP);
         Window::TopWindow.Draw("Level Completion Editor");
@@ -165,15 +173,7 @@ namespace CTRPluginFramework
         Renderer::DrawSysStringReturn((const u8*)_message.c_str(), 40, posY, 335, Preferences::Settings.MainTextColor);
     }
 
-    const StringVector labels =
-    {
-        "NC",
-        "C1",
-        "C2",
-        "C3"
-    };
-
-    void    LevelStatusEditor::_DrawBottom(void)
+    void LevelStatusEditor::_DrawBottom(void)
     {
         Renderer::SetTarget(BOTTOM);
         Window::BottomWindow.Draw();
@@ -198,10 +198,10 @@ namespace CTRPluginFramework
             Renderer::DrawSysString(_levelNames[i].c_str(), 38, lvlY, 290, Preferences::Settings.MainTextColor);
     }
 
-    void    LevelStatusEditor::_Update(void)
+    void LevelStatusEditor::_Update(void)
     {
-        bool        isTouched = Touch::IsDown();
-        IntVector   touchPos(Touch::GetPosition());
+        bool isTouched = Touch::IsDown();
+        IntVector touchPos(Touch::GetPosition());
 
         for (auto it = _checkboxes.begin(); it != _checkboxes.end(); it++)
             (*it).Update(isTouched, touchPos);
@@ -209,7 +209,7 @@ namespace CTRPluginFramework
         Window::BottomWindow.Update(isTouched, touchPos);
     }
 
-    void    LevelStatusEditor::_EditDoTCompletion(void)
+    void LevelStatusEditor::_EditDoTCompletion(void)
     {
         // TODO:
         // no challenge only = bitstring[0]
