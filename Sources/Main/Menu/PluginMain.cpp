@@ -1,5 +1,8 @@
+#include <3ds.h>
+
 #include "Helpers.hpp"
 #include "Cheats.hpp"
+#include "CTRPF.hpp"
 
 namespace CTRPluginFramework
 {
@@ -24,19 +27,19 @@ namespace CTRPluginFramework
 
         Result  res;
         Handle  processHandle;
-        s64     textTotalSize = 0;
+        s64     textTotalRoundedSize = 0;
         s64     startAddress = 0;
         u32*    found;
 
         if (R_FAILED(svcOpenProcess(&processHandle, 16)))
             return;
 
-        svcGetProcessInfo(&textTotalSize, processHandle, 0x10002);
+        svcGetProcessInfo(&textTotalRoundedSize, processHandle, 0x10002);
         svcGetProcessInfo(&startAddress, processHandle, 0x10005);
-        if (R_FAILED(svcMapProcessMemoryEx(CUR_PROCESS_HANDLE, 0x14000000, processHandle, (u32)startAddress, textTotalSize)))
+        if (R_FAILED(svcMapProcessMemoryEx(CUR_PROCESS_HANDLE, 0x14000000, processHandle, (u32)startAddress, textTotalRoundedSize, static_cast<MapExFlags>(0))))
             goto exit;
 
-        found = (u32*)Utils::Search<u32>(0x14000000, (u32)textTotalSize, pattern);
+        found = (u32*)Utils::Search<u32>(0x14000000, (u32)textTotalRoundedSize, pattern);
 
         if (found != nullptr)
         {
@@ -45,23 +48,39 @@ namespace CTRPluginFramework
             found[13] = 0xE1A00000; // NOP operation
         }
 
-        svcUnmapProcessMemoryEx(CUR_PROCESS_HANDLE, 0x14000000, textTotalSize);
+        svcUnmapProcessMemoryEx(CUR_PROCESS_HANDLE, 0x14000000, textTotalRoundedSize);
     exit:
         svcCloseHandle(processHandle);
     }
 
     void PatchProcess(void)
     {
-        // Disable Doppel-between-stage-costume reset
-        Process::Patch(AddressList::DoppelStageResetA.addr, 0xE320F000);
-        Process::Patch(AddressList::DoppelStageResetB.addr, 0xE320F000);
-        Process::Patch(AddressList::DoppelStageResetC.addr, 0xE320F000);
+    }
+
+    void ManageTFH_Settings(void)
+    {
+        // TODO: is there a better way of doing this
+        if (Preferences::PretendoPatch)
+            pretendoOnlinePatchManager->Enable();
+        else
+            pretendoOnlinePatchManager->Disable();
+
+        if (Preferences::DisableMoveOffset)
+            rotationOffsetManager->Enable();
+        else
+            rotationOffsetManager->Disable();
+
+        if (Preferences::DoppelStageCostumeReset)
+            rotationOffsetManager->Enable();
+        else
+            rotationOffsetManager->Disable();
     }
 
     void InitSequence(FwkSettings &settings)
     {
         Address::InitMemoryRange();
         AddressList::InitAddresses();
+        DescUtils::InitDescriptions();
 
         if (Preferences::IsEnabled(Preferences::HIDToggle))
             settings.UseGameHidMemory = true;
@@ -71,31 +90,35 @@ namespace CTRPluginFramework
         PatchProcess();
         ToggleTouchscreenForceOn();
 
-        // autoBeamCooldown->Enable(); // why is this enabled here?
+        //autoBeamCooldown->Enable(); // why is this enabled here?
     }
 
     void OnProcessExit(void)
     {
         ToggleTouchscreenForceOn();
+        Process::ReturnToHomeMenu(); // force exit to home menu might fix old system crashes...
     }
 
     // This function only runs once at plugin startup
     int main(void)
     {
-        std::string title = "An advanced, region-free cheat plugin made for\nThe Legend of Zelda: Tri Force Heroes.\n\nForked from the original CTRPluginFramework\nblank template repository.";
+        std::string title = "An advanced utility plugin made for\nThe Legend of Zelda: Tri Force Heroes packed with QoL features, solo and online-compatible cheats, and customizable gameplay options.\n\nForked from the original CTRPluginFramework\nblank template repository.";
         PluginMenu *menu = new PluginMenu("Tricord", 0, 5, 0, title);
 
         menu->SynchronizeWithFrame(true);
         menu->OnNewFrame = ToggleMenuChange;
+        menu->OnClosing = ManageTFH_Settings;
 
-        CreateMenu(*menu);
         InitSequence(FwkSettings::Get());
+        CreateMenu(*menu);
 
         menu->Run();
 
-        // Exit plugin
+        // end of plugin lifetime
         delete menu;
         OnProcessExit();
+
+        // should not reach here -> force home menu = NORETURN
         return (0);
     }
 }

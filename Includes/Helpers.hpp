@@ -1,14 +1,17 @@
 #pragma once
 
-#include "AddressList.hpp"
+#include <3ds.h>
 
-#include "Helpers/GeneralHelpers.hpp"
-#include "Helpers/MenuHelper.hpp"
-
+#include "General/Unicode.h"
 #include "General/char16.h"
 #include "General/csvc.h"
+#include "General/json.hpp"
 #include "General/types.h"
-#include "General/Unicode.h"
+
+#include "Helpers/GeneralHelpers.hpp"
+
+#include "Helpers/MenuHelpers/DescriptionUtils.hpp"
+#include "Helpers/MenuHelpers/FolderEntries.hpp"
 
 #include "Helpers/BuiltIn/HoldKey.hpp"
 #include "Helpers/BuiltIn/KeySequence.hpp"
@@ -28,14 +31,16 @@
 #include "Helpers/DataHelpers/Material.hpp"
 #include "Helpers/DataHelpers/PlayerAnimation.hpp"
 
-#include "csvc.h"
-#include "3ds.h"
+#include "AddressList.hpp"
 
-#include <vector>
-#include <functional>
-#include <string>
 #include <array>
 #include <bitset>
+#include <fstream>
+#include <functional>
+#include <iostream>
+#include <map>
+#include <string>
+#include <vector>
 
 namespace CTRPluginFramework
 {

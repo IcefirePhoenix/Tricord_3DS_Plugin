@@ -1,83 +1,67 @@
-#include "Helpers/MenuHelper.hpp"
 #include "Cheats.hpp"
+#include "Helpers/MenuHelpers/FolderEntries.hpp"
 
 namespace CTRPluginFramework
 {
-    static MenuEntry *EntryWithHotkey(MenuEntry *entry, const std::vector<Hotkey> &hotkeys)
-    {
-        if (entry != nullptr)
-        {
-            for (const Hotkey &hotkey : hotkeys)
-                entry->Hotkeys += hotkey;
-        }
-        return entry;
-    }
 
     void InitGameModes(PluginMenu &menu)
     {
-        /* first custom game mode */
-        effects = new MenuFolder("Chaos Events");
+        chaos = new MenuFolder("Chaos Mode by Glem");
+        turbo = new MenuFolder("Turbo Mode by Peanut");
 
+        /* populate Chaos sub-folder */
+        effects = new MenuFolder("Chaos Events");
         *effects += new MenuEntry("(TODO) View selected events");
         *effects += new MenuEntry("(TODO) Edit selected events");
         *effects += new MenuEntry("(TODO) Reset event selection");
 
-        chaos = new MenuFolder("Chaos Mode by Glem");
         *chaos += effects;
         *chaos += new MenuEntry("(TODO) Select event trigger interval");
 
-        /* second custom game mode */
-        turbo = new MenuFolder("Turbo Mode by Peanut");
         *turbo += new MenuEntry("Enable Turbo Mode", nullptr, TurboMode::enableTurboMode);
     }
 
-    void InitWarpCodes(PluginMenu &menu)
+    void InitWarpCodes(PluginMenu& menu)
     {
-        *warp += new MenuEntry("Warp to any location", nullptr, Gameplay::instantWarp);
-        *warp += new MenuEntry("Warp to any stage in current Drablands level", nullptr, Gameplay::stageWarp);
+        *warp += new MenuEntry("Warp to any location", nullptr, Gameplay::instantWarp, DescUtils::getDesc("warp_note"));
+        *warp += new MenuEntry("Warp to any stage in current Drablands level", nullptr, Gameplay::stageWarp, DescUtils::getDesc("warp_stage_note"));
 
-        // needs to be defined globally to allow entry name edits during runtime...
-        reWarp = new MenuEntry("Return to previous warp: None", nullptr, Gameplay::warpAgain);
+        reWarp = new MenuEntry("Return to previous warp: None", nullptr, Gameplay::warpAgain, DescUtils::getDesc("rewarp_note"));
         *warp += reWarp;
 
-        *warp += (EntryWithHotkey(new MenuEntry("Reset the current area (trigger via hotkey)", Gameplay::resetRoom),
+        *warp += (EntryWithHotkey(new MenuEntry("Reset the current area via hotkey", Gameplay::resetRoom, DescUtils::getDesc("reset_room_note")),
             { Hotkey(Key::L | Key::R, "Reset current area") }));
     }
 
     void InitHealthFairyCodes(PluginMenu &menu)
     {
-        std::string maxHeartNote = "Affects your base heart containers. Costume effects that add or remove heart containers still apply.";
-        std::string infHealthNote = "Freezes your health to match your maximum heart containers. May not be consistent if a costume that adds or removes heart containers is worn.";
-
-        *healthFairies += new MenuEntry("Set maximum heart containers", nullptr, Gameplay::maxHealthSet, maxHeartNote);
-        *healthFairies += new MenuEntry("Infinite health", Gameplay::infHealth, infHealthNote);
-        *healthFairies += new MenuEntry("Infinite fairies", Gameplay::infFairy);
+        *healthFairies += new MenuEntry("Set maximum heart containers", nullptr, Gameplay::maxHealthSet, DescUtils::getDesc("max_heart_note"));
+        *healthFairies += new MenuEntry("Infinite health", Gameplay::infHealth, DescUtils::getDesc("inf_heart_note"));
+        *healthFairies += new MenuEntry("Infinite fairies", Gameplay::infFairy, DescUtils::getDesc("inf_fairy_note"));
     }
 
     void InitEnergyCodes(PluginMenu &menu)
     {
-        std::string largeEnergyNote = "Switches the energy gauge in the UI to the Energy Gear / Cheer Outfit / Tri Suit energy gauge. Does NOT affect your max energy.";
-
-        *energy += new MenuEntry("Infinite energy", Gameplay::infEnergy);
-        *energy += new MenuEntry("Set maximum energy", nullptr, Gameplay::maxEnergySet);
-        *energy += new MenuEntry("Set energy consumption multiplier", nullptr, Gameplay::energyConsumeMultiplier);
-        *energy += new MenuEntry("Use large energy gauge graphic", nullptr, Gameplay::useLargeEnergyGauge, largeEnergyNote);
+        *energy += new MenuEntry("Infinite energy", Gameplay::infEnergy, DescUtils::getDesc("inf_energy_note"));
+        *energy += new MenuEntry("Set maximum energy", nullptr, Gameplay::maxEnergySet, DescUtils::getDesc("max_energy_note"));
+        *energy += new MenuEntry("Set energy consumption multiplier", nullptr, Gameplay::energyConsumeMultiplier, DescUtils::getDesc("energy_consumption_note"));
+        *energy += new MenuEntry("Use large energy gauge graphic", nullptr, Gameplay::useLargeEnergyGauge, DescUtils::getDesc("large_energy_bar_note"));
     }
 
     void InitEnemyCodes(PluginMenu &menu)
     {
-        *enemies += (EntryWithHotkey(new MenuEntry("Insta-kill all spawned enemies", Gameplay::autoKillEnemy),
+        *enemies += (EntryWithHotkey(new MenuEntry("Insta-kill all spawned enemies", Gameplay::autoKillEnemy, DescUtils::getDesc("instakill_note")),
             { Hotkey(Key::L | Key::B, "Insta-kill all spawned enemies") }));
 
-        *enemies += (EntryWithHotkey(new MenuEntry("Make all spawned enemies invincible", Gameplay::enemyInvinci),
+        *enemies += (EntryWithHotkey(new MenuEntry("Make all spawned enemies invincible", Gameplay::enemyInvinci, DescUtils::getDesc("invinci_note")),
             { Hotkey(Key::R | Key::B, "Make all spawned enemies invincible") }));
     }
 
     void InitPhysicsCodes(PluginMenu &menu)
     {
-        physicsSelG = new MenuEntry("Player 1 (Green): Not edited", nullptr, Gameplay::changePhysics);
-        physicsSelB = new MenuEntry("Player 2 (Blue): Not edited", nullptr, Gameplay::changePhysics);
-        physicsSelR = new MenuEntry("Player 3 (Red): Not edited", nullptr, Gameplay::changePhysics);
+        physicsSelG = new MenuEntry("Player 1 (Green): Not edited", nullptr, Gameplay::changePhysics, DescUtils::getDesc("physics_note"));
+        physicsSelB = new MenuEntry("Player 2 (Blue): Not edited", nullptr, Gameplay::changePhysics, DescUtils::getDesc("physics_note"));
+        physicsSelR = new MenuEntry("Player 3 (Red): Not edited", nullptr, Gameplay::changePhysics, DescUtils::getDesc("physics_note"));
 
         physicsEditAutoG = new MenuEntry("Write physics edit G (auto)", Gameplay::writePhysicsChanges);
         physicsEditAutoB = new MenuEntry("Write physics edit B (auto)", Gameplay::writePhysicsChanges);
@@ -108,7 +92,7 @@ namespace CTRPluginFramework
     void InitMoonJumpCodes(PluginMenu &menu)
     {
         // Radio group 1 for mutual exclusivity
-        moonJumpEntry = (EntryWithHotkey(new MenuEntry(1, "Enable Moon Jump", Gameplay::moonJumpAndFlight),
+        moonJumpEntry = (EntryWithHotkey(new MenuEntry(1, "Enable Moon Jump", Gameplay::moonJumpAndFlight, DescUtils::getDesc("moon_jump_note")),
         {
             Hotkey(Key::CPadUp, "Move North"),
             Hotkey(Key::CPadDown, "Move South"),
@@ -118,7 +102,7 @@ namespace CTRPluginFramework
         }));
 
 
-        flightEntry = (EntryWithHotkey(new MenuEntry(1, "Enable Flight", Gameplay::moonJumpAndFlight),
+        flightEntry = (EntryWithHotkey(new MenuEntry(1, "Enable Flight", Gameplay::moonJumpAndFlight, DescUtils::getDesc("flight_note")),
         {
             Hotkey(Key::CPadUp, "Move North"),
             Hotkey(Key::CPadDown, "Move South"),
@@ -131,17 +115,17 @@ namespace CTRPluginFramework
         *moonJumpFlight += moonJumpEntry;
         *moonJumpFlight += flightEntry;
 
-        *moonJumpFlight += new MenuEntry("Keep uncontrolled players hovering in place", Gameplay::forceHover);
+        *moonJumpFlight += new MenuEntry("Keep uncontrolled players hovering in place", Gameplay::forceHover, DescUtils::getDesc("doppel_hover_note"));
 
-        ascentSpeedSet = new MenuEntry("Adjust ascent speed: Medium", nullptr, Gameplay::selAscentDescentEdit);
-        descentSpeedSet = new MenuEntry("Adjust descent speed: Medium", nullptr, Gameplay::selAscentDescentEdit);
+        ascentSpeedSet = new MenuEntry("Adjust ascent speed: Medium", nullptr, Gameplay::selAscentDescentEdit, DescUtils::getDesc("ascent_note"));
+        descentSpeedSet = new MenuEntry("Adjust descent speed: Medium", nullptr, Gameplay::selAscentDescentEdit, DescUtils::getDesc("descent_note"));
         ascentSpeedSet->SetArg(reinterpret_cast<void *>(1));
         descentSpeedSet->SetArg(reinterpret_cast<void *>(2));
 
         *moonJumpFlight += ascentSpeedSet;
         *moonJumpFlight += descentSpeedSet;
 
-        *moonJumpFlight += new MenuEntry("Adjust lateral speed: Medium", nullptr, Gameplay::adjustLateralSpeed);
+        *moonJumpFlight += new MenuEntry("Adjust lateral speed: Medium", nullptr, Gameplay::adjustLateralSpeed, DescUtils::getDesc("lateral_note"));
     }
 
     void InitGameplayFolder(PluginMenu &menu)
@@ -168,11 +152,9 @@ namespace CTRPluginFramework
         *gameplay += physics;
         *gameplay += moonJumpFlight;
 
-        std::string moveSpeedNote = "Work in progress. Currently only affects walking speed.";
-
-        *gameplay += new MenuEntry("Control all players", nullptr, Gameplay::controlAllPlayers);
-        *gameplay += new MenuEntry("Infinite time", Gameplay::infTime);
-        *gameplay += new MenuEntry("Set custom movement speed", nullptr, Gameplay::customSpeed, moveSpeedNote);
+        *gameplay += new MenuEntry("Control all players", nullptr, Gameplay::controlAllPlayers, DescUtils::getDesc("control_all_note"));
+        *gameplay += new MenuEntry("Infinite time", Gameplay::infTime, DescUtils::getDesc("inf_time_note"));
+        *gameplay += new MenuEntry("Set custom movement speed", nullptr, Gameplay::customSpeed, DescUtils::getDesc("move_speed_note"));
 
         // auto-managed by plugin; hidden from users...
         controlAllAuto = new MenuEntry("Control all players (auto)", Gameplay::writePlayerControl);
@@ -185,13 +167,13 @@ namespace CTRPluginFramework
     {
         emotes = new MenuFolder("Emotes");
 
-        *emotes += (EntryWithHotkey(new MenuEntry("Enable Drablands Emote Swapper", Emotes::drablandEmoteSwapper),
+        *emotes += (EntryWithHotkey(new MenuEntry("Enable Drablands Emote Swapper", Emotes::drablandEmoteSwapper, DescUtils::getDesc("drabland_emote_note")),
         {
             Hotkey(Key::DPadLeft, "Swap to original emote set"),
             Hotkey(Key::DPadRight, "Swap to alternative emote set")
         }));
 
-        *emotes += (EntryWithHotkey(new MenuEntry("Enable Lobby Emote Swapper", Emotes::lobbyEmoteSwapper),
+        *emotes += (EntryWithHotkey(new MenuEntry("Enable Lobby Emote Swapper", Emotes::lobbyEmoteSwapper, DescUtils::getDesc("lobby_emote_note")),
         {
             Hotkey(Key::DPadLeft, "Swap to original emote set"),
             Hotkey(Key::DPadRight, "Swap to alternative emote set"),
@@ -201,7 +183,7 @@ namespace CTRPluginFramework
 
     void InitFreecamCodes(PluginMenu &menu)
     {
-        menuFreecam = (EntryWithHotkey(new MenuEntry("Use Freecam button controls", Freecam::useFreecam),
+        menuFreecam = (EntryWithHotkey(new MenuEntry("Use Freecam button controls", Freecam::useFreecam, DescUtils::getDesc("freecam_note")),
         {
             Hotkey(Key::L, "Enable/Disable Freecam"),
             Hotkey(Key::R, "Toggle camera lock"),
@@ -220,9 +202,12 @@ namespace CTRPluginFramework
             Hotkey(Key::CPadRight, "Rotate clockwise (Z-axis)")
         }));
 
-        editFreecamControls = new MenuEntry("Edit button controls", nullptr, Freecam::editHotkeys);
-        editFreecamSen = new MenuEntry("Edit sensitivity", nullptr, Freecam::editSensitivity);
-        swapZoom = new MenuEntry("Swap to Orthographic Zoom", nullptr, Freecam::setZoomType);
+        // TODO: view freecam hotkeys? entry nullptr pops up window with hotkey text...
+        //view_freecam_hotkeys_note: Previews your current Freecam hotkeys.
+
+        editFreecamControls = new MenuEntry("Edit button controls", nullptr, Freecam::editHotkeys, DescUtils::getDesc("edit_freecam_hotkey_note"));
+        editFreecamSen = new MenuEntry("Edit sensitivity", nullptr, Freecam::editSensitivity, DescUtils::getDesc("freecam_sensitivity_note"));
+        swapZoom = new MenuEntry("Swap to Orthographic Zoom", nullptr, Freecam::setZoomType, DescUtils::getDesc("zoom_swap_note"));
 
         editFreecamControls->SetAltIcon(false);
 
@@ -237,28 +222,24 @@ namespace CTRPluginFramework
         costume = new MenuFolder("Costumes");
         MenuFolder *cosmetic = new MenuFolder("Cosmetic Costumes");
 
-        std::string slotANote = "This setting is not accessible if Restore Great Fairy Costume is enabled.";
-        std::string preventDoppelResetNote = "Determines whether Doppel costumes reset to the Hero's Tunic when entering or returning to the single player lobby.";
-        std::string cosmeticNote = "Determines whether choices under Set Cosmetic Costume get applied or not.";
-        std::string cosmeticUsageNote = "Select a costume to gain the cosmetics of without changing the effects of the currently worn costume hiding underneath. Any usages of the \"Change Player Costume\" code or normal in-game costume changes after activating this will only change your costume's effect.";
-
-        *cosmetic += new MenuEntry("Enable Cosmetic Costumes", nullptr, Costume::enableCosmeticCostume, cosmeticNote);
-        *cosmetic += new MenuEntry("Set Cosmetic Costume", nullptr, Costume::setCosmeticCostume, cosmeticUsageNote);
+        *cosmetic += new MenuEntry("Enable Cosmetic Costumes", nullptr, Costume::enableCosmeticCostume, DescUtils::getDesc("choose_cosmetic_note"));
+        *cosmetic += new MenuEntry("Set Cosmetic Costume", nullptr, Costume::setCosmeticCostume, DescUtils::getDesc("set_cosmetic_note"));
         *costume += cosmetic;
 
-        triggerCostumeSlots = new MenuEntry("Open Custom Costume Slots", nullptr, Costume::openCustomCostumeSlots);
-        menuCostumeSlotA = new MenuEntry("   Set custom costume slot A", nullptr, Costume::selectCostumeID, slotANote);
-        menuCostumeSlotB = new MenuEntry("   Set custom costume slot B", nullptr, Costume::selectCostumeID);
-        menuCostumeSlotC = new MenuEntry("   Set custom costume slot C", nullptr, Costume::selectCostumeID);
-        menuCostumeSlotD = new MenuEntry("   Set custom costume slot D", nullptr, Costume::selectCostumeID);
-        restoreGreatFairy = new MenuEntry("Restore Great Fairy Costume", Costume::greatFairyEnable);
+        // TODO: restore after custom costume model loaders are ready...
+        // triggerCostumeSlots = new MenuEntry("Open Custom Costume Slots", nullptr, Costume::openCustomCostumeSlots);
+        // menuCostumeSlotA = new MenuEntry("   Set custom costume slot A", nullptr, Costume::selectCostumeID, slotANote);
+        // menuCostumeSlotB = new MenuEntry("   Set custom costume slot B", nullptr, Costume::selectCostumeID);
+        // menuCostumeSlotC = new MenuEntry("   Set custom costume slot C", nullptr, Costume::selectCostumeID);
+        // menuCostumeSlotD = new MenuEntry("   Set custom costume slot D", nullptr, Costume::selectCostumeID);
+        restoreGreatFairy = new MenuEntry("Restore Great Fairy Costume", Costume::greatFairyEnable, DescUtils::getDesc("restore_fairy_note"));
 
         // add to costume folder + hide by default
-        *costume += triggerCostumeSlots;
-        *costume += menuCostumeSlotA;
-        *costume += menuCostumeSlotB;
-        *costume += menuCostumeSlotC;
-        *costume += menuCostumeSlotD;
+        // *costume += triggerCostumeSlots;
+        // *costume += menuCostumeSlotA;
+        // *costume += menuCostumeSlotB;
+        // *costume += menuCostumeSlotC;
+        // *costume += menuCostumeSlotD;
         *costume += restoreGreatFairy;
 
         menuCostumeSlotA->Hide();
@@ -271,10 +252,10 @@ namespace CTRPluginFramework
         menuCostumeSlotC->SetAltIcon(true);
         menuCostumeSlotD->SetAltIcon(true);
 
-        *costume += new MenuEntry("Change Player Costume", nullptr, Costume::changeLinkCostume);
-        *costume += new MenuEntry("Prevent Doppel Costume resets", nullptr, Costume::preventLobbyReset, preventDoppelResetNote);
-        *costume += new MenuEntry("Set custom sword model(s)", nullptr, Player::setSwordChanges);
-        *costume += new MenuEntry("Force Bear Minimum / Maximum", nullptr, Costume::forceBearMinMax);
+        *costume += new MenuEntry("Change Player Costume", nullptr, Costume::changeLinkCostume, DescUtils::getDesc("change_costume_note"));
+        *costume += new MenuEntry("Prevent Doppel Costume resets", nullptr, Costume::preventDoppelLobbyReset, DescUtils::getDesc("prevent_doppel_reset_note"));
+        *costume += new MenuEntry("Set custom sword model(s)", nullptr, Player::setSwordChanges, DescUtils::getDesc("sword_model_note"));
+        *costume += new MenuEntry("Force Bear Minimum / Maximum", nullptr, Costume::forceBearMinMax, DescUtils::getDesc("bear_minMax_note"));
 
         // create costume sub-folders...
         // TODO: need to merge fixes from test branch...
@@ -297,19 +278,19 @@ namespace CTRPluginFramework
         MenuFolder *buttonSpam = new MenuFolder("Button Spammer");
         MenuFolder *camera = new MenuFolder("Screenshot");
 
-        *buttonSpam += new MenuEntry("Enable button spam", Miscellaneous::buttonSpammer);
-        *buttonSpam += new MenuEntry("Set custom timer interval: 10 ms", nullptr, Miscellaneous::selSpamInterval);
-        *buttonSpam += new MenuEntry("Set button spammer keys", nullptr, Miscellaneous::selectSpamKeys);
+        *buttonSpam += new MenuEntry("Enable button spam", Miscellaneous::buttonSpammer, DescUtils::getDesc("button_spam_note"));
+        *buttonSpam += new MenuEntry("Set custom timer interval: 10 ms", nullptr, Miscellaneous::selSpamInterval, DescUtils::getDesc("set_spam_interval_note"));
+        *buttonSpam += new MenuEntry("Set button spammer keys", nullptr, Miscellaneous::selectSpamKeys, DescUtils::getDesc("set_spam_button_note"));
 
-        *camera += new MenuEntry("Toggle camera on X button: No edits", nullptr, Miscellaneous::toggleCameraButton);
-        *camera += new MenuEntry("Disable camera shutter", nullptr, Miscellaneous::toggleCameraShutter);
-        *camera += new MenuEntry("Use photo viewer touchscreen toggle", Miscellaneous::managePhotoDisp);
+        *camera += new MenuEntry("Toggle camera on X button: No edits", nullptr, Miscellaneous::toggleCameraButton, DescUtils::getDesc("toggle_X_cam_note"));
+        *camera += new MenuEntry("Disable camera shutter", nullptr, Miscellaneous::toggleCameraShutter, DescUtils::getDesc("shutter_note"));
+        *camera += new MenuEntry("Use photo viewer touchscreen toggle", Miscellaneous::managePhotoDisp, DescUtils::getDesc("viewer_toggle_note"));
 
         *miscellaneous += buttonSpam;
         *miscellaneous += camera;
 
-        *miscellaneous += new MenuEntry("Toggle sword beam cooldown", nullptr, Miscellaneous::selectLinkBeam);
-        *miscellaneous += new MenuEntry("Force instant text boxes", nullptr, Miscellaneous::manageInstantText);
+        *miscellaneous += new MenuEntry("Toggle sword beam cooldown", nullptr, Miscellaneous::selectLinkBeam, DescUtils::getDesc("beam_cooldown_note"));
+        *miscellaneous += new MenuEntry("Force instant text boxes", nullptr, Miscellaneous::manageInstantText, DescUtils::getDesc("instant_text_note"));
 
         // auto-managed by plugin; hidden from users...
         autoWriteCameraStatus = new MenuEntry("Toggle camera status (auto)", Miscellaneous::writeCameraEdits);
@@ -321,20 +302,20 @@ namespace CTRPluginFramework
     {
         player = new MenuFolder("Player");
 
-        *player += new MenuEntry("Bypass Doppel Master dialogue cutscene", Player::bypassDoppelDemo);
-        *player += new MenuEntry("Enable position save/load touchscreen toggle", Player::posEditor);
+        *player += new MenuEntry("Bypass Doppel Master dialogue cutscene", Player::bypassDoppelDemo, DescUtils::getDesc("bypass_doppel_note"));
+        *player += new MenuEntry("Enable position save/load touchscreen toggle", Player::posEditor, DescUtils::getDesc("save_load_pos_note"));
 
-        *player += (EntryWithHotkey(new MenuEntry("Bring Doppels to your position via hotkey", Player::doppelsToPlayer),
-            { Hotkey(Key::X | Key::DPadDown, "Bring Doppels to you") }));
+        *player += (EntryWithHotkey(new MenuEntry("Bring Doppels to your position via hotkey", Player::doppelsToPlayer, DescUtils::getDesc("doppel_summon_note")),
+                                    {Hotkey(Key::X | Key::DPadDown, "Bring Doppels to you")}));
 
-        *player += new MenuEntry("Toggle collision edits (experimental!)", nullptr, Player::setCollisionChanges);
-        *player += new MenuEntry("Toggle animation storage edits", nullptr, Player::setAnimStorageChanges);
-        *player += new MenuEntry("Toggle player spawn edits", nullptr, Player::setSpawnChanges);
-        *player += new MenuEntry("Toggle jinxed model edits", nullptr, Player::setJinxChanges);
-        *player += new MenuEntry("Toggle player visibility edits", nullptr, Player::setVisibilityChanges);
-        *player += new MenuEntry("Toggle player invincibility edits", nullptr, Player::setInvincibilityChanges);
-        *player += new MenuEntry("Toggle PvP damage edits", nullptr, Player::setPVPChanges);
-        *player += new MenuEntry("Set custom player model size", nullptr, Player::setSizeChanges);
+        *player += new MenuEntry("Toggle collision edits (experimental!)", nullptr, Player::setCollisionChanges, DescUtils::getDesc("collision_note"));
+        *player += new MenuEntry("Toggle animation storage edits", nullptr, Player::setAnimStorageChanges, DescUtils::getDesc("anim_storage_note"));
+        *player += new MenuEntry("Toggle player spawn edits", nullptr, Player::setSpawnChanges, DescUtils::getDesc("spawn_note"));
+        *player += new MenuEntry("Toggle jinxed model edits", nullptr, Player::setJinxChanges, DescUtils::getDesc("jinxed_note"));
+        *player += new MenuEntry("Toggle player visibility edits", nullptr, Player::setVisibilityChanges, DescUtils::getDesc("visible_note"));
+        *player += new MenuEntry("Toggle player invincibility edits", nullptr, Player::setInvincibilityChanges, DescUtils::getDesc("player_invinci_note"));
+        *player += new MenuEntry("Toggle PvP damage edits", nullptr, Player::setPVPChanges, DescUtils::getDesc("pvp_note"));
+        *player += new MenuEntry("Set custom player model size", nullptr, Player::setSizeChanges, DescUtils::getDesc("player_size_note"));
 
         // auto-managed by plugin; hidden from users...
         jinxEditAuto = new MenuEntry("Write Jinx edits (auto)", Player::writeJinxChanges);
@@ -350,11 +331,11 @@ namespace CTRPluginFramework
     {
         items = new MenuFolder("Items");
 
-        *items += new MenuEntry("Set current item", nullptr, Item::itemOpt);
-        *items += new MenuEntry("Set Shadow Link item", nullptr, Item::shadowItemOpt);
-        *items += new MenuEntry("Set strafing speeds", nullptr, Item::strafingSpeedSet);
-        *items += new MenuEntry("Remove current items", nullptr, Item::manageItems);
-        *items += new MenuEntry("Freeze current items", Item::manageItems);
+        *items += new MenuEntry("Set current item", nullptr, Item::itemOpt, DescUtils::getDesc("curr_item_note"));
+        *items += new MenuEntry("Set Shadow Link item", nullptr, Item::shadowItemOpt, DescUtils::getDesc("shadow_link_note"));
+        *items += new MenuEntry("Set strafing speeds", nullptr, Item::strafingSpeedSet, DescUtils::getDesc("strafe_note"));
+        *items += new MenuEntry("Remove current items", nullptr, Item::manageItems, DescUtils::getDesc("remove_item_note"));
+        *items += new MenuEntry("Freeze current items", Item::manageItems, DescUtils::getDesc("freeze_item_note"));
 
         // TODO: *items += new MenuEntry("Always use upgraded Items", Item::upgradeItemAlways);
     }
@@ -369,26 +350,26 @@ namespace CTRPluginFramework
         MenuFolder *face = new MenuFolder("Facial Expressions");
         MenuFolder *scrollText = new MenuFolder("Top Screen Scrolling Messages");
 
-        *scrollText += new MenuEntry("Edit top screen scrolling text colors", nullptr, Rendering::editLiveMsgColor); // TODO: settings
-        *scrollText += new MenuEntry("Disable top screen scrolling text", nullptr, Rendering::disableScrollingText);
+        *scrollText += new MenuEntry("Edit top screen scrolling text colors", nullptr, Rendering::editLiveMsgColor, DescUtils::getDesc("scroll_text_color_note")); // TODO: settings
+        *scrollText += new MenuEntry("Disable top screen scrolling text", nullptr, Rendering::disableScrollingText, DescUtils::getDesc("disable_scroll_text_note"));
         *overlay += scrollText;
 
-        *overlay += new MenuEntry("Hide HUD", Rendering::triggerHideHUD);
-        *overlay += new MenuEntry("Display current respawn location", Rendering::respawnIndicator);
-        *overlay += new MenuEntry("Force visibility of Treasure Chest contents", nullptr, Rendering::seeChestContents);
-        *overlay += new MenuEntry("Swap single player loading screen", nullptr, Rendering::swapSPLoadingScreen);
+        *overlay += new MenuEntry("Hide HUD", Rendering::triggerHideHUD, DescUtils::getDesc("hide_HUD_note"));
+        *overlay += new MenuEntry("Display current respawn location", Rendering::respawnIndicator, DescUtils::getDesc("respawn_locator_note"));
+        *overlay += new MenuEntry("Force visibility of Treasure Chest contents", nullptr, Rendering::seeChestContents, DescUtils::getDesc("chest_visible_note"));
+        *overlay += new MenuEntry("Swap single player loading screen", nullptr, Rendering::swapSPLoadingScreen, DescUtils::getDesc("load_sp_screen_note"));
 
-        *face += new MenuEntry("Enable custom facial expressions", FaceSelMenu::maintainEdits);
-        *face += new MenuEntry("Edit facial expressions", nullptr, Rendering::editFaceExpr);
+        *face += new MenuEntry("Enable custom facial expressions", FaceSelMenu::maintainEdits, DescUtils::getDesc("face_expr_enable_note"));
+        *face += new MenuEntry("Edit idle facial expression", nullptr, Rendering::editFaceExpr, DescUtils::getDesc("face_expr_sel_note"));
         *texture += face;
 
-        *texture += new MenuEntry("Swap Link textures", nullptr, Rendering::swapLinkTexture);
-        *texture += new MenuEntry("Force visibility of Cheer Outfit pom poms", nullptr, Rendering::forcePomPom);
+        *texture += new MenuEntry("Swap Link textures", nullptr, Rendering::swapLinkTexture, DescUtils::getDesc("swap_link_tex_note"));
+        *texture += new MenuEntry("Force visibility of Cheer Outfit pom poms", nullptr, Rendering::forcePomPom, DescUtils::getDesc("cheer_pom_note"));
 
-        *env += new MenuEntry("Disable fog effects", Rendering::disableFog);
-        *env += new MenuEntry("Force costume aura visibility", nullptr, Rendering::forceAura);
-        *env += new MenuEntry("Force Sword Suit blue sword particles", nullptr, Rendering::forceBlueSwordParticles);
-        *env += new MenuEntry("Disable player light sources in dark stages", nullptr, Rendering::disablePlayerLight);
+        *env += new MenuEntry("Disable fog effects", Rendering::disableFog, DescUtils::getDesc("fog_disable_note"));
+        *env += new MenuEntry("Force costume aura visibility", nullptr, Rendering::forceAura, DescUtils::getDesc("aura_visible_note"));
+        *env += new MenuEntry("Force Sword Suit blue sword particles", nullptr, Rendering::forceBlueSwordParticles, DescUtils::getDesc("sword_ptcl_note"));
+        *env += new MenuEntry("Disable player light sources in dark stages", nullptr, Rendering::disablePlayerLight, DescUtils::getDesc("disable_light_source_note"));
 
         *render += overlay;
         *render += texture;
@@ -399,19 +380,19 @@ namespace CTRPluginFramework
     {
         save = new MenuFolder("Save Data Editors");
 
-        *save += new MenuEntry("Use Voiceless", Save::useVoiceless);
-        *save += new MenuEntry("Set Main Voice", nullptr, Save::mainVoice);
-        *save += new MenuEntry("Set Hero Point count", nullptr, Save::heroPointCountSet);
-        *save += new MenuEntry("Set Coliseum Win count", nullptr, Save::coliseumWinCountSet);
-        *save += new MenuEntry("Edit Level Completion", nullptr, Save::selLevelCompletion);
+        *save += new MenuEntry("Use Voiceless", Save::useVoiceless, DescUtils::getDesc("voiceless_note"));
+        *save += new MenuEntry("Set Main Voice", nullptr, Save::mainVoice, DescUtils::getDesc("main_voice_note"));
+        *save += new MenuEntry("Set Hero Point count", nullptr, Save::heroPointCountSet, DescUtils::getDesc("hero_point_note"));
+        *save += new MenuEntry("Set Coliseum Win count", nullptr, Save::coliseumWinCountSet, DescUtils::getDesc("coliseum_win_note"));
+        *save += new MenuEntry("Edit Level Completion", nullptr, Save::selLevelCompletion, DescUtils::getDesc("level_completion_note"));
 
         MenuFolder *merchant = new MenuFolder("Street Merchant Codes");
-        merchantA = new MenuEntry("Set 1st material slot", nullptr, Save::selMerchantSlot);
-        merchantB = new MenuEntry("Set 2nd material slot", nullptr, Save::selMerchantSlot);
-        merchantC = new MenuEntry("Set 3rd material slot", nullptr, Save::selMerchantSlot);
-        merchantD = new MenuEntry("Set 4th material slot", nullptr, Save::selMerchantSlot);
-        merchantE = new MenuEntry("Set 5th material slot", nullptr, Save::selMerchantSlot);
-        *merchant += new MenuEntry("Force re-stock Street Merchant stall", nullptr, Save::resetMerchant);
+        merchantA = new MenuEntry("Set 1st material slot", nullptr, Save::selMerchantSlot, DescUtils::getDesc("merchant_mat_note"));
+        merchantB = new MenuEntry("Set 2nd material slot", nullptr, Save::selMerchantSlot, DescUtils::getDesc("merchant_mat_note"));
+        merchantC = new MenuEntry("Set 3rd material slot", nullptr, Save::selMerchantSlot, DescUtils::getDesc("merchant_mat_note"));
+        merchantD = new MenuEntry("Set 4th material slot", nullptr, Save::selMerchantSlot, DescUtils::getDesc("merchant_mat_note"));
+        merchantE = new MenuEntry("Set 5th material slot", nullptr, Save::selMerchantSlot, DescUtils::getDesc("merchant_mat_note"));
+        *merchant += new MenuEntry("Force re-stock Street Merchant stall", nullptr, Save::resetMerchant, DescUtils::getDesc("merchant_restock_note"));
 
         MenuEntry *slots[5] =
         {
@@ -436,18 +417,16 @@ namespace CTRPluginFramework
     {
         sound = new MenuFolder("BGM & SFX");
 
-        std::string timelessNote = "You will be voiceless in Hytopia, but retain a normal voice in the Drablands.";
-
         // incomplete -- messy for now...
-        masterVol = new MenuEntry("Master volume: 100%", nullptr, BGM_SFX::volSet);
-        BGMVol = new MenuEntry("BGM volume: 100%", nullptr, BGM_SFX::volSet);
+        masterVol = new MenuEntry("Master volume: 100%", nullptr, BGM_SFX::volSet, DescUtils::getDesc("master_vol_note"));
+        BGMVol = new MenuEntry("BGM volume: 100%", nullptr, BGM_SFX::volSet, DescUtils::getDesc("bgm_vol_note"));
         //*sound += new MenuEntry("Override current BGM", nullptr, BGM_SFX::bgmSet);
-        voiceVol = new MenuEntry("(TODO) Link Voice volume: 100%", nullptr, BGM_SFX::volSet);
-        lowHPVol = new MenuEntry("(TODO) Low Health Alert volume: 100%", nullptr, BGM_SFX::volSet);
+        voiceVol = new MenuEntry("(TODO) Link Voice volume: 100%", nullptr, BGM_SFX::volSet, DescUtils::getDesc("voice_vol_note"));
+        lowHPVol = new MenuEntry("(TODO) Low Health Alert volume: 100%", nullptr, BGM_SFX::volSet, DescUtils::getDesc("low_HP_vol_note"));
         // emoteVol += new MenuEntry("(TODO) Emote volume: 100%", nullptr, BGM_SFX::?);
         //*sound += new MenuEntry("Set Lobby Ball volume", BGM_SFX::?);
         //*sound += new MenuEntry("Set Lobby Ball counter", BGM_SFX::?);
-        *sound += new MenuEntry("Choose Lobby Ball song", nullptr, BGM_SFX::lobbyBallSong);
+        *sound += new MenuEntry("Choose Lobby Ball song", nullptr, BGM_SFX::lobbyBallSong, DescUtils::getDesc("lobby_ball_song"));
 
         MenuEntry *soundEntries[4] =
         {
@@ -464,11 +443,18 @@ namespace CTRPluginFramework
             *sound += soundEntries[iterator];
         }
 
-        *sound += new MenuEntry("Force normal or 8-bit BGM", nullptr, BGM_SFX::forceNormal8bit);
-        *sound += new MenuEntry("Disable Timeless Tunic voice filter", nullptr, BGM_SFX::disable8bitVoice, timelessNote);
-        *sound += new MenuEntry("Force 8-bit sword SFX", nullptr, BGM_SFX::force8bitSword);
+        *sound += new MenuEntry("Force normal or 8-bit BGM", nullptr, BGM_SFX::forceNormal8bit, DescUtils::getDesc("8bit_note"));
+        *sound += new MenuEntry("Disable Timeless Tunic voice filter", nullptr, BGM_SFX::disable8bitVoice, DescUtils::getDesc("disable_timeless_voice_note"));
+        *sound += new MenuEntry("Force 8-bit sword SFX", nullptr, BGM_SFX::force8bitSword, DescUtils::getDesc("sword_8bit_note"));
 
         // auto-managed by plugin; hidden from users...
         lobbyBallAuto = new MenuEntry("Write lobby ball edits (auto)", BGM_SFX::writeLobbyBallSel);
+    }
+
+    void InitTFH_Settings(PluginMenu &menu)
+    {
+        pretendoOnlinePatchManager = new MenuEntry("Pretendo Patch (auto)", Miscellaneous::applyPretendoPatch);
+        rotationOffsetManager = new MenuEntry("Disable rotation offset (auto)", Player::disableOffset);
+        doppelCostumeStageResetManager = new MenuEntry("Disable Doppel costume stage reset (auto)", Costume::preventDoppelStageReset);
     }
 }

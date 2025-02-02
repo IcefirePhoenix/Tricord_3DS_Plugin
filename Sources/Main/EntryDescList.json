@@ -1,0 +1,992 @@
+{
+    "descriptions": [
+        {
+            "name": "warp_note",
+            "content": {
+                "intro": "Enables warping to any location -- not just individual levels. Doppels are automatically activated in areas where they might be required.",
+                "note": "If entering the Drablands, you can also choose to enable a challenge.",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "warp_stage_note",
+            "content": {
+                "intro": "Enables warping to any stage within the current Drablands level.",
+                "note": "Cannot be used outside of the Drablands.",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "rewarp_note",
+            "content": {
+                "intro": "Returns you to the last location you warped to.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "reset_room_note",
+            "content": {
+                "intro": "Reloads the current area.",
+                "note": "",
+                "hotkeys": [
+                    {
+                        "hotkeyTitle": "\uE052 + \uE053",
+                        "hotkeyDesc": "Reset the area"
+                    }
+                ],
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "max_heart_note",
+            "content": {
+                "intro": "Allows you to set a custom number of *base* heart containers. Using large values may cause graphical glitches as the UI only supports displaying up to 18 heart containers.",
+                "note": "Costume effects that add or remove heart containers will still apply.",
+                "hotkeys": {},
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "inf_heart_note",
+            "content": {
+                "intro": "Keeps your health fixed at the maximum number of heart containers.",
+                "note": "Consistency may vary if wearing a costume that adjusts the total number of heart containers.",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "inf_fairy_note",
+            "content": {
+                "intro": "Keeps your fairy count at 9 fairies.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "inf_energy_note",
+            "content": {
+                "intro": "Prevents energy depletion when using items or swim boosts. Compatible with both standard and large energy gauges.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "max_energy_note",
+            "content": {
+                "intro": "Adjusts the maximum capacity of the energy gauge.",
+                "note": "Standard gauges have a default capacity of 600 units, while large gauges hold 900 units.",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "energy_consumption_note",
+            "content": {
+                "intro": "Sets a custom multiplier for energy consumption, modifying the amount used for items or swim boosts.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "large_energy_bar_note",
+            "content": {
+                "intro": "Switches the energy gauge graphic in the UI to the Energy Gear / Cheer Outfit / Tri Suit version.",
+                "note": "This is ONLY a visual change and does NOT affect your maximum energy.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "instakill_note",
+            "content": {
+                "intro": " Instantly defeats all currently spawned enemies when hotkeys are pressed. Modeled after a debug feature found in the EU DLP Debug Build.",
+                "note": "",
+                "hotkeys": [
+                    {
+                        "hotkeyTitle": "\uE052 + \uE001",
+                        "hotkeyDesc": "Insta-kill all enemies"
+                    }
+                ],
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "invinci_note",
+            "content": {
+                "intro": "Grants infinite health to all currently spawned enemies when hotkeys are pressed.",
+                "note": "Ideal for practicing enemy-fighting strategies.",
+                "hotkeys": [
+                    {
+                        "hotkeyTitle": "\uE053 + \uE001",
+                        "hotkeyDesc": "Make all enemies invincible"
+                    }
+                ],
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "physics_note",
+            "content": {
+                "intro": "Sets custom physics types that alter player movement + interactions with the environment.\n\nAvailable types include:\n- Water\n- Lava\n- Ice\n-Quicksand",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "moon_jump_note",
+            "content": {
+                "intro": "Enables moon-jumping with lateral movement controls while airborne.",
+                "note": "",
+                "hotkeys": [
+                    {
+                        "hotkeyTitle": "\uE077 Up",
+                        "hotkeyDesc": "Move north"
+                    },
+                    {
+                        "hotkeyTitle": "\uE077 Down",
+                        "hotkeyDesc": "Move south"
+                    },
+                    {
+                        "hotkeyTitle": "\uE077 Left",
+                        "hotkeyDesc": "Move west"
+                    },
+                    {
+                        "hotkeyTitle": "\uE077 Right",
+                        "hotkeyDesc": "Move east"
+                    },
+                    {
+                        "hotkeyTitle": "\uE002",
+                        "hotkeyDesc": "Ascend"
+                    }
+                ],
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "flight_note",
+            "content": {
+                "intro": "Enables flight with adjustable height and movement. When stationary, you will automatically hover in-place.",
+                "note": "",
+                "hotkeys": [
+                    {
+                        "hotkeyTitle": "\uE077 Up",
+                        "hotkeyDesc": "Move north"
+                    },
+                    {
+                        "hotkeyTitle": "\uE077 Down",
+                        "hotkeyDesc": "Move south"
+                    },
+                    {
+                        "hotkeyTitle": "\uE077 Left",
+                        "hotkeyDesc": "Move west"
+                    },
+                    {
+                        "hotkeyTitle": "\uE077 Right",
+                        "hotkeyDesc": "Move east"
+                    },
+                    {
+                        "hotkeyTitle": "\uE002",
+                        "hotkeyDesc": "Ascend"
+                    },
+                    {
+                        "hotkeyTitle": "\uE001",
+                        "hotkeyDesc": "Descend"
+                    }
+                ],
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "doppel_hover_note",
+            "content": {
+                "intro": "Allows Doppels to hover in-place instead of falling when switched out of them.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "ascent_note",
+            "content": {
+                "intro": "Adjusts the ascent strength for moon-jumping or flying.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "descent_note",
+            "content": {
+                "intro": "Adjusts the descent strength for moon-jumping or flying.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "lateral_note",
+            "content": {
+                "intro": "Adjusts the lateral movement strength for moon-jumping or flying.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "control_all_note",
+            "content": {
+                "intro": "Enables control of all players simultaneously by directing all inputs for the main player to Doppels.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "inf_time_note",
+            "content": {
+                "intro": "Prevents the timer from decreasing during Drablands timed challenges",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "move_speed_note",
+            "content": {
+                "intro": "Allows you to set a custom movement speed.",
+                "note": "Work in progress! Currently only affects walking speed.",
+                "hotkeys": {},
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "drabland_emote_note",
+            "content": {
+                "intro": "Enables use of emotes that are not usually accessible in the Drablands. Also restores functionality of an unused emote (yawning Link) and allows you to send blank emotes.",
+                "note": "Blank emotes can only be sent if NO other emotes have been used after a new area has been loaded.",
+                "hotkeys": [
+                    {
+                        "hotkeyTitle": "\uE07B",
+                        "hotkeyDesc": "Swap to original emotes"
+                    },
+                    {
+                        "hotkeyTitle": "\uE07C",
+                        "hotkeyDesc": "Swap to alternative emotes"
+                    }
+                ],
+                "modeCompatibility": 4,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "lobby_emote_note",
+            "content": {
+                "intro": "Enables use of emotes that are not usually accessible in the multiplayer lobbies. Also restores functionality of an unused emote (yawning Link) and allows you to send blank emotes.",
+                "note": "Blank emotes can only be sent if NO other emotes have been used since creating/joining a lobby.",
+                "hotkeys": [
+                    {
+                        "hotkeyTitle": "\uE07B",
+                        "hotkeyDesc": "Swap to original emotes"
+                    },
+                    {
+                        "hotkeyTitle": "\uE07C",
+                        "hotkeyDesc": "Swap to alternative emotes"
+                    },
+                    {
+                        "hotkeyTitle": "\uE079",
+                        "hotkeyDesc": "Add blank emote to current set"
+                    }
+                ],
+                "modeCompatibility": 4,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "freecam_note",
+            "content": {
+                "intro": "Enables unrestricted camera movement along all axes with zoom + rotation options. The camera can also be locked to prevent auto-resets when switching Doppels, using an item, or dropping into the fall plane.",
+                "note": "Hotkeys can be edited. Current hotkeys can be viewed by selecting the \"View Hotkeys\" entry below.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "edit_freecam_hotkey_note",
+            "content": {
+                "intro": "Allows you to customize the current hotkeys for Freecam. Current hotkeys can be viewed by selecting the \"View Hotkeys\" entry below.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "zoom_swap_note",
+            "content": {
+                "intro": "Switches between Orthographic and Perspective zoom types.\n\nOrthographic: maintains object sizes but reduces depth perception\nPerspective: more realistic; objects get smaller (and potentially distorted/skewed) the farther they are from the camera",
+                "note": "The difference becomes more noticeable when the camera is zoomed out at a far distance.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "freecam_sensitivity_note",
+            "content": {
+                "intro": "Adjusts Freecam sensitivity for movement, height, zoom, and rotation.\n\nRecommended values:\n- Shift sensitivity: 0.05 - 0.30\n- Height sensitivity: 0.40 - 1.00\n- Zoom sensitivity: 0.02 - 0.04\n- Rotation sensitivity: 0.10 - 0.50",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "set_cosmetic_note",
+            "content": {
+                "intro": "Determines whether the selection made under \"Set Cosmetic Costume\" gets applied in-game.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "choose_cosmetic_note",
+            "content": {
+                "intro": "Allows you to select a new costume to wear while keeping the effects of the currently worn costume.\n\nThis is a visual/cosmetic change ONLY and does NOT affect the true costume \"hiding underneath.\"",
+                "note": "Changing your costume through Tricord or the TFH costume selection menu will not affect your cosmetic costume.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "change_costume_note",
+            "content": {
+                "intro": "Allows you to change any player's costume.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "restore_fairy_note",
+            "content": {
+                "intro": "Restores the Great Fairy Costume, an unused costume accidentally left during pre-release development. An additional slot will be added to the TFH costume selection menu to accommodate this extra costume.",
+                "note": "If used in multiplayer, other players will see the Hero's Tunic as a placeholder.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "slot_A_note",
+            "content": {
+                "intro": "TODO",
+                "note": "This setting is not accessible if Restore Great Fairy Costume is enabled.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "prevent_doppel_reset_note",
+            "content": {
+                "intro": "Toggles whether Doppel costumes reset to the Hero's Tunic upon entering/returning to the single-player lobby.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "sword_model_note",
+            "content": {
+                "intro": "Allows player sword models to be changed, regardless of current costume. DEVTODO: check below?",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "bear_minMax_note",
+            "content": {
+                "intro": "Toggles the Bear Maximum costume upgrade, regardless of current Hero Point count. DEVTODO: check below?",
+                "note": "Bear Maximum is normally unlocked with 30+ Hero Points.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "button_spam_note",
+            "content": {
+                "intro": "Allows you to spam buttons at specified time intervals by pressing and holding them.\n\nSpammable button list: A, B, X, Y, L, R, Start/Select\nSpamming speeds: 10ms, 50ms, 100ms, 150ms",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "set_spam_interval_note",
+            "content": {
+                "intro": "Adjusts the button spamming speed\n\nSpamming speeds: 10ms, 50ms, 100ms, 150ms",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "set_spam_button_note",
+            "content": {
+                "intro": "Allows you to choose the buttons to spam.\n\nSpammable button list: A, B, X, Y, L, R, Start/Select",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "toggle_X_cam_note",
+            "content": {
+                "intro": "Toggles the X button's screenshot functionality in the Drablands/Coliseum, regardless of whether the camera has been obtained from the Photo Bro in the Miiverse Gallery.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "shutter_note",
+            "content": {
+                "intro": "Prevents the shutter graphic from appearing on the top-screen when taking a screenshot in the Drablands/Coliseum.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "viewer_toggle_note",
+            "content": {
+                "intro": "Adds a custom button on the touchscreen to preview existing Drablands/Coliseum screenshots.",
+                "note": "Since the top-screen will be occupied by the preview, real-time gameplay cannot be seen. To prevent unintended actions, player input will be disabled in preview mode.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "beam_cooldown_note",
+            "content": {
+                "intro": "Disables the cooldown period for sword beams, allowing you to shoot sword beams much quicker.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "instant_text_note",
+            "content": {
+                "intro": "Forces text box strings to render instantly instead of per-word. DEVTODO: check below?",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "bypass_doppel_note",
+            "content": {
+                "intro": "Automatically activates Doppels and places them on the Triforce portal upon entering the single-player lobby. This skips the cutscene from the Doppel Master's activation dialogue.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "save_load_pos_note",
+            "content": {
+                "intro": "Adds custom touchscreen buttons to save and load player positions.",
+                "note": "To save/load the position of an inactive Doppel, switch to that Doppel first",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "doppel_summon_note",
+            "content": {
+                "intro": "Summons Doppels to your current location via hotkey, saving you the trouble of controlling and/or carrying them individually. Modeled after a debug feature found in the EU DLP Debug Build.",
+                "note": "",
+                "hotkeys": [
+                    {
+                        "hotkeyTitle": "\uE07A + \uE002",
+                        "hotkeyDesc": "Summon Doppels"
+                    }
+                ],
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "collision_note",
+            "content": {
+                "intro": "Toggles player collision. Disabling collision allows you to pass through walls, objects, and NPCs.",
+                "note": "Work in progress! May not work as expected.",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "anim_storage_note",
+            "content": {
+                "intro": "Allows the water storage glitch to be performed without any setup. This glitch allows jumping onto higher ledges that are normally unreachable when exiting water.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "spawn_note",
+            "content": {
+                "intro": "Allows you to spawn and/or de-spawn players.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "jinxed_note",
+            "content": {
+                "intro": "Toggles jinxed status, which is normally only obtainable if a player has been attacked by a \"dark\" enemy variant. Players that are jinxed cannot use their sword or equipped item.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "visible_note",
+            "content": {
+                "intro": "Toggles player visibility. Although player MODELS are hidden, their shadows remain visible... making invisible players somewhat traceable.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "player_invinci_note",
+            "content": {
+                "intro": "Makes players invincible, rendering them immune to all damage except for fall damage.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "pvp_note",
+            "content": {
+                "intro": "Enables friendly fire, allowing players to attack each other with swords, items, dash attacks, and costume abilities, similar to Coliseum gameplay.",
+                "note": "Players still share the same health bar...",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "player_size_note",
+            "content": {
+                "intro": "Adjusts player sizes. Extremely large sizes are not recommended, as they may make the game unstable/crash. DEVTODO: check this(?)",
+                "note": "The selected size value applies to all players. Individual sizes cannot be set",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "curr_item_note",
+            "content": {
+                "intro": "Sets player items, overwriting any current items.",
+                "note": "It is not recommended to use this entry at the beginning of Stage 1 of a Drablands level, as it can halt progress by preventing item pedestals from despawning normally. If you encounter this situation, remove your current item(s) and try interacting with the item pedestals again.",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "shadow_link_note",
+            "content": {
+                "intro": "Customizes Shadow Link items for the Den of Trials boss fight. Also adds a custom option to randomize items after each use.",
+                "note": "Cannot be used outside of Baneful Zone, Stage 4.",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "strafe_note",
+            "content": {
+                "intro": "Allows you to set custom strafing speeds when moving while priming an item. Default strafing speeds are all 1.0.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "remove_item_note",
+            "content": {
+                "intro": "Quickly removes equipped items for all players.",
+                "note": "If using in multiplayer matches, all players must refrain from using/equipping items until the entry has been successfully activated by all players.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "freeze_item_note",
+            "content": {
+                "intro": "Prevent your current items from being:\n- removed after leaving the current level\n- overwritten by newly-equipped items",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "scroll_text_color_note",
+            "content": {
+                "intro": "ustomizes the color of player names that appear in top-screen scrolling event messages. Accepts hex color codes. Changes are preserved between reboots.",
+                "note": "Recommended for use with custom Link color modpacks.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "disable_scroll_text_note",
+            "content": {
+                "intro": "Prevents top-screen scrolling event messages from appearing.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "hide_HUD_note",
+            "content": {
+                "intro": "Hides the HUD, including the health bar, rupee count, energy gauge, and player location indicators.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "respawn_locator_note",
+            "content": {
+                "intro": "Adds custom arrows to indicate each player's current respawn point in real-time, modeled after a debug feature found in the EU DLP Debug Build.",
+                "note": "Useful for performing glitches that rely on respawn exploits.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "chest_visible_note",
+            "content": {
+                "intro": "Forces the contents of treasure chests to be visible, regardless of whether the Linebeck's Uniform is currently worn.",
+                "note": "Works on large and small treasure chests. Does NOT work in the Daily Riches minigame.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "load_sp_screen_note",
+            "content": {
+                "intro": "Forces a specific loading screen layout in single-player mode.\n\nFour layouts are available:\n- Drablands, default\n- Multiplayer\n- Coliseum, 2-player\n- Coliseum, 3-player",
+                "note": "Does not work in multiplayer mode.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "face_expr_sel_note",
+            "content": {
+                "intro": "Allows you to edit Link's default idle facial expression.\n\nThere are 20 available textures:\n- 9 eye textures\n- 5 eyebrow texture\n- 6 mouth textures\n\nThis includes several unused textures (three eye textures and one mouth texture) that have been restored.",
+                "note": "Changes will be preserved between reboots.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "face_expr_enable_note",
+            "content": {
+                "intro": "Determines whether the selection made under \"Edit idle facial expression\" gets applied in-game.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "swap_link_tex_note",
+            "content": {
+                "intro": "Allows you to change the color textures used for each player between:\n- Hytopia Link\n- Green Link\n- Blue Link\n- Red Link",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "cheer_pom_note",
+            "content": {
+                "intro": "Forces the Cheer Outfit's pom-pom model to load, regardless of whether the current area is Madame Couture's.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "fog_disable_note",
+            "content": {
+                "intro": "Disables fog effects, allowing for a clearer view of the current area, especially when the camera is zoomed out.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "aura_visible_note",
+            "content": {
+                "intro": "Forces a specific costume aura to appear, even if you are not currently wearing the corresponding costumes:\n- Fierce Deity Armor (blue flames)\n- Showstopper (luminous yellow sheen)\n- Bear Maximum (twinkling sparkles)",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "sword_ptcl_note",
+            "content": {
+                "intro": "Forces the Sword Suit's blue particles to render, regardless of whether the costume is worn.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "disable_light_source_note",
+            "content": {
+                "intro": "Disables surrounding light sources in low-light or dark areas.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "voiceless_note",
+            "content": {
+                "intro": "Disables the main player's voice. Any voice SFX that cannot be disabled are replaced with their Doppel counterpart SFX.",
+                "note": "In multiplayer matches, other players will not be voiceless unless they also have this entry enabled.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "main_voice_note",
+            "content": {
+                "intro": "Allows you to change your main player voice. Note that your choice will be overwritten by Voiceless, if enabled.\n\nDuring savefile creation, TFH assigns players a random voice from four Zelda games:\n- A Link Between Worlds\n- Wind Waker\n- Ocarina of Time\n- Spirit Tracks\n\nThis entry allows you to edit and save your new selection to your savefile.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "hero_point_note",
+            "content": {
+                "intro": "Allows you to set your Hero Point count, which affects:\n- the Bear Maximum costume upgrade (requires 30+)\n- online matchmaking",
+                "note": "Valid values range from 0-999.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "coliseum_win_note",
+            "content": {
+                "intro": "Allows you to set your Coliseum Win count.",
+                "note": "Valid values range from 0-999.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "level_completion_note",
+            "content": {
+                "intro": "Allows you to edit your level completion progress, including challenge completion. Completion can be edited for both single-player and multiplayer progress.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "merchant_mat_note",
+            "content": {
+                "intro": "Allows you to edit the materials sold by the Merchant (including story materials).",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "merchant_restock_note",
+            "content": {
+                "intro": "Forces the Merchant to immediately restock the material stall, which normally resets daily.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "master_vol_note",
+            "content": {
+                "intro": "Overrides the current position of the system's volume slider.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "bgm_vol_note",
+            "content": {
+                "intro": "Allows you to change the BGM volume without affecting other audio tracks.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "voice_vol_note",
+            "content": {
+                "intro": "Allows you to change the volume of player voice(s) without affecting other audio tracks.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "low_HP_vol_note",
+            "content": {
+                "intro": "Allows you to change the volume of the Low HP Alert SFX without affecting other audio tracks.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "lobby_ball_song",
+            "content": {
+                "intro": "Allows you to set the Lobby Ball song.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "8bit_note",
+            "content": {
+                "intro": "Toggles the 8-bit version of BGM tracks, regardless of whether the Timeless Tunic is worn.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "disable_timeless_voice_note",
+            "content": {
+                "intro": "Disables the 8-bit voice filter, allowing you to retain a normal voice while wearing the Timeless Tunic.",
+                "note": "You will be voiceless in Hytopia.",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "sword_8bit_note",
+            "content": {
+                "intro": "Toggles the 8-bit audio filter for sword-related SFX, regardless of whether the Timeless Tunic is worn.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        }
+    ]
+}
