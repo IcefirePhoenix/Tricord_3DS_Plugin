@@ -23,7 +23,7 @@ namespace CTRPluginFramework
             {
                 choice++; // since the list isn't actually 0-indexed in memory...
 
-                Process::Write8(AddressList::getAddress("CurrentItem") + PLAYER_OFFSET, choice);
+                Process::Write8(AddressList::getAddress("CurrentItem") + playerOffset, choice);
                 currItems[player] = choice;
             }
         }
