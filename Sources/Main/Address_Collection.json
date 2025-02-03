@@ -1,0 +1,3212 @@
+{
+    "addresses": [
+        {
+            "name": "DynamicCameraCheck",
+            "regionAddrs": {
+                "usaAddress": "0x00143810",
+                "eurAddress": "0x0014382C",
+                "jpnAddress": "0x001439FC"
+            }
+        },
+        {
+            "name": "GameplayCameraCheck",
+            "regionAddrs": {
+                "usaAddress": "0x00143A7C",
+                "eurAddress": "0x00143A98",
+                "jpnAddress": "0x00143C68"
+            }
+        },
+        {
+            "name": "GameplayCameraInit",
+            "regionAddrs": {
+                "usaAddress": "0x00143A80",
+                "eurAddress": "0x00143A9C",
+                "jpnAddress": "0x00143C6C"
+            }
+        },
+        {
+            "name": "RetGameplayCameraInit",
+            "regionAddrs": {
+                "usaAddress": "0x00143B80",
+                "eurAddress": "0x00143B9C",
+                "jpnAddress": "0x00143D6C"
+            }
+        },
+        {
+            "name": "CameraLinkFocus",
+            "regionAddrs": {
+                "usaAddress": "0x32C815D0",
+                "eurAddress": "0x32C81650",
+                "jpnAddress": "0x32CCC010"
+            }
+        },
+        {
+            "name": "CameraMode",
+            "regionAddrs": {
+                "usaAddress": "0x32C814BC",
+                "eurAddress": "0x32C8153C",
+                "jpnAddress": "0x32CCBEFC"
+            }
+        },
+        {
+            "name": "CameraPosX",
+            "regionAddrs": {
+                "usaAddress": "0x32C814C0",
+                "eurAddress": "0x32C81540",
+                "jpnAddress": "0x32CCBF00"
+            }
+        },
+        {
+            "name": "CameraPosY",
+            "regionAddrs": {
+                "usaAddress": "0x32C814C4",
+                "eurAddress": "0x32C81544",
+                "jpnAddress": "0x32CCBF04"
+            }
+        },
+        {
+            "name": "CameraPosZ",
+            "regionAddrs": {
+                "usaAddress": "0x32C814C8",
+                "eurAddress": "0x32C81548",
+                "jpnAddress": "0x32CCBF08"
+            }
+        },
+        {
+            "name": "CameraRotationX",
+            "regionAddrs": {
+                "usaAddress": "0x32C81520",
+                "eurAddress": "0x32C815A0",
+                "jpnAddress": "0x32CCBF60"
+            }
+        },
+        {
+            "name": "CameraRotationZ",
+            "regionAddrs": {
+                "usaAddress": "0x32C81524",
+                "eurAddress": "0x32C815A4",
+                "jpnAddress": "0x32CCBF64"
+            }
+        },
+        {
+            "name": "OrthographicZoom",
+            "regionAddrs": {
+                "usaAddress": "0x32C81528",
+                "eurAddress": "0x32C815A8",
+                "jpnAddress": "0x32CCBF68"
+            }
+        },
+        {
+            "name": "PerspectiveZoom",
+            "regionAddrs": {
+                "usaAddress": "0x005F529C",
+                "eurAddress": "0x005F56CC",
+                "jpnAddress": "0x005F621C"
+            }
+        },
+        {
+            "name": "HeartsTakeHealth",
+            "regionAddrs": {
+                "usaAddress": "0x0015CA04",
+                "eurAddress": "0x0015CA20",
+                "jpnAddress": "0x0015CEF0"
+            }
+        },
+        {
+            "name": "CostumeAttrA",
+            "regionAddrs": {
+                "usaAddress": "0x32849510",
+                "eurAddress": "0x32849590",
+                "jpnAddress": "0x32893F50"
+            }
+        },
+        {
+            "name": "CostumeAttrB",
+            "regionAddrs": {
+                "usaAddress": "0x32849512",
+                "eurAddress": "0x32849592",
+                "jpnAddress": "0x32893F52"
+            }
+        },
+        {
+            "name": "CostumeAttrC",
+            "regionAddrs": {
+                "usaAddress": "0x32849513",
+                "eurAddress": "0x32849593",
+                "jpnAddress": "0x32893F53"
+            }
+        },
+        {
+            "name": "CostumeAttrD",
+            "regionAddrs": {
+                "usaAddress": "0x32849514",
+                "eurAddress": "0x32849594",
+                "jpnAddress": "0x32893F54"
+            }
+        },
+        {
+            "name": "CurrCostume",
+            "regionAddrs": {
+                "usaAddress": "0x32849564",
+                "eurAddress": "0x328495E4",
+                "jpnAddress": "0x32893FA4"
+            }
+        },
+        {
+            "name": "CurrCostumeAlt",
+            "regionAddrs": {
+                "usaAddress": "0x3284A261",
+                "eurAddress": "0x3284A2E1",
+                "jpnAddress": "0x32894CA1"
+            }
+        },
+        {
+            "name": "CostumeCatalogPointer",
+            "regionAddrs": {
+                "usaAddress": "0x32C828E8",
+                "eurAddress": "0x32C82968",
+                "jpnAddress": "0x32CCD328"
+            }
+        },
+        {
+            "name": "PlayerStatus",
+            "regionAddrs": {
+                "usaAddress": "0x32849511",
+                "eurAddress": "0x32849591",
+                "jpnAddress": "0x32893F51"
+            }
+        },
+        {
+            "name": "TingleBalloons",
+            "regionAddrs": {
+                "usaAddress": "0x32849680",
+                "eurAddress": "0x32849700",
+                "jpnAddress": "0x328940C0"
+            }
+        },
+        {
+            "name": "DapperSwingCountdown",
+            "regionAddrs": {
+                "usaAddress": "0x3284968C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "DapperSpinCheck",
+            "regionAddrs": {
+                "usaAddress": "0x32849690",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "HeartDropRate",
+            "regionAddrs": {
+                "usaAddress": "0x32849553",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BearDodge",
+            "regionAddrs": {
+                "usaAddress": "0x3284959F",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "UnusedCostumeDataPointers",
+            "regionAddrs": {
+                "usaAddress": "0x0075C390",
+                "eurAddress": "0x0075C398",
+                "jpnAddress": "0x0075C388"
+            }
+        },
+        {
+            "name": "BearMinMaxCheckA",
+            "regionAddrs": {
+                "usaAddress": "0x005FAACC",
+                "eurAddress": "0x005FAEFC",
+                "jpnAddress": "0x005FBA64"
+            }
+        },
+        {
+            "name": "BearMinMaxCheckB",
+            "regionAddrs": {
+                "usaAddress": "0x005FAAD0",
+                "eurAddress": "0x005FAF00",
+                "jpnAddress": "0x005FBA68"
+            }
+        },
+        {
+            "name": "DoppelStageResetA",
+            "regionAddrs": {
+                "usaAddress": "0x00315B94",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "DoppelStageResetB",
+            "regionAddrs": {
+                "usaAddress": "0x00315B98",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "DoppelStageResetC",
+            "regionAddrs": {
+                "usaAddress": "0x00315B9C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "DoppelLobbyReset",
+            "regionAddrs": {
+                "usaAddress": "0x0058C314",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "CostumeIDOffsetAuraA",
+            "regionAddrs": {
+                "usaAddress": "0x001C3028",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "CostumeIDOffsetAuraB",
+            "regionAddrs": {
+                "usaAddress": "0x001C33FC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "CostumeIDOffsetAuraC",
+            "regionAddrs": {
+                "usaAddress": "0x001C34E8",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "CostumeIDOffsetAuraD",
+            "regionAddrs": {
+                "usaAddress": "0x001C360C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "CostumeIDOffsetCheetah",
+            "regionAddrs": {
+                "usaAddress": "0x001C32C4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "CostumeIDOffsetDune",
+            "regionAddrs": {
+                "usaAddress": "0x001C41C8",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "CostumeIDOffsetCheer",
+            "regionAddrs": {
+                "usaAddress": "0x001F9AB4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "CostumeIDOffsetSwordPtcl",
+            "regionAddrs": {
+                "usaAddress": "0x003B31C8",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "CostumeIDFunBLModel",
+            "regionAddrs": {
+                "usaAddress": "0x001C47F8",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "KokiriA",
+            "regionAddrs": {
+                "usaAddress": "0x0031637C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "KokiriB",
+            "regionAddrs": {
+                "usaAddress": "0x00316380",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "KokiriC",
+            "regionAddrs": {
+                "usaAddress": "0x00316384",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "KokiriD",
+            "regionAddrs": {
+                "usaAddress": "0x0057CBEC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "KokiriE",
+            "regionAddrs": {
+                "usaAddress": "0x0057CBF0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BigBombA",
+            "regionAddrs": {
+                "usaAddress": "0x0057F334",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BigBombB",
+            "regionAddrs": {
+                "usaAddress": "0x0057F70C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BigBombC",
+            "regionAddrs": {
+                "usaAddress": "0x0057F710",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BoomerangerA",
+            "regionAddrs": {
+                "usaAddress": "0x00316568",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BoomerangerB",
+            "regionAddrs": {
+                "usaAddress": "0x0031656C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BoomerangerC",
+            "regionAddrs": {
+                "usaAddress": "0x00316570",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BoomerangerD",
+            "regionAddrs": {
+                "usaAddress": "0x001B5AA8",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BoomerangerE",
+            "regionAddrs": {
+                "usaAddress": "0x001B5AAC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BoomerangerF",
+            "regionAddrs": {
+                "usaAddress": "0x003C883C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "TorrentA",
+            "regionAddrs": {
+                "usaAddress": "0x00316514",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "TorrentB",
+            "regionAddrs": {
+                "usaAddress": "0x00316518",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "TorrentC",
+            "regionAddrs": {
+                "usaAddress": "0x0031651C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "TorrentD",
+            "regionAddrs": {
+                "usaAddress": "0x002311E0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "TorrentE",
+            "regionAddrs": {
+                "usaAddress": "0x002311E4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GustGarbA",
+            "regionAddrs": {
+                "usaAddress": "0x003164CC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GustGarbB",
+            "regionAddrs": {
+                "usaAddress": "0x003164D0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GustGarbC",
+            "regionAddrs": {
+                "usaAddress": "0x003164D4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GustGarbD",
+            "regionAddrs": {
+                "usaAddress": "0x001B2490",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GustGarbE",
+            "regionAddrs": {
+                "usaAddress": "0x001B2494",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GustGarbF",
+            "regionAddrs": {
+                "usaAddress": "0x001B2884",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GustGarbG",
+            "regionAddrs": {
+                "usaAddress": "0x001B2888",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "HammerwearA",
+            "regionAddrs": {
+                "usaAddress": "0x003164FC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "HammerwearB",
+            "regionAddrs": {
+                "usaAddress": "0x00316500",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "HammerwearC",
+            "regionAddrs": {
+                "usaAddress": "0x00316504",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "HammerwearD",
+            "regionAddrs": {
+                "usaAddress": "0x00316654",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "HammerwearE",
+            "regionAddrs": {
+                "usaAddress": "0x00316658",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "HammerwearF",
+            "regionAddrs": {
+                "usaAddress": "0x0059AC80",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "HammerwearG",
+            "regionAddrs": {
+                "usaAddress": "0x0059AC84",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "RobowearA",
+            "regionAddrs": {
+                "usaAddress": "0x0031652C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "RobowearB",
+            "regionAddrs": {
+                "usaAddress": "0x00155C6C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "RobowearC",
+            "regionAddrs": {
+                "usaAddress": "0x00155C70",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "FireBlazerA",
+            "regionAddrs": {
+                "usaAddress": "0x00316540",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "FireBlazerB",
+            "regionAddrs": {
+                "usaAddress": "0x00316544",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "FireBlazerC",
+            "regionAddrs": {
+                "usaAddress": "0x00316548",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "FireBlazerD",
+            "regionAddrs": {
+                "usaAddress": "0x00185AC0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "LightArmorA",
+            "regionAddrs": {
+                "usaAddress": "0x00378B94",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "LightArmorB",
+            "regionAddrs": {
+                "usaAddress": "0x00378B98",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "LinebeckTimeA",
+            "regionAddrs": {
+                "usaAddress": "0x00295934",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "LinebeckTimeB",
+            "regionAddrs": {
+                "usaAddress": "0x00295AF8",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "LinebeckTimeC",
+            "regionAddrs": {
+                "usaAddress": "0x005A01E8",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "CheetahA",
+            "regionAddrs": {
+                "usaAddress": "0x00316660",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "CheetahB",
+            "regionAddrs": {
+                "usaAddress": "0x00316668",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "CheetahC",
+            "regionAddrs": {
+                "usaAddress": "0x0031666C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwordDamageBoostA",
+            "regionAddrs": {
+                "usaAddress": "0x00316634",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwordDamageBoostB",
+            "regionAddrs": {
+                "usaAddress": "0x00316638",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwordBeamAbility",
+            "regionAddrs": {
+                "usaAddress": "0x005CC990",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "QuadBeamA",
+            "regionAddrs": {
+                "usaAddress": "0x003B1258",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "QuadBeamB",
+            "regionAddrs": {
+                "usaAddress": "0x003B125C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "QuadBeamC",
+            "regionAddrs": {
+                "usaAddress": "0x003B1260",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "QuadBeamSpinA",
+            "regionAddrs": {
+                "usaAddress": "0x003B20A0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "QuadBeamSpinB",
+            "regionAddrs": {
+                "usaAddress": "0x003B20A4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "QuadBeamSpinC",
+            "regionAddrs": {
+                "usaAddress": "0x003B20A8",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "KnockbackImmunity",
+            "regionAddrs": {
+                "usaAddress": "0x003BAE6C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwordHammerDmgBoost",
+            "regionAddrs": {
+                "usaAddress": "0x003166A0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwordBeamHealthCheckA",
+            "regionAddrs": {
+                "usaAddress": "0x005CC9BC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwordBeamHealthCheckB",
+            "regionAddrs": {
+                "usaAddress": "0x005CC9C0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwordType",
+            "regionAddrs": {
+                "usaAddress": "0x328419EC",
+                "eurAddress": "0x32841A6C",
+                "jpnAddress": "0x3288C42C"
+            }
+        },
+        {
+            "name": "ABXY",
+            "regionAddrs": {
+                "usaAddress": "0x31A0110C",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "StartSelLRTouch",
+            "regionAddrs": {
+                "usaAddress": "0x31A0110D",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "DPadCPad",
+            "regionAddrs": {
+                "usaAddress": "0x31A0110E",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "GameplayEmotes",
+            "regionAddrs": {
+                "usaAddress": "0x006B6E98",
+                "eurAddress": "0x006B6E98",
+                "jpnAddress": "0x006B6E98"
+            }
+        },
+        {
+            "name": "LobbyEmotes",
+            "regionAddrs": {
+                "usaAddress": "0x006B6EA0",
+                "eurAddress": "0x006B6EA0",
+                "jpnAddress": "0x006B6EA0"
+            }
+        },
+        {
+            "name": "EmoteAGraphic",
+            "regionAddrs": {
+                "usaAddress": "0x32C91830",
+                "eurAddress": "0x32C918B0",
+                "jpnAddress": "0x32CDC420"
+            }
+        },
+        {
+            "name": "EmoteBGraphic",
+            "regionAddrs": {
+                "usaAddress": "0x32C9225C",
+                "eurAddress": "0x32C922DC",
+                "jpnAddress": "0x32CDCE4C"
+            }
+        },
+        {
+            "name": "EmoteCGraphic",
+            "regionAddrs": {
+                "usaAddress": "0x32C92BEC",
+                "eurAddress": "0x32C92C6C",
+                "jpnAddress": "0x32CDD7DC"
+            }
+        },
+        {
+            "name": "EmoteDGraphic",
+            "regionAddrs": {
+                "usaAddress": "0x32C9357C",
+                "eurAddress": "0x32C935FC",
+                "jpnAddress": "0x32CDE16C"
+            }
+        },
+        {
+            "name": "EmoteEGraphic",
+            "regionAddrs": {
+                "usaAddress": "0x32C93F0C",
+                "eurAddress": "0x32C93F8C",
+                "jpnAddress": "0x32CDEAFC"
+            }
+        },
+        {
+            "name": "EmoteFGraphic",
+            "regionAddrs": {
+                "usaAddress": "0x32C9489C",
+                "eurAddress": "0x32C9491C",
+                "jpnAddress": "0x32CDF48C"
+            }
+        },
+        {
+            "name": "EmoteGGraphic",
+            "regionAddrs": {
+                "usaAddress": "0x32C9522C",
+                "eurAddress": "0x32C952AC",
+                "jpnAddress": "0x32CDFE1C"
+            }
+        },
+        {
+            "name": "EmoteHGraphic",
+            "regionAddrs": {
+                "usaAddress": "0x32C95BBC",
+                "eurAddress": "0x32C95C3C",
+                "jpnAddress": "0x32CE07AC"
+            }
+        },
+        {
+            "name": "UseDoTLayoutAlways",
+            "regionAddrs": {
+                "usaAddress": "0x002F0C6C",
+                "eurAddress": "0x002F1010",
+                "jpnAddress": "0x002F1B94"
+            }
+        },
+        {
+            "name": "CurrLevelID",
+            "regionAddrs": {
+                "usaAddress": "0x3280EDC4",
+                "eurAddress": "0x3280EE44",
+                "jpnAddress": "0x32859804"
+            }
+        },
+        {
+            "name": "CurrStageID",
+            "regionAddrs": {
+                "usaAddress": "0x3280EDC8",
+                "eurAddress": "0x3280EE48",
+                "jpnAddress": "0x32859808"
+            }
+        },
+        {
+            "name": "CurrSpawnID",
+            "regionAddrs": {
+                "usaAddress": "0x3280EDCA",
+                "eurAddress": "0x3280EE4A",
+                "jpnAddress": "0x3285980A"
+            }
+        },
+        {
+            "name": "DoppelsEnabled",
+            "regionAddrs": {
+                "usaAddress": "0x32D81E46",
+                "eurAddress": "0x32D81EC6",
+                "jpnAddress": "0x32DD466A"
+            }
+        },
+        {
+            "name": "DrablandsRupeeCount",
+            "regionAddrs": {
+                "usaAddress": "0x32C8178C",
+                "eurAddress": "0x32C8180C",
+                "jpnAddress": "0x32CCC1CC"
+            }
+        },
+        {
+            "name": "EnemyDataPointer",
+            "regionAddrs": {
+                "usaAddress": "0x32989188",
+                "eurAddress": "0x32989208",
+                "jpnAddress": "0x329D3BC8"
+            }
+        },
+        {
+            "name": "HealthCurrent",
+            "regionAddrs": {
+                "usaAddress": "0x32C824F4",
+                "eurAddress": "0x32C82574",
+                "jpnAddress": "0x32CCCF34"
+            }
+        },
+        {
+            "name": "HealthMax",
+            "regionAddrs": {
+                "usaAddress": "0x32C824F5",
+                "eurAddress": "0x32C82575",
+                "jpnAddress": "0x32CCCF35"
+            }
+        },
+        {
+            "name": "EnergyCurrent",
+            "regionAddrs": {
+                "usaAddress": "0x328496C4",
+                "eurAddress": "0x32849744",
+                "jpnAddress": "0x32894104"
+            }
+        },
+        {
+            "name": "EnergyMax",
+            "regionAddrs": {
+                "usaAddress": "0x00192644",
+                "eurAddress": "0x001926D4",
+                "jpnAddress": "0x00192BC8"
+            }
+        },
+        {
+            "name": "EnergyMaxPitRecovery",
+            "regionAddrs": {
+                "usaAddress": "0x001925F8",
+                "eurAddress": "0x00192688",
+                "jpnAddress": "0x00192B7C"
+            }
+        },
+        {
+            "name": "EnergyMaxMultiplicand",
+            "regionAddrs": {
+                "usaAddress": "0x00192684",
+                "eurAddress": "0x00192714",
+                "jpnAddress": "0x00192C08"
+            }
+        },
+        {
+            "name": "LargeEnergyGauge",
+            "regionAddrs": {
+                "usaAddress": "0x002F26CC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "FairiesCurrent",
+            "regionAddrs": {
+                "usaAddress": "0x32D81F14",
+                "eurAddress": "0x32D81F94",
+                "jpnAddress": "0x32DD4738"
+            }
+        },
+        {
+            "name": "TimeLeft",
+            "regionAddrs": {
+                "usaAddress": "0x32D81F18",
+                "eurAddress": "0x32D81F98",
+                "jpnAddress": "0x32DD473C"
+            }
+        },
+        {
+            "name": "CollisionCurrent",
+            "regionAddrs": {
+                "usaAddress": "0x328416A4",
+                "eurAddress": "0x32841724",
+                "jpnAddress": "0x3288C0E4"
+            }
+        },
+        {
+            "name": "SpeedX",
+            "regionAddrs": {
+                "usaAddress": "0x32841650",
+                "eurAddress": "0x328416D0",
+                "jpnAddress": "0x3288C090"
+            }
+        },
+        {
+            "name": "SpeedY",
+            "regionAddrs": {
+                "usaAddress": "0x32841654",
+                "eurAddress": "0x328416D4",
+                "jpnAddress": "0x3288C094"
+            }
+        },
+        {
+            "name": "SpeedZ",
+            "regionAddrs": {
+                "usaAddress": "0x32841658",
+                "eurAddress": "0x328416D8",
+                "jpnAddress": "0x3288C098"
+            }
+        },
+        {
+            "name": "TotemCarrying",
+            "regionAddrs": {
+                "usaAddress": "0x32849520",
+                "eurAddress": "0x328495A0",
+                "jpnAddress": "0x32893F60"
+            }
+        },
+        {
+            "name": "TotemCarriedBy",
+            "regionAddrs": {
+                "usaAddress": "0x32849524",
+                "eurAddress": "0x328495A4",
+                "jpnAddress": "0x32893F64"
+            }
+        },
+        {
+            "name": "LoadingStatus",
+            "regionAddrs": {
+                "usaAddress": "0x319FE1D0",
+                "eurAddress": "0x319FE228",
+                "jpnAddress": "0x319FDF1C"
+            }
+        },
+        {
+            "name": "PauseStatus",
+            "regionAddrs": {
+                "usaAddress": "0x3280ED8C",
+                "eurAddress": "0x3280EE0C",
+                "jpnAddress": "0x328597CC"
+            }
+        },
+        {
+            "name": "PreviousLevelID",
+            "regionAddrs": {
+                "usaAddress": "0x3280EDBC",
+                "eurAddress": "0x3280EE3C",
+                "jpnAddress": "0x328597FC"
+            }
+        },
+        {
+            "name": "PreviousStageID",
+            "regionAddrs": {
+                "usaAddress": "0x3280EDC0",
+                "eurAddress": "0x3280EE40",
+                "jpnAddress": "0x32859800"
+            }
+        },
+        {
+            "name": "PreviousSpawnID",
+            "regionAddrs": {
+                "usaAddress": "0x3280EDC2",
+                "eurAddress": "0x3280EE42",
+                "jpnAddress": "0x32859802"
+            }
+        },
+        {
+            "name": "TimeElapsed",
+            "regionAddrs": {
+                "usaAddress": "0x3280EDE0",
+                "eurAddress": "0x3280EE60",
+                "jpnAddress": "0x32859820"
+            }
+        },
+        {
+            "name": "TargetLevelID",
+            "regionAddrs": {
+                "usaAddress": "0x32C81F10",
+                "eurAddress": "0x32C81F90",
+                "jpnAddress": "0x32CCC950"
+            }
+        },
+        {
+            "name": "TargetStageID",
+            "regionAddrs": {
+                "usaAddress": "0x32C81F14",
+                "eurAddress": "0x32C81F94",
+                "jpnAddress": "0x32CCC954"
+            }
+        },
+        {
+            "name": "TargetSpawnID",
+            "regionAddrs": {
+                "usaAddress": "0x32C81F16",
+                "eurAddress": "0x32C81F96",
+                "jpnAddress": "0x32CCC956"
+            }
+        },
+        {
+            "name": "Warp",
+            "regionAddrs": {
+                "usaAddress": "0x3282C4EC",
+                "eurAddress": "0x3282C56C",
+                "jpnAddress": "0x32876F2C"
+            }
+        },
+        {
+            "name": "WarpActivation",
+            "regionAddrs": {
+                "usaAddress": "0x32C81F00",
+                "eurAddress": "0x32C81F80",
+                "jpnAddress": "0x32CCC940"
+            }
+        },
+        {
+            "name": "WarpPointer",
+            "regionAddrs": {
+                "usaAddress": "0x32C81E28",
+                "eurAddress": "0x32C81EA8",
+                "jpnAddress": "0x32CCC868"
+            }
+        },
+        {
+            "name": "ChallengeID",
+            "regionAddrs": {
+                "usaAddress": "0x32D81E3C",
+                "eurAddress": "0x32D81EBC",
+                "jpnAddress": "0x32DD4660"
+            }
+        },
+        {
+            "name": "SpeedMultiplierAlt",
+            "regionAddrs": {
+                "usaAddress": "0x0039B56C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BowStrafe",
+            "regionAddrs": {
+                "usaAddress": "0x0038CC7C",
+                "eurAddress": "0x0038D024",
+                "jpnAddress": "0x0038DC00"
+            }
+        },
+        {
+            "name": "FireGloveStrafe",
+            "regionAddrs": {
+                "usaAddress": "0x003C8FD8",
+                "eurAddress": "0x003C9380",
+                "jpnAddress": "0x003C9F5C"
+            }
+        },
+        {
+            "name": "GustStrafe",
+            "regionAddrs": {
+                "usaAddress": "0x003C85A8",
+                "eurAddress": "0x003C8950",
+                "jpnAddress": "0x003C952C"
+            }
+        },
+        {
+            "name": "HammerStrafe",
+            "regionAddrs": {
+                "usaAddress": "0x003C03E0",
+                "eurAddress": "0x003C0788",
+                "jpnAddress": "0x003C1364"
+            }
+        },
+        {
+            "name": "ShadowLinkItemPointer",
+            "regionAddrs": {
+                "usaAddress": "0x32D81DEC",
+                "eurAddress": "0x32D81E6C",
+                "jpnAddress": "0x32DD4610"
+            }
+        },
+        {
+            "name": "GripshotStrafe",
+            "regionAddrs": {
+                "usaAddress": "0x003C214C",
+                "eurAddress": "0x003C24F4",
+                "jpnAddress": "0x003C30D0"
+            }
+        },
+        {
+            "name": "WaterRodStrafe",
+            "regionAddrs": {
+                "usaAddress": "0x003C59C0",
+                "eurAddress": "0x003C5D68",
+                "jpnAddress": "0x003C6944"
+            }
+        },
+        {
+            "name": "CameraXButtonToggle",
+            "regionAddrs": {
+                "usaAddress": "0x32D92920",
+                "eurAddress": "0x32D929A0",
+                "jpnAddress": "0x32DE5220"
+            }
+        },
+        {
+            "name": "CameraShutter",
+            "regionAddrs": {
+                "usaAddress": "0x32D92E9C",
+                "eurAddress": "0x32D92F1C",
+                "jpnAddress": "0x32DE579C"
+            }
+        },
+        {
+            "name": "CheckPhotoExist",
+            "regionAddrs": {
+                "usaAddress": "0x31B2FE3D",
+                "eurAddress": "0x31B2FEBD",
+                "jpnAddress": "0x31B2FBBD"
+            }
+        },
+        {
+            "name": "DisplayTopPhoto",
+            "regionAddrs": {
+                "usaAddress": "0x31B2FE21",
+                "eurAddress": "0x31B2FEA1",
+                "jpnAddress": "0x31B2FBA1"
+            }
+        },
+        {
+            "name": "SeeChestContents",
+            "regionAddrs": {
+                "usaAddress": "0x0022FFB8",
+                "eurAddress": "0x00230040",
+                "jpnAddress": "0x00230CDC"
+            }
+        },
+        {
+            "name": "SwordBeamCD",
+            "regionAddrs": {
+                "usaAddress": "0x328495A0",
+                "eurAddress": "0x32849620",
+                "jpnAddress": "0x32893FE0"
+            }
+        },
+        {
+            "name": "TextBoxSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x0018122C",
+                "eurAddress": "0x001812BC",
+                "jpnAddress": "0x001817AC"
+            }
+        },
+        {
+            "name": "TextToRodata",
+            "regionAddrs": {
+                "usaAddress": "0x006A9168",
+                "eurAddress": "0x006A9598",
+                "jpnAddress": "0x007239B8"
+            }
+        },
+        {
+            "name": "ActiveLink",
+            "regionAddrs": {
+                "usaAddress": "0x31A03879",
+                "eurAddress": "0x31A038D1",
+                "jpnAddress": "0x31A035C5"
+            }
+        },
+        {
+            "name": "CurrentAnim",
+            "regionAddrs": {
+                "usaAddress": "0x32849188",
+                "eurAddress": "0x32849208",
+                "jpnAddress": "0x32893BC8"
+            }
+        },
+        {
+            "name": "CurrentItem",
+            "regionAddrs": {
+                "usaAddress": "0x32841A20",
+                "eurAddress": "0x32841AA0",
+                "jpnAddress": "0x3288C460"
+            }
+        },
+        {
+            "name": "IsInvincible",
+            "regionAddrs": {
+                "usaAddress": "0x32849544",
+                "eurAddress": "0x328495C4",
+                "jpnAddress": "0x32893F84"
+            }
+        },
+        {
+            "name": "IsJinxed",
+            "regionAddrs": {
+                "usaAddress": "0x328495AC",
+                "eurAddress": "0x3284962C",
+                "jpnAddress": "0x32893FEC"
+            }
+        },
+        {
+            "name": "IsSpawned",
+            "regionAddrs": {
+                "usaAddress": "0x32841410",
+                "eurAddress": "0x32841490",
+                "jpnAddress": "0x3288BE50"
+            }
+        },
+        {
+            "name": "IsSwapping",
+            "regionAddrs": {
+                "usaAddress": "0x31A04610",
+                "eurAddress": "0x31A04668",
+                "jpnAddress": "0x31A0435C"
+            }
+        },
+        {
+            "name": "IsWaterStorage",
+            "regionAddrs": {
+                "usaAddress": "0x32849231",
+                "eurAddress": "0x328492B1",
+                "jpnAddress": "0x32893C71"
+            }
+        },
+        {
+            "name": "IsVisible",
+            "regionAddrs": {
+                "usaAddress": "0x32849550",
+                "eurAddress": "0x328495D0",
+                "jpnAddress": "0x32893F90"
+            }
+        },
+        {
+            "name": "LinkVoice",
+            "regionAddrs": {
+                "usaAddress": "0x3284A260",
+                "eurAddress": "0x3284A2E0",
+                "jpnAddress": "0x32894CA0"
+            }
+        },
+        {
+            "name": "LiveNameColorG",
+            "regionAddrs": {
+                "usaAddress": "0x007767F0",
+                "eurAddress": "0x007767F8",
+                "jpnAddress": "0x007767E8"
+            }
+        },
+        {
+            "name": "LiveNameColorB",
+            "regionAddrs": {
+                "usaAddress": "0x007767F4",
+                "eurAddress": "0x007767FC",
+                "jpnAddress": "0x007767EC"
+            }
+        },
+        {
+            "name": "LiveNameColorR",
+            "regionAddrs": {
+                "usaAddress": "0x007767F8",
+                "eurAddress": "0x00776800",
+                "jpnAddress": "0x007767F0"
+            }
+        },
+        {
+            "name": "LockMovement",
+            "regionAddrs": {
+                "usaAddress": "0x31A0115B",
+                "eurAddress": "0x31A011B3",
+                "jpnAddress": "0x31A00EA7"
+            }
+        },
+        {
+            "name": "NoCollision",
+            "regionAddrs": {
+                "usaAddress": "0x32849508",
+                "eurAddress": "0x32849588",
+                "jpnAddress": "0x32893F48"
+            }
+        },
+        {
+            "name": "PlayerModelSize",
+            "regionAddrs": {
+                "usaAddress": "0x001FAC64",
+                "eurAddress": "0x001FACF4",
+                "jpnAddress": "0x001FB908"
+            }
+        },
+        {
+            "name": "PositionX",
+            "regionAddrs": {
+                "usaAddress": "0x328412D8",
+                "eurAddress": "0x32841358",
+                "jpnAddress": "0x3288BD18"
+            }
+        },
+        {
+            "name": "PositionY",
+            "regionAddrs": {
+                "usaAddress": "0x328412DC",
+                "eurAddress": "0x3284135C",
+                "jpnAddress": "0x3288BD1C"
+            }
+        },
+        {
+            "name": "PositionZ",
+            "regionAddrs": {
+                "usaAddress": "0x328412E0",
+                "eurAddress": "0x32841360",
+                "jpnAddress": "0x3288BD20"
+            }
+        },
+        {
+            "name": "PreviousAnim",
+            "regionAddrs": {
+                "usaAddress": "0x32849189",
+                "eurAddress": "0x32849209",
+                "jpnAddress": "0x32893BC9"
+            }
+        },
+        {
+            "name": "PVPMode",
+            "regionAddrs": {
+                "usaAddress": "0x32849545",
+                "eurAddress": "0x328495C5",
+                "jpnAddress": "0x32893F85"
+            }
+        },
+        {
+            "name": "RespawnPositionX",
+            "regionAddrs": {
+                "usaAddress": "0x32841750",
+                "eurAddress": "0x328417D0",
+                "jpnAddress": "0x3288C190"
+            }
+        },
+        {
+            "name": "RespawnPositionY",
+            "regionAddrs": {
+                "usaAddress": "0x32841754",
+                "eurAddress": "0x328417D4",
+                "jpnAddress": "0x3288C194"
+            }
+        },
+        {
+            "name": "RespawnPositionZ",
+            "regionAddrs": {
+                "usaAddress": "0x32841758",
+                "eurAddress": "0x328417D8",
+                "jpnAddress": "0x3288C198"
+            }
+        },
+        {
+            "name": "ArrowIndicatorColorBot",
+            "regionAddrs": {
+                "usaAddress": "0x32D91B24",
+                "eurAddress": "0x32D91BA4",
+                "jpnAddress": "0x32DE4424"
+            }
+        },
+        {
+            "name": "ArrowIndicatorColorMid",
+            "regionAddrs": {
+                "usaAddress": "0x32D91A04",
+                "eurAddress": "0x32D91A84",
+                "jpnAddress": "0x32DE4304"
+            }
+        },
+        {
+            "name": "ArrowIndicatorColorTop",
+            "regionAddrs": {
+                "usaAddress": "0x32D918E4",
+                "eurAddress": "0x32D91964",
+                "jpnAddress": "0x32DE41E4"
+            }
+        },
+        {
+            "name": "HUDPointer",
+            "regionAddrs": {
+                "usaAddress": "0x32C8289C",
+                "eurAddress": "0x32C8291C",
+                "jpnAddress": "0x32CCD2DC"
+            }
+        },
+        {
+            "name": "FogA",
+            "regionAddrs": {
+                "usaAddress": "0x31B31BE4",
+                "eurAddress": "0x31B31C64",
+                "jpnAddress": "0x31B31964"
+            }
+        },
+        {
+            "name": "FogB",
+            "regionAddrs": {
+                "usaAddress": "0x31B31BDC",
+                "eurAddress": "0x31B31C5C",
+                "jpnAddress": "0x31B3195C"
+            }
+        },
+        {
+            "name": "FogC",
+            "regionAddrs": {
+                "usaAddress": "0x31B31BE0",
+                "eurAddress": "0x31B31C60",
+                "jpnAddress": "0x31B31960"
+            }
+        },
+        {
+            "name": "ScrollingTextOpacity",
+            "regionAddrs": {
+                "usaAddress": "0x00151C40",
+                "eurAddress": "0x00151C5C",
+                "jpnAddress": "0x00152050"
+            }
+        },
+        {
+            "name": "OffScreenLocation",
+            "regionAddrs": {
+                "usaAddress": "0x32D83094",
+                "eurAddress": "0x32D83114",
+                "jpnAddress": "0x32DD58B8"
+            }
+        },
+        {
+            "name": "TextureName",
+            "regionAddrs": {
+                "usaAddress": "0x3033D7C3",
+                "eurAddress": "0x30363E43",
+                "jpnAddress": "0x3037F5C3"
+            }
+        },
+        {
+            "name": "LoadingScreenSPNoChal",
+            "regionAddrs": {
+                "usaAddress": "0x002B1410",
+                "eurAddress": "0x002B17B4",
+                "jpnAddress": "0x002B2338"
+            }
+        },
+        {
+            "name": "LoadingScreenSPIcons",
+            "regionAddrs": {
+                "usaAddress": "0x00390C08",
+                "eurAddress": "0x00390FB0",
+                "jpnAddress": "0x00391B88"
+            }
+        },
+        {
+            "name": "CheerPomPom",
+            "regionAddrs": {
+                "usaAddress": "0x001F9AFC",
+                "eurAddress": "0x001F9B8C",
+                "jpnAddress": "0x001FA7A0"
+            }
+        },
+        {
+            "name": "Aura",
+            "regionAddrs": {
+                "usaAddress": "0x001C3030",
+                "eurAddress": "0x001C30C0",
+                "jpnAddress": "0x001C35B4"
+            }
+        },
+        {
+            "name": "PlayerLuminanceNormalA",
+            "regionAddrs": {
+                "usaAddress": "0x00378F94",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "PlayerLuminanceNormalB",
+            "regionAddrs": {
+                "usaAddress": "0x00378F9C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "PlayerLuminanceLightArmor",
+            "regionAddrs": {
+                "usaAddress": "0x00378F98",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwordParticle",
+            "regionAddrs": {
+                "usaAddress": "0x003B31D0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "NormalNCCompletion",
+            "regionAddrs": {
+                "usaAddress": "0x31A060EC",
+                "eurAddress": "0x31A06144",
+                "jpnAddress": "0x31A05E38"
+            }
+        },
+        {
+            "name": "NormalC1Completion",
+            "regionAddrs": {
+                "usaAddress": "0x31A060F4",
+                "eurAddress": "0x31A0614C",
+                "jpnAddress": "0x31A05E40"
+            }
+        },
+        {
+            "name": "NormalC2Completion",
+            "regionAddrs": {
+                "usaAddress": "0x31A060FC",
+                "eurAddress": "0x31A06154",
+                "jpnAddress": "0x31A05E48"
+            }
+        },
+        {
+            "name": "NormalC3Completion",
+            "regionAddrs": {
+                "usaAddress": "0x31A06104",
+                "eurAddress": "0x31A0615C",
+                "jpnAddress": "0x31A05E50"
+            }
+        },
+        {
+            "name": "SoloNCCompletion",
+            "regionAddrs": {
+                "usaAddress": "0x31A0616C",
+                "eurAddress": "0x31A061C4",
+                "jpnAddress": "0x31A05EB8"
+            }
+        },
+        {
+            "name": "SoloC1Completion",
+            "regionAddrs": {
+                "usaAddress": "0x31A06174",
+                "eurAddress": "0x31A061CC",
+                "jpnAddress": "0x31A05EC0"
+            }
+        },
+        {
+            "name": "SoloC2Completion",
+            "regionAddrs": {
+                "usaAddress": "0x31A0617C",
+                "eurAddress": "0x31A061D4",
+                "jpnAddress": "0x31A05EC8"
+            }
+        },
+        {
+            "name": "SoloC3Completion",
+            "regionAddrs": {
+                "usaAddress": "0x31A06184",
+                "eurAddress": "0x31A061DC",
+                "jpnAddress": "0x31A05ED0"
+            }
+        },
+        {
+            "name": "MultiNCCompletion",
+            "regionAddrs": {
+                "usaAddress": "0x31A0612C",
+                "eurAddress": "0x31A06184",
+                "jpnAddress": "0x31A05E78"
+            }
+        },
+        {
+            "name": "MultiC1Completion",
+            "regionAddrs": {
+                "usaAddress": "0x31A06134",
+                "eurAddress": "0x31A0618C",
+                "jpnAddress": "0x31A05E80"
+            }
+        },
+        {
+            "name": "MultiC2Completion",
+            "regionAddrs": {
+                "usaAddress": "0x31A0613C",
+                "eurAddress": "0x31A06194",
+                "jpnAddress": "0x31A05E88"
+            }
+        },
+        {
+            "name": "MultiC3Completion",
+            "regionAddrs": {
+                "usaAddress": "0x31A06144",
+                "eurAddress": "0x31A0619C",
+                "jpnAddress": "0x31A05E90"
+            }
+        },
+        {
+            "name": "CostumeObtainStatus",
+            "regionAddrs": {
+                "usaAddress": "0x32C8256A",
+                "eurAddress": "0x32C825EA",
+                "jpnAddress": "0x32CCCFAA"
+            }
+        },
+        {
+            "name": "ColiseumWinCount",
+            "regionAddrs": {
+                "usaAddress": "0x31A062AC",
+                "eurAddress": "0x31A06304",
+                "jpnAddress": "0x31A05FF8"
+            }
+        },
+        {
+            "name": "EditMerchantStock",
+            "regionAddrs": {
+                "usaAddress": "0x31A077A4",
+                "eurAddress": "0x31A077FC",
+                "jpnAddress": "0x31A074F0"
+            }
+        },
+        {
+            "name": "HeroPointCount",
+            "regionAddrs": {
+                "usaAddress": "0x31A0611C",
+                "eurAddress": "0x31A06174",
+                "jpnAddress": "0x31A05E68"
+            }
+        },
+        {
+            "name": "MainVoice",
+            "regionAddrs": {
+                "usaAddress": "0x31A06118",
+                "eurAddress": "0x31A06170",
+                "jpnAddress": "0x31A05E64"
+            }
+        },
+        {
+            "name": "ResetMerchantStock",
+            "regionAddrs": {
+                "usaAddress": "0x31A077AE",
+                "eurAddress": "0x31A07806",
+                "jpnAddress": "0x31A074FA"
+            }
+        },
+        {
+            "name": "BGMType",
+            "regionAddrs": {
+                "usaAddress": "0x005FD3C0",
+                "eurAddress": "0x005FD7F0",
+                "jpnAddress": "0x005FE358"
+            }
+        },
+        {
+            "name": "BGMVolume",
+            "regionAddrs": {
+                "usaAddress": "0x00236444",
+                "eurAddress": "0x002364D4",
+                "jpnAddress": "0x00237170"
+            }
+        },
+        {
+            "name": "LobbyBallPointer",
+            "regionAddrs": {
+                "usaAddress": "0x32DCAA60",
+                "eurAddress": "0x32DCAAE0",
+                "jpnAddress": "0x32E277F4"
+            }
+        },
+        {
+            "name": "LinkVoiceSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x3284A25C",
+                "eurAddress": "0x3284A2DC",
+                "jpnAddress": "0x32894C9C"
+            }
+        },
+        {
+            "name": "Voice8bit",
+            "regionAddrs": {
+                "usaAddress": "0x00194630",
+                "eurAddress": "0x001946C0",
+                "jpnAddress": "0x00194BB4"
+            }
+        },
+        {
+            "name": "MasterVolume",
+            "regionAddrs": {
+                "usaAddress": "0x0050BC74",
+                "eurAddress": "0x0050C01C",
+                "jpnAddress": "0x0050CBF0"
+            }
+        },
+        {
+            "name": "SwordSwipe8bit",
+            "regionAddrs": {
+                "usaAddress": "0x003B0FB4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwordCharge8bit",
+            "regionAddrs": {
+                "usaAddress": "0x003B1AD4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwordSpin8bit",
+            "regionAddrs": {
+                "usaAddress": "0x003B1FD4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "DashTimerNormal",
+            "regionAddrs": {
+                "usaAddress": "0x0039CE08",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "DashTimerNinja",
+            "regionAddrs": {
+                "usaAddress": "0x0039CE0C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwordBeamCDExe",
+            "regionAddrs": {
+                "usaAddress": "0x005CC998",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "HammerwearSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x003BFD08",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SL_SwordSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x00251538",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SL_Strafe",
+            "regionAddrs": {
+                "usaAddress": "0x00251558",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SL_RunAnimSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x0025155C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SL_RunSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x00251560",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BombFlashSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x0057FB74",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "LoadingIconAnimSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x00390C04",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "LiveMsgSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x00152180",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwordBeamSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x001BD9EC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SpeedDamageUndo",
+            "regionAddrs": {
+                "usaAddress": "0x0031663C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BGMSFXSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x0050BA48",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "EnergyBarStretch",
+            "regionAddrs": {
+                "usaAddress": "0x005AEBDC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SpeedMultiplierNormal",
+            "regionAddrs": {
+                "usaAddress": "0x003166A4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SpeedMultiplierCheetah",
+            "regionAddrs": {
+                "usaAddress": "0x003166B0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "DashStaggerSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x0039B9AC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "DashSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x0039CC2C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "DashBrakeDuration",
+            "regionAddrs": {
+                "usaAddress": "0x0039CC40",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "DashPlayerCrashHeight",
+            "regionAddrs": {
+                "usaAddress": "0x0039D4A0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "DashWallCrashHeight",
+            "regionAddrs": {
+                "usaAddress": "0x0039D4AC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "DashCrashBackwards",
+            "regionAddrs": {
+                "usaAddress": "0x0039D4CC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "FireJumpHeight",
+            "regionAddrs": {
+                "usaAddress": "0x003BE9D4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "LavaBounceHeight",
+            "regionAddrs": {
+                "usaAddress": "0x003BCEE8",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "WaterJumpHeight",
+            "regionAddrs": {
+                "usaAddress": "0x003A1714",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "WaterJumpForwardSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x003A1728",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwimBoostSpeedZora",
+            "regionAddrs": {
+                "usaAddress": "0x003A204C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwimBoostSpeedNormal",
+            "regionAddrs": {
+                "usaAddress": "0x003A2058",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwimTurnaroundSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x003A2294",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SwimSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x003A2298",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "ArrowSpeedPlayer",
+            "regionAddrs": {
+                "usaAddress": "0x0057E084",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "FireballHeight",
+            "regionAddrs": {
+                "usaAddress": "0x001855E0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "FireballSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x001855DC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "FireballBounceHeight",
+            "regionAddrs": {
+                "usaAddress": "0x00185DAC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "FireballThrowHeight",
+            "regionAddrs": {
+                "usaAddress": "0x00186AE8",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "FireballReleaseTime",
+            "regionAddrs": {
+                "usaAddress": "0x003C8CE8",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BoomerangReturnSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x001B5394",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BoomerangDistance",
+            "regionAddrs": {
+                "usaAddress": "0x001B6300",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BoomerangSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x001B6308",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GustSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x001B24C0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GripshotRetractSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x001568E4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GripshotExtendSpeed",
+            "regionAddrs": {
+                "usaAddress": "0x0015690C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "Link_Wait",
+            "regionAddrs": {
+                "usaAddress": "0x00731008",
+                "eurAddress": "0x0073100C",
+                "jpnAddress": "0x00731000"
+            }
+        },
+        {
+            "name": "Link_WalkSlow",
+            "regionAddrs": {
+                "usaAddress": "0x00731020",
+                "eurAddress": "0x00731024",
+                "jpnAddress": "0x00731018"
+            }
+        },
+        {
+            "name": "Link_Walk",
+            "regionAddrs": {
+                "usaAddress": "0x00731038",
+                "eurAddress": "0x0073103C",
+                "jpnAddress": "0x00731030"
+            }
+        },
+        {
+            "name": "Link_Dash",
+            "regionAddrs": {
+                "usaAddress": "0x00731050",
+                "eurAddress": "0x00731054",
+                "jpnAddress": "0x00731048"
+            }
+        },
+        {
+            "name": "Link_DashTotem",
+            "regionAddrs": {
+                "usaAddress": "0x00731068",
+                "eurAddress": "0x0073106C",
+                "jpnAddress": "0x00731060"
+            }
+        },
+        {
+            "name": "Link_GrabDash",
+            "regionAddrs": {
+                "usaAddress": "0x00731080",
+                "eurAddress": "0x00731084",
+                "jpnAddress": "0x00731078"
+            }
+        },
+        {
+            "name": "Link_CutRF",
+            "regionAddrs": {
+                "usaAddress": "0x00731098",
+                "eurAddress": "0x0073109C",
+                "jpnAddress": "0x00731090"
+            }
+        },
+        {
+            "name": "Link_CutRFTotem",
+            "regionAddrs": {
+                "usaAddress": "0x007310B0",
+                "eurAddress": "0x007310B4",
+                "jpnAddress": "0x007310A8"
+            }
+        },
+        {
+            "name": "Link_CutRFtoKeep",
+            "regionAddrs": {
+                "usaAddress": "0x007310C8",
+                "eurAddress": "0x007310CC",
+                "jpnAddress": "0x007310C0"
+            }
+        },
+        {
+            "name": "Link_KeepWait",
+            "regionAddrs": {
+                "usaAddress": "0x007310E0",
+                "eurAddress": "0x007310E4",
+                "jpnAddress": "0x007310D8"
+            }
+        },
+        {
+            "name": "Link_Compete",
+            "regionAddrs": {
+                "usaAddress": "0x007310F8",
+                "eurAddress": "0x007310FC",
+                "jpnAddress": "0x007310F0"
+            }
+        },
+        {
+            "name": "Link_CutTurn",
+            "regionAddrs": {
+                "usaAddress": "0x00731110",
+                "eurAddress": "0x00731114",
+                "jpnAddress": "0x00731108"
+            }
+        },
+        {
+            "name": "Link_CutTurnW",
+            "regionAddrs": {
+                "usaAddress": "0x00731128",
+                "eurAddress": "0x0073112C",
+                "jpnAddress": "0x00731120"
+            }
+        },
+        {
+            "name": "Link_CutTurnB",
+            "regionAddrs": {
+                "usaAddress": "0x00731140",
+                "eurAddress": "0x00731144",
+                "jpnAddress": "0x00731138"
+            }
+        },
+        {
+            "name": "Link_GrabP_A",
+            "regionAddrs": {
+                "usaAddress": "0x00731158",
+                "eurAddress": "0x0073115C",
+                "jpnAddress": "0x00731150"
+            }
+        },
+        {
+            "name": "Link_GrabP_B",
+            "regionAddrs": {
+                "usaAddress": "0x00731170",
+                "eurAddress": "0x00731174",
+                "jpnAddress": "0x00731168"
+            }
+        },
+        {
+            "name": "Link_GrabUp",
+            "regionAddrs": {
+                "usaAddress": "0x00731188",
+                "eurAddress": "0x0073118C",
+                "jpnAddress": "0x00731180"
+            }
+        },
+        {
+            "name": "Link_GrabThrow",
+            "regionAddrs": {
+                "usaAddress": "0x007311A0",
+                "eurAddress": "0x007311A4",
+                "jpnAddress": "0x00731198"
+            }
+        },
+        {
+            "name": "Link_GrabWait",
+            "regionAddrs": {
+                "usaAddress": "0x007311B8",
+                "eurAddress": "0x007311BC",
+                "jpnAddress": "0x007311B0"
+            }
+        },
+        {
+            "name": "Link_WaitTotem",
+            "regionAddrs": {
+                "usaAddress": "0x007311D0",
+                "eurAddress": "0x007311D4",
+                "jpnAddress": "0x007311C8"
+            }
+        },
+        {
+            "name": "Link_GrabYorokeTotem",
+            "regionAddrs": {
+                "usaAddress": "0x007311E8",
+                "eurAddress": "0x007311EC",
+                "jpnAddress": "0x007311E0"
+            }
+        },
+        {
+            "name": "Link_YorokeTotem",
+            "regionAddrs": {
+                "usaAddress": "0x00731200",
+                "eurAddress": "0x00731204",
+                "jpnAddress": "0x007311F8"
+            }
+        },
+        {
+            "name": "Link_WaitYoroke",
+            "regionAddrs": {
+                "usaAddress": "0x00731218",
+                "eurAddress": "0x0073121C",
+                "jpnAddress": "0x00731210"
+            }
+        },
+        {
+            "name": "Link_JumpEdS_A",
+            "regionAddrs": {
+                "usaAddress": "0x00731230",
+                "eurAddress": "0x00731234",
+                "jpnAddress": "0x00731228"
+            }
+        },
+        {
+            "name": "Link_DamF",
+            "regionAddrs": {
+                "usaAddress": "0x00731248",
+                "eurAddress": "0x0073124C",
+                "jpnAddress": "0x00731240"
+            }
+        },
+        {
+            "name": "Link_DamB",
+            "regionAddrs": {
+                "usaAddress": "0x00731260",
+                "eurAddress": "0x00731264",
+                "jpnAddress": "0x00731258"
+            }
+        },
+        {
+            "name": "Link_FallLava",
+            "regionAddrs": {
+                "usaAddress": "0x00731278",
+                "eurAddress": "0x0073127C",
+                "jpnAddress": "0x00731270"
+            }
+        },
+        {
+            "name": "Link_FallSand",
+            "regionAddrs": {
+                "usaAddress": "0x00731290",
+                "eurAddress": "0x00731294",
+                "jpnAddress": "0x00731288"
+            }
+        },
+        {
+            "name": "Link_Drown",
+            "regionAddrs": {
+                "usaAddress": "0x007312A8",
+                "eurAddress": "0x007312AC",
+                "jpnAddress": "0x007312A0"
+            }
+        },
+        {
+            "name": "Link_DrownLava",
+            "regionAddrs": {
+                "usaAddress": "0x007312C0",
+                "eurAddress": "0x007312C4",
+                "jpnAddress": "0x007312B8"
+            }
+        },
+        {
+            "name": "Link_Fall",
+            "regionAddrs": {
+                "usaAddress": "0x007312D8",
+                "eurAddress": "0x007312DC",
+                "jpnAddress": "0x007312D0"
+            }
+        },
+        {
+            "name": "Link_DamBiri",
+            "regionAddrs": {
+                "usaAddress": "0x007312F0",
+                "eurAddress": "0x007312F4",
+                "jpnAddress": "0x007312E8"
+            }
+        },
+        {
+            "name": "Link_WaitQ",
+            "regionAddrs": {
+                "usaAddress": "0x00731308",
+                "eurAddress": "0x0073130C",
+                "jpnAddress": "0x00731300"
+            }
+        },
+        {
+            "name": "Link_DamBoyon",
+            "regionAddrs": {
+                "usaAddress": "0x00731320",
+                "eurAddress": "0x00731324",
+                "jpnAddress": "0x00731318"
+            }
+        },
+        {
+            "name": "Link_DamFFup",
+            "regionAddrs": {
+                "usaAddress": "0x00731338",
+                "eurAddress": "0x0073133C",
+                "jpnAddress": "0x00731330"
+            }
+        },
+        {
+            "name": "Link_DamSwimF",
+            "regionAddrs": {
+                "usaAddress": "0x00731350",
+                "eurAddress": "0x00731354",
+                "jpnAddress": "0x00731348"
+            }
+        },
+        {
+            "name": "Link_DamSwimB",
+            "regionAddrs": {
+                "usaAddress": "0x00731368",
+                "eurAddress": "0x0073136C",
+                "jpnAddress": "0x00731360"
+            }
+        },
+        {
+            "name": "Link_LLhold",
+            "regionAddrs": {
+                "usaAddress": "0x00731380",
+                "eurAddress": "0x00731384",
+                "jpnAddress": "0x00731378"
+            }
+        },
+        {
+            "name": "Link_LLswallowSt",
+            "regionAddrs": {
+                "usaAddress": "0x00731398",
+                "eurAddress": "0x0073139C",
+                "jpnAddress": "0x00731390"
+            }
+        },
+        {
+            "name": "Link_LLstruggle",
+            "regionAddrs": {
+                "usaAddress": "0x007313B0",
+                "eurAddress": "0x007313B4",
+                "jpnAddress": "0x007313A8"
+            }
+        },
+        {
+            "name": "Link_FallTotem",
+            "regionAddrs": {
+                "usaAddress": "0x007313C8",
+                "eurAddress": "0x007313CC",
+                "jpnAddress": "0x007313C0"
+            }
+        },
+        {
+            "name": "Link_FallBallon",
+            "regionAddrs": {
+                "usaAddress": "0x007313E0",
+                "eurAddress": "0x007313E4",
+                "jpnAddress": "0x007313D8"
+            }
+        },
+        {
+            "name": "Link_BowWalkA",
+            "regionAddrs": {
+                "usaAddress": "0x007313F8",
+                "eurAddress": "0x007313FC",
+                "jpnAddress": "0x007313F0"
+            }
+        },
+        {
+            "name": "Link_BowWalkB",
+            "regionAddrs": {
+                "usaAddress": "0x00731410",
+                "eurAddress": "0x00731414",
+                "jpnAddress": "0x00731408"
+            }
+        },
+        {
+            "name": "Link_Slipice",
+            "regionAddrs": {
+                "usaAddress": "0x00731428",
+                "eurAddress": "0x0073142C",
+                "jpnAddress": "0x00731420"
+            }
+        },
+        {
+            "name": "Link_BowWait",
+            "regionAddrs": {
+                "usaAddress": "0x00731440",
+                "eurAddress": "0x00731444",
+                "jpnAddress": "0x00731438"
+            }
+        },
+        {
+            "name": "Link_ArrowShoot",
+            "regionAddrs": {
+                "usaAddress": "0x00731458",
+                "eurAddress": "0x0073145C",
+                "jpnAddress": "0x00731450"
+            }
+        },
+        {
+            "name": "Link_RodWait",
+            "regionAddrs": {
+                "usaAddress": "0x00731470",
+                "eurAddress": "0x00731474",
+                "jpnAddress": "0x00731468"
+            }
+        },
+        {
+            "name": "Link_RodAttack",
+            "regionAddrs": {
+                "usaAddress": "0x00731488",
+                "eurAddress": "0x0073148C",
+                "jpnAddress": "0x00731480"
+            }
+        },
+        {
+            "name": "Link_BoomAttack",
+            "regionAddrs": {
+                "usaAddress": "0x007314A0",
+                "eurAddress": "0x007314A4",
+                "jpnAddress": "0x00731498"
+            }
+        },
+        {
+            "name": "Link_BoomCarried",
+            "regionAddrs": {
+                "usaAddress": "0x007314B8",
+                "eurAddress": "0x007314BC",
+                "jpnAddress": "0x007314B0"
+            }
+        },
+        {
+            "name": "Link_HookshotWait",
+            "regionAddrs": {
+                "usaAddress": "0x007314D0",
+                "eurAddress": "0x007314D4",
+                "jpnAddress": "0x007314C8"
+            }
+        },
+        {
+            "name": "Link_HookshotAttack",
+            "regionAddrs": {
+                "usaAddress": "0x007314E8",
+                "eurAddress": "0x007314EC",
+                "jpnAddress": "0x007314E0"
+            }
+        },
+        {
+            "name": "Link_HookshotDrag",
+            "regionAddrs": {
+                "usaAddress": "0x00731500",
+                "eurAddress": "0x00731504",
+                "jpnAddress": "0x007314F8"
+            }
+        },
+        {
+            "name": "Link_Bump",
+            "regionAddrs": {
+                "usaAddress": "0x00731518",
+                "eurAddress": "0x0073151C",
+                "jpnAddress": "0x00731510"
+            }
+        },
+        {
+            "name": "Link_HookshotPullSt",
+            "regionAddrs": {
+                "usaAddress": "0x00731530",
+                "eurAddress": "0x00731534",
+                "jpnAddress": "0x00731528"
+            }
+        },
+        {
+            "name": "Link_HookshotPullEd",
+            "regionAddrs": {
+                "usaAddress": "0x00731548",
+                "eurAddress": "0x0073154C",
+                "jpnAddress": "0x00731540"
+            }
+        },
+        {
+            "name": "Link_AirCannonWait",
+            "regionAddrs": {
+                "usaAddress": "0x00731560",
+                "eurAddress": "0x00731564",
+                "jpnAddress": "0x00731558"
+            }
+        },
+        {
+            "name": "Link_AirCannonAttack",
+            "regionAddrs": {
+                "usaAddress": "0x00731578",
+                "eurAddress": "0x0073157C",
+                "jpnAddress": "0x00731570"
+            }
+        },
+        {
+            "name": "Link_FireGloveWait",
+            "regionAddrs": {
+                "usaAddress": "0x00731590",
+                "eurAddress": "0x00731594",
+                "jpnAddress": "0x00731588"
+            }
+        },
+        {
+            "name": "Link_FireGloveAttack",
+            "regionAddrs": {
+                "usaAddress": "0x007315A8",
+                "eurAddress": "0x007315AC",
+                "jpnAddress": "0x007315A0"
+            }
+        },
+        {
+            "name": "Link_HammerWait",
+            "regionAddrs": {
+                "usaAddress": "0x007315C0",
+                "eurAddress": "0x007315C4",
+                "jpnAddress": "0x007315B8"
+            }
+        },
+        {
+            "name": "Link_HammerAttack",
+            "regionAddrs": {
+                "usaAddress": "0x007315D8",
+                "eurAddress": "0x007315DC",
+                "jpnAddress": "0x007315D0"
+            }
+        },
+        {
+            "name": "Link_HammerAttackTotem",
+            "regionAddrs": {
+                "usaAddress": "0x007315F0",
+                "eurAddress": "0x007315F4",
+                "jpnAddress": "0x007315E8"
+            }
+        },
+        {
+            "name": "Link_HammerMiss",
+            "regionAddrs": {
+                "usaAddress": "0x00731608",
+                "eurAddress": "0x0073160C",
+                "jpnAddress": "0x00731600"
+            }
+        },
+        {
+            "name": "Link_Die",
+            "regionAddrs": {
+                "usaAddress": "0x00731620",
+                "eurAddress": "0x00731624",
+                "jpnAddress": "0x00731618"
+            }
+        },
+        {
+            "name": "Link_DieSt",
+            "regionAddrs": {
+                "usaAddress": "0x00731638",
+                "eurAddress": "0x0073163C",
+                "jpnAddress": "0x00731630"
+            }
+        },
+        {
+            "name": "Link_DieEd",
+            "regionAddrs": {
+                "usaAddress": "0x00731650",
+                "eurAddress": "0x00731654",
+                "jpnAddress": "0x00731648"
+            }
+        },
+        {
+            "name": "Link_Talk",
+            "regionAddrs": {
+                "usaAddress": "0x00731668",
+                "eurAddress": "0x0073166C",
+                "jpnAddress": "0x00731660"
+            }
+        },
+        {
+            "name": "Link_ItemGetA_A",
+            "regionAddrs": {
+                "usaAddress": "0x00731680",
+                "eurAddress": "0x00731684",
+                "jpnAddress": "0x00731678"
+            }
+        },
+        {
+            "name": "Link_ItemGetA_B",
+            "regionAddrs": {
+                "usaAddress": "0x00731698",
+                "eurAddress": "0x0073169C",
+                "jpnAddress": "0x00731690"
+            }
+        },
+        {
+            "name": "Link_ItemGetShort",
+            "regionAddrs": {
+                "usaAddress": "0x007316B0",
+                "eurAddress": "0x007316B4",
+                "jpnAddress": "0x007316A8"
+            }
+        },
+        {
+            "name": "Link_UnlockB",
+            "regionAddrs": {
+                "usaAddress": "0x007316C8",
+                "eurAddress": "0x007316CC",
+                "jpnAddress": "0x007316C0"
+            }
+        },
+        {
+            "name": "Link_PDashReady",
+            "regionAddrs": {
+                "usaAddress": "0x007316E0",
+                "eurAddress": "0x007316E4",
+                "jpnAddress": "0x007316D8"
+            }
+        },
+        {
+            "name": "Link_PDash",
+            "regionAddrs": {
+                "usaAddress": "0x007316F8",
+                "eurAddress": "0x007316FC",
+                "jpnAddress": "0x007316F0"
+            }
+        },
+        {
+            "name": "Link_DashAchichi",
+            "regionAddrs": {
+                "usaAddress": "0x00731710",
+                "eurAddress": "0x00731714",
+                "jpnAddress": "0x00731708"
+            }
+        },
+        {
+            "name": "Link_PDashCrash",
+            "regionAddrs": {
+                "usaAddress": "0x00731728",
+                "eurAddress": "0x0073172C",
+                "jpnAddress": "0x00731720"
+            }
+        },
+        {
+            "name": "Link_PDashBrake",
+            "regionAddrs": {
+                "usaAddress": "0x00731740",
+                "eurAddress": "0x00731744",
+                "jpnAddress": "0x00731738"
+            }
+        },
+        {
+            "name": "Link_PDashStagger",
+            "regionAddrs": {
+                "usaAddress": "0x00731758",
+                "eurAddress": "0x0073175C",
+                "jpnAddress": "0x00731750"
+            }
+        },
+        {
+            "name": "Link_WaitPushPull",
+            "regionAddrs": {
+                "usaAddress": "0x00731770",
+                "eurAddress": "0x00731774",
+                "jpnAddress": "0x00731768"
+            }
+        },
+        {
+            "name": "Link_WalkPush",
+            "regionAddrs": {
+                "usaAddress": "0x00731788",
+                "eurAddress": "0x0073178C",
+                "jpnAddress": "0x00731780"
+            }
+        },
+        {
+            "name": "Link_WalkPull",
+            "regionAddrs": {
+                "usaAddress": "0x007317A0",
+                "eurAddress": "0x007317A4",
+                "jpnAddress": "0x00731798"
+            }
+        },
+        {
+            "name": "Link_Swim",
+            "regionAddrs": {
+                "usaAddress": "0x007317B8",
+                "eurAddress": "0x007317BC",
+                "jpnAddress": "0x007317B0"
+            }
+        },
+        {
+            "name": "Link_SwimWait",
+            "regionAddrs": {
+                "usaAddress": "0x007317D0",
+                "eurAddress": "0x007317D4",
+                "jpnAddress": "0x007317C8"
+            }
+        },
+        {
+            "name": "Link_SwimDive",
+            "regionAddrs": {
+                "usaAddress": "0x007317E8",
+                "eurAddress": "0x007317EC",
+                "jpnAddress": "0x007317E0"
+            }
+        },
+        {
+            "name": "Link_SwimLand",
+            "regionAddrs": {
+                "usaAddress": "0x00731800",
+                "eurAddress": "0x00731804",
+                "jpnAddress": "0x007317F8"
+            }
+        },
+        {
+            "name": "Link_SwimDrift",
+            "regionAddrs": {
+                "usaAddress": "0x00731818",
+                "eurAddress": "0x0073181C",
+                "jpnAddress": "0x00731810"
+            }
+        },
+        {
+            "name": "Link_SwimScrewAttack_A",
+            "regionAddrs": {
+                "usaAddress": "0x00731830",
+                "eurAddress": "0x00731834",
+                "jpnAddress": "0x00731828"
+            }
+        },
+        {
+            "name": "Link_SwimScrewAttack_B",
+            "regionAddrs": {
+                "usaAddress": "0x00731848",
+                "eurAddress": "0x0073184C",
+                "jpnAddress": "0x00731840"
+            }
+        },
+        {
+            "name": "Link_SwimWaitPuppet",
+            "regionAddrs": {
+                "usaAddress": "0x00731860",
+                "eurAddress": "0x00731864",
+                "jpnAddress": "0x00731858"
+            }
+        },
+        {
+            "name": "Link_WaitAtoB",
+            "regionAddrs": {
+                "usaAddress": "0x00731878",
+                "eurAddress": "0x0073187C",
+                "jpnAddress": "0x00731870"
+            }
+        },
+        {
+            "name": "Link_WaitB",
+            "regionAddrs": {
+                "usaAddress": "0x00731890",
+                "eurAddress": "0x00731894",
+                "jpnAddress": "0x00731888"
+            }
+        },
+        {
+            "name": "Link_WaitFight",
+            "regionAddrs": {
+                "usaAddress": "0x007318A8",
+                "eurAddress": "0x007318AC",
+                "jpnAddress": "0x007318A0"
+            }
+        },
+        {
+            "name": "Link_WaitPuppet",
+            "regionAddrs": {
+                "usaAddress": "0x007318C0",
+                "eurAddress": "0x007318C4",
+                "jpnAddress": "0x007318B8"
+            }
+        },
+        {
+            "name": "Link_WalkPuppet",
+            "regionAddrs": {
+                "usaAddress": "0x007318D8",
+                "eurAddress": "0x007318DC",
+                "jpnAddress": "0x007318D0"
+            }
+        },
+        {
+            "name": "Link_Skyward",
+            "regionAddrs": {
+                "usaAddress": "0x007318F0",
+                "eurAddress": "0x007318F4",
+                "jpnAddress": "0x007318E8"
+            }
+        },
+        {
+            "name": "Link_JumpSt",
+            "regionAddrs": {
+                "usaAddress": "0x00731908",
+                "eurAddress": "0x0073190C",
+                "jpnAddress": "0x00731900"
+            }
+        },
+        {
+            "name": "Link_JumpAuto",
+            "regionAddrs": {
+                "usaAddress": "0x00731920",
+                "eurAddress": "0x00731924",
+                "jpnAddress": "0x00731918"
+            }
+        },
+        {
+            "name": "Link_JumpEdS_B",
+            "regionAddrs": {
+                "usaAddress": "0x00731938",
+                "eurAddress": "0x0073193C",
+                "jpnAddress": "0x00731930"
+            }
+        },
+        {
+            "name": "Link_CarryAway",
+            "regionAddrs": {
+                "usaAddress": "0x00731950",
+                "eurAddress": "0x00731954",
+                "jpnAddress": "0x00731948"
+            }
+        },
+        {
+            "name": "Link_Call",
+            "regionAddrs": {
+                "usaAddress": "0x00731968",
+                "eurAddress": "0x0073196C",
+                "jpnAddress": "0x00731960"
+            }
+        },
+        {
+            "name": "Link_Rock",
+            "regionAddrs": {
+                "usaAddress": "0x00731980",
+                "eurAddress": "0x00731984",
+                "jpnAddress": "0x00731978"
+            }
+        },
+        {
+            "name": "Link_Sad",
+            "regionAddrs": {
+                "usaAddress": "0x00731998",
+                "eurAddress": "0x0073199C",
+                "jpnAddress": "0x00731990"
+            }
+        },
+        {
+            "name": "Link_SadWait",
+            "regionAddrs": {
+                "usaAddress": "0x007319B0",
+                "eurAddress": "0x007319B4",
+                "jpnAddress": "0x007319A8"
+            }
+        },
+        {
+            "name": "Link_WalkMagic",
+            "regionAddrs": {
+                "usaAddress": "0x007319C8",
+                "eurAddress": "0x007319CC",
+                "jpnAddress": "0x007319C0"
+            }
+        },
+        {
+            "name": "Link_TurnMagic",
+            "regionAddrs": {
+                "usaAddress": "0x007319E0",
+                "eurAddress": "0x007319E4",
+                "jpnAddress": "0x007319D8"
+            }
+        },
+        {
+            "name": "Link_EdYorokeTotem1",
+            "regionAddrs": {
+                "usaAddress": "0x007319F8",
+                "eurAddress": "0x007319FC",
+                "jpnAddress": "0x007319F0"
+            }
+        },
+        {
+            "name": "Link_EdWaitTotem1",
+            "regionAddrs": {
+                "usaAddress": "0x00731A10",
+                "eurAddress": "0x00731A14",
+                "jpnAddress": "0x00731A08"
+            }
+        },
+        {
+            "name": "Link_EdYorokeTotem2",
+            "regionAddrs": {
+                "usaAddress": "0x00731A28",
+                "eurAddress": "0x00731A2C",
+                "jpnAddress": "0x00731A20"
+            }
+        },
+        {
+            "name": "Link_EdWaitTotem2",
+            "regionAddrs": {
+                "usaAddress": "0x00731A40",
+                "eurAddress": "0x00731A44",
+                "jpnAddress": "0x00731A38"
+            }
+        },
+        {
+            "name": "Link_WaitPinch",
+            "regionAddrs": {
+                "usaAddress": "0x00731A58",
+                "eurAddress": "0x00731A5C",
+                "jpnAddress": "0x00731A50"
+            }
+        },
+        {
+            "name": "FileTableRewrite",
+            "regionAddrs": {
+                "usaAddress": "0x006A9600",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "FileTableStart",
+            "regionAddrs": {
+                "usaAddress": "0x32DD7434",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "CustomInfoHeaders",
+            "regionAddrs": {
+                "usaAddress": "0x006A9350",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "CustomAnimData",
+            "regionAddrs": {
+                "usaAddress": "0x006A922C",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "CustomFacePointerList",
+            "regionAddrs": {
+                "usaAddress": "0x006A91DC",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "EditFaceStatusBit",
+            "regionAddrs": {
+                "usaAddress": "0x006A91D8",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "EyeTitleReference",
+            "regionAddrs": {
+                "usaAddress": "0x3033D761",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "HytopiaPMAStart",
+            "regionAddrs": {
+                "usaAddress": "0x302123FC",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "IndivPMAStart",
+            "regionAddrs": {
+                "usaAddress": "0x32C81A78",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        }
+    ]
+}

@@ -1,878 +1,109 @@
-#include "Helpers/DataHelpers/Address.hpp"
-#include "AddressList.hpp"
+#include "Address_Collection.json.h"
+#include "Helpers.hpp"
 
-namespace CTRPluginFramework {
+namespace CTRPluginFramework
+{
+	u32 memOffset = 0x0;
+	std::map<std::string, u32> AddressList::addresses;
 
-	void AddressList::InitAddresses(void) {
-		/* Camera */
-		DynamicCameraCheck			= Address(0x00143810, 0x0014382C, 0x001439FC);
-		GameplayCameraCheck			= Address(0x00143A7C, 0x00143A98, 0x00143C68);
-		GameplayCameraInit 			= Address(0x00143A80, 0x00143A9C, 0x00143C6C);
-		RetGameplayCameraInit		= Address(0x00143B80, 0x00143B9C, 0x00143D6C);
+	/* ------------------ */
 
-		CameraLinkFocus				= Address(0x32C815D0, 0x32C81650, 0x32CCC010);
-		CameraMode					= Address(0x32C814BC, 0x32C8153C, 0x32CCBEFC);
-		CameraPosX					= Address(0x32C814C0, 0x32C81540, 0x32CCBF00);
-		CameraPosY					= Address(0x32C814C4, 0x32C81544, 0x32CCBF04);
-		CameraPosZ					= Address(0x32C814C8, 0x32C81548, 0x32CCBF08);
-		CameraRotationX				= Address(0x32C81520, 0x32C815A0, 0x32CCBF60);
-		CameraRotationZ				= Address(0x32C81524, 0x32C815A4, 0x32CCBF64);
-		OrthographicZoom			= Address(0x32C81528, 0x32C815A8, 0x32CCBF68);
-		PerspectiveZoom				= Address(0x005F529C, 0x005F56CC, 0x005F621C);
+	// Initializes the address list
+	void AddressList::InitAddresses(void)
+	{
+		std::string addressFile(reinterpret_cast<char *>(Address_Collection_json), Address_Collection_json_len);
+		nlohmann::json JSON_content = nlohmann::json::parse(addressFile);
 
-		/* Chaos */
-		HeartsTakeHealth			= Address(0x0015CA04, 0x0015CA20, 0x0015CEF0);
+		// TODO: not the best -- we can't put hex values in JSON so they are currently strs to allow us to skip converting to int... check for alternative implementations?
+		std::string addrStr = "";
+		u32 addrVal = 0x0;
 
-		/* Costume */
-		CostumeAttrA				= Address(0x32849510, 0x32849590, 0x32893F50);
-		CostumeAttrB				= Address(0x32849512, 0x32849592, 0x32893F52);
-		CostumeAttrC				= Address(0x32849513, 0x32849593, 0x32893F53);
-		CostumeAttrD				= Address(0x32849514, 0x32849594, 0x32893F54);
-		CurrCostume					= Address(0x32849564, 0x328495E4, 0x32893FA4);
-		CurrCostumeAlt				= Address(0x3284A261, 0x3284A2E1, 0x32894CA1);
-		CostumeCatalogPointer		= Address(0x32C828E8, 0x32C82968, 0x32CCD328);
-		PlayerStatus				= Address(0x32849511, 0x32849591, 0x32893F51);
-		TingleBalloons				= Address(0x32849680, 0x32849700, 0x328940C0);
-		DapperSwingCountdown		= Address(0x3284968C, 0x00000000, 0x00000000);
-		DapperSpinCheck				= Address(0x32849690, 0x00000000, 0x00000000);
-		HeartDropRate				= Address(0x32849553, 0x00000000, 0x00000000);
-		BearDodge					= Address(0x3284959F, 0x00000000, 0x00000000);
-		UnusedCostumeDataPointers 	= Address(0x0075C390, 0x0075C398, 0x0075C388);
-		BearMinMaxCheckA			= Address(0x005FAACC, 0x005FAEFC, 0x005FBA64);
-		BearMinMaxCheckB			= Address(0x005FAAD0, 0x005FAF00, 0x005FBA68);
-		DoppelStageResetA			= Address(0x00315B94, 0x00000000, 0x00000000);
-		DoppelStageResetB			= Address(0x00315B98, 0x00000000, 0x00000000);
-		DoppelStageResetC			= Address(0x00315B9C, 0x00000000, 0x00000000);
-		DoppelLobbyReset			= Address(0x0058C314, 0x00000000, 0x00000000);
-		CostumeIDOffsetAuraA		= Address(0x001C3028, 0x00000000, 0x00000000);
-		CostumeIDOffsetAuraB		= Address(0x001C33FC, 0x00000000, 0x00000000);
-		CostumeIDOffsetAuraC		= Address(0x001C34E8, 0x00000000, 0x00000000);
-		CostumeIDOffsetAuraD		= Address(0x001C360C, 0x00000000, 0x00000000);
-		CostumeIDOffsetCheetah		= Address(0x001C32C4, 0x00000000, 0x00000000);
-		CostumeIDOffsetDune			= Address(0x001C41C8, 0x00000000, 0x00000000);
-		CostumeIDOffsetCheer		= Address(0x001F9AB4, 0x00000000, 0x00000000);
-		CostumeIDOffsetSwordPtcl	= Address(0x003B31C8, 0x00000000, 0x00000000);
-		CostumeIDFunBLModel			= Address(0x001C47F8, 0x00000000, 0x00000000);
-		KokiriA						= Address(0x0031637C, 0x00000000, 0x00000000);
-		KokiriB						= Address(0x00316380, 0x00000000, 0x00000000);
-		KokiriC						= Address(0x00316384, 0x00000000, 0x00000000);
-		KokiriD						= Address(0x0057CBEC, 0x00000000, 0x00000000);
-		KokiriE						= Address(0x0057CBF0, 0x00000000, 0x00000000);
-		BigBombA					= Address(0x0057F334, 0x00000000, 0x00000000);
-		BigBombB					= Address(0x0057F70C, 0x00000000, 0x00000000);
-		BigBombC					= Address(0x0057F710, 0x00000000, 0x00000000);
-		BoomerangerA				= Address(0x00316568, 0x00000000, 0x00000000);
-		BoomerangerB				= Address(0x0031656C, 0x00000000, 0x00000000);
-		BoomerangerC				= Address(0x00316570, 0x00000000, 0x00000000);
-		BoomerangerD				= Address(0x001B5AA8, 0x00000000, 0x00000000);
-		BoomerangerE				= Address(0x001B5AAC, 0x00000000, 0x00000000);
-		BoomerangerF				= Address(0x003C883C, 0x00000000, 0x00000000);
-		TorrentA					= Address(0x00316514, 0x00000000, 0x00000000);
-		TorrentB					= Address(0x00316518, 0x00000000, 0x00000000);
-		TorrentC					= Address(0x0031651C, 0x00000000, 0x00000000);
-		TorrentD					= Address(0x002311E0, 0x00000000, 0x00000000);
-		TorrentE					= Address(0x002311E4, 0x00000000, 0x00000000);
-		GustGarbA					= Address(0x003164CC, 0x00000000, 0x00000000);
-		GustGarbB					= Address(0x003164D0, 0x00000000, 0x00000000);
-		GustGarbC					= Address(0x003164D4, 0x00000000, 0x00000000);
-		GustGarbD					= Address(0x001B2490, 0x00000000, 0x00000000);
-		GustGarbE					= Address(0x001B2494, 0x00000000, 0x00000000);
-		GustGarbF					= Address(0x001B2884, 0x00000000, 0x00000000);
-		GustGarbG					= Address(0x001B2888, 0x00000000, 0x00000000);
-		HammerwearA					= Address(0x003164FC, 0x00000000, 0x00000000);
-		HammerwearB					= Address(0x00316500, 0x00000000, 0x00000000);
-		HammerwearC					= Address(0x00316504, 0x00000000, 0x00000000);
-		HammerwearD					= Address(0x00316654, 0x00000000, 0x00000000);
-		HammerwearE					= Address(0x00316658, 0x00000000, 0x00000000);
-		HammerwearF					= Address(0x0059AC80, 0x00000000, 0x00000000);
-		HammerwearG					= Address(0x0059AC84, 0x00000000, 0x00000000);
-		RobowearA					= Address(0x0031652C, 0x00000000, 0x00000000);
-		RobowearB					= Address(0x00155C6C, 0x00000000, 0x00000000);
-		RobowearC					= Address(0x00155C70, 0x00000000, 0x00000000);
-		FireBlazerA					= Address(0x00316540, 0x00000000, 0x00000000);
-		FireBlazerB					= Address(0x00316544, 0x00000000, 0x00000000);
-		FireBlazerC					= Address(0x00316548, 0x00000000, 0x00000000);
-		FireBlazerD					= Address(0x00185AC0, 0x00000000, 0x00000000);
-		LightArmorA					= Address(0x00378B94, 0x00000000, 0x00000000);
-		LightArmorB					= Address(0x00378B98, 0x00000000, 0x00000000);
-		LinebeckTimeA				= Address(0x00295934, 0x00000000, 0x00000000);
-		LinebeckTimeB				= Address(0x00295AF8, 0x00000000, 0x00000000);
-		LinebeckTimeC				= Address(0x005A01E8, 0x00000000, 0x00000000);
-		CheetahA					= Address(0x00316660, 0x00000000, 0x00000000);
-		CheetahB					= Address(0x00316668, 0x00000000, 0x00000000);
-		CheetahC					= Address(0x0031666C, 0x00000000, 0x00000000);
-		SwordDamageBoostA			= Address(0x00316634, 0x00000000, 0x00000000);
-		SwordDamageBoostB			= Address(0x00316638, 0x00000000, 0x00000000);
-		SwordBeamAbility			= Address(0x005CC990, 0x00000000, 0x00000000);
-		QuadBeamA					= Address(0x003B1258, 0x00000000, 0x00000000);
-		QuadBeamB					= Address(0x003B125C, 0x00000000, 0x00000000);
-		QuadBeamC					= Address(0x003B1260, 0x00000000, 0x00000000);
-		QuadBeamSpinA				= Address(0x003B20A0, 0x00000000, 0x00000000);
-		QuadBeamSpinB				= Address(0x003B20A4, 0x00000000, 0x00000000);
-		QuadBeamSpinC				= Address(0x003B20A8, 0x00000000, 0x00000000);
-		KnockbackImmunity			= Address(0x003BAE6C, 0x00000000, 0x00000000);
-		SwordHammerDmgBoost			= Address(0x003166A0, 0x00000000, 0x00000000);
-		SwordBeamHealthCheckA		= Address(0x005CC9BC, 0x00000000, 0x00000000);
-		SwordBeamHealthCheckB		= Address(0x005CC9C0, 0x00000000, 0x00000000);
-		SwordType 					= Address(0x328419EC, 0x32841A6C, 0x3288C42C);
+		if (JSON_content.empty())
+		{
+			OSD::Notify("ERROR: Address list cannot be loaded.", Color::Red);
+			AddressList::cancelAddrInit();
+		}
+		else
+		{
+			// parse JSON...
+			for (const auto &addressEntry : JSON_content["addresses"])
+			{
+				std::string addrReference = addressEntry["name"];
+				const auto &addrValues = addressEntry["regionAddrs"];
 
-		/* Console */
-		ABXY 						= Address(0x31A0110C, 0x0, 0x0);
-		StartSelLRTouch 			= Address(0x31A0110D, 0x0, 0x0);
-		DPadCPad 					= Address(0x31A0110E, 0x0, 0x0);
+				if (addrValues.size() == 3)
+				{
+					switch (Process::GetTitleID())
+					{
+						case TID_USA:
+							addrStr = addrValues["usaAddress"].get<std::string>();
+							break;
 
-		/* Emotes */
-		GameplayEmotes				= Address(0x006B6E98, 0x006B6E98, 0x006B6E98);
-		LobbyEmotes					= Address(0x006B6EA0, 0x006B6EA0, 0x006B6EA0);
-		EmoteAGraphic				= Address(0x32C91830, 0x32C918B0, 0x32CDC420);
-		EmoteBGraphic				= Address(0x32C9225C, 0x32C922DC, 0x32CDCE4C);
-		EmoteCGraphic				= Address(0x32C92BEC, 0x32C92C6C, 0x32CDD7DC);
-		EmoteDGraphic				= Address(0x32C9357C, 0x32C935FC, 0x32CDE16C);
-		EmoteEGraphic				= Address(0x32C93F0C, 0x32C93F8C, 0x32CDEAFC);
-		EmoteFGraphic				= Address(0x32C9489C, 0x32C9491C, 0x32CDF48C);
-		EmoteGGraphic				= Address(0x32C9522C, 0x32C952AC, 0x32CDFE1C);
-		EmoteHGraphic				= Address(0x32C95BBC, 0x32C95C3C, 0x32CE07AC);
-		UseDoTLayoutAlways			= Address(0x002F0C6C, 0x002F1010, 0x002F1B94);
+						case TID_EUR:
+							addrStr = addrValues["eurAddress"].get<std::string>();
+							break;
 
-		/* Game Data */
-		CurrLevelID                 = Address(0x3280EDC4, 0x3280EE44, 0x32859804);
-		CurrStageID                 = Address(0x3280EDC8, 0x3280EE48, 0x32859808);
-		CurrSpawnID                 = Address(0x3280EDCA, 0x3280EE4A, 0x3285980A);
-		DoppelsEnabled              = Address(0x32D81E46, 0x32D81EC6, 0x32DD466A);
-		DrablandsRupeeCount         = Address(0x32C8178C, 0x32C8180C, 0x32CCC1CC);
-		EnemyDataPointer            = Address(0x32989188, 0x32989208, 0x329D3BC8);
-		HealthCurrent               = Address(0x32C824F4, 0x32C82574, 0x32CCCF34);
-		HealthMax                   = Address(0x32C824F5, 0x32C82575, 0x32CCCF35);
-		EnergyCurrent               = Address(0x328496C4, 0x32849744, 0x32894104);
-		EnergyMax                   = Address(0x00192644, 0x001926D4, 0x00192BC8);
-		EnergyMaxPitRecovery        = Address(0x001925F8, 0x00192688, 0x00192B7C);
-		EnergyMaxMultiplicand       = Address(0x00192684, 0x00192714, 0x00192C08);
-		LargeEnergyGauge            = Address(0x002F26CC, 0x00000000, 0x00000000);
-		FairiesCurrent              = Address(0x32D81F14, 0x32D81F94, 0x32DD4738);
-		TimeLeft                    = Address(0x32D81F18, 0x32D81F98, 0x32DD473C);
-		CollisionCurrent            = Address(0x328416A4, 0x32841724, 0x3288C0E4);
-		SpeedX                      = Address(0x32841650, 0x328416D0, 0x3288C090);
-		SpeedY                      = Address(0x32841654, 0x328416D4, 0x3288C094);
-		SpeedZ                      = Address(0x32841658, 0x328416D8, 0x3288C098);
-		TotemCarrying               = Address(0x32849520, 0x328495A0, 0x32893F60);
-		TotemCarriedBy              = Address(0x32849524, 0x328495A4, 0x32893F64);
-		LoadingStatus               = Address(0x319FE1D0, 0x319FE228, 0x319FDF1C);
-		PauseStatus                 = Address(0x3280ED8C, 0x3280EE0C, 0x328597CC);
-		PreviousLevelID             = Address(0x3280EDBC, 0x3280EE3C, 0x328597FC);
-		PreviousStageID             = Address(0x3280EDC0, 0x3280EE40, 0x32859800);
-		PreviousSpawnID             = Address(0x3280EDC2, 0x3280EE42, 0x32859802);
-		TimeElapsed                 = Address(0x3280EDE0, 0x3280EE60, 0x32859820);
-		TargetLevelID               = Address(0x32C81F10, 0x32C81F90, 0x32CCC950);
-		TargetStageID               = Address(0x32C81F14, 0x32C81F94, 0x32CCC954);
-		TargetSpawnID               = Address(0x32C81F16, 0x32C81F96, 0x32CCC956);
-		Warp                        = Address(0x3282C4EC, 0x3282C56C, 0x32876F2C);
-		WarpActivation              = Address(0x32C81F00, 0x32C81F80, 0x32CCC940);
-		WarpPointer                 = Address(0x32C81E28, 0x32C81EA8, 0x32CCC868);
-		ChallengeID                 = Address(0x32D81E3C, 0x32D81EBC, 0x32DD4660);
-		SpeedMultiplierAlt          = Address(0x0039B56C, 0x00000000, 0x00000000);
+						case TID_JPN:
+							addrStr = addrValues["jpnAddress"].get<std::string>();
+							break;
 
-		/* Items */
-		BowStrafe                   = Address(0x0038CC7C, 0x0038D024, 0x0038DC00);
-		FireGloveStrafe             = Address(0x003C8FD8, 0x003C9380, 0x003C9F5C);
-		GustStrafe                  = Address(0x003C85A8, 0x003C8950, 0x003C952C);
-		HammerStrafe                = Address(0x003C03E0, 0x003C0788, 0x003C1364);
-		ShadowLinkItemPointer       = Address(0x32D81DEC, 0x32D81E6C, 0x32DD4610);
-		GripshotStrafe              = Address(0x003C214C, 0x003C24F4, 0x003C30D0);
-		WaterRodStrafe              = Address(0x003C59C0, 0x003C5D68, 0x003C6944);
+						default:
+							OSD::Notify("The current title is not a supported retail version of TFH!", Color::Red);
+							OSD::Notify("Supported TFH regions include NA, EU/AUS, and JPN.", Color::Red);
+							AddressList::cancelAddrInit();
+					}
 
-		/* Miscellaneous */
-		CameraXButtonToggle         = Address(0x32D92920, 0x32D929A0, 0x32DE5220);
-		CameraShutter               = Address(0x32D92E9C, 0x32D92F1C, 0x32DE579C);
-		CheckPhotoExist             = Address(0x31B2FE3D, 0x31B2FEBD, 0x31B2FBBD);
-		DisplayTopPhoto             = Address(0x31B2FE21, 0x31B2FEA1, 0x31B2FBA1);
-		SeeChestContents            = Address(0x0022FFB8, 0x00230040, 0x00230CDC);
-		SwordBeamCD                 = Address(0x328495A0, 0x32849620, 0x32893FE0);
-		TextBoxSpeed                = Address(0x0018122C, 0x001812BC, 0x001817AC);
+					// remove 0x prefix and convert to numerical val...
+					if (addrStr.substr(0, 2) == "0x")
+						addrStr = addrStr.substr(2);
 
-		/* Padding */
-		TextToRodata                = Address(0x006A9168, 0x006A9598, 0x007239B8);
 
-		/* Player */
-		ActiveLink                  = Address(0x31A03879, 0x31A038D1, 0x31A035C5);
-		CurrentAnim                 = Address(0x32849188, 0x32849208, 0x32893BC8);
-		CurrentItem                 = Address(0x32841A20, 0x32841AA0, 0x3288C460);
-		//check if jinxed is model or effects also
-		IsInvincible                = Address(0x32849544, 0x328495C4, 0x32893F84);
-		IsJinxed                    = Address(0x328495AC, 0x3284962C, 0x32893FEC);
-		IsSpawned                   = Address(0x32841410, 0x32841490, 0x3288BE50);
-		IsSwapping                  = Address(0x31A04610, 0x31A04668, 0x31A0435C);
-		IsWaterStorage              = Address(0x32849231, 0x328492B1, 0x32893C71);
-		IsVisible                   = Address(0x32849550, 0x328495D0, 0x32893F90);
-		LinkVoice 					= Address(0x3284A260, 0x3284A2E0, 0x32894CA0);
-		LiveNameColorG 				= Address(0x007767F0, 0x007767F8, 0x007767E8);
-		LiveNameColorB 				= Address(0x007767F4, 0x007767FC, 0x007767EC);
-		LiveNameColorR 				= Address(0x007767F8, 0x00776800, 0x007767F0);
-		LockMovement 				= Address(0x31A0115B, 0x31A011B3, 0x31A00EA7);
-		NoCollision 				= Address(0x32849508, 0x32849588, 0x32893F48);
-		PlayerModelSize 			= Address(0x001FAC64, 0x001FACF4, 0x001FB908);
-		PositionX 					= Address(0x328412D8, 0x32841358, 0x3288BD18);
-		PositionY 					= Address(0x328412DC, 0x3284135C, 0x3288BD1C);
-		PositionZ 					= Address(0x328412E0, 0x32841360, 0x3288BD20);
-		PreviousAnim 				= Address(0x32849189, 0x32849209, 0x32893BC9);
-		PVPMode 					= Address(0x32849545, 0x328495C5, 0x32893F85);
-		RespawnPositionX 			= Address(0x32841750, 0x328417D0, 0x3288C190);
-		RespawnPositionY 			= Address(0x32841754, 0x328417D4, 0x3288C194);
-		RespawnPositionZ 			= Address(0x32841758, 0x328417D8, 0x3288C198);
+					addrVal = std::stoi(addrStr, nullptr, 16);
 
-		/* Rendering */
-		ArrowIndicatorColorBot 		= Address(0x32D91B24, 0x32D91BA4, 0x32DE4424);
-		ArrowIndicatorColorMid 		= Address(0x32D91A04, 0x32D91A84, 0x32DE4304);
-		ArrowIndicatorColorTop 		= Address(0x32D918E4, 0x32D91964, 0x32DE41E4);
-		HUDPointer 					= Address(0x32C8289C, 0x32C8291C, 0x32CCD2DC);
-		FogA 						= Address(0x31B31BE4, 0x31B31C64, 0x31B31964);
-		FogB 						= Address(0x31B31BDC, 0x31B31C5C, 0x31B3195C);
-		FogC 						= Address(0x31B31BE0, 0x31B31C60, 0x31B31960);
-		ScrollingTextOpacity 		= Address(0x00151C40, 0x00151C5C, 0x00152050);
-		OffScreenLocation 			= Address(0x32D83094, 0x32D83114, 0x32DD58B8);
-		TextureName					= Address(0x3033D7C3, 0x30363E43, 0x3037F5C3);
-		LoadingScreenSPNoChal		= Address(0x002B1410, 0x002B17B4, 0x002B2338);
-		LoadingScreenSPIcons		= Address(0x00390C08, 0x00390FB0, 0x00391B88);
-		CheerPomPom					= Address(0x001F9AFC, 0x001F9B8C, 0x001FA7A0);
-		Aura						= Address(0x001C3030, 0x001C30C0, 0x001C35B4);
-		PlayerLuminanceNormalA		= Address(0x00378F94, 0x00000000, 0x00000000);
-		PlayerLuminanceNormalB		= Address(0x00378F9C, 0x00000000, 0x00000000);
-		PlayerLuminanceLightArmor	= Address(0x00378F98, 0x00000000, 0x00000000);
-		SwordParticle				= Address(0x003B31D0, 0x00000000, 0x00000000);
+					// adjust all addresses within LINEAR mem range...
+					if (addrVal >= 0x14000000)
+						addrVal -= memOffset;
 
-		/* Savefile */
-		NormalNCCompletion 			= Address(0x31A060EC, 0x31A06144, 0x31A05E38);
-		NormalC1Completion 			= Address(0x31A060F4, 0x31A0614C, 0x31A05E40);
-		NormalC2Completion 			= Address(0x31A060FC, 0x31A06154, 0x31A05E48);
-		NormalC3Completion 			= Address(0x31A06104, 0x31A0615C, 0x31A05E50);
-		SoloNCCompletion 			= Address(0x31A0616C, 0x31A061C4, 0x31A05EB8);
-		SoloC1Completion 			= Address(0x31A06174, 0x31A061CC, 0x31A05EC0);
-		SoloC2Completion 			= Address(0x31A0617C, 0x31A061D4, 0x31A05EC8);
-		SoloC3Completion 			= Address(0x31A06184, 0x31A061DC, 0x31A05ED0);
-		MultiNCCompletion 			= Address(0x31A0612C, 0x31A06184, 0x31A05E78);
-		MultiC1Completion 			= Address(0x31A06134, 0x31A0618C, 0x31A05E80);
-		MultiC2Completion 			= Address(0x31A0613C, 0x31A06194, 0x31A05E88);
-		MultiC3Completion 			= Address(0x31A06144, 0x31A0619C, 0x31A05E90);
-
-		CostumeObtainStatus 		= Address(0x32C8256A, 0x32C825EA, 0x32CCCFAA);
-		ColiseumWinCount 			= Address(0x31A062AC, 0x31A06304, 0x31A05FF8);
-		EditMerchantStock 			= Address(0x31A077A4, 0x31A077FC, 0x31A074F0);
-		HeroPointCount 				= Address(0x31A0611C, 0x31A06174, 0x31A05E68);
-		MainVoice 					= Address(0x31A06118, 0x31A06170, 0x31A05E64);
-		ResetMerchantStock 			= Address(0x31A077AE, 0x31A07806, 0x31A074FA);
-
-		// SFX and BGM
-		BGMType 					= Address(0x005FD3C0, 0x005FD7F0, 0x005FE358);
-		BGMVolume 					= Address(0x00236444, 0x002364D4, 0x00237170);
-		LobbyBallPointer			= Address(0x32DCAA60, 0x32DCAAE0, 0x32E277F4);
-		LinkVoiceSpeed 				= Address(0x3284A25C, 0x3284A2DC, 0x32894C9C);
-		Voice8bit	 				= Address(0x00194630, 0x001946C0, 0x00194BB4);
-		MasterVolume 				= Address(0x0050BC74, 0x0050C01C, 0x0050CBF0);
-		SwordSwipe8bit				= Address(0x003B0FB4, 0x00000000, 0x00000000);
-		SwordCharge8bit				= Address(0x003B1AD4, 0x00000000, 0x00000000);
-		SwordSpin8bit				= Address(0x003B1FD4, 0x00000000, 0x00000000);
-
-		// Turbo Mode
-		DashTimerNormal				= Address(0x0039CE08, 0x00000000, 0x00000000);
-		DashTimerNinja				= Address(0x0039CE0C, 0x00000000, 0x00000000);
-		SwordBeamCDExe				= Address(0x005CC998, 0x00000000, 0x00000000);
-		HammerwearSpeed				= Address(0x003BFD08, 0x00000000, 0x00000000);
-		SL_SwordSpeed				= Address(0x00251538, 0x00000000, 0x00000000);
-		SL_Strafe					= Address(0x00251558, 0x00000000, 0x00000000);
-		SL_RunAnimSpeed				= Address(0x0025155C, 0x00000000, 0x00000000);
-		SL_RunSpeed					= Address(0x00251560, 0x00000000, 0x00000000);
-		BombFlashSpeed				= Address(0x0057FB74, 0x00000000, 0x00000000);
-		LoadingIconAnimSpeed		= Address(0x00390C04, 0x00000000, 0x00000000);
-		LiveMsgSpeed				= Address(0x00152180, 0x00000000, 0x00000000);
-		SwordBeamSpeed				= Address(0x001BD9EC, 0x00000000, 0x00000000);
-		SpeedDamageUndo				= Address(0x0031663C, 0x00000000, 0x00000000);
-		BGMSFXSpeed					= Address(0x0050BA48, 0x00000000, 0x00000000);
-		EnergyBarStretch			= Address(0x005AEBDC, 0x00000000, 0x00000000);
-		SpeedMultiplierNormal		= Address(0x003166A4, 0x00000000, 0x00000000);
-		SpeedMultiplierCheetah		= Address(0x003166B0, 0x00000000, 0x00000000);
-		DashStaggerSpeed			= Address(0x0039B9AC, 0x00000000, 0x00000000);
-		DashSpeed					= Address(0x0039CC2C, 0x00000000, 0x00000000);
-		DashBrakeDuration			= Address(0x0039CC40, 0x00000000, 0x00000000);
-		DashPlayerCrashHeight		= Address(0x0039D4A0, 0x00000000, 0x00000000);
-		DashWallCrashHeight			= Address(0x0039D4AC, 0x00000000, 0x00000000);
-		DashCrashBackwards			= Address(0x0039D4CC, 0x00000000, 0x00000000);
-		FireJumpHeight				= Address(0x003BE9D4, 0x00000000, 0x00000000);
-		LavaBounceHeight			= Address(0x003BCEE8, 0x00000000, 0x00000000);
-		WaterJumpHeight				= Address(0x003A1714, 0x00000000, 0x00000000);
-		WaterJumpForwardSpeed		= Address(0x003A1728, 0x00000000, 0x00000000);
-		SwimBoostSpeedZora			= Address(0x003A204C, 0x00000000, 0x00000000);
-		SwimBoostSpeedNormal		= Address(0x003A2058, 0x00000000, 0x00000000);
-		SwimTurnaroundSpeed			= Address(0x003A2294, 0x00000000, 0x00000000);
-		SwimSpeed					= Address(0x003A2298, 0x00000000, 0x00000000);
-		ArrowSpeedPlayer			= Address(0x0057E084, 0x00000000, 0x00000000);
-		FireballHeight				= Address(0x001855E0, 0x00000000, 0x00000000);
-		FireballSpeed				= Address(0x001855DC, 0x00000000, 0x00000000);
-		FireballBounceHeight		= Address(0x00185DAC, 0x00000000, 0x00000000);
-		FireballThrowHeight			= Address(0x00186AE8, 0x00000000, 0x00000000);
-		FireballReleaseTime			= Address(0x003C8CE8, 0x00000000, 0x00000000);
-		BoomerangReturnSpeed		= Address(0x001B5394, 0x00000000, 0x00000000);
-		BoomerangDistance			= Address(0x001B6300, 0x00000000, 0x00000000);
-		BoomerangSpeed				= Address(0x001B6308, 0x00000000, 0x00000000);
-		GustSpeed					= Address(0x001B24C0, 0x00000000, 0x00000000);
-		GripshotRetractSpeed		= Address(0x001568E4, 0x00000000, 0x00000000);
-		GripshotExtendSpeed			= Address(0x0015690C, 0x00000000, 0x00000000);
-
-		// Animation Speeds
-		Link_Wait					= Address(0x00731008, 0x0073100C, 0x00731000);
-		Link_WalkSlow				= Address(0x00731020, 0x00731024, 0x00731018);
-		Link_Walk					= Address(0x00731038, 0x0073103C, 0x00731030);
-		Link_Dash					= Address(0x00731050, 0x00731054, 0x00731048);
-		Link_DashTotem				= Address(0x00731068, 0x0073106C, 0x00731060);
-		Link_GrabDash				= Address(0x00731080, 0x00731084, 0x00731078);
-		Link_CutRF					= Address(0x00731098, 0x0073109C, 0x00731090);
-		Link_CutRFTotem				= Address(0x007310B0, 0x007310B4, 0x007310A8);
-		Link_CutRFtoKeep			= Address(0x007310C8, 0x007310CC, 0x007310C0);
-		Link_KeepWait				= Address(0x007310E0, 0x007310E4, 0x007310D8);
-		Link_Compete				= Address(0x007310F8, 0x007310FC, 0x007310F0);
-		Link_CutTurn				= Address(0x00731110, 0x00731114, 0x00731108);
-		Link_CutTurnW				= Address(0x00731128, 0x0073112C, 0x00731120);
-		Link_CutTurnB				= Address(0x00731140, 0x00731144, 0x00731138);
-		Link_GrabP_A				= Address(0x00731158, 0x0073115C, 0x00731150);
-		Link_GrabP_B				= Address(0x00731170, 0x00731174, 0x00731168);
-		Link_GrabUp					= Address(0x00731188, 0x0073118C, 0x00731180);
-		Link_GrabThrow				= Address(0x007311A0, 0x007311A4, 0x00731198);
-		Link_GrabWait				= Address(0x007311B8, 0x007311BC, 0x007311B0);
-		Link_WaitTotem				= Address(0x007311D0, 0x007311D4, 0x007311C8);
-		Link_GrabYorokeTotem		= Address(0x007311E8, 0x007311EC, 0x007311E0);
-		Link_YorokeTotem			= Address(0x00731200, 0x00731204, 0x007311F8);
-		Link_WaitYoroke				= Address(0x00731218, 0x0073121C, 0x00731210);
-		Link_JumpEdS_A				= Address(0x00731230, 0x00731234, 0x00731228);
-		Link_DamF					= Address(0x00731248, 0x0073124C, 0x00731240);
-		Link_DamB					= Address(0x00731260, 0x00731264, 0x00731258);
-		Link_FallLava				= Address(0x00731278, 0x0073127C, 0x00731270);
-		Link_FallSand				= Address(0x00731290, 0x00731294, 0x00731288);
-		Link_Drown					= Address(0x007312A8, 0x007312AC, 0x007312A0);
-		Link_DrownLava				= Address(0x007312C0, 0x007312C4, 0x007312B8);
-		Link_Fall					= Address(0x007312D8, 0x007312DC, 0x007312D0);
-		Link_DamBiri				= Address(0x007312F0, 0x007312F4, 0x007312E8);
-		Link_WaitQ					= Address(0x00731308, 0x0073130C, 0x00731300);
-		Link_DamBoyon				= Address(0x00731320, 0x00731324, 0x00731318);
-		Link_DamFFup				= Address(0x00731338, 0x0073133C, 0x00731330);
-		Link_DamSwimF				= Address(0x00731350, 0x00731354, 0x00731348);
-		Link_DamSwimB				= Address(0x00731368, 0x0073136C, 0x00731360);
-		Link_LLhold					= Address(0x00731380, 0x00731384, 0x00731378);
-		Link_LLswallowSt			= Address(0x00731398, 0x0073139C, 0x00731390);
-		Link_LLstruggle				= Address(0x007313B0, 0x007313B4, 0x007313A8);
-		Link_FallTotem				= Address(0x007313C8, 0x007313CC, 0x007313C0);
-		Link_FallBallon				= Address(0x007313E0, 0x007313E4, 0x007313D8);
-		Link_BowWalkA				= Address(0x007313F8, 0x007313FC, 0x007313F0);
-		Link_BowWalkB				= Address(0x00731410, 0x00731414, 0x00731408);
-		Link_Slipice				= Address(0x00731428, 0x0073142C, 0x00731420);
-		Link_BowWait				= Address(0x00731440, 0x00731444, 0x00731438);
-		Link_ArrowShoot				= Address(0x00731458, 0x0073145C, 0x00731450);
-		Link_RodWait				= Address(0x00731470, 0x00731474, 0x00731468);
-		Link_RodAttack				= Address(0x00731488, 0x0073148C, 0x00731480);
-		Link_BoomAttack				= Address(0x007314A0, 0x007314A4, 0x00731498);
-		Link_BoomCarried			= Address(0x007314B8, 0x007314BC, 0x007314B0);
-		Link_HookshotWait			= Address(0x007314D0, 0x007314D4, 0x007314C8);
-		Link_HookshotAttack			= Address(0x007314E8, 0x007314EC, 0x007314E0);
-		Link_HookshotDrag			= Address(0x00731500, 0x00731504, 0x007314F8);
-		Link_Bump					= Address(0x00731518, 0x0073151C, 0x00731510);
-		Link_HookshotPullSt			= Address(0x00731530, 0x00731534, 0x00731528);
-		Link_HookshotPullEd			= Address(0x00731548, 0x0073154C, 0x00731540);
-		Link_AirCannonWait			= Address(0x00731560, 0x00731564, 0x00731558);
-		Link_AirCannonAttack		= Address(0x00731578, 0x0073157C, 0x00731570);
-		Link_FireGloveWait			= Address(0x00731590, 0x00731594, 0x00731588);
-		Link_FireGloveAttack		= Address(0x007315A8, 0x007315AC, 0x007315A0);
-		Link_HammerWait				= Address(0x007315C0, 0x007315C4, 0x007315B8);
-		Link_HammerAttack			= Address(0x007315D8, 0x007315DC, 0x007315D0);
-		Link_HammerAttackTotem		= Address(0x007315F0, 0x007315F4, 0x007315E8);
-		Link_HammerMiss				= Address(0x00731608, 0x0073160C, 0x00731600);
-		Link_Die					= Address(0x00731620, 0x00731624, 0x00731618);
-		Link_DieSt					= Address(0x00731638, 0x0073163C, 0x00731630);
-		Link_DieEd					= Address(0x00731650, 0x00731654, 0x00731648);
-		Link_Talk					= Address(0x00731668, 0x0073166C, 0x00731660);
-		Link_ItemGetA_A				= Address(0x00731680, 0x00731684, 0x00731678);
-		Link_ItemGetA_B				= Address(0x00731698, 0x0073169C, 0x00731690);
-		Link_ItemGetShort			= Address(0x007316B0, 0x007316B4, 0x007316A8);
-		Link_UnlockB				= Address(0x007316C8, 0x007316CC, 0x007316C0);
-		Link_PDashReady				= Address(0x007316E0, 0x007316E4, 0x007316D8);
-		Link_PDash					= Address(0x007316F8, 0x007316FC, 0x007316F0);
-		Link_DashAchichi			= Address(0x00731710, 0x00731714, 0x00731708);
-		Link_PDashCrash				= Address(0x00731728, 0x0073172C, 0x00731720);
-		Link_PDashBrake				= Address(0x00731740, 0x00731744, 0x00731738);
-		Link_PDashStagger			= Address(0x00731758, 0x0073175C, 0x00731750);
-		Link_WaitPushPull			= Address(0x00731770, 0x00731774, 0x00731768);
-		Link_WalkPush				= Address(0x00731788, 0x0073178C, 0x00731780);
-		Link_WalkPull				= Address(0x007317A0, 0x007317A4, 0x00731798);
-		Link_Swim					= Address(0x007317B8, 0x007317BC, 0x007317B0);
-		Link_SwimWait				= Address(0x007317D0, 0x007317D4, 0x007317C8);
-		Link_SwimDive				= Address(0x007317E8, 0x007317EC, 0x007317E0);
-		Link_SwimLand				= Address(0x00731800, 0x00731804, 0x007317F8);
-		Link_SwimDrift				= Address(0x00731818, 0x0073181C, 0x00731810);
-		Link_SwimScrewAttack_A      = Address(0x00731830, 0x00731834, 0x00731828);
-		Link_SwimScrewAttack_B      = Address(0x00731848, 0x0073184C, 0x00731840);
-		Link_SwimWaitPuppet         = Address(0x00731860, 0x00731864, 0x00731858);
-		Link_WaitAtoB               = Address(0x00731878, 0x0073187C, 0x00731870);
-		Link_WaitB                  = Address(0x00731890, 0x00731894, 0x00731888);
-		Link_WaitFight              = Address(0x007318A8, 0x007318AC, 0x007318A0);
-		Link_WaitPuppet             = Address(0x007318C0, 0x007318C4, 0x007318B8);
-		Link_WalkPuppet             = Address(0x007318D8, 0x007318DC, 0x007318D0);
-		Link_Skyward                = Address(0x007318F0, 0x007318F4, 0x007318E8);
-		Link_JumpSt                 = Address(0x00731908, 0x0073190C, 0x00731900);
-		Link_JumpAuto               = Address(0x00731920, 0x00731924, 0x00731918);
-		Link_JumpEdS_B              = Address(0x00731938, 0x0073193C, 0x00731930);
-		Link_CarryAway              = Address(0x00731950, 0x00731954, 0x00731948);
-		Link_Call                   = Address(0x00731968, 0x0073196C, 0x00731960);
-		Link_Rock                   = Address(0x00731980, 0x00731984, 0x00731978);
-		Link_Sad                    = Address(0x00731998, 0x0073199C, 0x00731990);
-		Link_SadWait                = Address(0x007319B0, 0x007319B4, 0x007319A8);
-		Link_WalkMagic              = Address(0x007319C8, 0x007319CC, 0x007319C0);
-		Link_TurnMagic              = Address(0x007319E0, 0x007319E4, 0x007319D8);
-		Link_EdYorokeTotem1         = Address(0x007319F8, 0x007319FC, 0x007319F0);
-		Link_EdWaitTotem1           = Address(0x00731A10, 0x00731A14, 0x00731A08);
-		Link_EdYorokeTotem2         = Address(0x00731A28, 0x00731A2C, 0x00731A20);
-		Link_EdWaitTotem2           = Address(0x00731A40, 0x00731A44, 0x00731A38);
-		Link_WaitPinch              = Address(0x00731A58, 0x00731A5C, 0x00731A50);
-
-		// facial expression data
-		FileTableRewrite            = Address(0x006A9600, 0x0, 0x0);
-		FileTableStart              = Address(0x32DD7434, 0x0, 0x0);
-		CustomInfoHeaders           = Address(0x006A9350, 0x0, 0x0);
-		CustomAnimData              = Address(0x006A922C, 0x0, 0x0);
-		CustomFacePointerList       = Address(0x006A91DC, 0x0, 0x0);
-		EditFaceStatusBit           = Address(0x006A91D8, 0x0, 0x0);
-		EyeTitleReference           = Address(0x3033D761, 0x0, 0x0);
-		HytopiaPMAStart             = Address(0x302123FC, 0x0, 0x0);
-		IndivPMAStart               = Address(0x32C81A78, 0x0, 0x0);
+					// create new address reference...
+					AddressList::addresses[addrReference] = addrVal;
+				}
+				else
+				{
+					OSD::Notify("[ERROR] Invalid address data for " << addrReference << ".", Color::Yellow);
+					AddressList::cancelAddrInit();
+				}
+			}
+		}
 	}
 
-	// Camera
-	Address		AddressList::DynamicCameraCheck;
-	Address		AddressList::GameplayCameraCheck;
-	Address		AddressList::GameplayCameraInit;
-	Address		AddressList::RetGameplayCameraInit;
-	Address		AddressList::CameraLinkFocus;
-	Address		AddressList::CameraMode;
-	Address		AddressList::CameraPosX;
-	Address		AddressList::CameraPosY;
-	Address		AddressList::CameraPosZ;
-	Address		AddressList::CameraRotationX;
-	Address		AddressList::CameraRotationY;
-	Address		AddressList::CameraRotationZ;
-	Address		AddressList::OrthographicZoom;
-	Address		AddressList::PerspectiveZoom;
+	// Adjusts the working memory range depending on the current memory allocation scheme
+	void AddressList::InitMemoryRange(void)
+	{
+		u32 startAddress = 0x30000000;
+		u32 temp;
 
-	// Chaos
-	Address		AddressList::HeartsTakeHealth;
+		memOffset = Process::CheckRegion(startAddress, temp) ? 0x0 : 0x1C000000;
 
-	// Costume
-	Address		AddressList::CostumeAttrA;
-	Address		AddressList::CostumeAttrB;
-	Address		AddressList::CostumeAttrC;
-	Address		AddressList::CostumeAttrD;
-	Address		AddressList::CostumeCatalogPointer;
-	Address		AddressList::CurrCostume;
-	Address		AddressList::CurrCostumeAlt;
-	Address		AddressList::UnusedCostumeDataPointers;
-	Address		AddressList::PlayerStatus;
-	Address		AddressList::TingleBalloons;
-	Address		AddressList::DapperSwingCountdown;
-	Address		AddressList::DapperSpinCheck;
-	Address		AddressList::HeartDropRate;
-	Address		AddressList::BearDodge;
-	Address		AddressList::BearMinMaxCheckA;
-	Address		AddressList::BearMinMaxCheckB;
-	Address		AddressList::DoppelStageResetA;
-	Address		AddressList::DoppelStageResetB;
-	Address		AddressList::DoppelStageResetC;
-	Address		AddressList::DoppelLobbyReset;
-	Address		AddressList::CostumeIDOffsetAuraA;
-	Address		AddressList::CostumeIDOffsetAuraB;
-	Address		AddressList::CostumeIDOffsetAuraC;
-	Address		AddressList::CostumeIDOffsetAuraD;
-	Address		AddressList::CostumeIDOffsetCheetah;
-	Address		AddressList::CostumeIDOffsetDune;
-	Address		AddressList::CostumeIDOffsetCheer;
-	Address		AddressList::CostumeIDOffsetSwordPtcl;
-	Address		AddressList::CostumeIDFunBLModel;
-	Address		AddressList::KokiriA;
-	Address		AddressList::KokiriB;
-	Address		AddressList::KokiriC;
-	Address		AddressList::KokiriD;
-	Address		AddressList::KokiriE;
-	Address		AddressList::BigBombA;
-	Address		AddressList::BigBombB;
-	Address		AddressList::BigBombC;
-	Address		AddressList::BoomerangerA;
-	Address		AddressList::BoomerangerB;
-	Address		AddressList::BoomerangerC;
-	Address		AddressList::BoomerangerD;
-	Address		AddressList::BoomerangerE;
-	Address		AddressList::BoomerangerF;
-	Address		AddressList::TorrentA;
-	Address		AddressList::TorrentB;
-	Address		AddressList::TorrentC;
-	Address		AddressList::TorrentD;
-	Address		AddressList::TorrentE;
-	Address		AddressList::GustGarbA;
-	Address		AddressList::GustGarbB;
-	Address		AddressList::GustGarbC;
-	Address		AddressList::GustGarbD;
-	Address		AddressList::GustGarbE;
-	Address		AddressList::GustGarbF;
-	Address		AddressList::GustGarbG;
-	Address		AddressList::HammerwearA;
-	Address		AddressList::HammerwearB;
-	Address		AddressList::HammerwearC;
-	Address		AddressList::HammerwearD;
-	Address		AddressList::HammerwearE;
-	Address		AddressList::HammerwearF;
-	Address		AddressList::HammerwearG;
-	Address		AddressList::RobowearA;
-	Address		AddressList::RobowearB;
-	Address		AddressList::RobowearC;
-	Address		AddressList::FireBlazerA;
-	Address		AddressList::FireBlazerB;
-	Address		AddressList::FireBlazerC;
-	Address		AddressList::FireBlazerD;
-	Address		AddressList::LightArmorA;
-	Address		AddressList::LightArmorB;
-	Address		AddressList::LinebeckTimeA;
-	Address		AddressList::LinebeckTimeB;
-	Address		AddressList::LinebeckTimeC;
-	Address		AddressList::CheetahA;
-	Address		AddressList::CheetahB;
-	Address		AddressList::CheetahC;
-	Address		AddressList::SwordDamageBoostA;
-	Address		AddressList::SwordDamageBoostB;
-	Address		AddressList::SwordBeamAbility;
-	Address		AddressList::QuadBeamA;
-	Address		AddressList::QuadBeamB;
-	Address		AddressList::QuadBeamC;
-	Address		AddressList::QuadBeamSpinA;
-	Address		AddressList::QuadBeamSpinB;
-	Address		AddressList::QuadBeamSpinC;
-	Address		AddressList::KnockbackImmunity;
-	Address		AddressList::SwordHammerDmgBoost;
-	Address		AddressList::SwordBeamHealthCheckA;
-	Address		AddressList::SwordBeamHealthCheckB;
-	Address		AddressList::SwordType;
+		if (memOffset == 0x1C000000)
+			OSD::Notify("Alternate address set loaded.");
+	}
 
-	// Console
-	Address		AddressList::ABXY;
-	Address		AddressList::StartSelLRTouch;
-	Address		AddressList::DPadCPad;
+	// Force-terminates the plugin
+	void AddressList::cancelAddrInit(void)
+	{
+		OSD::Notify("Addresses cannot be initialized. Plugin will now abort.", Color::Red);
+		svcSleepThread(150);
+		abort();
+	}
 
-	// Emotes
-	Address		AddressList::GameplayEmotes;
-	Address		AddressList::LobbyEmotes;
-	Address		AddressList::EmoteAGraphic;
-	Address		AddressList::EmoteBGraphic;
-	Address		AddressList::EmoteCGraphic;
-	Address		AddressList::EmoteDGraphic;
-	Address		AddressList::EmoteEGraphic;
-	Address		AddressList::EmoteFGraphic;
-	Address		AddressList::EmoteGGraphic;
-	Address		AddressList::EmoteHGraphic;
-	Address		AddressList::UseDoTLayoutAlways;
+	// Retrieves address value via reference key
+	u32 AddressList::getAddress(std::string addrName)
+	{
+		u32 addr = AddressList::addresses[addrName];
 
-	// Game Data
-	Address		AddressList::CurrLevelID;
-	Address		AddressList::CurrStageID;
-	Address		AddressList::CurrSpawnID;
-	Address		AddressList::DoppelsEnabled;
-	Address		AddressList::DrablandsRupeeCount;
-	Address		AddressList::EnemyDataPointer;
-	Address		AddressList::HealthCurrent;
-	Address		AddressList::HealthMax;
-	Address		AddressList::EnergyCurrent;
-	Address		AddressList::EnergyMax;
-	Address		AddressList::EnergyMaxPitRecovery;
-	Address		AddressList::EnergyMaxMultiplicand;
-	Address		AddressList::LargeEnergyGauge;
-	Address		AddressList::FairiesCurrent;
-	Address		AddressList::TimeLeft;
-	Address		AddressList::CollisionCurrent;
-	Address		AddressList::SpeedX;
-	Address		AddressList::SpeedY;
-	Address		AddressList::SpeedZ;
-	Address		AddressList::TotemCarrying;
-	Address		AddressList::TotemCarriedBy;
-	Address		AddressList::LoadingStatus;
-	Address		AddressList::PauseStatus;
-	Address		AddressList::PreviousLevelID;
-	Address		AddressList::PreviousStageID;
-	Address		AddressList::PreviousSpawnID;
-	Address		AddressList::TimeElapsed;
-	Address		AddressList::TargetLevelID;
-	Address		AddressList::TargetStageID;
-	Address		AddressList::TargetSpawnID;
-	Address		AddressList::Warp;
-	Address 	AddressList::WarpActivation;
-	Address		AddressList::WarpPointer;
-	Address		AddressList::ChallengeID;
-	Address		AddressList::SpeedMultiplierAlt;
+		if (addr == 0x0)
+			OSD::Notify("[ERROR] Address reference cannot be found for " << addrName << ".", Color::Red);
 
-	// Items
-	Address		AddressList::BowStrafe;
-	Address		AddressList::FireGloveStrafe;
-	Address		AddressList::GustStrafe;
-	Address		AddressList::HammerStrafe;
-	Address		AddressList::ShadowLinkItemPointer;
-	Address		AddressList::GripshotStrafe;
-	Address		AddressList::WaterRodStrafe;
-
-	// Miscellaneous
-	Address		AddressList::CameraXButtonToggle;
-	Address		AddressList::CameraShutter;
-	Address		AddressList::CheckPhotoExist;
-	Address		AddressList::DisplayTopPhoto;
-	Address		AddressList::SeeChestContents;
-	Address		AddressList::SwordBeamCD;
-	Address		AddressList::TextBoxSpeed;
-
-	// Padding
-	Address		AddressList::TextToRodata;
-
-	// Player
-	Address		AddressList::ActiveLink;
-	Address		AddressList::CurrentAnim;
-	Address		AddressList::CurrentItem;
-	Address		AddressList::IsInvincible;
-	Address		AddressList::IsJinxed;
-	Address		AddressList::IsSpawned;
-	Address		AddressList::IsSwapping;
-	Address		AddressList::IsWaterStorage;
-	Address		AddressList::IsVisible;
-	Address		AddressList::LinkVoice;
-	Address		AddressList::LiveNameColorG;
-	Address		AddressList::LiveNameColorB;
-	Address		AddressList::LiveNameColorR;
-	Address		AddressList::LockMovement;
-	Address		AddressList::NoCollision;
-	Address		AddressList::PlayerModelSize;
-	Address		AddressList::PositionX;
-	Address		AddressList::PositionY;
-	Address		AddressList::PositionZ;
-	Address		AddressList::PreviousAnim;
-	Address		AddressList::PVPMode;
-	Address		AddressList::RespawnPositionX;
-	Address		AddressList::RespawnPositionY;
-	Address		AddressList::RespawnPositionZ;
-
-	// Rendering
-	Address		AddressList::ArrowIndicatorColorTop;
-	Address		AddressList::ArrowIndicatorColorMid;
-	Address		AddressList::ArrowIndicatorColorBot;
-	Address		AddressList::HUDPointer;
-	Address		AddressList::FogA;
-	Address		AddressList::FogB;
-	Address		AddressList::FogC;
-	Address		AddressList::ScrollingTextOpacity;
-	Address		AddressList::OffScreenLocation;
-	Address		AddressList::TextureName;
-	Address		AddressList::LoadingScreenSPNoChal;
-	Address		AddressList::LoadingScreenSPIcons;
-	Address		AddressList::CheerPomPom;
-	Address		AddressList::Aura;
-	Address		AddressList::PlayerLuminanceNormalA;
-	Address		AddressList::PlayerLuminanceNormalB;
-	Address		AddressList::PlayerLuminanceLightArmor;
-	Address		AddressList::SwordParticle;
-
-	// Savefile
-	Address		AddressList::NormalNCCompletion;
-	Address		AddressList::NormalC1Completion;
-	Address		AddressList::NormalC2Completion;
-	Address		AddressList::NormalC3Completion;
-	Address		AddressList::SoloNCCompletion;
-	Address		AddressList::SoloC1Completion;
-	Address		AddressList::SoloC2Completion;
-	Address		AddressList::SoloC3Completion;
-	Address		AddressList::MultiNCCompletion;
-	Address		AddressList::MultiC1Completion;
-	Address		AddressList::MultiC2Completion;
-	Address		AddressList::MultiC3Completion;
-
-	Address		AddressList::CostumeObtainStatus;
-	Address		AddressList::ColiseumWinCount;
-	Address		AddressList::EditMerchantStock;
-	Address		AddressList::HeroPointCount;
-	Address		AddressList::MainVoice;
-	Address		AddressList::ResetMerchantStock;
-
-	// SFX and BGM
-	Address		AddressList::BGMType;
-	Address		AddressList::BGMVolume;
-	Address		AddressList::LinkVoiceSpeed;
-	Address		AddressList::Voice8bit;
-	Address		AddressList::LobbyBallPointer;
-	Address		AddressList::MasterVolume;
-	Address		AddressList::SwordSwipe8bit;
-	Address		AddressList::SwordCharge8bit;
-	Address		AddressList::SwordSpin8bit;
-
-	// Turbo Mode
-	Address		AddressList::DashTimerNormal;
-	Address		AddressList::DashTimerNinja;
-	Address		AddressList::SwordBeamCDExe;
-	Address		AddressList::HammerwearSpeed;
-	Address		AddressList::SL_SwordSpeed;
-	Address		AddressList::SL_Strafe;
-	Address		AddressList::SL_RunAnimSpeed;
-	Address		AddressList::SL_RunSpeed;
-	Address		AddressList::BombFlashSpeed;
-	Address		AddressList::LoadingIconAnimSpeed;
-	Address		AddressList::LiveMsgSpeed;
-	Address		AddressList::SwordBeamSpeed;
-	Address		AddressList::SpeedDamageUndo;
-	Address		AddressList::BGMSFXSpeed;
-	Address		AddressList::EnergyBarStretch;
-	Address		AddressList::SpeedMultiplierNormal;
-	Address		AddressList::SpeedMultiplierCheetah;
-	Address		AddressList::DashStaggerSpeed;
-	Address		AddressList::DashSpeed;
-	Address		AddressList::DashBrakeDuration;
-	Address		AddressList::DashPlayerCrashHeight;
-	Address		AddressList::DashWallCrashHeight;
-	Address		AddressList::DashCrashBackwards;
-	Address		AddressList::FireJumpHeight;
-	Address		AddressList::LavaBounceHeight;
-	Address		AddressList::WaterJumpHeight;
-	Address		AddressList::WaterJumpForwardSpeed;
-	Address		AddressList::SwimBoostSpeedZora;
-	Address		AddressList::SwimBoostSpeedNormal;
-	Address		AddressList::SwimTurnaroundSpeed;
-	Address		AddressList::SwimSpeed;
-	Address		AddressList::ArrowSpeedPlayer;
-	Address		AddressList::FireballHeight;
-	Address		AddressList::FireballSpeed;
-	Address		AddressList::FireballBounceHeight;
-	Address		AddressList::FireballThrowHeight;
-	Address		AddressList::FireballReleaseTime;
-	Address		AddressList::BoomerangReturnSpeed;
-	Address		AddressList::BoomerangDistance;
-	Address		AddressList::BoomerangSpeed;
-	Address		AddressList::GustSpeed;
-	Address		AddressList::GripshotRetractSpeed;
-	Address		AddressList::GripshotExtendSpeed;
-
-	// Animation Speeds
-	Address		AddressList::Link_Wait;
-	Address		AddressList::Link_WalkSlow;
-	Address		AddressList::Link_Walk;
-	Address		AddressList::Link_Dash;
-	Address		AddressList::Link_DashTotem;
-	Address		AddressList::Link_GrabDash;
-	Address		AddressList::Link_CutRF;
-	Address		AddressList::Link_CutRFTotem;
-	Address		AddressList::Link_CutRFtoKeep;
-	Address		AddressList::Link_KeepWait;
-	Address		AddressList::Link_Compete;
-	Address		AddressList::Link_CutTurn;
-	Address		AddressList::Link_CutTurnW;
-	Address		AddressList::Link_CutTurnB;
-	Address		AddressList::Link_GrabP_A;
-	Address		AddressList::Link_GrabP_B;
-	Address		AddressList::Link_GrabUp;
-	Address		AddressList::Link_GrabThrow;
-	Address		AddressList::Link_GrabWait;
-	Address		AddressList::Link_WaitTotem;
-	Address		AddressList::Link_GrabYorokeTotem;
-	Address		AddressList::Link_YorokeTotem;
-	Address		AddressList::Link_WaitYoroke;
-	Address		AddressList::Link_JumpEdS_A;
-	Address		AddressList::Link_DamF;
-	Address		AddressList::Link_DamB;
-	Address		AddressList::Link_FallLava;
-	Address		AddressList::Link_FallSand;
-	Address		AddressList::Link_Drown;
-	Address		AddressList::Link_DrownLava;
-	Address		AddressList::Link_Fall;
-	Address		AddressList::Link_DamBiri;
-	Address		AddressList::Link_WaitQ;
-	Address		AddressList::Link_DamBoyon;
-	Address		AddressList::Link_DamFFup;
-	Address		AddressList::Link_DamSwimF;
-	Address		AddressList::Link_DamSwimB;
-	Address		AddressList::Link_LLhold;
-	Address		AddressList::Link_LLswallowSt;
-	Address		AddressList::Link_LLstruggle;
-	Address		AddressList::Link_FallTotem;
-	Address		AddressList::Link_FallBallon;
-	Address		AddressList::Link_BowWalkA;
-	Address		AddressList::Link_BowWalkB;
-	Address		AddressList::Link_Slipice;
-	Address		AddressList::Link_BowWait;
-	Address		AddressList::Link_ArrowShoot;
-	Address		AddressList::Link_RodWait;
-	Address		AddressList::Link_RodAttack;
-	Address		AddressList::Link_BoomAttack;
-	Address		AddressList::Link_BoomCarried;
-	Address		AddressList::Link_HookshotWait;
-	Address		AddressList::Link_HookshotAttack;
-	Address		AddressList::Link_HookshotDrag;
-	Address		AddressList::Link_Bump;
-	Address		AddressList::Link_HookshotPullSt;
-	Address		AddressList::Link_HookshotPullEd;
-	Address		AddressList::Link_AirCannonWait;
-	Address		AddressList::Link_AirCannonAttack;
-	Address		AddressList::Link_FireGloveWait;
-	Address		AddressList::Link_FireGloveAttack;
-	Address		AddressList::Link_HammerWait;
-	Address		AddressList::Link_HammerAttack;
-	Address		AddressList::Link_HammerAttackTotem;
-	Address		AddressList::Link_HammerMiss;
-	Address		AddressList::Link_Die;
-	Address		AddressList::Link_DieSt;
-	Address		AddressList::Link_DieEd;
-	Address		AddressList::Link_Talk;
-	Address		AddressList::Link_ItemGetA_A;
-	Address		AddressList::Link_ItemGetA_B;
-	Address		AddressList::Link_ItemGetShort;
-	Address		AddressList::Link_UnlockB;
-	Address		AddressList::Link_PDashReady;
-	Address		AddressList::Link_PDash;
-	Address		AddressList::Link_DashAchichi;
-	Address		AddressList::Link_PDashCrash;
-	Address		AddressList::Link_PDashBrake;
-	Address		AddressList::Link_PDashStagger;
-	Address		AddressList::Link_WaitPushPull;
-	Address		AddressList::Link_WalkPush;
-	Address		AddressList::Link_WalkPull;
-	Address		AddressList::Link_Swim;
-	Address		AddressList::Link_SwimWait;
-	Address		AddressList::Link_SwimDive;
-	Address		AddressList::Link_SwimLand;
-	Address		AddressList::Link_SwimDrift;
-	Address		AddressList::Link_SwimScrewAttack_A;
-	Address		AddressList::Link_SwimScrewAttack_B;
-	Address		AddressList::Link_SwimWaitPuppet;
-	Address		AddressList::Link_WaitAtoB;
-	Address		AddressList::Link_WaitB;
-	Address		AddressList::Link_WaitFight;
-	Address		AddressList::Link_WaitPuppet;
-	Address		AddressList::Link_WalkPuppet;
-	Address		AddressList::Link_Skyward;
-	Address		AddressList::Link_JumpSt;
-	Address		AddressList::Link_JumpAuto;
-	Address		AddressList::Link_JumpEdS_B;
-	Address		AddressList::Link_CarryAway;
-	Address		AddressList::Link_Call;
-	Address		AddressList::Link_Rock;
-	Address		AddressList::Link_Sad;
-	Address		AddressList::Link_SadWait;
-	Address		AddressList::Link_WalkMagic;
-	Address		AddressList::Link_TurnMagic;
-	Address		AddressList::Link_EdYorokeTotem1;
-	Address		AddressList::Link_EdWaitTotem1;
-	Address		AddressList::Link_EdYorokeTotem2;
-	Address		AddressList::Link_EdWaitTotem2;
-	Address		AddressList::Link_WaitPinch;
-
-	// facial expression data
-	Address 	AddressList::CustomInfoHeaders;
-	Address		AddressList::CustomFacePointerList;
-	Address		AddressList::EditFaceStatusBit;
-	Address 	AddressList::EyeTitleReference;
-	Address 	AddressList::HytopiaPMAStart;
-	Address 	AddressList::FileTableStart;
-	Address 	AddressList::FileTableRewrite;
-	Address 	AddressList::IndivPMAStart;
-	Address 	AddressList::CustomAnimData;
+		return addr;
+	}
 }
