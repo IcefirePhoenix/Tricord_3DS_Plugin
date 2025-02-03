@@ -28,12 +28,12 @@ namespace CTRPluginFramework
             entry->SetName("Disable custom player size edits");
 
             if (Player::PlayerSizes > 0.0)
-                Process::WriteFloat(AddressList::PlayerModelSize.addr, Player::PlayerSizes);
+                Process::WriteFloat(AddressList::getAddress("PlayerModelSize"), Player::PlayerSizes);
         }
         else
         {
             entry->SetName("Set custom player model size");
-            Process::WriteFloat(AddressList::PlayerModelSize.addr, 1.0);
+            Process::WriteFloat(AddressList::getAddress("PlayerModelSize"), 1.0);
         }
     }
 

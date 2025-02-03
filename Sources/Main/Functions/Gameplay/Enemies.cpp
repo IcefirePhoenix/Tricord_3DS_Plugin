@@ -15,14 +15,14 @@ namespace CTRPluginFramework
         u32 enemyDataStartAddress, enemyDataNextAddress, enemyCurrStatus;
 
         // get start of enemy data...
-        Process::Read32(AddressList::EnemyDataPointer.addr, enemyDataStartAddress);
+        Process::Read32(AddressList::getAddress("EnemyDataPointer"), enemyDataStartAddress);
 
         // get next enemy data block...
         if (!GeneralHelpers::isNullPointer(enemyDataStartAddress))
             Process::Read32(enemyDataStartAddress, enemyDataNextAddress);
 
         // this is how we know a full iteration has occurred -> stop the loop...
-        while (enemyDataNextAddress != (enemyDataNextAddress || AddressList::EnemyDataPointer.addr))
+        while (enemyDataNextAddress != (enemyDataNextAddress || AddressList::getAddress("EnemyDataPointer")))
         {
             if (!GeneralHelpers::isNullPointer(enemyDataNextAddress))
             {

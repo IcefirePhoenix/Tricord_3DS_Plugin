@@ -193,7 +193,7 @@ namespace CTRPluginFramework
         u32 catalogSizeOffset = 0xE4;
 
         // get catalog dynamic location from pointer...
-        Process::Read32(AddressList::CostumeCatalogPointer.addr, CostumeCatalogLocation);
+        Process::Read32(AddressList::getAddress("CostumeCatalogPointer"), CostumeCatalogLocation);
 
         // determine total number of costume slots needed (vanilla and custom)...
         if (!GeneralHelpers::isNullPointer(CostumeCatalogLocation))
@@ -202,7 +202,7 @@ namespace CTRPluginFramework
             for (u8 slotCount = 0x0; slotCount <= vanillaCostumeCount; slotCount++)
             {
                 isObtained = 0;
-                Process::Read8((AddressList::CostumeObtainStatus.addr + slotCount), isObtained);
+                Process::Read8((AddressList::getAddress("CostumeObtainStatus") + slotCount), isObtained);
 
                 if (isObtained)
                     costumeCatalogSize++;
@@ -251,12 +251,12 @@ namespace CTRPluginFramework
         bool showErrMsg = false;
 
         // define filenames in padding space...
-        Process::WriteString(AddressList::TextToRodata.addr + RODataPaddingOffset, fileNames, StringFormat::Utf8);
+        Process::WriteString(AddressList::getAddress("TextToRodata") + RODataPaddingOffset, fileNames, StringFormat::Utf8);
 
         // restore Slot A pointer if Great Fairy is not currently used -> directs to "costume_customA" rather than "costume_highfairy"...
         if (!restoreGreatFairy->IsActivated())
         {
-            Process::Write32((AddressList::UnusedCostumeDataPointers.addr), (AddressList::TextToRodata.addr + 0x14));
+            Process::Write32((AddressList::getAddress("UnusedCostumeDataPointers")), (AddressList::getAddress("TextToRodata") + 0x14));
             menuCostumeSlotA->CanBeSelected(true);
         }
 
@@ -266,7 +266,7 @@ namespace CTRPluginFramework
             u32 filenamePtrOffset = RODataPaddingOffset + (offsetBetweenFileNames * customCostumeFileIndex);
 
             if (File::Exists(customCostumeDirectory + Costume::BCH_fileNames[customCostumeFileIndex]))
-                Process::Write32((AddressList::UnusedCostumeDataPointers.addr), (AddressList::TextToRodata.addr + filenamePtrOffset));
+                Process::Write32((AddressList::getAddress("UnusedCostumeDataPointers")), (AddressList::getAddress("TextToRodata") + filenamePtrOffset));
             else
             {
                 missingFiles.push_back(Costume::BCH_fileNames[customCostumeFileIndex]);
@@ -303,7 +303,7 @@ namespace CTRPluginFramework
         std::string errMsg = "Tricord cannot place Great Fairy Costume into Custom Costume Slot A since it is currently configured to display a custom costume.\n\nWould you like to overwrite the custom costume in Custom Costume Slot A with Great Fairy?";
 
         // create pointer reference to Great Fairy filename...
-        Process::WriteString(AddressList::TextToRodata.addr, greatFairyFileName, StringFormat::Utf8);
+        Process::WriteString(AddressList::getAddress("TextToRodata"), greatFairyFileName, StringFormat::Utf8);
 
         manageCatalogSize->Enable();
 
@@ -327,7 +327,7 @@ namespace CTRPluginFramework
         {
             if (!GeneralHelpers::isNullPointer(CostumeCatalogLocation))
             {
-                Process::Write32((AddressList::UnusedCostumeDataPointers.addr), AddressList::TextToRodata.addr);
+                Process::Write32((AddressList::getAddress("UnusedCostumeDataPointers")), AddressList::getAddress("TextToRodata"));
                 Process::Write8((CostumeCatalogLocation + catalogStartOffset + costumeCatalogSize), greatFairySlotID);
             }
         }

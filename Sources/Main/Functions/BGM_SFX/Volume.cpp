@@ -35,9 +35,9 @@ namespace CTRPluginFramework
         switch (entryID)
         {
             case 0:
-                return AddressList::MasterVolume.addr;
+                return AddressList::getAddress("MasterVolume");
             case 1:
-                return AddressList::BGMVolume.addr;
+                return AddressList::getAddress("BGMVolume");
             case 2:
             case 3:
             case 4:

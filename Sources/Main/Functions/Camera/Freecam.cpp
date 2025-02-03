@@ -44,7 +44,7 @@ namespace CTRPluginFramework
 			int freecamStatus = isFreecamInUse ? static_cast<int>(CUTSCENE) : static_cast<int>(GAMEPLAY);
 			std::string notif = isFreecamInUse ? "[FREECAM] Freecam in-use." : "[FREECAM] Freecam disabled.";
 
-			Process::Write8(AddressList::CameraMode.addr, freecamStatus);
+			Process::Write8(AddressList::getAddress("CameraMode"), freecamStatus);
 			OSD::Notify(notif);
 		}
 
@@ -62,16 +62,18 @@ namespace CTRPluginFramework
 
 		// reset camera
 		if (entry->Hotkeys[2].IsPressed()) {
-			Process::Write8(AddressList::CameraMode.addr, static_cast<int>(GAMEPLAY)); // use GAMEPLAY cam to re-orient camera back to player
+			Process::Write8(AddressList::getAddress("CameraMode"), static_cast<int>(GAMEPLAY)); // use GAMEPLAY cam to re-orient camera back to player
 
 			// reset rotation and perspective zoom as this doesn't happen automatically
-			Process::WriteFloat(AddressList::PerspectiveZoom.addr, 1.0);
-			Process::Write32(AddressList::OrthographicZoom.addr, 0x41D80000);
-			Process::Write32(AddressList::CameraRotationX.addr, 0x271C71C6);
-			Process::Write32(AddressList::CameraRotationZ.addr, 0x00000000);
+			Process::WriteFloat(AddressList::getAddress("PerspectiveZoom"), 1.0);
+			Process::Write32(AddressList::getAddress("OrthographicZoom"), 0x41D80000);
+			Process::Write32(AddressList::getAddress("CameraRotationX"), 0x271C71C6);
+			Process::Write32(AddressList::getAddress("CameraRotationZ"), 0x00000000);
+
+			Player::resetOffset();
 
 			if (isFreecamInUse)
-				Process::Write8(AddressList::CameraMode.addr, static_cast<int>(CUTSCENE)); // if freecam is activated, use CUTSCENE cam
+				Process::Write8(AddressList::getAddress("CameraMode"), static_cast<int>(CUTSCENE)); // if freecam is activated, use CUTSCENE cam
 
 			OSD::Notify("[FREECAM] Camera position has been reset.");
 		}
@@ -117,97 +119,101 @@ namespace CTRPluginFramework
 	}
 
 	void shiftCamNorth(void) {
-		Process::ReadFloat(AddressList::CameraPosZ.addr, cameraZcoord);
-		Process::WriteFloat(AddressList::CameraPosZ.addr, (cameraZcoord + shiftSensitivity));
+		Process::ReadFloat(AddressList::getAddress("CameraPosZ"), cameraZcoord);
+		Process::WriteFloat(AddressList::getAddress("CameraPosZ"), (cameraZcoord + shiftSensitivity));
 	}
 
 	void shiftCamSouth(void) {
-		Process::ReadFloat(AddressList::CameraPosZ.addr, cameraZcoord);
-		Process::WriteFloat(AddressList::CameraPosZ.addr, (cameraZcoord - shiftSensitivity));
+		Process::ReadFloat(AddressList::getAddress("CameraPosZ"), cameraZcoord);
+		Process::WriteFloat(AddressList::getAddress("CameraPosZ"), (cameraZcoord - shiftSensitivity));
 	}
 
 	void shiftCamEast(void) {
-		Process::ReadFloat(AddressList::CameraPosX.addr, cameraXcoord);
-		Process::WriteFloat(AddressList::CameraPosX.addr, (cameraXcoord + shiftSensitivity));
+		Process::ReadFloat(AddressList::getAddress("CameraPosX"), cameraXcoord);
+		Process::WriteFloat(AddressList::getAddress("CameraPosX"), (cameraXcoord + shiftSensitivity));
 	}
 
 	void shiftCamWest(void) {
-		Process::ReadFloat(AddressList::CameraPosX.addr, cameraXcoord);
-		Process::WriteFloat(AddressList::CameraPosX.addr, (cameraXcoord - shiftSensitivity));
+		Process::ReadFloat(AddressList::getAddress("CameraPosX"), cameraXcoord);
+		Process::WriteFloat(AddressList::getAddress("CameraPosX"), (cameraXcoord - shiftSensitivity));
 	}
 
 	void zoomCamIn(void) {
-		Address zoom = usePerspectiveZoom ? AddressList::PerspectiveZoom : AddressList::OrthographicZoom.addr;
+		u32 zoomType = usePerspectiveZoom ? AddressList::getAddress("PerspectiveZoom") : AddressList::getAddress("OrthographicZoom");
 
-		Process::ReadFloat(zoom.addr, cameraZoom);
-		Process::WriteFloat(zoom.addr, (cameraZoom * (1 + zoomSensitivity)));
+		Process::ReadFloat(zoomType, cameraZoom);
+		Process::WriteFloat(zoomType, (cameraZoom * (1 + zoomSensitivity)));
 	}
 
 	void zoomCamOut(void) {
-		Address zoom = usePerspectiveZoom ? AddressList::PerspectiveZoom : AddressList::OrthographicZoom.addr;
+		u32 zoomType = usePerspectiveZoom ? AddressList::getAddress("PerspectiveZoom") : AddressList::getAddress("OrthographicZoom");
 
-		Process::ReadFloat(zoom.addr, cameraZoom);
-		Process::WriteFloat(zoom.addr, (cameraZoom * (1 - zoomSensitivity)));
+		Process::ReadFloat(zoomType, cameraZoom);
+		Process::WriteFloat(zoomType, (cameraZoom * (1 - zoomSensitivity)));
 	}
 
 	void raiseCam(void) {
-		Process::ReadFloat(AddressList::CameraPosY.addr, cameraYcoord);
-		Process::WriteFloat(AddressList::CameraPosY.addr, (cameraYcoord + heightSensitivity));
+		Process::ReadFloat(AddressList::getAddress("CameraPosY"), cameraYcoord);
+		Process::WriteFloat(AddressList::getAddress("CameraPosY"), (cameraYcoord + heightSensitivity));
 	}
 
 	void lowerCam(void) {
-		Process::ReadFloat(AddressList::CameraPosY.addr, cameraYcoord);
-		Process::WriteFloat(AddressList::CameraPosY.addr, (cameraYcoord - heightSensitivity));
+		Process::ReadFloat(AddressList::getAddress("CameraPosY"), cameraYcoord);
+		Process::WriteFloat(AddressList::getAddress("CameraPosY"), (cameraYcoord - heightSensitivity));
 	}
 
 	void rotateCamXCounter(void) {
-		Process::ReadFloat(AddressList::CameraRotationX.addr, cameraXrotation);
+		Process::ReadFloat(AddressList::getAddress("CameraRotationX"), cameraXrotation);
 		if ((cameraXrotation * rotationSensitivity) != 0.0)
-			Process::WriteFloat(AddressList::CameraRotationX.addr, (cameraXrotation * rotationSensitivity));
+			Process::WriteFloat(AddressList::getAddress("CameraRotationX"), (cameraXrotation * rotationSensitivity));
 
 		// if value becomes invalid, fix it after
-		Process::Read32(AddressList::CameraRotationX.addr, cameraXrawValue);
+		Process::Read32(AddressList::getAddress("CameraRotationX"), cameraXrawValue);
 		if (cameraXrawValue == 0x00000000)
-			Process::Write32(AddressList::CameraRotationX.addr, 0x00000001);
+			Process::Write32(AddressList::getAddress("CameraRotationX"), 0x00000001);
+
+		adjustRotationMoveOffset();
 	}
 
 	void rotateCamXClockwise(void) {
-		Process::ReadFloat(AddressList::CameraRotationX.addr, cameraXrotation);
-		Process::WriteFloat(AddressList::CameraRotationX.addr, (cameraXrotation / rotationSensitivity));
+		Process::ReadFloat(AddressList::getAddress("CameraRotationX"), cameraXrotation);
+		Process::WriteFloat(AddressList::getAddress("CameraRotationX"), (cameraXrotation / rotationSensitivity));
 
 		// if value becomes invalid, fix it after
-		Process::Read32(AddressList::CameraRotationX.addr, cameraXrawValue);
+		Process::Read32(AddressList::getAddress("CameraRotationX"), cameraXrawValue);
 		if (cameraXrawValue == 0x7F800000)
-			Process::Write32(AddressList::CameraRotationX.addr, 0x7F7F0000);
+			Process::Write32(AddressList::getAddress("CameraRotationX"), 0x7F7F0000);
+
+		adjustRotationMoveOffset();
 	}
 
 	void rotateCamZCounter(void) {
-		Process::ReadFloat(AddressList::CameraRotationZ.addr, cameraZrotation);
-		Process::WriteFloat(AddressList::CameraRotationZ.addr, (cameraZrotation * rotationSensitivity));
+		Process::ReadFloat(AddressList::getAddress("CameraRotationZ"), cameraZrotation);
+		Process::WriteFloat(AddressList::getAddress("CameraRotationZ"), (cameraZrotation * rotationSensitivity));
 
 		// if value becomes invalid, fix it after
-		Process::Read32(AddressList::CameraRotationZ.addr, cameraZrawValue);
+		Process::Read32(AddressList::getAddress("CameraRotationZ"), cameraZrawValue);
 		if (cameraZrawValue == 0x00000000)
-			Process::Write32(AddressList::CameraRotationZ.addr, 0xFE7F0000);
+			Process::Write32(AddressList::getAddress("CameraRotationZ"), 0xFE7F0000);
 
 		if (cameraZrawValue == 0x000081FF || cameraZrawValue == 0x00008180)
-			Process::Write32(AddressList::CameraRotationZ.addr, 0x00007E80);
+			Process::Write32(AddressList::getAddress("CameraRotationZ"), 0x00007E80);
 
 		if (cameraZrawValue == 0x80000000)
-			Process::Write32(AddressList::CameraRotationZ.addr, 0x7F000000);
+			Process::Write32(AddressList::getAddress("CameraRotationZ"), 0x7F000000);
 	}
 
 	void rotateCamZClockwise(void) {
-		Process::ReadFloat(AddressList::CameraRotationZ.addr, cameraZrotation);
-		Process::WriteFloat(AddressList::CameraRotationZ.addr, (cameraZrotation / rotationSensitivity));
+		Process::ReadFloat(AddressList::getAddress("CameraRotationZ"), cameraZrotation);
+		Process::WriteFloat(AddressList::getAddress("CameraRotationZ"), (cameraZrotation / rotationSensitivity));
 
 		// if value becomes invalid, fix it after
-		Process::Read32(AddressList::CameraRotationZ.addr, cameraZrawValue);
+		Process::Read32(AddressList::getAddress("CameraRotationZ"), cameraZrawValue);
 		if (cameraZrawValue == 0x7F8F0000 || cameraZrawValue == 0x7F800000)
-			Process::Write32(AddressList::CameraRotationZ.addr, 0x80800000);
+			Process::Write32(AddressList::getAddress("CameraRotationZ"), 0x80800000);
 
 		if (cameraZrawValue == 0xFF7F0000 || cameraZrawValue == 0x00000000 || cameraZrawValue == 0xFF800000)
-			Process::Write32(AddressList::CameraRotationZ.addr, 0x00800000);
+			Process::Write32(AddressList::getAddress("CameraRotationZ"), 0x00800000);
 
 	}
 
@@ -247,17 +253,21 @@ namespace CTRPluginFramework
 			kbd.Populate(opts);
 
 			int chose = kbd.Open();
-			if (chose == 0) {
+			if (chose == 0)
+			{
 				// end loop = exit the menu
 				loop = false;
 				break;
 			}
-			else menuFreecam->Hotkeys[chose - 1].AskForKeys();
+			else
+				menuFreecam->Hotkeys[chose - 1].AskForKeys();
 		}
 	}
 
-	void lockCamera(void) {
-		u32 edits[8] = {
+	void lockCamera(void)
+	{
+		u32 edits[8] =
+		{
 			0xE3500000,
 			0xE3500002,
 			0x1A000002,
@@ -270,10 +280,10 @@ namespace CTRPluginFramework
 
 		int index = (isFreecamInUse == true || isCameraLocked == true) ? 0 : 4;
 
-		Process::Patch(AddressList::DynamicCameraCheck.addr, edits[0 + index]);
-		Process::Patch(AddressList::GameplayCameraCheck.addr, edits[1 + index]);
-		Process::Patch(AddressList::GameplayCameraInit.addr, edits[2 + index]);
-		Process::Patch(AddressList::RetGameplayCameraInit.addr, edits[3 + index]);
+		Process::Patch(AddressList::getAddress("DynamicCameraCheck"), edits[0 + index]);
+		Process::Patch(AddressList::getAddress("GameplayCameraCheck"), edits[1 + index]);
+		Process::Patch(AddressList::getAddress("GameplayCameraInit"), edits[2 + index]);
+		Process::Patch(AddressList::getAddress("RetGameplayCameraInit"), edits[3 + index]);
 	}
 
 	void manageFreecamPlayerLock(void) {
@@ -352,6 +362,6 @@ namespace CTRPluginFramework
 		swapZoom->SetName(name);
 	}
 
-	// TODO set camera on X link -> hotkey
+	// TODO: set camera on X link -> hotkey
 }
 

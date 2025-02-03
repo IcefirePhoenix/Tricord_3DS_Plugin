@@ -18,18 +18,18 @@ namespace CTRPluginFramework
     {
         if (entry->Name() == "Enable Cosmetic Costumes")
         {
-            u32 custFuncStart = AddressList::TextToRodata.addr + 0x64;
-            u32 blOffset = (custFuncStart - 0x8 - AddressList::CostumeIDFunBLModel.addr) / 4; // division by 4 as all instructions are 32-bit...
+            u32 custFuncStart = AddressList::getAddress("TextToRodata") + 0x64;
+            u32 blOffset = (custFuncStart - 0x8 - AddressList::getAddress("CostumeIDFunBLModel")) / 4; // division by 4 as all instructions are 32-bit...
 
             // patch LDRB instructions to force graphic/visual costume effects to reference the alternate costume address...
-            Process::Patch(AddressList::CostumeIDOffsetAuraA.addr, 0xE5D00D61);
-            Process::Patch(AddressList::CostumeIDOffsetAuraB.addr, 0xE5D01D61);
-            Process::Patch(AddressList::CostumeIDOffsetAuraC.addr, 0xE5D01D61);
-            Process::Patch(AddressList::CostumeIDOffsetAuraD.addr, 0xE5D01D61);
-            Process::Patch(AddressList::CostumeIDOffsetCheetah.addr, 0xE5D01D61); // TODO: add more to clarify address name -> env? ptcl?
-            Process::Patch(AddressList::CostumeIDOffsetDune.addr, 0xE5D00D61);
-            Process::Patch(AddressList::CostumeIDOffsetCheer.addr, 0xE5D00D61);
-            Process::Patch(AddressList::CostumeIDOffsetSwordPtcl.addr, 0xE5D00D61);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraA"), 0xE5D00D61);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraB"), 0xE5D01D61);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraC"), 0xE5D01D61);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraD"), 0xE5D01D61);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetCheetah"), 0xE5D01D61); // TODO: add more to clarify address name -> env? ptcl?
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetDune"), 0xE5D00D61);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetCheer"), 0xE5D00D61);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetSwordPtcl"), 0xE5D00D61);
 
             // create custom function in text->rodata padding...
             Process::Patch(custFuncStart, 0xE5900008);
@@ -37,7 +37,7 @@ namespace CTRPluginFramework
             Process::Patch(custFuncStart + 0x8, 0xE12FFF1E);
 
             // redirect model loader to custom function via BL instruction...
-            Process::Patch(AddressList::CostumeIDFunBLModel.addr, 0xEB000000 + blOffset);
+            Process::Patch(AddressList::getAddress("CostumeIDFunBLModel"), 0xEB000000 + blOffset);
 
             writeCosmeticCostumeID->Enable();
             entry->SetName("Disable Cosmetic Costumes");
@@ -45,18 +45,18 @@ namespace CTRPluginFramework
         else
         {
             // revert LDRB instructions to restore graphic/visual costume effect references to the original costume address...
-            Process::Patch(AddressList::CostumeIDOffsetAuraA.addr, 0xE5D00064);
-            Process::Patch(AddressList::CostumeIDOffsetAuraB.addr, 0xE5D01064);
-            Process::Patch(AddressList::CostumeIDOffsetAuraC.addr, 0xE5D01064);
-            Process::Patch(AddressList::CostumeIDOffsetAuraD.addr, 0xE5D01064);
-            Process::Patch(AddressList::CostumeIDOffsetCheetah.addr, 0xE5D01064);
-            Process::Patch(AddressList::CostumeIDOffsetDune.addr, 0xE5D00064);
-            Process::Patch(AddressList::CostumeIDOffsetCheer.addr, 0xE5D00064);
-            Process::Patch(AddressList::CostumeIDOffsetSwordPtcl.addr, 0xE5D00064);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraA"), 0xE5D00064);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraB"), 0xE5D01064);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraC"), 0xE5D01064);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraD"), 0xE5D01064);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetCheetah"), 0xE5D01064);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetDune"), 0xE5D00064);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetCheer"), 0xE5D00064);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetSwordPtcl"), 0xE5D00064);
 
             // revert model loader BL instruction...
             // TODO: Need to know: Does this hold the same offset value in all regions, or not?
-            Process::Patch(AddressList::CostumeIDFunBLModel.addr, 0xEB0FDCF8);
+            Process::Patch(AddressList::getAddress("CostumeIDFunBLModel"), 0xEB0FDCF8);
 
             writeCosmeticCostumeID->Disable();
             entry->SetName("Enable Cosmetic Costumes");
@@ -74,7 +74,7 @@ namespace CTRPluginFramework
             u32 memoryOffset = playerID * PLAYER_OFFSET;
 
             // get current effect (true) costume...
-            Process::Read8(AddressList::CurrCostume.addr + memoryOffset, currEffectCostumeID);
+            Process::Read8(AddressList::getAddress("CurrCostume") + memoryOffset, currEffectCostumeID);
 
             // get existing/current cosmetic costume ID, if any... else just fallback to true costume...
             if (cosmeticIDs[linkChoice] != cosmeticNotInUse)
@@ -123,6 +123,7 @@ namespace CTRPluginFramework
         int setResetResult = setReset.Open();
         if (setResetResult == 0)
         {
+            // TODO: just get new costume using helper method? // remove redundant code
             Keyboard costumeList("Choose a costume:\n\nBe sure to load into a new area for changes to fully\ntake effect.");
             costumeList.Populate(GameData::universalCostumeList);
 
@@ -133,7 +134,7 @@ namespace CTRPluginFramework
         else if (setResetResult == 1)
         {
             cosmeticIDs[player] = cosmeticNotInUse;
-            Process::Write8(AddressList::CurrCostumeAlt.addr + memoryOffset, currEffectCostumeID);
+            Process::Write8(AddressList::getAddress("CurrCostumeAlt") + memoryOffset, currEffectCostumeID);
         }
     }
 
@@ -143,7 +144,7 @@ namespace CTRPluginFramework
         for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
         {
             if (cosmeticIDs[iterateThruPlayers] != 0xFF)
-                Process::Write8(AddressList::CurrCostumeAlt.addr + iterateThruPlayers * PLAYER_OFFSET, cosmeticIDs[iterateThruPlayers]);
+                Process::Write8(AddressList::getAddress("CurrCostumeAlt") + iterateThruPlayers * PLAYER_OFFSET, cosmeticIDs[iterateThruPlayers]);
         }
     }
 }

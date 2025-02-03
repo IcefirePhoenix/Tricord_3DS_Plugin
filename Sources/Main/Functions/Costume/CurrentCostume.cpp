@@ -25,7 +25,7 @@ namespace CTRPluginFramework
             int result = costumeList.Open();
 
             if (result >= 0)
-                Process::Write8((AddressList::CurrCostume.addr + memoryOffset), result);
+                Process::Write8((AddressList::getAddress("CurrCostume") + memoryOffset), result);
         }
     }
 
@@ -78,16 +78,16 @@ namespace CTRPluginFramework
         switch (bearStatus.Open())
         {
             case 0: // default -> upgrade check for 30+ hero points...
-                Process::Patch(AddressList::BearMinMaxCheckA.addr, 0xA3A00001);
-                Process::Patch(AddressList::BearMinMaxCheckB.addr, 0xB3A00000);
+                Process::Patch(AddressList::getAddress("BearMinMaxCheckA"), 0xA3A00001);
+                Process::Patch(AddressList::getAddress("BearMinMaxCheckB"), 0xB3A00000);
                 break;
             case 1: // force-disable upgrade...
-                Process::Patch(AddressList::BearMinMaxCheckA.addr, 0xA3A00000);
-                Process::Patch(AddressList::BearMinMaxCheckB.addr, 0xB3A00000);
+                Process::Patch(AddressList::getAddress("BearMinMaxCheckA"), 0xA3A00000);
+                Process::Patch(AddressList::getAddress("BearMinMaxCheckB"), 0xB3A00000);
                 break;
             case 2: // force-enable upgrade..
-                Process::Patch(AddressList::BearMinMaxCheckA.addr, 0xA3A00001);
-                Process::Patch(AddressList::BearMinMaxCheckB.addr, 0xB3A00001);
+                Process::Patch(AddressList::getAddress("BearMinMaxCheckA"), 0xA3A00001);
+                Process::Patch(AddressList::getAddress("BearMinMaxCheckB"), 0xB3A00001);
                 break;
             default:
                 break;
@@ -102,12 +102,12 @@ namespace CTRPluginFramework
 
         if (entry->Name() == "Prevent Doppel Costume resets")
         {
-            Process::Patch(AddressList::DoppelLobbyReset.addr, forceDisableReset);
+            Process::Patch(AddressList::getAddress("DoppelLobbyReset"), forceDisableReset);
             entry->SetName("Allow Doppel Costume resets");
         }
         else
         {
-            Process::Patch(AddressList::DoppelLobbyReset.addr, defaultResetBehavior);
+            Process::Patch(AddressList::getAddress("DoppelLobbyReset"), defaultResetBehavior);
             entry->SetName("Prevent Doppel Costume resets");
         }
     }
@@ -117,15 +117,15 @@ namespace CTRPluginFramework
         // TODO: impl using Process::Patch w/buffer ptr + CopyMem to reset
         if (!entry->IsActivated())
         {
-            Process::Patch(AddressList::DoppelStageResetA.addr, 0xE3500000);
-            Process::Patch(AddressList::DoppelStageResetB.addr, 0x13A00018);
-            Process::Patch(AddressList::DoppelStageResetC.addr, 0x15C40064);
+            Process::Patch(AddressList::getAddress("DoppelStageResetA"), 0xE3500000);
+            Process::Patch(AddressList::getAddress("DoppelStageResetB"), 0x13A00018);
+            Process::Patch(AddressList::getAddress("DoppelStageResetC"), 0x15C40064);
         }
         else
         {
-            Process::Patch(AddressList::DoppelStageResetA.addr, 0xE320F000);
-            Process::Patch(AddressList::DoppelStageResetB.addr, 0xE320F000);
-            Process::Patch(AddressList::DoppelStageResetC.addr, 0xE320F000);
+            Process::Patch(AddressList::getAddress("DoppelStageResetA"), 0xE320F000);
+            Process::Patch(AddressList::getAddress("DoppelStageResetB"), 0xE320F000);
+            Process::Patch(AddressList::getAddress("DoppelStageResetC"), 0xE320F000);
         }
     }
 }

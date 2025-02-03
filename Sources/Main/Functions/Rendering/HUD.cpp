@@ -23,7 +23,7 @@ namespace CTRPluginFramework
         u32 ActionButtonTextOffset = 0x78B0;
         u32 HUDPointerCheck;
 
-        Process::Read32(AddressList::HUDPointer.addr, HUDPointerCheck);
+        Process::Read32(AddressList::getAddress("HUDPointer"), HUDPointerCheck);
 
         if (!GeneralHelpers::isNullPointer(HUDPointerCheck))
         {
@@ -32,7 +32,7 @@ namespace CTRPluginFramework
             Process::Write32((HUDPointerCheck + ActionButtonTextOffset), 0x00FFFF00);
         }
 
-        Process::Write8(AddressList::OffScreenLocation.addr, disableOffScrArrow);
+        Process::Write8(AddressList::getAddress("OffScreenLocation"), disableOffScrArrow);
     }
 
     // Forces top-screen scrolling event text to be transparent
@@ -42,12 +42,12 @@ namespace CTRPluginFramework
 
         if (isScrollTextDisabled)
         {
-            Process::WriteFloat(AddressList::ScrollingTextOpacity.addr, 0.0);
+            Process::WriteFloat(AddressList::getAddress("ScrollingTextOpacity"), 0.0);
             entry->SetName("Enable top screen scrolling text");
         }
         else
         {
-            Process::WriteFloat(AddressList::ScrollingTextOpacity.addr, 1.0);
+            Process::WriteFloat(AddressList::getAddress("ScrollingTextOpacity"), 1.0);
             entry->SetName("Disable top screen scrolling text");
         }
     }
@@ -61,13 +61,13 @@ namespace CTRPluginFramework
         switch (GeneralHelpers::chooseLink())
         {
             case 0:
-                targetaddr = AddressList::LiveNameColorG.addr;
+                targetaddr = AddressList::getAddress("LiveNameColorG");
                 break;
             case 1:
-                targetaddr = AddressList::LiveNameColorB.addr;
+                targetaddr = AddressList::getAddress("LiveNameColorB");
                 break;
             case 2:
-                targetaddr = AddressList::LiveNameColorR.addr;
+                targetaddr = AddressList::getAddress("LiveNameColorR");
                 break;
             default:
                 return;
@@ -99,9 +99,9 @@ namespace CTRPluginFramework
 
         u32 arrowAddresses[3] =
         {
-            AddressList::ArrowIndicatorColorTop.addr,
-            AddressList::ArrowIndicatorColorMid.addr,
-            AddressList::ArrowIndicatorColorBot.addr
+            AddressList::getAddress("ArrowIndicatorColorTop"),
+            AddressList::getAddress("ArrowIndicatorColorMid"),
+            AddressList::getAddress("ArrowIndicatorColorBot")
         };
 
         u8 visibilityOffset = 0x4, indivCoordinateOffset = 0x4;
@@ -112,9 +112,9 @@ namespace CTRPluginFramework
         for (int iterateColor = 0; iterateColor < 3; iterateColor++)
         {
             u32 offset = iterateColor * PLAYER_OFFSET;
-            Process::ReadFloat((AddressList::RespawnPositionX.addr + offset), respawnCoords[iterateColor][0]);
-            Process::ReadFloat((AddressList::RespawnPositionY.addr + offset), respawnCoords[iterateColor][1]);
-            Process::ReadFloat((AddressList::RespawnPositionZ.addr + offset), respawnCoords[iterateColor][2]);
+            Process::ReadFloat((AddressList::getAddress("RespawnPositionX") + offset), respawnCoords[iterateColor][0]);
+            Process::ReadFloat((AddressList::getAddress("RespawnPositionY") + offset), respawnCoords[iterateColor][1]);
+            Process::ReadFloat((AddressList::getAddress("RespawnPositionZ") + offset), respawnCoords[iterateColor][2]);
         }
 
         for (int iterateEdits = 0; iterateEdits < 3; iterateEdits++)
@@ -138,12 +138,12 @@ namespace CTRPluginFramework
 
         if (showChestContents)
         {
-            Process::Patch(AddressList::SeeChestContents.addr, 0xEA000017);
+            Process::Patch(AddressList::getAddress("SeeChestContents"), 0xEA000017);
             entry->SetName("Disable forced-visibility of Treasure Chest contents");
         }
         else
         {
-            Process::Patch(AddressList::SeeChestContents.addr, 0x0A000017);
+            Process::Patch(AddressList::getAddress("SeeChestContents"), 0x0A000017);
             entry->SetName("Force visibility of Treasure Chest contents");
         }
     }

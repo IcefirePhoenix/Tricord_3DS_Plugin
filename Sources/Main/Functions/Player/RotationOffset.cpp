@@ -21,7 +21,7 @@ namespace CTRPluginFramework
         {
             if (GeneralHelpers::isLoadingScreen())
             {
-                Process::Read32(AddressList::RotationOffset.addr, currOffset);
+                Process::Read32(AddressList::getAddress("RotationOffset"), currOffset);
 
                 // maintenance writes
                 if (currOffset != 0x00000000)
@@ -59,7 +59,7 @@ namespace CTRPluginFramework
         float adjustPercent;
         u32 currOffset, adjustmentAsInt;
 
-        Process::Read32(AddressList::RotationOffset.addr, currOffset);
+        Process::Read32(AddressList::getAddress("RotationOffset"), currOffset);
 
         // convert adjustment to hex-based u32...
         adjustPercent = adjustment / 360.0;
@@ -67,6 +67,6 @@ namespace CTRPluginFramework
 
         // saves on write repetitions...
         if (currOffset != adjustmentAsInt)
-            Process::Write32(AddressList::RotationOffset.addr, adjustmentAsInt);
+            Process::Write32(AddressList::getAddress("RotationOffset"), adjustmentAsInt);
     }
 }

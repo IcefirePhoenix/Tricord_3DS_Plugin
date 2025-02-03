@@ -70,19 +70,19 @@ namespace CTRPluginFramework
     void GeneralHelpers::managePlayerLock(bool isLocked)
     {
         int lock = isLocked ? 0x10 : 0x00;
-        Process::Write8(AddressList::LockMovement.addr, lock);
+        Process::Write8(AddressList::getAddress("LockMovement"), lock);
     }
 
     void GeneralHelpers::forceDoppelStatus(bool enable)
     {
         u8 status = enable ? 0x1 : 0x0;
-        Process::Write8(AddressList::DoppelsEnabled.addr, status);
+        Process::Write8(AddressList::getAddress("DoppelsEnabled"), status);
     }
 
     bool GeneralHelpers::isSinglePlayer(void)
     {
         u8 mode;
-        Process::Read8(AddressList::DoppelsEnabled.addr, mode);
+        Process::Read8(AddressList::getAddress("DoppelsEnabled"), mode);
 
         return mode == 0x01;
     }
@@ -90,7 +90,7 @@ namespace CTRPluginFramework
     bool GeneralHelpers::isLoadingScreen(void)
     {
         u8 type;
-        Process::Read8(AddressList::LoadingStatus.addr, type);
+        Process::Read8(AddressList::getAddress("LoadingStatus"), type);
 
         return type == 0x01;
     }
@@ -98,7 +98,7 @@ namespace CTRPluginFramework
     bool GeneralHelpers::isPauseScreen(void)
     {
         u8 status;
-        Process::Read8(AddressList::PauseStatus.addr, status);
+        Process::Read8(AddressList::getAddress("PauseStatus"), status);
 
         return status == 0x03;
     }
@@ -133,7 +133,7 @@ namespace CTRPluginFramework
     int GeneralHelpers::getCurrLink(void)
     {
         u8 currLink;
-        Process::Read8(AddressList::ActiveLink.addr, currLink);
+        Process::Read8(AddressList::getAddress("ActiveLink"), currLink);
 
         return static_cast<int>(currLink);
     }
@@ -141,19 +141,19 @@ namespace CTRPluginFramework
     int GeneralHelpers::getHP(void)
     {
         u8 currHP;
-        Process::Read8(AddressList::HealthCurrent.addr, currHP);
+        Process::Read8(AddressList::getAddress("HealthCurrent"), currHP);
 
         return static_cast<int>(currHP);
     }
 
     void GeneralHelpers::setCurrLink(int playerID)
     {
-        Process::Write8(AddressList::ActiveLink.addr, playerID);
+        Process::Write8(AddressList::getAddress("ActiveLink"), playerID);
     }
 
     void GeneralHelpers::setPlayerCam(int playerID)
     {
-        Process::Write8(AddressList::CameraLinkFocus.addr, playerID);
+        Process::Write8(AddressList::getAddress("CameraLinkFocus"), playerID);
     }
 }
 

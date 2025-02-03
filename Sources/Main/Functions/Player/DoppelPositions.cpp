@@ -10,9 +10,9 @@ namespace CTRPluginFramework
         u8 activePlayer = 0x0;
         u32 offset = 0x0;
 
-        u32 xAddr = AddressList::PositionX.addr;
-        u32 yAddr = AddressList::PositionY.addr;
-        u32 zAddr = AddressList::PositionZ.addr;
+        u32 xAddr = AddressList::getAddress("PositionX");
+        u32 yAddr = AddressList::getAddress("PositionY");
+        u32 zAddr = AddressList::getAddress("PositionZ");
 
         if (entry->Hotkeys[0].IsPressed())
         {
@@ -55,14 +55,14 @@ namespace CTRPluginFramework
             if (Level::hasStageBegan() && Level::getElapsedTime() < 0x5)
             {
                 // set blue location to triforce...
-                Process::WriteFloat((AddressList::PositionX.addr + blueDataOffset), -0.8);
-                Process::WriteFloat((AddressList::PositionY.addr + blueDataOffset), 1.1452);
-                Process::WriteFloat((AddressList::PositionZ.addr + blueDataOffset), -9.95);
+                Process::WriteFloat((AddressList::getAddress("PositionX") + blueDataOffset), -0.8);
+                Process::WriteFloat((AddressList::getAddress("PositionY") + blueDataOffset), 1.1452);
+                Process::WriteFloat((AddressList::getAddress("PositionZ") + blueDataOffset), -9.95);
 
                 // set red location to triforce...
-                Process::WriteFloat((AddressList::PositionX.addr + redDataOffset), 0.8);
-                Process::WriteFloat((AddressList::PositionY.addr + redDataOffset), 1.1452);
-                Process::WriteFloat((AddressList::PositionZ.addr + redDataOffset), -9.95);
+                Process::WriteFloat((AddressList::getAddress("PositionX") + redDataOffset), 0.8);
+                Process::WriteFloat((AddressList::getAddress("PositionY") + redDataOffset), 1.1452);
+                Process::WriteFloat((AddressList::getAddress("PositionZ") + redDataOffset), -9.95);
             }
         }
     }

@@ -113,7 +113,7 @@ namespace CTRPluginFramework
          * 3) if Link is swimming -- ensures water/lava acts properly
          */
 
-        Process::Read8(AddressList::CostumeAttrD.addr + addressOffset, sinkingStatus);  // check 1...
+        Process::Read8(AddressList::getAddress("CostumeAttrD") + addressOffset, sinkingStatus);  // check 1...
         bool isSinking = (sinkingStatus & 0x80) == 0x80;
 
         currentColID = Collision::getCurrCol(player);                                   // check 2 + 3...
@@ -137,18 +137,18 @@ namespace CTRPluginFramework
          */
 
         u32 offset = GeneralHelpers::getCurrLink() * PLAYER_OFFSET;
-        u32 addrX = AddressList::SpeedX.addr + offset;
-        u32 addrY = AddressList::SpeedY.addr + offset;
-        u32 addrZ = AddressList::SpeedZ.addr + offset;
+        u32 addrX = AddressList::getAddress("SpeedX") + offset;
+        u32 addrY = AddressList::getAddress("SpeedY") + offset;
+        u32 addrZ = AddressList::getAddress("SpeedZ") + offset;
 
         u16 currColl;
         bool isAirborne, canMoveInMoonJump;
 
         // disable X-button screenshot functionality to avoid hotkey conflicts...
-        Process::Write8(AddressList::CameraXButtonToggle.addr, cameraDisabled);
+        Process::Write8(AddressList::getAddress("CameraXButtonToggle"), cameraDisabled);
 
         // get current collision type...
-        Process::Read16(AddressList::CollisionCurrent.addr + offset, currColl);
+        Process::Read16(AddressList::getAddress("CollisionCurrent") + offset, currColl);
 
         // verify moonjump status...
         isAirborne = (currColl == Collision::colIDFromName("Air"));
@@ -202,9 +202,9 @@ namespace CTRPluginFramework
         {
             if (iterateThruPlayers != link)
             {
-                Process::WriteFloat(AddressList::SpeedX.addr + iterateThruPlayers * PLAYER_OFFSET, 0.0);
-                Process::WriteFloat(AddressList::SpeedY.addr + iterateThruPlayers * PLAYER_OFFSET, speedToMaintainHover);
-                Process::WriteFloat(AddressList::SpeedZ.addr + iterateThruPlayers * PLAYER_OFFSET, 0.0);
+                Process::WriteFloat(AddressList::getAddress("SpeedX") + iterateThruPlayers * PLAYER_OFFSET, 0.0);
+                Process::WriteFloat(AddressList::getAddress("SpeedY") + iterateThruPlayers * PLAYER_OFFSET, speedToMaintainHover);
+                Process::WriteFloat(AddressList::getAddress("SpeedZ") + iterateThruPlayers * PLAYER_OFFSET, 0.0);
             }
         }
     }

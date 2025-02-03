@@ -64,7 +64,7 @@ namespace CTRPluginFramework
              * Since each slot's data has a 8-bit spacer between them, the entry's Arg value (even int 0-8)
              * is used as an offset to navigate between slots without having to define 5 separate addresses.
              */
-            Process::Write8(AddressList::EditMerchantStock.addr + slotNumber, static_cast<u8>(material));
+            Process::Write8(AddressList::getAddress("EditMerchantStock") + slotNumber, static_cast<u8>(material));
             return Material::getMaterialName(world, material);
         }
         return "";
@@ -73,7 +73,7 @@ namespace CTRPluginFramework
     // Force-triggers refresh of merchant selection
     void Save::resetMerchant(MenuEntry *entry)
     {
-        Process::Write8(AddressList::ResetMerchantStock.addr, 0x0);
+        Process::Write8(AddressList::getAddress("ResetMerchantStock"), 0x0);
         MessageBox(Color::Gainsboro << "Street Merchant Stall has been re-stocked.")();
     }
 }

@@ -23,8 +23,8 @@ namespace CTRPluginFramework
         if (timer.HasTimePassed(Seconds(interval)))
         {
             // get current button input statuses...
-            Process::Read8(AddressList::ABXY.addr, ABXY_status);
-            Process::Read8(AddressList::StartSelLRTouch.addr, othersStatus);
+            Process::Read8(AddressList::getAddress("ABXY"), ABXY_status);
+            Process::Read8(AddressList::getAddress("StartSelLRTouch"), othersStatus);
 
             // clear per-button status if spam enabled...
             for (int i = 0; i < 8; i++)
@@ -39,8 +39,8 @@ namespace CTRPluginFramework
             }
 
             // update with new statuses...
-            Process::Write8(AddressList::ABXY.addr, forceClearStatus);
-            Process::Write8(AddressList::StartSelLRTouch.addr, forceClearStatus);
+            Process::Write8(AddressList::getAddress("ABXY"), forceClearStatus);
+            Process::Write8(AddressList::getAddress("StartSelLRTouch"), forceClearStatus);
             timer.Restart();
         }
     }

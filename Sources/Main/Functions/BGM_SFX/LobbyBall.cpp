@@ -39,7 +39,7 @@ namespace CTRPluginFramework
         u32 lobbyBallSongOffset = 0x6CC;
         u32 dynamicAddr, finalSongAddress;
 
-        Process::Read32(AddressList::LobbyBallPointer.addr, dynamicAddr);
+        Process::Read32(AddressList::getAddress("LobbyBallPointer"), dynamicAddr);
         finalSongAddress = dynamicAddr + lobbyBallSongOffset;
 
         if (!GeneralHelpers::isNullPointer(finalSongAddress))

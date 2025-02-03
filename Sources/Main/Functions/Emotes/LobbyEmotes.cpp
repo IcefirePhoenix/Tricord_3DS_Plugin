@@ -7,10 +7,7 @@ namespace CTRPluginFramework
     void Emotes::lobbyEmoteSwapper(MenuEntry *entry)
     {
         // when previous location is NOT Drablands, emote menu data defaults to Drablands emote set for some reason...
-        u32 finalAddress = (Level::getPrevLevel() < Level::levelIDFromName("Deku Forest")) ? AddressList::GameplayEmotes.addr : AddressList::LobbyEmotes.addr;
-
-        if (entry->WasJustActivated())
-            initEmoteAddresses();
+        u32 finalAddress = (Level::getPrevLevel() < Level::levelIDFromName("Deku Forest")) ? AddressList::getAddress("GameplayEmotes") : AddressList::getAddress("LobbyEmotes");
 
         // when entering new area, it's not possible to override current bottom-screen emote menu graphics...
         // restore default emote set to avoid button-graphic mix-ups...

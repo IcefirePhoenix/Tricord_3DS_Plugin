@@ -12,16 +12,16 @@ namespace CTRPluginFramework
 	// Retrieve addresses for item strafing speeds
 	void Item::initItemAddresses(void)
     {
-        Address temp[6] =
+        const char* names[6] =
 		{
-			AddressList::BowStrafe, AddressList::FireGloveStrafe, AddressList::WaterRodStrafe,
-			AddressList::GustStrafe, AddressList::GripshotStrafe, AddressList::HammerStrafe
+			"BowStrafe", "FireGloveStrafe", "WaterRodStrafe",
+			"GustStrafe", "GripshotStrafe", "HammerStrafe"
 		};
 
         for (int iterator = 0; iterator < 6; iterator++)
 		{
-            Item::addresses[iterator] = temp[iterator].addr;
-        }
+			Item::addresses[iterator] = AddressList::getAddress(names[iterator]);
+		}
     }
 
 	// Gets current item data for normal players / Shadow Links and returns them as strings

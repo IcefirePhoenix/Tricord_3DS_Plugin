@@ -19,7 +19,7 @@ namespace CTRPluginFramework
         u8 textSpeed = useInstantText ? 0x2D : 0x1;
         std::string entryName = useInstantText ? "Disable instant text boxes" : "Force instant text boxes";
 
-        Process::Write8(AddressList::TextBoxSpeed.addr, textSpeed);
+        Process::Write8(AddressList::getAddress("TextBoxSpeed"), textSpeed);
         entry->SetName(entryName);
     }
 

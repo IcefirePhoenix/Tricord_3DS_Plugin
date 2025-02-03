@@ -11,8 +11,8 @@ namespace CTRPluginFramework
          * TODO: confirm if fog resets itself during loading zones?
          */
 
-        Process::Write32((AddressList::FogA.addr), 0xFF700FFF);
-        Process::Write32((AddressList::FogB.addr), 0x453B8000);
-        Process::Write32((AddressList::FogC.addr), 0x459C4000);
+        Process::Write32((AddressList::getAddress("FogA")), 0xFF700FFF);
+        Process::Write32((AddressList::getAddress("FogB")), 0x453B8000);
+        Process::Write32((AddressList::getAddress("FogC")), 0x459C4000);
     }
 }

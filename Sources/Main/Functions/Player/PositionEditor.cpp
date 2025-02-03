@@ -61,9 +61,9 @@ namespace CTRPluginFramework
     {
         u32 offset = playerID * PLAYER_OFFSET;
 
-        Process::WriteFloat(AddressList::PositionX.addr + offset, positions[playerID][0]);
-        Process::WriteFloat(AddressList::PositionY.addr + offset, positions[playerID][1]);
-        Process::WriteFloat(AddressList::PositionZ.addr + offset, positions[playerID][2]);
+        Process::WriteFloat(AddressList::getAddress("PositionX") + offset, positions[playerID][0]);
+        Process::WriteFloat(AddressList::getAddress("PositionY") + offset, positions[playerID][1]);
+        Process::WriteFloat(AddressList::getAddress("PositionZ") + offset, positions[playerID][2]);
     }
 
     // Helper function to back up current player coordinates
@@ -71,9 +71,9 @@ namespace CTRPluginFramework
     {
         u32 offset = playerID * PLAYER_OFFSET;
 
-        Process::ReadFloat(AddressList::PositionX.addr + offset, positions[playerID][0]);
-        Process::ReadFloat(AddressList::PositionY.addr + offset, positions[playerID][1]);
-        Process::ReadFloat(AddressList::PositionZ.addr + offset, positions[playerID][2]);
+        Process::ReadFloat(AddressList::getAddress("PositionX") + offset, positions[playerID][0]);
+        Process::ReadFloat(AddressList::getAddress("PositionY") + offset, positions[playerID][1]);
+        Process::ReadFloat(AddressList::getAddress("PositionZ") + offset, positions[playerID][2]);
 
         isPositionSaved[playerID] = true;
     }

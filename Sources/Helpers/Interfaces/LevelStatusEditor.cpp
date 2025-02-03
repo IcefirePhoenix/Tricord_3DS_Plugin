@@ -61,17 +61,19 @@ namespace CTRPluginFramework
 
     void LevelStatusEditor::initBitstringAddresses(void)
     {
-        Address bitstringArray[3][4] =
+        const char* names[3][4] =
         {
-            {AddressList::SoloNCCompletion, AddressList::SoloC1Completion, AddressList::SoloC2Completion, AddressList::SoloC3Completion},
-            {AddressList::MultiNCCompletion, AddressList::MultiC1Completion, AddressList::MultiC2Completion, AddressList::MultiC3Completion},
-            {AddressList::NormalNCCompletion, AddressList::NormalC1Completion, AddressList::NormalC2Completion, AddressList::NormalC3Completion}
+            {"SoloNCCompletion", "SoloC1Completion", "SoloC2Completion", "SoloC3Completion"},
+            {"MultiNCCompletion", "MultiC1Completion", "MultiC2Completion", "MultiC3Completion"},
+            {"NormalNCCompletion", "NormalC1Completion", "NormalC2Completion", "NormalC3Completion"}
         };
 
         for (int modeIndex = 0; modeIndex < 3; modeIndex++)
         {
             for (int levelIndex = 0; levelIndex < 4; levelIndex++)
-                bitstringLocations[modeIndex][levelIndex] = bitstringArray[modeIndex][levelIndex].addr;
+            {
+                bitstringLocations[modeIndex][levelIndex] = AddressList::getAddress(names[modeIndex][levelIndex]);
+            }
         }
     }
 

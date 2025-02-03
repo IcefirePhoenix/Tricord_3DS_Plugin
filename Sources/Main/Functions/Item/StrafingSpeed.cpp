@@ -10,8 +10,6 @@ namespace CTRPluginFramework
     // Helper function that backs up current strafing speeds
     void readCurrStrafingSpeeds(void)
     {
-        Item::initItemAddresses();
-
         for (int iterator = 0; iterator < 6; iterator++)
             Process::ReadFloat(Item::addresses[iterator], currStrafingSpeeds[iterator]);
     }
