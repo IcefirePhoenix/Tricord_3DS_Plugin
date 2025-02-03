@@ -78,7 +78,7 @@ namespace CTRPluginFramework
 
     void InitSequence(FwkSettings &settings)
     {
-        Address::InitMemoryRange();
+        AddressList::InitMemoryRange();
         AddressList::InitAddresses();
         DescUtils::InitDescriptions();
 
@@ -105,13 +105,13 @@ namespace CTRPluginFramework
         std::string title = "An advanced utility plugin made for\nThe Legend of Zelda: Tri Force Heroes packed with QoL features, solo and online-compatible cheats, and customizable gameplay options.\n\nForked from the original CTRPluginFramework\nblank template repository.";
         PluginMenu *menu = new PluginMenu("Tricord", 0, 5, 0, title);
 
+        InitSequence(FwkSettings::Get());
+
         menu->SynchronizeWithFrame(true);
         menu->OnNewFrame = ToggleMenuChange;
         menu->OnClosing = ManageTFH_Settings;
 
-        InitSequence(FwkSettings::Get());
         CreateMenu(*menu);
-
         menu->Run();
 
         // end of plugin lifetime
