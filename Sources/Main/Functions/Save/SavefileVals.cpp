@@ -28,7 +28,7 @@ namespace CTRPluginFramework
         // display edits in menu
         if (heroPointInput.Open(result) == 0)
         {
-            Process::Write32(AddressList::HeroPointCount.addr, result);
+            Process::Write32(AddressList::getAddress("HeroPointCount"), result);
             entry->SetName("Edit Hero Point count: " + std::to_string(result));
         }
     }
@@ -57,7 +57,7 @@ namespace CTRPluginFramework
         // display edits in menu...
         if (coliseumWinInput.Open(result) == 0)
         {
-            Process::Write32(AddressList::ColiseumWinCount.addr, result);
+            Process::Write32(AddressList::getAddress("ColiseumWinCount"), result);
             entry->SetName("Edit Coliseum Win count: " + std::to_string(result));
         }
     }

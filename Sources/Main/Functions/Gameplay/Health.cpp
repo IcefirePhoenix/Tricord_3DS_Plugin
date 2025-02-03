@@ -47,7 +47,7 @@ namespace CTRPluginFramework
             healthMaxAuto->Disable();
 
             // restore max HP value...
-            Process::Write8(AddressList::HealthMax.addr, defaultMaxHP);
+            Process::Write8(AddressList::getAddress("HealthMax"), defaultMaxHP);
             preventOverflowHP(defaultMaxHP);
 
             entry->SetName("Set maximum heart containers");
@@ -62,7 +62,7 @@ namespace CTRPluginFramework
         if (currentHealth < maxHP)
         {
             if (GeneralHelpers::showMsgKbd("Refill hearts?", DialogType::DialogYesNo))
-                Process::Write8(AddressList::HealthCurrent.addr, maxHP);
+                Process::Write8(AddressList::getAddress("HealthCurrent"), maxHP);
         }
     }
 
@@ -72,7 +72,7 @@ namespace CTRPluginFramework
         u8 currentHealth = GeneralHelpers::getHP();
 
         if (currentHealth > maxHP)
-            Process::Write8(AddressList::HealthCurrent.addr, maxHP);
+            Process::Write8(AddressList::getAddress("HealthCurrent"), maxHP);
     }
 
     // Sets maximum HP value in memory
@@ -83,7 +83,7 @@ namespace CTRPluginFramework
 
         if (healthAuto)
         {
-            Process::Write8(AddressList::HealthMax.addr, customMaxHealth);
+            Process::Write8(AddressList::getAddress("HealthMax"), customMaxHealth);
         }
     }
 
@@ -91,13 +91,13 @@ namespace CTRPluginFramework
     void Gameplay::infHealth(MenuEntry *entry)
     {
         u8 maxHealth;
-        Process::Read8(AddressList::HealthMax.addr, maxHealth);
-        Process::Write8(AddressList::HealthCurrent.addr, maxHealth);
+        Process::Read8(AddressList::getAddress("HealthMax"), maxHealth);
+        Process::Write8(AddressList::getAddress("HealthCurrent"), maxHealth);
     }
 
     // Freezes current number of fairies to 9 (0xA because 0 fairies starts at 0x1)
     void Gameplay::infFairy(MenuEntry *entry)
     {
-        Process::Write8(AddressList::FairiesCurrent.addr, 0xA);
+        Process::Write8(AddressList::getAddress("FairiesCurrent"), 0xA);
     }
 }

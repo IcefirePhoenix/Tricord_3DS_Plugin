@@ -7,7 +7,7 @@ namespace CTRPluginFramework
     void Gameplay::infEnergy(MenuEntry *entry)
     {
         float largeEnergyGaugeMax = 900.0;
-        Process::WriteFloat(AddressList::EnergyCurrent.addr, largeEnergyGaugeMax);
+        Process::WriteFloat(AddressList::getAddress("EnergyCurrent"), largeEnergyGaugeMax);
     }
 
     // Sets max stamina/energy value
@@ -25,12 +25,12 @@ namespace CTRPluginFramework
             {
                 entry->SetName("Disable custom maximum energy edits");
 
-                Process::WriteFloat(AddressList::EnergyMax.addr, newMaxEnergy);
-                Process::WriteFloat(AddressList::EnergyMaxPitRecovery.addr, newMaxEnergy);
+                Process::WriteFloat(AddressList::getAddress("EnergyMax"), newMaxEnergy);
+                Process::WriteFloat(AddressList::getAddress("EnergyMaxPitRecovery"), newMaxEnergy);
 
                 // update the height of the energy bar graphic...
                 if (newMaxEnergy < normalGaugeMax)
-                    Process::WriteFloat(AddressList::EnergyBarStretch.addr, normalGaugeMax / newMaxEnergy);
+                    Process::WriteFloat(AddressList::getAddress("EnergyBarStretch"), normalGaugeMax / newMaxEnergy);
             }
         }
         else
@@ -38,9 +38,9 @@ namespace CTRPluginFramework
             entry->SetName("Set maximum energy");
 
             // reset all values...
-            Process::WriteFloat(AddressList::EnergyMax.addr, normalGaugeMax);
-            Process::WriteFloat(AddressList::EnergyMaxPitRecovery.addr, normalGaugeMax);
-            Process::WriteFloat(AddressList::EnergyBarStretch.addr, 1.0);
+            Process::WriteFloat(AddressList::getAddress("EnergyMax"), normalGaugeMax);
+            Process::WriteFloat(AddressList::getAddress("EnergyMaxPitRecovery"), normalGaugeMax);
+            Process::WriteFloat(AddressList::getAddress("EnergyBarStretch"), 1.0);
         }
     }
 
@@ -58,13 +58,13 @@ namespace CTRPluginFramework
             if (editEnergyConsumeMultiplier.Open(newMultiplier) == 0 && newMultiplier > 0.0)
             {
                 entry->SetName("Disable custom energy consumption edits");
-                Process::WriteFloat(AddressList::EnergyMaxMultiplicand.addr, baseEnergyMax * newMultiplier);
+                Process::WriteFloat(AddressList::getAddress("EnergyMaxMultiplicand"), baseEnergyMax * newMultiplier);
             }
         }
         else
         {
             entry->SetName("Set energy consumption multiplier");
-            Process::WriteFloat(AddressList::EnergyMaxMultiplicand.addr, baseEnergyMax);
+            Process::WriteFloat(AddressList::getAddress("EnergyMaxMultiplicand"), baseEnergyMax);
         }
     }
 
@@ -73,12 +73,12 @@ namespace CTRPluginFramework
     {
         if (entry->Name() == "Use large energy gauge graphic")
         {
-            Process::Patch(AddressList::LargeEnergyGauge.addr, 0xEA000004);
+            Process::Patch(AddressList::getAddress("LargeEnergyGauge"), 0xEA000004);
             entry->SetName("Reset energy gauge graphic");
         }
         else
         {
-            Process::Patch(AddressList::LargeEnergyGauge.addr, 0x0A000004);
+            Process::Patch(AddressList::getAddress("LargeEnergyGauge"), 0x0A000004);
             entry->SetName("Use large energy gauge graphic");
         }
     }

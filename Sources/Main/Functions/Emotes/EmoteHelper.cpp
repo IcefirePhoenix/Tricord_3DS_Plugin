@@ -64,22 +64,14 @@ namespace CTRPluginFramework
     // Places relevant addresses into array for easier access
     void initEmoteAddresses(void)
     {
-        Address temp[8] =
-        {
-            AddressList::EmoteAGraphic.addr,
-            AddressList::EmoteBGraphic.addr,
-            AddressList::EmoteCGraphic.addr,
-            AddressList::EmoteDGraphic.addr,
-            AddressList::EmoteEGraphic.addr,
-            AddressList::EmoteFGraphic.addr,
-            AddressList::EmoteGGraphic.addr,
-            AddressList::EmoteHGraphic.addr
-        };
-
-        for (int iterator = 0; iterator < 8; iterator++)
-        {
-            Emotes::graphicsAddresses[iterator] = temp[iterator].addr;
-        }
+        Emotes::graphicsAddresses[0] = AddressList::getAddress("EmoteAGraphic");
+        Emotes::graphicsAddresses[1] = AddressList::getAddress("EmoteBGraphic");
+        Emotes::graphicsAddresses[2] = AddressList::getAddress("EmoteCGraphic");
+        Emotes::graphicsAddresses[3] = AddressList::getAddress("EmoteDGraphic");
+        Emotes::graphicsAddresses[4] = AddressList::getAddress("EmoteEGraphic");
+        Emotes::graphicsAddresses[5] = AddressList::getAddress("EmoteFGraphic");
+        Emotes::graphicsAddresses[6] = AddressList::getAddress("EmoteGGraphic");
+        Emotes::graphicsAddresses[7] = AddressList::getAddress("EmoteHGraphic");
     }
 
     // Force-refreshes bottom-screen emote menu graphics
@@ -149,6 +141,6 @@ namespace CTRPluginFramework
     void Emotes::forceDefaultEmotes(bool shouldDisable)
     {
         u32 forceDotLayoutEdit = shouldDisable ? 0xEA00000D : 0x0A00000D; // edit : default
-        Process::Patch(AddressList::UseDoTLayoutAlways.addr, forceDotLayoutEdit);
+        Process::Patch(AddressList::getAddress("UseDoTLayoutAlways"), forceDotLayoutEdit);
     }
 }

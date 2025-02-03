@@ -56,7 +56,7 @@ namespace CTRPluginFramework {
 	{
 		u8 anim;
 		u32 addressOffset = playerID * PLAYER_OFFSET;
-		u32 animAddress = getPrevAnim ? AddressList::PreviousAnim.addr : AddressList::CurrentAnim.addr;
+		u32 animAddress = getPrevAnim ? AddressList::getAddress("PreviousAnim") : AddressList::getAddress("CurrentAnim");
 
 		Process::Read8(animAddress + addressOffset, anim);
 		return anim;

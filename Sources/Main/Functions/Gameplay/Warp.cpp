@@ -130,9 +130,9 @@ namespace CTRPluginFramework
             }
 
             // proceed with warp...
-            Process::Write8(AddressList::TargetLevelID.addr, (u8)targetLevel);
-            Process::Write8(AddressList::TargetStageID.addr, (u8)targetStage);
-            // TODO: Process::Write8(AddressList::TargetSpawnID.addr, targetspawn);
+            Process::Write8(AddressList::getAddress("TargetLevelID"), (u8)targetLevel);
+            Process::Write8(AddressList::getAddress("TargetStageID"), (u8)targetStage);
+            // TODO: Process::Write8(AddressList::getAddress("TargetSpawnID"), targetspawn);
 
             startWarp();
 
@@ -155,8 +155,8 @@ namespace CTRPluginFramework
                 if (GeneralHelpers::showMsgKbd(firstWarpIntro, DialogType::DialogYesNo))
                 {
                     // set default Doppel costumes from Bear Minimum -> Hero's Tunic
-                    Process::Write8(AddressList::CurrCostume.addr + PLAYER_OFFSET, GameData::getCostumeIDFromName("Hero's Tunic"));
-                    Process::Write8(AddressList::CurrCostume.addr + (2 * PLAYER_OFFSET), GameData::getCostumeIDFromName("Hero's Tunic"));
+                    Process::Write8(AddressList::getAddress("CurrCostume") + PLAYER_OFFSET, GameData::getCostumeIDFromName("Hero's Tunic"));
+                    Process::Write8(AddressList::getAddress("CurrCostume") + (2 * PLAYER_OFFSET), GameData::getCostumeIDFromName("Hero's Tunic"));
                 }
                 firstWarp = false;
             }
@@ -168,8 +168,8 @@ namespace CTRPluginFramework
     {
         if (warpData[0] != -1 && warpData[1] != -1)
         {
-            Process::Write8(AddressList::TargetLevelID.addr, warpData[0]);
-            Process::Write8(AddressList::TargetStageID.addr, warpData[1]);
+            Process::Write8(AddressList::getAddress("TargetLevelID"), warpData[0]);
+            Process::Write8(AddressList::getAddress("TargetStageID"), warpData[1]);
 
             startWarp();
         }
@@ -182,8 +182,8 @@ namespace CTRPluginFramework
     {
         if (entry->Hotkeys[0].IsPressed())
         {
-            Process::Write8(AddressList::TargetLevelID.addr, Level::getCurrLevel());
-            Process::Write8(AddressList::TargetStageID.addr, Level::getCurrStage());
+            Process::Write8(AddressList::getAddress("TargetLevelID"), Level::getCurrLevel());
+            Process::Write8(AddressList::getAddress("TargetStageID"), Level::getCurrStage());
             startWarp();
         }
     }
@@ -192,8 +192,8 @@ namespace CTRPluginFramework
     void startWarp(void)
     {
         u16 warpInit = 0x001E;
-        Process::Write16(AddressList::WarpActivation.addr, warpInit);
-        Process::Write32(AddressList::Warp.addr, AddressList::WarpPointer.addr);
+        Process::Write16(AddressList::getAddress("WarpActivation"), warpInit);
+        Process::Write32(AddressList::getAddress("Warp"), AddressList::getAddress("WarpPointer"));
     }
 
     // Warp between stages in the current Drablands level
@@ -204,8 +204,8 @@ namespace CTRPluginFramework
         {
             u8 targetStage = warpGetStage(targetLevel);
 
-            Process::Write8(AddressList::TargetLevelID.addr, targetLevel);
-            Process::Write8(AddressList::TargetStageID.addr, targetStage);
+            Process::Write8(AddressList::getAddress("TargetLevelID"), targetLevel);
+            Process::Write8(AddressList::getAddress("TargetStageID"), targetStage);
 
             startWarp();
         }

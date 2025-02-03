@@ -20,7 +20,7 @@ namespace CTRPluginFramework
         u32 jinxed = 0x00000000;
         u32 notJinxed = 0xFFFFFFFF;
 
-        Player::writePlayerChanges(32, Player::jinxStatus, AddressList::IsJinxed.addr, jinxed, notJinxed);
+        Player::writePlayerChanges(32, Player::jinxStatus, AddressList::getAddress("IsJinxed"), jinxed, notJinxed);
     }
 
     void Player::writeSpawnChanges(MenuEntry *entry)
@@ -28,7 +28,7 @@ namespace CTRPluginFramework
         u8 spawned = 0x1;
         u8 notSpawned = 0x0;
 
-        Player::writePlayerChanges(8, Player::spawnStatus, AddressList::IsSpawned.addr, spawned, notSpawned);
+        Player::writePlayerChanges(8, Player::spawnStatus, AddressList::getAddress("IsSpawned"), spawned, notSpawned);
     }
 
     void Player::writeVisibilityChanges(MenuEntry *entry)
@@ -36,7 +36,7 @@ namespace CTRPluginFramework
         u8 visible = 0x1;
         u8 notVisible = 0x0;
 
-        Player::writePlayerChanges(8, Player::visibleStatus, AddressList::IsVisible.addr, visible, notVisible);
+        Player::writePlayerChanges(8, Player::visibleStatus, AddressList::getAddress("IsVisible"), visible, notVisible);
     }
 
     void Player::writeInvincibilityChanges(MenuEntry *entry)
@@ -44,7 +44,7 @@ namespace CTRPluginFramework
         u8 invincible = 0x16;
         u8 notInvinci = 0x0;
 
-        Player::writePlayerChanges(8, Player::invinciStatus, AddressList::IsInvincible.addr, invincible, notInvinci);
+        Player::writePlayerChanges(8, Player::invinciStatus, AddressList::getAddress("IsInvincible"), invincible, notInvinci);
     }
 
     void Player::writeAnimStorageChanges(MenuEntry *entry)
@@ -58,8 +58,8 @@ namespace CTRPluginFramework
         if (PlayerAnimation::getAnim(static_cast<u8>(GeneralHelpers::getCurrLink()), false) == PlayerAnimation::getIDFromName("Link_SwimWait"))
         {
             // lazy workaround for 24-bit write...
-            Player::writePlayerChanges(16, Player::animStoreStatus, AddressList::IsWaterStorage.addr, animStoredA, notStoredA);
-            Player::writePlayerChanges(8, Player::animStoreStatus, AddressList::IsWaterStorage.addr + 0x2, animStoredB, notStoredB);
+            Player::writePlayerChanges(16, Player::animStoreStatus, AddressList::getAddress("IsWaterStorage"), animStoredA, notStoredA);
+            Player::writePlayerChanges(8, Player::animStoreStatus, AddressList::getAddress("IsWaterStorage") + 0x2, animStoredB, notStoredB);
         }
     }
 
@@ -68,7 +68,7 @@ namespace CTRPluginFramework
         u8 collision = 0x10;
         u8 noCollision = 0xEA;
 
-        Player::writePlayerChanges(8, Player::collisionStatus, AddressList::NoCollision.addr, collision, noCollision);
+        Player::writePlayerChanges(8, Player::collisionStatus, AddressList::getAddress("NoCollision"), collision, noCollision);
     }
 
     void Player::writePVPChanges(MenuEntry *entry)
@@ -76,14 +76,14 @@ namespace CTRPluginFramework
         u8 pvp = 0x1;
         u8 notPvp = 0x0;
 
-        Player::writePlayerChanges(8, Player::pvpStatus, AddressList::PVPMode.addr, pvp, notPvp);
+        Player::writePlayerChanges(8, Player::pvpStatus, AddressList::getAddress("PVPMode"), pvp, notPvp);
     }
 
     void Player::writeSwordChanges(MenuEntry *entry)
     {
         for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
         {
-            u32 finalAddress = AddressList::SwordType.addr + (iterateThruPlayers * PLAYER_OFFSET);
+            u32 finalAddress = AddressList::getAddress("SwordType") + (iterateThruPlayers * PLAYER_OFFSET);
 
             if (Player::swordType[iterateThruPlayers] != 0xFF)
                 Process::Write8(finalAddress, Player::swordType[iterateThruPlayers]);

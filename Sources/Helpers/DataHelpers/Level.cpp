@@ -276,7 +276,7 @@ namespace CTRPluginFramework
 	u8 Level::getPrevLevel(void)
 	{
 		u8 levelID;
-		Process::Read8(AddressList::PreviousLevelID.addr, levelID);
+		Process::Read8(AddressList::getAddress("PreviousLevelID"), levelID);
 
 		return levelID;
 	}
@@ -284,7 +284,7 @@ namespace CTRPluginFramework
 	u8 Level::getCurrLevel(void)
 	{
 		u8 levelID;
-		Process::Read8(AddressList::CurrLevelID.addr, levelID);
+		Process::Read8(AddressList::getAddress("CurrLevelID"), levelID);
 
 		return levelID;
 	}
@@ -292,7 +292,7 @@ namespace CTRPluginFramework
 	u8 Level::getCurrStage(void)
 	{
 		u8 stageID;
-		Process::Read8(AddressList::CurrStageID.addr, stageID);
+		Process::Read8(AddressList::getAddress("CurrStageID"), stageID);
 
 		return stageID;
 	}
@@ -300,7 +300,7 @@ namespace CTRPluginFramework
 	u8 Level::getCurrChallenge(void)
 	{
 		u8 chalID;
-		Process::Read8(AddressList::ChallengeID.addr, chalID);
+		Process::Read8(AddressList::getAddress("ChallengeID"), chalID);
 
 		return chalID;
 	}
@@ -308,24 +308,24 @@ namespace CTRPluginFramework
 	u32 Level::getElapsedTime(void)
 	{
 		u32 elapsedTime;
-		Process::Read32(AddressList::TimeElapsed.addr, elapsedTime);
+		Process::Read32(AddressList::getAddress("TimeElapsed"), elapsedTime);
 
 		return elapsedTime;
 	}
 
 	void Level::setCurrLevel(u8 levelID)
 	{
-		Process::Write8(AddressList::CurrLevelID.addr, levelID);
+		Process::Write8(AddressList::getAddress("CurrLevelID"), levelID);
 	}
 
 	void Level::setCurrStage(u8 stageID)
 	{
-		Process::Write8(AddressList::CurrStageID.addr, stageID);
+		Process::Write8(AddressList::getAddress("CurrStageID"), stageID);
 	}
 
 	void Level::setCurrChal(u8 chalID)
 	{
-		Process::Write8(AddressList::ChallengeID.addr, chalID);
+		Process::Write8(AddressList::getAddress("ChallengeID"), chalID);
 	}
 
 	bool Level::isInDrablands(u8 optionalLevel)

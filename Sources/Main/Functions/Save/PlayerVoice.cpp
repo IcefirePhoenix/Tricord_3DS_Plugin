@@ -6,7 +6,7 @@ namespace CTRPluginFramework
     // Removes player voice
     void Save::useVoiceless(MenuEntry *entry)
     {
-        Process::Write8(AddressList::MainVoice.addr, 0x4);
+        Process::Write8(AddressList::getAddress("MainVoice"), 0x4);
     }
 
     // Changes player voice (randomly generated once during savefile creation and was not intended to be edited)
@@ -20,7 +20,7 @@ namespace CTRPluginFramework
 
         if (result >= 0)
         {
-            Process::Write8(AddressList::MainVoice.addr, result);
+            Process::Write8(AddressList::getAddress("MainVoice"), result);
             entry->SetName("Set Main Voice: " + GameData::getVoiceAsStr(result));
         }
     }

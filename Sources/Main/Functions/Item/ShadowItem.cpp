@@ -17,7 +17,7 @@ namespace CTRPluginFramework
             initShadowItemList();
 
             // get dynamic address via pointer...
-            Process::Read32(AddressList::ShadowLinkItemPointer.addr, dynamicShadowItemAddress);
+            Process::Read32(AddressList::getAddress("ShadowLinkItemPointer"), dynamicShadowItemAddress);
             u32 shadowDataAddress = dynamicShadowItemAddress + shadowItemPointerOffset;
 
             // Shadow Links aren't loaded in-game outside of Baneful Zone...

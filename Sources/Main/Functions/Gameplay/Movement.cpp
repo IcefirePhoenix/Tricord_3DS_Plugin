@@ -23,13 +23,13 @@ namespace CTRPluginFramework
             if (editSpeed.Open(newSpeed) == 0)
             {
                 entry->SetName("Disable custom movement speed edits");
-                Process::WriteFloat(AddressList::SpeedMultiplierAlt.addr, newSpeed);
+                Process::WriteFloat(AddressList::getAddress("SpeedMultiplierAlt"), newSpeed);
             }
         }
         else
         {
             entry->SetName("Set custom movement speed");
-            Process::WriteFloat(AddressList::SpeedMultiplierAlt.addr, defaultSpeed);
+            Process::WriteFloat(AddressList::getAddress("SpeedMultiplierAlt"), defaultSpeed);
         }
     }
 

@@ -52,7 +52,7 @@ namespace CTRPluginFramework
 
         if (tex >= 0)
         {
-            u32 targetaddr = AddressList::TextureName.addr + link * texNameOffset;
+            u32 targetaddr = AddressList::getAddress("TextureName") + link * texNameOffset;
             u8 towrite = texNameDataStartIndex + tex;
 
             Process::Write8(targetaddr, towrite);
@@ -76,22 +76,22 @@ namespace CTRPluginFramework
         switch (lsType.Open())
         {
             case 0:
-                Process::WriteFloat(AddressList::LoadingScreenSPNoChal.addr, 3);
-                Process::WriteFloat(AddressList::LoadingScreenSPIcons.addr, 3);
+                Process::WriteFloat(AddressList::getAddress("LoadingScreenSPNoChal"), 3);
+                Process::WriteFloat(AddressList::getAddress("LoadingScreenSPIcons"), 3);
                 break;
             case 1:
-                Process::WriteFloat(AddressList::LoadingScreenSPNoChal.addr, 3);
-                Process::WriteFloat(AddressList::LoadingScreenSPIcons.addr, 0);
+                Process::WriteFloat(AddressList::getAddress("LoadingScreenSPNoChal"), 3);
+                Process::WriteFloat(AddressList::getAddress("LoadingScreenSPIcons"), 0);
                 break;
             case 2:
                 // Blue and Green panels
-                Process::WriteFloat(AddressList::LoadingScreenSPNoChal.addr, 6);
-                Process::WriteFloat(AddressList::LoadingScreenSPIcons.addr, 5);
+                Process::WriteFloat(AddressList::getAddress("LoadingScreenSPNoChal"), 6);
+                Process::WriteFloat(AddressList::getAddress("LoadingScreenSPIcons"), 5);
                 break;
             case 3:
                 // Red and Blue panels
-                Process::WriteFloat(AddressList::LoadingScreenSPNoChal.addr, 6);
-                Process::WriteFloat(AddressList::LoadingScreenSPIcons.addr, 6);
+                Process::WriteFloat(AddressList::getAddress("LoadingScreenSPNoChal"), 6);
+                Process::WriteFloat(AddressList::getAddress("LoadingScreenSPIcons"), 6);
                 break;
         }
     }
@@ -118,16 +118,16 @@ namespace CTRPluginFramework
         switch (auraType.Open())
         {
             case 0:
-                Process::Patch(AddressList::Aura.addr, 0x0A000018);
+                Process::Patch(AddressList::getAddress("Aura"), 0x0A000018);
                 break;
             case 1:
-                Process::Patch(AddressList::Aura.addr, 0xEA00001B);
+                Process::Patch(AddressList::getAddress("Aura"), 0xEA00001B);
                 break;
             case 2:
-                Process::Patch(AddressList::Aura.addr, 0xEA000004);
+                Process::Patch(AddressList::getAddress("Aura"), 0xEA000004);
                 break;
             case 3:
-                Process::Patch(AddressList::Aura.addr, 0xEA00000E);
+                Process::Patch(AddressList::getAddress("Aura"), 0xEA00000E);
                 break;
         }
     }
@@ -137,12 +137,12 @@ namespace CTRPluginFramework
     {
         if (entry->Name() == "Force visibility of Cheer Outfit pom poms")
         {
-            Process::Patch(AddressList::CheerPomPom.addr, 0x1A000009);
+            Process::Patch(AddressList::getAddress("CheerPomPom"), 0x1A000009);
             entry->SetName("Hide Cheer Outfit pom poms outside Couture's");
         }
         else
         {
-            Process::Patch(AddressList::CheerPomPom.addr, 0x0A000009);
+            Process::Patch(AddressList::getAddress("CheerPomPom"), 0x0A000009);
             entry->SetName("Force visibility of Cheer Outfit pom poms");
         }
     }
@@ -152,12 +152,12 @@ namespace CTRPluginFramework
     {
         if (entry->Name() == "Force Sword Suit blue sword particles")
         {
-            Process::Patch(AddressList::SwordParticle.addr, 0xEA000038);
+            Process::Patch(AddressList::getAddress("SwordParticle"), 0xEA000038);
             entry->SetName("Reset sword particles");
         }
         else
         {
-            Process::Patch(AddressList::SwordParticle.addr, 0x0A000062);
+            Process::Patch(AddressList::getAddress("SwordParticle"), 0x0A000062);
             entry->SetName("Force Sword Suit blue sword particles");
         }
     }
@@ -167,16 +167,16 @@ namespace CTRPluginFramework
     {
         if (entry->Name() == "Disable player light sources in dark stages")
         {
-            Process::WriteFloat(AddressList::PlayerLuminanceNormalA.addr, 0);
-            Process::WriteFloat(AddressList::PlayerLuminanceNormalB.addr, 0);
-            Process::WriteFloat(AddressList::PlayerLuminanceLightArmor.addr, 0);
+            Process::WriteFloat(AddressList::getAddress("PlayerLuminanceNormalA"), 0);
+            Process::WriteFloat(AddressList::getAddress("PlayerLuminanceNormalB"), 0);
+            Process::WriteFloat(AddressList::getAddress("PlayerLuminanceLightArmor"), 0);
             entry->SetName("Enable player light sources in dark stages");
         }
         else
         {
-            Process::WriteFloat(AddressList::PlayerLuminanceNormalA.addr, 1);
-            Process::WriteFloat(AddressList::PlayerLuminanceNormalB.addr, 0.5);
-            Process::WriteFloat(AddressList::PlayerLuminanceLightArmor.addr, 0.89);
+            Process::WriteFloat(AddressList::getAddress("PlayerLuminanceNormalA"), 1);
+            Process::WriteFloat(AddressList::getAddress("PlayerLuminanceNormalB"), 0.5);
+            Process::WriteFloat(AddressList::getAddress("PlayerLuminanceLightArmor"), 0.89);
             entry->SetName("Disable player light sources in dark stages");
         }
     }

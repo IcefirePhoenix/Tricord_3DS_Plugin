@@ -33,13 +33,13 @@ namespace CTRPluginFramework
 		u16 colID;
         u32 addressOffset = player * PLAYER_OFFSET;
 
-		Process::Read16(AddressList::CollisionCurrent.addr + addressOffset, colID);
+		Process::Read16(AddressList::getAddress("CollisionCurrent") + addressOffset, colID);
 		return colID;
 	}
 
     void Collision::setCurrCol(int player, u16 targetCol)
 	{
 		u32 addressOffset = player * PLAYER_OFFSET;
-		Process::Write16(AddressList::CollisionCurrent.addr + addressOffset, targetCol);
+		Process::Write16(AddressList::getAddress("CollisionCurrent") + addressOffset, targetCol);
 	}
 }

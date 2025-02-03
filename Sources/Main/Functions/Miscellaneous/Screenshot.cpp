@@ -19,7 +19,7 @@ namespace CTRPluginFramework
         u8 doesPhotoExist, clearPhotoDisplay = 0x0;
 
         // init actions...
-        Process::Read8(AddressList::CheckPhotoExist.addr, doesPhotoExist);
+        Process::Read8(AddressList::getAddress("CheckPhotoExist"), doesPhotoExist);
         showPhotoBtnIntroMsg(entry->WasJustActivated());
 
         // only draw the floating button during level-based gameplay...
@@ -53,7 +53,7 @@ namespace CTRPluginFramework
             displayPhoto(doesPhotoExist);
         else
         {
-            Process::Write8(AddressList::DisplayTopPhoto.addr, clearPhotoDisplay);
+            Process::Write8(AddressList::getAddress("DisplayTopPhoto"), clearPhotoDisplay);
             GeneralHelpers::managePlayerLock(false);
         }
     }
@@ -74,7 +74,7 @@ namespace CTRPluginFramework
         u8 forceDisplayPhoto = 0xFF;
         if (photoCheck)
         {
-            Process::Write8(AddressList::DisplayTopPhoto.addr, forceDisplayPhoto);
+            Process::Write8(AddressList::getAddress("DisplayTopPhoto"), forceDisplayPhoto);
             hideHUD();
 
             // top screen is occupied by photo so real-time gameplay can't be seen; prevent player from moving
@@ -121,7 +121,7 @@ namespace CTRPluginFramework
     void Miscellaneous::writeCameraEdits(MenuEntry *entry)
     {
         if (Level::isInDrablands)
-            Process::Write8(AddressList::CameraXButtonToggle.addr, cameraToggle);
+            Process::Write8(AddressList::getAddress("CameraXButtonToggle"), cameraToggle);
     }
 
     // Force-toggles the top-screen camera shutter animation
@@ -136,7 +136,7 @@ namespace CTRPluginFramework
         {
             autoDisableCamShutter->Disable();
             entry->SetName("Disable camera shutter");
-            Process::Write32(AddressList::CameraShutter.addr, shutterVisible);
+            Process::Write32(AddressList::getAddress("CameraShutter"), shutterVisible);
         }
     }
 
@@ -145,10 +145,10 @@ namespace CTRPluginFramework
     void Miscellaneous::writeShutterDisable(MenuEntry *entry)
     {
         if (Level::isInDrablands())
-            Process::Write8(AddressList::CameraShutter.addr, shutterNotVisible);
+            Process::Write8(AddressList::getAddress("CameraShutter"), shutterNotVisible);
 
         // reset during very last execution after entry is disabled
         if (!entry->IsActivated())
-            Process::Write32(AddressList::CameraShutter.addr, shutterVisible);
+            Process::Write32(AddressList::getAddress("CameraShutter"), shutterVisible);
     }
 }

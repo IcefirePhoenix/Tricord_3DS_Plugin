@@ -65,7 +65,7 @@ namespace CTRPluginFramework
         for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
         {
             if (beamStatuses[iterateThruPlayers])
-                Process::Write8(AddressList::SwordBeamCD.addr + (PLAYER_OFFSET * iterateThruPlayers), minBeamCooldownTimer);
+                Process::Write8(AddressList::getAddress("SwordBeamCD") + (PLAYER_OFFSET * iterateThruPlayers), minBeamCooldownTimer);
         }
     }
 }
