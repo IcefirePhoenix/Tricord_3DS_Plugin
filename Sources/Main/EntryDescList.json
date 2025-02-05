@@ -601,7 +601,7 @@
         {
             "name": "jinxed_note",
             "content": {
-                "intro": "Toggles jinxed status, which is normally only obtainable if a player has been attacked by a \"dark\" enemy variant. Players that are jinxed cannot use their sword or equipped item.",
+                "intro": "Toggles jinxed status, which is normally only obtainable if a player has been attacked by a \"dark\" enemy variant. Players that are jinxed CAN still use their sword or equipped item.",
                 "note": "",
                 "hotkeys": {},
                 "modeCompatibility": 2,
