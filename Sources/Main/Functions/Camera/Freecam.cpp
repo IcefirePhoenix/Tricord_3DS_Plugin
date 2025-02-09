@@ -53,6 +53,12 @@ namespace CTRPluginFramework
 			manageDynamicCamShifts(true);
 			manageZ_AxisReturnShift(true);
 
+			// prevent overlap with X-button screenshot ability...
+			if (isFreecamInUse)
+				Miscellaneous::writeCameraEdits(false);
+			else
+				Miscellaneous::writeCameraEdits(Miscellaneous::getCameraStatus());
+
 			// unhook camera from player...
 			OSD::Notify(isFreecamInUse ? "[FREECAM] Freecam in-use." : "[FREECAM] Freecam disabled.");
 			setCameraType(CUTSCENE);

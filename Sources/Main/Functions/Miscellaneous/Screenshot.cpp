@@ -8,6 +8,8 @@ namespace CTRPluginFramework
     MenuEntry *autoWriteCameraStatus;
     MenuEntry *autoDisableCamShutter;
 
+    Clock SS_Timer;
+
     u8 shutterNotVisible = 0x0, shutterVisible = 0x1;
     bool cameraToggle, showPhoto;
 
@@ -117,11 +119,33 @@ namespace CTRPluginFramework
         }
     }
 
-    // Helper funcion to write X button edits to memory
-    void Miscellaneous::writeCameraEdits(MenuEntry *entry)
+    // Maintains X button edits
+    void Miscellaneous::keepCameraEdits(MenuEntry *entry)
+    {
+        if (entry->WasJustActivated())
+            writeCameraEdits(cameraToggle);
+        else
+        {
+            // one-time possible write per loading screen
+            if (GeneralHelpers::isLoadingScreen() && SS_Timer.HasTimePassed(Seconds(5)))
+            {
+                writeCameraEdits(cameraToggle);
+                SS_Timer.Restart();
+            }
+        }
+    }
+
+    // Helper function to write X button edits to memory
+    void Miscellaneous::writeCameraEdits(bool allowCamUsage)
     {
         if (Level::isInDrablands)
-            Process::Write8(AddressList::getAddress("CameraXButtonToggle"), cameraToggle);
+            Process::Write8(AddressList::getAddress("CameraXButtonToggle"), allowCamUsage);
+    }
+
+    // For external functions that need to check X button toggle status
+    bool Miscellaneous::getCameraStatus(void)
+    {
+        return cameraToggle;
     }
 
     // Force-toggles the top-screen camera shutter animation
