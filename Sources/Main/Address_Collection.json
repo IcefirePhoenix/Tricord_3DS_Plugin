@@ -1561,6 +1561,14 @@
             }
         },
         {
+            "name": "RotationOffset",
+            "regionAddrs": {
+                "usaAddress": "0x00731A64",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
             "name": "ArrowIndicatorColorBot",
             "regionAddrs": {
                 "usaAddress": "0x32D91B24",

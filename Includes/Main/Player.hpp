@@ -72,9 +72,8 @@ namespace CTRPluginFramework
         static void doppelsToPlayer(MenuEntry* entry);
 
         static void disableOffset(MenuEntry *entry);
-        static void adjustOffset(MenuEntry *entry);
         static void resetOffset(void);
-        static void overwriteOffset(float adjustment);
+        static void overwriteOffset(double adjustment);
 
         template <typename T>
         static void writePlayerChanges(int editSize, u8 &playerStatus, u32 address, T trueValue, T falseValue);
