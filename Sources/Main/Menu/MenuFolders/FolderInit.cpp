@@ -186,8 +186,8 @@ namespace CTRPluginFramework
         menuFreecam = (EntryWithHotkey(new MenuEntry("Use Freecam button controls", Freecam::useFreecam, DescUtils::getDesc("freecam_note")),
         {
             Hotkey(Key::L, "Enable/Disable Freecam"),
-            Hotkey(Key::R, "Toggle camera lock"),
-            Hotkey(Key::L | Key::R, "Reset camera"),
+            Hotkey(Key::Start, "Toggle camera lock"),
+            Hotkey(Key::R, "Reset camera"),
             Hotkey(Key::X, "Shift camera north"),
             Hotkey(Key::B, "Shift camera south"),
             Hotkey(Key::A, "Shift camera east"),
@@ -202,12 +202,10 @@ namespace CTRPluginFramework
             Hotkey(Key::CPadRight, "Rotate clockwise (Z-axis)")
         }));
 
-        // TODO: view freecam hotkeys? entry nullptr pops up window with hotkey text...
-        //view_freecam_hotkeys_note: Previews your current Freecam hotkeys.
 
         editFreecamControls = new MenuEntry("Edit button controls", nullptr, Freecam::editHotkeys, DescUtils::getDesc("edit_freecam_hotkey_note"));
         editFreecamSen = new MenuEntry("Edit sensitivity", nullptr, Freecam::editSensitivity, DescUtils::getDesc("freecam_sensitivity_note"));
-        swapZoom = new MenuEntry("Swap to Orthographic Zoom", nullptr, Freecam::setZoomType, DescUtils::getDesc("zoom_swap_note"));
+        swapZoom = new MenuEntry("Swap to Perspective Zoom", nullptr, Freecam::setZoomType, DescUtils::getDesc("zoom_swap_note"));
 
         editFreecamControls->SetAltIcon(false);
 
@@ -227,11 +225,11 @@ namespace CTRPluginFramework
         *costume += cosmetic;
 
         // TODO: restore after custom costume model loaders are ready...
-        // triggerCostumeSlots = new MenuEntry("Open Custom Costume Slots", nullptr, Costume::openCustomCostumeSlots);
-        // menuCostumeSlotA = new MenuEntry("   Set custom costume slot A", nullptr, Costume::selectCostumeID, slotANote);
-        // menuCostumeSlotB = new MenuEntry("   Set custom costume slot B", nullptr, Costume::selectCostumeID);
-        // menuCostumeSlotC = new MenuEntry("   Set custom costume slot C", nullptr, Costume::selectCostumeID);
-        // menuCostumeSlotD = new MenuEntry("   Set custom costume slot D", nullptr, Costume::selectCostumeID);
+        triggerCostumeSlots = new MenuEntry("Open Custom Costume Slots", nullptr, Costume::openCustomCostumeSlots);
+        menuCostumeSlotA = new MenuEntry("   Set custom costume slot A", nullptr, Costume::selectCostumeID, DescUtils::getDesc("slot_A_note"));
+        menuCostumeSlotB = new MenuEntry("   Set custom costume slot B", nullptr, Costume::selectCostumeID);
+        menuCostumeSlotC = new MenuEntry("   Set custom costume slot C", nullptr, Costume::selectCostumeID);
+        menuCostumeSlotD = new MenuEntry("   Set custom costume slot D", nullptr, Costume::selectCostumeID);
         restoreGreatFairy = new MenuEntry("Restore Great Fairy Costume", Costume::greatFairyEnable, DescUtils::getDesc("restore_fairy_note"));
 
         // add to costume folder + hide by default
@@ -242,15 +240,15 @@ namespace CTRPluginFramework
         // *costume += menuCostumeSlotD;
         *costume += restoreGreatFairy;
 
-        // menuCostumeSlotA->Hide();
-        // menuCostumeSlotB->Hide();
-        // menuCostumeSlotC->Hide();
-        // menuCostumeSlotD->Hide();
+        menuCostumeSlotA->Hide();
+        menuCostumeSlotB->Hide();
+        menuCostumeSlotC->Hide();
+        menuCostumeSlotD->Hide();
 
-        // menuCostumeSlotA->SetAltIcon(true);
-        // menuCostumeSlotB->SetAltIcon(true);
-        // menuCostumeSlotC->SetAltIcon(true);
-        // menuCostumeSlotD->SetAltIcon(true);
+        menuCostumeSlotA->SetAltIcon(true);
+        menuCostumeSlotB->SetAltIcon(true);
+        menuCostumeSlotC->SetAltIcon(true);
+        menuCostumeSlotD->SetAltIcon(true);
 
         *costume += new MenuEntry("Change Player Costume", nullptr, Costume::changeLinkCostume, DescUtils::getDesc("change_costume_note"));
         *costume += new MenuEntry("Prevent Doppel Costume resets", nullptr, Costume::preventDoppelLobbyReset, DescUtils::getDesc("prevent_doppel_reset_note"));
@@ -293,7 +291,7 @@ namespace CTRPluginFramework
         *miscellaneous += new MenuEntry("Force instant text boxes", nullptr, Miscellaneous::manageInstantText, DescUtils::getDesc("instant_text_note"));
 
         // auto-managed by plugin; hidden from users...
-        autoWriteCameraStatus = new MenuEntry("Toggle camera status (auto)", Miscellaneous::writeCameraEdits);
+        autoWriteCameraStatus = new MenuEntry("Toggle camera status (auto)", Miscellaneous::keepCameraEdits);
         autoDisableCamShutter = new MenuEntry("Disable camera shutter (auto)", Miscellaneous::writeShutterDisable);
         autoBeamCooldown = new MenuEntry("Set Beam Cooldown (auto)", Miscellaneous::setBeamCooldown);
     }
@@ -359,8 +357,8 @@ namespace CTRPluginFramework
         *overlay += new MenuEntry("Force visibility of Treasure Chest contents", nullptr, Rendering::seeChestContents, DescUtils::getDesc("chest_visible_note"));
         *overlay += new MenuEntry("Swap single player loading screen", nullptr, Rendering::swapSPLoadingScreen, DescUtils::getDesc("load_sp_screen_note"));
 
-        *face += new MenuEntry("Enable custom facial expressions", FaceSelMenu::maintainEdits, DescUtils::getDesc("face_expr_enable_note"));
-        *face += new MenuEntry("Edit idle facial expression", nullptr, Rendering::editFaceExpr, DescUtils::getDesc("face_expr_sel_note"));
+        // *face += new MenuEntry("Enable custom facial expressions", FaceSelMenu::maintainEdits, DescUtils::getDesc("face_expr_enable_note"));
+        // *face += new MenuEntry("Edit idle facial expression", nullptr, Rendering::editFaceExpr, DescUtils::getDesc("face_expr_sel_note"));
         *texture += face;
 
         *texture += new MenuEntry("Swap Link textures", nullptr, Rendering::swapLinkTexture, DescUtils::getDesc("swap_link_tex_note"));
@@ -453,8 +451,8 @@ namespace CTRPluginFramework
 
     void InitTFH_Settings(PluginMenu &menu)
     {
-        // pretendoOnlinePatchManager = new MenuEntry("Pretendo Patch (auto)", Miscellaneous::applyPretendoPatch);
-        // rotationOffsetManager = new MenuEntry("Disable rotation offset (auto)", Player::disableOffset);
-        // doppelCostumeStageResetManager = new MenuEntry("Disable Doppel costume stage reset (auto)", Costume::preventDoppelStageReset);
+        pretendoOnlinePatchManager = new MenuEntry("Pretendo Patch (auto)", Miscellaneous::applyPretendoPatch);
+        rotationOffsetManager = new MenuEntry("Disable rotation offset (auto)", Player::disableOffset);
+        doppelCostumeStageResetManager = new MenuEntry("Disable Doppel costume stage reset (auto)", Costume::preventDoppelStageReset);
     }
 }
