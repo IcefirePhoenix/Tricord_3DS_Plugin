@@ -242,15 +242,15 @@ namespace CTRPluginFramework
         // *costume += menuCostumeSlotD;
         *costume += restoreGreatFairy;
 
-        menuCostumeSlotA->Hide();
-        menuCostumeSlotB->Hide();
-        menuCostumeSlotC->Hide();
-        menuCostumeSlotD->Hide();
+        // menuCostumeSlotA->Hide();
+        // menuCostumeSlotB->Hide();
+        // menuCostumeSlotC->Hide();
+        // menuCostumeSlotD->Hide();
 
-        menuCostumeSlotA->SetAltIcon(true);
-        menuCostumeSlotB->SetAltIcon(true);
-        menuCostumeSlotC->SetAltIcon(true);
-        menuCostumeSlotD->SetAltIcon(true);
+        // menuCostumeSlotA->SetAltIcon(true);
+        // menuCostumeSlotB->SetAltIcon(true);
+        // menuCostumeSlotC->SetAltIcon(true);
+        // menuCostumeSlotD->SetAltIcon(true);
 
         *costume += new MenuEntry("Change Player Costume", nullptr, Costume::changeLinkCostume, DescUtils::getDesc("change_costume_note"));
         *costume += new MenuEntry("Prevent Doppel Costume resets", nullptr, Costume::preventDoppelLobbyReset, DescUtils::getDesc("prevent_doppel_reset_note"));
@@ -453,8 +453,8 @@ namespace CTRPluginFramework
 
     void InitTFH_Settings(PluginMenu &menu)
     {
-        pretendoOnlinePatchManager = new MenuEntry("Pretendo Patch (auto)", Miscellaneous::applyPretendoPatch);
-        rotationOffsetManager = new MenuEntry("Disable rotation offset (auto)", Player::disableOffset);
-        doppelCostumeStageResetManager = new MenuEntry("Disable Doppel costume stage reset (auto)", Costume::preventDoppelStageReset);
+        // pretendoOnlinePatchManager = new MenuEntry("Pretendo Patch (auto)", Miscellaneous::applyPretendoPatch);
+        // rotationOffsetManager = new MenuEntry("Disable rotation offset (auto)", Player::disableOffset);
+        // doppelCostumeStageResetManager = new MenuEntry("Disable Doppel costume stage reset (auto)", Costume::preventDoppelStageReset);
     }
 }
