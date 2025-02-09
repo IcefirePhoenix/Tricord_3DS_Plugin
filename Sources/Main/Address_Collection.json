@@ -81,7 +81,7 @@
             }
         },
         {
-            "name": "CameraRotationZ",
+            "name": "CameraRotationY",
             "regionAddrs": {
                 "usaAddress": "0x32C81524",
                 "eurAddress": "0x32C815A4",

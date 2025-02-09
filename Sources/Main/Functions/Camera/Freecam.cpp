@@ -17,7 +17,7 @@ namespace CTRPluginFramework
 	bool usePerspectiveZoom = false;
 
 	u32 cameraX_Rotation;
-	u32 cameraZ_Rotation;
+	u32 cameraY_Rotation;
 	u32 rotationFactor = 0x02000000;
 
 	float shiftSensitivity = 0.2;
@@ -40,7 +40,7 @@ namespace CTRPluginFramework
 		if (!entry->IsActivated())
 		{
 			manageDynamicCamShifts(false);
-			manageZ_AxisReturnShift(false);
+			manageY_AxisReturnShift(false);
 		}
 
 		// enable/disable freecam...
@@ -51,7 +51,7 @@ namespace CTRPluginFramework
 
 			// disable DYNAMIC camera movements...
 			manageDynamicCamShifts(true);
-			manageZ_AxisReturnShift(true);
+			manageY_AxisReturnShift(true);
 
 			// prevent overlap with X-button screenshot ability...
 			if (isFreecamInUse)
@@ -74,7 +74,7 @@ namespace CTRPluginFramework
 				isCameraLocked = !isCameraLocked;
 
 				manageDynamicCamShifts(true);
-				manageZ_AxisReturnShift(isCameraLocked);
+				manageY_AxisReturnShift(isCameraLocked);
 
 				// unhook/reattach camera to player...
 				setCameraType(isCameraLocked ? CUTSCENE : GAMEPLAY);
@@ -92,13 +92,13 @@ namespace CTRPluginFramework
 			{
 				// restore DYNAMIC camera behavior...
 				manageDynamicCamShifts(false);
-				manageZ_AxisReturnShift(true);
+				manageY_AxisReturnShift(true);
 
 				// reset rotation + zoom as these aren't tied to player coordinates...
 				Process::WriteFloat(AddressList::getAddress("PerspectiveZoom"), 1.0);
 				Process::Write32(AddressList::getAddress("OrthographicZoom"), 0x41D80000);
 				Process::Write32(AddressList::getAddress("CameraRotationX"), 0x271C71C6);
-				Process::Write32(AddressList::getAddress("CameraRotationZ"), 0x00000000);
+				Process::Write32(AddressList::getAddress("CameraRotationY"), 0x00000000);
 
 				Player::resetOffset();
 
@@ -111,7 +111,7 @@ namespace CTRPluginFramework
 					setCameraType(CUTSCENE);
 				}
 				else
-					manageZ_AxisReturnShift(false);
+					manageY_AxisReturnShift(false);
 
 				OSD::Notify("[FREECAM] Camera position has been reset.");
 			}
@@ -121,10 +121,10 @@ namespace CTRPluginFramework
 		if (isFreecamInUse == true)
 		{
 			if (entry->Hotkeys[3].IsDown())
-				shiftCamY(true); // south
+				shiftCamZ(true); // south
 
 			if (entry->Hotkeys[4].IsDown())
-				shiftCamY(false); // north
+				shiftCamZ(false); // north
 
 			if (entry->Hotkeys[5].IsDown())
 				shiftCamX(true); // east
@@ -151,10 +151,10 @@ namespace CTRPluginFramework
 				rotateCamX(false);
 
 			if (entry->Hotkeys[13].IsDown())
-				rotateCamZ(true);
+				rotateCamY(true);
 
 			if (entry->Hotkeys[14].IsDown())
-				rotateCamZ(false);
+				rotateCamY(false);
 		}
 
 		// prevent player from moving if Freecam is active...
@@ -178,12 +178,12 @@ namespace CTRPluginFramework
 	void shiftCamX(bool west)
 	{
 		float shiftAmount = west ? shiftSensitivity : -shiftSensitivity;
-		Process::ReadFloat(AddressList::getAddress("CameraPosX"), cameraZ_Coord);
-		Process::WriteFloat(AddressList::getAddress("CameraPosX"), (cameraZ_Coord + shiftAmount));
+		Process::ReadFloat(AddressList::getAddress("CameraPosX"), cameraX_Coord);
+		Process::WriteFloat(AddressList::getAddress("CameraPosX"), (cameraX_Coord + shiftAmount));
 	}
 
-	// Shifts the camera position along the Y-axis (north-south)
-	void shiftCamY(bool south)
+	// Shifts the camera position along the Z-axis (north-south)
+	void shiftCamZ(bool south)
 	{
 		float shiftAmount = south ? -shiftSensitivity : shiftSensitivity;
 		Process::ReadFloat(AddressList::getAddress("CameraPosZ"), cameraZ_Coord);
@@ -229,28 +229,28 @@ namespace CTRPluginFramework
 		Process::Write32(AddressList::getAddress("CameraRotationX"), cameraX_Rotation);
 	}
 
-	// Rotates the camera along the Z-axis
-	void rotateCamZ(bool counterclockwise)
+	// Rotates the camera along the Y-axis
+	void rotateCamY(bool counterclockwise)
 	{
 		s32 rotationScale = static_cast<s32>(rotationFactor * rotationSensitivity);
 
 		if (counterclockwise)
 			rotationScale = -rotationScale;
 
-		Process::Read32(AddressList::getAddress("CameraRotationZ"), cameraZ_Rotation);
-		Process::Write32(AddressList::getAddress("CameraRotationZ"), (cameraZ_Rotation + rotationScale));
+		Process::Read32(AddressList::getAddress("CameraRotationY"), cameraY_Rotation);
+		Process::Write32(AddressList::getAddress("CameraRotationY"), (cameraY_Rotation + rotationScale));
 	}
 
 	// Aligns the player's directional input with the camera's current rotation along the vertical axis
 	void adjustRotationMoveOffset(void)
 	{
-		double Z_rotationAsPercent = 0x0;
-		double maxRotationZ = static_cast<double>(0xFFFF0000);
+		double Y_rotationAsPercent = 0x0;
+		double maxRotationY = static_cast<double>(0xFFFF0000);
 
-		Process::Read32(AddressList::getAddress("CameraRotationZ"), cameraZ_Rotation);
-		Z_rotationAsPercent = (static_cast<double>(cameraZ_Rotation)) / maxRotationZ;
+		Process::Read32(AddressList::getAddress("CameraRotationY"), cameraY_Rotation);
+		Y_rotationAsPercent = (static_cast<double>(cameraY_Rotation)) / maxRotationY;
 
-		Player::overwriteOffset(Z_rotationAsPercent * 360.0);
+		Player::overwriteOffset(Y_rotationAsPercent * 360.0);
 	}
 
 	// Allows the Freecam's hotkeys to be reconfigured
@@ -283,8 +283,8 @@ namespace CTRPluginFramework
 			opts.push_back(std::string("Lower camera"));
 			opts.push_back(std::string("Counterclockwise X-rotation"));
 			opts.push_back(std::string("Clockwise X-rotation"));
-			opts.push_back(std::string("Counterclockwise Z-rotation"));
-			opts.push_back(std::string("Clockwise Z-rotation"));
+			opts.push_back(std::string("Counterclockwise Y-rotation"));
+			opts.push_back(std::string("Clockwise Y-rotation"));
 
 			menu.GetMessage() = title;
 			menu.Populate(opts);
@@ -324,7 +324,7 @@ namespace CTRPluginFramework
 	}
 
 	// Toggles the vertical axis gradual return function, allowing the Freecam to reset its Z-position instantly
-	void manageZ_AxisReturnShift(bool disableGradualShifts)
+	void manageY_AxisReturnShift(bool disableGradualShifts)
 	{
 		Process::Patch(AddressList::getAddress("VerticalCamShiftUpwards"), disableGradualShifts ? 0x8A000002 : 0x9A000002);
 		Process::Patch(AddressList::getAddress("VerticalCamShiftDownwards"), disableGradualShifts ? 0x2A000009 : 0x3A000009);
