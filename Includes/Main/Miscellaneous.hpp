@@ -50,7 +50,9 @@ namespace CTRPluginFramework
         static void selectLinkBeam(MenuEntry* entry);
         static void setBeamCooldown(MenuEntry* entry);
         static void toggleCameraButton(MenuEntry* entry);
-        static void writeCameraEdits(MenuEntry* entry);
+        static void keepCameraEdits(MenuEntry *entry);
+        static void writeCameraEdits(bool allowCamUsage);
+        static bool getCameraStatus(void);
         static void setLobbyBallCounter(MenuEntry* entry);
         static void toggleCameraShutter (MenuEntry* entry);
         static void writeShutterDisable(MenuEntry* entry);
