@@ -337,7 +337,7 @@
             "name": "freecam_note",
             "content": {
                 "intro": "Enables unrestricted camera movement along all axes with zoom + rotation options. The camera can also be locked to prevent auto-resets when switching Doppels, using an item, or dropping into the fall plane.",
-                "note": "Hotkeys can be edited. Current hotkeys can be viewed by selecting the \"View Hotkeys\" entry below.",
+                "note": "Hotkeys can be edited. Current hotkeys can be viewed below.",
                 "hotkeys": {},
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -346,7 +346,7 @@
         {
             "name": "edit_freecam_hotkey_note",
             "content": {
-                "intro": "Allows you to customize the current hotkeys for Freecam. Current hotkeys can be viewed by selecting the \"View Hotkeys\" entry below.",
+                "intro": "Allows you to customize the current hotkeys for Freecam. Current hotkeys are listed in Freecam's description.",
                 "note": "",
                 "hotkeys": {},
                 "modeCompatibility": 1,
