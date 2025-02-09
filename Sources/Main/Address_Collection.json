@@ -105,6 +105,22 @@
             }
         },
         {
+            "name": "VerticalCamShiftUpwards",
+            "regionAddrs": {
+                "usaAddress": "0x006A2494",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "VerticalCamShiftDownwards",
+            "regionAddrs": {
+                "usaAddress": "0x006A2478",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
             "name": "HeartsTakeHealth",
             "regionAddrs": {
                 "usaAddress": "0x0015CA04",

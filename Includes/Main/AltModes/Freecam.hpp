@@ -11,22 +11,24 @@ namespace CTRPluginFramework
     extern MenuEntry* editFreecamSen;
     extern MenuEntry* swapZoom;
 
-    void shiftCamNorth(void);
+    enum cameraMode
+    {
+        GAMEPLAY,
+        DYNAMIC,
+        CUTSCENE,
+        CAM_ANIMATION
+    };
+
+    bool setCameraType(cameraMode mode);
     void shiftCamSouth(void);
-    void shiftCamEast(void);
     void shiftCamWest(void);
-    void zoomCamIn(void);
-    void zoomCamOut(void);
-    void raiseCam(void);
-    void lowerCam(void);
-    void rotateCamXCounter(void);
-    void rotateCamXClockwise(void);
-    void rotateCamZCounter(void);
-    void rotateCamZClockwise(void);
-
-    void lockCamera(void);
+    void adjustCamZoom(bool zoomIn);
+    void adjustCamHeight(bool isRaise);
+    void rotateCamX(bool counterclockwise);
+    void rotateCamZ(bool counterclockwise);
+    void manageDynamicCamShifts(bool reset);
+    void manageZ_AxisReturnShift(bool disableGradualShifts);
     void manageFreecamPlayerLock(void);
-
     float setSensitivity(std::string message);
 
     class Freecam

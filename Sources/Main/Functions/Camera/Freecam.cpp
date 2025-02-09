@@ -4,231 +4,245 @@
 namespace CTRPluginFramework
 {
 	// TODO: cam-anim freeze bypass in boss stages (remove support?)
-	// TODO: player movement compensation
+	// TODO: set camera on X link -> hotkey
+	// TODO: disable Start/Select behavior -> Pause Menu
 
-    MenuEntry* menuFreecam;
+	MenuEntry* menuFreecam;
     MenuEntry* editFreecamControls;
     MenuEntry* editFreecamSen;
     MenuEntry* swapZoom;
 
-	float cameraXcoord;
-	float cameraYcoord;
-	float cameraZcoord;
-	float cameraXrotation;
-	float cameraZrotation;
-	float cameraZoom;
+	bool isFreecamInUse;
+	bool isCameraLocked;
+	bool usePerspectiveZoom = false;
 
-	enum cameraMode { GAMEPLAY, DYNAMIC, CUTSCENE, CAM_ANIMATION };
+	u32 cameraX_Rotation;
+	u32 cameraZ_Rotation;
+	u32 rotationFactor = 0x02000000;
 
 	float shiftSensitivity = 0.2;
 	float heightSensitivity = 0.6;
 	float zoomSensitivity = 0.03;
 	float rotationSensitivity = 0.5;
+	float cameraX_Coord;
+	float cameraY_Coord;
+	float cameraZ_Coord;
+	float cameraZoom;
+
 	// float CS_DP_ShiftDistance;
-	//
 
-	u32 cameraXrawValue;
-	u32 cameraZrawValue;
+	/* ------------------ */
 
-	bool isFreecamInUse;
-	bool isCameraLocked;
-	bool usePerspectiveZoom = true;
+	// Driver code for Freecam
+	void Freecam::useFreecam(MenuEntry* entry)
+	{
+		// if Freecam has been turned off, restore DYNAMIC camera shift ability...
+		if (!entry->IsActivated())
+		{
+			manageDynamicCamShifts(false);
+			manageZ_AxisReturnShift(false);
+		}
 
-	std::string cameraLockStatus = "";
-
-	void Freecam::useFreecam(MenuEntry* entry) {
-		// enable/disable freecam
-		if (entry->Hotkeys[0].IsPressed()) {
+		// enable/disable freecam...
+		if (entry->Hotkeys[0].IsPressed())
+		{
 			isFreecamInUse = !isFreecamInUse;
+			isCameraLocked = true;
 
-			int freecamStatus = isFreecamInUse ? static_cast<int>(CUTSCENE) : static_cast<int>(GAMEPLAY);
-			std::string notif = isFreecamInUse ? "[FREECAM] Freecam in-use." : "[FREECAM] Freecam disabled.";
+			// disable DYNAMIC camera movements...
+			manageDynamicCamShifts(true);
+			manageZ_AxisReturnShift(true);
 
-			Process::Write8(AddressList::getAddress("CameraMode"), freecamStatus);
-			OSD::Notify(notif);
+			// unhook camera from player...
+			OSD::Notify(isFreecamInUse ? "[FREECAM] Freecam in-use." : "[FREECAM] Freecam disabled.");
+			setCameraType(CUTSCENE);
 		}
 
-		manageFreecamPlayerLock();
+		// toggle camera lock...
+		if (entry->Hotkeys[1].IsPressed())
+		{
+			if (isFreecamInUse && isCameraLocked)
+				OSD::Notify("[FREECAM] Cannot disengage camera lock while Freecam is active.");
+			else
+			{
+				isCameraLocked = !isCameraLocked;
 
-		// toggle camera lock
-		if (entry->Hotkeys[1].IsPressed()) {
-			isCameraLocked = !isCameraLocked;
+				manageDynamicCamShifts(true);
+				manageZ_AxisReturnShift(isCameraLocked);
 
-			std::string lockNotif = isFreecamInUse ? "locked." : "unlocked.";
-			OSD::Notify("[FREECAM] Camera position has been manually" + lockNotif);
+				// unhook/reattach camera to player...
+				setCameraType(isCameraLocked ? CUTSCENE : GAMEPLAY);
+
+				std::string notif = isCameraLocked ? "locked in-place." : "re-attached to player.";
+				OSD::Notify("[FREECAM] Camera position has been " + notif);
+			}
 		}
 
-		lockCamera();
+		// reset camera position...
+		if (entry->Hotkeys[2].IsPressed())
+		{
+			// re-orient camera back to player...
+			if (setCameraType(GAMEPLAY))
+			{
+				// restore DYNAMIC camera behavior...
+				manageDynamicCamShifts(false);
+				manageZ_AxisReturnShift(true);
 
-		// reset camera
-		if (entry->Hotkeys[2].IsPressed()) {
-			Process::Write8(AddressList::getAddress("CameraMode"), static_cast<int>(GAMEPLAY)); // use GAMEPLAY cam to re-orient camera back to player
+				// reset rotation + zoom as these aren't tied to player coordinates...
+				Process::WriteFloat(AddressList::getAddress("PerspectiveZoom"), 1.0);
+				Process::Write32(AddressList::getAddress("OrthographicZoom"), 0x41D80000);
+				Process::Write32(AddressList::getAddress("CameraRotationX"), 0x271C71C6);
+				Process::Write32(AddressList::getAddress("CameraRotationZ"), 0x00000000);
 
-			// reset rotation and perspective zoom as this doesn't happen automatically
-			Process::WriteFloat(AddressList::getAddress("PerspectiveZoom"), 1.0);
-			Process::Write32(AddressList::getAddress("OrthographicZoom"), 0x41D80000);
-			Process::Write32(AddressList::getAddress("CameraRotationX"), 0x271C71C6);
-			Process::Write32(AddressList::getAddress("CameraRotationZ"), 0x00000000);
+				Player::resetOffset();
 
-			Player::resetOffset();
+				// camera previously configured to unhook from player...
+				if (isCameraLocked)
+				{
+					Sleep(Milliseconds(100)); // allow time to reorient camera before desync...
 
-			if (isFreecamInUse)
-				Process::Write8(AddressList::getAddress("CameraMode"), static_cast<int>(CUTSCENE)); // if freecam is activated, use CUTSCENE cam
+					manageDynamicCamShifts(true);
+					setCameraType(CUTSCENE);
+				}
+				else
+					manageZ_AxisReturnShift(false);
 
-			OSD::Notify("[FREECAM] Camera position has been reset.");
+				OSD::Notify("[FREECAM] Camera position has been reset.");
+			}
 		}
 
-		// basic camera controls
-		if (isFreecamInUse == true) {
+		// check status of camera controls...
+		if (isFreecamInUse == true)
+		{
 			if (entry->Hotkeys[3].IsDown())
-				shiftCamSouth();
+				shiftCamY(true); // south
 
 			if (entry->Hotkeys[4].IsDown())
-				shiftCamNorth();
+				shiftCamY(false); // north
 
 			if (entry->Hotkeys[5].IsDown())
-				shiftCamEast();
+				shiftCamX(true); // east
 
 			if (entry->Hotkeys[6].IsDown())
-				shiftCamWest();
+				shiftCamX(false); // west
 
 			if (entry->Hotkeys[7].IsDown())
-				zoomCamIn();
+				adjustCamZoom(true);
 
 			if (entry->Hotkeys[8].IsDown())
-				zoomCamOut();
+				adjustCamZoom(false);
 
 			if (entry->Hotkeys[9].IsDown())
-				raiseCam();
+				adjustCamHeight(true);
 
 			if (entry->Hotkeys[10].IsDown())
-				lowerCam();
+				adjustCamHeight(false);
 
 			if (entry->Hotkeys[11].IsDown())
-				rotateCamXCounter();
+				rotateCamX(true);
 
 			if (entry->Hotkeys[12].IsDown())
-				rotateCamXClockwise();
+				rotateCamX(false);
 
 			if (entry->Hotkeys[13].IsDown())
-				rotateCamZCounter();
+				rotateCamZ(true);
 
 			if (entry->Hotkeys[14].IsDown())
-				rotateCamZClockwise();
+				rotateCamZ(false);
 		}
+
+		// prevent player from moving if Freecam is active...
+		GeneralHelpers::managePlayerLock(isFreecamInUse);
+		// allow camera lock to be maintained after entering new area...
+		if (GeneralHelpers::isLoadingScreen() && isCameraLocked)
+			setCameraType(CUTSCENE);
 	}
 
-	void shiftCamNorth(void) {
-		Process::ReadFloat(AddressList::getAddress("CameraPosZ"), cameraZcoord);
-		Process::WriteFloat(AddressList::getAddress("CameraPosZ"), (cameraZcoord + shiftSensitivity));
+	// Sets the current camera mode -- used to toggle the camera's ability to follow the player
+	bool setCameraType(cameraMode mode)
+	{
+		return Process::Write8(AddressList::getAddress("CameraMode"), static_cast<int>(mode));
 	}
 
-	void shiftCamSouth(void) {
-		Process::ReadFloat(AddressList::getAddress("CameraPosZ"), cameraZcoord);
-		Process::WriteFloat(AddressList::getAddress("CameraPosZ"), (cameraZcoord - shiftSensitivity));
+	// Shifts the camera position along the X-axis (east-west)
+	void shiftCamX(bool west)
+	{
+		float shiftAmount = west ? shiftSensitivity : -shiftSensitivity;
+		Process::ReadFloat(AddressList::getAddress("CameraPosX"), cameraZ_Coord);
+		Process::WriteFloat(AddressList::getAddress("CameraPosX"), (cameraZ_Coord + shiftAmount));
 	}
 
-	void shiftCamEast(void) {
-		Process::ReadFloat(AddressList::getAddress("CameraPosX"), cameraXcoord);
-		Process::WriteFloat(AddressList::getAddress("CameraPosX"), (cameraXcoord + shiftSensitivity));
+	// Shifts the camera position along the Y-axis (north-south)
+	void shiftCamY(bool south)
+	{
+		float shiftAmount = south ? -shiftSensitivity : shiftSensitivity;
+		Process::ReadFloat(AddressList::getAddress("CameraPosZ"), cameraZ_Coord);
+		Process::WriteFloat(AddressList::getAddress("CameraPosZ"), (cameraZ_Coord + shiftAmount));
 	}
 
-	void shiftCamWest(void) {
-		Process::ReadFloat(AddressList::getAddress("CameraPosX"), cameraXcoord);
-		Process::WriteFloat(AddressList::getAddress("CameraPosX"), (cameraXcoord - shiftSensitivity));
-	}
-
-	void zoomCamIn(void) {
+	// Adjusts the camera's zoom level
+	void adjustCamZoom(bool zoomIn)
+	{
 		u32 zoomType = usePerspectiveZoom ? AddressList::getAddress("PerspectiveZoom") : AddressList::getAddress("OrthographicZoom");
+		float zoomAmount = zoomIn ? zoomSensitivity : -zoomSensitivity;
 
 		Process::ReadFloat(zoomType, cameraZoom);
-		Process::WriteFloat(zoomType, (cameraZoom * (1 + zoomSensitivity)));
+		Process::WriteFloat(zoomType, (cameraZoom * (1 + zoomAmount)));
 	}
 
-	void zoomCamOut(void) {
-		u32 zoomType = usePerspectiveZoom ? AddressList::getAddress("PerspectiveZoom") : AddressList::getAddress("OrthographicZoom");
-
-		Process::ReadFloat(zoomType, cameraZoom);
-		Process::WriteFloat(zoomType, (cameraZoom * (1 - zoomSensitivity)));
+	// Sets the camera's position along the Z-axis (vertical axis)
+	void adjustCamHeight(bool isRaise)
+	{
+		float shiftAmount = isRaise ? heightSensitivity : -heightSensitivity;
+		Process::ReadFloat(AddressList::getAddress("CameraPosY"), cameraY_Coord);
+		Process::WriteFloat(AddressList::getAddress("CameraPosY"), (cameraY_Coord + shiftAmount));
 	}
 
-	void raiseCam(void) {
-		Process::ReadFloat(AddressList::getAddress("CameraPosY"), cameraYcoord);
-		Process::WriteFloat(AddressList::getAddress("CameraPosY"), (cameraYcoord + heightSensitivity));
+	// Rotates the camera along the X-axis. Overflow correction has also been (lazily) recreated here
+	void rotateCamX(bool counterclockwise)
+	{
+		u32 maxThreshold = 0x40000000;
+		s32 rotationScale = static_cast<s32>(rotationFactor * rotationSensitivity);
+
+		if (counterclockwise)
+			rotationScale = -rotationScale;
+
+		Process::Read32(AddressList::getAddress("CameraRotationX"), cameraX_Rotation);
+		cameraX_Rotation = cameraX_Rotation + rotationScale;
+
+		// manual adjustments to prevent overflow...
+		if (cameraX_Rotation > maxThreshold)
+			cameraX_Rotation = counterclockwise ? 0x0000FFFF : 0x3FFF0000;
+		else if (cameraX_Rotation < 0x0000FFFF)
+			cameraX_Rotation = counterclockwise ? 0x0 : cameraX_Rotation;
+
+		Process::Write32(AddressList::getAddress("CameraRotationX"), cameraX_Rotation);
 	}
 
-	void lowerCam(void) {
-		Process::ReadFloat(AddressList::getAddress("CameraPosY"), cameraYcoord);
-		Process::WriteFloat(AddressList::getAddress("CameraPosY"), (cameraYcoord - heightSensitivity));
-	}
+	// Rotates the camera along the Z-axis
+	void rotateCamZ(bool counterclockwise)
+	{
+		s32 rotationScale = static_cast<s32>(rotationFactor * rotationSensitivity);
 
-	void rotateCamXCounter(void) {
-		Process::ReadFloat(AddressList::getAddress("CameraRotationX"), cameraXrotation);
-		if ((cameraXrotation * rotationSensitivity) != 0.0)
-			Process::WriteFloat(AddressList::getAddress("CameraRotationX"), (cameraXrotation * rotationSensitivity));
+		if (counterclockwise)
+			rotationScale = -rotationScale;
 
-		// if value becomes invalid, fix it after
-		Process::Read32(AddressList::getAddress("CameraRotationX"), cameraXrawValue);
-		if (cameraXrawValue == 0x00000000)
-			Process::Write32(AddressList::getAddress("CameraRotationX"), 0x00000001);
-
-		adjustRotationMoveOffset();
-	}
-
-	void rotateCamXClockwise(void) {
-		Process::ReadFloat(AddressList::getAddress("CameraRotationX"), cameraXrotation);
-		Process::WriteFloat(AddressList::getAddress("CameraRotationX"), (cameraXrotation / rotationSensitivity));
-
-		// if value becomes invalid, fix it after
-		Process::Read32(AddressList::getAddress("CameraRotationX"), cameraXrawValue);
-		if (cameraXrawValue == 0x7F800000)
-			Process::Write32(AddressList::getAddress("CameraRotationX"), 0x7F7F0000);
-
-		adjustRotationMoveOffset();
-	}
-
-	void rotateCamZCounter(void) {
-		Process::ReadFloat(AddressList::getAddress("CameraRotationZ"), cameraZrotation);
-		Process::WriteFloat(AddressList::getAddress("CameraRotationZ"), (cameraZrotation * rotationSensitivity));
-
-		// if value becomes invalid, fix it after
-		Process::Read32(AddressList::getAddress("CameraRotationZ"), cameraZrawValue);
-		if (cameraZrawValue == 0x00000000)
-			Process::Write32(AddressList::getAddress("CameraRotationZ"), 0xFE7F0000);
-
-		if (cameraZrawValue == 0x000081FF || cameraZrawValue == 0x00008180)
-			Process::Write32(AddressList::getAddress("CameraRotationZ"), 0x00007E80);
-
-		if (cameraZrawValue == 0x80000000)
-			Process::Write32(AddressList::getAddress("CameraRotationZ"), 0x7F000000);
-	}
-
-	void rotateCamZClockwise(void) {
-		Process::ReadFloat(AddressList::getAddress("CameraRotationZ"), cameraZrotation);
-		Process::WriteFloat(AddressList::getAddress("CameraRotationZ"), (cameraZrotation / rotationSensitivity));
-
-		// if value becomes invalid, fix it after
-		Process::Read32(AddressList::getAddress("CameraRotationZ"), cameraZrawValue);
-		if (cameraZrawValue == 0x7F8F0000 || cameraZrawValue == 0x7F800000)
-			Process::Write32(AddressList::getAddress("CameraRotationZ"), 0x80800000);
-
-		if (cameraZrawValue == 0xFF7F0000 || cameraZrawValue == 0x00000000 || cameraZrawValue == 0xFF800000)
-			Process::Write32(AddressList::getAddress("CameraRotationZ"), 0x00800000);
-
+		Process::Read32(AddressList::getAddress("CameraRotationZ"), cameraZ_Rotation);
+		Process::Write32(AddressList::getAddress("CameraRotationZ"), (cameraZ_Rotation + rotationScale));
 	}
 
 	void Freecam::editHotkeys(MenuEntry* entry)
 	{
-		// placeholder
-		Keyboard kbd("dummy text");
+		Keyboard menu("");
 
 		std::string title;
 		StringVector opts;
 
-		bool loop = true;
-		kbd.CanAbort(false);
+		bool isMenuOpen = true;
+		menu.CanAbort(false);
 
-		while (loop) {
+		while (isMenuOpen)
+		{
 			title = "Choose a Freecam hotkey to edit.\n\nNote: ZL/ZR and C-stick controls are available\nonly on n2/3DS models.";
 
 			opts.clear();
@@ -249,14 +263,13 @@ namespace CTRPluginFramework
 			opts.push_back(std::string("Counterclockwise Z-rotation"));
 			opts.push_back(std::string("Clockwise Z-rotation"));
 
-			kbd.GetMessage() = title;
-			kbd.Populate(opts);
+			menu.GetMessage() = title;
+			menu.Populate(opts);
 
-			int chose = kbd.Open();
+			int chose = menu.Open();
 			if (chose == 0)
 			{
-				// end loop = exit the menu
-				loop = false;
+				isMenuOpen = false;
 				break;
 			}
 			else
@@ -264,7 +277,8 @@ namespace CTRPluginFramework
 		}
 	}
 
-	void lockCamera(void)
+	// Restores/patches out dynamic camera movements caused by item usage, Doppel swaps, swim boosts, etc.
+	void manageDynamicCamShifts(bool disableShifts)
 	{
 		u32 edits[8] =
 		{
@@ -278,7 +292,7 @@ namespace CTRPluginFramework
 			0x0A000008
 		};
 
-		int index = (isFreecamInUse == true || isCameraLocked == true) ? 0 : 4;
+		int index = disableShifts ? 0 : 4;
 
 		Process::Patch(AddressList::getAddress("DynamicCameraCheck"), edits[0 + index]);
 		Process::Patch(AddressList::getAddress("GameplayCameraCheck"), edits[1 + index]);
@@ -286,29 +300,32 @@ namespace CTRPluginFramework
 		Process::Patch(AddressList::getAddress("RetGameplayCameraInit"), edits[3 + index]);
 	}
 
-	void manageFreecamPlayerLock(void) {
-		GeneralHelpers::managePlayerLock(isFreecamInUse);
+	// Toggles the vertical axis gradual return function, allowing the Freecam to reset its Z-position instantly
+	void manageZ_AxisReturnShift(bool disableGradualShifts)
+	{
+		Process::Patch(AddressList::getAddress("VerticalCamShiftUpwards"), disableGradualShifts ? 0x8A000002 : 0x9A000002);
+		Process::Patch(AddressList::getAddress("VerticalCamShiftDownwards"), disableGradualShifts ? 0x2A000009 : 0x3A000009);
 	}
 
+	// Allows custom sensitivity levels to be chosen for each hotkey group
 	void Freecam::editSensitivity(MenuEntry* entry)
 	{
-		// placeholder
-		Keyboard kbd("dummy text");
+		Keyboard menu("");
 
-		std::string title;
+		std::string title = "Current Freecam sensitivity levels:\n\n";
 		StringVector opts;
 
-		bool loop = true;
-		kbd.CanAbort(false);
+		bool isMenuOpen = true;
+		menu.CanAbort(false);
 
-		while (loop) {
-			title = "Current Freecam sensitivity levels:\n\n";
+		while (isMenuOpen)
+		{
 			title.append("Shift sensitivity: " + std::to_string(shiftSensitivity));
 			title.append("\nHeight sensitivity: " + std::to_string(heightSensitivity));
 			title.append("\nZoom sensitivity: " + std::to_string(zoomSensitivity));
 			title.append("\nRotation sensitivity: " + std::to_string(rotationSensitivity));
 
-			// update bottom screen options
+			// update bottom screen options...
 			opts.clear();
 			opts.push_back(std::string("Set shift sensitivity"));
 			opts.push_back(std::string("Set height sensitivity"));
@@ -316,10 +333,11 @@ namespace CTRPluginFramework
 			opts.push_back(std::string("Set rotation sensitivity"));
 			opts.push_back(std::string("Save and exit"));
 
-			kbd.GetMessage() = title;
-			kbd.Populate(opts);
+			menu.GetMessage() = title;
+			menu.Populate(opts);
 
-			switch (kbd.Open()) {
+			switch (menu.Open())
+			{
 				case 0:
 					shiftSensitivity = setSensitivity("Shift Sensitivity Value\n\nRecommended values: [0.05 - 0.30]");
 					break;
@@ -333,14 +351,15 @@ namespace CTRPluginFramework
 					rotationSensitivity = setSensitivity("Rotation Sensitivity Value\n\nRecommended values: [0.10 - 0.50]");
 					break;
 				default:
-					// end loop = exit the menu...
-					loop = false;
+					isMenuOpen = false;
 					break;
 			}
 		}
 	}
 
-	float setSensitivity(std::string message) {
+	// Helper function to prompt user for custom sensitivity values
+	float setSensitivity(std::string message)
+	{
 		float result;
 
 		Keyboard sizeKB(message);
@@ -355,13 +374,13 @@ namespace CTRPluginFramework
 		return result;
 	}
 
-	void Freecam::setZoomType(MenuEntry* entry) {
+	// Toggles between Orthographic and Perspective Zoom
+	void Freecam::setZoomType(MenuEntry* entry)
+	{
 		usePerspectiveZoom = !usePerspectiveZoom;
 
 		std::string name = usePerspectiveZoom ? "Swap to Orthographic Zoom" : "Swap to Perspective Zoom";
 		swapZoom->SetName(name);
 	}
-
-	// TODO: set camera on X link -> hotkey
 }
 
