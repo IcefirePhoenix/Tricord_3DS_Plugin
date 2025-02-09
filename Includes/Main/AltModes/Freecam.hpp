@@ -26,6 +26,7 @@ namespace CTRPluginFramework
     void adjustCamHeight(bool isRaise);
     void rotateCamX(bool counterclockwise);
     void rotateCamZ(bool counterclockwise);
+    void adjustRotationMoveOffset(void);
     void manageDynamicCamShifts(bool reset);
     void manageZ_AxisReturnShift(bool disableGradualShifts);
     void manageFreecamPlayerLock(void);

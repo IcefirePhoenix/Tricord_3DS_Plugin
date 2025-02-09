@@ -5,7 +5,7 @@ namespace CTRPluginFramework
 {
     MenuEntry *rotationOffsetManager;
 
-    u32 maxOffset = 0xFFFFFFFF;
+    double maxOffset = 0xFFFFFFFF;
     float newOffset = 0.0;
 
     /* ------------------ */
@@ -39,31 +39,18 @@ namespace CTRPluginFramework
             overwriteOffset(5.0);   // vanilla
     }
 
-    // Allows custom rotation offsets
-    void Player::adjustOffset(MenuEntry* entry)
+    // Helper function to write rotation offset edits to memory | Note: accepts doubles for readability!
+    void Player::overwriteOffset(double adjustment)
     {
-        std::string offsetAsStr = "None";
-
-        // TODO: keyboard
-
-        offsetAsStr = (newOffset == 0.0) ? "None" : std::to_string(newOffset) << "degrees";
-
-        overwriteOffset(1.0);
-        entry->SetName("Set rotation offset: " << offsetAsStr);
-    }
-
-    // Helper function to write rotation offset edits to memory
-    // Note: accepts floats for readability!
-    void Player::overwriteOffset(float adjustment)
-    {
-        float adjustPercent;
-        u32 currOffset, adjustmentAsInt;
+        u32 currOffset;
+        u32 adjustmentAsInt;
+        double adjustPercent;
 
         Process::Read32(AddressList::getAddress("RotationOffset"), currOffset);
 
-        // convert adjustment to hex-based u32...
+        // convert adjustment to u32 int...
         adjustPercent = adjustment / 360.0;
-        adjustmentAsInt = static_cast<u32>(adjustPercent) * maxOffset;
+        adjustmentAsInt = static_cast<u32>(std::round(adjustPercent * maxOffset));
 
         // saves on write repetitions...
         if (currOffset != adjustmentAsInt)

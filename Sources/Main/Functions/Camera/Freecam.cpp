@@ -153,6 +153,10 @@ namespace CTRPluginFramework
 
 		// prevent player from moving if Freecam is active...
 		GeneralHelpers::managePlayerLock(isFreecamInUse);
+
+		// align player input with current vertical axis rotation...
+		adjustRotationMoveOffset();
+
 		// allow camera lock to be maintained after entering new area...
 		if (GeneralHelpers::isLoadingScreen() && isCameraLocked)
 			setCameraType(CUTSCENE);
@@ -231,6 +235,19 @@ namespace CTRPluginFramework
 		Process::Write32(AddressList::getAddress("CameraRotationZ"), (cameraZ_Rotation + rotationScale));
 	}
 
+	// Aligns the player's directional input with the camera's current rotation along the vertical axis
+	void adjustRotationMoveOffset(void)
+	{
+		double Z_rotationAsPercent = 0x0;
+		double maxRotationZ = static_cast<double>(0xFFFF0000);
+
+		Process::Read32(AddressList::getAddress("CameraRotationZ"), cameraZ_Rotation);
+		Z_rotationAsPercent = (static_cast<double>(cameraZ_Rotation)) / maxRotationZ;
+
+		Player::overwriteOffset(Z_rotationAsPercent * 360.0);
+	}
+
+	// Allows the Freecam's hotkeys to be reconfigured
 	void Freecam::editHotkeys(MenuEntry* entry)
 	{
 		Keyboard menu("");
