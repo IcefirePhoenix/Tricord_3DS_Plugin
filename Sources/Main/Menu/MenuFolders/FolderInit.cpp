@@ -198,8 +198,8 @@ namespace CTRPluginFramework
             Hotkey(Key::DPadDown, "Lower camera"),
             Hotkey(Key::CPadDown, "Rotate counterclockwise (X-axis)"),
             Hotkey(Key::CPadUp, "Rotate clockwise (X-axis)"),
-            Hotkey(Key::CPadLeft, "Rotate counterclockwise (Z-axis)"),
-            Hotkey(Key::CPadRight, "Rotate clockwise (Z-axis)")
+            Hotkey(Key::CPadLeft, "Rotate counterclockwise (Y-axis)"),
+            Hotkey(Key::CPadRight, "Rotate clockwise (Y-axis)")
         }));
 
 
