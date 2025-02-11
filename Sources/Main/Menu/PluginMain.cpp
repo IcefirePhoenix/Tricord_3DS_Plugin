@@ -60,20 +60,20 @@ namespace CTRPluginFramework
     void ManageTFH_Settings(void)
     {
         // TODO: is there a better way of doing this
-        if (Preferences::PretendoPatch)
+        if (Preferences::IsEnabled(Preferences::PretendoPatch))
             pretendoOnlinePatchManager->Enable();
         else
             pretendoOnlinePatchManager->Disable();
 
-        if (Preferences::DisableMoveOffset)
+        if (Preferences::IsEnabled(Preferences::DisableMoveOffset))
             rotationOffsetManager->Enable();
         else
             rotationOffsetManager->Disable();
 
-        if (Preferences::DoppelStageCostumeReset)
-            rotationOffsetManager->Enable();
+        if (Preferences::IsEnabled(Preferences::DoppelStageCostumeReset))
+            doppelCostumeStageResetManager->Enable();
         else
-            rotationOffsetManager->Disable();
+            doppelCostumeStageResetManager->Disable();
     }
 
     void InitSequence(FwkSettings &settings)
@@ -102,8 +102,8 @@ namespace CTRPluginFramework
     // This function only runs once at plugin startup
     int main(void)
     {
-        std::string title = "An advanced utility plugin made for\nThe Legend of Zelda: Tri Force Heroes packed with QoL features, solo and online-compatible cheats, and customizable gameplay options.\n\nForked from the original CTRPluginFramework\nblank template repository.";
-        PluginMenu *menu = new PluginMenu("Tricord", 0, 5, 0, title);
+        std::string title = "An advanced utility plugin made for\nThe Legend of Zelda: Tri Force Heroes packed with QoL features, solo and online-compatible cheats, and customizable gameplay options.\n\nForked from the original CTRPluginFramework\n repository.";
+        PluginMenu *menu = new PluginMenu("Tricord", 0, 5, 0, title); // change to actual tags
 
         InitSequence(FwkSettings::Get());
 
