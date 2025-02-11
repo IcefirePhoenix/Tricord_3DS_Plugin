@@ -121,7 +121,8 @@ namespace CTRPluginFramework
             Process::Patch(AddressList::getAddress("DoppelStageResetB"), 0x13A00018);
             Process::Patch(AddressList::getAddress("DoppelStageResetC"), 0x15C40064);
         }
-        else
+
+        if (entry->WasJustActivated())
         {
             Process::Patch(AddressList::getAddress("DoppelStageResetA"), 0xE320F000);
             Process::Patch(AddressList::getAddress("DoppelStageResetB"), 0xE320F000);
