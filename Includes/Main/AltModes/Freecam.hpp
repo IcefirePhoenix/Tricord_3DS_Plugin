@@ -20,8 +20,8 @@ namespace CTRPluginFramework
     };
 
     bool setCameraType(cameraMode mode);
-    void shiftCamSouth(void);
-    void shiftCamWest(void);
+    void shiftCamZ(bool south);
+    void shiftCamX(bool west);
     void adjustCamZoom(bool zoomIn);
     void adjustCamHeight(bool isRaise);
     void rotateCamX(bool counterclockwise);
