@@ -108,6 +108,9 @@ namespace CTRPluginFramework
         "Fabled Butterfly"
     };
 
+    /* ------------------ */
+
+    // Returns world ID, excluding regions that do not have materials associated with them
     int Material::selectMaterialWorld(void)
     {
         StringVector worldSelectionList = Level::worldList;
@@ -120,6 +123,7 @@ namespace CTRPluginFramework
         return chooseWorld.Open();
     }
 
+    // Returns material ID based on user selection
     int Material::selectMaterialIndiv(int selectedWorld)
     {
         int materialOffset = 0, chosenMaterial = -1;
@@ -180,11 +184,13 @@ namespace CTRPluginFramework
         return chosenMaterial;
     }
 
+    // Retrieves a material's external name given its ID
     std::string Material::getMaterialName(int world, int mat)
     {
         int finalMatID = mat - 20;
 
-        switch (world) {
+        switch (world)
+        {
             case 0:
                 return Material::otherMats[finalMatID];
             case 1:
@@ -207,10 +213,10 @@ namespace CTRPluginFramework
         return "";
     }
 
-    // TODO: review this
+    // Returns the current inventory count of a specified material
     int Material::getMaterialCount(int materialID)
     {
-        // is this needed
+        // TODO: implementation
         return 0;
     }
 }

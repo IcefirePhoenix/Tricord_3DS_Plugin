@@ -54,9 +54,6 @@ namespace CTRPluginFramework
 		Level(0x5F, "Desert Zone", "AbyssFoxtrot", false),
 		Level(0x60, "Shadow Zone", "AbyssGolf", false),
 		Level(0x61, "Baneful Zone", "AbyssHotel", false)
-
-		// Developer levels, Test levels, and Dummy levels are not added here
-		// Memory(?) issues with Citra when this array exceeded 0x5E elements...
 	};
 
 	const StringVector Level::hytopiaLevelList =
@@ -191,7 +188,7 @@ namespace CTRPluginFramework
         "Sky Realm Arena"
     };
 
-
+    // Returns level names from a specified region/world
     StringVector Level::getWorldNamesfromID(int ID, bool useNonLevels)
     {
         if (!useNonLevels)
@@ -226,6 +223,9 @@ namespace CTRPluginFramework
         }
     }
 
+    /* ------------------ */
+
+    // Helper function that returns possible world/region selections given a category
     int Level::selWorld(bool useDoT, bool useNonLevels)
     {
         StringVector worldSelectionList = Level::worldList;
@@ -247,12 +247,13 @@ namespace CTRPluginFramework
         return chooseWorld.Open();
     }
 
-    // TODO: right now this only uses woodlands-sky
+    // Retrieves world name given the ID | Note: only uses base levels
     std::string Level::worldIDToStr(int worldID)
     {
         return Level::worldList[worldID];
     }
 
+    // Retrieves level name given the ID
 	std::string Level::levelNameFromID(u8 levelID)
 	{
 		for (int iterator = 0; iterator < 45; iterator++)
@@ -263,6 +264,7 @@ namespace CTRPluginFramework
 		return ""; // wasn't found
 	}
 
+    // Retrieves level ID given external name
 	u8 Level::levelIDFromName(std::string name)
 	{
 		for (int iterator = 0; iterator < 45; iterator++)
@@ -273,6 +275,7 @@ namespace CTRPluginFramework
 		return -1; // wasn't found
 	}
 
+    // Retrieves the ID of the previous location
 	u8 Level::getPrevLevel(void)
 	{
 		u8 levelID;
@@ -281,7 +284,8 @@ namespace CTRPluginFramework
 		return levelID;
 	}
 
-	u8 Level::getCurrLevel(void)
+    // Retrieves the ID of the current location
+    u8 Level::getCurrLevel(void)
 	{
 		u8 levelID;
 		Process::Read8(AddressList::getAddress("CurrLevelID"), levelID);
@@ -289,7 +293,8 @@ namespace CTRPluginFramework
 		return levelID;
 	}
 
-	u8 Level::getCurrStage(void)
+    // Retrieves the ID of the current stage
+    u8 Level::getCurrStage(void)
 	{
 		u8 stageID;
 		Process::Read8(AddressList::getAddress("CurrStageID"), stageID);
@@ -297,7 +302,8 @@ namespace CTRPluginFramework
 		return stageID;
 	}
 
-	u8 Level::getCurrChallenge(void)
+    // Retrieves the ID of the current challenge, if any
+    u8 Level::getCurrChallenge(void)
 	{
 		u8 chalID;
 		Process::Read8(AddressList::getAddress("ChallengeID"), chalID);
@@ -305,7 +311,8 @@ namespace CTRPluginFramework
 		return chalID;
 	}
 
-	u32 Level::getElapsedTime(void)
+    // Retrieves the elapsed time since the level was started
+    u32 Level::getElapsedTime(void)
 	{
 		u32 elapsedTime;
 		Process::Read32(AddressList::getAddress("TimeElapsed"), elapsedTime);
@@ -313,43 +320,51 @@ namespace CTRPluginFramework
 		return elapsedTime;
 	}
 
+    // Overrides the current location ID
 	void Level::setCurrLevel(u8 levelID)
 	{
 		Process::Write8(AddressList::getAddress("CurrLevelID"), levelID);
 	}
 
-	void Level::setCurrStage(u8 stageID)
+    // Overrides the current stage ID
+    void Level::setCurrStage(u8 stageID)
 	{
 		Process::Write8(AddressList::getAddress("CurrStageID"), stageID);
 	}
 
-	void Level::setCurrChal(u8 chalID)
+    // Overrides the current challenge ID
+    void Level::setCurrChal(u8 chalID)
 	{
 		Process::Write8(AddressList::getAddress("ChallengeID"), chalID);
 	}
 
-	bool Level::isInDrablands(u8 optionalLevel)
+    // Checks if the current location belongs to the set of base levels/DoT
+    bool Level::isInDrablands(u8 optionalLevel)
 	{
 		u8 level = optionalLevel == 0x0 ? getCurrLevel() : optionalLevel;
 		return (level >= levelIDFromName("Deku Forest")) && (level <= levelIDFromName("Baneful Zone"));
 	}
 
+    // Checks if the current location belongs to DoT
     bool Level::isInDoT(u8 optionalLevel)
     {
         u8 level = optionalLevel == 0x0 ? getCurrLevel() : optionalLevel;
         return (level >= levelIDFromName("Forest Zone")) && (level <= levelIDFromName("Baneful Zone"));
     }
 
+    // Checks if the stage has finished loading
     bool Level::hasStageBegan(void)
 	{
 		return Level::getElapsedTime() >= 0x0;
 	}
 
+    // Checks if a specified amount of time has passed since the level was started
 	bool Level::hasCertainTimeElapsed(int time)
 	{
 		return Level::getElapsedTime() >= static_cast<u32>(time);
 	}
 
+    // Helper function that returns stage ID selection
 	int Level::selBasicStage(void)
 	{
 		StringVector stages =
