@@ -3,8 +3,10 @@
 
 #include "CTRPF.hpp"
 
-namespace CTRPluginFramework {
-	class Collision {
+namespace CTRPluginFramework
+{
+	class Collision
+	{
 	public:
 		Collision(u16 ID, std::string colType);
 
