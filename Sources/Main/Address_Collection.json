@@ -1241,6 +1241,22 @@
             }
         },
         {
+            "name": "ActorListStart",
+            "regionAddrs": {
+                "usaAddress": "0x32989188",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "ActorPtrChainLen",
+            "regionAddrs": {
+                "usaAddress": "0x32989190",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
             "name": "SpeedMultiplierAlt",
             "regionAddrs": {
                 "usaAddress": "0x0039B56C",
