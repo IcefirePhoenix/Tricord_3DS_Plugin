@@ -36,6 +36,7 @@ namespace CTRPluginFramework
 		static bool isSinglePlayer(void);
 		static bool isLoadingScreen(void);
 		static bool isPauseScreen(void);
+		static bool isSoloActiveGameplay(void);
 	};
 }
 #endif
