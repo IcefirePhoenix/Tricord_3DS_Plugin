@@ -17,9 +17,9 @@ INCLUDES	:= 	Includes \
 				Includes/General \
 				Includes/Helpers \
 				Includes/Helpers/BuiltIn \
-				Includes/Helpers/DataHelpers \
+				Includes/Helpers/Data \
+				Includes/Helpers/Handlers \
 				Includes/Helpers/Interfaces \
-				Includes/Helpers/MenuHelpers \
 				Includes/Main \
 				Includes/Main/AltModes \
 
@@ -29,7 +29,8 @@ SOURCES 	:= 	Sources \
 				$(wildcard Sources/Main/*/*) \
 				Sources/Helpers \
 				Sources/Helpers/BuiltIn \
-				Sources/Helpers/DataHelpers \
+				Sources/Helpers/Data \
+				Sources/Helpers/Handlers \
 				Sources/Helpers/Interfaces
 
 

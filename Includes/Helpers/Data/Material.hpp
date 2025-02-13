@@ -3,8 +3,10 @@
 
 #include "CTRPF.hpp"
 
-namespace CTRPluginFramework {
-    class Material {
+namespace CTRPluginFramework
+{
+    class Material
+    {
     public:
         static const StringVector otherMats;
         static const StringVector woodlandMats;

@@ -5,7 +5,8 @@
 
 namespace CTRPluginFramework
 {
-    class Level {
+    class Level
+	{
 	public:
 		Level(u8 ID, std::string externalName, std::string internalName, bool dummyStatus);
 

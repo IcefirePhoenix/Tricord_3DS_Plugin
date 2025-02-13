@@ -9,7 +9,8 @@ namespace CTRPluginFramework {
 	}
 
 	// using the most generic name, if multiple are used by the same ID
-	const PlayerAnimation PlayerAnimation::animList[30] = {
+	const PlayerAnimation PlayerAnimation::animList[30] =
+	{
 		PlayerAnimation(0x0, "Link_Wait"),
 		PlayerAnimation(0x1, "Link_Walk"),
 		PlayerAnimation(0x3, "Link_PDashStagger"),
@@ -42,7 +43,8 @@ namespace CTRPluginFramework {
 		PlayerAnimation(0x6A, "Link_CarryAway")
 	};
 
-	u8 PlayerAnimation::getIDFromName(const std::string& name)
+	// Returns an animation ID given its name
+	u8 PlayerAnimation::getIDFromName(std::string name)
 	{
 		for (int iterator = 0; iterator < 30; iterator++)
 		{
@@ -52,6 +54,7 @@ namespace CTRPluginFramework {
 		return -1; // wasn't found
 	}
 
+	// Retrieves the current/previous animation ID of a specified player
 	u8 PlayerAnimation::getAnim(int playerID, bool getPrevAnim)
 	{
 		u8 anim;
