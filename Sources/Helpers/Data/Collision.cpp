@@ -7,7 +7,8 @@ namespace CTRPluginFramework
 	{
 	}
 
-	const Collision Collision::colList[8] = {
+	const Collision Collision::colList[8] =
+	{
 		Collision(0xA, "Fall_plane"),
         Collision(0x121, "Ice"),
 		Collision(0x167, "Lava"),
@@ -18,6 +19,7 @@ namespace CTRPluginFramework
 		Collision(0x1F, "Air")
     };
 
+	// Returns collision ID
     u16 Collision::colIDFromName(std::string name)
 	{
 		for (int iterator = 0; iterator < 10; iterator++)
@@ -28,6 +30,7 @@ namespace CTRPluginFramework
 		return 0xFFFF; // wasn't found
 	}
 
+	// Returns the current collision ID corresponding to a specified player
     u16 Collision::getCurrCol(int player)
 	{
 		u16 colID;
@@ -37,6 +40,7 @@ namespace CTRPluginFramework
 		return colID;
 	}
 
+	// Overrides a specified player's collision type
     void Collision::setCurrCol(int player, u16 targetCol)
 	{
 		u32 addressOffset = player * PLAYER_OFFSET;

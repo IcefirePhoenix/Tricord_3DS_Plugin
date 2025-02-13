@@ -24,11 +24,14 @@
 #include "Helpers/Interfaces/FaceSelMenu.hpp"
 #include "Helpers/Interfaces/LevelStatusEditor.hpp"
 
-#include "Helpers/DataHelpers/Collision.hpp"
-#include "Helpers/DataHelpers/GameData.hpp"
-#include "Helpers/DataHelpers/Level.hpp"
-#include "Helpers/DataHelpers/Material.hpp"
-#include "Helpers/DataHelpers/PlayerAnimation.hpp"
+#include "Helpers/Data/Actor.hpp"
+#include "Helpers/Data/Collision.hpp"
+#include "Helpers/Data/GameData.hpp"
+#include "Helpers/Data/Level.hpp"
+#include "Helpers/Data/Material.hpp"
+#include "Helpers/Data/PlayerAnimation.hpp"
+
+#include "Helpers/Handlers/MapActorMngr.hpp"
 
 #include "AddressList.hpp"
 
