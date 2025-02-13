@@ -62,6 +62,8 @@ namespace CTRPluginFramework
         return kbd.Open() == 0;
     }
 
+
+
     bool GeneralHelpers::isNullPointer(u32 address)
     {
         return address == 0x00000000;
@@ -84,7 +86,12 @@ namespace CTRPluginFramework
         u8 mode;
         Process::Read8(AddressList::getAddress("DoppelsEnabled"), mode);
 
-        return mode == 0x01;
+        return mode;
+    }
+
+    bool GeneralHelpers::isSoloActiveGameplay(void)
+    {
+        return Level::isInDrablands() && isSinglePlayer() && !isPauseScreen() && !isLoadingScreen();
     }
 
     bool GeneralHelpers::isLoadingScreen(void)
@@ -92,7 +99,7 @@ namespace CTRPluginFramework
         u8 type;
         Process::Read8(AddressList::getAddress("LoadingStatus"), type);
 
-        return type == 0x01;
+        return type;
     }
 
     bool GeneralHelpers::isPauseScreen(void)
@@ -100,7 +107,7 @@ namespace CTRPluginFramework
         u8 status;
         Process::Read8(AddressList::getAddress("PauseStatus"), status);
 
-        return status == 0x03;
+        return status == 0x3;
     }
 
     bool GeneralHelpers::isTitleScreen(void)
