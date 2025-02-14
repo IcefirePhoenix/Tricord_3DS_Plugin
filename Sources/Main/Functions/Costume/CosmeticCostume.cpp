@@ -3,13 +3,13 @@
 
 namespace CTRPluginFramework
 {
-    MenuEntry* writeCosmeticCostumeID;
+    MenuEntry* cosmeticCostumeAuto;
 
     u8 currEffectCostumeID;   // true costume currently worn -> this costume's effects will continue to be used...
     u8 currCosmeticCostumeID; // costume MODEL desired...
 
     u8 cosmeticNotInUse = 0xFF;
-    u8 cosmeticIDs[3] = {cosmeticNotInUse};
+    u8 Costume::cosmeticIDs[3] = {cosmeticNotInUse};
 
     /* ------------------ */
 
@@ -39,7 +39,7 @@ namespace CTRPluginFramework
             // redirect model loader to custom function via BL instruction...
             Process::Patch(AddressList::getAddress("CostumeIDFunBLModel"), 0xEB000000 + blOffset);
 
-            writeCosmeticCostumeID->Enable();
+            cosmeticCostumeAuto->Enable();
             entry->SetName("Disable Cosmetic Costumes");
         }
         else
@@ -58,7 +58,7 @@ namespace CTRPluginFramework
             // TODO: Need to know: Does this hold the same offset value in all regions, or not?
             Process::Patch(AddressList::getAddress("CostumeIDFunBLModel"), 0xEB0FDCF8);
 
-            writeCosmeticCostumeID->Disable();
+            cosmeticCostumeAuto->Disable();
             entry->SetName("Enable Cosmetic Costumes");
         }
     }
@@ -129,11 +129,11 @@ namespace CTRPluginFramework
 
             int result = costumeList.Open();
             if (result >= 0)
-                cosmeticIDs[player] = result;
+                Costume::cosmeticIDs[player] = result;
         }
         else if (setResetResult == 1)
         {
-            cosmeticIDs[player] = cosmeticNotInUse;
+            Costume::cosmeticIDs[player] = cosmeticNotInUse;
             Process::Write8(AddressList::getAddress("CurrCostumeAlt") + memoryOffset, currEffectCostumeID);
         }
     }
@@ -143,7 +143,7 @@ namespace CTRPluginFramework
     {
         for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
         {
-            if (cosmeticIDs[iterateThruPlayers] != 0xFF)
+            if (cosmeticIDs[iterateThruPlayers] != cosmeticNotInUse)
                 Process::Write8(AddressList::getAddress("CurrCostumeAlt") + iterateThruPlayers * PLAYER_OFFSET, cosmeticIDs[iterateThruPlayers]);
         }
     }

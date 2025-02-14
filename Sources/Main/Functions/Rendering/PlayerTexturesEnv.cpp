@@ -208,6 +208,6 @@ namespace CTRPluginFramework
         // if (selection >= 0)
         //     FaceSelMenu(selection, expressionList[selection])();
 
-        FaceSelMenu(0, expressionList[0])(); // Idle expression
+        //FaceSelMenu(0, expressionList[0])(); // Idle expression
     }
 }

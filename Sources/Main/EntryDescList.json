@@ -426,13 +426,23 @@
         {
             "name": "prevent_doppel_reset_note",
             "content": {
-                "intro": "Toggles whether Doppel costumes reset to the Hero's Tunic upon entering/returning to the single-player lobby.",
+                "intro": "Toggles whether Doppel costumes reset to the Hero's Tunic upon entering/returning to the single player lobby.",
                 "note": "",
                 "hotkeys": {},
                 "modeCompatibility": 0,
                 "clientOnly": false
             }
         },
+        {
+            "name": "costume_randomizers_note",
+            "content": {
+                "intro": "Toggle randomizers for either your effective or cosmetic costume. Changes the costume to a new, random one every stage (changes happen during Triforce portal teleportation).",
+                "note": "If setting a cosmetic randomizer, you must enable cosmetic costumes. ONLY cosmetic randomizers alone may work in multiplayer (client-side only).",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        }
         {
             "name": "sword_model_note",
             "content": {
@@ -536,7 +546,7 @@
         {
             "name": "bypass_doppel_note",
             "content": {
-                "intro": "Automatically activates Doppels and places them on the Triforce portal upon entering the single-player lobby. This skips the cutscene from the Doppel Master's activation dialogue.",
+                "intro": "Automatically activates Doppels and places them on the Triforce portal upon entering the single player lobby. This skips the cutscene from the Doppel Master's activation dialogue.",
                 "note": "",
                 "hotkeys": {},
                 "modeCompatibility": 0,
@@ -751,7 +761,7 @@
         {
             "name": "load_sp_screen_note",
             "content": {
-                "intro": "Forces a specific loading screen layout in single-player mode.\n\nFour layouts are available:\n- Drablands, default\n- Multiplayer\n- Coliseum, 2-player\n- Coliseum, 3-player",
+                "intro": "Forces a specific loading screen layout in single player mode.\n\nFour layouts are available:\n- Drablands, default\n- Multiplayer\n- Coliseum, 2-player\n- Coliseum, 3-player",
                 "note": "Does not work in multiplayer mode.",
                 "hotkeys": {},
                 "modeCompatibility": 1,
@@ -881,7 +891,7 @@
         {
             "name": "level_completion_note",
             "content": {
-                "intro": "Allows you to edit your level completion progress, including challenge completion. Completion can be edited for both single-player and multiplayer progress.",
+                "intro": "Allows you to edit your level completion progress, including challenge completion. Completion can be edited for both single player and multiplayer progress.",
                 "note": "",
                 "hotkeys": {},
                 "modeCompatibility": 1,
