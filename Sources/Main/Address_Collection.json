@@ -1145,11 +1145,19 @@
             }
         },
         {
-            "name": "LoadingStatus",
+            "name": "LoadingActiveStatus",
             "regionAddrs": {
                 "usaAddress": "0x319FE1D0",
                 "eurAddress": "0x319FE228",
                 "jpnAddress": "0x319FDF1C"
+            }
+        },
+        {
+            "name": "LoadingInitState",
+            "regionAddrs": {
+                "usaAddress": "0x319FE1D0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
             }
         },
         {

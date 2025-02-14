@@ -91,14 +91,15 @@ namespace CTRPluginFramework
 
     bool GeneralHelpers::isSoloActiveGameplay(void)
     {
-        return Level::isInDrablands() && isSinglePlayer() && !isPauseScreen() && !isLoadingScreen();
+        return Level::isInDrablands() && isSinglePlayer() && !isPauseScreen() && !isLoadingScreen(false);
     }
 
-    bool GeneralHelpers::isLoadingScreen(void)
+    bool GeneralHelpers::isLoadingScreen(bool checkInitStateOnly)
     {
+        u32 address = checkInitStateOnly ? AddressList::getAddress("LoadingInitState") : AddressList::getAddress("LoadingActiveStatus");
         u8 type;
-        Process::Read8(AddressList::getAddress("LoadingStatus"), type);
 
+        Process::Read8(address, type);
         return type;
     }
 
