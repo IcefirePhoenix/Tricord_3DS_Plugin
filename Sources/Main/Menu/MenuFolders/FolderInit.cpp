@@ -261,12 +261,15 @@ namespace CTRPluginFramework
         // *costumeEffects += new MenuEntry("(TODO) Set Costume Effects", nullptr, Costume::selCostumeEffect);
         // *costume += costumeEffects;
 
+        *costume += new MenuEntry("Costume Randomizers", nullptr, Costume::costumeRandomizer, DescUtils::getDesc("costume_randomizers_note"));
+
         // auto-managed by plugin; hidden from users...
         swordEditAuto = new MenuEntry("Write Sword edits (auto)", Player::writeSwordChanges);
-        writeCosmeticCostumeID = new MenuEntry("Write cosmetic costumes (auto)", Costume::writeCosmeticCostume);
+        cosmeticCostumeAuto = new MenuEntry("Write cosmetic costumes (auto)", Costume::writeCosmeticCostume);
         manageCatalogSize = new MenuEntry("Manage Catalog Size (auto)", Costume::manageCatalogSizeAuto);
         initCustomCostumes = new MenuEntry("Init Custom Costume list (auto)", Costume::initCustomCostumesAuto);
         writeCostumeIDToSlot = new MenuEntry("Write to costume slots (auto)", Costume::writeToCostumeSlot);
+        costumeRandomizerAuto = new MenuEntry("Costume Randomizers (auto)", Costume::writeRandomCostume);
 
     }
 

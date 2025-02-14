@@ -18,7 +18,6 @@ namespace CTRPluginFramework {
 		static const int generalPlayerIDs[];
 		static const std::vector<u8> emoteIDs;
 
-		static const u32 playerAddressOffset;
 
 		static const std::map<std::string, std::string> actorNames;
 

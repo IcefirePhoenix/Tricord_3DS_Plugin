@@ -129,7 +129,7 @@
             }
         },
         {
-            "name": "CostumeAttrA",
+            "name": "StatusBitA",
             "regionAddrs": {
                 "usaAddress": "0x32849510",
                 "eurAddress": "0x32849590",
@@ -137,7 +137,15 @@
             }
         },
         {
-            "name": "CostumeAttrB",
+            "name": "StatusBitB",
+            "regionAddrs": {
+                "usaAddress": "0x32849511",
+                "eurAddress": "0x32849591",
+                "jpnAddress": "0x32893F51"
+            }
+        },
+        {
+            "name": "StatusBitC",
             "regionAddrs": {
                 "usaAddress": "0x32849512",
                 "eurAddress": "0x32849592",
@@ -145,7 +153,7 @@
             }
         },
         {
-            "name": "CostumeAttrC",
+            "name": "StatusBitD",
             "regionAddrs": {
                 "usaAddress": "0x32849513",
                 "eurAddress": "0x32849593",
@@ -153,7 +161,7 @@
             }
         },
         {
-            "name": "CostumeAttrD",
+            "name": "StatusBitE",
             "regionAddrs": {
                 "usaAddress": "0x32849514",
                 "eurAddress": "0x32849594",

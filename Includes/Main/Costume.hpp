@@ -16,8 +16,10 @@ namespace CTRPluginFramework
     extern MenuEntry* initCustomCostumes;
     extern MenuEntry* writeCostumeIDToSlot;
 
-    extern MenuEntry* writeCosmeticCostumeID;
-    extern MenuEntry *doppelCostumeStageResetManager;
+    extern MenuEntry* cosmeticCostumeAuto;
+    extern MenuEntry* doppelCostumeStageResetManager;
+
+    extern MenuEntry* costumeRandomizerAuto;
 
     int chooseSlotAddNum(void);
     void selCosmeticCostume(int player);
@@ -43,9 +45,12 @@ namespace CTRPluginFramework
         static void enableCosmeticCostume(MenuEntry* entry);
         static void setCosmeticCostume(MenuEntry* entry);
         static void writeCosmeticCostume(MenuEntry* entry);
-        static void changeSlotMappings(MenuEntry *entry);
+        static void changeSlotMappings(MenuEntry* entry);
+        static void costumeRandomizer(MenuEntry* entry);
+        static void writeRandomCostume(MenuEntry* entry);
 
         static const int unusedDLC_slotIDs[4];
         static const StringVector BCH_fileNames;
+        static u8 cosmeticIDs[3];
     };
 }

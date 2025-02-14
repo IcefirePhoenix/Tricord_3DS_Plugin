@@ -25,7 +25,12 @@ namespace CTRPluginFramework
             int result = costumeList.Open();
 
             if (result >= 0)
+            {
+                // Write to both primary and alternate costume ID addresses to ensure the model updates at the
+                // loading zone if cosmetic costumes are enabled
                 Process::Write8((AddressList::getAddress("CurrCostume") + memoryOffset), result);
+                Process::Write8((AddressList::getAddress("CurrCostumeAlt") + memoryOffset), result);
+            }
         }
     }
 

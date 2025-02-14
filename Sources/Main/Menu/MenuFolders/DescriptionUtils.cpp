@@ -12,13 +12,13 @@ namespace CTRPluginFramework
         switch (mode)
         {
             case 0:
-                return "\n\nCan only be used in single-player.";
+                return "\n\nCan only be used in single player.";
             case 1:
-                return "\n\nCan be used in single-player OR multiplayer.";
+                return "\n\nCan be used in single player OR multiplayer.";
             case 2:
-                return "\n\nCan be used in single-player OR multiplayer if all players enable this entry.";
+                return "\n\nCan be used in single player OR multiplayer if all players enable this entry.";
             case 3:
-                return "\n\nCan be used in single-player OR multiplayer if all players apply the same selection(s) or value(s).";
+                return "\n\nCan be used in single player OR multiplayer if all players apply the same selection(s) or value(s).";
             case 4:
                 return "\n\nCan only be used in multiplayer.";
             default:
