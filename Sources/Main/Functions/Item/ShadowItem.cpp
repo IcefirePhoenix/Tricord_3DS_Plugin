@@ -5,6 +5,10 @@ namespace CTRPluginFramework
 {
     MenuEntry *forceShadowSwordOnly;
     u32 defaultJumpTblDestinations[8];
+    u8 randomItem = 0x9;
+
+    /* ------------------ */
+
     // Force-sets current items for Shadow Links
     void Item::shadowItemOpt(MenuEntry *entry)
     {
@@ -36,12 +40,13 @@ namespace CTRPluginFramework
                 item.Populate(Item::shadowItemList);
 
                 int choice = item.Open();
-
-                // adjust for first list item = randomized items = last ID (0x9)
                 if (choice == 0)
-                    Process::Write8(shadowDataAddress + indivShadowOffset, 0x9);
+                {
+                    toggleRandomizedShadowItems(true, shadowLinkChoice);
+                    Process::Write8(shadowDataAddress + indivShadowOffset, randomItem);
+                }
                 else if (choice > 0)
-                    Process::Write8(shadowDataAddress + indivShadowOffset, choice);
+                    Process::Write8(shadowDataAddress + indivShadowOffset, choice - 1);
             }
             else
             {
@@ -53,6 +58,45 @@ namespace CTRPluginFramework
                 item.Open();
             }
         }
+    }
+
+    // Disables specialty item options and resets Shadow Link items to a new randomized set
+    void Item::resetShadowItems(MenuEntry *entry)
+    {
+        u32 shadowLinkItemOffset = 0x4;
+        u32 shadowItemPointerOffset = 0x20;
+        u32 dynamicShadowItemAddress;
+
+        // get dynamic address via pointer...
+        Process::Read32(AddressList::getAddress("ShadowLinkItemPointer"), dynamicShadowItemAddress);
+        u32 shadowDataAddress = dynamicShadowItemAddress + shadowItemPointerOffset;
+
+        // Shadow Links aren't loaded in-game outside of Baneful Zone...
+        bool isInBaneful = (Level::getCurrLevel() == Level::levelIDFromName("Baneful Zone")) && (Level::getCurrStage() == 4);
+        std::string msg = isInBaneful ? "Select an item." : "Error\n\nThe current level is not Baneful Zone - 4. Please\nenter Baneful Zone and try again.";
+
+        if (isInBaneful)
+        {
+            // disable per-use item randomization and assign new items...
+            for (int iterateThroughPlayers = 0; iterateThroughPlayers < 3; iterateThroughPlayers++)
+            {
+                toggleRandomizedShadowItems(false, iterateThroughPlayers);
+                Process::Write8(shadowDataAddress + iterateThroughPlayers * shadowLinkItemOffset, Utils::Random(0x1, 0x8));
+            }
+
+            // disable forced-sword attacks...
+            forceShadowSwordOnly->Disable();
+        }
+    }
+
+    // Bypasses the item init sequence by forcing the Shadow Link ID checks to fail
+    void toggleRandomizedShadowItems(bool useRandom, int shadowLink)
+    {
+        u8 shadowLinkOffset = 0x8;
+        u32 invalidCMP = 0xE3500000; // immediate value set to invalid ID... by default, they range from 1-3
+        u32 patchedCMP = useRandom ? invalidCMP : (invalidCMP & 0xFFFFFFF0) | (shadowLink + 1);
+
+        Process::Patch(AddressList::getAddress("ShadowLinkItemInitCheck") + shadowLinkOffset * shadowLink, patchedCMP);
     }
 
     // Redirects all item usage calls to sword usage function
