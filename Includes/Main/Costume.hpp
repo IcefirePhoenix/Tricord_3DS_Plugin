@@ -28,6 +28,10 @@ namespace CTRPluginFramework
     void checkCustomCostumeConflict(void);
     void addCustomSlotsToMenu(int openSlots);
     void resetCostumeArray(void);
+    void openRandomizerToggles(int selection);
+    int selCostumeType(void);
+
+    static const u8 cosmeticNotInUse = 0xFF;
 
     class Costume
     {
@@ -37,7 +41,8 @@ namespace CTRPluginFramework
         static void writeToCostumeSlot(MenuEntry* entry);
         static void greatFairyEnable(MenuEntry* entry);
         static void changeLinkCostume(MenuEntry* entry);
-        static void selectCostumeID(MenuEntry* entry);
+        static void setPlayerCostume(int player, int costumeID, bool useAltOnly = false);
+        static void selectCostumeID(MenuEntry *entry);
         static void initCustomCostumesAuto(MenuEntry* entry);
         static void forceBearMinMax(MenuEntry* entry);
         static void preventDoppelLobbyReset(MenuEntry* entry);
@@ -47,7 +52,7 @@ namespace CTRPluginFramework
         static void writeCosmeticCostume(MenuEntry* entry);
         static void changeSlotMappings(MenuEntry* entry);
         static void costumeRandomizer(MenuEntry* entry);
-        static void writeRandomCostume(MenuEntry* entry);
+        static void writeRandomCostume(MenuEntry *entry);
 
         static const int unusedDLC_slotIDs[4];
         static const StringVector BCH_fileNames;

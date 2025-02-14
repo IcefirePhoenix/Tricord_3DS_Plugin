@@ -155,8 +155,8 @@ namespace CTRPluginFramework
                 if (GeneralHelpers::showMsgKbd(firstWarpIntro, DialogType::DialogYesNo))
                 {
                     // set default Doppel costumes from Bear Minimum -> Hero's Tunic
-                    Process::Write8(AddressList::getAddress("CurrCostume") + PLAYER_OFFSET, GameData::getCostumeIDFromName("Hero's Tunic"));
-                    Process::Write8(AddressList::getAddress("CurrCostume") + (2 * PLAYER_OFFSET), GameData::getCostumeIDFromName("Hero's Tunic"));
+                    Costume::setPlayerCostume(GameData::getPlayerIDFromColor("Blue"), GameData::getCostumeIDFromName("Hero's Tunic"));
+                    Costume::setPlayerCostume(GameData::getPlayerIDFromColor("Red"), GameData::getCostumeIDFromName("Hero's Tunic"));
                 }
                 firstWarp = false;
             }
