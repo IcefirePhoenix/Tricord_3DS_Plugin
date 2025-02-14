@@ -15,11 +15,9 @@ namespace CTRPluginFramework
     void initShadowItemList(void);
     void readCurrStrafingSpeeds(void);
     void resetCurrStrafingSpeeds(void);
-
+    void toggleRandomizedShadowItems(bool useRandom, int shadowLink);
     float setSpeedKB(void);
-
     u32 getShadowItemAddress(void);
-
     std::string readCurrItems(u32 address, bool useShadow);
 
     class Item
@@ -31,6 +29,7 @@ namespace CTRPluginFramework
         static void shadowItemOpt(MenuEntry* entry);
         static void strafingSpeedSet(MenuEntry* entry);
         static void upgradeItemAlways(MenuEntry* entry);
+        static void resetShadowItems(MenuEntry *entry);
         static void toggleShadowForceSwordUse(MenuEntry *entry);
 
         static StringVector shadowItemList;

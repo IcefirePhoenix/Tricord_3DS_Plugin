@@ -1321,6 +1321,14 @@
             }
         },
         {
+            "name": "ShadowLinkItemInitCheck",
+            "regionAddrs": {
+                "usaAddress": "0x00252DC8",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
             "name": "ShadowLinkItemJumptbl",
             "regionAddrs": {
                 "usaAddress": "0x00251AF4",
@@ -1331,7 +1339,7 @@
         {
             "name": "ShadowLinkSwordUsageFunc",
             "regionAddrs": {
-                "usaAddress": "0x00251AEC",
+                "usaAddress": "0x00251B60",
                 "eurAddress": "0x00000000",
                 "jpnAddress": "0x00000000"
             }
