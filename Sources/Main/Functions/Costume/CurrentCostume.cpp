@@ -46,8 +46,6 @@ namespace CTRPluginFramework
         };
 
         u8 result;
-        u8 unusedRange = 0x26;
-
         Keyboard costumeType("Choose the desired costume type:");
         Keyboard costumeList("Choose a costume:");
 
@@ -62,7 +60,7 @@ namespace CTRPluginFramework
                 break;
             case 1:
                 costumeList.Populate(GameData::customCostumeList);
-                result = costumeList.Open() + unusedRange; // get 0x26-0x29 range
+                result = costumeList.Open() + GameData::maxCostumeCount; // get 0x26-0x29 range
                 break;
             default:
                 break;
