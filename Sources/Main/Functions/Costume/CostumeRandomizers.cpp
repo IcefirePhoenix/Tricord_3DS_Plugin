@@ -88,16 +88,10 @@ namespace CTRPluginFramework
         }
     }
 
+    // Sets the current cosmetic/effective costume ID
     void Costume::writeRandomCostume(MenuEntry* entry)
     {
-        // Loading zone flag is too late and causes delays in the model loaded
-        // Instead we check if three Links are on the triforce portal
-        u8 triforceG, triforceB, triforceR;
-        Process::Read8(AddressList::getAddress("StatusBitB"), triforceG);
-        Process::Read8(AddressList::getAddress("StatusBitB") + PLAYER_OFFSET, triforceB);
-        Process::Read8(AddressList::getAddress("StatusBitB") + 2*PLAYER_OFFSET, triforceR);
-        bool aboutToWarp = ((triforceG & 0x20) == 0x20) && ((triforceB & 0x20) == 0x20) && ((triforceR & 0x20) == 0x20);
-        if (aboutToWarp && canRandomize)
+        if (GeneralHelpers::isLoadingScreen(true) && canRandomize)
         {
             canRandomize = false;
             // Effective costume - Write directly to address
