@@ -7,9 +7,7 @@ namespace CTRPluginFramework
 
     u8 currEffectCostumeID;   // true costume currently worn -> this costume's effects will continue to be used...
     u8 currCosmeticCostumeID; // costume MODEL desired...
-
-    u8 cosmeticNotInUse = 0xFF;
-    u8 Costume::cosmeticIDs[3] = {cosmeticNotInUse};
+    u8 Costume::cosmeticIDs[3] = { cosmeticNotInUse, cosmeticNotInUse, cosmeticNotInUse };
 
     /* ------------------ */
 
@@ -90,8 +88,6 @@ namespace CTRPluginFramework
     // Menu interface for selecting cosmetic costume
     void selCosmeticCostume(int player)
     {
-        u32 memoryOffset = player * PLAYER_OFFSET;
-
         std::string currEffectCostumeName = GameData::getCostumeNameFromID(currEffectCostumeID);
         std::string currCosmeticCostumeName = GameData::getCostumeNameFromID(currCosmeticCostumeID);
         std::string selectedPlayer = "";
@@ -134,7 +130,7 @@ namespace CTRPluginFramework
         else if (setResetResult == 1)
         {
             Costume::cosmeticIDs[player] = cosmeticNotInUse;
-            Process::Write8(AddressList::getAddress("CurrCostumeAlt") + memoryOffset, currEffectCostumeID);
+            Costume::setPlayerCostume(player, currEffectCostumeID, true);
         }
     }
 
@@ -144,7 +140,7 @@ namespace CTRPluginFramework
         for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
         {
             if (cosmeticIDs[iterateThruPlayers] != cosmeticNotInUse)
-                Process::Write8(AddressList::getAddress("CurrCostumeAlt") + iterateThruPlayers * PLAYER_OFFSET, cosmeticIDs[iterateThruPlayers]);
+                Costume::setPlayerCostume(iterateThruPlayers, cosmeticIDs[iterateThruPlayers], true);
         }
     }
 }
