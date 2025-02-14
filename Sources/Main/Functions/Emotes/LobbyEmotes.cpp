@@ -11,7 +11,7 @@ namespace CTRPluginFramework
 
         // when entering new area, it's not possible to override current bottom-screen emote menu graphics...
         // restore default emote set to avoid button-graphic mix-ups...
-        if (GeneralHelpers::isLoadingScreen())
+        if (GeneralHelpers::isLoadingScreen(false))
         {
             initEmoteValueLayout(finalAddress, 0x05080A0B, 0x00000706, true, {11, 6, 5, 3, 4, 9, 0});
             forceDefaultEmotes(false);

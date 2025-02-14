@@ -20,7 +20,7 @@ namespace CTRPluginFramework
         resetPositionEditorSaves(entry->WasJustActivated());
 
         // custom touchscreen button display behavior...
-        if (GeneralHelpers::isSinglePlayer() && !GeneralHelpers::isLoadingScreen() && Level::getCurrLevel() != Level::levelIDFromName("Hytopia Castle"))
+        if (GeneralHelpers::isSinglePlayer() && !GeneralHelpers::isLoadingScreen(false) && Level::getCurrLevel() != Level::levelIDFromName("Hytopia Castle"))
         {
             loadBtn.Draw();
             saveBtn.Draw();
@@ -32,7 +32,7 @@ namespace CTRPluginFramework
             }
         }
 
-        resetPositionEditorSaves(GeneralHelpers::isLoadingScreen());
+        resetPositionEditorSaves(GeneralHelpers::isLoadingScreen(true));
 
         int currLink = GeneralHelpers::getCurrLink();
         std::string color = GeneralHelpers::getLinkColorAsStr(currLink);

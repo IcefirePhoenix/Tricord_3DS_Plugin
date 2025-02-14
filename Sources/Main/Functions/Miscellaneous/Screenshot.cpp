@@ -25,7 +25,7 @@ namespace CTRPluginFramework
         showPhotoBtnIntroMsg(entry->WasJustActivated());
 
         // only draw the floating button during level-based gameplay...
-        if (Level::isInDrablands() && !GeneralHelpers::isLoadingScreen())
+        if (Level::isInDrablands() && !GeneralHelpers::isLoadingScreen(false))
         {
             photoBtn.Draw();
 
@@ -127,7 +127,7 @@ namespace CTRPluginFramework
         else
         {
             // one-time possible write per loading screen
-            if (GeneralHelpers::isLoadingScreen() && SS_Timer.HasTimePassed(Seconds(5)))
+            if (GeneralHelpers::isLoadingScreen(false) && SS_Timer.HasTimePassed(Seconds(5)))
             {
                 writeCameraEdits(cameraToggle);
                 SS_Timer.Restart();

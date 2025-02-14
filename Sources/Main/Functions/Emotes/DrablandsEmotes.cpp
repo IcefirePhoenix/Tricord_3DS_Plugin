@@ -8,7 +8,7 @@ namespace CTRPluginFramework
     {
         // when entering new area, it's not possible to override current bottom-screen emote menu graphics...
         // restore default emote set to avoid button-graphic mix-ups...
-        if (GeneralHelpers::isLoadingScreen())
+        if (GeneralHelpers::isLoadingScreen(false))
         {
             initEmoteValueLayout(AddressList::getAddress("GameplayEmotes"), 0x03020100, 0x07060504, false, {0, 1, 2, 7, 8, 3, 4, 9});
             Emotes::forceDefaultEmotes(false);

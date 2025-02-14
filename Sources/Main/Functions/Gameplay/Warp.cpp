@@ -216,7 +216,7 @@ namespace CTRPluginFramework
     // Toggles whether Doppels should be automatically enabled following a warp
     void Gameplay::midWarpDoppelEnable(MenuEntry *entry)
     {
-        if (GeneralHelpers::isLoadingScreen())
+        if (GeneralHelpers::isLoadingScreen(false))
         {
             if (Level::getCurrLevel() >= Level::levelIDFromName("Coliseum"))
                 GeneralHelpers::forceDoppelStatus(true);

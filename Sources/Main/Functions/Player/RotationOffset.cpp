@@ -19,7 +19,7 @@ namespace CTRPluginFramework
             overwriteOffset(0.0);
         else
         {
-            if (GeneralHelpers::isLoadingScreen())
+            if (GeneralHelpers::isLoadingScreen(true))
             {
                 Process::Read32(AddressList::getAddress("RotationOffset"), currOffset);
 
