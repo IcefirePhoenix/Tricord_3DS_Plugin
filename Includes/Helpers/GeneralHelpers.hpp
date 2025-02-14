@@ -7,7 +7,7 @@
 #define PLAYER_OFFSET 	0x10000
 
 #define ENABLED_SLIDER 		Color::LimeGreen << "\u2282\u25CF"
-#define DISABLED_SLIDER 	Color::Red << "\u25CF\u2283"
+#define DISABLED_SLIDER 		Color::Red << "\u25CF\u2283"
 
 #include "CTRPF.hpp"
 
@@ -34,7 +34,7 @@ namespace CTRPluginFramework
 
 		static bool isTitleScreen(void);
 		static bool isSinglePlayer(void);
-		static bool isLoadingScreen(void);
+		static bool isLoadingScreen(bool checkInitStateOnly);
 		static bool isPauseScreen(void);
 		static bool isSoloActiveGameplay(void);
 	};
