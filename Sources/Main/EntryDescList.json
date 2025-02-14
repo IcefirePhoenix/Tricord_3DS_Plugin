@@ -669,6 +669,16 @@
             }
         },
         {
+            "name": "shadow_link_disable_item_note",
+            "content": {
+                "intro": "Forces Shadow Links to only perform sword attacks during the Den of Trials boss fight. Overrides any item selections made using \"Set Shadow Link item\".",
+                "note": "Cannot be used outside of Baneful Zone, Stage 4.",
+                "hotkeys": {},
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "shadow_link_note",
             "content": {
                 "intro": "Customizes Shadow Link items for the Den of Trials boss fight. Also adds a custom option to randomize items after each use.",

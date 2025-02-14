@@ -8,6 +8,8 @@
 
 namespace CTRPluginFramework
 {
+    extern MenuEntry* forceShadowSwordOnly;
+
     // helper functions
     void saveCurrItems(void);
     void initShadowItemList(void);
@@ -29,6 +31,7 @@ namespace CTRPluginFramework
         static void shadowItemOpt(MenuEntry* entry);
         static void strafingSpeedSet(MenuEntry* entry);
         static void upgradeItemAlways(MenuEntry* entry);
+        static void toggleShadowForceSwordUse(MenuEntry *entry);
 
         static StringVector shadowItemList;
         static u8 currItems[3];
