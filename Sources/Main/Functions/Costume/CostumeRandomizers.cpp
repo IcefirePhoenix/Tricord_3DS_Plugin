@@ -98,14 +98,14 @@ namespace CTRPluginFramework
             for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
             {
                 if (randomizers[0][iterateThruPlayers])
-                    Costume::setPlayerCostume(iterateThruPlayers, rand() % GameData::maxCostumeCount); // primary + alternate costume IDs used...
+                    Costume::setPlayerCostume(iterateThruPlayers, Utils::Random(0, GameData::maxCostumeCount)); // primary + alternate costume IDs used...
             }
 
             // Cosmetic costume
             for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
             {
                 if (randomizers[1][iterateThruPlayers])
-                    cosmeticIDs[iterateThruPlayers] = rand() % GameData::maxCostumeCount; // let Cosmetic Costume function handle mem writes...
+                    cosmeticIDs[iterateThruPlayers] = Utils::Random(0, GameData::maxCostumeCount); // let Cosmetic Costume function handle mem writes...
             }
         }
 
