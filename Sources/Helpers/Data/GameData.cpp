@@ -142,6 +142,7 @@ namespace CTRPluginFramework {
     };
 
     const int GameData::generalPlayerIDs[3] = { 0, 1, 2 };
+    const int GameData::maxCostumeCount = 38;
 
     int GameData::getPlayerIDFromColor(std::string color)
     {
@@ -167,17 +168,19 @@ namespace CTRPluginFramework {
 
     std::string GameData::getCostumeNameFromID(int ID)
     {
-        if (ID < 0x26)
+        u8 unusedDLC_SlotCount = 0x4;
+
+        if (ID < maxCostumeCount)
             return GameData::universalCostumeList[ID];
-        else if (ID < 0x30)
-            return GameData::customCostumeList[ID - 0x26];
+        else if (ID < maxCostumeCount + unusedDLC_SlotCount)
+            return GameData::customCostumeList[ID - maxCostumeCount];
         else
             return "N/A";
     }
 
     int GameData::getCostumeIDFromName(std::string costumeName)
     {
-        for (int iterator = 0; iterator < 38; iterator++)
+        for (int iterator = 0; iterator < GameData::maxCostumeCount; iterator++)
         {
             if (universalCostumeList[iterator] == costumeName)
                 return iterator;

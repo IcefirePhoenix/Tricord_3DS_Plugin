@@ -16,6 +16,7 @@ namespace CTRPluginFramework {
 		static const StringVector lobbyBallSongs;
 
 		static const int generalPlayerIDs[];
+		static const int maxCostumeCount;
 		static const std::vector<u8> emoteIDs;
 
 
