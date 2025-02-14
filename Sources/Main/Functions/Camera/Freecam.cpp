@@ -164,7 +164,7 @@ namespace CTRPluginFramework
 		adjustRotationMoveOffset();
 
 		// allow camera lock to be maintained after entering new area...
-		if (GeneralHelpers::isLoadingScreen() && isCameraLocked)
+		if (GeneralHelpers::isLoadingScreen(false) && isCameraLocked)
 			setCameraType(CUTSCENE);
 	}
 
