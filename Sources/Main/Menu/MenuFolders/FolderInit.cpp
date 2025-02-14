@@ -331,12 +331,22 @@ namespace CTRPluginFramework
     void InitItemsFolder(PluginMenu &menu)
     {
         items = new MenuFolder("Items");
+        MenuFolder *playerItem = new MenuFolder("Player Items");
+        MenuFolder *shadowItem = new MenuFolder("Shadow Link Items");
 
-        *items += new MenuEntry("Set current item", nullptr, Item::itemOpt, DescUtils::getDesc("curr_item_note"));
-        *items += new MenuEntry("Set Shadow Link item", nullptr, Item::shadowItemOpt, DescUtils::getDesc("shadow_link_note"));
-        *items += new MenuEntry("Set strafing speeds", nullptr, Item::strafingSpeedSet, DescUtils::getDesc("strafe_note"));
-        *items += new MenuEntry("Remove current items", nullptr, Item::manageItems, DescUtils::getDesc("remove_item_note"));
-        *items += new MenuEntry("Freeze current items", Item::manageItems, DescUtils::getDesc("freeze_item_note"));
+        *playerItem += new MenuEntry("Set current item", nullptr, Item::itemOpt, DescUtils::getDesc("curr_item_note"));
+        *playerItem += new MenuEntry("Set strafing speeds", nullptr, Item::strafingSpeedSet, DescUtils::getDesc("strafe_note"));
+        *playerItem += new MenuEntry("Remove current items", nullptr, Item::manageItems, DescUtils::getDesc("remove_item_note"));
+        *playerItem += new MenuEntry("Freeze current items", Item::manageItems, DescUtils::getDesc("freeze_item_note"));
+
+        forceShadowSwordOnly = new MenuEntry("Disable Shadow Link item usage", Item::toggleShadowForceSwordUse, DescUtils::getDesc("shadow_link_disable_item_note"));
+        *shadowItem += forceShadowSwordOnly;
+
+        *shadowItem += new MenuEntry("Set Shadow Link item", nullptr, Item::shadowItemOpt, DescUtils::getDesc("shadow_link_note"));
+        *shadowItem += new MenuEntry("Reset Shadow Link items", nullptr, Item::resetShadowItems, DescUtils::getDesc("shadow_link_reset_note"));
+
+        *items += playerItem;
+        *items += shadowItem;
 
         // TODO: *items += new MenuEntry("Always use upgraded Items", Item::upgradeItemAlways);
     }

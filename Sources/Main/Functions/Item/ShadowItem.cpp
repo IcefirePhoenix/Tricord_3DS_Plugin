@@ -3,6 +3,8 @@
 
 namespace CTRPluginFramework
 {
+    MenuEntry *forceShadowSwordOnly;
+    u32 defaultJumpTblDestinations[8];
     // Force-sets current items for Shadow Links
     void Item::shadowItemOpt(MenuEntry *entry)
     {
@@ -49,6 +51,34 @@ namespace CTRPluginFramework
 
                 item.Populate(temp);
                 item.Open();
+            }
+        }
+    }
+
+    // Redirects all item usage calls to sword usage function
+    void Item::toggleShadowForceSwordUse(MenuEntry* entry)
+    {
+        u32 jumpTblOffset;
+
+        // reset to default destinations...
+        if (!entry->IsActivated())
+        {
+            for (int index = 0; index < 8; index++)
+            {
+                jumpTblOffset = (index + 1) * sizeof(u32);
+                Process::Write32(AddressList::getAddress("ShadowLinkItemJumptbl") + jumpTblOffset, defaultJumpTblDestinations[index]);
+            }
+        }
+
+        // patch all item function jumptable destinations -> point to default case (sword usage)
+        if (entry->WasJustActivated())
+        {
+            // store then patch default addresses...
+            for (int index = 0; index < 8; index++)
+            {
+                jumpTblOffset = (index + 1) * sizeof(u32);
+                Process::Read32(AddressList::getAddress("ShadowLinkItemJumptbl") + jumpTblOffset, defaultJumpTblDestinations[index]);
+                Process::Write32(AddressList::getAddress("ShadowLinkItemJumptbl") + jumpTblOffset, AddressList::getAddress("ShadowLinkSwordUsageFunc"));
             }
         }
     }

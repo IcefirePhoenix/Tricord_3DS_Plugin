@@ -1321,6 +1321,22 @@
             }
         },
         {
+            "name": "ShadowLinkItemJumptbl",
+            "regionAddrs": {
+                "usaAddress": "0x00251AF4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "ShadowLinkSwordUsageFunc",
+            "regionAddrs": {
+                "usaAddress": "0x00251AEC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
             "name": "GripshotStrafe",
             "regionAddrs": {
                 "usaAddress": "0x003C214C",
