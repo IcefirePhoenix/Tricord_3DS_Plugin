@@ -16,21 +16,23 @@ namespace CTRPluginFramework
 
         if (linkChoice >= 0)
         {
-            u32 playerID = (u32)linkChoice;
-            u32 memoryOffset = playerID * PLAYER_OFFSET;
-
             Keyboard costumeList("Choose a costume:\n\nBe sure to load into a new area for changes to fully\ntake effect.");
             costumeList.Populate(GameData::universalCostumeList);
 
-            int result = costumeList.Open();
+            Costume::setPlayerCostume(linkChoice, costumeList.Open());
+        }
+    }
 
-            if (result >= 0)
-            {
-                // Write to both primary and alternate costume ID addresses to ensure the model updates at the
-                // loading zone if cosmetic costumes are enabled
-                Process::Write8((AddressList::getAddress("CurrCostume") + memoryOffset), result);
-                Process::Write8((AddressList::getAddress("CurrCostumeAlt") + memoryOffset), result);
-            }
+    // Helper method for setting current costume; by default, this accesses both primary + alternate costume IDs
+    void Costume::setPlayerCostume(int player, int costumeID, bool useAltOnly)
+    {
+        if (costumeID >= 0)
+        {
+            if (!useAltOnly)
+                Process::Write8((AddressList::getAddress("CurrCostume") + player * PLAYER_OFFSET), costumeID);
+
+            // note: loading screen updates require both addresses to be set if cosmetic costumes are enabled...
+            Process::Write8((AddressList::getAddress("CurrCostumeAlt") + player * PLAYER_OFFSET), costumeID);
         }
     }
 
