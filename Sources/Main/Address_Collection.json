@@ -1041,6 +1041,14 @@
             }
         },
         {
+            "name": "HealthMaxCostumeEffect",
+            "regionAddrs": {
+                "usaAddress": "0x32C824F6",
+                "eurAddress": "0x32C82576",
+                "jpnAddress": "0x32CCCF36"
+            }
+        },
+        {
             "name": "EnergyCurrent",
             "regionAddrs": {
                 "usaAddress": "0x328496C4",
@@ -1155,7 +1163,7 @@
         {
             "name": "LoadingInitState",
             "regionAddrs": {
-                "usaAddress": "0x319FE1D0",
+                "usaAddress": "0x3280EDE8",
                 "eurAddress": "0x00000000",
                 "jpnAddress": "0x00000000"
             }

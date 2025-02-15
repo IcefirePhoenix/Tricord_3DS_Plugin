@@ -7,7 +7,6 @@ namespace CTRPluginFramework
 
     u8 defaultMaxHP = 0x24;
     u8 customMaxHealth = 0x24;
-    bool healthAuto = false; // TODO: double-check why this is necessary
 
     /* ------------------ */
 
@@ -33,17 +32,19 @@ namespace CTRPluginFramework
                 // convert from full hearts to quarter hearts...
                 customMaxHealth = (newMaxHealth) * 4;
 
-                healthAuto = true;
                 healthMaxAuto->Enable();
                 entry->SetName("Reset to 9 heart containers");
 
                 promptHP_Refill(customMaxHealth);
                 preventOverflowHP(customMaxHealth);
+
+                // First immediate write before the auto code handles loading screens
+                Process::Write8(AddressList::getAddress("HealthMax"), customMaxHealth);
+                Process::Write8(AddressList::getAddress("HealthMaxCostumeEffect"), 0x0);
             }
         }
         else
         {
-            healthAuto = false;
             healthMaxAuto->Disable();
 
             // restore max HP value...
@@ -54,7 +55,7 @@ namespace CTRPluginFramework
         }
     }
 
-    // Helper function to refill HP after setting custom maximumm HP value
+    // Helper function to refill HP after setting custom maximum HP value
     void promptHP_Refill(int maxHP)
     {
         u8 currentHealth = GeneralHelpers::getHP();
@@ -78,21 +79,25 @@ namespace CTRPluginFramework
     // Sets maximum HP value in memory
     void Gameplay::writeMaxHealth(MenuEntry *entry)
     {
-        // TODO: does this need to be written at all times to avoid conflicting overwrites, or only once during loading zones?
-        // TODO: is bool impl needed?
-
-        if (healthAuto)
+        if (GeneralHelpers::isLoadingScreen(false))
         {
             Process::Write8(AddressList::getAddress("HealthMax"), customMaxHealth);
+            Process::Write8(AddressList::getAddress("HealthMaxCostumeEffect"), 0x0);
+        }
+        if (Level::getElapsedTime() == 0)
+        {
+            preventOverflowHP(customMaxHealth);
         }
     }
 
     // Freezes current HP value to the maximum value
     void Gameplay::infHealth(MenuEntry *entry)
     {
-        u8 maxHealth;
+        u8 maxHealth, maxHealthCostumeEffect;
         Process::Read8(AddressList::getAddress("HealthMax"), maxHealth);
-        Process::Write8(AddressList::getAddress("HealthCurrent"), maxHealth);
+        Process::Read8(AddressList::getAddress("HealthMaxCostumeEffect"), maxHealthCostumeEffect);
+        u8 healthToWrite = maxHealth + (s8)maxHealthCostumeEffect;
+        Process::Write8(AddressList::getAddress("HealthCurrent"), healthToWrite);
     }
 
     // Freezes current number of fairies to 9 (0xA because 0 fairies starts at 0x1)
