@@ -48,8 +48,8 @@
         {
             "name": "max_heart_note",
             "content": {
-                "intro": "Allows you to set a custom number of *base* heart containers. Using large values may cause graphical glitches as the UI only supports displaying up to 18 heart containers.",
-                "note": "Costume effects that add or remove heart containers will still apply.",
+                "intro": "Allows you to set a custom number of heart containers. Using large values may cause graphical glitches as the UI only supports displaying up to 18 heart containers.",
+                "note": "Overrides costume/challenge effects that add or remove heart containers.",
                 "hotkeys": {},
                 "modeCompatibility": 3,
                 "clientOnly": false
@@ -59,7 +59,7 @@
             "name": "inf_heart_note",
             "content": {
                 "intro": "Keeps your health fixed at the maximum number of heart containers.",
-                "note": "Consistency may vary if wearing a costume that adjusts the total number of heart containers.",
+                "note": "You still flinch from damage.",
                 "hotkeys": {},
                 "modeCompatibility": 2,
                 "clientOnly": false
