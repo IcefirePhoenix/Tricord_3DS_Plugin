@@ -158,24 +158,12 @@
         {
             "name": "moon_jump_note",
             "content": {
-                "intro": "Enables moon-jumping with lateral movement controls while airborne.",
+                "intro": "Enables moon jumping with lateral movement controls while airborne.",
                 "note": "",
                 "hotkeys": [
                     {
-                        "hotkeyTitle": "\uE077 Up",
-                        "hotkeyDesc": "Move north"
-                    },
-                    {
-                        "hotkeyTitle": "\uE077 Down",
-                        "hotkeyDesc": "Move south"
-                    },
-                    {
-                        "hotkeyTitle": "\uE077 Left",
-                        "hotkeyDesc": "Move west"
-                    },
-                    {
-                        "hotkeyTitle": "\uE077 Right",
-                        "hotkeyDesc": "Move east"
+                        "hotkeyTitle": "\uE077",
+                        "hotkeyDesc": "Move laterally"
                     },
                     {
                         "hotkeyTitle": "\uE002",
@@ -189,24 +177,12 @@
         {
             "name": "flight_note",
             "content": {
-                "intro": "Enables flight with adjustable height and movement. When stationary, you will automatically hover in-place.",
+                "intro": "Enables flight with adjustable height and movement. When stationary, you will automatically hover in place.",
                 "note": "",
                 "hotkeys": [
                     {
                         "hotkeyTitle": "\uE077 Up",
-                        "hotkeyDesc": "Move north"
-                    },
-                    {
-                        "hotkeyTitle": "\uE077 Down",
-                        "hotkeyDesc": "Move south"
-                    },
-                    {
-                        "hotkeyTitle": "\uE077 Left",
-                        "hotkeyDesc": "Move west"
-                    },
-                    {
-                        "hotkeyTitle": "\uE077 Right",
-                        "hotkeyDesc": "Move east"
+                        "hotkeyDesc": "Move laterally"
                     },
                     {
                         "hotkeyTitle": "\uE002",
