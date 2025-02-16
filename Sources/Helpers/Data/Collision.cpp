@@ -7,7 +7,7 @@ namespace CTRPluginFramework
 	{
 	}
 
-	const Collision Collision::colList[8] =
+	const Collision Collision::colList[9] =
 	{
 		Collision(0xA, "Fall_plane"),
         Collision(0x121, "Ice"),
@@ -16,7 +16,8 @@ namespace CTRPluginFramework
 		Collision(0xC1, "Quicksand_plane"),
 		Collision(0xC7, "Quicksand_stream"),
 		Collision(0x364, "Colored_platform"),
-		Collision(0x1F, "Air")
+		Collision(0x1F, "Air"),
+		Collision(0x40A1, "Triforce_gate")
     };
 
 	// Returns collision ID
@@ -37,6 +38,16 @@ namespace CTRPluginFramework
         u32 addressOffset = player * PLAYER_OFFSET;
 
 		Process::Read16(AddressList::getAddress("CollisionCurrent") + addressOffset, colID);
+		return colID;
+	}
+
+	// Returns the last collision ID corresponding to a specified player
+    u16 Collision::getLastCol(int player)
+	{
+		u16 colID;
+        u32 addressOffset = player * PLAYER_OFFSET;
+
+		Process::Read16(AddressList::getAddress("CollisionLast") + addressOffset, colID);
 		return colID;
 	}
 

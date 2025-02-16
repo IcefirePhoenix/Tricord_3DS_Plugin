@@ -889,6 +889,22 @@
             }
         },
         {
+            "name": "CPadXCoord",
+            "regionAddrs": {
+                "usaAddress": "0x31A01118",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "CPadYCoord",
+            "regionAddrs": {
+                "usaAddress": "0x31A0111C",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
             "name": "GameplayEmotes",
             "regionAddrs": {
                 "usaAddress": "0x006B6E98",
@@ -1110,6 +1126,14 @@
                 "usaAddress": "0x328416A4",
                 "eurAddress": "0x32841724",
                 "jpnAddress": "0x3288C0E4"
+            }
+        },
+        {
+            "name": "CollisionLast",
+            "regionAddrs": {
+                "usaAddress": "0x328416B2",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
             }
         },
         {
@@ -1622,6 +1646,14 @@
                 "usaAddress": "0x32841758",
                 "eurAddress": "0x328417D8",
                 "jpnAddress": "0x3288C198"
+            }
+        },
+        {
+            "name": "PlayerShadowVisibility",
+            "regionAddrs": {
+                "usaAddress": "0x3284196C",
+                "eurAddress": "0x328419EC",
+                "jpnAddress": "0x3284C3AC"
             }
         },
         {

@@ -44,6 +44,8 @@ namespace CTRPluginFramework
     void promptHP_Refill(int maxHP);
     void preventOverflowHP(int maxHP);
 
+    bool canApplyYSpeed(int player);
+
     class Gameplay
     {
     public:

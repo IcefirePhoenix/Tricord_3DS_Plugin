@@ -132,79 +132,82 @@ namespace CTRPluginFramework
     void Gameplay::moonJumpAndFlight(MenuEntry *entry)
     {
         /**
-         * Hotkeys: North, South, East, West, Ascend
+         * Hotkeys: Ascend, Descend
          * Note: South and East are positive, North and West are negative
          */
 
-        u32 offset = GeneralHelpers::getCurrLink() * PLAYER_OFFSET;
-        u32 addrX = AddressList::getAddress("SpeedX") + offset;
-        u32 addrY = AddressList::getAddress("SpeedY") + offset;
-        u32 addrZ = AddressList::getAddress("SpeedZ") + offset;
-
         u16 currColl;
-        bool isAirborne, canMoveInMoonJump;
+        bool isOnTriforceGate;
+        int player = GeneralHelpers::getCurrLink();
 
-        // disable X-button screenshot functionality to avoid hotkey conflicts...
-        Process::Write8(AddressList::getAddress("CameraXButtonToggle"), cameraDisabled);
+        currColl = Collision::getCurrCol(player);
+        isOnTriforceGate = (currColl == Collision::colIDFromName("Triforce_gate"));
 
-        // get current collision type...
-        Process::Read16(AddressList::getAddress("CollisionCurrent") + offset, currColl);
-
-        // verify moonjump status...
-        isAirborne = (currColl == Collision::colIDFromName("Air"));
-        canMoveInMoonJump = isAirborne && (entry->Name() == "Enable Moon Jump");
-
-        // allow lateral movement during active moon jumps OR if currently flying...
-        if (canMoveInMoonJump || entry->Name() == "Enable Flight")
+        // Only apply edits if NOT standing on a Triforce gate, to avoid crashes on warp
+        if (!isOnTriforceGate)
         {
-            if (entry->Hotkeys[0].IsDown())                             // move player north
-                Process::WriteFloat(addrZ, (lateralSpeed * -1.0));
-            else if (entry->Hotkeys[1].IsDown())                        // move player south
-                Process::WriteFloat(addrZ, lateralSpeed);
-            else                                                        // no input = no movement along Z-axis
-                Process::WriteFloat(addrZ, 0);
+            u32 offset = player * PLAYER_OFFSET;
+            u32 addrX = AddressList::getAddress("SpeedX") + offset;
+            u32 addrY = AddressList::getAddress("SpeedY") + offset;
+            u32 addrZ = AddressList::getAddress("SpeedZ") + offset;
 
-            if (entry->Hotkeys[2].IsDown())                             // move player east
-                Process::WriteFloat(addrX, lateralSpeed);
-            else if (entry->Hotkeys[3].IsDown())                        // move player west
-                Process::WriteFloat(addrX, (lateralSpeed * -1.0));
-            else                                                        // no input = no movement along X-axis
-                Process::WriteFloat(addrX, 0);
-        }
+            bool isAirborne;
 
-        // TODO: check logic here
-        // when NOT moon jumping...
-        if (!isAirborne && (entry->Name() == "Enable Moon Jump"))
-        {
-            if (entry->Hotkeys[4].IsDown())                 // actively try to ascend/moon jump
+            // disable X-button screenshot functionality to avoid hotkey conflicts...
+            Process::Write8(AddressList::getAddress("CameraXButtonToggle"), cameraDisabled);
+
+            isAirborne = (currColl == Collision::colIDFromName("Air"));
+
+            // Allow lateral movement while airborne and not warping on a triforce gate
+            if (isAirborne)
+            {
+                // Translate Circle Pad input into lateral movement
+                // As the game normally does not let you change trajectory in midair
+                // This implementation offers 360 degree movement, unlike 8 directions from just taking Left/Right/Up/Down input
+                float CirclePadXCoord, CirclePadYCoord;
+                Process::ReadFloat(AddressList::getAddress("CPadXCoord"), CirclePadXCoord);
+                Process::ReadFloat(AddressList::getAddress("CPadYCoord"), CirclePadYCoord);
+                Process::WriteFloat(addrX, lateralSpeed * CirclePadXCoord);
+                Process::WriteFloat(addrZ, lateralSpeed * CirclePadYCoord * -1.0); //Circle Pad Y is reverse to Z-axis
+            }
+
+            // Ascent / moon jump
+            if (entry->Name() == "Enable Moon Jump" && entry->Hotkeys[0].IsDown() && canApplyYSpeed(player))
                 Process::WriteFloat(addrY, ascentSpeed);
-            else                                            // auto-descend
-                Process::WriteFloat(addrY, descentSpeed);
-        }
 
-        // when currently flying...
-        if (entry->Name() == "Enable Flight")
-        {
-            if (entry->Hotkeys[4].IsDown())                         // ascend
-                Process::WriteFloat(addrY, ascentSpeed);
-            else if (entry->Hotkeys[5].IsDown())                    // descend
-                Process::WriteFloat(addrY, descentSpeed);
-            else                                                    // hover in place
-                Process::WriteFloat(addrY, speedToMaintainHover);
+            // Flight descent / hovering
+            if (entry->Name() == "Enable Flight" && canApplyYSpeed(player))
+            {
+                if (entry->Hotkeys[0].IsDown())                         // ascend
+                    Process::WriteFloat(addrY, ascentSpeed);
+                else if (entry->Hotkeys[1].IsDown())                    // descend
+                    Process::WriteFloat(addrY, descentSpeed);
+                else if (isAirborne)                                    // hover in place
+                    Process::WriteFloat(addrY, speedToMaintainHover);
+            }
         }
     }
 
-    // Keep the two players you aren't currently controlling hovering in place
+    // Keep the two players you aren't currently controlling hovering in place while airborne
     void Gameplay::forceHover(MenuEntry *entry)
     {
         int link = GeneralHelpers::getCurrLink();
+        u16 currColl, lastColl;
+        bool isAirborne, wasOnTriforceGate;
         for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
         {
-            if (iterateThruPlayers != link)
+            if (iterateThruPlayers != link && canApplyYSpeed(iterateThruPlayers))
             {
-                Process::WriteFloat(AddressList::getAddress("SpeedX") + iterateThruPlayers * PLAYER_OFFSET, 0.0);
-                Process::WriteFloat(AddressList::getAddress("SpeedY") + iterateThruPlayers * PLAYER_OFFSET, speedToMaintainHover);
-                Process::WriteFloat(AddressList::getAddress("SpeedZ") + iterateThruPlayers * PLAYER_OFFSET, 0.0);
+                currColl = Collision::getCurrCol(iterateThruPlayers);
+                isAirborne = (currColl == Collision::colIDFromName("Air"));
+                lastColl = Collision::getLastCol(iterateThruPlayers);
+                wasOnTriforceGate = (lastColl == Collision::colIDFromName("Triforce_gate"));
+                if (isAirborne && !wasOnTriforceGate)
+                {
+                    Process::WriteFloat(AddressList::getAddress("SpeedX") + iterateThruPlayers * PLAYER_OFFSET, 0.0);
+                    Process::WriteFloat(AddressList::getAddress("SpeedY") + iterateThruPlayers * PLAYER_OFFSET, speedToMaintainHover);
+                    Process::WriteFloat(AddressList::getAddress("SpeedZ") + iterateThruPlayers * PLAYER_OFFSET, 0.0);
+                }
             }
         }
     }
@@ -271,11 +274,11 @@ namespace CTRPluginFramework
         switch (speed.Open())
         {
             case 0:
-                lateralSpeed = 0.04;
+                lateralSpeed = 0.05;
                 entry->SetName("Adjust lateral speed: Weak");
                 break;
             case 1:
-                lateralSpeed = 0.09;
+                lateralSpeed = 0.1;
                 entry->SetName("Adjust lateral speed: Medium");
                 break;
             case 2:
@@ -283,5 +286,17 @@ namespace CTRPluginFramework
                 entry->SetName("Adjust lateral speed: Strong");
                 break;
         }
+    }
+
+    // Returns true if the player is not currently spawning into a stage, respawning from a fall
+    // For the purpose of not applying y axis speed during these times
+    bool canApplyYSpeed(int player)
+    {
+        u8 respawning, invincible;
+        // Link's shadow is invisible while falling out of bounds / respawning, so we can check this indicator
+        Process::Read8(AddressList::getAddress("PlayerShadowVisibility") + player * PLAYER_OFFSET, respawning);
+        // Extra check for water collision and invincibility frames since these also hide Link's shadow
+        Process::Read8(AddressList::getAddress("IsInvincible") + player * PLAYER_OFFSET, invincible);
+        return (respawning == 0 && Level::hasCertainTimeElapsed(100)) || Collision::getCurrCol(player) == Collision::colIDFromName("Water") || invincible != 0;
     }
 }

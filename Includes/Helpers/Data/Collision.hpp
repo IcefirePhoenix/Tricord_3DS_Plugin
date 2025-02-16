@@ -14,6 +14,7 @@ namespace CTRPluginFramework
 
         static u16 colIDFromName(std::string name);
         static u16 getCurrCol(int player);
+		static u16 getLastCol(int player);
         static void setCurrCol(int player, u16 targetCol);
 
 	private:
