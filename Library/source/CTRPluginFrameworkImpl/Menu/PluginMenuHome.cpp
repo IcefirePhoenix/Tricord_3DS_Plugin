@@ -538,7 +538,7 @@ namespace CTRPluginFramework
                     Renderer::DrawSysString(name, posX + 20, posY, 350, Color::Gainsboro, offset);
                 }
                 else if (entry->_flags.useControllerIcon && !entry->_flags.isUnselectable) {
-                    Icon::DrawController(posX, posY);
+                    Icon::DrawGameController(posX, posY);
                     Renderer::DrawSysString(name, posX + 20, posY, 350, Color::Gainsboro, offset);
                     posY += 1;
                 }
