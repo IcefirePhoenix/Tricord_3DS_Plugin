@@ -158,7 +158,7 @@ namespace CTRPluginFramework
 
             isAirborne = (currColl == Collision::colIDFromName("Air"));
 
-            // Allow lateral movement while airborne and not warping on a triforce gate
+            // Allow lateral movement while airborne
             if (isAirborne)
             {
                 // Translate Circle Pad input into lateral movement
@@ -175,7 +175,7 @@ namespace CTRPluginFramework
             if (entry->Name() == "Enable Moon Jump" && entry->Hotkeys[0].IsDown() && canApplyYSpeed(player))
                 Process::WriteFloat(addrY, ascentSpeed);
 
-            // Flight descent / hovering
+            // Flight ascent, descent or hovering
             if (entry->Name() == "Enable Flight" && canApplyYSpeed(player))
             {
                 if (entry->Hotkeys[0].IsDown())                         // ascend

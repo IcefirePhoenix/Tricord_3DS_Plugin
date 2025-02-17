@@ -420,6 +420,16 @@
             }
         },
         {
+            "name": "preserve_costume_on_defeat_note",
+            "content": {
+                "intro": "Toggles whether your randomly generated costumes are preserved upon defeat (losing a fairy). If preserving, then new random costumes only generate when progressing to the next stage.",
+                "note": "",
+                "hotkeys": {},
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "sword_model_note",
             "content": {
                 "intro": "Allows player sword models to be changed, regardless of current costume. DEVTODO: check below?",

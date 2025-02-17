@@ -17,6 +17,7 @@ namespace CTRPluginFramework
 	{
 	public:
 		static std::string getLinkColorAsStr(int ID);
+		static std::string getPlayerAsStr(int ID);
 
 		static int chooseLink(void);
 		static int chooseShadowLink(void);

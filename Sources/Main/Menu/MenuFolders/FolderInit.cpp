@@ -249,13 +249,21 @@ namespace CTRPluginFramework
         *costume += new MenuEntry("Set custom sword model(s)", nullptr, Player::setSwordChanges, DescUtils::getDesc("sword_model_note"));
         *costume += new MenuEntry("Force Bear Minimum / Maximum", nullptr, Costume::forceBearMinMax, DescUtils::getDesc("bear_minMax_note"));
 
-        // create costume sub-folders...
+        // Create costume effects subfolders
         // TODO: need to merge fixes from test branch...
-        // MenuFolder *costumeEffects = new MenuFolder("Costume Effects");
-        // *costumeEffects += new MenuEntry("(TODO) Set Costume Effects", nullptr, Costume::selCostumeEffect);
-        // *costume += costumeEffects;
+        MenuFolder *costumeEffects = new MenuFolder("Costume Effects");
 
-        *costume += new MenuEntry("Costume Randomizers", nullptr, Costume::costumeRandomizer, DescUtils::getDesc("costume_randomizers_note"));
+        // All costume effects
+        *costumeEffects += new MenuEntry("Toggle sword beam cooldown", nullptr, Costume::selectLinkBeam, DescUtils::getDesc("beam_cooldown_note"));
+
+        // Add to parent folder
+        *costume += costumeEffects;
+
+        // Costume Randomizers subfolder
+        MenuFolder *costumeRandomizers = new MenuFolder("Costume Randomizers");
+        *costumeRandomizers += new MenuEntry("Toggle Costume Randomizers", nullptr, Costume::costumeRandomizer, DescUtils::getDesc("costume_randomizers_note"));
+        *costumeRandomizers += new MenuEntry("Preserve costumes upon defeat", nullptr, Costume::toggleRandomizeOnDefeat, DescUtils::getDesc("preserve_costume_on_defeat_note"));
+        *costume += costumeRandomizers;
 
         // auto-managed by plugin; hidden from users...
         swordEditAuto = new MenuEntry("Write Sword edits (auto)", Player::writeSwordChanges);
@@ -264,7 +272,7 @@ namespace CTRPluginFramework
         initCustomCostumes = new MenuEntry("Init Custom Costume list (auto)", Costume::initCustomCostumesAuto);
         writeCostumeIDToSlot = new MenuEntry("Write to costume slots (auto)", Costume::writeToCostumeSlot);
         costumeRandomizerAuto = new MenuEntry("Costume Randomizers (auto)", Costume::writeRandomCostume);
-
+        beamCooldownAuto = new MenuEntry("Write beam cooldown (auto)", Costume::writeBeamCooldown);
     }
 
     void InitMiscFolder(PluginMenu &menu)
@@ -284,13 +292,11 @@ namespace CTRPluginFramework
         *miscellaneous += buttonSpam;
         *miscellaneous += camera;
 
-        *miscellaneous += new MenuEntry("Toggle sword beam cooldown", nullptr, Miscellaneous::selectLinkBeam, DescUtils::getDesc("beam_cooldown_note"));
         *miscellaneous += new MenuEntry("Force instant text boxes", nullptr, Miscellaneous::manageInstantText, DescUtils::getDesc("instant_text_note"));
 
         // auto-managed by plugin; hidden from users...
         autoWriteCameraStatus = new MenuEntry("Toggle camera status (auto)", Miscellaneous::keepCameraEdits);
         autoDisableCamShutter = new MenuEntry("Disable camera shutter (auto)", Miscellaneous::writeShutterDisable);
-        autoBeamCooldown = new MenuEntry("Set Beam Cooldown (auto)", Miscellaneous::setBeamCooldown);
     }
 
     void InitPlayerFolder(PluginMenu &menu)

@@ -6,7 +6,6 @@
 
 namespace CTRPluginFramework
 {
-    extern MenuEntry* autoBeamCooldown;
     extern MenuEntry* instantTextDisplay;
     extern MenuEntry* autoWriteCameraStatus;
     extern MenuEntry* autoDisableCamShutter;
@@ -47,8 +46,6 @@ namespace CTRPluginFramework
         static void selectSpamKeys(MenuEntry *entry);
         static void managePhotoDisp(MenuEntry *entry);
         static void manageInstantText(MenuEntry* entry);
-        static void selectLinkBeam(MenuEntry* entry);
-        static void setBeamCooldown(MenuEntry* entry);
         static void toggleCameraButton(MenuEntry* entry);
         static void keepCameraEdits(MenuEntry *entry);
         static void writeCameraEdits(bool allowCamUsage);

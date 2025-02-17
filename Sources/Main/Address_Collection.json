@@ -409,6 +409,14 @@
             }
         },
         {
+            "name": "KokiriIcon",
+            "regionAddrs": {
+                "usaAddress": "0x0015ED94",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
             "name": "BigBombA",
             "regionAddrs": {
                 "usaAddress": "0x0057F334",
@@ -428,6 +436,14 @@
             "name": "BigBombC",
             "regionAddrs": {
                 "usaAddress": "0x0057F710",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "BigBombIcon",
+            "regionAddrs": {
+                "usaAddress": "0x0015ED7C",
                 "eurAddress": "0x00000000",
                 "jpnAddress": "0x00000000"
             }
@@ -481,6 +497,14 @@
             }
         },
         {
+            "name": "BoomerangerIcon",
+            "regionAddrs": {
+                "usaAddress": "0x0015EDAC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
             "name": "TorrentA",
             "regionAddrs": {
                 "usaAddress": "0x00316514",
@@ -516,6 +540,14 @@
             "name": "TorrentE",
             "regionAddrs": {
                 "usaAddress": "0x002311E4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "TorrentIcon",
+            "regionAddrs": {
+                "usaAddress": "0x0015EDB8",
                 "eurAddress": "0x00000000",
                 "jpnAddress": "0x00000000"
             }
@@ -577,6 +609,22 @@
             }
         },
         {
+            "name": "GustGarbH",
+            "regionAddrs": {
+                "usaAddress": "0x00189764",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GustGarbIcon",
+            "regionAddrs": {
+                "usaAddress": "0x0015EDC4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
             "name": "HammerwearA",
             "regionAddrs": {
                 "usaAddress": "0x003164FC",
@@ -633,6 +681,14 @@
             }
         },
         {
+            "name": "HammerwearIcon",
+            "regionAddrs": {
+                "usaAddress": "0x0015EDDC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
             "name": "RobowearA",
             "regionAddrs": {
                 "usaAddress": "0x0031652C",
@@ -652,6 +708,14 @@
             "name": "RobowearC",
             "regionAddrs": {
                 "usaAddress": "0x00155C70",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "RobowearIcon",
+            "regionAddrs": {
+                "usaAddress": "0x0015EDD0",
                 "eurAddress": "0x00000000",
                 "jpnAddress": "0x00000000"
             }
@@ -689,6 +753,94 @@
             }
         },
         {
+            "name": "FireBlazerIcon",
+            "regionAddrs": {
+                "usaAddress": "0x0015EDA0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GoronA",
+            "regionAddrs": {
+                "usaAddress": "0x001B8A44",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GoronB",
+            "regionAddrs": {
+                "usaAddress": "0x00226BBC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GoronC",
+            "regionAddrs": {
+                "usaAddress": "0x00226BC0",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GoronD",
+            "regionAddrs": {
+                "usaAddress": "0x00226BF4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GoronE",
+            "regionAddrs": {
+                "usaAddress": "0x00226BF8",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GoronF",
+            "regionAddrs": {
+                "usaAddress": "0x003163F4",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GoronG",
+            "regionAddrs": {
+                "usaAddress": "0x003163F8",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GoronH",
+            "regionAddrs": {
+                "usaAddress": "0x003163FC",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GoronI",
+            "regionAddrs": {
+                "usaAddress": "0x0059D420",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "GoronJ",
+            "regionAddrs": {
+                "usaAddress": "0x0059D424",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
             "name": "LightArmorA",
             "regionAddrs": {
                 "usaAddress": "0x00378B94",
@@ -700,6 +852,38 @@
             "name": "LightArmorB",
             "regionAddrs": {
                 "usaAddress": "0x00378B98",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "LightArmorC",
+            "regionAddrs": {
+                "usaAddress": "0x0031660C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "LightArmorD",
+            "regionAddrs": {
+                "usaAddress": "0x00316614",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "LightArmorE",
+            "regionAddrs": {
+                "usaAddress": "0x00316618",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "LightArmorF",
+            "regionAddrs": {
+                "usaAddress": "0x0031661C",
                 "eurAddress": "0x00000000",
                 "jpnAddress": "0x00000000"
             }
@@ -777,6 +961,14 @@
             }
         },
         {
+            "name": "BigSwordBeam",
+            "regionAddrs": {
+                "usaAddress": "0x001BDA90",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
             "name": "QuadBeamA",
             "regionAddrs": {
                 "usaAddress": "0x003B1258",
@@ -828,6 +1020,14 @@
             "name": "KnockbackImmunity",
             "regionAddrs": {
                 "usaAddress": "0x003BAE6C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "CactoDamageDrablands",
+            "regionAddrs": {
+                "usaAddress": "0x001C1740",
                 "eurAddress": "0x00000000",
                 "jpnAddress": "0x00000000"
             }
