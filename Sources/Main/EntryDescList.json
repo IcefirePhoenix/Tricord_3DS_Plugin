@@ -337,7 +337,7 @@
             "name": "sword_model_note",
             "content": {
                 "intro": "Allows player sword models to be changed, regardless of current costume. DEVTODO: check below?",
-                "note": "",
+                "note": "Overrides settings from cosmetic costumes.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }
@@ -348,6 +348,357 @@
                 "intro": "Toggles the Bear Maximum costume upgrade, regardless of current Hero Point count. DEVTODO: check below?",
                 "note": "Bear Maximum is normally unlocked with 30+ Hero Points.",
                 "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "costume_effects_note",
+            "content": {
+                "intro": "Any combination of these costume effects can be selected and will be applied to the chosen player. This does not overwrite any existing costume effects the player may have.",
+                "note": "",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "ind_costume_effects_note",
+            "content": {
+                "intro": "Set costume effects that apply only to this player. A loading zone may be required to fully disable effects.",
+                "note": "Not all costume effects in the game are able to be forced on for one player at a time.",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "allp_costume_effects_note",
+            "content": {
+                "intro": "Set costume effects that apply to all three players at once. Some may require a loading zone to see full effects.",
+                "note": "For any costume effects you don't find here, look for them under the individual costume effects subfolders above.",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "bonus_costume_effects_note",
+            "content": {
+                "intro": "A collection of codes that tweak the effect of some costumes.",
+                "note": "",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "write_ind_costume_effects_note",
+            "content": {
+                "intro": "Enable this entry to apply all the selected changes below.",
+                "note": "",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "double_damage_taken_note",
+            "content": {
+                "intro": "Double damage received from enemies.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "lucky_note",
+            "content": {
+                "intro": "Dodge chances that come from certain costumes. Can only apply one at a time.",
+                "note": "25% - Lucky Loungewear\n50% - Cursed Tights\n75% - Bear Maximum",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "zora_note",
+            "content": {
+                "intro": "Swim faster, deal damage with swim boosts, and become immune to currents.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "goron_ind_note",
+            "content": {
+                "intro": "Allows you to swim in lava and become immune to burning effects from enemies and the environment.",
+                "note": "Does not prevent you from taking damage from lava pillars. Does not allow you to walk through fire curtains. Does not allow you to pick up flaming rupees.",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "parka_note",
+            "content": {
+                "intro": "Allows you to walk on ice without sliding around, and become immune to freezing effects from enemies and the environment.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "dune_note",
+            "content": {
+                "intro": "Allows you to stand still on quicksand without sinking.",
+                "note": "Does not some with the sand ripple effect.",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "legendary_note",
+            "content": {
+                "intro": "Hearts drop from destroyed objects (grass, pots, etc.) or defeated enemies more frequently.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "regalia_note",
+            "content": {
+                "intro": "Rupees drop from destroyed objects (grass, pots, etc.) or defeated enemies in pairs.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "serpent_note",
+            "content": {
+                "intro": "Stand still for about one second to turn invincible. Invincibility ends upon moving.",
+                "note": "Does not include a stony texture.",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "cacto_note",
+            "content": {
+                "intro": "Enemies you come in contact with take damage.",
+                "note": "2 hearts of damage by default. Affected by \"Cacto Clothes - Set damage\" found in the Bonus Effects folder.",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "dapper_note",
+            "content": {
+                "intro": "Swing your sword three* times to unleash a spin attack.\n*Affected by \"Dapper Spinner - Reduce # swings to spin\" found in the Bonus Effects folder.",
+                "note": "This spin attack is not affected by the Spin Attack Attire's effect.",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "ninja_note",
+            "content": {
+                "intro": "Dashing requires virtually no startup time; it's instant. Dashes do triple damage.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "saa_note",
+            "content": {
+                "intro": "Great Spin Attacks have more range, do double damage, and grant invincibility frames.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "kokiri_note",
+            "content": {
+                "intro": "Shoots three arrows, one straight ahead and two slightly angled outward.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "bigbomb_note",
+            "content": {
+                "intro": "All bombs spawned or picked up are turned into Big Bombs.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "torrent_note",
+            "content": {
+                "intro": "Water pillars are larger.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "boomeranger_note",
+            "content": {
+                "intro": "The Boomerang is larger, can carry two players, deals damage and pierces enemies.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "blazer_note",
+            "content": {
+                "intro": "Throws three fireballs, one large and two smaller. All fireballs do double damage, for a total of 6x damage.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "gustgarb_note",
+            "content": {
+                "intro": "The Gust Jar fires faster and farther, has wider range, and keeps fans activated for longer.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "robo_note",
+            "content": {
+                "intro": "The Gripshot is larger, fires faster, and deals damage.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "hammerwear_note",
+            "content": {
+                "intro": "The Hammer is larger, swings faster, has a much wider shockwave/stun radius, and deals more damage.",
+                "note": "2x damage by default. Affected by \"Set boosted sword & hammer dmg mult.\" found in the Bonus Effects folder.",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "goron_allp_note",
+            "content": {
+                "intro": "Includes burn immunity, lava swimming, no damage from lava pillars, walking through fire curtains and picking up flaming rupees.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "light_armor_note",
+            "content": {
+                "intro": "Increases the size of the light source provided in \"Adventure in the dark!\" challenges and a few other dark stages. Also allows you to burn opponents on contact in the Coliseum.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "linebeck_time_note",
+            "content": {
+                "intro": "Grants +30 seconds at the start of a timed challenge, and grants 1.5x time for collected hourglasses.",
+                "note": "For viewing the contents of treasure chests, see the Rendering folder.",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "cheetah_speed_note",
+            "content": {
+                "intro": "Uses the Cheetah speed multiplier to walk faster, including while charging a spin attack or strafing with an item prepped. Does not affect dashing.",
+                "note": "1.5x speed by default. Affected by \"Cheetah Costume - Set speed mult.\" found in the Bonus Effects folder.",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "sword_dmg_boost_note",
+            "content": {
+                "intro": "Boosts the damage dealt with the sword, including spin attacks. Does not affect dash damage.",
+                "note": "2x damage by default. Affected by \"Set boosted sword & hammer dmg mult.\" found in the Bonus Effects folder.",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "set_sword_beam_note",
+            "content": {
+                "intro": "Allows you to select a sword beam type to enable.",
+                "note": "\"Quad sword beam\" includes both the normal sword attack quad sword beam, as well as the spin attack quad sword beam.",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "knockback_immunity_note",
+            "content": {
+                "intro": "Prevents you from being pushed/knocked back by enemies/objects.",
+                "note": "You can still be affected by wind or drop held players/objects when struck.",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "tingle_note",
+            "content": {
+                "intro": "Allows you to set a specific number of Tingle balloons for a player to have, including infinite balloons. Tingle balloons rescue you from falling into pits or lava.",
+                "note": "You do not need to be wearing Tingle Tights.",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "dapper_instant_note",
+            "content": {
+                "intro": "Allows you to reduce the number of swings need to unleash a spin attack with the Dapper Spinner costume to two or one swing.",
+                "note": "It is not possible to increase the number of swings required. Must be wearing Dapper Spinner (or forcing its effect).",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "cheetah_mult_note",
+            "content": {
+                "intro": "Sets the multiplier for Link's walking speed when it is boosted by the Cheetah Costume.",
+                "note": "Must be wearing the Cheetah Costume (or forcing its effect) to observe changes. Negative values will invert movement.",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "cacto_dmg_note",
+            "content": {
+                "intro": "Sets the amount of damage the Cacto Clothes deals to foes in the Drablands. Default is 2 hearts.",
+                "note": "Must be wearing the Cacto Clothes (or forcing its effect) to see changes. Only effective in the Coliseum if not wearing Cacto Clothes, but forcing its effect.",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "sword_hammer_mult_note",
+            "content": {
+                "intro": "Sets the multiplier for sword damage dealt when boosted by the Sword Suit, Sword Master Suit or Fierce Deity Armor. Also used for the hammer when it is upgraded by the Hammerwear.",
+                "note": "Must be wearing one of the above costumes (or forcing its effect) to observe changes.",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "beam_any_health_note",
+            "content": {
+                "intro": "Sword beams can be spawned regardless of whether your health is at the maximum or not.",
+                "note": "Must be wearing a costume that provides sword beams, or forcing a sword beam ability on.",
+                "modeCompatibility": 2,
                 "clientOnly": false
             }
         },
