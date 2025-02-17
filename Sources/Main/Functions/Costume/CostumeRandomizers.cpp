@@ -7,6 +7,7 @@ namespace CTRPluginFramework
 
     bool randomizers[2][3] = { { false, false, false }, { false, false, false } };
     bool canRandomize = true; // Used to ensure only one write during loading screens
+    bool canRandomizeOnDefeat = true; // Used to preserve generated costumes upon defeat if desired
 
     /* ------------------ */
 
@@ -90,7 +91,7 @@ namespace CTRPluginFramework
     // Sets the current cosmetic/effective costume ID
     void Costume::writeRandomCostume(MenuEntry* entry)
     {
-        if (GeneralHelpers::isLoadingScreen(true) && canRandomize)
+        if (GeneralHelpers::isLoadingScreen(true) && canRandomize && !(!canRandomizeOnDefeat && GeneralHelpers::getHP() == 0))
         {
             canRandomize = false;
 
@@ -111,5 +112,20 @@ namespace CTRPluginFramework
 
         if (Level::getElapsedTime() == 100)
             canRandomize = true;
+    }
+
+    // Toggles whether new random costumes are generated upon defeat (losing a fairy) or not
+    void Costume::toggleRandomizeOnDefeat(MenuEntry* entry)
+    {
+        if (entry->Name() == "Preserve costumes upon defeat")
+        {
+            canRandomizeOnDefeat = false;
+            entry->SetName("Randomize costumes upon defeat");
+        }
+        else
+        {
+            canRandomizeOnDefeat = true;
+            entry->SetName("Preserve costumes upon defeat");
+        }
     }
 }

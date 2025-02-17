@@ -21,6 +21,8 @@ namespace CTRPluginFramework
 
     extern MenuEntry* costumeRandomizerAuto;
 
+    extern MenuEntry* beamCooldownAuto;
+
     int chooseSlotAddNum(void);
     void selCosmeticCostume(int player);
     void disableCustomCostumeMenuOpt(void);
@@ -52,7 +54,11 @@ namespace CTRPluginFramework
         static void writeCosmeticCostume(MenuEntry* entry);
         static void changeSlotMappings(MenuEntry* entry);
         static void costumeRandomizer(MenuEntry* entry);
-        static void writeRandomCostume(MenuEntry *entry);
+        static void writeRandomCostume(MenuEntry* entry);
+        static void toggleRandomizeOnDefeat(MenuEntry* entry);
+
+        static void selectLinkBeam(MenuEntry* entry);
+        static void writeBeamCooldown(MenuEntry* entry);
 
         static const int unusedDLC_slotIDs[4];
         static const StringVector BCH_fileNames;
