@@ -1,5 +1,6 @@
 #include "Cheats.hpp"
 #include "Helpers/MenuHelpers/FolderEntries.hpp"
+#include "General/pIDindex.h"
 
 namespace CTRPluginFramework
 {
@@ -212,11 +213,164 @@ namespace CTRPluginFramework
     void InitCostumeFolder(PluginMenu &menu)
     {
         costume = new MenuFolder("Costumes");
-        MenuFolder *cosmetic = new MenuFolder("Cosmetic Costumes");
 
+        *costume += new MenuEntry("Change Player Costume", nullptr, Costume::changeLinkCostume, DescUtils::getDesc("change_costume_note"));
+        *costume += new MenuEntry("Prevent Doppel Costume resets", nullptr, Costume::preventDoppelLobbyReset, DescUtils::getDesc("prevent_doppel_reset_note"));
+
+        // Cosmetic costumes subfolder
+        MenuFolder *cosmetic = new MenuFolder("Cosmetic Costumes");
         *cosmetic += new MenuEntry("Enable Cosmetic Costumes", nullptr, Costume::enableCosmeticCostume, DescUtils::getDesc("choose_cosmetic_note"));
         *cosmetic += new MenuEntry("Set Cosmetic Costume", nullptr, Costume::setCosmeticCostume, DescUtils::getDesc("set_cosmetic_note"));
+        *cosmetic += new MenuEntry("Set Custom Sword Model(s)", nullptr, Player::setSwordChanges, DescUtils::getDesc("sword_model_note"));
         *costume += cosmetic;
+
+        // Costume effects subfolders
+        MenuFolder *costumeEffects = new MenuFolder("Costume Effects", DescUtils::getDesc("costume_effects_note"));
+
+        // Individual costume effects
+        MenuFolder* indCostumeEffects[3] = {
+            new MenuFolder("Costume Effects - Player 1 (Green)", DescUtils::getDesc("ind_costume_effects_note")),
+            new MenuFolder("Costume Effects - Player 2 (Blue)", DescUtils::getDesc("ind_costume_effects_note")),
+            new MenuFolder("Costume Effects - Player 3 (Red)", DescUtils::getDesc("ind_costume_effects_note"))
+        };
+
+        MenuEntry* subEntries[3][14];
+
+        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++) {
+            pIDindex args;
+            args.playerID = iterateThruPlayers;
+
+            // Checkbox to apply effects
+            subEntries[iterateThruPlayers][0] = new MenuEntry("Apply costume effects", Costume::writeIndCostumeEffects, DescUtils::getDesc("write_ind_costume_effects_note"));
+            subEntries[iterateThruPlayers][0]->SetArg(reinterpret_cast<void*>(iterateThruPlayers));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][0];
+
+            // Double damage
+            args.index = 19;
+            subEntries[iterateThruPlayers][1] = new MenuEntry("(  ) Bear / Cursed - Double damage taken", nullptr, Costume::setIndCostumeEffect, DescUtils::getDesc("double_damage_taken_note"));
+            subEntries[iterateThruPlayers][1]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][1];
+
+            // Lucky dodge
+            subEntries[iterateThruPlayers][2] = new MenuEntry("(  ) Lucky Dodge", nullptr, Costume::luckyDodge, DescUtils::getDesc("lucky_note"));
+            subEntries[iterateThruPlayers][2]->SetArg(reinterpret_cast<void*>(iterateThruPlayers));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][2];
+
+            // Zora
+            args.index = 1;
+            subEntries[iterateThruPlayers][3] = new MenuEntry("(  ) Zora Costume - Enhanced swimming", nullptr, Costume::setIndCostumeEffect, DescUtils::getDesc("zora_note"));
+            subEntries[iterateThruPlayers][3]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][3];
+
+            // Goron
+            args.index = 2;
+            subEntries[iterateThruPlayers][4] = new MenuEntry("(  ) Goron Garb - Burn immunity & lava swim", nullptr, Costume::setIndCostumeEffect, DescUtils::getDesc("goron_ind_note"));
+            subEntries[iterateThruPlayers][4]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][4];
+
+            // Parka
+            args.index = 3;
+            subEntries[iterateThruPlayers][5] = new MenuEntry("(  ) Cozy Parka - Freeze & ice slip immunity", nullptr, Costume::setIndCostumeEffect, DescUtils::getDesc("parka_note"));
+            subEntries[iterateThruPlayers][5]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][5];
+
+            // Dune
+            args.index = 21;
+            subEntries[iterateThruPlayers][6] = new MenuEntry("(  ) Dunewalker Duds - Quicksand immunity", nullptr, Costume::setIndCostumeEffect, DescUtils::getDesc("dune_note"));
+            subEntries[iterateThruPlayers][6]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][6];
+
+            // Legendary
+            args.index = 40;
+            subEntries[iterateThruPlayers][7] = new MenuEntry("(  ) Legendary Dress - Increased heart drops", nullptr, Costume::setIndCostumeEffect, DescUtils::getDesc("legendary_note"));
+            subEntries[iterateThruPlayers][7]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][7];
+
+            // Rupee
+            args.index = 11;
+            subEntries[iterateThruPlayers][8] = new MenuEntry("(  ) Rupee Regalia - Increased rupee drops", nullptr, Costume::setIndCostumeEffect, DescUtils::getDesc("regalia_note"));
+            subEntries[iterateThruPlayers][8]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][8];
+
+            // Serpent
+            args.index = 29;
+            subEntries[iterateThruPlayers][9] = new MenuEntry("(  ) Serpent's Toga - Invincible when still", nullptr, Costume::setIndCostumeEffect, DescUtils::getDesc("serpent_note"));
+            subEntries[iterateThruPlayers][9]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][9];
+
+            // Cacto
+            args.index = 33;
+            subEntries[iterateThruPlayers][10] = new MenuEntry("(  ) Cacto Clothes - Damage foes on contact", nullptr, Costume::setIndCostumeEffect, DescUtils::getDesc("cacto_note"));
+            subEntries[iterateThruPlayers][10]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][10];
+
+            // Dapper
+            args.index = 28;
+            subEntries[iterateThruPlayers][11] = new MenuEntry("(  ) Dapper Spinner - 3x"+std::string(FONT_B)+" to spin attack", nullptr, Costume::setIndCostumeEffect, DescUtils::getDesc("dapper_note"));
+            subEntries[iterateThruPlayers][11]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][11];
+
+            // Ninja
+            args.index = 4;
+            subEntries[iterateThruPlayers][12] = new MenuEntry("(  ) Ninja Gi - Instant triple damage dash", nullptr, Costume::setIndCostumeEffect, DescUtils::getDesc("ninja_note"));
+            subEntries[iterateThruPlayers][12]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][12];
+
+            // Spin Attack
+            args.index = 5;
+            subEntries[iterateThruPlayers][13] = new MenuEntry("(  ) Spin Attack Attire - Great Spin Attack", nullptr, Costume::setIndCostumeEffect, DescUtils::getDesc("saa_note"));
+            subEntries[iterateThruPlayers][13]->SetArg(reinterpret_cast<void*>(new pIDindex(args)));
+            *indCostumeEffects[iterateThruPlayers] += subEntries[iterateThruPlayers][13];
+
+            // Add to parent folder
+            *costumeEffects += indCostumeEffects[iterateThruPlayers];
+        }
+
+        MenuFolder* allPCostumeEffects = new MenuFolder("All-Player Costume Effects", DescUtils::getDesc("allp_costume_effects_note"));
+
+        // Item upgrades
+        *allPCostumeEffects += new MenuEntry("(  ) Kokiri Clothes - Bow upgrade", nullptr, Costume::kokiri, DescUtils::getDesc("kokiri_note"));
+        *allPCostumeEffects += new MenuEntry("(  ) Big Bomb Outfit - Bomb upgrade", nullptr,  Costume::bigBomb, DescUtils::getDesc("bigbomb_note"));
+        *allPCostumeEffects += new MenuEntry("(  ) Torrent Robe - Water Rod upgrade", nullptr, Costume::torrent, DescUtils::getDesc("torrent_note"));
+        *allPCostumeEffects += new MenuEntry("(  ) Boomeranger - Boomerang upgrade", nullptr, Costume::boomeranger, DescUtils::getDesc("boomeranger_note"));
+        *allPCostumeEffects += new MenuEntry("(  ) Fire Blazer - Fire Gloves upgrade", nullptr, Costume::fireBlazer, DescUtils::getDesc("blazer_note"));
+        *allPCostumeEffects += new MenuEntry("(  ) Gust Garb - Gust Jar upgrade", nullptr, Costume::gustGarb, DescUtils::getDesc("gustgarb_note"));
+        *allPCostumeEffects += new MenuEntry("(  ) Robowear - Gripshot upgrade", nullptr, Costume::robowear, DescUtils::getDesc("robo_note"));
+        *allPCostumeEffects += new MenuEntry("(  ) Hammerwear - Hammer upgrade", nullptr, Costume::hammerwear, DescUtils::getDesc("hammerwear_note"));
+
+        // Other
+        *allPCostumeEffects += new MenuEntry("(  ) Goron Garb - Full fire/lava immunity", nullptr, Costume::goron, DescUtils::getDesc("goron_allp_note"));
+        *allPCostumeEffects += new MenuEntry("(  ) Light Armor - Glow & burn foes", nullptr, Costume::lightArmor, DescUtils::getDesc("light_armor_note"));
+        *allPCostumeEffects += new MenuEntry("(  ) Linebeck's Uniform - Time bonuses", nullptr, Costume::linebeck, DescUtils::getDesc("linebeck_time_note"));
+        *allPCostumeEffects += new MenuEntry("(  ) Cheetah Costume - Faster walk speed", nullptr, Costume::cheetah, DescUtils::getDesc("cheetah_speed_note"));
+        *allPCostumeEffects += new MenuEntry("(  ) Sword Suits - Sword damage boost", nullptr, Costume::swordDmgBoost, DescUtils::getDesc("sword_dmg_boost_note"));
+        *allPCostumeEffects += new MenuEntry("(  ) Sword Suits - Set sword beam", nullptr, Costume::swordBeam, DescUtils::getDesc("set_sword_beam_note"));
+        *allPCostumeEffects += new MenuEntry("(  ) Fierce Deity Armor - Knockback immunity", nullptr, Costume::knockbackImmunity, DescUtils::getDesc("knockback_immunity_note"));
+        *costumeEffects += allPCostumeEffects;
+
+        // Bonus effects
+        MenuFolder* bonusEffects = new MenuFolder("Bonus Effects", DescUtils::getDesc("bonus_costume_effects_note"));
+        *bonusEffects += new MenuEntry("Tingle Tights - Set number of balloons", nullptr, Costume::tingle, DescUtils::getDesc("tingle_note"));
+        *bonusEffects += new MenuEntry("Dapper Spinner - Reduce # swings to spin", nullptr, Costume::dapperInstant, DescUtils::getDesc("dapper_instant_note"));
+        *bonusEffects += new MenuEntry("Cheetah Costume - Set speed mult.: 1.5x", nullptr, Costume::setCheetahMultiplier, DescUtils::getDesc("cheetah_mult_note"));
+        *bonusEffects += new MenuEntry("Cacto Clothes - Set damage: 2 hearts", nullptr, Costume::setCactoDmg, DescUtils::getDesc("cacto_dmg_note"));
+        *bonusEffects += new MenuEntry("Set boosted sword & hammer dmg mult.: 2x", nullptr, Costume::setSwordHammerDmgMult, DescUtils::getDesc("sword_hammer_mult_note"));
+        *bonusEffects += new MenuEntry("Enable sword beams at any health", nullptr, Costume::swordBeamsAnyHealth, DescUtils::getDesc("beam_any_health_note"));
+        *bonusEffects += new MenuEntry("Toggle sword beam cooldown", nullptr, Costume::selectLinkBeam, DescUtils::getDesc("beam_cooldown_note"));
+        *costumeEffects += bonusEffects;
+
+        // Add to parent folder
+        *costume += costumeEffects;
+
+        // Costume Randomizers subfolder
+        MenuFolder *costumeRandomizers = new MenuFolder("Costume Randomizers");
+        *costumeRandomizers += new MenuEntry("Toggle Costume Randomizers", nullptr, Costume::costumeRandomizer, DescUtils::getDesc("costume_randomizers_note"));
+        *costumeRandomizers += new MenuEntry("Preserve costumes upon defeat", nullptr, Costume::toggleRandomizeOnDefeat, DescUtils::getDesc("preserve_costume_on_defeat_note"));
+        *costume += costumeRandomizers;
+
+        *costume += new MenuEntry("Force Bear Minimum / Maximum", nullptr, Costume::forceBearMinMax, DescUtils::getDesc("bear_minMax_note"));
+
+        // Custom costumes
 
         // TODO: restore after custom costume model loaders are ready...
         triggerCostumeSlots = new MenuEntry("Open Custom Costume Slots", nullptr, Costume::openCustomCostumeSlots);
@@ -244,27 +398,6 @@ namespace CTRPluginFramework
         menuCostumeSlotC->SetAltIcon(true);
         menuCostumeSlotD->SetAltIcon(true);
 
-        *costume += new MenuEntry("Change Player Costume", nullptr, Costume::changeLinkCostume, DescUtils::getDesc("change_costume_note"));
-        *costume += new MenuEntry("Prevent Doppel Costume resets", nullptr, Costume::preventDoppelLobbyReset, DescUtils::getDesc("prevent_doppel_reset_note"));
-        *costume += new MenuEntry("Set custom sword model(s)", nullptr, Player::setSwordChanges, DescUtils::getDesc("sword_model_note"));
-        *costume += new MenuEntry("Force Bear Minimum / Maximum", nullptr, Costume::forceBearMinMax, DescUtils::getDesc("bear_minMax_note"));
-
-        // Create costume effects subfolders
-        // TODO: need to merge fixes from test branch...
-        MenuFolder *costumeEffects = new MenuFolder("Costume Effects");
-
-        // All costume effects
-        *costumeEffects += new MenuEntry("Toggle sword beam cooldown", nullptr, Costume::selectLinkBeam, DescUtils::getDesc("beam_cooldown_note"));
-
-        // Add to parent folder
-        *costume += costumeEffects;
-
-        // Costume Randomizers subfolder
-        MenuFolder *costumeRandomizers = new MenuFolder("Costume Randomizers");
-        *costumeRandomizers += new MenuEntry("Toggle Costume Randomizers", nullptr, Costume::costumeRandomizer, DescUtils::getDesc("costume_randomizers_note"));
-        *costumeRandomizers += new MenuEntry("Preserve costumes upon defeat", nullptr, Costume::toggleRandomizeOnDefeat, DescUtils::getDesc("preserve_costume_on_defeat_note"));
-        *costume += costumeRandomizers;
-
         // auto-managed by plugin; hidden from users...
         swordEditAuto = new MenuEntry("Write Sword edits (auto)", Player::writeSwordChanges);
         cosmeticCostumeAuto = new MenuEntry("Write cosmetic costumes (auto)", Costume::writeCosmeticCostume);
@@ -273,6 +406,8 @@ namespace CTRPluginFramework
         writeCostumeIDToSlot = new MenuEntry("Write to costume slots (auto)", Costume::writeToCostumeSlot);
         costumeRandomizerAuto = new MenuEntry("Costume Randomizers (auto)", Costume::writeRandomCostume);
         beamCooldownAuto = new MenuEntry("Write beam cooldown (auto)", Costume::writeBeamCooldown);
+        infBalloonsAuto = new MenuEntry("Infinite tingle balloons (auto)", Costume::writeBalloons);
+        dapperAuto = new MenuEntry("Dapper faster spins (auto)", Costume::writeDapper);
     }
 
     void InitMiscFolder(PluginMenu &menu)

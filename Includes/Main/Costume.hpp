@@ -21,6 +21,8 @@ namespace CTRPluginFramework
 
     extern MenuEntry* costumeRandomizerAuto;
 
+    extern MenuEntry* infBalloonsAuto;
+    extern MenuEntry* dapperAuto;
     extern MenuEntry* beamCooldownAuto;
 
     int chooseSlotAddNum(void);
@@ -57,8 +59,45 @@ namespace CTRPluginFramework
         static void writeRandomCostume(MenuEntry* entry);
         static void toggleRandomizeOnDefeat(MenuEntry* entry);
 
+        // Individual costume effects
+
+        static void luckyDodge(MenuEntry* entry);
+        static void tingle(MenuEntry* entry);
+        static void writeBalloons(MenuEntry* entry);
+        static void dapperInstant(MenuEntry* entry);
+        static void writeDapper(MenuEntry* entry);
         static void selectLinkBeam(MenuEntry* entry);
         static void writeBeamCooldown(MenuEntry* entry);
+
+        static void setIndCostumeEffect(MenuEntry* entry);
+        static void writeIndCostumeEffects(MenuEntry* entry);
+
+        // All-player costume effects
+
+        // Item costumes
+        static void kokiri(MenuEntry* entry);
+        static void bigBomb(MenuEntry* entry);
+        static void torrent(MenuEntry* entry);
+        static void boomeranger(MenuEntry* entry);
+        static void fireBlazer(MenuEntry* entry);
+        static void gustGarb(MenuEntry* entry);
+        static void robowear(MenuEntry* entry);
+        static void hammerwear(MenuEntry* entry);
+
+        // Other
+        static void goron(MenuEntry* entry);
+        static void lightArmor(MenuEntry* entry);
+        static void linebeck(MenuEntry* entry);
+        static void cheetah(MenuEntry* entry);
+        static void swordDmgBoost(MenuEntry* entry);
+        static void swordBeam(MenuEntry* entry);
+        static void knockbackImmunity(MenuEntry* entry);
+
+        // Bonus - Exe
+        static void setCheetahMultiplier(MenuEntry* entry);
+        static void setCactoDmg(MenuEntry* entry);
+        static void setSwordHammerDmgMult(MenuEntry* entry);
+        static void swordBeamsAnyHealth(MenuEntry* entry);
 
         static const int unusedDLC_slotIDs[4];
         static const StringVector BCH_fileNames;

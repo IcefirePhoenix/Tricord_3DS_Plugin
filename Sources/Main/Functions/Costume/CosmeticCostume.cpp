@@ -90,7 +90,7 @@ namespace CTRPluginFramework
     {
         std::string currEffectCostumeName = GameData::getCostumeNameFromID(currEffectCostumeID);
         std::string currCosmeticCostumeName = GameData::getCostumeNameFromID(currCosmeticCostumeID);
-        std::string selectedPlayer = "";
+        std::string selectedPlayer, topscreenMessage;
 
         const StringVector setResetOptions =
         {
@@ -98,20 +98,9 @@ namespace CTRPluginFramework
             "Reset"
         };
 
-        switch (player)
-        {
-            case 0:
-                selectedPlayer = "Player 1 (Green)";
-                break;
-            case 1:
-                selectedPlayer = "Player 2 (Blue)";
-                break;
-            case 2:
-                selectedPlayer = "Player 3 (Red)";
-                break;
-        }
+        selectedPlayer = GeneralHelpers::getPlayerAsStr(player);
 
-        std::string topscreenMessage = "Set new cosmetic costume?\nOr reset to the effective costume?\n\nSelected: " + selectedPlayer + "\n\nCurrent effective costume: " + currEffectCostumeName + "\nCurrent cosmetic costume: " + currCosmeticCostumeName;
+        topscreenMessage = "Set new cosmetic costume?\nOr reset to the effective costume?\n\nSelected: " + selectedPlayer + "\n\nCurrent effective costume: " + currEffectCostumeName + "\nCurrent cosmetic costume: " + currCosmeticCostumeName;
 
         Keyboard setReset(topscreenMessage);
         setReset.Populate(setResetOptions);
