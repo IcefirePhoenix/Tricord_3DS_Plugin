@@ -222,13 +222,15 @@ namespace CTRPluginFramework
         newSpeed = (entryID == 1) ? setHeightAdjustmentSpeed(ascentSpeed) : setHeightAdjustmentSpeed(descentSpeed);
         newEntryName = (entryID == 1) ? "Adjust ascent speed: " : "Adjust descent speed: ";
 
-        // complete entry title string...
-        if (newSpeed == 0.2)
+        // complete entry title string... absolute value used in case original descentSpeed is returned...
+        if (newSpeed == fabs((float)0.2))
             newEntryName += "Weak";
-        else if (newSpeed == 0.5)
+        else if (newSpeed == fabs((float)0.5))
             newEntryName += "Medium";
-        else if (newSpeed == 0.7)
+        else if (newSpeed == fabs((float)0.7))
             newEntryName += "Strong";
+        else
+            newEntryName += "?";
 
         // update height adjustment values...
         if (entryID == 1)
@@ -251,13 +253,13 @@ namespace CTRPluginFramework
         switch (speed.Open())
         {
             case 0:
-                chosenSpeed = 0.2;
+                chosenSpeed = (float)0.2;
                 break;
             case 1:
-                chosenSpeed = 0.5;
+                chosenSpeed = (float)0.5;
                 break;
             case 2:
-                chosenSpeed = 0.7;
+                chosenSpeed = (float)0.7;
                 break;
         }
 
