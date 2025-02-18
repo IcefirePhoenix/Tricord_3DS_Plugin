@@ -70,7 +70,10 @@ namespace CTRPluginFramework
             int modeCompatibility = content["modeCompatibility"].get<int>();
             bool clientOnly = content["clientOnly"].get<bool>();
 
-            std::string finalDesc = intro + "\n\n" + note + getModeStr(modeCompatibility) + getClientStr(clientOnly, modeCompatibility);
+            if (!note.empty())
+                intro += "\n\n";
+
+            std::string finalDesc = intro + note + getModeStr(modeCompatibility) + getClientStr(clientOnly, modeCompatibility);
 
             DescUtils::descriptions[name] = finalDesc;
         }
