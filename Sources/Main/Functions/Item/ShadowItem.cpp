@@ -43,11 +43,13 @@ namespace CTRPluginFramework
                 {
                     toggleRandomizedShadowItems(true, shadowLinkChoice);
                     Process::Write8(shadowDataAddress + indivShadowOffset, randomItem);
+                    forceShadowSwordOnly->Disable();
                 }
                 else if (choice > 0)
                 {
                     toggleRandomizedShadowItems(false, shadowLinkChoice);
                     Process::Write8(shadowDataAddress + indivShadowOffset, choice);
+                    forceShadowSwordOnly->Disable();
                 }
             }
             else
