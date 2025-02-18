@@ -5,6 +5,10 @@ namespace CTRPluginFramework
 {
     MenuEntry *forceShadowSwordOnly;
     u32 defaultJumpTblDestinations[8];
+
+    u32 shadowLinkItemOffset = 0x4;
+    u32 shadowItemPointerOffset = 0x20;
+    u32 dynamicShadowItemAddress;
     u8 randomItem = 0x9;
 
     /* ------------------ */
@@ -16,15 +20,10 @@ namespace CTRPluginFramework
 
         if (shadowLinkChoice >= 0)
         {
-            u32 indivShadowOffset = shadowLinkChoice * 0x4;
-            u32 shadowItemPointerOffset = 0x20;
-            u32 dynamicShadowItemAddress;
+            u32 shadowDataAddress = getShadowItemAddress();
+            u32 indivShadowOffset = shadowLinkChoice * shadowLinkItemOffset;
 
             initShadowItemList();
-
-            // get dynamic address via pointer...
-            Process::Read32(AddressList::getAddress("ShadowLinkItemPointer"), dynamicShadowItemAddress);
-            u32 shadowDataAddress = dynamicShadowItemAddress + shadowItemPointerOffset;
 
             // Shadow Links aren't loaded in-game outside of Baneful Zone...
             bool isInBaneful = (Level::getCurrLevel() == Level::levelIDFromName("Baneful Zone")) && (Level::getCurrStage() == 4);
@@ -46,7 +45,10 @@ namespace CTRPluginFramework
                     Process::Write8(shadowDataAddress + indivShadowOffset, randomItem);
                 }
                 else if (choice > 0)
-                    Process::Write8(shadowDataAddress + indivShadowOffset, choice - 1);
+                {
+                    toggleRandomizedShadowItems(false, shadowLinkChoice);
+                    Process::Write8(shadowDataAddress + indivShadowOffset, choice);
+                }
             }
             else
             {
@@ -63,13 +65,7 @@ namespace CTRPluginFramework
     // Disables specialty item options and resets Shadow Link items to a new randomized set
     void Item::resetShadowItems(MenuEntry *entry)
     {
-        u32 shadowLinkItemOffset = 0x4;
-        u32 shadowItemPointerOffset = 0x20;
-        u32 dynamicShadowItemAddress;
-
-        // get dynamic address via pointer...
-        Process::Read32(AddressList::getAddress("ShadowLinkItemPointer"), dynamicShadowItemAddress);
-        u32 shadowDataAddress = dynamicShadowItemAddress + shadowItemPointerOffset;
+        u32 shadowDataAddress = getShadowItemAddress();
 
         // Shadow Links aren't loaded in-game outside of Baneful Zone...
         bool isInBaneful = (Level::getCurrLevel() == Level::levelIDFromName("Baneful Zone")) && (Level::getCurrStage() == 4);
@@ -77,11 +73,18 @@ namespace CTRPluginFramework
 
         if (isInBaneful)
         {
+            int index, itemPoolCount = 8;
+            std::vector<u8> availableItems = {0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8};
+
             // disable per-use item randomization and assign new items...
             for (int iterateThroughPlayers = 0; iterateThroughPlayers < 3; iterateThroughPlayers++)
             {
+                index = Utils::Random(0, itemPoolCount - 1);
+                Process::Write8(shadowDataAddress + iterateThroughPlayers * shadowLinkItemOffset, availableItems[index]);
                 toggleRandomizedShadowItems(false, iterateThroughPlayers);
-                Process::Write8(shadowDataAddress + iterateThroughPlayers * shadowLinkItemOffset, Utils::Random(0x1, 0x8));
+
+                availableItems.erase(availableItems.begin() + index);
+                itemPoolCount--;
             }
 
             // disable forced-sword attacks...
@@ -99,10 +102,19 @@ namespace CTRPluginFramework
         Process::Patch(AddressList::getAddress("ShadowLinkItemInitCheck") + shadowLinkOffset * shadowLink, patchedCMP);
     }
 
+    u32 getShadowItemAddress(void)
+    {
+        // get dynamic address via pointer...
+        Process::Read32(AddressList::getAddress("ShadowLinkItemPointer"), dynamicShadowItemAddress);
+        return dynamicShadowItemAddress + shadowItemPointerOffset;
+    }
+
     // Redirects all item usage calls to sword usage function
     void Item::toggleShadowForceSwordUse(MenuEntry* entry)
     {
+        u8 currItem;
         u32 jumpTblOffset;
+        u32 shadowDataAddress = getShadowItemAddress();
 
         // reset to default destinations...
         if (!entry->IsActivated())
@@ -111,6 +123,15 @@ namespace CTRPluginFramework
             {
                 jumpTblOffset = (index + 1) * sizeof(u32);
                 Process::Write32(AddressList::getAddress("ShadowLinkItemJumptbl") + jumpTblOffset, defaultJumpTblDestinations[index]);
+            }
+
+            for (int iterateThroughPlayers = 0; iterateThroughPlayers < 3; iterateThroughPlayers++)
+            {
+                Process::Read8(shadowDataAddress + iterateThroughPlayers * shadowLinkItemOffset, currItem);
+
+                // restore randomization if necessary...
+                if (currItem == 0x9)
+                    toggleRandomizedShadowItems(true, iterateThroughPlayers);
             }
         }
 
@@ -124,6 +145,10 @@ namespace CTRPluginFramework
                 Process::Read32(AddressList::getAddress("ShadowLinkItemJumptbl") + jumpTblOffset, defaultJumpTblDestinations[index]);
                 Process::Write32(AddressList::getAddress("ShadowLinkItemJumptbl") + jumpTblOffset, AddressList::getAddress("ShadowLinkSwordUsageFunc"));
             }
+
+            // item disabling overrides randomization...
+            for (int iterateThroughPlayers = 0; iterateThroughPlayers < 3; iterateThroughPlayers++)
+                toggleRandomizedShadowItems(false, iterateThroughPlayers);
         }
     }
 
