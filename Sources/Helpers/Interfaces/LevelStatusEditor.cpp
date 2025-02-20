@@ -46,9 +46,9 @@ namespace CTRPluginFramework
             int editedBit = getBit(rowNum);
 
             if (_checkboxes[index].GetState())
-                bitstring[columnNum] |= (1 << editedBit);
+                bitstring[columnNum] |= (BIT(editedBit));
             else
-                bitstring[columnNum] &= ~(1 << editedBit);
+                bitstring[columnNum] &= ~(BIT(editedBit));
         }
 
         // addresses should only be updated one time -> once the menu is closed
@@ -107,7 +107,7 @@ namespace CTRPluginFramework
 
                 int index = (currRow * 4) + currCol;
 
-                if (bitstring[iterateThruChal] & (1 << iterateThruLevels))
+                if (bitstring[iterateThruChal] & (BIT(iterateThruLevels)))
                     _checkboxes[index].SetState(true);
             }
         }

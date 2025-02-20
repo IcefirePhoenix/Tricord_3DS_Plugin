@@ -16,14 +16,14 @@ namespace CTRPluginFramework
     void setCameraEdits(bool useCamera);
     bool getCameraEdits(void);
 
-    const u16 BUTTON_A = 1 << 0;
-    const u16 BUTTON_B = 1 << 1;
-    const u16 BUTTON_X = 1 << 2;
-    const u16 BUTTON_Y = 1 << 3;
-    const u16 BUTTON_L = 1 << 4;
-    const u16 BUTTON_R = 1 << 5;
-    const u16 BUTTON_STARTSEL = 1 << 6;
-    const u16 BUTTON_TOUCH = 1 << 7;
+    const u16 BUTTON_A = BIT(0);
+    const u16 BUTTON_B = BIT(1);
+    const u16 BUTTON_X = BIT(2);
+    const u16 BUTTON_Y = BIT(3);
+    const u16 BUTTON_L = BIT(4);
+    const u16 BUTTON_R = BIT(5);
+    const u16 BUTTON_STARTSEL = BIT(6);
+    const u16 BUTTON_TOUCH = BIT(7);
 
     const Key keys[] =
     {
