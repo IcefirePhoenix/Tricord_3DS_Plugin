@@ -71,7 +71,7 @@ namespace CTRPluginFramework
 
         // Shadow Links aren't loaded in-game outside of Baneful Zone...
         bool isInBaneful = (Level::getCurrLevel() == Level::levelIDFromName("Baneful Zone")) && (Level::getCurrStage() == 4);
-        std::string msg = isInBaneful ? "Select an item." : "Error\n\nThe current level is not Baneful Zone - 4. Please\nenter Baneful Zone and try again.";
+        std::string msg = isInBaneful ? "Items have been reset." : "The current level is not Baneful Zone - 4. Please\nenter Baneful Zone and try again.";
 
         if (isInBaneful)
         {
@@ -91,7 +91,10 @@ namespace CTRPluginFramework
 
             // disable forced-sword attacks...
             forceShadowSwordOnly->Disable();
+            MessageBox(Color::Gainsboro << "Success", msg)();
         }
+        else
+            MessageBox(Color::Gainsboro << "Error", msg)();
     }
 
     // Bypasses the item init sequence by forcing the Shadow Link ID checks to fail
