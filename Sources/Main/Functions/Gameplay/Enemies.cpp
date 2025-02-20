@@ -3,6 +3,10 @@
 
 namespace CTRPluginFramework
 {
+    Clock cooldownTimer;
+
+    /* ------------------ */
+
     // Freezes enemies' HP values or sets them to zero
     void manageEnemy(bool keepAlive)
     {
@@ -23,18 +27,30 @@ namespace CTRPluginFramework
     // Instantly kills all enemies in the current area
     void Gameplay::autoKillEnemy(MenuEntry *entry)
     {
-        if (entry->Hotkeys[0].IsPressed() && GeneralHelpers::isSoloActiveGameplay())
-            manageEnemy(false);
+        if (entry->WasJustActivated())
+            cooldownTimer.Restart();
 
-        Sleep(Milliseconds(500));
+        if (cooldownTimer.HasTimePassed(Milliseconds(500)) && entry->Hotkeys[0].IsPressed())
+        {
+            if (GeneralHelpers::isSoloActiveGameplay())
+                manageEnemy(false);
+
+            cooldownTimer.Restart();
+        }
     }
 
     // Forces all enemies in the current area to have the maximum amount of possible HP
     void Gameplay::enemyInvinci(MenuEntry *entry)
     {
-        if (entry->Hotkeys[0].IsPressed() && GeneralHelpers::isSoloActiveGameplay())
-            manageEnemy(true);
+        if (entry->WasJustActivated())
+            cooldownTimer.Restart();
 
-        Sleep(Milliseconds(500));
+        if (cooldownTimer.HasTimePassed(Milliseconds(500)) && entry->Hotkeys[0].IsPressed())
+        {
+            if (GeneralHelpers::isSoloActiveGameplay())
+                manageEnemy(true);
+
+            cooldownTimer.Restart();
+        }
     }
 }
