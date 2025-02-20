@@ -221,7 +221,7 @@ namespace CTRPluginFramework
         MenuFolder *cosmetic = new MenuFolder("Cosmetic Costumes");
         *cosmetic += new MenuEntry("Enable Cosmetic Costumes", nullptr, Costume::enableCosmeticCostume, DescUtils::getDesc("choose_cosmetic_note"));
         *cosmetic += new MenuEntry("Set Cosmetic Costume", nullptr, Costume::setCosmeticCostume, DescUtils::getDesc("set_cosmetic_note"));
-        *cosmetic += new MenuEntry("Set Custom Sword Model(s)", nullptr, Player::setSwordChanges, DescUtils::getDesc("sword_model_note"));
+        *cosmetic += new MenuEntry("Set custom sword model(s)", nullptr, Costume::setSwordChanges, DescUtils::getDesc("sword_model_note"));
         *costume += cosmetic;
 
         // Costume effects subfolders
@@ -399,7 +399,7 @@ namespace CTRPluginFramework
         menuCostumeSlotD->SetAltIcon(true);
 
         // auto-managed by plugin; hidden from users...
-        swordEditAuto = new MenuEntry("Write Sword edits (auto)", Player::writeSwordChanges);
+        swordEditAuto = new MenuEntry("Write Sword edits (auto)", Costume::writeSwordChanges);
         cosmeticCostumeAuto = new MenuEntry("Write cosmetic costumes (auto)", Costume::writeCosmeticCostume);
         manageCatalogSize = new MenuEntry("Manage Catalog Size (auto)", Costume::manageCatalogSizeAuto);
         initCustomCostumes = new MenuEntry("Init Custom Costume list (auto)", Costume::initCustomCostumesAuto);

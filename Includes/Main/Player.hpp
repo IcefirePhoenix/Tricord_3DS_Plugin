@@ -29,7 +29,6 @@ namespace CTRPluginFramework
     enum EditType
     {
         NORMAL,
-        SWORD,
         PLAYER_SIZE
     };
 
@@ -47,7 +46,6 @@ namespace CTRPluginFramework
     class Player
     {
     public:
-        static void writeSwordChanges(MenuEntry* entry);
         static void writeJinxChanges(MenuEntry* entry);
         static void writeSpawnChanges(MenuEntry* entry);
         static void writeVisibilityChanges(MenuEntry* entry);
@@ -56,7 +54,6 @@ namespace CTRPluginFramework
         static void writeCollisionChanges(MenuEntry* entry);
         static void writePVPChanges(MenuEntry* entry);
 
-        static void setSwordChanges(MenuEntry* entry);
         static void setSizeChanges(MenuEntry* entry);
         static void setJinxChanges(MenuEntry* entry);
         static void setSpawnChanges(MenuEntry* entry);
@@ -79,7 +76,6 @@ namespace CTRPluginFramework
         static void writePlayerChanges(int editSize, u8 &playerStatus, u32 address, T trueValue, T falseValue);
 
         static u8 jinxStatus, spawnStatus, visibleStatus, invinciStatus, animStoreStatus, collisionStatus, pvpStatus;
-        static u8 swordType[3];
         static float PlayerSizes;
     };
 }

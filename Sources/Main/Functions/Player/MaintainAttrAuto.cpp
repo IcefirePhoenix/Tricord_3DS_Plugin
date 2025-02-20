@@ -10,7 +10,6 @@ namespace CTRPluginFramework
     MenuEntry *pvpEditAuto;
     MenuEntry *animStoreEditAuto;
     MenuEntry *colEditAuto;
-    MenuEntry *swordEditAuto;
     MenuEntry *sizeEditAuto;
 
     /* The following are all wrapper functions + definitions for status-based values: */
@@ -77,16 +76,5 @@ namespace CTRPluginFramework
         u8 notPvp = 0x0;
 
         Player::writePlayerChanges(8, Player::pvpStatus, AddressList::getAddress("PVPMode"), pvp, notPvp);
-    }
-
-    void Player::writeSwordChanges(MenuEntry *entry)
-    {
-        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
-        {
-            u32 finalAddress = AddressList::getAddress("SwordType") + (iterateThruPlayers * PLAYER_OFFSET);
-
-            if (Player::swordType[iterateThruPlayers] != 0xFF)
-                Process::Write8(finalAddress, Player::swordType[iterateThruPlayers]);
-        }
     }
 }
