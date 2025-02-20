@@ -35,12 +35,6 @@ namespace CTRPluginFramework
     void manageEnemy(bool keepAlive);
     void startWarp(void);
 
-    std::string warpSelLevel(StringVector locNames);
-    int warpGetLevel(int locCategory);
-    int warpGetStage(int levelID);
-    int warpSelStage(StringVector stageNames);
-    int warpSelChallenge(void);
-
     void promptHP_Refill(int maxHP);
     void preventOverflowHP(int maxHP);
 
