@@ -4,22 +4,6 @@
 namespace CTRPluginFramework
 {
     /* The following are all helper/driver functions: */
-
-    void Player::setSwordChanges(MenuEntry *entry)
-    {
-        if (entry->Name() == "Set custom sword model(s)")
-        {
-            openToggleMenu("Sword Model Type Menu", SWORD);
-            entry->SetName("Disable custom sword model edits");
-            swordEditAuto->Enable();
-        }
-        else
-        {
-            entry->SetName("Set custom sword model(s)");
-            swordEditAuto->Disable();
-        }
-    }
-
     void Player::setSizeChanges(MenuEntry *entry)
     {
         if (entry->Name() == "Set custom player model size")

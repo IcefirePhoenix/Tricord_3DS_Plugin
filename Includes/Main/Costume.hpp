@@ -24,6 +24,7 @@ namespace CTRPluginFramework
     extern MenuEntry* infBalloonsAuto;
     extern MenuEntry* dapperAuto;
     extern MenuEntry* beamCooldownAuto;
+    extern MenuEntry *swordEditAuto;
 
     int chooseSlotAddNum(void);
     void selCosmeticCostume(int player);
@@ -34,6 +35,7 @@ namespace CTRPluginFramework
     void resetCostumeArray(void);
     void openRandomizerToggles(int selection);
     int selCostumeType(void);
+    void openSwordSelMenu(void);
 
     static const u8 cosmeticNotInUse = 0xFF;
 
@@ -49,7 +51,8 @@ namespace CTRPluginFramework
         static void selectCostumeID(MenuEntry *entry);
         static void initCustomCostumesAuto(MenuEntry* entry);
         static void forceBearMinMax(MenuEntry* entry);
-        static void preventDoppelLobbyReset(MenuEntry* entry);
+        static void setSwordChanges(MenuEntry *entry);
+        static void writeSwordChanges(MenuEntry *entry);
         static void preventDoppelStageReset(MenuEntry* entry);
         static void enableCosmeticCostume(MenuEntry* entry);
         static void setCosmeticCostume(MenuEntry* entry);
@@ -102,5 +105,6 @@ namespace CTRPluginFramework
         static const int unusedDLC_slotIDs[4];
         static const StringVector BCH_fileNames;
         static u8 cosmeticIDs[3];
+        static u8 swordType[3];
     };
 }

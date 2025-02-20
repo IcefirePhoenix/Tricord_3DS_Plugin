@@ -16,8 +16,6 @@ namespace CTRPluginFramework
     u8 Player::collisionStatus = 0x0;
     u8 Player::pvpStatus = 0x0;
 
-    u8 Player::swordType[3] = {0xFF, 0xFF, 0xFF};
-
     float Player::PlayerSizes = 1.0;
 
     /* ------------------ */
@@ -70,17 +68,10 @@ namespace CTRPluginFramework
     // Depending on user choice, call appropriate methods to update statuses OR other player data
     void initEdit(EditType type, int playerID, ColorStatus color, u8 &playerStatus)
     {
-        int swordChoice = -1;
-
         switch (type)
         {
             case NORMAL:
                 togglePlayerStatus(playerStatus, color);
-                break;
-            case SWORD:
-                swordChoice = GeneralHelpers::chooseSword();
-                if (swordChoice >= 0)
-                    Player::swordType[playerID] = swordChoice;
                 break;
             case PLAYER_SIZE:
                 Player::PlayerSizes = setPlayerSize();
@@ -113,11 +104,6 @@ namespace CTRPluginFramework
                     bottomScreenOptions.push_back(std::string("Player 1 ") << (checkPlayerStatus(status, 0) ? ENABLED_SLIDER : DISABLED_SLIDER));
                     bottomScreenOptions.push_back(std::string("Player 2 ") << (checkPlayerStatus(status, 1) ? ENABLED_SLIDER : DISABLED_SLIDER));
                     bottomScreenOptions.push_back(std::string("Player 3 ") << (checkPlayerStatus(status, 2) ? ENABLED_SLIDER : DISABLED_SLIDER));
-                    break;
-                case SWORD:
-                    bottomScreenOptions.push_back(std::string("Player 1: ") << GameData::getSwordNameFromID(Player::swordType[0]));
-                    bottomScreenOptions.push_back(std::string("Player 2: ") << GameData::getSwordNameFromID(Player::swordType[1]));
-                    bottomScreenOptions.push_back(std::string("Player 3: ") << GameData::getSwordNameFromID(Player::swordType[2]));
                     break;
                 case PLAYER_SIZE:
                     bottomScreenOptions.push_back(std::string("Player Size: ") << std::to_string(Player::PlayerSizes));
