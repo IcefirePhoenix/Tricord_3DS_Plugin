@@ -2,65 +2,68 @@
 
 namespace CTRPluginFramework
 {
-	Level::Level(u8 ID, std::string externalName, std::string internalName, bool dummyStatus) :
-		_levelID(ID), _extName(externalName), _intName(internalName), _isDummy(dummyStatus)
+    Level::Level(){}
+
+	Level::Level(u8 levelID, bool dummyStatus, int world, std::array<u8, 3> challenges) :
+		_ID(levelID), _isDummy(dummyStatus), _world(world), _challenges(challenges)
 	{
 	}
 
-	const Level Level::levelList[45] =
+    const std::map<std::string, Level> Level::nonLevelMap =
     {
-		Level(0x1, "Hytopia Castle", "StartCastle", false),
-		Level(0x2, "Hytopia", "StartVillage", false),
-		Level(0x3, "Hytopia Shops", "IndoorVillage", false),
-		Level(0x4, "Coliseum", "Colosseum", false),
-		Level(0xA, "Deku Forest", "GrassTango", false),
-		Level(0xB, "Buzz Blob Cave", "GrassEcho", false),
-		Level(0xC, "Moblin Base", "GrassAlpha", false),
-		Level(0xD, "Forest Temple", "GrassIndia", false),
-		Level(0x14, "Secret Fortress", "WaterQuebec", false),
-		Level(0x15, "Abyss of Agony", "WaterIndia", false),
-		Level(0x16, "Cove of Transition", "WaterNovember", false),
-		Level(0x17, "Water Temple", "WaterAlpha", false),
-		Level(0x1E, "Blazing Trail", "FireAlpha", false),
-		Level(0x1F, "Hinox Mine", "FireEcho", false),
-		Level(0x20, "Den of Flames", "FireKilo", false),
-		Level(0x21, "Fire Temple", "FireFoxtrot", false),
-		Level(0x28, "Frozen Plateau", "IceHotel", false),
-		Level(0x29, "Snowball Ravine", "IceKilo", false),
-		Level(0x2A, "Silver Shrine", "IceIndia", false),
-		Level(0x2B, "Ice Temple", "IceLima", false),
-		Level(0x32, "Sealed Gateway", "FortFoxtrot", false),
-		Level(0x33, "Bomb Storage", "FortEcho", false),
-		Level(0x34, "Training Ground", "FortAlpha", false),
-		Level(0x35, "The Lady's Lair", "FortGolf", false),
-		Level(0x3C, "Infinity Dunes", "SandQuebec", false),
-		Level(0x3D, "Stone Corridors", "SandNovember", false),
-		Level(0x3E, "Gibdo Mausoleum", "SandRomeo", false),
-		Level(0x3F, "Desert Temple", "SandOscar", false),
-		Level(0x46, "Illusory Mansion", "DarkHotel", false),
-		Level(0x47, "Palace Noir", "DarkAlpha", false),
-		Level(0x48, "Lone Labyrinth", "DarkTango", false),
-		Level(0x49, "Grim Temple", "DarkNovember", false),
-		Level(0x50, "Floating Garden", "SkyKilo", false),
-		Level(0x51, "Deception Castle", "SkyQuebec", false),
-		Level(0x52, "Dragon Citadel", "SkyHotel", false),
-		Level(0x53, "Sky Temple", "SkyAlpha", false),
-		Level(0x59, "DoT Warp Room", "AbyssPortal", false),
-		Level(0x5A, "Forest Zone", "AbyssAlpha", false),
-		Level(0x5B, "Flooded Zone", "AbyssBravo", false),
-		Level(0x5C, "Scorching Zone", "AbyssCharlie", false),
-		Level(0x5D, "Frozen Zone", "AbyssDelta", false),
-		Level(0x5E, "Fortified Zone", "AbyssEcho", false),
-		Level(0x5F, "Desert Zone", "AbyssFoxtrot", false),
-		Level(0x60, "Shadow Zone", "AbyssGolf", false),
-		Level(0x61, "Baneful Zone", "AbyssHotel", false)
-	};
+        {"Hytopia", Level(0x2, false, 9)},
+        {"Hytopia Shops", Level(0x3, false, 9)},
+        {"Hytopia Castle", Level(0x1, false, 9)},
+        {"Coliseum", Level(0x4, false, 10)}
+    };
 
-	const StringVector Level::hytopiaLevelList =
+    const std::map<std::string, Level> Level::levelMap =
     {
-        "Hytopia",
-        "Hytopia Shops",
-        "Hytopia Castle"
+        {"Deku Forest", Level(0xA, false, 0, {0xD, 0xE, 0x4})},
+        {"Buzz Blob Cave", Level(0xB, false, 0, {0x6, 0xE, 0xF})},
+        {"Moblin Base", Level(0xC, false, 0, {0x6, 0xC, 0x3})},
+        {"Forest Temple", Level(0xD, false, 0, {0x8, 0xE, 0xD})},
+        {"Secret Fortress", Level(0x14, false, 1, {0x6, 0x12, 0x15})},
+        {"Abyss of Agony", Level(0x15, false, 1, {0x16, 0x4, 0xE})},
+        {"Cove of Transition", Level(0x16, false, 1, {0x16, 0x15, 0xE})},
+        {"Water Temple", Level(0x17, false, 1, {0xD, 0x12, 0x3})},
+        {"Blazing Trail", Level(0x1E, false, 2, {0x6, 0x15, 0x3})},
+        {"Hinox Mine", Level(0x1F, false, 2, {0xE, 0x6, 0x7})},
+        {"Den of Flames", Level(0x20, false, 2, {0xD, 0x13, 0xE})},
+        {"Fire Temple", Level(0x21, false, 2, {0xE, 0x15, 0xA})},
+        {"Frozen Plateau", Level(0x28, false, 3, {0x17, 0x6, 0x4})},
+        {"Snowball Ravine", Level(0x29, false, 3, {0x8, 0xD, 0x3})},
+        {"Silver Shrine", Level(0x2A, false, 3, {0x9, 0x16, 0x15})},
+        {"Ice Temple", Level(0x2B, false, 3, {0xD, 0x17, 0x3})},
+        {"Sealed Gateway", Level(0x32, false, 4, {0x2, 0x15, 0x16})},
+        {"Bomb Storage", Level(0x33, false, 4, {0x9, 0x3, 0x11})},
+        {"Training Ground", Level(0x34, false, 4, {0xE, 0x16, 0x2})},
+        {"The Lady's Lair", Level(0x35, false, 4, {0x15, 0xD, 0xA})},
+        {"Infinity Dunes", Level(0x3C, false, 5, {0x8, 0x4, 0xD})},
+        {"Stone Corridors", Level(0x3D, false, 5, {0xE, 0x15, 0x11})},
+        {"Gibdo Mausoleum", Level(0x3E, false, 5, {0xE, 0x14, 0xA})},
+        {"Desert Temple", Level(0x3F, false, 5, {0xD, 0x7, 0xE})},
+        {"Illusory Mansion", Level(0x46, false, 6, {0xD, 0x11, 0xE})},
+        {"Palace Noir", Level(0x47, false, 6, {0x6, 0x16, 0x3})},
+        {"Lone Labyrinth", Level(0x48, false, 6, {0x2, 0x4, 0x8})},
+        {"Grim Temple", Level(0x49, false, 6, {0xD, 0x11, 0xE})},
+        {"Floating Garden", Level(0x50, false, 7, {0x9, 0x15, 0x11})},
+        {"Deception Castle", Level(0x51, false, 7, {0xE, 0x11, 0x7})},
+        {"Dragon Citadel", Level(0x52, false, 7, {0x13, 0x16, 0x11})},
+        {"Sky Temple", Level(0x53, false, 7, {0xE, 0x10, 0xD})}
+    };
+
+    const std::map<std::string, Level> Level::DoTLevelMap =
+    {
+        {"DoT Warp Room", Level(0x59, false, 8)},
+        {"Forest Zone", Level(0x5A, false, 8)},
+        {"Flooded Zone", Level(0x5B, false, 8)},
+        {"Scorching Zone", Level(0x5C, false, 8)},
+        {"Frozen Zone", Level(0x5D, false, 8)},
+        {"Fortified Zone", Level(0x5E, false, 8)},
+        {"Desert Zone", Level(0x5F, false, 8)},
+        {"Shadow Zone", Level(0x60, false, 8)},
+        {"Baneful Zone", Level(0x61, false, 8)}
     };
 
     const StringVector Level::hytopiaShopsStageList =
@@ -90,90 +93,6 @@ namespace CTRPluginFramework
         "The Dunes",
         "The Ruins",
         "Sky Realm"
-    };
-
-    const StringVector Level::woodlandLevelList =
-    {
-        "Deku Forest",
-        "Buzz Blob Cave",
-        "Moblin Base",
-        "Forest Temple"
-    };
-
-    const StringVector Level::riversideLevelList =
-    {
-        "Secret Fortress",
-        "Abyss of Agony",
-        "Cove of Transition",
-        "Water Temple"
-    };
-
-    const StringVector Level::volcanoLevelList =
-    {
-        "Blazing Trail",
-        "Hinox Mine",
-        "Den of Flames",
-        "Fire Temple"
-    };
-
-    const StringVector Level::iceLevelList =
-    {
-        "Frozen Plateau",
-        "Snowball Ravine",
-        "Silver Shrine",
-        "Ice Temple"
-    };
-
-    const StringVector Level::fortressLevelList =
-    {
-        "Sealed Gateway",
-        "Bomb Storage",
-        "Training Ground",
-        "The Lady's Lair"
-    };
-
-    const StringVector Level::dunesLevelList =
-    {
-        "Infinity Dunes",
-        "Stone Corridors",
-        "Gibdo Mausoleum",
-        "Desert Temple"
-    };
-
-    const StringVector Level::ruinsLevelList =
-    {
-        "Illusory Mansion",
-        "Palace Noir",
-        "Lone Labyrinth",
-        "Grim Temple"
-    };
-
-    const StringVector Level::skyLevelList =
-    {
-        "Floating Garden",
-        "Deception Castle",
-        "Dragon Citadel",
-        "Sky Temple"
-    };
-
-    const StringVector Level::challengeList =
-    {
-        "No challenge",
-        "Challenge 1",
-        "Challenge 2",
-        "Challenge 3"
-    };
-
-    const StringVector Level::dotZoneList =
-    {
-        "Forest Zone",
-        "Flooded Zone",
-        "Scorching Zone",
-        "Frozen Zone",
-        "Fortified Zone",
-        "Desert Zone",
-        "Shadow Zone",
-        "Baneful Zone"
     };
 
     const StringVector Level::arenaList =
