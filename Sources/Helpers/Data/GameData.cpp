@@ -1,6 +1,7 @@
 #include "Helpers.hpp"
 
-namespace CTRPluginFramework {
+namespace CTRPluginFramework
+{
     const StringVector GameData::universalCostumeList =
     {
         "Bear Minimum/Maximum",
@@ -135,8 +136,36 @@ namespace CTRPluginFramework {
         0x0C   // blank
     };
 
+    const std::unordered_map<u8, std::string> GameData::challengeList =
+    {
+        {0x0, "No challenge"},
+        {0x1, "Transport the orb!"},
+        {0x2, "Don't drop the pot!"},
+        {0x3, "Transport the orb quickly!"},
+        {0x4, "Guard the orb!"},
+        {0x5, "Defeat all enemies!"},
+        {0x6, "Pop all balloons!"},
+        {0x7, "Don't pop any balloons!"},
+        {0x8, "Adventure in the dark!"},
+        {0x9, "Win without using a sword!"},
+        {0xA, "Only Bombs -- no swords!"},
+        {0xB, "Only Hammers -- no swords!"},
+        {0xC, "Defeat all foes sans sword!"},
+        {0xD, "Fewer Heart Containers!"},
+        {0xE, "Clear within the time limit!"},
+        {0xF, "Clear using only Bombs!"},
+        {0x10, "Clear without any items!"},
+        {0x11, "Don't fall at all!"},
+        {0x12, "Clear with halved energy!"},
+        {0x13, "Avoid the volcanic rocks!"},
+        {0x14, "Avoid falling and quicksand!"},
+        {0x15, "Evade the Wallmaster!"},
+        {0x16, "Halved attack and defense!"},
+        {0x17, "Don't get hit by snowballs!"}
+    };
+
     // TODO: go through possible Actors...
-    const std::map<std::string, std::string> GameData::actorNames =
+    const std::unordered_map<std::string, std::string> GameData::actorNames =
     {
         {"EnemyAbyssBoneThrowStalfos", ""}
     };
@@ -162,6 +191,14 @@ namespace CTRPluginFramework {
     {
         if (ID < 0xD)
             return GameData::swordList[ID];
+        else
+            return "N/A";
+    }
+
+    std::string GameData::getChallengeName(int chalID)
+    {
+        if (chalID < 0x18)
+            return GameData::challengeList.at(chalID);
         else
             return "N/A";
     }

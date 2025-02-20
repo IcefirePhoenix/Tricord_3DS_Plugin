@@ -5,31 +5,39 @@
 
 namespace CTRPluginFramework
 {
-    class Level
+	class Level
 	{
 	public:
-		Level(u8 ID, std::string externalName, std::string internalName, bool dummyStatus);
+		Level();
+		Level(u8 levelID, bool dummyStatus, int world, std::array<u8, 3> challenges = {0xFF, 0xFF, 0xFF});
 
-		static const Level levelList[];
+		enum class World : int
+		{
+			Woodlands = 0,
+			Riverside = 1,
+			Volcano = 2,
+			Ice = 3,
+			Fortress = 4,
+			Dunes = 5,
+			Ruins = 6,
+			Sky = 7,
+			DoT = 8,
+			Hytopia = 9,
+			Coliseum = 10
+		};
 
-		static const StringVector hytopiaLevelList;
+		static const std::map<std::string, Level> nonLevelMap;
+		static const std::map<std::string, Level> levelMap;
+		static const std::map<std::string, Level> DoTLevelMap;
+
 		static const StringVector hytopiaShopsStageList;
 		static const StringVector hytopiaCastleStageList;
-
-		static const StringVector worldList;
-		static const StringVector woodlandLevelList;
-		static const StringVector riversideLevelList;
-		static const StringVector volcanoLevelList;
-		static const StringVector iceLevelList;
-		static const StringVector fortressLevelList;
-		static const StringVector dunesLevelList;
-		static const StringVector ruinsLevelList;
-		static const StringVector skyLevelList;
-		static const StringVector challengeList;
-		static const StringVector dotZoneList;
 		static const StringVector arenaList;
+		static const StringVector worldList;
 
-		static StringVector getWorldNamesfromID(int ID, bool useNonLevels);
+		// level map(s) functions
+		static StringVector getLevelNamesFromWorld(int worldID);
+		static StringVector buildLevelNameList(const std::map<std::string, Level> &levelMap, World world);
 		static std::string worldIDToStr(int worldID);
 		static std::string levelNameFromID(u8 levelID);
 
@@ -52,11 +60,16 @@ namespace CTRPluginFramework
 		static bool hasStageBegan(void);
 		static bool hasCertainTimeElapsed(int time);
 
+		// Level object helpers
+		u8 getLevelID(void) const { return _ID; };
+		int getWorld(void) const { return _world; };
+		std::array<u8, 3> getChallenges(void) const { return _challenges; };
+
 	private:
-		u8				_levelID;
-		std::string		_extName;
-		std::string		_intName;
-		bool			_isDummy;
+		u8 _ID;
+		bool _isDummy;
+		int _world;
+		std::array<u8, 3> _challenges;
 	};
 }
 #endif
