@@ -51,10 +51,11 @@ namespace CTRPluginFramework
 
     void InitEnemyCodes(PluginMenu &menu)
     {
-        *enemies += (EntryWithHotkey(new MenuEntry("Insta-kill all spawned enemies", Gameplay::autoKillEnemy, DescUtils::getDesc("instakill_note")),
+        // Radio group 2 for mutual exclusivity
+        *enemies += (EntryWithHotkey(new MenuEntry(2, "Insta-kill all spawned enemies", Gameplay::autoKillEnemy, DescUtils::getDesc("instakill_note")),
             { Hotkey(Key::L | Key::B, "Insta-kill all spawned enemies") }));
 
-        *enemies += (EntryWithHotkey(new MenuEntry("Make all spawned enemies invincible", Gameplay::enemyInvinci, DescUtils::getDesc("invinci_note")),
+        *enemies += (EntryWithHotkey(new MenuEntry(2, "Make all spawned enemies invincible", Gameplay::enemyInvinci, DescUtils::getDesc("invinci_note")),
             { Hotkey(Key::R | Key::B, "Make all spawned enemies invincible") }));
     }
 
