@@ -107,55 +107,105 @@ namespace CTRPluginFramework
         "Sky Realm Arena"
     };
 
-    // Returns level names from a specified region/world
-    StringVector Level::getWorldNamesfromID(int ID, bool useNonLevels)
+    // Combines all Level data into a single map
+    std::map<std::string, Level> Level::getAllLevels(void)
     {
-        if (!useNonLevels)
-            ID = ID + 2;
+        std::map<std::string, Level> allLevels;
 
-        switch (ID)
+        allLevels.insert(nonLevelMap.begin(), nonLevelMap.end());
+        allLevels.insert(levelMap.begin(), levelMap.end());
+        allLevels.insert(DoTLevelMap.begin(), DoTLevelMap.end());
+
+        return allLevels;
+    }
+
+    // Returns level names from a specified region/world
+    StringVector Level::getLevelNamesFromWorld(int worldID) // TODO: check eberything that calls this for new index
+    {
+        switch (worldID)
         {
             case 0:
-                return Level::hytopiaLevelList;
+                return Level::buildLevelNameList(Level::levelMap, World::Woodlands);
             case 1:
-                return Level::arenaList;
+                return Level::buildLevelNameList(Level::levelMap, World::Riverside);
             case 2:
-                return Level::woodlandLevelList;
+                return Level::buildLevelNameList(Level::levelMap, World::Volcano);
             case 3:
-                return Level::riversideLevelList;
+                return Level::buildLevelNameList(Level::levelMap, World::Ice);
             case 4:
-                return Level::volcanoLevelList;
+                return Level::buildLevelNameList(Level::levelMap, World::Fortress);
             case 5:
-                return Level::iceLevelList;
+                return Level::buildLevelNameList(Level::levelMap, World::Dunes);
             case 6:
-                return Level::fortressLevelList;
+                return Level::buildLevelNameList(Level::levelMap, World::Ruins);
             case 7:
-                return Level::dunesLevelList;
+                return Level::buildLevelNameList(Level::levelMap, World::Sky);
             case 8:
-                return Level::ruinsLevelList;
+                return Level::buildLevelNameList(Level::DoTLevelMap, World::DoT);
             case 9:
-                return Level::skyLevelList;
+                return Level::buildLevelNameList(Level::nonLevelMap, World::Hytopia);
             case 10:
-                return Level::dotZoneList;
             default:
                 return StringVector();
         }
     }
 
-    /* ------------------ */
+    // Returns a vector containing the level names from a specified world's map
+    StringVector Level::buildLevelNameList(const std::map<std::string, Level> &levelMap, World world)
+    {
+        StringVector levelNames;
+        std::vector<std::pair<std::string, Level>> levelEntry;
 
-    // Helper function that returns possible world/region selections given a category
-    int Level::selWorld(bool useDoT, bool useNonLevels)
+        // entry.first = key (string) | entry.second = value (Level)
+        for (const auto& entry : levelMap)
+        {
+            if (entry.second.getWorld() == static_cast<int>(world))
+                levelEntry.push_back(entry);
+        }
+
+        // maps are auto-sorted by key, not value -> manually sort by levelID (or name if Hytopia)
+        if (world == World::Hytopia)
+        {
+            std::sort(levelEntry.begin(), levelEntry.end(), [](const std::pair<std::string, Level> &firstLevel, const std::pair<std::string, Level> &secondLevel)
+            {
+                return firstLevel.first < secondLevel.first;
+            });
+        }
+        else
+        {
+            std::sort(levelEntry.begin(), levelEntry.end(), [](const std::pair<std::string, Level>& firstLevel, const std::pair<std::string, Level>& secondLevel)
+            {
+                return firstLevel.second.getLevelID() < secondLevel.second.getLevelID();
+            });
+        }
+
+        for (const auto &level : levelEntry)
+            levelNames.push_back(level.first);
+
+        return levelNames;
+    }
+
+    // Helper function that returns a location category
+    int Level::selCategory(void)
+    {
+        StringVector locationCategories =
+        {
+            "Hytopia",
+            "Coliseum",
+            "Levels",
+            "Den of Trials"
+        };
+
+        Keyboard chooseCategory("Select a category:");
+        chooseCategory.Populate(locationCategories);
+
+        return chooseCategory.Open();
+    }
+
+    // Helper function that returns Drabland world selection
+    int Level::selDrablandsWorld(bool useDoT)
     {
         StringVector worldSelectionList = Level::worldList;
-
-        if (useNonLevels)
-        {
-            worldSelectionList.clear();
-            worldSelectionList.insert(worldSelectionList.begin(), "Levels");
-		    worldSelectionList.insert(worldSelectionList.begin(), "Coliseum");
-       		worldSelectionList.insert(worldSelectionList.begin(), "Hytopia");
-        }
 
         if (useDoT)
             worldSelectionList.push_back("Den of Trials");
@@ -166,33 +216,99 @@ namespace CTRPluginFramework
         return chooseWorld.Open();
     }
 
+
+    // Helper function that returns level from world
+    std::pair<std::string, Level> Level::selLevel(int world)
+    {
+        u16 index;
+        std::string chosenLevel = "";
+        StringVector levelChoices = Level::getLevelNamesFromWorld(world);
+
+        if (world == 10)
+            return std::make_pair("Coliseum", getAllLevels().at("Coliseum"));
+
+        // choose level via name...
+        if (GetInput(index, levelChoices, "Select a level:"))
+        {
+            chosenLevel = levelChoices[index];
+            return std::make_pair(chosenLevel, getAllLevels().at(chosenLevel));
+        }
+        return {};
+    }
+
+    // Helper function that returns stage ID selection
+	int Level::selStage(u8 levelID)
+	{
+        StringVector availableStages;
+        StringVector basicStages =
+        {
+			"Stage 1",
+			"Stage 2",
+			"Stage 3",
+			"Stage 4",
+			"Treasure Room"
+		};
+
+        // handle no-stage levels first...
+        if (levelID == Level::levelIDFromName("Hytopia") || levelID == Level::levelIDFromName("DoT Warp Room"))
+            return 1;
+
+        // custom stage lists...
+        switch (levelID)
+        {
+            case 1:
+                availableStages = Level::hytopiaCastleStageList;
+                break;
+            case 3:
+                availableStages = Level::hytopiaShopsStageList;
+                break;
+            case 4:
+                availableStages = Level::arenaList;
+                break;
+            default:
+                availableStages = basicStages;
+                break;
+        }
+
+        Keyboard chooseStage("Select a stage:");
+        chooseStage.Populate(availableStages);
+
+        // stages are not 0-indexed...
+        return chooseStage.Open() + 1;
+    }
+
+    // Helper function that sets the current area's challenge, if applicable | Note: assumes valid level data inputted
+    int Level::selChallenge(std::array<u8, 3> challenges)
+    {
+        StringVector availableChals;
+        Keyboard challenge("Choose a challenge:");
+
+        availableChals.push_back(GameData::getChallengeName(0x0)); // No challenge
+        availableChals.push_back(GameData::getChallengeName(challenges[0]));
+        availableChals.push_back(GameData::getChallengeName(challenges[1]));
+        availableChals.push_back(GameData::getChallengeName(challenges[2]));
+
+        challenge.Populate(availableChals);
+        return challenge.Open();
+    }
+
     // Retrieves world name given the ID | Note: only uses base levels
     std::string Level::worldIDToStr(int worldID)
     {
         return Level::worldList[worldID];
     }
 
-    // Retrieves level name given the ID
-	std::string Level::levelNameFromID(u8 levelID)
-	{
-		for (int iterator = 0; iterator < 45; iterator++)
-		{
-			if (levelList[iterator]._levelID == levelID)
-				return levelList[iterator]._extName;
-		}
-		return ""; // wasn't found
-	}
-
     // Retrieves level ID given external name
 	u8 Level::levelIDFromName(std::string name)
 	{
-		for (int iterator = 0; iterator < 45; iterator++)
-		{
-			if (levelList[iterator]._extName == name)
-				return levelList[iterator]._levelID;
-		}
-		return -1; // wasn't found
-	}
+        const std::map<std::string, Level> &levels = getAllLevels();
+        for (const auto &mapEntry : levels)
+        {
+            if (mapEntry.first == name)
+                return mapEntry.second._ID;
+        }
+        return 0xFF; // wasn't found
+    }
 
     // Retrieves the ID of the previous location
 	u8 Level::getPrevLevel(void)
@@ -265,10 +381,11 @@ namespace CTRPluginFramework
 	}
 
     // Checks if the current location belongs to DoT
-    bool Level::isInDoT(u8 optionalLevel)
+    bool Level::isInDoT(bool includeWarpRoom, u8 optionalLevel)
     {
         u8 level = optionalLevel == 0x0 ? getCurrLevel() : optionalLevel;
-        return (level >= levelIDFromName("Forest Zone")) && (level <= levelIDFromName("Baneful Zone"));
+        u8 minimumRange = includeWarpRoom ? levelIDFromName("DoT Warp Room") : levelIDFromName("Forest Zone");
+        return (level >= minimumRange) && (level <= levelIDFromName("Baneful Zone"));
     }
 
     // Checks if the stage has finished loading
@@ -282,28 +399,4 @@ namespace CTRPluginFramework
 	{
 		return Level::getElapsedTime() >= static_cast<u32>(time);
 	}
-
-    // Helper function that returns stage ID selection
-	int Level::selBasicStage(void)
-	{
-		StringVector stages =
-        {
-			"Stage 1",
-			"Stage 2",
-			"Stage 3",
-			"Stage 4",
-			"Treasure Room"
-		};
-
-		Keyboard selStage("Select a stage:");
-        selStage.Populate(stages);
-
-        int result = selStage.Open();
-
-        // stages are not 0-indexed...
-        if (result >= 0)
-            return result + 1;
-        else
-            return result; // failure
-    }
 }

@@ -39,12 +39,17 @@ namespace CTRPluginFramework
 		static StringVector getLevelNamesFromWorld(int worldID);
 		static StringVector buildLevelNameList(const std::map<std::string, Level> &levelMap, World world);
 		static std::string worldIDToStr(int worldID);
-		static std::string levelNameFromID(u8 levelID);
-
-		static int selWorld(bool useDoT, bool useNonLevels);
-		static int selBasicStage(void);
-
+		static std::map<std::string, Level> getAllLevels(void);
+		static std::pair<std::string, Level> selLevel(int world);
 		static u8 levelIDFromName(std::string name);
+
+		// level menu selection helpers
+		static int selDrablandsWorld(bool useDoT);
+		static int selCategory(void);
+		static int selStage(u8 levelID);
+		static int selChallenge(std::array<u8, 3> challenges);
+
+		// real-time level data
 		static u8 getPrevLevel(void);
 		static u8 getCurrLevel(void);
 		static u8 getCurrStage(void);
@@ -56,7 +61,7 @@ namespace CTRPluginFramework
 		static void setCurrChal(u8 chalID);
 
 		static bool isInDrablands(u8 optionalLevel = 0x0);
-		static bool isInDoT(u8 optionalLevel = 0x0);
+		static bool isInDoT(bool includeWarpRoom, u8 optionalLevel = 0x0);
 		static bool hasStageBegan(void);
 		static bool hasCertainTimeElapsed(int time);
 

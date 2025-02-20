@@ -11,88 +11,6 @@ namespace CTRPluginFramework
 
     /* ------------------ */
 
-    // Helper function that selects the world/region for the next warp
-    int warpGetLevel(int locCategory)
-    {
-        int worldID = -1;
-        std::string chosenLevel = "";
-
-        // warp room technically isn't considered part of DoT, so add it manually...
-        StringVector DoTWithLobby = Level::dotZoneList;
-        DoTWithLobby.insert(DoTWithLobby.begin(), "DoT Warp Room");
-
-        switch (locCategory)
-        {
-            case 0: // choose from village, shops, castle
-                chosenLevel = warpSelLevel(Level::getWorldNamesfromID(0, true));
-                break;
-            case 1: // coliseum
-                chosenLevel = "Coliseum";
-                break;
-            case 2: // choose world level
-                worldID = Level::selWorld(false, false);
-                if (worldID >= 0)
-                    chosenLevel = warpSelLevel(Level::getWorldNamesfromID(worldID, false));
-                break;
-            case 3: // choose DoT level
-                chosenLevel = warpSelLevel(DoTWithLobby);
-                break;
-            default:
-                break;
-        }
-
-        if (!chosenLevel.empty())
-            return Level::levelIDFromName(chosenLevel);
-        return -1;
-    }
-
-    // Helper function that returns the chosen location/world as a string
-    std::string warpSelLevel(StringVector locNames)
-    {
-        Keyboard selLevel("Select a location:");
-        selLevel.Populate(locNames);
-
-        int result = selLevel.Open();
-        if (result >= 0)
-            return locNames[result];
-
-        return "";
-    }
-
-    // Helper function that retrieves the possible list of stages based on the chosen area/level
-    int warpGetStage(u8 levelID)
-    {
-        // we are given the levelID, this determines what stage menu list to display...
-        if (levelID == Level::levelIDFromName("Hytopia Castle"))
-            return warpSelStage(Level::hytopiaCastleStageList);
-        else if (levelID == Level::levelIDFromName("Hytopia"))
-            return 1;
-        else if (levelID == Level::levelIDFromName("Hytopia Shops"))
-            return warpSelStage(Level::hytopiaShopsStageList);
-        else if (levelID == Level::levelIDFromName("Coliseum"))
-            return warpSelStage(Level::arenaList);
-        else if (levelID == Level::levelIDFromName("DoT Warp Room"))
-            return 1;
-        else
-            return Level::selBasicStage(); // Drablands...
-    }
-
-    // Helper function that sets the current stage
-    int warpSelStage(StringVector stageNames)
-    {
-        Keyboard selStage("Select an area:");
-        selStage.Populate(stageNames);
-        return selStage.Open() + 1; // adjust for 1-indexing instead of 0-indexing...
-    }
-
-    // Helper function that sets the current area's challenge, if applicable
-    int warpSelChallenge(void)
-    {
-        Keyboard challenge("Choose a challenge:");
-        challenge.Populate(Level::challengeList);
-        return challenge.Open();
-    }
-
     // Sets the current challenge index
     void Gameplay::writeChallengeEdit(MenuEntry *entry)
     {
@@ -107,59 +25,103 @@ namespace CTRPluginFramework
     // Driver code for warping to a desired area
     void Gameplay::instantWarp(MenuEntry *entry)
     {
-        int targetLevel = -3, targetStage = -3, targetChallenge = 0, targetSpawn = 0;
+        int targetCategory = -3, targetLevelID = -3, targetWorld = -3, targetStage = -3, targetChallenge = 0, targetSpawn = 0;
         std::string firstWarpIntro = "This is your first warp. Make sure Doppels are wearing Hero's Tunics?";
+        std::string levelName = "";
+        std::pair<std::string, Level> targetLevelData = {};
 
-        // Level::selWorld() returns world category ID (0-3) which DOES includes DoT and nonLevels in this case...
-        targetLevel = warpGetLevel(Level::selWorld(true, true));
+    selectCategory:
+        targetCategory = Level::selCategory();
 
-        // proceed to Stage selection if Level ID is valid...
-        if (targetLevel >= 0x0)
-            targetStage = warpGetStage((u8)targetLevel);
-        else
+        // user abort
+        if (targetCategory == -1)
             return;
 
-        // proceed to Challenge selection if stage ID is valid and Level is in Drablands...
-        if (targetStage >= 0x1)
+    selectWorld:
+        switch (targetCategory)
         {
-            if (Level::isInDrablands(targetLevel) && !Level::isInDoT(targetLevel))
+            case 0:
+                targetWorld = static_cast<int>(Level::World::Hytopia);
+                break;
+            case 1:
+                targetWorld = static_cast<int>(Level::World::Coliseum);
+                break;
+            case 2:
+                targetWorld = Level::selDrablandsWorld(false);
+                break;
+            case 3:
+                targetWorld = static_cast<int>(Level::World::DoT);
+                break;
+            default: // sys sleep abort
+                return;
+        }
+
+        if (targetWorld < 0)
+            goto selectCategory;
+
+    selectLevel:
+        targetLevelData = Level::selLevel(targetWorld);
+
+        if (targetLevelData.first.empty())
+        {
+            if (targetWorld != 2)
+                goto selectCategory;
+            else
+                goto selectWorld;
+        }
+
+    selectStage:
+        targetLevelID = targetLevelData.second.getLevelID();
+        levelName = targetLevelData.first;
+        targetStage = Level::selStage(targetLevelID);
+
+        // stages are not 0-indexed...
+        if (targetStage < 1)
+        {
+            if (targetLevelID == Level::levelIDFromName("Coliseum"))
+                goto selectCategory;
+            else
+                goto selectLevel;
+        }
+
+    selectChallenge:
+        if (Level::isInDrablands(targetLevelID) && !Level::isInDoT(true, targetLevelID))
+        {
+            targetChallenge = Level::selChallenge(targetLevelData.second.getChallenges());
+            if (targetChallenge < 0)
+                goto selectStage;
+        }
+
+        // proceed with warp...
+        Process::Write8(AddressList::getAddress("TargetLevelID"), targetLevelID);
+        Process::Write8(AddressList::getAddress("TargetStageID"), targetStage);
+        // TODO: Process::Write8(AddressList::getAddress("TargetSpawnID"), targetspawn);
+
+        startWarp();
+
+        // since single-lobby is bypassed, manually allow Doppel use...
+        doppelEnableAuto->Enable();
+
+        Level::setCurrChal(targetChallenge);
+        challengeEditAuto->Enable();
+
+        // save this warp's data for future re-warps...
+        warpData[0] = targetLevelID;
+        warpData[1] = targetStage;
+        warpData[2] = targetChallenge;
+
+        reWarp->SetName("Return to last warp: " + levelName + " - " + std::to_string(warpData[1]));
+
+        // optional: change default Doppel costumes...
+        if (firstWarp)
+        {
+            if (GeneralHelpers::showMsgKbd(firstWarpIntro, DialogType::DialogYesNo))
             {
-                targetChallenge = warpSelChallenge();
-                if (targetChallenge == -1)
-                    return;
+                // set default Doppel costumes from Bear Minimum -> Hero's Tunic
+                Costume::setPlayerCostume(GameData::getPlayerIDFromColor("Blue"), GameData::getCostumeIDFromName("Hero's Tunic"));
+                Costume::setPlayerCostume(GameData::getPlayerIDFromColor("Red"), GameData::getCostumeIDFromName("Hero's Tunic"));
             }
-
-            // proceed with warp...
-            Process::Write8(AddressList::getAddress("TargetLevelID"), (u8)targetLevel);
-            Process::Write8(AddressList::getAddress("TargetStageID"), (u8)targetStage);
-            // TODO: Process::Write8(AddressList::getAddress("TargetSpawnID"), targetspawn);
-
-            startWarp();
-
-            // since single-lobby is bypassed, manually allow Doppel use...
-            doppelEnableAuto->Enable();
-
-            Level::setCurrChal((u8)targetChallenge);
-            challengeEditAuto->Enable();
-
-            // save this warp's data for future re-warps...
-            warpData[0] = targetLevel;
-            warpData[1] = targetStage;
-            warpData[2] = targetChallenge;
-
-            reWarp->SetName("Return to last warp: " + Level::levelNameFromID(warpData[0]) + " - " + std::to_string(warpData[1]));
-
-            // optional: change default Doppel costumes...
-            if (firstWarp)
-            {
-                if (GeneralHelpers::showMsgKbd(firstWarpIntro, DialogType::DialogYesNo))
-                {
-                    // set default Doppel costumes from Bear Minimum -> Hero's Tunic
-                    Costume::setPlayerCostume(GameData::getPlayerIDFromColor("Blue"), GameData::getCostumeIDFromName("Hero's Tunic"));
-                    Costume::setPlayerCostume(GameData::getPlayerIDFromColor("Red"), GameData::getCostumeIDFromName("Hero's Tunic"));
-                }
-                firstWarp = false;
-            }
+            firstWarp = false;
         }
     }
 
@@ -202,7 +164,7 @@ namespace CTRPluginFramework
         u8 targetLevel = Level::getCurrLevel();
         if (Level::isInDrablands())
         {
-            u8 targetStage = warpGetStage(targetLevel);
+            u8 targetStage = Level::selStage(targetLevel);
 
             Process::Write8(AddressList::getAddress("TargetLevelID"), targetLevel);
             Process::Write8(AddressList::getAddress("TargetStageID"), targetStage);
