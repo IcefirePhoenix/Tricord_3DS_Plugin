@@ -21,9 +21,9 @@ namespace CTRPluginFramework
 
     enum ColorStatus
     {
-        greenEnabled = 1 << 0, // 0001
-        blueEnabled = 1 << 1,  // 0010
-        redEnabled = 1 << 2    // 0100
+        greenEnabled = BIT(0), // 0001
+        blueEnabled = BIT(1),  // 0010
+        redEnabled = BIT(2)    // 0100
     };
 
     enum EditType

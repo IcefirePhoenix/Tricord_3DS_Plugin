@@ -31,7 +31,7 @@ namespace CTRPluginFramework
     // Reads status bits for individual players
     bool checkPlayerStatus(u8 &playerStatus, int playerID)
     {
-        if (playerStatus & (1 << playerID))
+        if (playerStatus & (BIT(playerID)))
             return true;
         return false;
     }

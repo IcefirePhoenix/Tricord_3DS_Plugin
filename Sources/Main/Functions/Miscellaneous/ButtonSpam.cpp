@@ -29,7 +29,7 @@ namespace CTRPluginFramework
             // clear per-button status if spam enabled...
             for (int i = 0; i < 8; i++)
             {
-                if (Controller::IsKeyDown(keys[i]) && (spamHotkeys & (1 << i)))
+                if (Controller::IsKeyDown(keys[i]) && (spamHotkeys & (BIT(i))))
                 {
                     if (i < 4)
                         ABXY_status &= ~keyBits[i];
