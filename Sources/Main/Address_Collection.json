@@ -2321,9 +2321,17 @@
             }
         },
         {
-            "name": "SpeedDamageUndo",
+            "name": "SpeedDamageUndoA",
             "regionAddrs": {
                 "usaAddress": "0x0031663C",
+                "eurAddress": "0x00000000",
+                "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "SpeedDamageUndoB",
+            "regionAddrs": {
+                "usaAddress": "0x00316648",
                 "eurAddress": "0x00000000",
                 "jpnAddress": "0x00000000"
             }
@@ -2344,6 +2352,15 @@
                 "jpnAddress": "0x00000000"
             }
         },
+        {
+            "name": "CurrSwordDamageMult",
+            "regionAddrs": {
+                "usaAddress": "0x3284956C",
+                "eurAddress": "0x328495EC",
+                "jpnAddress": "0x32893FAC"
+            }
+        },
+        
         {
             "name": "SpeedMultiplierNormal",
             "regionAddrs": {

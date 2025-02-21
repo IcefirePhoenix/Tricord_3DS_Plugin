@@ -29,7 +29,7 @@ namespace CTRPluginFramework
             Process::WriteFloat(AddressList::getAddress("LoadingIconAnimSpeed"), 3);
             Process::WriteFloat(AddressList::getAddress("LiveMsgSpeed"), 2400);
             Process::WriteFloat(AddressList::getAddress("SwordBeamSpeed"), 1);
-            Process::Write8(AddressList::getAddress("SpeedDamageUndo"), 0x41);
+            // Process::Write8(AddressList::getAddress("SpeedDamageUndo"), 0x41); TODO: Refactor
             Process::WriteFloat(AddressList::getAddress("BGMSFXSpeed"), 1.2);
             Process::Write8(AddressList::getAddress("TextBoxSpeed"), 0x2D);
             Process::WriteFloat(AddressList::getAddress("EnergyMax"), 100);
@@ -198,7 +198,7 @@ namespace CTRPluginFramework
             Process::WriteFloat(AddressList::getAddress("LoadingIconAnimSpeed"), 1);
             Process::WriteFloat(AddressList::getAddress("LiveMsgSpeed"), 800);
             Process::WriteFloat(AddressList::getAddress("SwordBeamSpeed"), 0.45);
-            Process::Write8(AddressList::getAddress("SpeedDamageUndo"), 0x1B);
+            // Process::Write8(AddressList::getAddress("SpeedDamageUndo"), 0x1B); TODO: Refactor
             Process::WriteFloat(AddressList::getAddress("BGMSFXSpeed"), 1);
             Process::Write8(AddressList::getAddress("TextBoxSpeed"), 0x01);
             Process::WriteFloat(AddressList::getAddress("EnergyMax"), 600);
