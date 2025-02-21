@@ -29,7 +29,7 @@ namespace CTRPluginFramework
     std::string DescUtils::getClientStr(bool clientOnly, int mode)
     {
         if (clientOnly)
-            return "This entry is only observable client-side.";
+            return "\n\nThis entry is only observable client-side.";
         else
         {
             if (mode >= 1 && mode <= 4)
