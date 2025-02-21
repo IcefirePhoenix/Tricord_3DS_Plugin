@@ -17,11 +17,13 @@ namespace CTRPluginFramework
     bool infTingleBalloons[3] = { false, false, false };
     bool dapperSpinA[3] = { false, false, false }; bool dapperSpinB[3] = { false, false, false };
 
+    float Costume::customSwordHammerDmgMult = 2.0;
+    bool Costume::forcingSwordDmgBoost = false;
+
     /* --------------------------------- */
 
     // Sets a status-bit-based costume effect for the given player and ID arguments
     // ID refers to the position of the status bit for the costume effect
-    // TODO: Make sure the big sword beams code is removed from here
     void Costume::setIndCostumeEffect(MenuEntry* entry)
     {
         pIDindex args = *reinterpret_cast<pIDindex*>(entry->GetArg());
@@ -428,15 +430,19 @@ namespace CTRPluginFramework
     {
         if (entry->Name() == "(  ) Sword Suits - Sword damage boost")
         {
-            Process::Patch(AddressList::getAddress("SwordDamageBoostA"), 0xED848A1B);
-            Process::Patch(AddressList::getAddress("SwordDamageBoostB"), 0xEA000000);
+            // Only edit the fourth byte of each instruction to change whether it's unconditional or conditional
+            // Without creating conflicts with the custom movement speed editor in Movement.cpp
+            Process::Write8(AddressList::getAddress("SwordDamageBoostA") + 0x3, 0xED);
+            Process::Write8(AddressList::getAddress("SwordDamageBoostB") + 0x3, 0xEA);
             entry->SetName("(X) Sword Suits - Sword damage boost");
+            forcingSwordDmgBoost = true;
         }
         else
         {
-            Process::Patch(AddressList::getAddress("SwordDamageBoostA"), 0x0D848A1B);
-            Process::Patch(AddressList::getAddress("SwordDamageBoostB"), 0x0A000000);
+            Process::Write8(AddressList::getAddress("SwordDamageBoostA") + 0x3, 0x0D);
+            Process::Write8(AddressList::getAddress("SwordDamageBoostB") + 0x3, 0x0A);
             entry->SetName("(  ) Sword Suits - Sword damage boost");
+            forcingSwordDmgBoost = false;
         }
     }
 
@@ -755,13 +761,12 @@ namespace CTRPluginFramework
     // Sets the damage multiplier used to boost the sword or hammer damage when an appropriate costume is worn (default 2.0)
     void Costume::setSwordHammerDmgMult(MenuEntry* entry)
     {
-        float newDmg = 1;
         Keyboard editDmg("Enter a custom damage multiplier.\n\nThe default value is 2.\nNegative values equate to 0 damage.");
         editDmg.IsHexadecimal(false);
-        if (editDmg.Open(newDmg) == 0)
+        if (editDmg.Open(customSwordHammerDmgMult) == 0)
         {
-            entry->SetName("Set boosted sword & hammer dmg mult.: "+std::to_string(newDmg)+"x");
-            Process::WriteFloat(AddressList::getAddress("SwordHammerDmgBoost"), newDmg);
+            entry->SetName("Set boosted sword & hammer dmg mult.: "+std::to_string(customSwordHammerDmgMult)+"x");
+            Process::WriteFloat(AddressList::getAddress("SwordHammerDmgBoost"), customSwordHammerDmgMult);
         }
     }
 

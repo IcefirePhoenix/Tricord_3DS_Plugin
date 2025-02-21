@@ -157,6 +157,7 @@ namespace CTRPluginFramework
         doppelEnableAuto = new MenuEntry("Mid-warp Doppel Enable (auto)", Gameplay::midWarpDoppelEnable);
         challengeEditAuto = new MenuEntry("Challenge ID edit (auto)", Gameplay::writeChallengeEdit);
         healthMaxAuto = new MenuEntry("Set max heart containers (auto)", Gameplay::writeMaxHealth);
+        fixSwordSuitDamageAuto = new MenuEntry("Fix sword suit damage (auto)", Gameplay::writeSwordSuitDamageFix);
     }
 
     void InitEmoteFolder(PluginMenu &menu)
