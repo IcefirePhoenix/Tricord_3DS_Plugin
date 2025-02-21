@@ -8,6 +8,13 @@ namespace CTRPluginFramework
     {
         float largeEnergyGaugeMax = 900.0;
         Process::WriteFloat(AddressList::getAddress("EnergyCurrent"), largeEnergyGaugeMax);
+
+        // Apply to player 2 and player 3 if in multiplayer
+        if (!GeneralHelpers::isSinglePlayer())
+        {
+            Process::WriteFloat(AddressList::getAddress("EnergyCurrent") + PLAYER_OFFSET, largeEnergyGaugeMax);
+            Process::WriteFloat(AddressList::getAddress("EnergyCurrent") + 2 * PLAYER_OFFSET, largeEnergyGaugeMax);
+        }
     }
 
     // Sets max stamina/energy value
