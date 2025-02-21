@@ -5,6 +5,7 @@ namespace CTRPluginFramework
 {
     MenuEntry *swordEditAuto;
     u8 Costume::swordType[3] = {0xFF, 0xFF, 0xFF};
+    bool Costume::customSwordsActive = false;
 
     /* ------------------ */
 
@@ -69,11 +70,13 @@ namespace CTRPluginFramework
             openSwordSelMenu();
             entry->SetName("Disable custom sword model edits");
             swordEditAuto->Enable();
+            Costume::customSwordsActive = true;
         }
         else
         {
             entry->SetName("Set custom sword model(s)");
             swordEditAuto->Disable();
+            Costume::customSwordsActive = false;
         }
     }
 }

@@ -54,6 +54,7 @@ namespace CTRPluginFramework
         static void setSwordChanges(MenuEntry *entry);
         static void writeSwordChanges(MenuEntry *entry);
         static void preventDoppelStageReset(MenuEntry* entry);
+        static void preventDoppelLobbyReset(MenuEntry* entry);
         static void enableCosmeticCostume(MenuEntry* entry);
         static void setCosmeticCostume(MenuEntry* entry);
         static void writeCosmeticCostume(MenuEntry* entry);
@@ -106,5 +107,6 @@ namespace CTRPluginFramework
         static const StringVector BCH_fileNames;
         static u8 cosmeticIDs[3];
         static u8 swordType[3];
+        static bool customSwordsActive;
     };
 }

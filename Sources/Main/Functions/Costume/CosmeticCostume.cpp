@@ -126,10 +126,99 @@ namespace CTRPluginFramework
     // Reflect cosmetic costume selection to alternate costume address
     void Costume::writeCosmeticCostume(MenuEntry *entry)
     {
-        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
+        if (GeneralHelpers::isLoadingScreen(true) || GeneralHelpers::isLoadingScreen(false))
         {
-            if (cosmeticIDs[iterateThruPlayers] != cosmeticNotInUse)
-                Costume::setPlayerCostume(iterateThruPlayers, cosmeticIDs[iterateThruPlayers], true);
+            for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
+            {
+                if (cosmeticIDs[iterateThruPlayers] != cosmeticNotInUse)
+                {
+                    // Set cosmetic costume ID
+                    Costume::setPlayerCostume(iterateThruPlayers, cosmeticIDs[iterateThruPlayers], true);
+
+                    // Check for costumes that have unique sword models
+                    if (!Costume::customSwordsActive)
+                    {
+                        switch (cosmeticIDs[iterateThruPlayers])
+                        {
+                            // Spin Attack Attire
+                            case 0x0B:
+                                Costume::swordType[iterateThruPlayers] = 0x1;
+                                break;
+                            // Ninja Gi
+                            case 0x0C:
+                                Costume::swordType[iterateThruPlayers] = 0x2;
+                                break;
+                            // Sword Suit
+                            case 0x01:
+                                Costume::swordType[iterateThruPlayers] = 0x3;
+                                break;
+                            // Sword Master Suit
+                            case 0x20:
+                                Costume::swordType[iterateThruPlayers] = 0x4;
+                                break;
+                            // Dapper Spinner
+                            case 0x21:
+                                Costume::swordType[iterateThruPlayers] = 0x5;
+                                break;
+                            // Lady's Ensemble
+                            case 0x12:
+                                Costume::swordType[iterateThruPlayers] = 0x6;
+                                break;
+                            // Tri Suit
+                            case 0x0F:
+                                Costume::swordType[iterateThruPlayers] = 0x7;
+                                break;
+                            // Timeless Tunic
+                            case 0x14:
+                                Costume::swordType[iterateThruPlayers] = 0x8;
+                                break;
+                            // Linebeck's Uniform
+                            case 0x24:
+                                Costume::swordType[iterateThruPlayers] = 0x9;
+                                break;
+                            // Fierce Deity Armor
+                            case 0x25:
+                                Costume::swordType[iterateThruPlayers] = 0xA;
+                                break;
+                            // Everything else gets the default sword
+                            default:
+                                Costume::swordType[iterateThruPlayers] = 0x0;
+                                break;
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    // Ensure custom sword model is disabled if cosmetic is disabled
+                    Costume::swordType[iterateThruPlayers] = 0xFF;
+                }
+            }
+
+            // Enable sword edits if a unique sword model was set, else disable
+            // Can only edit the state of the sword model handler if custom swords are not actively in use
+            if (!Costume::customSwordsActive)
+            {
+                if (Costume::swordType[0] != 0xFF || Costume::swordType[1] != 0xFF || Costume::swordType[2] != 0xFF)
+                    swordEditAuto->Enable();
+                else
+                    swordEditAuto->Disable();
+            }
+            
+            // Fix issues with Tingle Tights not getting balloons initialized properly
+            // If a loading screen started, and the player/team is at 0 health, or are spawning into stage 1, give Tingle players three balloons
+            // TODO: Check if any other costumes have issues applying their effects when cosmetic costumes are enabled
+            u8 targetStageID, currCostume;
+            Process::Read8(AddressList::getAddress("TargetStageID"), targetStageID);
+            if ((GeneralHelpers::getHP() == 0 || targetStageID == 1))
+            {
+                for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
+                {
+                    Process::Read8(AddressList::getAddress("CurrCostume") + iterateThruPlayers * PLAYER_OFFSET, currCostume);
+                    if (currCostume == 0x1E)
+                        Process::Write8(AddressList::getAddress("TingleBalloons") + iterateThruPlayers * PLAYER_OFFSET, 3);
+                }
+            }
         }
     }
 }

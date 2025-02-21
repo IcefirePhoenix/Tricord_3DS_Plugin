@@ -262,9 +262,9 @@
             }
         },
         {
-            "name": "set_cosmetic_note",
+            "name": "enable_cosmetic_note",
             "content": {
-                "intro": "Determines whether the selection made under \"Set Cosmetic Costume\" gets applied in-game.",
+                "intro": "Determines whether the selections made under \"Set Cosmetic Costume\" get applied in-game.",
                 "note": "",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -273,8 +273,8 @@
         {
             "name": "choose_cosmetic_note",
             "content": {
-                "intro": "Allows you to select a new costume to wear while keeping the effects of the currently worn costume.\n\nThis is a visual/cosmetic change ONLY and does NOT affect the true costume \"hiding underneath.\"",
-                "note": "Changing your costume through Tricord or the TFH costume selection menu will not affect your cosmetic costume.",
+                "intro": "Allows you to select a new costume to wear while keeping the effects of the currently worn costume.\n\nThis is a visual/cosmetic change ONLY and does NOT affect the true costume \"hiding underneath.\" Also changes sword models to match cosmetic costumes, UNLESS \"Set custom sword model(s)\" is in use.",
+                "note": "Changing your costume through Tricord (\"Change Player Costume\") or the TFH costume selection menu will not affect your cosmetic costume.",
                 "modeCompatibility": 1,
                 "clientOnly": true
             }

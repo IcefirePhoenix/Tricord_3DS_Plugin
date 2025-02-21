@@ -220,8 +220,8 @@ namespace CTRPluginFramework
 
         // Cosmetic costumes subfolder
         MenuFolder *cosmetic = new MenuFolder("Cosmetic Costumes");
-        *cosmetic += new MenuEntry("Enable Cosmetic Costumes", nullptr, Costume::enableCosmeticCostume, DescUtils::getDesc("choose_cosmetic_note"));
-        *cosmetic += new MenuEntry("Set Cosmetic Costume", nullptr, Costume::setCosmeticCostume, DescUtils::getDesc("set_cosmetic_note"));
+        *cosmetic += new MenuEntry("Enable Cosmetic Costumes", nullptr, Costume::enableCosmeticCostume, DescUtils::getDesc("enable_cosmetic_note"));
+        *cosmetic += new MenuEntry("Set Cosmetic Costume", nullptr, Costume::setCosmeticCostume, DescUtils::getDesc("choose_cosmetic_note"));
         *cosmetic += new MenuEntry("Set custom sword model(s)", nullptr, Costume::setSwordChanges, DescUtils::getDesc("sword_model_note"));
         *costume += cosmetic;
 
