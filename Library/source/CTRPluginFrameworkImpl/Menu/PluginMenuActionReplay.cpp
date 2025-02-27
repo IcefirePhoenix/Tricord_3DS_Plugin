@@ -194,7 +194,7 @@ namespace CTRPluginFramework
         Renderer::DrawRect(posX, posY, 220, 15, Color::Maroon);
         posY += 3;
         Renderer::DrawString((const char *)_path, posX + 2, posY, Color::Gainsboro);
-        
+
         const char* labels[6] =
         {
             "Create New", "Duplicate", "Open Editor", "", "Delete", "Read Note"
@@ -213,7 +213,7 @@ namespace CTRPluginFramework
                 _trashBtn.Draw();
 
                 Renderer::DrawSysString(labels[1], 205, yCoordB, 290, Preferences::Settings.MainTextColor);
-            
+
                 if (!_topMenu.GetSelectedItem()->note.empty())
                     Renderer::DrawSysString(labels[5], 75, yCoordB -= 17, 290, Preferences::Settings.MainTextColor);
 
@@ -330,7 +330,7 @@ namespace CTRPluginFramework
 
     void    PluginMenuActionReplay::_NewBtn_OnClick(void)
     {
-        Keyboard        kbd("", {"Code", "Folder"});
+        Keyboard        kbd("", {"Code", "Folder"}, "");
         MenuFolderImpl  *f = __pmARinstance->_topMenu.GetRootFolder();
 
         if (f == nullptr)
@@ -474,7 +474,7 @@ namespace CTRPluginFramework
 
         // delete the current cheat file and rename the temporary file
         File::Remove(path);
-        File::Rename("AR.temp", path); 
+        File::Rename("AR.temp", path);
     }
 
     // TODO: decide whether backup folder should be placed under default "cheats" folder or under "Tricord"
@@ -503,39 +503,39 @@ namespace CTRPluginFramework
 
             // search for backup file via matching titleID substring
             for (const auto& fileLocator : files) {
-                if (fileLocator.find(titleID) != std::string::npos) 
+                if (fileLocator.find(titleID) != std::string::npos)
                 {
                     backupFileName = fileLocator;
-                    break; 
+                    break;
                 }
             }
 
             if (!backupFileName.empty()) // backup file found
                 backupPath.append(backupFileName);
-            else 
-                backupPath.append(titleID + "-" + dateStr + ".txt"); // no backup found; create new 
+            else
+                backupPath.append(titleID + "-" + dateStr + ".txt"); // no backup found; create new
         }
-        else 
+        else
         {
             backupPath.append(titleID + "/");
 
             if (!Directory::IsExists(backupPath))
                 Directory::Create(backupPath);
-                
+
             // have user choose custom name when creating manual backups from settings menu
             Keyboard setName("Name your backup file.");
             setName.DisplayTopScreen = true;
             setName.CanAbort(true);
 
             if (setName.Open(backupFileName) == 0)
-                backupPath.append(backupFileName + ".txt"); 
+                backupPath.append(backupFileName + ".txt");
             else
                 return;
         }
-        
-        if (!File::Exists(backupPath)) 
+
+        if (!File::Exists(backupPath))
             File::Create(backupPath);
-    
+
         // prep read processes
         File sourceFile(sourcePath, File::READ);
         LineReader reader(sourceFile);
@@ -545,17 +545,17 @@ namespace CTRPluginFramework
             File backupFile(backupPath, File::WRITE | File::TRUNCATE); // will clear the file upon open
             LineWriter writer(backupFile);
 
-            if (!sourceFile.IsOpen() || !backupFile.IsOpen() || !File::Exists(sourcePath)) 
+            if (!sourceFile.IsOpen() || !backupFile.IsOpen() || !File::Exists(sourcePath))
             {
                 MessageBox msg("Error", "Backup of Action Replay codes failed.", DialogType::DialogOk);
-                msg();                
+                msg();
                 return;
             }
 
             std::string nextLine;
-            while (reader(nextLine)) 
+            while (reader(nextLine))
                 writer << nextLine << writer.endl();
-        
+
             // end LineWriter process
             writer.Close();
 
@@ -568,7 +568,7 @@ namespace CTRPluginFramework
                 MessageBox msg("Success", "Action Replay cheats have been successfully backed up.", DialogType::DialogOk);
                 msg();
             }
-            else 
+            else
                 // rename the backup file with date
                 File::Rename(backupPath, "/cheats/TricordBackup/auto/" + titleID + "-" + dateStr + ".txt");
         }
@@ -603,7 +603,7 @@ namespace CTRPluginFramework
                 root->Clear();
             }
 
-            ActionReplay_LoadCodes(root); 
+            ActionReplay_LoadCodes(root);
             Preferences::CheatsFile = currCheatFilePath;
 
             MessageBox errBox("Success", "Action Replay cheats have been restored from backup.", DialogType::DialogOk);

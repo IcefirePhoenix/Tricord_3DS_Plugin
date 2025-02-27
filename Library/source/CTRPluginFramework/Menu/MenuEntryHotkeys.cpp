@@ -182,7 +182,7 @@ namespace CTRPluginFramework
         if (_hotkeys.size() == 0)
             return;
 
-        Keyboard                    keyboard("Hotkeys Modifier:");
+        Keyboard                    keyboard("Select new hotkeys.", "Hotkeys Modifier");
         std::vector<std::string>    hkNames;
         int                         ret;
 
