@@ -234,14 +234,21 @@ namespace CTRPluginFramework
     ** Compare
     ***********/
 
-    Keyboard::Keyboard(const std::string &text) : _keyboard(new KeyboardImpl(this, text))
+    Keyboard::Keyboard(const std::string &text) : _keyboard(new KeyboardImpl(this, text, ""))
     {
         _hexadecimal = true;
         _isPopulated = false;
         DisplayTopScreen = !text.empty();
     }
 
-    Keyboard::Keyboard(const std::string &text, const std::vector<std::string> &options) : _keyboard(new KeyboardImpl(this, text))
+    Keyboard::Keyboard(const std::string &text, const std::string &title) : _keyboard(new KeyboardImpl(this, text, title))
+    {
+        _hexadecimal = true;
+        _isPopulated = false;
+        DisplayTopScreen = !text.empty();
+    }
+
+    Keyboard::Keyboard(const std::string &text, const std::vector<std::string> &options, const std::string &title) : _keyboard(new KeyboardImpl(this, text, title))
     {
         _hexadecimal = false;
         DisplayTopScreen = !text.empty();
@@ -249,7 +256,7 @@ namespace CTRPluginFramework
         _isPopulated = !options.empty();
     }
 
-    Keyboard::Keyboard(const std::vector<std::string> &options) : _keyboard(new KeyboardImpl(this))
+    Keyboard::Keyboard(const std::vector<std::string> &options) : _keyboard(new KeyboardImpl(this, "", ""))
     {
         _hexadecimal = false;
         DisplayTopScreen = false;
