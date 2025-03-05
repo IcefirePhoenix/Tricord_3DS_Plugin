@@ -492,12 +492,12 @@ namespace CTRPluginFramework
     static CpuRegisters g_previousException{};
 
     void    ProcessImpl::ExceptionHandler(ERRF_ExceptionInfo* excep, CpuRegisters* regs) {
-        // Default exception handler, if the user didn't set an custom exception handler or an exception happened in the user callback
-        if (AtomicPostIncrement(&exceptionCount) || !Process::exceptionCallback) {
+        // Run Luma's default exception handler if Tricord's exception handler fails...
+        if (AtomicPostIncrement(&exceptionCount))
+        {
             DisableExceptionHandlers();
             ReturnFromException(Process::ThrowOldExceptionOnCallbackException ? &g_previousException : regs);
         }
-        // Lock game threads
         LockGameThreads();
 
         // Backup exception register state
@@ -507,7 +507,6 @@ namespace CTRPluginFramework
         // NOTE: NEEDS TO BE DISABLED IF THIS FUNCTION IS MADE TO RETURN EXECUTION
         GSP::ResumeInterruptReceiver();
         if (!ScreenImpl::AcquireFromGsp(false))
-            // Update OSD screens
             OSDImpl::UpdateScreens();
 
         // Update memregions, this layout is used by internal checks
@@ -516,21 +515,24 @@ namespace CTRPluginFramework
         Process::ExceptionCallbackState ret = Process::EXCB_LOOP;
 
         while (ret == Process::EXCB_LOOP)
-            ret = Process::exceptionCallback(excep, regs);
+        {
+            ExceptionHandler::drawExceptionInfo(ExceptionHandler::getErrorInfo(excep), ExceptionHandler::getRegisterInfo(excep, regs));
+            ret = ExceptionHandler::getExceptionEventState();
+        }
 
         switch (ret)
         {
-        case Process::EXCB_REBOOT:
-            System::Reboot();
-            break;
-        case Process::EXCB_RETURN_HOME:
-            Process::ReturnToHomeMenu();
-            break;
-        default:
-            // Rethrow the exception to the default exceptions handlers
-            DisableExceptionHandlers();
-            ReturnFromException(regs);
-            break;
+            case Process::EXCB_REBOOT:
+                System::Reboot();
+                break;
+            case Process::EXCB_RETURN_HOME:
+                Process::ReturnToHomeMenu();
+                break;
+            default:
+                // Rethrow the exception to Luma's default exceptions handlers if needed
+                DisableExceptionHandlers();
+                ReturnFromException(regs);
+                break;
         }
     }
 

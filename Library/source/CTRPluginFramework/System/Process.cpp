@@ -9,7 +9,6 @@ extern Handle gspThreadEventHandle;
 
 namespace CTRPluginFramework
 {
-    Process::ExceptionCallback Process::exceptionCallback = nullptr;
     Process::OnPauseResumeCallback Process::OnPauseResume = nullptr;
     bool Process::ThrowOldExceptionOnCallbackException = false;
 

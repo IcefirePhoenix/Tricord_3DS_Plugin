@@ -88,7 +88,7 @@ ifneq ($(ENABLE_LINK_TIME_OPTIMIZATIONS), 0)
 	ASFLAGS += -flto=auto -ffat-lto-objects
 endif
 
-CXXFLAGS 	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++20
+CXXFLAGS 	:= $(CFLAGS) -fno-rtti -fexceptions -std=gnu++20
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

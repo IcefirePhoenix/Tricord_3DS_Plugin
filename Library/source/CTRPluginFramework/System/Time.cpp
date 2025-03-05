@@ -30,17 +30,17 @@ namespace CTRPluginFramework
         return static_cast<s64>(_ticks / (TicksPerSecond / 1000000.f));
     }
 
-    std::string Time::GetDate(void) 
+    std::string Time::GetDate(bool addTime)
     {
-        char buffer[9] = { 0 };
+        char buffer[20] = { 0 };
         time_t t = time(NULL);
         struct tm *timeinfo = localtime(&t);
 
-        strftime(buffer, 100, "%x", timeinfo);
+        strftime(buffer, sizeof(buffer), addTime ? "%F_%H.%M" : "%F", timeinfo); // colons not allowed -> auto-truncates string as a side effect
 
         std::string dateStr(buffer);
 
-        std::replace(dateStr.begin(), dateStr.end(), '/', '.'); 
+        std::replace(dateStr.begin(), dateStr.end(), '/', '.');
         return dateStr;
     }
 
