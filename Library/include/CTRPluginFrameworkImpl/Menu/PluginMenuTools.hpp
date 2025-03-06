@@ -41,7 +41,6 @@ namespace CTRPluginFramework
         MenuFolderImpl  _mainMenu;
         MenuFolderImpl  _miscellaneousMenu;
         MenuFolderImpl  _screenshotMenu;
-        MenuFolderImpl  _TFH_settingsMenu;
         MenuFolderImpl  _tricordSettingsMenu;
         MenuEntryTools  *_hexEditorEntry;
         HexEditor       &_hexEditor;

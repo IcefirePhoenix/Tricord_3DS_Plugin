@@ -36,9 +36,7 @@ namespace CTRPluginFramework
             ShowBottomFps       = 1 << 21,
 
             // TFH Settings
-            PretendoPatch       = 1 << 22,
-            DisableMoveOffset   = 1 << 23,
-            DoppelStageCostumeReset   = 1 << 24
+            QoL_Patch           = 1 << 22
         };
 
         /*struct HeaderV1
