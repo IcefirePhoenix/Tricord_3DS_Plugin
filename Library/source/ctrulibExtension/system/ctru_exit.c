@@ -10,4 +10,7 @@ void __libctru_exit(int rc)
 
     if (__sync_fini)
         __sync_fini();
+
+    // End this thread
+    svcExitThread();
 }
