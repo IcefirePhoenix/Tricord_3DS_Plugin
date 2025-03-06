@@ -36,7 +36,7 @@ namespace CTRPluginFramework
     // Immediately resets the rotation offset according to user preference -> for use with Freecam/Chaos
     void Player::resetOffset(void)
     {
-        if (Preferences::IsEnabled(Preferences::DisableMoveOffset))
+        if (Preferences::IsEnabled(Preferences::QoL_Patch))
             overwriteOffset(0.0);   // custom -> no-offset
         else
             overwriteOffset(5.0);   // vanilla
