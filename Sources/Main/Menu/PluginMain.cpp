@@ -90,12 +90,6 @@ namespace CTRPluginFramework
         //autoBeamCooldown->Enable(); // why is this enabled here?
     }
 
-    void OnProcessExit(void)
-    {
-        ToggleTouchscreenForceOn();
-        Process::ReturnToHomeMenu(); // force exit to home menu might fix old system crashes...
-    }
-
     // This function only runs once at plugin startup
     int main(void)
     {
@@ -110,12 +104,6 @@ namespace CTRPluginFramework
 
         CreateMenu(*menu);
         menu->Run();
-
-        // end of plugin lifetime
-        delete menu;
-        OnProcessExit();
-
-        // should not reach here -> force home menu = NORETURN
         return (0);
     }
 }
