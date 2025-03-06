@@ -59,7 +59,6 @@ namespace CTRPluginFramework
         _mainMenu("Tools"),
         _miscellaneousMenu("Miscellaneous"),
         _screenshotMenu("Screenshot Options"),
-        _TFH_settingsMenu("TFH Settings"),
         _tricordSettingsMenu("Tricord Settings"),
         _hexEditorEntry(nullptr),
         _hexEditor(hexEditor),
@@ -84,6 +83,9 @@ namespace CTRPluginFramework
     {
         // Settings
         auto item = _tricordSettingsMenu.begin() + 2; // skip first two entries -> NOT checkboxes w/saved status
+
+        if (Preferences::IsEnabled(Preferences::QoL_Patch)) (*item)->AsMenuEntryTools().Enable();
+        else (*item)->AsMenuEntryTools().Disable();
 
         if (Preferences::IsEnabled(Preferences::HIDToggle)) (*item++)->AsMenuEntryImpl().Enable();
         else (*item++)->AsMenuEntryImpl().Disable();
@@ -110,18 +112,6 @@ namespace CTRPluginFramework
         else (*item++)->AsMenuEntryTools().Disable();
 
         if (Preferences::IsEnabled(Preferences::ShowBottomFps)) (*item)->AsMenuEntryTools().Enable();
-        else (*item)->AsMenuEntryTools().Disable();
-
-        // TFH Settings
-        item = _TFH_settingsMenu.begin();
-
-        if (Preferences::IsEnabled(Preferences::PretendoPatch)) (*item)->AsMenuEntryTools().Enable();
-        else (*item)->AsMenuEntryTools().Disable();
-
-        if (Preferences::IsEnabled(Preferences::DisableMoveOffset)) (*item)->AsMenuEntryTools().Enable();
-        else (*item)->AsMenuEntryTools().Disable();
-
-        if (Preferences::IsEnabled(Preferences::DoppelStageCostumeReset)) (*item)->AsMenuEntryTools().Enable();
         else (*item)->AsMenuEntryTools().Disable();
     }
 
@@ -557,7 +547,6 @@ namespace CTRPluginFramework
         _mainMenu.Append(new MenuEntryTools("Gateway RAM Dumper", [] { g_mode = GWRAMDUMP; }, Icon::DrawRAM));
         _mainMenu.Append(new MenuEntryTools("Screenshot Options", nullptr, Icon::DrawUnsplash, new u32(SCREENSHOT)));
         _mainMenu.Append(new MenuEntryTools("Miscellaneous", nullptr, Icon::DrawMore, new u32(MISCELLANEOUS)));
-        _mainMenu.Append(new MenuEntryTools("TFH Settings", nullptr, Icon::DrawSettings, this));
         _mainMenu.Append(new MenuEntryTools("Tricord Settings", nullptr, Icon::DrawSettings, this));
         _mainMenu.Append(new MenuEntryTools("Shutdown", Shutdown, Icon::DrawShutdown));
         _mainMenu.Append(new MenuEntryTools("Reboot", Reboot, Icon::DrawRestart));
@@ -578,17 +567,11 @@ namespace CTRPluginFramework
         // Settings menu
         _tricordSettingsMenu.Append(new MenuEntryTools("Change Tricord menu hotkeys", MenuHotkeyModifier, Icon::DrawGameController));
         _tricordSettingsMenu.Append(new MenuEntryTools("Set backlight (Experimental)", EditBacklight, false, false));
+        _tricordSettingsMenu.Append(new MenuEntryTools("Enable QoL patches", [] { Preferences::Toggle(Preferences::QoL_Patch); }, true, Preferences::IsEnabled(Preferences::QoL_Patch)));
         _tricordSettingsMenu.Append(new MenuEntryTools("Disable HID memory allocation", [] { Preferences::Toggle(Preferences::HIDToggle); }, true, Preferences::IsEnabled(Preferences::HIDToggle)));
         _tricordSettingsMenu.Append(new MenuEntryTools("Automatically re-enable currently active cheats on launch", [] { Preferences::Toggle(Preferences::AutoSaveCheats); Preferences::Toggle(Preferences::AutoLoadCheats); }, true, Preferences::IsEnabled(Preferences::AutoSaveCheats)));
         _tricordSettingsMenu.Append(new MenuEntryTools("Back-up Action Replay codes now", [] { PluginMenuActionReplay::BackupCodes(true); }, nullptr));
         _tricordSettingsMenu.Append(new MenuEntryTools("Restore Action Replay codes from back-up", [] { PluginMenuActionReplay::RestoreFromBackup(false); }, nullptr));
-
-        // TFH Settings
-        // TODO: formatting for this
-        _TFH_settingsMenu.Append(new MenuEntryTools("Apply bug fix patches for cross-region online gameplay via Pretendo", [] { Preferences::Toggle(Preferences::PretendoPatch); Preferences::Toggle(Preferences::PretendoPatch); }, true, Preferences::IsEnabled(Preferences::PretendoPatch)));
-        _TFH_settingsMenu.Append(new MenuEntryTools("Disable 5-degree rotation offset", [] { Preferences::Toggle(Preferences::DisableMoveOffset); Preferences::Toggle(Preferences::DisableMoveOffset); }, true, Preferences::IsEnabled(Preferences::DisableMoveOffset)));
-        _TFH_settingsMenu.Append(new MenuEntryTools("Disable Doppel costume resets between stages", [] { Preferences::Toggle(Preferences::DoppelStageCostumeReset); Preferences::Toggle(Preferences::DoppelStageCostumeReset); }, true, Preferences::IsEnabled(Preferences::DoppelStageCostumeReset)));
-
 
         // Get strings x position
         g_textXpos[0] = (320 - Renderer::LinuxFontSize(g_ctrpfText)) / 2;
@@ -761,7 +744,7 @@ namespace CTRPluginFramework
         // Draw Framework version
         {
             //static const char *version = VersionStr;
-            static const char *tagVersion = "0.5.0";
+            static const char *tagVersion = "0.5.0"; // CHANGE
             static const char *commit = "0.7.4";
             static const char *compilationDate = COMPILE_DATE;
 

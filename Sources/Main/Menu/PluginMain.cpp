@@ -59,21 +59,18 @@ namespace CTRPluginFramework
 
     void ManageTFH_Settings(void)
     {
-        // TODO: is there a better way of doing this
-        if (Preferences::IsEnabled(Preferences::PretendoPatch))
+        if (Preferences::IsEnabled(Preferences::QoL_Patch))
+        {
             pretendoOnlinePatchManager->Enable();
-        else
-            pretendoOnlinePatchManager->Disable();
-
-        if (Preferences::IsEnabled(Preferences::DisableMoveOffset))
             rotationOffsetManager->Enable();
-        else
-            rotationOffsetManager->Disable();
-
-        if (Preferences::IsEnabled(Preferences::DoppelStageCostumeReset))
             doppelCostumeStageResetManager->Enable();
+        }
         else
+        {
+            pretendoOnlinePatchManager->Disable();
+            rotationOffsetManager->Disable();
             doppelCostumeStageResetManager->Disable();
+        }
     }
 
     void InitSequence(FwkSettings &settings)
