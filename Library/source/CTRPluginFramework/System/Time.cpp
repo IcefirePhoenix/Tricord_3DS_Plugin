@@ -53,17 +53,18 @@ namespace CTRPluginFramework
         };
 
         std::istringstream stream(date);
-        std::string month, day, year;
-        std::getline(stream, month, '.');
-        std::getline(stream, day, '.');
-        std::getline(stream, year);
+        std::string year, month, day;
 
-        std::string monthName = monthMap[month];
+        std::getline(stream, year, '-');
+        std::getline(stream, month, '-');
+        std::getline(stream, day);
+
+        if (monthMap.find(month) == monthMap.end())
+            return "Invalid Date";
 
         std::stringstream formattedDate;
-        formattedDate << std::setw(2) << std::setfill('0') << day << ", 20" << year;
+        formattedDate << monthMap[month] << " " << std::stoi(day) << ", " << year;
 
-        std::string outputDate = monthName + " " + formattedDate.str();
-        return outputDate;
+        return formattedDate.str();
     }
 }

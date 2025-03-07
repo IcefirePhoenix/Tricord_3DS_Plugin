@@ -84,8 +84,8 @@ namespace CTRPluginFramework
         // Settings
         auto item = _tricordSettingsMenu.begin() + 2; // skip first two entries -> NOT checkboxes w/saved status
 
-        if (Preferences::IsEnabled(Preferences::QoL_Patch)) (*item)->AsMenuEntryTools().Enable();
-        else (*item)->AsMenuEntryTools().Disable();
+        if (Preferences::IsEnabled(Preferences::QoL_Patch)) (*item++)->AsMenuEntryTools().Enable();
+        else (*item++)->AsMenuEntryTools().Disable();
 
         if (Preferences::IsEnabled(Preferences::HIDToggle)) (*item++)->AsMenuEntryImpl().Enable();
         else (*item++)->AsMenuEntryImpl().Disable();
@@ -570,8 +570,8 @@ namespace CTRPluginFramework
         _tricordSettingsMenu.Append(new MenuEntryTools("Enable QoL patches", [] { Preferences::Toggle(Preferences::QoL_Patch); }, true, Preferences::IsEnabled(Preferences::QoL_Patch)));
         _tricordSettingsMenu.Append(new MenuEntryTools("Disable HID memory allocation", [] { Preferences::Toggle(Preferences::HIDToggle); }, true, Preferences::IsEnabled(Preferences::HIDToggle)));
         _tricordSettingsMenu.Append(new MenuEntryTools("Automatically re-enable currently active cheats on launch", [] { Preferences::Toggle(Preferences::AutoSaveCheats); Preferences::Toggle(Preferences::AutoLoadCheats); }, true, Preferences::IsEnabled(Preferences::AutoSaveCheats)));
-        _tricordSettingsMenu.Append(new MenuEntryTools("Back-up Action Replay codes now", [] { PluginMenuActionReplay::BackupCodes(true); }, nullptr));
-        _tricordSettingsMenu.Append(new MenuEntryTools("Restore Action Replay codes from back-up", [] { PluginMenuActionReplay::RestoreFromBackup(false); }, nullptr));
+        _tricordSettingsMenu.Append(new MenuEntryTools("Backup Action Replay codes now", [] { PluginMenuActionReplay::BackupCodes(true); }, nullptr));
+        _tricordSettingsMenu.Append(new MenuEntryTools("Restore Action Replay codes from backup", [] { PluginMenuActionReplay::RestoreFromBackup(false); }, nullptr));
 
         // Get strings x position
         g_textXpos[0] = (320 - Renderer::LinuxFontSize(g_ctrpfText)) / 2;

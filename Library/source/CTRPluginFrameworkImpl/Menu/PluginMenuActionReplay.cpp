@@ -480,66 +480,90 @@ namespace CTRPluginFramework
     // TODO: decide whether backup folder should be placed under default "cheats" folder or under "Tricord"
     void    PluginMenuActionReplay::BackupCodes(bool manualMode)
     {
-        std::string titleID;
-        Process::GetTitleID(titleID);
-
+        std::string region = "NA";
         std::string sourcePath = Preferences::CheatsFile;
-        std::string backupPath = manualMode ? "/cheats/TricordBackup/manual/" : "/cheats/TricordBackup/auto/";
+        std::string backupPath = manualMode ? "/Tricord/AR_Backups/manual/" : "/Tricord/AR_Backups/auto/";
         std::string backupFileName = "";
-        std::string dateStr = Time::GetDate();
+        std::string dateStr = Time::GetDate(false);
+
+        // prep read processes
+        File sourceFile(sourcePath, File::READ);
+        LineReader reader(sourceFile);
+
+        if (!Directory::IsExists(backupPath))
+            Directory::Create(backupPath);
+
+        switch (Process::GetTitleID())
+        {
+            case 0x0004000000176F00:
+                region = "NA";
+                break;
+            case 0x0004000000177000:
+                region = "EU";
+                break;
+            case 0x0004000000176E00:
+                region = "JP";
+                break;
+        }
+
+        backupPath.append(region + "/");
 
         if (!Directory::IsExists(backupPath))
             Directory::Create(backupPath);
 
         if (!manualMode)
         {
-            // backup files have their "last updated" date appended to their filename, like so: titleID-MM.DD.YY.txt
-            // since the filenames are dynamic, locating backup files relies on titleID
-            Directory folder;
-            Directory::Open(folder, backupPath);
+            if (sourceFile.GetSize() > 0)
+            {
+                // backup files have their "last updated" date as their filename, like so: YYYY-MM.DD.txt
+                Directory folder;
+                Directory::Open(folder, backupPath);
 
-            std::vector<std::string> files;
-            folder.ListFiles(files, ".txt");
+                std::vector<std::string> files;
+                folder.ListFiles(files, ".txt");
 
-            // search for backup file via matching titleID substring
-            for (const auto& fileLocator : files) {
-                if (fileLocator.find(titleID) != std::string::npos)
+                // search for backup file via matching region code substring
+                for (const auto &fileLocator : files)
                 {
-                    backupFileName = fileLocator;
-                    break;
+                    if (fileLocator.find("AutoBackup") != std::string::npos)
+                    {
+                        backupFileName = fileLocator;
+                        break;
+                    }
                 }
-            }
 
-            if (!backupFileName.empty()) // backup file found
-                backupPath.append(backupFileName);
-            else
-                backupPath.append(titleID + "-" + dateStr + ".txt"); // no backup found; create new
+                if (!backupFileName.empty()) // backup file found
+                    backupPath.append(backupFileName);
+                else
+                    backupPath.append("AutoBackup-" + dateStr + ".txt"); // no backup found; create new
+            }
         }
         else
         {
-            backupPath.append(titleID + "/");
-
-            if (!Directory::IsExists(backupPath))
-                Directory::Create(backupPath);
-
-            // have user choose custom name when creating manual backups from settings menu
-            Keyboard setName("Name your backup file.");
-            setName.DisplayTopScreen = true;
-            setName.CanAbort(true);
-
-            if (setName.Open(backupFileName) == 0)
-                backupPath.append(backupFileName + ".txt");
-            else
+            // attempting to create a manual backup when the active cheat file is empty is not allowed
+            if (sourceFile.GetSize() <= 0)
+            {
+                MessageBox("Error", "Cannot create backup. The active cheat file is empty.", DialogType::DialogOk)();
                 return;
+            }
+            else
+            {
+                // have user choose custom name when creating manual backups from settings menu
+                Keyboard setName("Name your backup file.");
+                setName.DisplayTopScreen = true;
+                setName.CanAbort(true);
+
+                if (setName.Open(backupFileName) == 0)
+                    backupPath.append(backupFileName + ".txt");
+                else
+                    return;
+            }
         }
 
         if (!File::Exists(backupPath))
             File::Create(backupPath);
 
-        // prep read processes
-        File sourceFile(sourcePath, File::READ);
-        LineReader reader(sourceFile);
-
+        // copy contents of source file...
         if (sourceFile.GetSize() > 0)
         {
             File backupFile(backupPath, File::WRITE | File::TRUNCATE); // will clear the file upon open
@@ -547,8 +571,7 @@ namespace CTRPluginFramework
 
             if (!sourceFile.IsOpen() || !backupFile.IsOpen() || !File::Exists(sourcePath))
             {
-                MessageBox msg("Error", "Backup of Action Replay codes failed.", DialogType::DialogOk);
-                msg();
+                MessageBox("Error", "Backup of Action Replay codes failed.", DialogType::DialogOk)();
                 return;
             }
 
@@ -570,7 +593,7 @@ namespace CTRPluginFramework
             }
             else
                 // rename the backup file with date
-                File::Rename(backupPath, "/cheats/TricordBackup/auto/" + titleID + "-" + dateStr + ".txt");
+                File::Rename(backupPath, "/Tricord/AR_Backups/auto/" + region + "/AutoBackup-" + dateStr + ".txt");
         }
         else
         {
@@ -580,19 +603,21 @@ namespace CTRPluginFramework
         }
     }
 
-    void    PluginMenuActionReplay::RestoreFromBackup(bool fromAuto, std::string autoDate)
+    void    PluginMenuActionReplay::RestoreFromBackup(bool fromAutoEmptyDetect, std::string autoDate)
     {
         std::string currCheatFilePath = Preferences::CheatsFile;
 
         MessageBox  msgBox("This operation will overwrite your current Action Replay code list. Are you sure you want to proceed?", DialogType::DialogYesNo);
         bool fromManual;
 
-        if (!fromAuto)
+        // if attempting to manually restore from Tools > Tricord Settings...
+        if (!fromAutoEmptyDetect)
             fromManual = msgBox();
 
-        if (fromManual || fromAuto)
+        // open file explorer...
+        if (fromManual || fromAutoEmptyDetect)
         {
-            std::string chosenFilePath;
+            std::string chosenFilePath = "";
             if (Utils::FilePicker(chosenFilePath, ".txt", autoDate) == 0)
                 Preferences::CheatsFile = chosenFilePath;
 
@@ -606,8 +631,8 @@ namespace CTRPluginFramework
             ActionReplay_LoadCodes(root);
             Preferences::CheatsFile = currCheatFilePath;
 
-            MessageBox errBox("Success", "Action Replay cheats have been restored from backup.", DialogType::DialogOk);
-            errBox();
+            if (!chosenFilePath.empty())
+                MessageBox("Success", "Action Replay cheats have been restored from backup.", DialogType::DialogOk)();
         }
     }
 
