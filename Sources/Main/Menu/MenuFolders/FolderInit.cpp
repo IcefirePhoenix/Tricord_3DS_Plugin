@@ -19,7 +19,7 @@ namespace CTRPluginFramework
         *chaos += effects;
         *chaos += new MenuEntry("(TODO) Select event trigger interval");
 
-        *turbo += new MenuEntry("Enable Turbo Mode", nullptr, TurboMode::enableTurboMode);
+        *turbo += new MenuEntry("Enable Turbo Mode", TurboMode::enableTurboMode, DescUtils::getDesc("turbo_note"));
     }
 
     void InitWarpCodes(PluginMenu& menu)
