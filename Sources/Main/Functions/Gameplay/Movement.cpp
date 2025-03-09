@@ -93,7 +93,6 @@ namespace CTRPluginFramework
     // Helper function that enables all-player control
     void Gameplay::writePlayerControl(MenuEntry *entry)
     {
-        /// TODO: is bool impl necessary?
         if (controlAuto)
         {
             GeneralHelpers::setCurrLink(GameData::getPlayerIDFromColor("All"));
