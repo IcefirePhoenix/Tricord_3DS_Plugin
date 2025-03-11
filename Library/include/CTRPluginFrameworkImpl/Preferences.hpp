@@ -23,9 +23,9 @@ namespace CTRPluginFramework
             // Settings
             HIDToggle           = 1,
             AutoSaveCheats      = 1 << 2,
-            AutoSaveFavorites   = 1 << 3,
+            DisableOSDNotifs    = 1 << 3,
             AutoLoadCheats      = 1 << 4,
-            AutoLoadFavorites   = 1 << 5,
+            AutoLoadFavorites   = 1 << 5, // unused
 
             // Misc
             DisplayLoadedFiles  = 1 << 16,

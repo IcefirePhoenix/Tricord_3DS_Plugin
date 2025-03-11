@@ -90,6 +90,9 @@ namespace CTRPluginFramework
         if (Preferences::IsEnabled(Preferences::HIDToggle)) (*item++)->AsMenuEntryImpl().Enable();
         else (*item++)->AsMenuEntryImpl().Disable();
 
+        if (Preferences::IsEnabled(Preferences::DisableOSDNotifs)) (*item++)->AsMenuEntryImpl().Enable();
+        else (*item++)->AsMenuEntryImpl().Disable();
+
         if (Preferences::IsEnabled(Preferences::AutoSaveCheats)) (*item++)->AsMenuEntryImpl().Enable();
         else (*item++)->AsMenuEntryImpl().Disable();
 
@@ -569,6 +572,7 @@ namespace CTRPluginFramework
         _tricordSettingsMenu.Append(new MenuEntryTools("Set backlight (Experimental)", EditBacklight, false, false));
         _tricordSettingsMenu.Append(new MenuEntryTools("Enable QoL patches", [] { Preferences::Toggle(Preferences::QoL_Patch); }, true, Preferences::IsEnabled(Preferences::QoL_Patch)));
         _tricordSettingsMenu.Append(new MenuEntryTools("Disable HID memory allocation", [] { Preferences::Toggle(Preferences::HIDToggle); }, true, Preferences::IsEnabled(Preferences::HIDToggle)));
+        _tricordSettingsMenu.Append(new MenuEntryTools("Disable on-screen notification messages", [] { Preferences::Toggle(Preferences::DisableOSDNotifs); }, true, Preferences::IsEnabled(Preferences::DisableOSDNotifs)));
         _tricordSettingsMenu.Append(new MenuEntryTools("Automatically re-enable currently active cheats on launch", [] { Preferences::Toggle(Preferences::AutoSaveCheats); Preferences::Toggle(Preferences::AutoLoadCheats); }, true, Preferences::IsEnabled(Preferences::AutoSaveCheats)));
         _tricordSettingsMenu.Append(new MenuEntryTools("Backup Action Replay codes now", [] { PluginMenuActionReplay::BackupCodes(true); }, nullptr));
         _tricordSettingsMenu.Append(new MenuEntryTools("Restore Action Replay codes from backup", [] { PluginMenuActionReplay::RestoreFromBackup(false); }, nullptr));
