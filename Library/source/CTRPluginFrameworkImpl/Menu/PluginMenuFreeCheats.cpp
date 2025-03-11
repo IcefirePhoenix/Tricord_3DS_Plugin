@@ -12,7 +12,7 @@ namespace CTRPluginFramework
 
     static bool   GetName(std::string &name)
     {
-        Keyboard    keyboard;
+        Keyboard keyboard("", "");
 
         keyboard.DisplayTopScreen = false;
         //keyboard.CanAbort(false);
@@ -434,7 +434,7 @@ namespace CTRPluginFramework
     {
         _savedName = _selectedFC->name;
 
-        Keyboard    keyboard;
+        Keyboard  keyboard("", "");
         std::string input;
 
         keyboard.DisplayTopScreen = false;

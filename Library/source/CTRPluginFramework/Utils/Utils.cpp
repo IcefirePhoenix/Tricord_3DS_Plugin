@@ -209,9 +209,9 @@ namespace CTRPluginFramework
         }
     }
 
-    static bool     GetName(std::string &out)
+    static bool     GetName(std::string title, std::string &out)
     {
-        Keyboard kb;
+        Keyboard kb(title, "Input a new name.");
 
         return kb.Open(out, out) != -1;
     }
@@ -221,7 +221,7 @@ namespace CTRPluginFramework
         std::string     backupStatus = "\n\nLast auto-backup created: " + forBackup;
         const char *    opendir =   "\n\n\n" FONT_A ": Open folder";
         const char *    selFile =   " / Select file\n";
-        const char *    selDir =    "\nStart : Select the current folder\n";
+        const char *    selDir =    "\nStart: Select the current folder\n";
         const char *    commands =  FONT_B ": Close folder\n" \
                                     FONT_X ": Open options";
 
@@ -310,7 +310,7 @@ namespace CTRPluginFramework
 
                     if (menuEvent == 0) // Create folder
                     {
-                        if (GetName(name))
+                        if (GetName("Create new folder", name))
                         {
                             Directory::Create(path + name);
 
@@ -320,7 +320,7 @@ namespace CTRPluginFramework
                     }
                     if (menuEvent == 1) // Create file
                     {
-                        if (GetName(name))
+                        if (GetName("Create new file", name))
                         {
                             File::Create(path + name);
 
@@ -333,7 +333,7 @@ namespace CTRPluginFramework
                         item = menu.GetSelectedItem();
 
                         name = item->name;
-                        if (GetName(name))
+                        if (GetName("Rename", name))
                         {
                             name.insert(0, path); ///< New path
                             path.append(name); ///< Old path
@@ -354,17 +354,16 @@ namespace CTRPluginFramework
 
                         // Display a little warning
                         {
-                            std::string body = "Do you really want to delete the ";
+                            std::string body = "Do you really want to delete this ";
 
                             body.append(item->IsEntry() ? "file" : "folder");
                             body.append(" : ").append(item->name).append(" ?");
 
-                            MessageBox  msgBox(Color::Orange << "Warning", body, DialogType::DialogYesNo);
+                            MessageBox msgBox("Warning", body, DialogType::DialogYesNo);
 
                             if (msgBox())
                             {
-                                int     res;
-
+                                int res;
                                 path += item->name;
 
                                 if (item->IsEntry())
@@ -374,13 +373,13 @@ namespace CTRPluginFramework
 
                                 if (R_SUCCEEDED(res))
                                 {
-                                    MessageBox(Color::LimeGreen << "Info", "Operation succeeded")();
+                                    MessageBox("Success", "Operation succeeded.")();
 
                                     // Relist folder
                                     ListFolders(*folder, filter, !selDirectory);
                                 }
                                 else
-                                    MessageBox(Color::Red << "Error", Utils::Format("Operation failed: %08X", res))();
+                                    MessageBox("Error", Utils::Format("Operation failed: %08X", res))();
                             }
                         }
                     }

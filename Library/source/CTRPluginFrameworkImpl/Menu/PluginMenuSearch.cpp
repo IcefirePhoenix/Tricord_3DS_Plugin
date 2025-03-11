@@ -18,13 +18,13 @@ namespace CTRPluginFramework
         _step(0),
         _searchMenu(_currentSearch, hexEditor, _inEditor, _hexInput),
         // _closeBtn(*this, nullptr, IntRect(275, 24, 20, 20), Icon::DrawClose),
-        _memoryRegions(150, 45, 130, 15),
-        _searchSize(150, 85, 130, 15),
-        _searchType(150, 105, 130, 15),
-        _compareType(150, 125, 130, 15),
-        _startRangeTextBox(85, 65, 66, 15),
-        _endRangeTextBox(214, 65, 66, 15),
-        _valueTextBox(150, 145, 130, 15),
+        _memoryRegions(155, 45, 130, 15),
+        _searchSize(155, 85, 130, 15),
+        _searchType(155, 105, 130, 15),
+        _compareType(155, 125, 130, 15),
+        _startRangeTextBox(90, 65, 66, 15),
+        _endRangeTextBox(219, 65, 66, 15),
+        _valueTextBox(155, 145, 130, 15),
         _searchBtn(0, "Search", IntRect(35, 195, 80, 15)),
         _cancelBtn(0, "Cancel", IntRect(120, 195, 80, 15)),
         _undoBtn(0, "Undo", IntRect(120, 195, 80, 15)),
@@ -370,7 +370,7 @@ namespace CTRPluginFramework
         Window::BottomWindow.Draw();
 
         int posY = 47;
-        int textPosX = 30;
+        int textPosX = 38;
 
         // MemRegion
         Renderer::DrawString((char *)"MemRegion:", textPosX, posY, blank);

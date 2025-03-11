@@ -75,7 +75,7 @@ namespace CTRPluginFramework
     {
         if (_items.size() && IsEnabled && _execute)
         {
-            Keyboard  keyboard;
+            Keyboard  keyboard("", "");
 
             keyboard.Populate(_items);
 

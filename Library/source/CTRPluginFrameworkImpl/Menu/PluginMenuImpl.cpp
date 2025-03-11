@@ -184,18 +184,14 @@ namespace CTRPluginFramework
         home.Init();
 
         // Restore Search state
-        if (Preferences::Settings.AllowSearchEngine)
-            search.RestoreSearchState();
+        search.RestoreSearchState();
 
         if (!Directory::IsExists("/Tricord/AR_Backups/"))
             Directory::Create("/Tricord/AR_Backups/");
 
         // Load AR Cheats
-        if (Preferences::Settings.AllowActionReplay)
-        {
-            ar.Initialize();
-            PluginMenuActionReplay::BackupCodes(false);
-        }
+        ar.Initialize();
+        PluginMenuActionReplay::BackupCodes(false);
 
         if (_showMsg)
         {
@@ -356,11 +352,8 @@ namespace CTRPluginFramework
                     return 0;
                 }
 
-                if (FwkSettings::Get().AllowActionReplay)
-                {
-                    // Lock the AR & execute codes before releasing it
-                    PluginMenuExecuteLoop::ExecuteAR();
-                }
+                // Lock the AR & execute codes before releasing it
+                PluginMenuExecuteLoop::ExecuteAR();
 
                 // Remove callbacks in the trash bin
                 if (_callbacksTrashBin.size())

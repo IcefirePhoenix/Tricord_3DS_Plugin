@@ -37,7 +37,6 @@ namespace CTRPluginFramework
         int             _cursor;
         u32             _exitKey;
         IntRect         _box;
-
     };
 }
 

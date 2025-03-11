@@ -10,10 +10,10 @@ namespace CTRPluginFramework
     static Converter *__converter = nullptr;
 
     Converter::Converter():
-        _decimalTB(30, 100, 125, 15),
-        _hexadecimalTB(30, 140, 125, 15),
-        _floatTB(160, 100, 125, 15),
-        _hexfloatTB(160, 140, 125, 15)
+        _decimalTB(32, 110, 125, 15),
+        _hexadecimalTB(32, 150, 125, 15),
+        _floatTB(165, 110, 125, 15),
+        _hexfloatTB(165, 150, 125, 15)
     {
         u32 val = 0;
         _decimalTB.SetValue(val);
@@ -119,25 +119,25 @@ namespace CTRPluginFramework
     {
         Renderer::SetTarget(BOTTOM);
 
-        Window::BottomWindow.Draw("Converter");
+        Window::BottomWindow.Draw();
 
         _decimalTB.Draw();
         _hexadecimalTB.Draw();
         _floatTB.Draw();
         _hexfloatTB.Draw();
 
-        int posX = 30;
-        int posY = 90;
+        int posX = 32;
+        int posY = 100;
         const Color &textcolor = Preferences::Settings.MainTextColor;
 
         Renderer::DrawString("Decimal:", posX, posY, textcolor);
-        posY = 130;
+        posY = 140;
         Renderer::DrawString("Decimal (hex):", posX, posY, textcolor);
 
-        posX = 160;
-        posY = 90;
+        posX = 165;
+        posY = 100;
         Renderer::DrawString("Float: ", posX, posY, textcolor);
-        posY = 130;
+        posY = 140;
         Renderer::DrawString("Float (hex):", posX, posY, textcolor);
         Renderer::EndFrame();
     }

@@ -47,7 +47,7 @@ namespace CTRPluginFramework
         _box = IntRect(posX, posY, width, height - 25);
 
         _textbox._box = _box;
-        _textbox._border = IntRect(_box.leftTop.x + 2, _box.leftTop.y + 2, _box.size.x - 4, _box.size.y - 4);
+        _textbox._border = IntRect(_box.leftTop.x + 2, _box.leftTop.y + 2, _box.size.x - 4, height);
         _box.size.y = height;
         _textbox.Update(_title, _message);
         _textbox.Open();
@@ -208,6 +208,7 @@ namespace CTRPluginFramework
 
         // Draw Box backgrounds
         Renderer::DrawRect2(_box, settings.BackgroundMainColor, settings.BackgroundSecondaryColor);
+        Renderer::DrawRect(_box, settings.BackgroundBorderColor, false);
 
         // Draw Text
         int posY = _box.leftTop.y + _textbox._box.size.y;

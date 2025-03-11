@@ -158,7 +158,7 @@ namespace CTRPluginFramework
     {
         if (IsEnabled && _execute)
         {
-            Keyboard  keyboard;
+            Keyboard  keyboard("", "");
 
             keyboard.DisplayTopScreen = false;
 			keyboard.IsHexadecimal(_isHexadecimal);

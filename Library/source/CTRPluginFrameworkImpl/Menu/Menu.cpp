@@ -117,12 +117,11 @@ namespace CTRPluginFramework
     void    Menu::Draw(void) const
     {
         const Color &title = Preferences::Settings.MainTextColor;
-        //const Color &text = Preferences::Settings.MainTextColor;
         const Color &selected = Preferences::Settings.MenuSelectedItemColor;
         const Color &unselected = Preferences::Settings.MenuUnselectedItemColor;
 
-        int   posY = 25;
-        int   posX = 40;
+        int posY = 25;
+        int posX = 40;
 
         Renderer::SetTarget(TOP);
         Window::TopWindow.Draw();

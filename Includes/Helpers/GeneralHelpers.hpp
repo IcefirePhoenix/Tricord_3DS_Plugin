@@ -1,9 +1,6 @@
 #ifndef GENERALHELPER_HPP
 #define GENERALHELPER_HPP
 
-#define TID_USA 		0x0004000000176F00
-#define TID_EUR 		0x0004000000177000
-#define TID_JPN 		0x0004000000176E00
 #define PLAYER_OFFSET 	0x10000
 
 #define ENABLED_SLIDER 		Color::LimeGreen << "\u2282\u25CF"
@@ -20,12 +17,11 @@ namespace CTRPluginFramework
 		static std::string getPlayerAsStr(int ID);
 
 		static int chooseLink(void);
-		static int chooseShadowLink(void);
 		static int getCurrLink(void);
 		static int chooseSword(void);
 		static int getHP(void);
 
-		static bool showMsgKbd(std::string text, DialogType digtype);
+		static bool showMsgKbd(std::string title, std::string text, DialogType digtype);
 		static bool isNullPointer(u32 address);
 
 		static void managePlayerLock(bool isLocked);

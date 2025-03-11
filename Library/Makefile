@@ -14,6 +14,8 @@ export CTRPF_VERSION_MINOR	:=	$(shell git describe --always --tags | cut -f1 -d-
 export CTRPF_VERSION_BUILD	:=	$(shell git describe --always --tags | cut -f1 -d- | cut -f3 -d.)
 export COMMIT			:=	$(shell git rev-parse --short=8 HEAD)
 export COMPILE_DATE 	:=  $(shell date -u +"%Y-%m-%dT%H:%M:%S%Z")
+export INVITE 			:=	P6csr4jc5U
+
 
 ENABLE_LINK_TIME_OPTIMIZATIONS = 1
 
@@ -69,7 +71,7 @@ INCLUDES	:=	include
 ARCH	:=	-march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 
 DEFINES	:=	-DCTRPF_VERSION_MAJOR="\"$(CTRPF_VERSION_MAJOR)\"" -DCTRPF_VERSION_MINOR="\"$(CTRPF_VERSION_MINOR)\"" \
-			-DCTRPF_VERSION_BUILD="\"$(CTRPF_VERSION_BUILD)\"" -DCOMMIT_HASH="\"$(COMMIT)\"" -DCOMPILE_DATE="\"$(COMPILE_DATE)\""
+			-DCTRPF_VERSION_BUILD="\"$(CTRPF_VERSION_BUILD)\"" -DCOMMIT_HASH="\"$(COMMIT)\"" -DCOMPILE_DATE="\"$(COMPILE_DATE)\"" -DINVITE="\"$(INVITE)\""
 
 GCC11_FALSEPOSITIVES := -Wno-array-bounds -Wno-stringop-overflow -Wno-stringop-overread
 CFLAGS	:=	-Wall -Werror -Wno-psabi -mword-relocations \

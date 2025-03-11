@@ -73,7 +73,7 @@ namespace CTRPluginFramework
     {
         u32 keys = Preferences::MenuHotkeys;
 
-        (HotkeysModifier(keys, "Select the hotkeys you'd like to use to open the menu."))();
+        (HotkeysModifier(keys, "Select the hotkeys you'd like to use to open the Tricord menu."))();
 
         if (keys != 0)
             Preferences::MenuHotkeys = keys;
@@ -318,8 +318,8 @@ namespace CTRPluginFramework
 
     static bool     ConfirmBeforeProceed(const std::string &task)
     {
-        std::string msg = Color::Gainsboro << "Warning\n\nDo you really want to " + task + "?";
-        MessageBox  msgBox(msg, DialogType::DialogYesNo);
+        std::string msg = Color::Gainsboro << "Do you really want to " + task + "?";
+        MessageBox  msgBox("Warning", msg, DialogType::DialogYesNo);
 
         return (msgBox());
     }
@@ -343,11 +343,13 @@ namespace CTRPluginFramework
         }
     }
 
-    static MenuEntryTools    *g_screenshotEntry;
+    static MenuEntryTools *g_screenshotEntry;
 
-    static void      GetScreenShotMode(void)
+    static void getScreenShotMode(void)
     {
-        Keyboard    kb(Color::Gainsboro << "Screenshot settings\x18\n\n Which screen(s) would you like to capture?", {"Top screen", "Bottom screen", "Both screens"});
+        Keyboard kb("Screenshot settings", "Which screen(s) would you like to capture?");
+
+        kb.Populate({"Top screen", "Bottom screen", "Both screens"});
 
         int mode = kb.Open();
         if (mode != -1)
@@ -368,15 +370,16 @@ namespace CTRPluginFramework
         // Update entry
         const char *screens[3] = {"Top screen", "Bottom screen", "Both screens"};
 
-        g_screenshotEntry->name = ("Screenshot: " << Color::DeepSkyBlue).append(KeysToString(Screenshot::Hotkeys));
-        g_screenshotEntry->name += "\x18, " << Color::DeepSkyBlue;
+        g_screenshotEntry->name = "Screenshot: ";
+        g_screenshotEntry->name.append(KeysToString(Screenshot::Hotkeys) + ", ");
         g_screenshotEntry->name.append(screens[(Screenshot::Screens & SCREENSHOT_BOTH) - 1]);
 
         u32 time = static_cast<u32>(Screenshot::Timer.AsSeconds());
 
+
         if (time)
         {
-            g_screenshotEntry->name += ("\x18, " << Color::DeepSkyBlue << time);
+            g_screenshotEntry->name += time;
             Screenshot::Screens |= 4; ///< TIMED flags
         }
         g_manualScreenshotTrigger = true;
@@ -391,86 +394,82 @@ namespace CTRPluginFramework
 
     static void     ScreenshotMenuCallback(void)
     {
-        Keyboard    kb(Color::Gainsboro << "Screenshot options\x18\n\nWhat setting do you want to change?", { "Screens", "Hotkeys", "Timer", "Name", "Directory" });
+        Keyboard kb("Screenshot Options", "What setting would you like to change?");
+        kb.Populate({"Screens", "Hotkeys", "Timer", "Name", "Directory"});
 
         int choice;
-
         do
         {
             choice = kb.Open();
 
             switch (choice)
             {
-            case 0: ///< Screens
-            {
-                GetScreenShotMode();
-                break;
-            }
-
-            case 1: ///< Hotkeys
-            {
-                u32 keys = Screenshot::Hotkeys;
-
-                (HotkeysModifier(keys, "Select the hotkeys you'd like to use to take a new screenshot."))();
-
-                if (keys != 0)
-                    Screenshot::Hotkeys = keys;
-                break;
-            }
-
-            case 2: ///< Timer
-            {
-                u32         current = static_cast<u32>(Screenshot::Timer.AsSeconds());
-                Keyboard    keyboard(Color::Gainsboro << "Screenshot timer\x18\n\n Enter the amount of seconds you would like\n to continuously take screenshots.\n\n Enter 0 to disable the timer.\n\n"
-                            << Color::Yellow << " Note that during that time, you can't\n access the menu.");
-
-                keyboard.IsHexadecimal(false);
-                keyboard.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
-                {
-                    if (event.type == KeyboardEvent::CharacterAdded)
-                    {
-                        std::string &input = kb.GetInput();
-                        u32  value;
-                        stou32(input, value);
-
-                        if (value > 120)
-                            input = "120";
-                    }
-                });
-
-                if (keyboard.Open(current, current) != -1)
-                    Screenshot::Timer = Seconds(static_cast<float>(current));
-
-                break;
-            }
-
-            case 3: ///< Name
-            {
-                Keyboard    nameKb(Color::LimeGreen << "Screenshot name\x18\n\n What would you like to name your screnshot files?");
-                std::string out;
-
-                if (nameKb.Open(out, Screenshot::Prefix) != -1)
-                     Screenshot::Prefix = out;
-                break;
-            }
-
-            case 4: ///< Directory
-            {
-                std::string out;
-
-                if (Utils::DirectoryPicker(out) == -1)
+                case 0: ///< Screens
+                    getScreenShotMode();
                     break;
+                case 1: ///< Hotkeys
+                {
+                    u32 keys = Screenshot::Hotkeys;
+                    (HotkeysModifier(keys, "Select the hotkeys you'd like to use to take a\nnew screenshot."))();
 
-                Screenshot::Path = std::move(out);
-                if (Screenshot::Path[Screenshot::Path.size() - 1] != '/')
-                    Screenshot::Path += '/';
-                break;
-            }
+                    if (keys != 0)
+                        Screenshot::Hotkeys = keys;
+                    break;
+                }
 
-            default:
-                break;
+                case 2: ///< Timer
+                {
+                    u32 current = static_cast<u32>(Screenshot::Timer.AsSeconds());
+                    Keyboard keyboard("Screenshot Timer", "Enter the amount of seconds you would like to continuously take screenshots.\n\nTo disable the timer, enter 0.\n\nNote: While taking timed screenshots, you can't access the Tricord menu.");
+
+                    keyboard.IsHexadecimal(false);
+                    keyboard.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
+                    {
+                        if (event.type == KeyboardEvent::CharacterAdded)
+                        {
+                            std::string &input = kb.GetInput();
+                            u32  value;
+                            stou32(input, value);
+
+                            if (value > 120)
+                                input = "120";
+                        }
+                    });
+
+                    if (keyboard.Open(current, current) != -1)
+                        Screenshot::Timer = Seconds(static_cast<float>(current));
+
+                    break;
+                }
+
+                case 3: ///< Name
+                {
+                    Keyboard nameKb("Screenshot Name", "What would you like your screenshot filenames to begin with?");
+                    std::string out;
+
+                    if (nameKb.Open(out, Screenshot::Prefix) != -1)
+                        Screenshot::Prefix = out;
+                    break;
+                }
+
+                case 4: ///< Directory
+                {
+                    std::string out;
+
+                    if (Utils::DirectoryPicker(out) == -1)
+                        break;
+
+                    Screenshot::Path = std::move(out);
+                    if (Screenshot::Path[Screenshot::Path.size() - 1] != '/')
+                        Screenshot::Path += '/';
+                    break;
+                }
+
+                default:
+                    break;
             }
-        } while (choice != -1);
+        }
+        while (choice != -1);
 
         UpdateScreenshotText();
 
@@ -485,38 +484,31 @@ namespace CTRPluginFramework
         int             userchoice;
         u16             backlight;
         ScreenImpl *    screen;
-        Keyboard        kb;
-        std::string     triggerTop;
-        std::string     triggerBottom;
+        Keyboard        kb("", "");
+        std::string     trigger;
+        std::string&    title = kb.GetTitle();
         std::string&    message = kb.GetMessage();
 
         kb.DisplayTopScreen = true;
         while (true)
         {
-            triggerTop = Preferences::Backlights[0].isEnabled ?
-                            Color::Red << "Disable for Top"
-                          : Color::LimeGreen << "Enable for Top";
-            triggerBottom = Preferences::Backlights[1].isEnabled ?
-                            Color::Red << "Disable for Bottom"
-                          : Color::LimeGreen << "Enable for Bottom";
+            trigger = Preferences::Backlights[0].isEnabled ?
+                            Color::Gainsboro << "Backlight override: Enabled " << Color::LimeGreen << "\u2282\u25CF"
+                          : Color::Gainsboro << "Backlight override: Disabled " << Color::Red << "\u25CF\u2283";
 
-            message = "Backlight Setter\n\n" \
-                      " Select which screen to configure\n\n" \
-                      "  - Top screen: " + std::to_string(Preferences::Backlights[0].value) + ", " + (Preferences::Backlights[0].isEnabled ?
-                            (std::string)Color::LimeGreen + "Enabled\n"
-                          : (std::string)Color::Red + "Disabled\n") + ResetColor();
+            title = "Backlight Options";
+            message = "Select a screen to configure.\n\n";
+            message += "Top screen - Brightness: " + std::to_string(Preferences::Backlights[0].value);
+            message += "\nBottom screen - Brightness: " + std::to_string(Preferences::Backlights[1].value);
+            message += "\n\nNote: Remember to turn off \"Auto-Brightness\"\nin the \uE073 HOME Menu.";
 
-            message += "  - Bottom screen: " + std::to_string(Preferences::Backlights[1].value) + ", " + (Preferences::Backlights[1].isEnabled ?
-                            (std::string)Color::LimeGreen + "Enabled\n"
-                          : (std::string)Color::Red + "Disabled\n") + ResetColor();
-            message += "\n\n Remember to turn off \"Auto-Brightness\"\n in the \uE073HOME Menu.";
-
-            kb.Populate({triggerTop, "Top screen", triggerBottom, "Bottom screen"});
+            kb.Populate({trigger, "Adjust top screen brightness", "Adjust bottom screen brightness"});
             userchoice = kb.Open();
+
             if (userchoice == -1)
                 return;
 
-            if (userchoice == 0 || userchoice == 2)
+            if (userchoice == 0)
             {
                 LCDBacklight *  backlights = Preferences::Backlights;
 
@@ -528,10 +520,10 @@ namespace CTRPluginFramework
             screen = userchoice == 3 ? ScreenImpl::Bottom : ScreenImpl::Top;
             backlight = screen->GetBacklight();
             kb.IsHexadecimal(false);
-            message = "Backlight Setter\n\nSet a value between 2 - 1023\n\nCurrent value: ";
-            message += Color::LimeGreen << backlight;
+            title = "Backlight Brightness Setter";
+            message = "Set a brightness value between 2 - 1023.\n\nCurrent value: " + backlight;
 
-            if (kb.Open(backlight, backlight) != -1)
+            if (kb.Open(backlight, 2) != -1)
             {
                 backlight = std::max(backlight, static_cast<u16>(2));
                 backlight = std::min(backlight, static_cast<u16>(0x3FF));
@@ -555,13 +547,12 @@ namespace CTRPluginFramework
         _mainMenu.Append(new MenuEntryTools("Reboot", Reboot, Icon::DrawRestart));
 
         // Screenshots menu
+        _screenshotMenu.Append((g_screenshotEntry = new MenuEntryTools( "Enable screenshot tool: " << KeysToString(Screenshot::Hotkeys) << "Both screens", Screenshot_Enabler, true)));
         _screenshotMenu.Append(new MenuEntryTools("Change screenshot settings", ScreenshotMenuCallback, Icon::DrawSettings));
-        _screenshotMenu.Append((g_screenshotEntry = new MenuEntryTools( "Screenshot: " << Color::LimeGreen << KeysToString(Screenshot::Hotkeys)
-                                << "\x18, " << Color::Orange << "Both screens", Screenshot_Enabler, true)));
 
         // Miscellaneous menu
         _miscellaneousMenu.Append(new MenuEntryTools("Display loaded game files on-screen", _DisplayLoadedFiles, true));
-        _miscellaneousMenu.Append(new MenuEntryTools("Log loaded filenames to .txt file (breaks with mods installed)", _WriteLoadedFiles, true));
+        _miscellaneousMenu.Append(new MenuEntryTools("Log loaded filenames to .txt file (breaks w/mods)", _WriteLoadedFiles, true));
         _miscellaneousMenu.Append(new MenuEntryTools("Display touchscreen cursor", [] { Preferences::Toggle(Preferences::DrawTouchCursor); }, true, Preferences::IsEnabled(Preferences::DrawTouchCursor)));
         _miscellaneousMenu.Append(new MenuEntryTools("Display touchcreen cursor coordinates", [] { Preferences::Toggle(Preferences::DrawTouchPosition); }, true, Preferences::IsEnabled(Preferences::DrawTouchPosition)));
         _miscellaneousMenu.Append(new MenuEntryTools("Display top screen FPS", [] { Preferences::Toggle(Preferences::ShowTopFps); }, true, Preferences::IsEnabled(Preferences::ShowTopFps)));
@@ -569,7 +560,7 @@ namespace CTRPluginFramework
 
         // Settings menu
         _tricordSettingsMenu.Append(new MenuEntryTools("Change Tricord menu hotkeys", MenuHotkeyModifier, Icon::DrawGameController));
-        _tricordSettingsMenu.Append(new MenuEntryTools("Set backlight (Experimental)", EditBacklight, false, false));
+        _tricordSettingsMenu.Append(new MenuEntryTools("Set backlight (Experimental!)", EditBacklight, false, false));
         _tricordSettingsMenu.Append(new MenuEntryTools("Enable QoL patches", [] { Preferences::Toggle(Preferences::QoL_Patch); }, true, Preferences::IsEnabled(Preferences::QoL_Patch)));
         _tricordSettingsMenu.Append(new MenuEntryTools("Disable HID memory allocation", [] { Preferences::Toggle(Preferences::HIDToggle); }, true, Preferences::IsEnabled(Preferences::HIDToggle)));
         _tricordSettingsMenu.Append(new MenuEntryTools("Disable on-screen notification messages", [] { Preferences::Toggle(Preferences::DisableOSDNotifs); }, true, Preferences::IsEnabled(Preferences::DisableOSDNotifs)));

@@ -414,7 +414,7 @@ namespace CTRPluginFramework
 
     void    SearchMenu::_Edit(void)
     {
-        Keyboard keyboard;
+        Keyboard keyboard("", "");
 
         keyboard.DisplayTopScreen = false;
 		keyboard.IsHexadecimal(_useHexInput);
@@ -569,7 +569,7 @@ namespace CTRPluginFramework
 
     void    SearchMenu::_ShowGame(void)
     {
-        MessageBox(Color::Green << "Info", "Press " FONT_B " to return to the menu.")();
+        MessageBox("Info", "Press " FONT_B " to return to the Tricord menu.")();
 
         ScreenImpl::SwitchFrameBuffers(true);
 

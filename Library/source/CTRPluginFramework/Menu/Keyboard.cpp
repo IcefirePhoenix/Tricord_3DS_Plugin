@@ -234,32 +234,17 @@ namespace CTRPluginFramework
     ** Compare
     ***********/
 
-    Keyboard::Keyboard(const std::string &text) : _keyboard(new KeyboardImpl(this, text, ""))
+    Keyboard::Keyboard(const std::string &title, const std::string &text) : _keyboard(new KeyboardImpl(this, title, text))
     {
         _hexadecimal = true;
         _isPopulated = false;
         DisplayTopScreen = !text.empty();
     }
 
-    Keyboard::Keyboard(const std::string &text, const std::string &title) : _keyboard(new KeyboardImpl(this, text, title))
-    {
-        _hexadecimal = true;
-        _isPopulated = false;
-        DisplayTopScreen = !text.empty();
-    }
-
-    Keyboard::Keyboard(const std::string &text, const std::vector<std::string> &options, const std::string &title) : _keyboard(new KeyboardImpl(this, text, title))
+    Keyboard::Keyboard(const std::string &title, const std::string &text, const std::vector<std::string> &options) : _keyboard(new KeyboardImpl(this, text, title))
     {
         _hexadecimal = false;
         DisplayTopScreen = !text.empty();
-        _keyboard->Populate(options, true);
-        _isPopulated = !options.empty();
-    }
-
-    Keyboard::Keyboard(const std::vector<std::string> &options) : _keyboard(new KeyboardImpl(this, "", ""))
-    {
-        _hexadecimal = false;
-        DisplayTopScreen = false;
         _keyboard->Populate(options, true);
         _isPopulated = !options.empty();
     }
@@ -762,6 +747,11 @@ namespace CTRPluginFramework
     std::string &Keyboard::GetMessage(void) const
     {
         return (_keyboard->GetMessage());
+    }
+
+    std::string &Keyboard::GetTitle(void) const
+    {
+        return (_keyboard->GetTitle());
     }
 
     void Keyboard::SetError(std::string error) const

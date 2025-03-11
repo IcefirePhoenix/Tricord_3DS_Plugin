@@ -114,9 +114,9 @@ namespace CTRPluginFramework
     void    Hotkey::AskForKeys(void)
     {
         FwkSettings& settings = FwkSettings::Get();
-        std::string lockKeys = (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable) ? "\n\n\nNote: o2/3DS detected; checkboxes for\nn2/3DS buttons havebeen disabled and\ncannot be selected in this menu." : "";
+        std::string lockKeys = (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable) ? "\n\n\nNote: o2/3DS detected; checkboxes for\nn2/3DS buttons have been disabled and\ncannot be selected in this menu." : "";
 
-        HotkeysModifier(_keys, "Select new Hotkeys for the following entry:\n\n" + _name + lockKeys)();
+        HotkeysModifier(_keys, "Select new hotkeys for the following entry:\n\n" + _name + lockKeys)();
     }
 
 
@@ -182,9 +182,9 @@ namespace CTRPluginFramework
         if (_hotkeys.size() == 0)
             return;
 
-        Keyboard                    keyboard("Select new hotkeys.", "Hotkeys Modifier");
-        std::vector<std::string>    hkNames;
-        int                         ret;
+        Keyboard keyboard("Hotkey Modifier", "Select an option to configure its current hotkeys.\n\nNote: ZL/ZR and C-stick controls are available only on n2/3DS models.");
+        std::vector<std::string> hkNames;
+        int ret;
 
         for (Hotkey &hotkey : _hotkeys)
             hkNames.push_back(hotkey._name);
@@ -205,7 +205,8 @@ namespace CTRPluginFramework
                 _owner->RefreshNote();
             }
 
-        } while (ret != -1);
+        }
+        while (ret != -1);
     }
 
     void    HotkeyManager::OnHotkeyChangeCallback(OnHotkeyChangeClbk callback)

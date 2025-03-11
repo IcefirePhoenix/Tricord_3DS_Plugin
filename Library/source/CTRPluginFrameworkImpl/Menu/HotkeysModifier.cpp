@@ -151,8 +151,8 @@ namespace CTRPluginFramework
         Renderer::SetTarget(TOP);
         Window::TopWindow.Draw("Hotkey Modifier");
 
-        int posY = 61;
-        Renderer::DrawSysStringReturn((const u8*)_message.c_str(), 40, posY, 335, Preferences::Settings.MainTextColor);
+        int posY = 55;
+        Renderer::DrawSysStringReturn((const u8*)_message.c_str(), 40, posY, 345, Preferences::Settings.MainTextColor);
     }
 
     void    HotkeysModifier::_DrawBottom(void)

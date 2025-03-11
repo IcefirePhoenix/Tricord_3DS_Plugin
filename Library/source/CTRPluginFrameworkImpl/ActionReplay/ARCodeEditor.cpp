@@ -761,7 +761,7 @@ namespace CTRPluginFramework
             else if (ctDiffer && !base.Data.empty() && (currentCodeType == "E" || currentCodeType == "FE" || currentCodeType == "FD"))
             {
             _changeCodeType:
-                if (!MessageBox(Color::Orange << "Warning", "You're about to delete a code with all it's data, continue ?", DialogType::DialogYesNo)())
+                if (!MessageBox("Warning", "Are you sure you want to delete this code with all of its data?", DialogType::DialogYesNo)())
                     return;
 
                 // Be sure that the whole line is empty
@@ -797,8 +797,8 @@ namespace CTRPluginFramework
 
                 if (diff > 0)
                 {
-                    std::string body = Utils::Format("You're about to delete %d line(s) of data, continue ?", diff);
-                    if (!MessageBox(Color::Orange << "Warning", body, DialogType::DialogYesNo)())
+                    std::string body = Utils::Format("Are you sure you want to delete %d total line(s) of data?", diff);
+                    if (!MessageBox("Warning", body, DialogType::DialogYesNo)())
                         return;
                 }
 
@@ -971,7 +971,7 @@ namespace CTRPluginFramework
             }
             case 2: ///< Clear all codes
             {
-                if (!(MessageBox(Color::Orange << "Warning", "Do you really want to delete all codes ?", DialogType::DialogYesNo)()))
+                if (!(MessageBox("Warning", "Are you sure you want to delete the entire list of codes?", DialogType::DialogYesNo)()))
                     break;
 
                 _context->codes.clear();
@@ -1168,7 +1168,7 @@ namespace CTRPluginFramework
                 if (code.flags & (u32)(CodeLine::PatchData | CodeLine::PatternData))
                     break;
 
-                if (!(MessageBox(Color::Orange << "Warning", "Do you really want to delete this line ?", DialogType::DialogYesNo))())
+                if (!(MessageBox("Warning", "Are you sure you really want to delete this line?", DialogType::DialogYesNo))())
                     break;
 
                 _context->codes.erase(_context->codes.begin() + code.index);
