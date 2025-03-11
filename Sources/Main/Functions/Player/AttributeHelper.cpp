@@ -80,9 +80,9 @@ namespace CTRPluginFramework
     }
 
     // Menu interface for toggling statuses
-    void openToggleMenu(std::string entryTitle, EditType type, u8 *playerStatus)
+    void openToggleMenu(std::string entryTitle, std::string desc, EditType type, u8 *playerStatus)
     {
-        Keyboard menu("Menu");
+        Keyboard menu(entryTitle, desc);
         StringVector bottomScreenOptions;
 
         bool isMenuOpen = true;
@@ -114,7 +114,6 @@ namespace CTRPluginFramework
             bottomScreenOptions.push_back("Save and exit");
 
             // update top screen with real-time current statuses...
-            menu.GetMessage() = entryTitle;
             menu.Populate(bottomScreenOptions);
 
             switch (menu.Open())

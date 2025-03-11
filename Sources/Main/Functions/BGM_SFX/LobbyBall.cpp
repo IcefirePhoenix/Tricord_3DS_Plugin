@@ -49,7 +49,7 @@ namespace CTRPluginFramework
     // Helper function to open song selection interface
     int BGM_SFX::selLobbyBallSong(void)
     {
-        Keyboard songSel("Select a song.\n\nNote that these changes are client-side only,\nand will not be observable by other players\nonline.");
+        Keyboard songSel("Lobby Ball Song Selection", "Select a lobby ball song.\n\nNote that these changes are client-side only, and will not be observable by other players online.");
         songSel.Populate(GameData::lobbyBallSongs);
         return songSel.Open();
     }

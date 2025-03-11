@@ -18,7 +18,7 @@ namespace CTRPluginFramework
 
         s64             AsMicroseconds(void) const;
 
-        static std::string     GetDate(void);
+        static std::string     GetDate(bool addTime);
         static std::string     ParseDate(std::string date);
 
 

@@ -12,9 +12,9 @@ namespace CTRPluginFramework
     // Changes player voice (randomly generated once during savefile creation and was not intended to be edited)
     void Save::mainVoice(MenuEntry *entry)
     {
-        std::string menuIntro = "Choose a voice:\n\nThese changes can be observable online. Keep in mind your selection will be overwritten by Voiceless, if used.";
+        std::string menuIntro = "Choose a voice.\n\nThese changes can be observable online. Keep in mind your selection will be overwritten by Voiceless, if used.";
 
-        Keyboard voiceMenu(menuIntro);
+        Keyboard voiceMenu("Player Voice Selection", menuIntro);
         voiceMenu.Populate(GameData::voiceList);
         int result = voiceMenu.Open();
 

@@ -56,7 +56,7 @@ namespace CTRPluginFramework
             "150 ms"
         };
 
-        Keyboard timeSel("Select Button Spammer's timer interval:");
+        Keyboard timeSel("Buttom Spammer Timer", "Select the Button Spammer's timer interval.");
         timeSel.Populate(intervals);
 
         int choice = timeSel.Open();
@@ -88,15 +88,13 @@ namespace CTRPluginFramework
     {
         std::string title;
         StringVector bottomScreenOptions;
-        Keyboard kbd("Button Spammer Hotkey Menu");
+        Keyboard kbd("Button Spammer Hotkey Modifier", "Use the toggles below to choose which keys to spam.");
 
         kbd.CanAbort(false);
         bool loop = true;
 
         while (loop)
         {
-            title = "Button Spammer Hotkey Menu\n\nUse the toggles to choose which keys to spam:\n\n";
-
             bottomScreenOptions.clear();
             bottomScreenOptions.push_back("Save changes");
             bottomScreenOptions.push_back(std::string(FONT_A) << " " << (spamHotkeys & BUTTON_A ? ENABLED_SLIDER : DISABLED_SLIDER));
@@ -108,7 +106,6 @@ namespace CTRPluginFramework
             bottomScreenOptions.push_back(std::string("Start/Select ") << (spamHotkeys & BUTTON_STARTSEL ? ENABLED_SLIDER : DISABLED_SLIDER));
             bottomScreenOptions.push_back(std::string("Touchscreen ") << (spamHotkeys & BUTTON_TOUCH ? ENABLED_SLIDER : DISABLED_SLIDER));
 
-            kbd.GetMessage() = title;
             kbd.Populate(bottomScreenOptions);
 
             switch (kbd.Open())

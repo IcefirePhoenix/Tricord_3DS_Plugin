@@ -92,24 +92,18 @@ namespace CTRPluginFramework
         std::string currCosmeticCostumeName = GameData::getCostumeNameFromID(currCosmeticCostumeID);
         std::string selectedPlayer, topscreenMessage;
 
-        const StringVector setResetOptions =
-        {
-            "Set new",
-            "Reset"
-        };
-
         selectedPlayer = GeneralHelpers::getPlayerAsStr(player);
 
-        topscreenMessage = "Set new cosmetic costume?\nOr reset to the effective costume?\n\nSelected: " + selectedPlayer + "\n\nCurrent effective costume: " + currEffectCostumeName + "\nCurrent cosmetic costume: " + currCosmeticCostumeName;
+        topscreenMessage = "Set a new cosmetic costume?\nOr reset to use the effective costume instead?\n\nSelected: " + selectedPlayer + "\n\nCurrent effective costume: " + currEffectCostumeName + "\nCurrent cosmetic costume: " + currCosmeticCostumeName;
 
-        Keyboard setReset(topscreenMessage);
-        setReset.Populate(setResetOptions);
+        Keyboard setReset("Cosmetic Costume Settings", topscreenMessage);
+        setReset.Populate(StringVector{"Choose new cosmetic costume", "Reset to effective costume"});
 
         int setResetResult = setReset.Open();
         if (setResetResult == 0)
         {
             // TODO: just get new costume using helper method? // remove redundant code
-            Keyboard costumeList("Choose a costume:\n\nBe sure to load into a new area for changes to fully\ntake effect.");
+            Keyboard costumeList("Costume Selection", "Choose a new costume.\n\nBe sure to load into a new area for changes to fully take effect.");
             costumeList.Populate(GameData::universalCostumeList);
 
             int result = costumeList.Open();
@@ -186,7 +180,7 @@ namespace CTRPluginFramework
                                 break;
                         }
                     }
-                    
+
                 }
                 else
                 {
@@ -204,7 +198,7 @@ namespace CTRPluginFramework
                 else
                     swordEditAuto->Disable();
             }
-            
+
             // Fix issues with Tingle Tights not getting balloons initialized properly
             // If a loading screen started, and the player/team is at 0 health, or are spawning into stage 1, give Tingle players three balloons
             // TODO: Check if any other costumes have issues applying their effects when cosmetic costumes are enabled

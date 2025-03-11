@@ -187,8 +187,8 @@ namespace CTRPluginFramework
         if (Preferences::Settings.AllowSearchEngine)
             search.RestoreSearchState();
 
-        if (!Directory::IsExists("/cheats/TricordBackup/"))
-            Directory::Create("/cheats/TricordBackup/");
+        if (!Directory::IsExists("/Tricord/AR_Backups/"))
+            Directory::Create("/Tricord/AR_Backups/");
 
         // Load AR Cheats
         if (Preferences::Settings.AllowActionReplay)

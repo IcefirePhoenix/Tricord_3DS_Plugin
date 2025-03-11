@@ -13,7 +13,7 @@ namespace CTRPluginFramework
             "8-bit BGM"
         };
 
-        Keyboard forceBGMType("Force Normal or 8-bit BGM, or\nReset to restore the Timeless Tunic check.");
+        Keyboard forceBGMType("BGM Type Selection", "Force normal BGM, 8-bit BGM, or restore normal BGM behavior based on the Timeless Tunic check.");
         forceBGMType.Populate(BGMTypeOptions);
 
         switch (forceBGMType.Open())

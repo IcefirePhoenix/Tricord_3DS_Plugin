@@ -93,8 +93,8 @@ namespace CTRPluginFramework
         if (!_hotkey())
             return;
 
-        Keyboard        keyboard;
-        StringVector    options;
+        Keyboard keyboard("", "");
+        StringVector options;
 
         // Create our list of options
         for (auto *item : _root)

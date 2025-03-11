@@ -68,15 +68,7 @@ namespace CTRPluginFramework
         int                 _mode;
         bool                _starMode; 
 
-        int                 _selector;
-        int                 _selectedTextSize;
-        float               _maxScrollOffset;
-        float               _scrollOffset;
-        Clock               _scrollClock;
-        bool                _reverseFlow;
-        bool                _showVersion;
-        int                 _versionPosX;
-        std::string         _versionStr;
+        bool _closedRootFolder;
 
         TextBox             _noteTB;
 

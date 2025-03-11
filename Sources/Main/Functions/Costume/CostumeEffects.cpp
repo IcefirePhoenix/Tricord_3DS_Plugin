@@ -53,15 +53,8 @@ namespace CTRPluginFramework
         if (entry->Name() == "(  ) Lucky Dodge")
         {
             // Select between 3 dodge chances
-            Keyboard dodge("Select the dodge rate:");
-            StringVector dodgeChances =
-            {
-                "25%",
-                "50%",
-                "75%"
-            };
-
-            dodge.Populate(dodgeChances);
+            Keyboard dodge("Attack Dodge Rate Selection", "Select a dodge rate.");
+            dodge.Populate( {"25%", "50%", "75%"} );
 
             switch (dodge.Open()) {
                 case 0:
@@ -451,13 +444,13 @@ namespace CTRPluginFramework
     {
         if (entry->Name() == "(  ) Sword Suits - Set sword beam")
         {
-            Keyboard beamTypes("Select a beam type:");
+            Keyboard beamTypes("Sword Beam Selection", "Select a sword beam type.");
             StringVector beamOptions =
             {
-                "Single reg. sword beam",
-                "Quad reg. sword beams",
-                "Single big sword beam",
-                "Quad big sword beams"
+                "Single, regular sword beam",
+                "Quad, regular sword beams",
+                "Single, big sword beam",
+                "Quad, big sword beams"
             };
             beamTypes.Populate(beamOptions);
             int result = beamTypes.Open();
@@ -486,7 +479,7 @@ namespace CTRPluginFramework
 
                 if (result >= 2)
                     Process::Patch(AddressList::getAddress("BigSwordBeam"), 0xEA00001F);
-                
+
                 if (result % 2 == 1)
                 {
                     Process::Patch(AddressList::getAddress("QuadBeamA"), 0xE3A05000);
@@ -535,6 +528,7 @@ namespace CTRPluginFramework
     void Costume::tingle(MenuEntry* entry)
     {
         int linkChoice = GeneralHelpers::chooseLink();
+        u8 result;
 
         if (linkChoice >= 0)
         {
@@ -551,28 +545,29 @@ namespace CTRPluginFramework
                 currentBalloons = std::to_string(balloons);
             }
 
-            std::string topscreenMessage = "Enter a positive number of balloons:\n\n";
-            topscreenMessage += "Enter 256 or higher for infinite balloons.\nEnter 0 to reset for this player.\nYou must reset to disable infinite balloons.\n\n";
-            topscreenMessage += "Selected: " + selectedPlayer + " - " + currentBalloons;
-            Keyboard balloons(topscreenMessage);
+            std::string topscreenMessage = "Enter a positive number of balloons.\n\n";
+            topscreenMessage += "For infinite balloons, enter 256 or higher.\nTo reset for this player, enter 0.\n\nNote: You must reset to disable infinite balloons.\n\n";
+            topscreenMessage += "Selected: " + selectedPlayer + "\nCurrent balloon count: " + currentBalloons;
+
+            Keyboard balloons("Balloon Count Selection", topscreenMessage);
             balloons.IsHexadecimal(false);
-            float result;
-            balloons.Open(result);
-            if ((int)result >= 256)
+            balloons.Open(result, 3);
+
+            if (result >= 256)
             {
                 infTingleBalloons[linkChoice] = true;
                 infBalloonsAuto->Enable();
             }
-            else if ((int)result == 0)
+            else if (result == 0)
             {
                 infTingleBalloons[linkChoice] = false;
-                Process::Write8(AddressList::getAddress("TingleBalloons") + linkChoice*PLAYER_OFFSET, 0);
+                Process::Write8(AddressList::getAddress("TingleBalloons") + linkChoice * PLAYER_OFFSET, 0);
                 if (!infTingleBalloons[0] && !infTingleBalloons[1] && !infTingleBalloons[2])
                     infBalloonsAuto->Disable();
             }
-            else if ((int)result > 0)
+            else if (result > 0)
             {
-                Process::Write8(AddressList::getAddress("TingleBalloons") + linkChoice*PLAYER_OFFSET, result);
+                Process::Write8(AddressList::getAddress("TingleBalloons") + linkChoice * PLAYER_OFFSET, result);
             }
         }
     }
@@ -612,18 +607,19 @@ namespace CTRPluginFramework
                 currentDapperStatus = "Not edited";
             }
 
-            std::string topscreenMessage = "Spin attack in one swing, two swings, or reset to\nthree swings?\n\n";
-            topscreenMessage += "Selected: " + selectedPlayer + " - " + currentDapperStatus;
-            Keyboard dapperSwing(topscreenMessage);
+            std::string topscreenMessage = "Perform a spin attack in one sword swing, two sword swings, or reset to three sword swings?\n\n";
+            topscreenMessage += "Selected: " + selectedPlayer + "\nCurrent required sword swing count: " + currentDapperStatus;
+
+            Keyboard dapperSwing("Instant Spin Attack Modifier", topscreenMessage);
             StringVector dapperOptions =
             {
-                "One swing",
-                "Two swings",
+                "One sword swing",
+                "Two sword swings",
                 "Reset"
             };
             dapperSwing.Populate(dapperOptions);
 
-            switch(dapperSwing.Open())
+            switch (dapperSwing.Open())
             {
                 case 0:
                     dapperSpinA[linkChoice] = true;
@@ -663,17 +659,15 @@ namespace CTRPluginFramework
     // Menu interface for force-toggling beam cooldowns for individual players
     void Costume::selectLinkBeam(MenuEntry *entry)
     {
-        std::string title;
+        std::string message;
         StringVector bottomScreenOptions;
-        Keyboard kbd("Menu");
+        Keyboard kbd("Sword Beam Cooldown", "Use the toggles to disable the Sword Beam cooldown period per player.");
 
         kbd.CanAbort(false);
         bool loop = true;
 
         while (loop)
         {
-            title = "Use the toggles to disable the Sword Beam cooldown period:\n\n";
-
             bottomScreenOptions.clear();
             bottomScreenOptions.push_back(std::string("Player 1 ") << (beamStatuses[0] ? ENABLED_SLIDER : DISABLED_SLIDER));
             bottomScreenOptions.push_back(std::string("Player 2 ") << (beamStatuses[1] ? ENABLED_SLIDER : DISABLED_SLIDER));
@@ -681,7 +675,6 @@ namespace CTRPluginFramework
             bottomScreenOptions.push_back("Save changes");
             bottomScreenOptions.push_back("Disable entry");
 
-            kbd.GetMessage() = title;
             kbd.Populate(bottomScreenOptions);
 
             switch (kbd.Open())
@@ -722,10 +715,10 @@ namespace CTRPluginFramework
     // Sets the speed multiplier for the Cheetah Costume (default 1.5)
     void Costume::setCheetahMultiplier(MenuEntry* entry)
     {
-        float newSpeed = 1;
-        Keyboard editSpeed("Enter a custom speed multiplier.\n\nThe default value is 1.5.\nNegative values will invert movement.");
+        float newSpeed = 1.5;
+        Keyboard editSpeed("Custom Cheetah Speed Multiplier", "Enter a custom speed multiplier.\n\nThe default value is 1.5.\n\nNote: negative values will invert movement.");
         editSpeed.IsHexadecimal(false);
-        if (editSpeed.Open(newSpeed) == 0)
+        if (editSpeed.Open(newSpeed, 1.5) == 0)
         {
             entry->SetName("Cheetah Costume - Set speed mult.: "+std::to_string(newSpeed)+"x");
             Process::WriteFloat(AddressList::getAddress("SpeedMultiplierCheetah"), newSpeed);
@@ -735,24 +728,19 @@ namespace CTRPluginFramework
     // Sets the damage dealt by the Cacto Clothes to enemies in the Drablands (default 2 hearts)
     void Costume::setCactoDmg(MenuEntry* entry)
     {
-        float newDmg = 1;
-        Keyboard editDmg("Enter a custom damage amount as a positive integer\nrepresenting the number of hearts of damage.\n\nThe default value is 2. Minimum is 1.");
+        u8 newDmg = 2;
+        Keyboard editDmg("Custom Cacto DMG", "Enter a custom damage amount as a positive integer\nrepresenting the number of hearts of damage.\n\nThe default value is 2 hearts. The minimum possible value is 1 heart.");
         editDmg.IsHexadecimal(false);
-        if (editDmg.Open(newDmg) == 0)
+        if (editDmg.Open(newDmg, 2) == 0)
         {
             // Minimum 1 heart damage
             if (newDmg < 1)
                 newDmg = 1;
 
             // Integer value as # hearts to write in entry name
-            u8 dmgToWrite = (u8)newDmg;
-            std::string unit = "";
-            if (dmgToWrite == 1)
-                unit = " heart";
-            else
-                unit = " hearts";
-            
-            entry->SetName("Cacto Clothes - Set damage: "+std::to_string(dmgToWrite)+unit);
+            u8 dmgToWrite = newDmg;
+
+            entry->SetName("Cacto Clothes - Set damage: "+ std::to_string(dmgToWrite) + ((dmgToWrite == 1) ? "heart" : "hearts"));
             // Write to address in terms of quarter hearts
             Process::Write8(AddressList::getAddress("CactoDamageDrablands"), dmgToWrite*4);
         }
@@ -761,9 +749,9 @@ namespace CTRPluginFramework
     // Sets the damage multiplier used to boost the sword or hammer damage when an appropriate costume is worn (default 2.0)
     void Costume::setSwordHammerDmgMult(MenuEntry* entry)
     {
-        Keyboard editDmg("Enter a custom damage multiplier.\n\nThe default value is 2.\nNegative values equate to 0 damage.");
+        Keyboard editDmg("Custom Hammer DMG Multiplier", "Enter a custom damage multiplier.\n\nThe default value is 2.0.\nNegative values equate to no damage.");
         editDmg.IsHexadecimal(false);
-        if (editDmg.Open(customSwordHammerDmgMult) == 0)
+        if (editDmg.Open(customSwordHammerDmgMult, 2.0) == 0)
         {
             entry->SetName("Set boosted sword & hammer dmg mult.: "+std::to_string(customSwordHammerDmgMult)+"x");
             Process::WriteFloat(AddressList::getAddress("SwordHammerDmgBoost"), customSwordHammerDmgMult);

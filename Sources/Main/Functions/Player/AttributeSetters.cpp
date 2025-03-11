@@ -8,7 +8,7 @@ namespace CTRPluginFramework
     {
         if (entry->Name() == "Set custom player model size")
         {
-            openToggleMenu("Player Size Menu", PLAYER_SIZE);
+            openToggleMenu("Player Size", "Enter a custom player size.\n\nNote: This value gets applied to all players.", PLAYER_SIZE);
             entry->SetName("Disable custom player size edits");
 
             if (Player::PlayerSizes > 0.0)
@@ -23,10 +23,13 @@ namespace CTRPluginFramework
 
     void Player::setJinxChanges(MenuEntry *entry)
     {
-        std::string intro = "Jinx Model Status Menu\n\nEnable Jinx " << ENABLED_SLIDER << Color::White << "\nDisable Jinx " << DISABLED_SLIDER;
+        std::string desc = "Use the toggles to change the jinxed status for each player.\n\n";
+        desc += ENABLED_SLIDER << Color::White << " Enable jinx\n";
+        desc += DISABLED_SLIDER << Color::White << " Disable jinx";
+
         if (entry->Name() == "Toggle jinxed model edits")
         {
-            openToggleMenu(intro, NORMAL, &Player::jinxStatus);
+            openToggleMenu("Jinxed Model Status Menu", desc, NORMAL, &Player::jinxStatus);
             entry->SetName("Disable jinxed model edits");
             jinxEditAuto->Enable();
         }
@@ -39,10 +42,13 @@ namespace CTRPluginFramework
 
     void Player::setSpawnChanges(MenuEntry *entry)
     {
-        std::string intro = "Player Spawn Status Menu\n\nSpawned " << ENABLED_SLIDER << Color::White << "\nNot spawned " << DISABLED_SLIDER;
+        std::string desc = "Use the toggles to change the spawned status for each player.\n\n";
+        desc += ENABLED_SLIDER << Color::White << " Spawned\n";
+        desc += DISABLED_SLIDER << Color::White << " Not spawned";
+
         if (entry->Name() == "Toggle player spawn edits")
         {
-            openToggleMenu(intro, NORMAL, &Player::spawnStatus);
+            openToggleMenu("Player Spawn Status Menu", desc, NORMAL, &Player::spawnStatus);
             entry->SetName("Disable player spawn edits");
             spawnEditAuto->Enable();
         }
@@ -55,10 +61,13 @@ namespace CTRPluginFramework
 
     void Player::setVisibilityChanges(MenuEntry *entry)
     {
-        std::string intro = "Player Model Visibility Menu\n\nVisible " << ENABLED_SLIDER << Color::White << "\nNot visible " << DISABLED_SLIDER;
+        std::string desc = "Use the toggles to change the visibility status for each player.\n\n";
+        desc += ENABLED_SLIDER << Color::White << " Visible\n";
+        desc += DISABLED_SLIDER << Color::White << " Not visible";
+
         if (entry->Name() == "Toggle player visibility edits")
         {
-            openToggleMenu(intro, NORMAL, &Player::visibleStatus);
+            openToggleMenu("Player Model Visibility Menu", desc, NORMAL, &Player::visibleStatus);
             entry->SetName("Disable player visibility edits");
             visibleEditAuto->Enable();
         }
@@ -71,10 +80,13 @@ namespace CTRPluginFramework
 
     void Player::setInvincibilityChanges(MenuEntry *entry)
     {
-        std::string intro = "Player Invincibility Status Menu\n\nEnable invincibility " << ENABLED_SLIDER << Color::White << "\nDisable invincibility " << DISABLED_SLIDER;
+        std::string desc = "Use the toggles to change the invincibility status for each player.\n\n";
+        desc += ENABLED_SLIDER << Color::White << " Enable invincibility\n";
+        desc += DISABLED_SLIDER << Color::White << " Disable invincibility";
+
         if (entry->Name() == "Toggle player invincibility edits")
         {
-            openToggleMenu(intro, NORMAL, &Player::invinciStatus);
+            openToggleMenu("Player Invincibility Status Menu", desc, NORMAL, &Player::invinciStatus);
             entry->SetName("Disable player invincibility edits");
             invinciEditAuto->Enable();
         }
@@ -87,10 +99,13 @@ namespace CTRPluginFramework
 
     void Player::setAnimStorageChanges(MenuEntry *entry)
     {
-        std::string intro = "Animation Storage Status Menu\n\nEnable animation storage " << ENABLED_SLIDER << Color::White << "\nDisable animation storage " << DISABLED_SLIDER;
+        std::string desc = "Use the toggles to change the animation storage status for each player.\n\n";
+        desc += ENABLED_SLIDER << Color::White << " Enable animation storage\n";
+        desc += DISABLED_SLIDER << Color::White << " Disable animation storage";
+
         if (entry->Name() == "Toggle animation storage edits")
         {
-            openToggleMenu(intro, NORMAL, &Player::animStoreStatus);
+            openToggleMenu("Animation Storage Status Menu", desc, NORMAL, &Player::animStoreStatus);
             entry->SetName("Disable animation storage edits");
             animStoreEditAuto->Enable();
         }
@@ -103,10 +118,13 @@ namespace CTRPluginFramework
 
     void Player::setCollisionChanges(MenuEntry *entry)
     {
-        std::string intro = "Player Collision Status Menu\n\nDefault collision " << ENABLED_SLIDER << Color::White << "\nNo collision " << DISABLED_SLIDER;
+        std::string desc = "Use the toggles to change the collision status for each player.\n\n";
+        desc += ENABLED_SLIDER << Color::White << " Default collision\n";
+        desc += DISABLED_SLIDER << Color::White << " No collision";
+
         if (entry->Name() == "Toggle collision edits (experimental!)")
         {
-            openToggleMenu(intro, NORMAL, &Player::collisionStatus);
+            openToggleMenu("Player Collision Status Menu", desc, NORMAL, &Player::collisionStatus);
             entry->SetName("Disable collision edits");
             colEditAuto->Enable();
         }
@@ -119,10 +137,13 @@ namespace CTRPluginFramework
 
     void Player::setPVPChanges(MenuEntry *entry)
     {
-        std::string intro = "Player PvP Status Menu\n\nEnable PvP " << ENABLED_SLIDER << Color::White << "\nDisable PvP " << DISABLED_SLIDER;
+        std::string desc = "Use the toggles to change the PvP status for each player.\n\n";
+        desc += ENABLED_SLIDER << Color::White << " Enable PvP\n";
+        desc += DISABLED_SLIDER << Color::White << " Disable PvP";
+
         if (entry->Name() == "Toggle PvP damage edits")
         {
-            openToggleMenu(intro, NORMAL, &Player::pvpStatus);
+            openToggleMenu("Player PvP Status Menu", desc, NORMAL, &Player::pvpStatus);
             entry->SetName("Disable PvP damage edits");
             pvpEditAuto->Enable();
         }
@@ -135,14 +156,14 @@ namespace CTRPluginFramework
 
     float setPlayerSize(void)
     {
-        float result;
+        float result = 1.0;
 
-        Keyboard sizeKB("Set player size:");
+        Keyboard sizeKB("Player Size", "Input a player size. The default value is 1.0.\n\nNote: size values cannot be negative.");
         sizeKB.IsHexadecimal(false);
-        sizeKB.Open(result);
+        sizeKB.Open(result, 1.0);
 
         if (result < 0.0)
-            MessageBox(Color::Gainsboro << "Error", "Player Sizes cannot be negative.")();
+            MessageBox("Error", "Player size cannot be negative.")();
         else
             return result;
 

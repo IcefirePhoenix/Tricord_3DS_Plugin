@@ -57,7 +57,6 @@ namespace CTRPluginFramework
         static u32              WaitingForScreenshot;
         static u32              FramesToPlay;
         static bool             NeedToPauseFrame;
-        static bool             WritesToPrevFB;
 
         static Hook             OSDHook;
         static RecursiveLock    RecLock;

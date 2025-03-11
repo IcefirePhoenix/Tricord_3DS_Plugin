@@ -52,6 +52,7 @@ namespace CTRPluginFramework
     Handle      g_keepThreadHandle;
     Handle      g_keepEvent = 0;
     Handle      g_resumeEvent = 0;
+    bool g_keepRunning = true;
 
     void    MainThreadInit(void* arg);
     void    MainThreadExit(void);
@@ -240,6 +241,7 @@ namespace CTRPluginFramework
         settings.WaitTimeToBoot = Seconds(5.f);
         settings.AreN3DSButtonsAvailable = true;
         settings.TryLoadSDSounds = false;
+        settings.CloseMenuWithB = true;
 
         // Set default theme
         FwkSettings::SetThemeDefault();
@@ -457,7 +459,6 @@ namespace CTRPluginFramework
 
         // Close PluginMenu to quit main thread
         PluginMenuImpl::ForceExit();
-        g_mainThread.JoinTimeout(true, 1000000000ULL);
 
         // Close some handles
         if (ncsndInitialised) {
@@ -469,17 +470,23 @@ namespace CTRPluginFramework
         else
             hidExit();
 
+        cfguExit();
+        fsExit();
+        amExit();
+        acExit();
+        srvExit();
+
         // Un-map hook wrapper memory
         HookManager::Lock();
         HookManager::PrepareToUnmapMemory();
         svcUnmapProcessMemoryEx(CUR_PROCESS_HANDLE, 0x01E80000, 0x2000);
 
-        ProcessImpl::DisableExceptionHandlers();
+        PLGLDR__Reply(event);
 
-        __ctru_exit(0);
+        svcCloseHandle(g_keepEvent);
+        svcExitThread();
 
         // This function does not return and exit the thread
-        PLGLDR__Reply(event);
         for(;;);
     }
 
@@ -545,20 +552,52 @@ namespace CTRPluginFramework
 
     void MainThreadExit(void)
     {
-        // ## Main Thread ##
+        // Reverted from CTRPF e211c8a8
+        if (reinterpret_cast<u32>(((Thread_tag *)threadGetCurrent())->stacktop) < 0x07000000)
+        {
+            // Remove the OSD Hook
+            OSDImpl::OSDHook.Disable();
 
-        // Remove the OSD Hook
-        OSDImpl::OSDHook.Disable();
+            // Release process in case it's currently paused
+            ProcessImpl::IsPaused = std::min((u32)ProcessImpl::IsPaused, (u32)1);
+            ProcessImpl::Play(true);
 
-        // Release process in case it's currently paused
-        ProcessImpl::IsPaused = std::min((u32)ProcessImpl::IsPaused, (u32)1);
-        ProcessImpl::Play(true);
+            // Exit services
+            gspExit();
 
-        // Exit services
-        gspExit();
+            // Exit loop in keep thread
+            g_keepRunning = false;
+            svcSignalEvent(g_keepEvent);
 
-        g_mainThread.Exit(1);
-        return;
+            threadExit(1);
+            return;
+        }
+
+        // ## Keep Thread ##
+        if (g_mainThread.GetStatus() == ThreadEx::RUNNING)
+        {
+            ProcessImpl::Play(true);
+            PluginMenuImpl::ForceExit();
+            g_mainThread.Join(false);
+        }
+        else // Release the game and exit in case abort occurred during early load-in
+            svcSignalEvent(g_continueGameEvent);
+        svcExitThread();
+
+        // // ## Main Thread ##
+
+        // // Remove the OSD Hook
+        // OSDImpl::OSDHook.Disable();
+
+        // // Release process in case it's currently paused
+        // ProcessImpl::IsPaused = std::min((u32)ProcessImpl::IsPaused, (u32)1);
+        // ProcessImpl::Play(true);
+
+        // // Exit services
+        // gspExit();
+
+        // g_mainThread.Exit(1);
+        // return;
     }
 
     extern "C"

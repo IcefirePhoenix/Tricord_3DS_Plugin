@@ -13,29 +13,42 @@ namespace CTRPluginFramework
 
     /* ------------------ */
 
+    // Helper method to select a Shadow Link for item overrides
+    int chooseShadowLink(std::string items)
+    {
+        Keyboard shadow("Shadow Link Selection", "Choose a Shadow Link. Current Shadow Link items:\n\n" + items);
+        const StringVector shadowList =
+        {
+            "Shadow Link A",
+            "Shadow Link B",
+            "Shadow Link C"
+        };
+
+        shadow.Populate(shadowList);
+        return shadow.Open();
+    }
+
     // Force-sets current items for Shadow Links
     void Item::shadowItemOpt(MenuEntry *entry)
     {
-        int shadowLinkChoice = GeneralHelpers::chooseShadowLink();
+        // Shadow Links aren't loaded in-game outside of Baneful Zone...
+        bool isInBaneful = (Level::getCurrLevel() == Level::levelIDFromName("Baneful Zone")) && (Level::getCurrStage() == 4);
 
-        if (shadowLinkChoice >= 0)
+        if (isInBaneful)
         {
             u32 shadowDataAddress = getShadowItemAddress();
-            u32 indivShadowOffset = shadowLinkChoice * shadowLinkItemOffset;
 
-            initShadowItemList();
-
-            // Shadow Links aren't loaded in-game outside of Baneful Zone...
-            bool isInBaneful = (Level::getCurrLevel() == Level::levelIDFromName("Baneful Zone")) && (Level::getCurrStage() == 4);
-            std::string msg = isInBaneful ? "Select an item." : "Error\n\nThe current level is not Baneful Zone - 4. Please\nenter Baneful Zone and try again.";
-
-            if (isInBaneful)
+            int shadowLinkChoice = chooseShadowLink(readCurrItems(shadowDataAddress, true));
+            if (shadowLinkChoice >= 0)
             {
-                msg.append("\n\nCurrent Shadow Link items:\n");
-                msg.append(readCurrItems(shadowDataAddress, true));
-                msg.append("\n\nBe sure to re-load the stage for changes to\ntake effect.");
+                u32 indivShadowOffset = shadowLinkChoice * shadowLinkItemOffset;
 
-                Keyboard item(msg);
+                initShadowItemList();
+
+                std::string msg = "Select an item.\nCurrently editing Shadow Link " + ('A' + shadowLinkChoice);
+                msg.append("\n\nBe sure to re-load the stage for changes to take effect.");
+
+                Keyboard item("Shadow Item Selection Menu", msg);
                 item.Populate(Item::shadowItemList);
 
                 int choice = item.Open();
@@ -52,16 +65,9 @@ namespace CTRPluginFramework
                     forceShadowSwordOnly->Disable();
                 }
             }
-            else
-            {
-                // if not in Baneful Zone -> no item options displayed...
-                const StringVector temp = {"Exit"};
-                Keyboard item(msg);
-
-                item.Populate(temp);
-                item.Open();
-            }
         }
+        else
+            MessageBox("Error", "The current level is not Baneful Zone - 4. Please\nenter Baneful Zone and try again.")();
     }
 
     // Disables specialty item options and resets Shadow Link items to a new randomized set
@@ -91,10 +97,10 @@ namespace CTRPluginFramework
 
             // disable forced-sword attacks...
             forceShadowSwordOnly->Disable();
-            MessageBox(Color::Gainsboro << "Success", msg)();
+            MessageBox("Success", msg)();
         }
         else
-            MessageBox(Color::Gainsboro << "Error", msg)();
+            MessageBox("Error", msg)();
     }
 
     // Bypasses the item init sequence by forcing the Shadow Link ID checks to fail

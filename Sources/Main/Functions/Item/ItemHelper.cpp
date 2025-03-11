@@ -46,7 +46,7 @@ namespace CTRPluginFramework
 
 			// Menu interface -> players are labeled via suffixes A, B, or C...
 			char letter = 'A' + checkItems;
-			std::string prefix = useShadow ? "\nShadow Link " : "\nPlayer ";
+			std::string prefix = useShadow ? "\nShadow Link " + letter : "\nPlayer " + std::to_string(checkItems);
 
 			// Append the current item name to the player labels...
 			if (useShadow)
@@ -57,10 +57,10 @@ namespace CTRPluginFramework
 				 * the last data ID (0x9) in-game...
 				 */
 				std::string itemIndex = (currItems[checkItems] == 0x9) ? itemList[0] : itemList[currItems[checkItems]];
-				str.append(prefix + letter + ": " + itemIndex);
+				str.append(prefix + ": " + itemIndex);
 			}
 			else
-				str.append(prefix + letter + ": " + itemList[currItems[checkItems] - 1]);
+				str.append(prefix + ": " + itemList[currItems[checkItems] - 1]);
 		}
 		return str;
 	}

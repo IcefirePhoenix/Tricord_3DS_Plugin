@@ -1,8 +1,9 @@
 #include "CTRPluginFramework/Graphics/OSD.hpp"
+#include "CTRPluginFramework/System/Process.hpp"
+#include "CTRPluginFrameworkImpl/Preferences.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/OSDImpl.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/PrivColor.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/Renderer.hpp"
-#include "CTRPluginFramework/System/Process.hpp"
 
 #include <algorithm>
 #include "CTRPluginFrameworkImpl/System/Screen.hpp"
@@ -78,9 +79,12 @@ namespace CTRPluginFramework
 
     int     OSD::Notify(const std::string &str, const Color &fg, const Color &bg)
     {
+        if (Preferences::IsEnabled(Preferences::DisableOSDNotifs))
+            return 0;
+
         OSDImpl::Lock();
 
-        if (OSDImpl::Notifications.size() >= 50)
+        if (OSDImpl::Notifications.size() >= 30)
         {
             OSDImpl::Unlock();
             return (-1);

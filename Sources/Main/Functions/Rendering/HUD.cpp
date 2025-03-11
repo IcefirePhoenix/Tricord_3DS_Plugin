@@ -73,7 +73,7 @@ namespace CTRPluginFramework
                 return;
         }
 
-        Keyboard HexColor("Enter a 6-digit RGB hex code:");
+        Keyboard HexColor("Custom Scrolling Text Name Color", "Enter a 6-digit RGB hex code.");
         HexColor.IsHexadecimal(true);
 
         if (HexColor.Open(result) == 0)

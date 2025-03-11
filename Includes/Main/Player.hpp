@@ -32,7 +32,7 @@ namespace CTRPluginFramework
         PLAYER_SIZE
     };
 
-    void openToggleMenu(std::string entryTitle, EditType type, u8* playerStatus = nullptr);
+    void openToggleMenu(std::string entryTitle, std::string desc, EditType type, u8* playerStatus = nullptr);
     void togglePlayerStatus(u8& playerStatus, ColorStatus color);
     void initEdit(EditType type, int playerID, ColorStatus color, u8& playerStatus);
     bool checkPlayerStatus(u8 &playerStatus, int playerID);

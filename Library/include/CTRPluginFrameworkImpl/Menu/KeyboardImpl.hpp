@@ -31,9 +31,9 @@ namespace CTRPluginFramework
         using   KeyIter  = std::vector<TouchKey>::iterator;
         using   KeyStringIter  = std::vector<TouchKeyString>::iterator;
     public:
-
         KeyboardImpl(const std::string &text = "");
-        explicit KeyboardImpl(Keyboard *kb, const std::string &text = "");
+        KeyboardImpl(const std::string &text, const std::string &title = "");
+        explicit KeyboardImpl(Keyboard *kb, const std::string &text, const std::string &title = "");
         ~KeyboardImpl(void);
 
         void        SetLayout(Layout layout);
