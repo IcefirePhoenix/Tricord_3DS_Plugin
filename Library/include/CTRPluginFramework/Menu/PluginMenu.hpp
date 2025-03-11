@@ -203,6 +203,7 @@ namespace CTRPluginFramework
 
         bool FreecamToggle;
         bool GameplayToggle;
+        bool ShowInvite;
 
     private:
         std::unique_ptr<PluginMenuImpl> _menu;

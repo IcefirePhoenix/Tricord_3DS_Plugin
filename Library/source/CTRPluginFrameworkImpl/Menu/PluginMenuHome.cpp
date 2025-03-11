@@ -23,9 +23,7 @@ namespace CTRPluginFramework
         _arBtn(Button::Sysfont | Button::Rounded, "Action Replay", IntRect(45, 160, 110, 28)),
         _toolsBtn(Button::Sysfont | Button::Rounded, "Tools", IntRect(165, 160, 110, 28)),
 
-        // _closeBtn(*this, nullptr, IntRect(275, 24, 20, 20), Icon::DrawClose),
-        _keyboardBtn(Button::Icon, IntRect(330, 30, 25, 25), Icon::DrawKeyboard),
-        _controllerBtn(Button::Icon, IntRect(370, 30, 25, 25), Icon::DrawGameController25),
+        _discordBtn(Button::Icon | Button::Toggle, IntRect(250, 50, 25, 25), Icon::DrawKeyboard),
 
         _AddFavoriteBtn(Button::Icon | Button::Toggle, IntRect(50, 30, 25, 25), Icon::DrawAddFavorite),
         _InfoBtn(Button::Icon | Button::Toggle, IntRect(90, 30, 25, 25), Icon::DrawInfo)
@@ -51,18 +49,54 @@ namespace CTRPluginFramework
         // Disable Toggle buttons
         _AddFavoriteBtn.Disable();
         _InfoBtn.Disable();
-        _keyboardBtn.Disable();
+        _discordBtn.Disable();
         _controllerBtn.Disable();
+    }
 
+    void drawInviteQR(void)
+    {
+        qrcodegen::QrCode qrcode = qrcodegen::QrCode::encodeText((std::string("discord.com/invite/") + INVITE).c_str(), qrcodegen::QrCode::Ecc::MEDIUM);
 
-        // Temporary disable unused buttons
-        //_hidMapperBtn.Lock();
+        int currXPos = 47, currYPos = 57;
+        int rightBoundary = 190, bottomBoundary = 190;
+        int qrSideLen = qrcode.getSize();
+        int pixelsPerModule = (bottomBoundary - currYPos) / qrSideLen;
+        int columnsDrawn = 0, modulesDrawn = 0;
 
-        // Are the buttons locked ?
-        if (!Preferences::Settings.AllowActionReplay)
-            _arBtn.Lock();
-        if (!Preferences::Settings.AllowSearchEngine)
-            _searchBtn.Lock();
+        // draw background...
+        const Screen &topScreen = OSD::GetTopScreen();
+        topScreen.DrawRect(40, 50, 130, 130, Color::White);
+
+        Renderer::SetTarget(TOP);
+        while (currXPos < rightBoundary && columnsDrawn < qrSideLen)
+        {
+            modulesDrawn = 0;
+            currYPos = 57;
+
+            while (currYPos < bottomBoundary && modulesDrawn < qrSideLen)
+            {
+                topScreen.DrawRect(currXPos, currYPos, pixelsPerModule, pixelsPerModule, qrcode.getModule(columnsDrawn, modulesDrawn) ? Color::Black : Color::White);
+                currYPos += pixelsPerModule;
+                modulesDrawn++;
+            }
+            columnsDrawn++;
+            currXPos += pixelsPerModule;
+        }
+
+        int posLabel = 190;
+        std::string message = std::string("Prefer typing? Use: discord.gg/") + INVITE;
+        Renderer::DrawSysStringReturn((const u8 *)message.c_str(), 40, posLabel, 362, Color::White);
+    }
+
+    void drawInviteInfo(void)
+    {
+        int posY = 50;
+        std::string message = "This is the home of all things\nrelated to TFH modding!\nHere you can connect with\nthe Tricord developers,\nexplore new mods from\nGameBanana, find helpful\nguides, and hang out with\nthe modding community!";
+
+        // really lazy workaround to avoid creating a custom UI box just for this...
+        Renderer::SetTarget(TOP);
+        Window::TopWindow.Draw("TFH Modding Discord Server");
+        Renderer::DrawSysStringReturn((const u8 *)message.c_str(), 180, posY, 370, Color::White);
     }
 
     bool PluginMenuHome::operator()(EventList& eventList, int& mode, Time& delta)
@@ -100,8 +134,11 @@ namespace CTRPluginFramework
         }
         else
         {
-            for (size_t i = 0; i < eventList.size(); i++)
-                _ProcessEvent(eventList[i]);
+            if (!PluginMenu::GetRunningInstance()->ShowInvite)
+            {
+                for (size_t i = 0; i < eventList.size(); i++)
+                    _ProcessEvent(eventList[i]);
+            }
         }
 
         if (_toolsBtn()) _toolsBtn_OnClick();
@@ -117,25 +154,41 @@ namespace CTRPluginFramework
             if (_arBtn()) _actionReplayBtn_OnClick();
             if (_AddFavoriteBtn()) _StarItem();
             if (_InfoBtn()) _InfoBtn_OnClick();
-            if (_keyboardBtn()) _keyboardBtn_OnClick();
+            if (_discordBtn()) _discordBtn_OnClick();
             if (_controllerBtn()) _controllerBtn_OnClick();
         }
 
-        // Update UI
+        if (PluginMenu::GetRunningInstance()->ShowInvite)
+        {
+            _showStarredBtn.Lock();
+            _freecamBtn.Lock();
+            _gameModeBtn.Lock();
+            _faqBtn.Lock();
+            _searchBtn.Lock();
+            _arBtn.Lock();
+            _toolsBtn.Lock();
+            _AddFavoriteBtn.Lock();
+            _InfoBtn.Lock();
+            _controllerBtn.Lock();
+
+            Renderer::SetTarget(TOP);
+            drawInviteInfo();
+            drawInviteQR();
+        }
+        else
+        {
+            top.Start();
+            top.Wait();
+        }
+
         _Update(delta);
-
-        // Render top
-        top.Start();
-
-        // RenderBottom
         _RenderBottom();
-
-        top.Wait();
 
         mode = _mode;
 
-        bool close = Window::BottomWindow.MustClose();
+        close = Window::BottomWindow.MustClose();
         close |= _closedRootFolder && Preferences::Settings.CloseMenuWithB;
+
         _closedRootFolder = false;
 
         return close;
@@ -434,8 +487,8 @@ namespace CTRPluginFramework
             _AddFavoriteBtn.Enable(false);
             _InfoBtn.Enable(false);
             _InfoBtn.SetState(false);
-            _keyboardBtn.Enable(false);
-            _keyboardBtn.SetState(false);
+            _discordBtn.Enable(false);
+            _discordBtn.SetState(false);
         }
 
         /*
@@ -622,7 +675,7 @@ namespace CTRPluginFramework
             _arBtn.Draw();
             _AddFavoriteBtn.Draw();
             _InfoBtn.Draw();
-            //_keyboardBtn.Draw();
+            _discordBtn.Draw();
             _controllerBtn.Draw();
         }
     }
@@ -671,7 +724,7 @@ namespace CTRPluginFramework
             {
                 _AddFavoriteBtn.Enable(false);
                 _InfoBtn.Enable(false);
-                _keyboardBtn.Enable(false);
+                _discordBtn.Enable(false);
                 _controllerBtn.Enable(false);
             }
             // If selected object is a folder
@@ -681,11 +734,8 @@ namespace CTRPluginFramework
 
                 if (!ShowNoteBottom)
                 {
-                    // A folder will not have a menufunc
-                    //_keyboardBtn.Enable(false);
-                    // Check if folder has a note
+                    _discordBtn.Enable(true);
                     _InfoBtn.Enable(e->note.size());
-                    // Enable AddFavorites icon
                     _AddFavoriteBtn.Enable(true);
                     _AddFavoriteBtn.SetState(e->_IsStarred());
                     _controllerBtn.Enable(false);
@@ -705,11 +755,8 @@ namespace CTRPluginFramework
 
                 if (!ShowNoteBottom)
                 {
-                    // Check if entry has a menu func
-                    //_keyboardBtn.Enable(e->MenuFunc != nullptr);
-                    // Check if entry has a note
+                    _discordBtn.Enable(true);
                     _InfoBtn.Enable(note.size());
-                    // Enable AddFavorites icon
                     _AddFavoriteBtn.Enable(true);
                     _AddFavoriteBtn.SetState(e->_IsStarred());
                     _controllerBtn.Enable(e->_owner != nullptr && e->_owner->Hotkeys.Count() > 0);
@@ -725,7 +772,7 @@ namespace CTRPluginFramework
             {
                 _AddFavoriteBtn.Enable(false);
                 _InfoBtn.Enable(false);
-                _keyboardBtn.Enable(false);
+                _discordBtn.Enable(false);
                 _controllerBtn.Enable(false);
             }
         }
@@ -744,7 +791,7 @@ namespace CTRPluginFramework
             _arBtn.Update(isTouched, touchPos);
             _AddFavoriteBtn.Update(isTouched, touchPos);
             _InfoBtn.Update(isTouched, touchPos);
-            //_keyboardBtn.Update(isTouched, touchPos);
+            _discordBtn.Update(isTouched, touchPos);
             _controllerBtn.Update(isTouched, touchPos);
         }
         _toolsBtn.Update(isTouched, touchPos);
@@ -852,14 +899,15 @@ namespace CTRPluginFramework
         {
             _InfoBtn.Enable(false);
             _AddFavoriteBtn.Enable(false);
-            _keyboardBtn.Enable(false);
+            _discordBtn.Enable(true);
+
             _selectedTextSize = 0;
         }
         else
         {
             MenuEntryImpl* e = reinterpret_cast<MenuEntryImpl *>(f->_items[_selector]);
             _InfoBtn.Enable(e->note.size() > 0);
-            //_keyboardBtn.Enable(e->MenuFunc != nullptr);
+            _discordBtn.Enable(true);
             _AddFavoriteBtn.Enable(true);
             _AddFavoriteBtn.SetState(e->_IsStarred());
 
@@ -894,13 +942,9 @@ namespace CTRPluginFramework
         }
     }
 
-    void    PluginMenuHome::_keyboardBtn_OnClick(void)
+    void PluginMenuHome::_discordBtn_OnClick(void)
     {
-        MenuFolderImpl *f = _starMode ? _starred : _folder;
-        MenuEntryImpl *e = reinterpret_cast<MenuEntryImpl *>((*f)[_selector]);
-
-        if (e->MenuFunc != nullptr)
-            e->MenuFunc(e->_owner);
+        PluginMenu::GetRunningInstance()->ShowInvite = !PluginMenu::GetRunningInstance()->ShowInvite;
     }
 
     void     PluginMenuHome::_actionReplayBtn_OnClick(void)
