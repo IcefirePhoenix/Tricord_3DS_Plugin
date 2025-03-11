@@ -42,6 +42,7 @@ namespace CTRPluginFramework
         _reverseFlow = false;
         _showVersion = false;
         _versionPosX = 0;
+        _closedRootFolder = false;
 
         ShowNoteBottom = showNoteBottom;
 
@@ -133,7 +134,11 @@ namespace CTRPluginFramework
 
         mode = _mode;
 
-        return (Window::BottomWindow.MustClose());
+        bool close = Window::BottomWindow.MustClose();
+        close |= _closedRootFolder && Preferences::Settings.CloseMenuWithB;
+        _closedRootFolder = false;
+
+        return close;
     }
 
     void PluginMenuHome::Append(MenuItem* item) const
@@ -393,6 +398,9 @@ namespace CTRPluginFramework
                             else
                                 _folder = newFolder;
                         }
+                        else
+                            _closedRootFolder = true;
+
                         break;
                     }
                     default: break;

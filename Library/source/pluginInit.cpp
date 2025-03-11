@@ -241,6 +241,7 @@ namespace CTRPluginFramework
         settings.WaitTimeToBoot = Seconds(5.f);
         settings.AreN3DSButtonsAvailable = true;
         settings.TryLoadSDSounds = false;
+        settings.CloseMenuWithB = true;
 
         // Set default theme
         FwkSettings::SetThemeDefault();
