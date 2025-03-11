@@ -623,9 +623,8 @@ namespace CTRPluginFramework
             _AddFavoriteBtn.Draw();
             _InfoBtn.Draw();
             //_keyboardBtn.Draw();
-            //_controllerBtn.Draw();
+            _controllerBtn.Draw();
         }
-        _toolsBtn.Draw();
     }
 
     //###########################################
@@ -689,7 +688,7 @@ namespace CTRPluginFramework
                     // Enable AddFavorites icon
                     _AddFavoriteBtn.Enable(true);
                     _AddFavoriteBtn.SetState(e->_IsStarred());
-                    //_controllerBtn.Enable(false);
+                    _controllerBtn.Enable(false);
                 }
                 if (e->HasNoteChanged())
                 {
@@ -713,8 +712,7 @@ namespace CTRPluginFramework
                     // Enable AddFavorites icon
                     _AddFavoriteBtn.Enable(true);
                     _AddFavoriteBtn.SetState(e->_IsStarred());
-                    // Enable controller icon
-                    //_controllerBtn.Enable(e->_owner != nullptr && e->_owner->Hotkeys.Count() > 0);
+                    _controllerBtn.Enable(e->_owner != nullptr && e->_owner->Hotkeys.Count() > 0);
                 }
                 if (e->HasNoteChanged())
                 {
@@ -747,7 +745,7 @@ namespace CTRPluginFramework
             _AddFavoriteBtn.Update(isTouched, touchPos);
             _InfoBtn.Update(isTouched, touchPos);
             //_keyboardBtn.Update(isTouched, touchPos);
-            //_controllerBtn.Update(isTouched, touchPos);
+            _controllerBtn.Update(isTouched, touchPos);
         }
         _toolsBtn.Update(isTouched, touchPos);
 
