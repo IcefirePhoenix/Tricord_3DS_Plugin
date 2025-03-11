@@ -95,7 +95,7 @@ namespace CTRPluginFramework
 
         /**
          * \brief Send a notification on the top screen, a notification duration is 5 seconds\n
-         * A maximum of 50 notifications can be queued
+         * A maximum of 30 notifications can be queued
          * \param str Text of the notification
          * \param foreground The color of the text (Default: blank)
          * \param background The color of the background (Default: black)
