@@ -72,7 +72,7 @@ namespace CTRPluginFramework
         if (restoreGreatFairy->IsActivated() && openedCustomSlots >= 0)
         {
             menuCostumeSlotA->CanBeSelected(false);
-            MessageBox(Color::Gainsboro << "Error", errMsg)();
+            MessageBox("Error", errMsg)();
         }
     }
 
@@ -151,7 +151,7 @@ namespace CTRPluginFramework
             "4 slots"
         };
 
-        Keyboard addSlots("Choose the number of costume slots to open:");
+        Keyboard addSlots("Additional Costume Slots", "Choose the number of costume slots to open:");
         addSlots.Populate(slotCount);
 
         return addSlots.Open();
@@ -168,8 +168,8 @@ namespace CTRPluginFramework
             "Slot D"
         };
 
-        Keyboard chooseSlot("Choose the slot to edit:");
-        Keyboard chooseCostume("Choose the costume to use:");
+        Keyboard chooseSlot("Custom Costume Slot Setter", "Choose the slot to edit:");
+        Keyboard chooseCostume("Costume Selection Menu", "Choose the costume to use:");
 
         chooseSlot.Populate(slotNames);
         chooseCostume.Populate(Costume::BCH_fileNames);
@@ -310,7 +310,7 @@ namespace CTRPluginFramework
         // handle conflicts if Slot A is already in-use...
         if (slotStatus[0] != true)
         {
-            if (MessageBox(Color::Gainsboro << "Error", errMsg, DialogType::DialogYesNo)())
+            if (MessageBox("Error", errMsg, DialogType::DialogYesNo)())
             {
                 // overwrite Slot A current custom costume with Great Fairy...
                 menuCostumeSlotA->CanBeSelected(false);

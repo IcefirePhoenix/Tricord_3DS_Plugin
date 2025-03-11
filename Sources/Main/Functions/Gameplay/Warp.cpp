@@ -115,7 +115,7 @@ namespace CTRPluginFramework
         // optional: change default Doppel costumes...
         if (firstWarp)
         {
-            if (GeneralHelpers::showMsgKbd(firstWarpIntro, DialogType::DialogYesNo))
+            if (GeneralHelpers::showMsgKbd("Doppel Costume Confirmation", firstWarpIntro, DialogType::DialogYesNo))
             {
                 // set default Doppel costumes from Bear Minimum -> Hero's Tunic
                 Costume::setPlayerCostume(GameData::getPlayerIDFromColor("Blue"), GameData::getCostumeIDFromName("Hero's Tunic"));

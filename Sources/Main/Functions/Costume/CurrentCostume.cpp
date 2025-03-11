@@ -16,7 +16,7 @@ namespace CTRPluginFramework
 
         if (linkChoice >= 0)
         {
-            Keyboard costumeList("Choose a costume:\n\nBe sure to load into a new area for changes to fully\ntake effect.");
+            Keyboard costumeList("Costume Selection Menu", "Choose a costume:\n\nBe sure to load into a new area for changes to fully\ntake effect.");
             costumeList.Populate(GameData::universalCostumeList);
 
             Costume::setPlayerCostume(linkChoice, costumeList.Open());
@@ -46,8 +46,8 @@ namespace CTRPluginFramework
         };
 
         u8 result;
-        Keyboard costumeType("Choose the desired costume type:");
-        Keyboard costumeList("Choose a costume:");
+        Keyboard costumeType("Costume Type Selection", "Choose the desired costume type.");
+        Keyboard costumeList("Costume Selection Menu", "Choose a costume.");
 
         costumeType.Populate(type);
         int choice = costumeType.Open();
@@ -77,7 +77,7 @@ namespace CTRPluginFramework
             "Bear Maximum"
         };
 
-        Keyboard bearStatus("Force Bear Minimum or Bear Maximum, or\nReset to restore the Hero Point check.");
+        Keyboard bearStatus("Bear Minimum Force Upgrade", "Force Bear Minimum, Bear Maximum, or reset to restore the normal 30 Hero Point check.");
         bearStatus.Populate(bearOptions);
 
         switch (bearStatus.Open())

@@ -22,12 +22,12 @@ namespace CTRPluginFramework
     {
         StringVector costumeTypeOptions =
         {
-            "Effective",
-            "Cosmetic",
+            "Effective costume",
+            "Cosmetic costume",
             "Disable entry"
         };
 
-        Keyboard costumeType("Select which type of costume to randomize,\nor disable this entry.");
+        Keyboard costumeType("Costume Randomizers", "Select which type of costume to randomize or disable this entry.");
         costumeType.Populate(costumeTypeOptions);
 
         int selection = costumeType.Open();
@@ -48,18 +48,18 @@ namespace CTRPluginFramework
     void openRandomizerToggles(int selection)
     {
         StringVector bottomScreenOptions;
-        std::string title;
+        std::string message;
         bool isMenuOpen = true;
 
-        Keyboard kbd("Menu");
+        Keyboard kbd("Costume Randomizer Toggle Menu", "");
+        kbd.DisplayTopScreen = true;
         kbd.CanAbort(false);
 
         if (selection == 0 || selection == 1)
         {
             while (isMenuOpen)
             {
-                title = "Use the toggles to enable the\n";
-                title += (selection == 0) ? "Effective Costume Randomizers:\n\n" : "Cosmetic Costume Randomizers:\n\n";
+                message = "Use the player toggles to enable the " + (selection == 0) ? "Effective Costume Randomizers." : "Cosmetic Costume Randomizers.";
 
                 bottomScreenOptions.clear();
                 bottomScreenOptions.push_back(std::string("Player 1 ") << (randomizers[selection][0] ? ENABLED_SLIDER : DISABLED_SLIDER));
@@ -67,7 +67,7 @@ namespace CTRPluginFramework
                 bottomScreenOptions.push_back(std::string("Player 3 ") << (randomizers[selection][2] ? ENABLED_SLIDER : DISABLED_SLIDER));
                 bottomScreenOptions.push_back("Save changes");
 
-                kbd.GetMessage() = title;
+                kbd.GetMessage() = message;
                 kbd.Populate(bottomScreenOptions);
                 int choice = kbd.Open();
 

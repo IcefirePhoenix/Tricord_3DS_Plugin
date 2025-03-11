@@ -21,14 +21,14 @@ namespace CTRPluginFramework
     void Gameplay::maxEnergySet(MenuEntry *entry)
     {
         float newMaxEnergy, normalGaugeMax = 600.0;
-        std::string maxEnergyIntro = "Maximum energy\n\nDefault value for normal gauge is 600\nDefault value for large gauge is 900";
+        std::string maxEnergyIntro = "Enter a new value to update the capacity of the energy gauge.\n\nThe default value for the normal gauge is 600.0.\nThe default value for the large gauge is 900.0.";
 
         if (entry->Name() == "Set maximum energy")
         {
-            Keyboard editMaxEnergy(maxEnergyIntro);
+            Keyboard editMaxEnergy("Maximum Energy Setter", maxEnergyIntro);
             editMaxEnergy.IsHexadecimal(false);
 
-            if (editMaxEnergy.Open(newMaxEnergy) == 0)
+            if (editMaxEnergy.Open(newMaxEnergy, 600.0) == 0)
             {
                 entry->SetName("Disable custom maximum energy edits");
 
@@ -59,10 +59,10 @@ namespace CTRPluginFramework
 
         if (entry->Name() == "Set energy consumption multiplier")
         {
-            Keyboard editEnergyConsumeMultiplier("Energy consumption multiplier");
+            Keyboard editEnergyConsumeMultiplier("Energy Consumption Multiplier Setter", "Input a new multiplier value. Using 1.0 will result in no changes.\n\nNote: The multiplier cannot be negative.");
             editEnergyConsumeMultiplier.IsHexadecimal(false);
 
-            if (editEnergyConsumeMultiplier.Open(newMultiplier) == 0 && newMultiplier > 0.0)
+            if (editEnergyConsumeMultiplier.Open(newMultiplier, 1.0) == 0 && newMultiplier > 0.0)
             {
                 entry->SetName("Disable custom energy consumption edits");
                 Process::WriteFloat(AddressList::getAddress("EnergyMaxMultiplicand"), baseEnergyMax * newMultiplier);

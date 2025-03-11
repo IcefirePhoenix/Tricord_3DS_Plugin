@@ -196,7 +196,7 @@ namespace CTRPluginFramework
             "Den of Trials"
         };
 
-        Keyboard chooseCategory("Select a category:");
+        Keyboard chooseCategory("Category Selection", "Select a location category.");
         chooseCategory.Populate(locationCategories);
 
         return chooseCategory.Open();
@@ -210,7 +210,7 @@ namespace CTRPluginFramework
         if (useDoT)
             worldSelectionList.push_back("Den of Trials");
 
-        Keyboard chooseWorld("Select a world:");
+        Keyboard chooseWorld("World Selection", "Select a world.");
         chooseWorld.Populate(worldSelectionList);
 
         return chooseWorld.Open();
@@ -220,7 +220,7 @@ namespace CTRPluginFramework
     // Helper function that returns level from world
     std::pair<std::string, Level> Level::selLevel(int world)
     {
-        u16 index;
+        u8 index;
         std::string chosenLevel = "";
         StringVector levelChoices = Level::getLevelNamesFromWorld(world);
 
@@ -228,7 +228,10 @@ namespace CTRPluginFramework
             return std::make_pair("Coliseum", getAllLevels().at("Coliseum"));
 
         // choose level via name...
-        if (GetInput(index, levelChoices, "Select a level:"))
+        Keyboard chooseLevel("Level Selection", "Select a level.");
+        chooseLevel.Populate(levelChoices);
+
+        if (chooseLevel.Open(index))
         {
             chosenLevel = levelChoices[index];
             return std::make_pair(chosenLevel, getAllLevels().at(chosenLevel));
@@ -270,7 +273,7 @@ namespace CTRPluginFramework
                 break;
         }
 
-        Keyboard chooseStage("Select a stage:");
+        Keyboard chooseStage("Stage Selection", "Select a stage.");
         chooseStage.Populate(availableStages);
 
         // stages are not 0-indexed...
@@ -281,7 +284,7 @@ namespace CTRPluginFramework
     int Level::selChallenge(std::array<u8, 3> challenges)
     {
         StringVector availableChals;
-        Keyboard challenge("Choose a challenge:");
+        Keyboard challenge("Challenge Selection", "Choose a Drablands Challenge to enable.\n\nNote: in order to change the active challenge in the current level, you must enter a different level before attempting to re-enter the current level.");
 
         availableChals.push_back(GameData::getChallengeName(0x0)); // No challenge
         availableChals.push_back(GameData::getChallengeName(challenges[0]));

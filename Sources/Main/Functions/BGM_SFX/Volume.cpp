@@ -88,7 +88,7 @@ namespace CTRPluginFramework
     // Menu interface for selecting the desired volume percentage level
     int BGM_SFX::selVolPreset(void)
     {
-        Keyboard vol("Select your desired volume level.\n\nChanges will be reverted upon game restart.");
+        Keyboard vol("Volume Override", "Select your desired volume level.\n\nChanges will be reverted upon game restart.");
         vol.Populate(percentages);
         return vol.Open();
     }
