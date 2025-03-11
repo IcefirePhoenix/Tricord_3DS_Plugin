@@ -108,5 +108,7 @@ namespace CTRPluginFramework
         static u8 cosmeticIDs[3];
         static u8 swordType[3];
         static bool customSwordsActive;
+        static float customSwordHammerDmgMult;
+        static bool forcingSwordDmgBoost;
     };
 }
