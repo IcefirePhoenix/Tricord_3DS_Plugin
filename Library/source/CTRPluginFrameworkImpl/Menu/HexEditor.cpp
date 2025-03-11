@@ -338,12 +338,9 @@ namespace CTRPluginFramework
 
     void    HexEditor::_CreateCheat(void)
     {
-        if (!Preferences::Settings.AllowActionReplay)
-            return;
-
         if (_ctx._flags & InvalidSrc)
         {
-            MessageBox(Color::Orange << "Error", "Invalid address, abort")();
+            MessageBox("Error", "Invalid address, aborting.")();
             return;
         }
 
@@ -392,11 +389,11 @@ namespace CTRPluginFramework
     {
         if (_history.empty())
         {
-            MessageBox(Color::Orange << "Error", "History is empty")();
+            MessageBox("Error", "History is empty.")();
             return;
         }
 
-        Keyboard    keyboard;
+        Keyboard keyboard("", "");
         std::vector<std::string> addresses;
 
         for (u32 v : _history)
@@ -498,28 +495,28 @@ namespace CTRPluginFramework
     {
         static const char *msg[2] = {"Enter the address to jump to:", "Enter the offset to jump to:"};
 
-        Keyboard    keyboard;
+        Keyboard keyboard("", "");
 
-        const Color     &bgMain = Preferences::Settings.BackgroundMainColor;
-        const Color     &bgSecondary = Preferences::Settings.BackgroundSecondaryColor;
-        const Color     &skyblue = Color::SkyBlue;
-        static IntRect  background(93, 95, 213, 50);
-
-        Renderer::SetTarget(TOP);
-
-        // Draw "window" background
-        Renderer::DrawRect2(background, bgMain, bgSecondary);
+        const Color &bgMain = Preferences::Settings.BackgroundMainColor;
+        const Color &bgSecondary = Preferences::Settings.BackgroundSecondaryColor;
+        static IntRect background(93, 95, 213, 50);
 
         int posY = 115;
-        Renderer::DrawString(msg[mode], 98, posY, skyblue);
+
+        // Draw "window" background
+        Renderer::SetTarget(TOP);
+        Renderer::DrawRect2(background, bgMain, bgSecondary);
+        Renderer::DrawRect(background, Color::Gainsboro, false);
+        Renderer::DrawString(msg[mode], 103, posY, Color::Gainsboro);
 
         // We write to second framebuffer too because of keyboard below
         Renderer::EndFrame();
+        posY = 115;
 
         Renderer::SetTarget(TOP);
         Renderer::DrawRect2(background, bgMain, bgSecondary);
-        posY = 115;
-        Renderer::DrawString(msg[mode], 98, posY, skyblue);
+        Renderer::DrawRect(background, Color::Gainsboro, false);
+        Renderer::DrawString(msg[mode], 103, posY, Color::Gainsboro);
 
         keyboard.DisplayTopScreen = false;
 
@@ -557,7 +554,7 @@ namespace CTRPluginFramework
             address = _GetSelectedItem().value32;
 
             if (!(MessageBox("Confirm",
-                Utils::Format("Do you want to jump to: 0x%08X ?", address), DialogType::DialogYesNo))())
+                Utils::Format("Do you want to jump to: 0x%08X?", address), DialogType::DialogYesNo))())
                 return;
         }
         else

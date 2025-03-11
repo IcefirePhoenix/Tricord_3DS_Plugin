@@ -1,0 +1,8 @@
+#ifndef TID_H
+#define TID_H
+
+#define TID_USA 0x0004000000176F00
+#define TID_EUR 0x0004000000177000
+#define TID_JPN 0x0004000000176E00
+
+#endif

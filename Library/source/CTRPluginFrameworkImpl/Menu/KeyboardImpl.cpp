@@ -79,7 +79,7 @@ namespace CTRPluginFramework
         DisplayTopScreen = true;
     }
 
-    KeyboardImpl::KeyboardImpl(const std::string &text, const std::string &title)
+    KeyboardImpl::KeyboardImpl(const std::string &title, const std::string &text)
     {
         _owner = nullptr;
 
@@ -128,7 +128,7 @@ namespace CTRPluginFramework
         DisplayTopScreen = true;
     }
 
-    KeyboardImpl::KeyboardImpl(Keyboard *kb, const std::string &text, const std::string &title)
+    KeyboardImpl::KeyboardImpl(Keyboard *kb, const std::string &title, const std::string &text)
     {
         _owner = kb;
 
@@ -360,7 +360,8 @@ namespace CTRPluginFramework
         _scrollSize = 0;
         _inertialVelocity = 0;
 
-        IntRect box(60, posY, 200, 30);
+        // note: selection menu are NOT combo box objects
+        IntRect box(35, posY, 250, 30);
         int i = 0;
         for (const std::string &str : input)
         {

@@ -124,6 +124,10 @@ namespace CTRPluginFramework
 
         if (Note2.empty() || HasNoteChanged())
             Note2 = note + "\n\n" + _owner->Hotkeys.ToString();
+
+        if (!Note2.empty() && Note2.back() == '\n')
+            Note2.pop_back();
+
         return (Note2);
     }
 

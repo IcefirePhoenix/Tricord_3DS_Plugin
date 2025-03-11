@@ -39,7 +39,7 @@ namespace CTRPluginFramework
 
         if (!buffer)
         {
-            (MessageBox(Color::Red << "Error", "An error occured (buffer alloc failed)"))();
+            (MessageBox(Color::Red << "Error", "Buffer alloc failed."))();
             return (true);
         }
 
@@ -130,8 +130,7 @@ namespace CTRPluginFramework
         g_progressLoop = false;
         progressTask.Wait();
 
-        // A little message
-        MessageBox(Color::LimeGreen << "Info", "Dump finished !")();
+        MessageBox("Success", "RAM dump has been completed.")();
 
         _file.Flush();
         _file.Close();
@@ -167,24 +166,27 @@ namespace CTRPluginFramework
 
     bool    GatewayRAMDumper::_SelectRegion(void)
     {
-        Menu            menu("Gateway RAM Dumper", "Select the region(s) to dump.\n\n" \
-                                                    "Key:\n" \
-                                                    "    " FONT_A ": (De)Select the current region\n" \
-                                                    "    Select: (De)Select all regions\n" \
-                                                    "    Start: Start the dump");
-        Event           event;
-        EventManager    manager(EventManager::EventGroups::GROUP_KEYS);
-        bool            exit = false;
-        bool            select = false;
+        Menu menu("Gateway RAM Dumper");
+        Event event;
+        EventManager manager(EventManager::EventGroups::GROUP_KEYS);
+        bool exit = false;
+        bool select = false;
+
+        std::string footer = "\n\n\n\n" + std::string(FONT_A) + ": Select the current region\n" +
+                             std::string(FONT_B) + ": Quit\n\nSelect: Select all regions\nStart: Start the dump";
 
         menu.drawFooter = true;
 
-        // Construct our menu with the regions list
+        // get mem regions
+        Renderer::SetTarget(TOP);
         for (Region &region : _regions)
         {
             std::string &&name = Utils::Format("%08X - %08X", region.startAddress, region.endAddress);
             menu.Append(new MenuEntryImpl(name));
         }
+
+        MenuFolderImpl &folder = *menu.GetFolder();
+        folder.note = footer;
 
         again:
         do
@@ -193,12 +195,15 @@ namespace CTRPluginFramework
             {
                 if (event.type == Event::KeyPressed)
                 {
-                    if (event.key.code == Key::Start)
+                    if (event.key.code == Key::B)
+                    {
+                        if (MessageBox("Confirmation", "Are you sure you want to quit?", DialogType::DialogYesNo)())
+                            return true;
+                    }
+                    else if (event.key.code == Key::Start)
                         exit = true;
                     else if (event.key.code == Key::Select)
                     {
-                        MenuFolderImpl &folder = *menu.GetFolder();
-
                         if (!select)
                         {
                             for (u32 i = 0; i < folder.ItemsCount(); i++)
@@ -218,19 +223,17 @@ namespace CTRPluginFramework
 
             menu.Draw();
             Renderer::EndFrame();
-        } while (!exit);
+        }
+        while (!exit);
 
         if (HowManyAreSelected(*menu.GetFolder()) == 0)
         {
             exit = false;
-            if (!(MessageBox("Do you want to abort ?", DialogType::DialogYesNo)()))
+            if (MessageBox("Error", "Cannot start RAM dump as no regions are currently selected.", DialogType::DialogOk)())
                 goto again;
-            return (true);
         }
 
         // Remove every entry not checked from the regions list
-        MenuFolderImpl &folder = *menu.GetFolder();
-
         for (int i = folder.ItemsCount() - 1; i >= 0; i--)
         {
             if (!folder[i]->AsMenuEntryImpl().IsActivated())
@@ -250,21 +253,19 @@ namespace CTRPluginFramework
 
         strftime(buffer, 100, "%x-%X", timeinfo);
 
-        std::string     timeString(buffer);
+        std::string timeString(buffer);
 
         timeString.erase(std::remove(timeString.begin(), timeString.end(), '/'), timeString.end());
         timeString.erase(std::remove(timeString.begin(), timeString.end(), ':'), timeString.end());
 
-        MessageBox      msgBox("Do you want to name the file ?", DialogType::DialogYesNo);
+        MessageBox msgBox("New RAM Dump", "Would you like to name the RAM dump?", DialogType::DialogYesNo);
 
         if (msgBox())
         {
             // Custom name
-            Keyboard    keyboard;
+            Keyboard keyboard("New RAM Dump", "Input a new name for this RAM dump.");
 
-            keyboard.DisplayTopScreen = false;
-            //keyboard.CanAbort(false);
-
+            keyboard.DisplayTopScreen = true;
             if (keyboard.Open(_fileName) == -1)
                 return;
         }
@@ -289,7 +290,7 @@ namespace CTRPluginFramework
 
         // Open file
         if (File::Open(_file, path, File::READ | File::WRITE | File::CREATE))
-            MessageBox("Error\n\nCouldn't create: \n" + path)();
+            MessageBox("Error", "Couldn't create file: \n" + path)();
     }
 
 #define REGION_INFOS_LENGTH (sizeof(u32) * 3)
@@ -332,10 +333,10 @@ namespace CTRPluginFramework
 
     void    GatewayRAMDumper::_DrawProgress()
     {
-        const Color     &gainsboro = Color::Gainsboro;
-        const Color     &limegreen = Color::LimeGreen;
+        const Color &gainsboro = Color::Gainsboro;
+        const Color &limegreen = Color::LimeGreen;
 
-        static ProcessingLogo   logo;
+        static ProcessingLogo logo;
 
         Renderer::SetTarget(TOP);
 
@@ -360,9 +361,7 @@ namespace CTRPluginFramework
         Renderer::DrawRect(progBarFill, limegreen);
 
         Renderer::SetTarget(BOTTOM);
-
         Window::BottomWindow.Draw();
-
         Renderer::EndFrame();
     }
 }

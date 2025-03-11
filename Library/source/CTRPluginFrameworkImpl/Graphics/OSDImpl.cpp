@@ -44,7 +44,6 @@ namespace CTRPluginFramework
 
     bool        OSDImpl::IsFramePaused = false;
     bool        OSDImpl::NeedToPauseFrame = false;
-    bool        OSDImpl::WritesToPrevFB = false;
     LightEvent  OSDImpl::OnNewFrameEvent;
     LightEvent  OSDImpl::OnFramePaused;
     LightEvent  OSDImpl::OnFrameResume;
@@ -98,23 +97,6 @@ namespace CTRPluginFramework
         LightEvent_Init(&OnFramePaused, RESET_STICKY);
         LightEvent_Init(&OnFrameResume, RESET_STICKY);
         IsFramePaused = false;
-
-        const u64 titlesNeedWritePrevFB[] =
-        {
-            0x0004000000101200ULL, // Puyo Puyo Tetris
-            0x0004000000197500ULL, // Puyo Puyo Chronicle
-            0x0004000000056600ULL, // Puyo Puyo!! 20th Anniversary
-        };
-        u64 titleID = Process::GetTitleID();
-
-        for (u32 i = 0; i < sizeof(titlesNeedWritePrevFB) / sizeof(u64); i++)
-        {
-            if (titleID == titlesNeedWritePrevFB[i])
-            {
-                WritesToPrevFB = true;
-                break;
-            }
-        }
 
         InstallOSD();
     }
@@ -309,8 +291,6 @@ namespace CTRPluginFramework
     {
         if (SystemImpl::Status())
             return;
-        // TODO: fully remove this, rosalina implements it now
-        // Preferences::ApplyBacklight();
 
         bool drawFps = (Preferences::IsEnabled(Preferences::ShowBottomFps) && isBottom) || (Preferences::IsEnabled(Preferences::ShowTopFps) && !isBottom);
         if (drawFps) g_fpsCounter[isBottom].Update();
@@ -319,36 +299,13 @@ namespace CTRPluginFramework
         if (Screenshot::OSDCallback(isBottom, addr, addrB, stride, format))
             return;
 
-        /*if (!drawFps && !DrawSaveIcon && !MessColors
-            && Callbacks.empty() && Notifications.empty())
-            return; */
-
         // Convert to actual addresses and check validity
-        if (WritesToPrevFB)
-        {
-            // TO DO: This is a very hacky fix! Research why this actually happens
-            // From my research, looks like puyo puyo games either re-render
-            // or do some post-processing to the FB after CTRPF writes to them,
-            // which causes the changes to be overwritten.
-            // As a hacky solution, we actually draw to the FB that's currently
-            // being displayed. This causes some artifacts such as flickering
-            // but is better than nothing. /shrug
-            previousFBAddr[isBottom][swap ? 1 : 0][0] = addr;
-            previousFBAddr[isBottom][swap ? 1 : 0][1] = addrB;
-
-            addr = previousFBAddr[isBottom][swap ? 0 : 1][0];
-            addrB = previousFBAddr[isBottom][swap ? 0 : 1][1];
-        }
         addr = (void*)GetBuffer((u32)addr);
         if (!isBottom)
             addrB = (void*)GetBuffer((u32)addrB);
 
         if (!addr)
             return;
-
-        // TODO: remove
-        // if (MessColors)
-        //    MessColor((u32)addr, stride, format);
 
         if (!isBottom)
         {
@@ -604,89 +561,4 @@ namespace CTRPluginFramework
 
         OSDImpl::OSDHook.InitializeForMitm(found, u32(OSDImpl::MainCallback)).Enable();
     }
-
-    /*static void    MessColor(u32 startAddr, u32 stride, u32 format)
-    {
-        //u32 endBuffer = startAddr + (stride * 400);
-        u32 bpp = GetBPP((GSPGPU_FramebufferFormat)format);
-
-        PrivColor::SetFormat((GSPGPU_FramebufferFormat)format);
-
-        if (bpp == 4)
-        {
-
-            for (int x = 0; x < 400; ++x)
-            {
-                u32 *fb = (u32 *)(startAddr + stride * x);
-                u32 fbend = (u32)fb + 240 * 4;
-
-                while (fb < (u32 *)fbend)
-                {
-                    u32 c = *fb;
-
-                    //color.a = 255;
-                    u8 b = (c >> 16); //Swap R
-                                      //u8 g = (c >> 8);
-                    u8 r = c; //Swap b
-
-                              //color.Fade(0.1f);
-
-                    c &= 0xFF00FF00;
-                    c |= r << 16;
-                    c |= b;
-
-                    *fb++ = c;
-                }
-            }
-        }
-
-        else if (bpp == 3)
-        {
-            for (int x = 0; x < 400; ++x)
-            {
-                u32 *fb = (u32 *)(startAddr + stride * x);
-                u32 fbend = (u32)fb + 240 * 3;
-
-                while (fb < (u32 *)fbend)
-                {
-                    u32 c = *fb;
-
-                    u8 b = (c >> 16); //Swap R
-                    u8 g = (c >> 8);
-                    u8 r = c; //Swap b
-
-                    c &= 0xFF000000;
-                    c |= r << 16;
-                    c |= g << 8;
-                    c |= b;
-
-                    *fb = c;
-                    fb = (u32 *)((u32)fb + 3);
-                }
-            }
-        }
-        else if (bpp == 2)
-        {
-            for (int x = 0; x < 400; ++x)
-            {
-                u16 *fb = (u16 *)(startAddr + stride * x);
-                u16 *fbEnd = fb + 240;
-
-                while (fb < fbEnd)
-                {
-                    u16 c = *fb;
-
-                    u8 b = (c >> 8) & 0xF8; //Swap R
-                    u8 g = (c >> 3) & 0xFC;
-                    u8 r = (c << 3) & 0xF8; //Swap b
-
-                    c = (r & 0xF8) << 8;
-                    c |= (g & 0xFC) << 3;
-                    c |= (b & 0xF8) >> 3;
-
-                    *fb++ = c;
-                }
-            }
-        }
-    }*/
 }

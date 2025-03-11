@@ -25,7 +25,7 @@ namespace CTRPluginFramework
     u32         Screenshot::Hotkeys = Key::Start;
     u32         Screenshot::Screens = SCREENSHOT_BOTH;
     Time        Screenshot::Timer;
-    std::string Screenshot::Path;// = "/Screenshots";
+    std::string Screenshot::Path;
     std::string Screenshot::Prefix;
     Screenshot::ImageBuffer* Screenshot::ImgBuffer = nullptr;
     Screenshot::OnScreenshotCallback Screenshot::ScreenshotCallback = nullptr;

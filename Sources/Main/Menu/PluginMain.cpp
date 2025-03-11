@@ -92,7 +92,7 @@ namespace CTRPluginFramework
 
     int main(void)
     {
-        std::string title = "An advanced utility plugin made for\nThe Legend of Zelda: Tri Force Heroes packed with QoL features, solo and online-compatible cheats, and customizable gameplay options.\n\nForked from the original CTRPluginFramework\nrepository.";
+        std::string title = "An advanced utility plugin made for The Legend of Zelda: Tri Force Heroes packed with QoL features, solo and online-compatible cheats, and customizable gameplay options.\n\nForked from the original CTRPluginFramework\nrepository.";
         PluginMenu *menu = new PluginMenu("Tricord", 0, 5, 0, title); // TODO: change to actual tags
 
         InitSequence(FwkSettings::Get());

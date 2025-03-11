@@ -8,6 +8,7 @@
 #include "CTRPluginFrameworkImpl/System/Services/Gsp.hpp"
 #include "CTRPluginFrameworkImpl/Sound.hpp"
 #include "csvc.h"
+#include "TID.h"
 #include "plgldr.h"
 
 #define PA_PTR(addr)            (void *)((u32)(addr) | 1 << 31)
@@ -236,8 +237,6 @@ namespace CTRPluginFramework
         FwkSettings& settings = FwkSettings::Get();
 
         settings.ThreadPriority = 0x30;
-        settings.AllowActionReplay = true;
-        settings.AllowSearchEngine = true;
         settings.WaitTimeToBoot = Seconds(5.f);
         settings.AreN3DSButtonsAvailable = true;
         settings.TryLoadSDSounds = false;
@@ -375,10 +374,12 @@ namespace CTRPluginFramework
                 if (event == PLG_SLEEP_ENTRY || event == PLG_HOME_ENTER)
                 {
                     ProcessImpl::UserProcessEventCallback(event == PLG_SLEEP_ENTRY ? Process::Event::SLEEP_ENTER : Process::Event::HOME_ENTER);
-                    if (!isSleeping) {
+                    if (!isSleeping)
+                    {
                         SystemImpl::AptStatus |= BIT(6);
                         SoundEngineImpl::NotifyAptEvent(event == PLG_SLEEP_ENTRY ? APT_HookType::APTHOOK_ONSLEEP : APT_HookType::APTHOOK_ONSUSPEND);
-                        if (ncsndInitialised) {
+                        if (ncsndInitialised)
+                        {
                             ncsndInitialised = false;
                             ncsndExit();
                         }
@@ -389,9 +390,11 @@ namespace CTRPluginFramework
                 else if (event == PLG_SLEEP_EXIT || event == PLG_HOME_EXIT)
                 {
                     ProcessImpl::UserProcessEventCallback(event == PLG_SLEEP_EXIT ? Process::Event::SLEEP_EXIT : Process::Event::HOME_EXIT);
-                    if (isSleeping) {
+                    if (isSleeping)
+                    {
                         SystemImpl::WakeUpFromSleep();
-                        if (!ncsndInitialised) {
+                        if (!ncsndInitialised)
+                        {
                             ncsndInitialised = true;
                             ncsndInit(false);
                         }
@@ -407,7 +410,8 @@ namespace CTRPluginFramework
                     SoundEngineImpl::NotifyAptEvent(APT_HookType::APTHOOK_ONSUSPEND);
 
                     // Close csnd as it may be needed by other processes (4 sessions max.)
-                    if (ncsndInitialised) {
+                    if (ncsndInitialised)
+                    {
                         ncsndInitialised = false;
                         ncsndExit();
                     }
@@ -428,7 +432,8 @@ namespace CTRPluginFramework
                     HookManager::Unlock();
 
                     // Init csnd again.
-                    if (!ncsndInitialised) {
+                    if (!ncsndInitialised)
+                    {
                         ncsndInitialised = true;
                         ncsndInit(false);
                     }
@@ -493,6 +498,10 @@ namespace CTRPluginFramework
     // Initialize most subsystem / Global variables
     void    Initialize(void)
     {
+        const char *mainPath = "/Tricord";
+        if (!Directory::IsExists(mainPath))
+            Directory::Create(mainPath);
+
         // Init sysfont
         Font::Initialize();
         {
@@ -514,19 +523,31 @@ namespace CTRPluginFramework
                 File::Create(cheatPath);
         }
 
-        // If /Screenshots/ doesn't exists, create it
-        const char* dirpath = "/Screenshots";
-        if (!Directory::IsExists(dirpath))
-            Directory::Create(dirpath);
-
         // Set default screenshot path
-        Screenshot::Path = dirpath;
-        Screenshot::Path.append("/");
+        std::string dirPath = "/Tricord/Screenshots";
+        if (!Directory::IsExists(dirPath))
+            Directory::Create(dirPath);
+
+        switch (Process::GetTitleID())
+        {
+            case TID_USA:
+                dirPath.append("/NA/");
+                break;
+            case TID_EUR:
+                dirPath.append("/NA/");
+                break;
+            case TID_JPN:
+                dirPath.append("/JP/");
+                break;
+        }
+
+        if (!Directory::IsExists(dirPath))
+            Directory::Create(dirPath);
+
+        Screenshot::Path = dirPath;
 
         // Set default screenshot prefix
-        Screenshot::Prefix = "[";
-        Process::GetName(Screenshot::Prefix);
-        Screenshot::Prefix += Utils::Format(" - %08X] - Screenshot", (u32)Process::GetTitleID());
+        Screenshot::Prefix = "Screenshot";
         Screenshot::Initialize();
     }
 

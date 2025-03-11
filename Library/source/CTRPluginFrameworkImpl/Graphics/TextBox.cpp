@@ -237,11 +237,9 @@ namespace CTRPluginFramework
 
         int  max = std::min((int)(_currentLine + _maxLines), (int)(_newline.size() - 1));
 
-        FwkSettings     &settings = Preferences::Settings;
-        //const Color     &titleColor = settings.WindowTitleColor;
-        const Color     &textColor = settings.MainTextColor;
-        const Color     &blank = Color::White;
-
+        FwkSettings &settings = Preferences::Settings;
+        const Color &textColor = settings.MainTextColor;
+        const Color &blank = Color::White;
 
         if (_drawBox)
         {
@@ -249,9 +247,7 @@ namespace CTRPluginFramework
             Renderer::DrawRect(_border, settings.BackgroundBorderColor, false);
         }
 
-        //Window::TopWindow.Draw(_title);
-
-        int posX = _box.leftTop.x + 5;
+        int posX = _box.leftTop.x + 10;
         int posY = _box.leftTop.y + 5;
         int xLimit = posX + _box.size.x - 10;
 
@@ -264,10 +260,10 @@ namespace CTRPluginFramework
             if (posX + length > xLimit)
                 length = xLimit - posX;
             Renderer::DrawLine(posX, posY, length, blank);
-            posY += 7;
+            posY += 12;
         }
         else
-            posY += 5;
+            posY += 10;
 
         // Draw Text
         RendererPriv::g_customColor = textColor;
@@ -280,8 +276,8 @@ namespace CTRPluginFramework
             return;
 
         // Draw scroll bar
-        const Color  &dimGrey = Color::DimGrey;
-        const Color  &silver = Color::Silver;
+        const Color &dimGrey = Color::DimGrey;
+        const Color &silver = Color::Silver;
 
         // Background
         posX = _box.leftTop.x + _box.size.x - 8;

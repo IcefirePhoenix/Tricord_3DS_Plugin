@@ -7,21 +7,23 @@
 #include "CTRPluginFramework/System/Directory.hpp"
 #include "CTRPluginFramework/Utils.hpp"
 
+#include "TID.h"
 #include "Unicode.h"
 #include "csvc.h"
 #include "qrcodegen.hpp"
 #include <3ds.h>
 #include <cstring>
+#include <cstdlib>
 #include <string>
 #include <vector>
 
 namespace CTRPluginFramework
 {
+    std::string inviteURL = std::string("discord.gg/") + INVITE;
+    std::string exceptionData = "";
     bool savedToSD = false;
     bool showRegisters = false;
     bool showInviteLink = false;
-    std::string invite = "P6csr4jc5U";
-    std::string exceptionData = "";
 
     // Updates exception handler state based on button events
     Process::ExceptionCallbackState ExceptionHandler::getExceptionEventState(void)
@@ -100,7 +102,7 @@ namespace CTRPluginFramework
 
         // implicit concat works here...
         const unsigned char intro[] = "Oh no! An exception\nhas occurred :(";
-        const unsigned char QR_caption[] = "TFH Modding Discord Server";
+        const unsigned char QR_caption[] = "TFH Modding Discord";
         const unsigned char optionA[] = FONT_A ": Reboot";
         const unsigned char optionB[] = FONT_B ": Display register\ndetails below";
         const unsigned char optionBAlt[] = FONT_B ": Hide register\ndetails";
@@ -108,19 +110,19 @@ namespace CTRPluginFramework
         const unsigned char optionXAlt[] = FONT_X ": Crash log has been\nsaved to SD card";
         const unsigned char optionY[] = FONT_Y ": Show TFH Modding\nDiscord Server invite\nlink";
         const unsigned char optionYAlt[] = FONT_Y ": Display log help\ninfo";
-        const unsigned char captionA[] = "Need support assistance? Save the crash\nlog to your SD card and post it as an\nattachment in the TFH Modding Server.\n\nDon’t forget to describe what happened\nand tag @Tricord Team for help! The log\nfile can be found under:\n\nTricord/Logs/[NA/EU/JP]";
-        const unsigned char captionB[] = "Need to join the server? The QR invite\nlink is above!\n\nIf you'd prefer to type out the invite link\nyourself, here it is:";
+        const unsigned char captionA[] = "Need support assistance? Save the crash\nlog to your SD card and post it as an\nattachment under the #bug-reports\nchannel in the TFH Modding Server.\n\nDon’t forget to describe what happened\nand tag @Tricord Team for help! The log\nfile can be found under:\n\nTricord/Logs/[NA/EU/JP]";
+        const unsigned char captionB[] = "Need to join the server? The QR invite\nlink is above!\n\nIf you'd prefer to type out the invite link\nyourself, here it is:\n";
 
         exceptionData = generalInfo + registerInfo + getEnabledEntries();
 
         // background and QR
         Renderer::SetTarget(TOP);
         topScreen.DrawRect(15, 10, 370, 220, Color::Magenta);
-        topScreen.DrawRect(19, 14, 360, 210, Color::Gainsboro, false);
+        topScreen.DrawRect(20, 15, 360, 210, Color::Gainsboro, false);
         bottomScreen.DrawRect(15, 20, 290, 205, Color::Magenta);
-        bottomScreen.DrawRect(19, 24, 280, 195, Color::Gainsboro, false);
+        bottomScreen.DrawRect(20, 25, 280, 195, Color::Gainsboro, false);
 
-        drawInviteQR(topScreen, 175, 15, qrcodegen::QrCode::encodeText((("https://discord.com/invite/" + invite).c_str()), qrcodegen::QrCode::Ecc::MEDIUM));
+        drawInviteQR(topScreen, 175, 15, qrcodegen::QrCode::encodeText(((std::string("https://discord.com/invite/") + INVITE).c_str()), qrcodegen::QrCode::Ecc::MEDIUM));
 
         // begin drawing text fields...
         Renderer::DrawSysStringReturn(intro, 220, posYIntro, 380, Color::Gainsboro);
@@ -131,7 +133,7 @@ namespace CTRPluginFramework
         {
             Renderer::DrawSysStringReturn(optionBAlt, 220, posYOptions, 380, Color::Gainsboro);
             Renderer::SetTarget(BOTTOM);
-            Renderer::DrawSysStringReturn((const u8 *)registerInfo.c_str(), 25, posYCaption, 400, Color::Gainsboro);
+            Renderer::DrawSysStringReturn((const u8 *)registerInfo.c_str(), 35, posYCaption, 400, Color::Gainsboro);
         }
         else
         {
@@ -145,7 +147,7 @@ namespace CTRPluginFramework
             {
                 Renderer::SetTarget(BOTTOM);
                 Renderer::DrawSysStringReturn(captionB, 25, posYCaption, 400, Color::Gainsboro);
-                Renderer::DrawSysStringReturn((const u8 *)("\ndiscord.gg/" + invite).c_str(), 25, posYCaption, 400, Color::Gainsboro);
+                Renderer::DrawSysStringReturn((const u8 *)inviteURL.c_str(), 25, posYCaption, 400, Color::Gainsboro);
             }
         }
 
@@ -161,7 +163,7 @@ namespace CTRPluginFramework
         else
             Renderer::DrawSysStringReturn(optionYAlt, 220, posYOptions, 380, Color::Gainsboro);
 
-        Renderer::DrawSysStringReturn(QR_caption, 28, posYLabel, 380, Color::Gainsboro);
+        Renderer::DrawSysStringReturn(QR_caption, 50, posYLabel, 380, Color::Gainsboro);
 
         OSD::SwapBuffers();
     }
@@ -276,13 +278,13 @@ namespace CTRPluginFramework
         // build path to log file...
         switch (Process::GetTitleID())
         {
-            case 0x0004000000176F00:
+            case TID_USA:
                 logPath.append("NA/");
                 break;
-            case 0x0004000000177000:
+            case TID_EUR:
                 logPath.append("EU/");
                 break;
-            case 0x0004000000176E00:
+            case TID_JPN:
                 logPath.append("JP/");
                 break;
         }

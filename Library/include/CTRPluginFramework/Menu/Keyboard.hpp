@@ -58,10 +58,8 @@ namespace CTRPluginFramework
          * \brief Keyboard constructor
          * \param text  The message to display on the top screen if displayed
          */
-        Keyboard(const std::string &text = "");
-        Keyboard(const std::string &text, const std::string &title);
-        Keyboard(const std::string &text, const std::vector<std::string> &options, const std::string &title = "");
-        Keyboard(const std::vector<std::string> &options);
+        Keyboard(const std::string &title, const std::string &text);
+        Keyboard(const std::string &title, const std::string &text, const std::vector<std::string> &options);
         ~Keyboard(void);
 
         /**
@@ -299,6 +297,12 @@ namespace CTRPluginFramework
         * \return A reference to the top screen's message string
         */
         std::string     &GetMessage(void) const;
+
+        /**
+        * \brief Get a reference to the top screen's title string
+        * \return A reference to the top screen's title string
+        */
+        std::string     &GetTitle(void) const;
 
         /**
          * \brief This property define if the top screen must be displayed or not \n

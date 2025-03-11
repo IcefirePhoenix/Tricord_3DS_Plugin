@@ -1,14 +1,15 @@
-#include <fstream>
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuActionReplay.hpp"
-#include "CTRPluginFrameworkImpl/Menu/PluginMenuExecuteLoop.hpp"
-#include "CTRPluginFrameworkImpl/ActionReplay/ARCode.hpp"
-#include "CTRPluginFrameworkImpl/ActionReplay/MenuEntryActionReplay.hpp"
-#include "CTRPluginFramework/Utils.hpp"
-#include "CTRPluginFramework/Menu/Keyboard.hpp"
-#include "CTRPluginFrameworkImpl/ActionReplay/ARCodeEditor.hpp"
-#include "CTRPluginFramework/Menu/MessageBox.hpp"
-#include "CTRPluginFrameworkImpl.hpp"
 #include "CTRPluginFramework.hpp"
+#include "CTRPluginFramework/Menu/Keyboard.hpp"
+#include "CTRPluginFramework/Menu/MessageBox.hpp"
+#include "CTRPluginFramework/Utils.hpp"
+#include "CTRPluginFrameworkImpl.hpp"
+#include "CTRPluginFrameworkImpl/ActionReplay/ARCode.hpp"
+#include "CTRPluginFrameworkImpl/ActionReplay/ARCodeEditor.hpp"
+#include "CTRPluginFrameworkImpl/ActionReplay/MenuEntryActionReplay.hpp"
+#include "CTRPluginFrameworkImpl/Menu/PluginMenuExecuteLoop.hpp"
+#include "TID.h"
+#include <fstream>
 
 namespace CTRPluginFramework
 {
@@ -271,9 +272,9 @@ namespace CTRPluginFramework
         _openFileBtn.Update(touchIsDown, touchPos);
     }
 
-    static bool ActionReplay_GetInput(std::string &ret)
+    static bool ActionReplay_GetInput(std::string title, std::string content, std::string &ret)
     {
-        Keyboard    keyboard;
+        Keyboard keyboard(title, content);
 
         /*keyboard.SetCompareCallback([](const void *in, std::string &error)
         {
@@ -289,9 +290,9 @@ namespace CTRPluginFramework
 
     void    PluginMenuActionReplay::_EditorBtn_OnClick(void)
     {
-        MenuItem    *item = _topMenu.GetSelectedItem();
-        Keyboard   optKbd;
-        std::vector<std::string>    options = { "Name", "Note" };
+        MenuItem *item = _topMenu.GetSelectedItem();
+        Keyboard optKbd("", "");
+        std::vector<std::string> options = { "Name", "Note" };
 
         if (!item)
             return;
@@ -299,18 +300,20 @@ namespace CTRPluginFramework
             options.push_back("Code");
 
         optKbd.Populate(options);
+        optKbd.DisplayTopScreen = false;
+
         int choice = optKbd.Open();
         if (choice >= 0)
         {
             // Name edition
             if (choice == 0)
             {
-                ActionReplay_GetInput(item->name);
+                ActionReplay_GetInput("Input", "Enter a name.", item->name);
             }
             // Note edition
             else if (choice == 1)
             {
-                ActionReplay_GetInput(item->note);
+                ActionReplay_GetInput("Input", "Enter a note description.", item->note);
                 ActionReplay_ProcessString(item->note);
             }
             // Code edition
@@ -330,8 +333,8 @@ namespace CTRPluginFramework
 
     void    PluginMenuActionReplay::_NewBtn_OnClick(void)
     {
-        Keyboard        kbd("", {"Code", "Folder"}, "");
-        MenuFolderImpl  *f = __pmARinstance->_topMenu.GetRootFolder();
+        Keyboard kbd("", "", {"Code", "Folder"});
+        MenuFolderImpl *f = __pmARinstance->_topMenu.GetRootFolder();
 
         if (f == nullptr)
             return;
@@ -343,7 +346,7 @@ namespace CTRPluginFramework
 
         std::string name;
 
-        if (!ActionReplay_GetInput(name))
+        if (!ActionReplay_GetInput("Input", choice ? "Enter a name for the new AR code.": "Enter a name for the new AR folder.", name))
             return;
 
         // Create a new code
@@ -398,7 +401,7 @@ namespace CTRPluginFramework
         if (item == nullptr)
             return;
 
-        if (!(MessageBox(Color::Orange << "Warning", "Do you really want to delete: " << item->name, DialogType::DialogYesNo )()))
+        if (!(MessageBox("Warning", "Do you really want to delete: " << item->name, DialogType::DialogYesNo )()))
             return;
 
         item = _topMenu.Pop();
@@ -412,7 +415,7 @@ namespace CTRPluginFramework
             return;
 
         // Backup current codes
-        if (MessageBox(Color::Orange << "Warning", "Do you want to save all changes to current file?", DialogType::DialogYesNo)())
+        if (MessageBox("Warning", "Do you want to save all changes to the current file before opening a different one?", DialogType::DialogYesNo)())
             SaveCodes();
 
         std::string newPath;
@@ -427,7 +430,7 @@ namespace CTRPluginFramework
 
         if (root->ItemsCount() > 0)
         {
-            if (MessageBox(Color::Orange << "Warning", "Do you want to clear the current code list?", DialogType::DialogYesNo)())
+            if (MessageBox("Warning", "Are you sure you want to clear the current code list?", DialogType::DialogYesNo)())
             {
                 // Ensure we're at the root of the menu
                 __pmARinstance->_topMenu.CloseAll();
@@ -495,13 +498,13 @@ namespace CTRPluginFramework
 
         switch (Process::GetTitleID())
         {
-            case 0x0004000000176F00:
+            case TID_USA:
                 region = "NA";
                 break;
-            case 0x0004000000177000:
+            case TID_EUR:
                 region = "EU";
                 break;
-            case 0x0004000000176E00:
+            case TID_JPN:
                 region = "JP";
                 break;
         }
@@ -549,7 +552,7 @@ namespace CTRPluginFramework
             else
             {
                 // have user choose custom name when creating manual backups from settings menu
-                Keyboard setName("Name your backup file.");
+                Keyboard setName("New AR backup", "Name your backup file.");
                 setName.DisplayTopScreen = true;
                 setName.CanAbort(true);
 
@@ -643,7 +646,7 @@ namespace CTRPluginFramework
 
         std::string name;
 
-        if (!ActionReplay_GetInput(name))
+        if (!ActionReplay_GetInput("Input", "Enter a name for the new AR code.", name))
             return;
 
         MenuEntryActionReplay *ar = new MenuEntryActionReplay(name);

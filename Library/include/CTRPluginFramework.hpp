@@ -6,5 +6,6 @@
 #include "CTRPluginFramework/Sound.hpp"
 #include "CTRPluginFramework/System.hpp"
 #include "CTRPluginFramework/Utils.hpp"
+#include "TID.h"
 
 #endif
