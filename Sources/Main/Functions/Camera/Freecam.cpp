@@ -256,9 +256,7 @@ namespace CTRPluginFramework
 	// Allows the Freecam's hotkeys to be reconfigured
 	void Freecam::editHotkeys(MenuEntry* entry)
 	{
-		Keyboard menu("");
-
-		std::string title;
+		Keyboard menu("Freecam Hotkey Selection Menu", "Choose a Freecam hotkey to edit.\n\nNote: ZL/ZR and C-stick controls are available\nonly on n2/3DS models.");
 		StringVector opts;
 
 		bool isMenuOpen = true;
@@ -266,8 +264,6 @@ namespace CTRPluginFramework
 
 		while (isMenuOpen)
 		{
-			title = "Choose a Freecam hotkey to edit.\n\nNote: ZL/ZR and C-stick controls are available\nonly on n2/3DS models.";
-
 			opts.clear();
 			opts.push_back(std::string("Save and exit"));
 			opts.push_back(std::string("Freecam toggle"));
@@ -286,7 +282,6 @@ namespace CTRPluginFramework
 			opts.push_back(std::string("Counterclockwise Y-rotation"));
 			opts.push_back(std::string("Clockwise Y-rotation"));
 
-			menu.GetMessage() = title;
 			menu.Populate(opts);
 
 			int chose = menu.Open();
@@ -333,20 +328,21 @@ namespace CTRPluginFramework
 	// Allows custom sensitivity levels to be chosen for each hotkey group
 	void Freecam::editSensitivity(MenuEntry* entry)
 	{
-		Keyboard menu("");
+		Keyboard menu("Freecam Sensitivity Selection", "");
 
-		std::string title = "Current Freecam sensitivity levels:\n\n";
+		std::string message = "Current Freecam sensitivity levels:\n\n";
 		StringVector opts;
 
 		bool isMenuOpen = true;
+		menu.DisplayTopScreen = true;
 		menu.CanAbort(false);
 
 		while (isMenuOpen)
 		{
-			title.append("Shift sensitivity: " + std::to_string(shiftSensitivity));
-			title.append("\nHeight sensitivity: " + std::to_string(heightSensitivity));
-			title.append("\nZoom sensitivity: " + std::to_string(zoomSensitivity));
-			title.append("\nRotation sensitivity: " + std::to_string(rotationSensitivity));
+			message.append("Shift sensitivity: " + std::to_string(shiftSensitivity));
+			message.append("\nHeight sensitivity: " + std::to_string(heightSensitivity));
+			message.append("\nZoom sensitivity: " + std::to_string(zoomSensitivity));
+			message.append("\nRotation sensitivity: " + std::to_string(rotationSensitivity));
 
 			// update bottom screen options...
 			opts.clear();
@@ -356,22 +352,22 @@ namespace CTRPluginFramework
 			opts.push_back(std::string("Set rotation sensitivity"));
 			opts.push_back(std::string("Save and exit"));
 
-			menu.GetMessage() = title;
+			menu.GetMessage() = message;
 			menu.Populate(opts);
 
 			switch (menu.Open())
 			{
 				case 0:
-					shiftSensitivity = setSensitivity("Shift Sensitivity Value\n\nRecommended values: [0.05 - 0.30]");
+					shiftSensitivity = setSensitivity("Shift Sensitivity", "Input a new sensitivity value. This value cannot be negative.\n\nRecommended values: [0.05 - 0.30]");
 					break;
 				case 1:
-					heightSensitivity = setSensitivity("Height Sensitivity Value\n\nRecommended values : [0.40 - 1.00] ");
+					heightSensitivity = setSensitivity("Height Sensitivity", "Input a new sensitivity value. This value cannot be negative.\n\nRecommended values : [0.40 - 1.00]");
 					break;
 				case 2:
-					zoomSensitivity = setSensitivity("Zoom Sensitivity Value\n\nRecommended values: [0.02 - 0.04]");
+					zoomSensitivity = setSensitivity("Zoom Sensitivity", "Input a new sensitivity value. This value cannot be negative.\n\nRecommended values: [0.02 - 0.04]");
 					break;
 				case 3:
-					rotationSensitivity = setSensitivity("Rotation Sensitivity Value\n\nRecommended values: [0.10 - 0.50]");
+					rotationSensitivity = setSensitivity("Rotation Sensitivity", "Input a new sensitivity value. This value cannot be negative.\n\nRecommended values: [0.10 - 0.50]");
 					break;
 				default:
 					isMenuOpen = false;
@@ -381,18 +377,18 @@ namespace CTRPluginFramework
 	}
 
 	// Helper function to prompt user for custom sensitivity values
-	float setSensitivity(std::string message)
+	float setSensitivity(std::string title, std::string message)
 	{
 		float result;
 
-		Keyboard sizeKB(message);
+		Keyboard sizeKB(title, message);
 		sizeKB.SetMaxLength(4);
 		sizeKB.CanAbort(true);
 		sizeKB.IsHexadecimal(false);
 		sizeKB.Open(result);
 
 		if (result < 0.0)
-			MessageBox(Color::Gainsboro << "Error", "Sensitivity cannot be negative.")();
+			MessageBox("Error", "Sensitivity cannot be negative.")();
 
 		return result;
 	}

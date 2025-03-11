@@ -94,7 +94,7 @@ namespace CTRPluginFramework
             "Reset changes"
         };
 
-        Keyboard selCamOpt("Select X button's camera function:");
+        Keyboard selCamOpt("Camera Button Behavior", "Select the X button's camera function.");
         selCamOpt.Populate(camOpts);
 
         int choice = selCamOpt.Open();

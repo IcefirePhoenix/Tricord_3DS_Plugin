@@ -30,17 +30,17 @@ namespace CTRPluginFramework
         return static_cast<s64>(_ticks / (TicksPerSecond / 1000000.f));
     }
 
-    std::string Time::GetDate(void) 
+    std::string Time::GetDate(bool addTime)
     {
-        char buffer[9] = { 0 };
+        char buffer[20] = { 0 };
         time_t t = time(NULL);
         struct tm *timeinfo = localtime(&t);
 
-        strftime(buffer, 100, "%x", timeinfo);
+        strftime(buffer, sizeof(buffer), addTime ? "%F_%H.%M" : "%F", timeinfo); // colons not allowed -> auto-truncates string as a side effect
 
         std::string dateStr(buffer);
 
-        std::replace(dateStr.begin(), dateStr.end(), '/', '.'); 
+        std::replace(dateStr.begin(), dateStr.end(), '/', '.');
         return dateStr;
     }
 
@@ -53,17 +53,18 @@ namespace CTRPluginFramework
         };
 
         std::istringstream stream(date);
-        std::string month, day, year;
-        std::getline(stream, month, '.');
-        std::getline(stream, day, '.');
-        std::getline(stream, year);
+        std::string year, month, day;
 
-        std::string monthName = monthMap[month];
+        std::getline(stream, year, '-');
+        std::getline(stream, month, '-');
+        std::getline(stream, day);
+
+        if (monthMap.find(month) == monthMap.end())
+            return "Invalid Date";
 
         std::stringstream formattedDate;
-        formattedDate << std::setw(2) << std::setfill('0') << day << ", 20" << year;
+        formattedDate << monthMap[month] << " " << std::stoi(day) << ", " << year;
 
-        std::string outputDate = monthName + " " + formattedDate.str();
-        return outputDate;
+        return formattedDate.str();
     }
 }

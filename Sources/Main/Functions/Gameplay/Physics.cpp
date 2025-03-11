@@ -72,7 +72,7 @@ namespace CTRPluginFramework
             "Quicksand"
         };
 
-        Keyboard physics("Choose a type of physics:");
+        Keyboard physics("Physics Selection Menu", "Choose a type of physics.");
         physics.Populate(physicsList);
 
         switch (physics.Open())
@@ -247,7 +247,7 @@ namespace CTRPluginFramework
     {
         float chosenSpeed = originalSpeed;
 
-        Keyboard speed("Choose a speed level:");
+        Keyboard speed("Height Adjustment Speed", "Choose a speed level.");
         speed.Populate(speedOptions);
 
         switch (speed.Open())
@@ -270,7 +270,7 @@ namespace CTRPluginFramework
     // Adjust lateral movement speed
     void Gameplay::adjustLateralSpeed(MenuEntry *entry)
     {
-        Keyboard speed("Choose a speed level:");
+        Keyboard speed("Lateral Movement Speed", "Choose a speed level.");
         speed.Populate(speedOptions);
 
         switch (speed.Open())

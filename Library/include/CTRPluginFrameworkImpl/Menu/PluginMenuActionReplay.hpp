@@ -21,10 +21,10 @@ namespace CTRPluginFramework
         // Return true if menu must close
         bool    operator()(EventList &eventList, const Time &delta);
 
-        static void     SaveCodes(void);
-        static void     NewARCode(u8 type, u32 address, u32 value);
-        static void     BackupCodes(bool manualMode);
-        static void     RestoreFromBackup(bool fromAuto, std::string autoDate = "");
+        static void SaveCodes(void);
+        static void NewARCode(u8 type, u32 address, u32 value);
+        static void BackupCodes(bool manualMode);
+        static void RestoreFromBackup(bool fromAutoEmptyDetect, std::string autoDate = "");
 
     private:
         ARCodeEditor    _editor;

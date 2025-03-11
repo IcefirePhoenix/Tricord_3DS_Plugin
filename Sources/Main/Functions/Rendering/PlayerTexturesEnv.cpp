@@ -20,7 +20,7 @@ namespace CTRPluginFramework
         std::string linkName;
 
         // select player instance...
-        Keyboard chooseLink("Choose which Link's texture to edit:");
+        Keyboard chooseLink("Player Texture Swapper", "Choose which Link's texture to edit.");
         chooseLink.Populate(linkList);
 
         switch (chooseLink.Open())
@@ -46,7 +46,7 @@ namespace CTRPluginFramework
         }
 
         // select target color texture...
-        Keyboard texture("Choose a texture to load for " + linkName + " link:");
+        Keyboard texture("Player Texture Swapper", "Choose a texture to load for " + linkName + " link.");
         texture.Populate(linkList);
         tex = texture.Open();
 
@@ -70,7 +70,7 @@ namespace CTRPluginFramework
             "Coliseum V2"
         };
 
-        Keyboard lsType("Choose an appearance for the single player\nno-challenge loading screen:");
+        Keyboard lsType("Loading Screen Layout Modifier", "Choose an appearance for the single player No Challenge loading screen.");
         lsType.Populate(lsTypeList);
 
         switch (lsType.Open())
@@ -112,7 +112,7 @@ namespace CTRPluginFramework
             "Fierce Deity Armor"
         };
 
-        Keyboard auraType("Select a costume aura, or reset to restore\ncostume checks.");
+        Keyboard auraType("Costume Aura Setter", "Select a costume aura or reset to restore default costume checks.");
         auraType.Populate(auras);
 
         switch (auraType.Open())

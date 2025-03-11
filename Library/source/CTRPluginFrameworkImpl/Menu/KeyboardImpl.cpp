@@ -34,6 +34,7 @@ namespace CTRPluginFramework
     {
         _owner = nullptr;
 
+        _title = "";
         _text = text;
         _error = "";
         _userInput = "";
@@ -78,10 +79,60 @@ namespace CTRPluginFramework
         DisplayTopScreen = true;
     }
 
-    KeyboardImpl::KeyboardImpl(Keyboard* kb, const std::string &text)
+    KeyboardImpl::KeyboardImpl(const std::string &text, const std::string &title)
+    {
+        _owner = nullptr;
+
+        _title = title;
+        _text = text;
+        _error = "";
+        _userInput = "";
+        _canChangeLayout = false;
+        _canAbort = true;
+        _isOpen = false;
+        _userAbort = false;
+        _mustRelease = false;
+        _useCaps = false;
+        _useSymbols = false;
+        _useNintendo = false;
+        _errorMessage = false;
+        _askForExit = false;
+        _isHex = false;
+        _offset = 0.f;
+        _max = 0;
+        _layout = HEXADECIMAL;
+        _cursorPositionInString = 0;
+        _cursorPositionOnScreen = 0;
+        _showCursor = true;
+        _keys = nullptr;
+        _convert = nullptr;
+        _compare = nullptr;
+        _onKeyboardEvent = nullptr;
+
+        _customKeyboard = false;
+        _displayScrollbar = false;
+        _currentPosition = 0;
+        _scrollbarSize = 0;
+        _scrollCursorSize = 10;
+        _scrollPadding = 0.f;
+        _scrollJump = 0.f;
+        _scrollSize = 0.f;
+        _scrollPosition = 0.f;
+        _inertialVelocity = 0.f;
+        _scrollStart = 0.f;
+        _scrollEnd = 0.f;
+
+        _symbolsPage = 0;
+        _nintendoPage = 0;
+
+        DisplayTopScreen = true;
+    }
+
+    KeyboardImpl::KeyboardImpl(Keyboard *kb, const std::string &text, const std::string &title)
     {
         _owner = kb;
 
+        _title = title;
         _text = text;
         _error = "";
         _userInput = "";
@@ -591,7 +642,9 @@ namespace CTRPluginFramework
         Renderer::SetTarget(TOP);
         Window::TopWindow.Draw();
 
-        Renderer::DrawSysStringReturn(reinterpret_cast<const u8 *>(_text.c_str()), posX, posY, maxX, Preferences::Settings.MainTextColor, maxY);
+        TextBox(_title.c_str(), _text.c_str(), background).Draw();
+
+        // Renderer::DrawSysStringReturn(reinterpret_cast<const u8 *>(_text.c_str()), posX, posY, maxX, Preferences::Settings.MainTextColor, maxY);
 
         // IF error
         if (_errorMessage && !_error.empty())
@@ -2196,14 +2249,14 @@ namespace CTRPluginFramework
                 {
                     int tempKey = _displayScrollbar ? _currentPosition : 0;
                     if (!_strKeys[tempKey]->CanUse())
-                        tempKey = 0;
+                        tempKey = (int)_strKeys.size() - 1;
 
                     _ChangeManualKey(tempKey);
                 } else if (key & Key::Up)
                 {
                     int tempKey = _displayScrollbar ? std::min((int)_strKeys.size() - 1, _currentPosition + 5) : _strKeys.size() - 1;
                     if (!_strKeys[tempKey]->CanUse())
-                        tempKey = (int)_strKeys.size() - 1;
+                        tempKey = 1;
 
                     _ChangeManualKey(tempKey);
                 }
@@ -2221,7 +2274,7 @@ namespace CTRPluginFramework
                     } while (tempKey < static_cast<int>(_strKeys.size()) && !_strKeys[tempKey]->CanUse() && tempKey - orig < 4);
 
                     if (tempKey >= static_cast<int>(_strKeys.size()) || tempKey - orig >= 4)
-                        tempKey = orig;
+                        tempKey = 0;
 
                     _ChangeManualKey(tempKey);
                 }
@@ -2235,7 +2288,7 @@ namespace CTRPluginFramework
                     } while (tempKey > 0 && !_strKeys[tempKey]->CanUse() && orig - tempKey < 4);
 
                     if (tempKey < 0 || orig - tempKey >= 4)
-                        tempKey = orig;
+                        tempKey = static_cast<int>(_strKeys.size()) - 1;
 
                     _ChangeManualKey(tempKey);
                 }

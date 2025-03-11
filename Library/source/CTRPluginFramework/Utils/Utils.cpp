@@ -1,11 +1,12 @@
 #include "CTRPluginFramework/Utils/Utils.hpp"
-#include "CTRPluginFramework/Utils/StringExtensions.hpp"
-#include "CTRPluginFramework/System/Directory.hpp"
 #include "CTRPluginFramework/Menu/MessageBox.hpp"
+#include "CTRPluginFramework/System/Directory.hpp"
+#include "CTRPluginFramework/System/Sleep.hpp"
+#include "CTRPluginFramework/Utils/StringExtensions.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/Icon.hpp"
-#include "CTRPluginFrameworkImpl/Menu/MenuFolderImpl.hpp"
-#include "CTRPluginFrameworkImpl/Menu/MenuEntryImpl.hpp"
 #include "CTRPluginFrameworkImpl/Menu/Menu.hpp"
+#include "CTRPluginFrameworkImpl/Menu/MenuEntryImpl.hpp"
+#include "CTRPluginFrameworkImpl/Menu/MenuFolderImpl.hpp"
 #include "CTRPluginFrameworkImpl/Menu/SubMenu.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
 #include "CTRPluginFrameworkImpl/Menu/HexEditor.hpp"
@@ -234,7 +235,10 @@ namespace CTRPluginFramework
         footer += forBackup.empty() ? "" : backupStatus;
         footer_cstr = (u8 *)footer.c_str();
 
-        // Ensure the process is paused
+        // Allow time to init FS Explorer -> required when accessing from boot
+        Sleep(Milliseconds(100));
+
+        // FS access not allowed while process is running
         Process::Pause();
 
         // Use note to store current path

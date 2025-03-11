@@ -27,11 +27,7 @@ namespace CTRPluginFramework
     struct FwkSettings
     {
         // Plugin init options
-        u32     ThreadPriority; ///< Priority for the main thread of the plugin must be within 0x3E - 0x18 | Default: 0x30
-        bool    AllowActionReplay; ///< Enable the Action Replay's handler, if this is set to off, even if the menu allows to create codes, they won't be executed
-        bool    AllowSearchEngine; ///< If false then the search engine won't be available | Default: true
-        Time    WaitTimeToBoot; ///< Time to wait for the plugin to starts (from when the game will starts) | Default: 5 seconds
-        bool    CachedDrawMode; ///< Set to true if your plugin heavily uses OSD to draw to the screen to improve performance (only change it in PatchProcess). | Default: false
+        bool CloseMenuWithB;    ///< Set to true to allow closing the plugin menu if B is pressed in the plugin main menu. | Default: false
 
         // Controller options
         bool    UseGameHidMemory; ///< Set to true to prevent using hidInit and use the game hid memory and capabilities (only change it in PatchProcess). | Default: false

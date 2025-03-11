@@ -59,21 +59,18 @@ namespace CTRPluginFramework
 
     void ManageTFH_Settings(void)
     {
-        // TODO: is there a better way of doing this
-        if (Preferences::IsEnabled(Preferences::PretendoPatch))
+        if (Preferences::IsEnabled(Preferences::QoL_Patch))
+        {
             pretendoOnlinePatchManager->Enable();
-        else
-            pretendoOnlinePatchManager->Disable();
-
-        if (Preferences::IsEnabled(Preferences::DisableMoveOffset))
             rotationOffsetManager->Enable();
-        else
-            rotationOffsetManager->Disable();
-
-        if (Preferences::IsEnabled(Preferences::DoppelStageCostumeReset))
             doppelCostumeStageResetManager->Enable();
+        }
         else
+        {
+            pretendoOnlinePatchManager->Disable();
+            rotationOffsetManager->Disable();
             doppelCostumeStageResetManager->Disable();
+        }
     }
 
     void InitSequence(FwkSettings &settings)
@@ -93,17 +90,10 @@ namespace CTRPluginFramework
         //autoBeamCooldown->Enable(); // why is this enabled here?
     }
 
-    void OnProcessExit(void)
-    {
-        ToggleTouchscreenForceOn();
-        Process::ReturnToHomeMenu(); // force exit to home menu might fix old system crashes...
-    }
-
-    // This function only runs once at plugin startup
     int main(void)
     {
-        std::string title = "An advanced utility plugin made for\nThe Legend of Zelda: Tri Force Heroes packed with QoL features, solo and online-compatible cheats, and customizable gameplay options.\n\nForked from the original CTRPluginFramework\n repository.";
-        PluginMenu *menu = new PluginMenu("Tricord", 0, 5, 0, title); // change to actual tags
+        std::string title = "An advanced utility plugin made for\nThe Legend of Zelda: Tri Force Heroes packed with QoL features, solo and online-compatible cheats, and customizable gameplay options.\n\nForked from the original CTRPluginFramework\nrepository.";
+        PluginMenu *menu = new PluginMenu("Tricord", 0, 5, 0, title); // TODO: change to actual tags
 
         InitSequence(FwkSettings::Get());
 
@@ -113,12 +103,6 @@ namespace CTRPluginFramework
 
         CreateMenu(*menu);
         menu->Run();
-
-        // end of plugin lifetime
-        delete menu;
-        OnProcessExit();
-
-        // should not reach here -> force home menu = NORETURN
         return (0);
     }
 }

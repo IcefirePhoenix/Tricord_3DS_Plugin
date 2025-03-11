@@ -74,6 +74,6 @@ namespace CTRPluginFramework
     void Save::resetMerchant(MenuEntry *entry)
     {
         Process::Write8(AddressList::getAddress("ResetMerchantStock"), 0x0);
-        MessageBox(Color::Gainsboro << "Street Merchant Stall has been re-stocked.")();
+        MessageBox("Success", "Street Merchant Stall has been re-stocked.")();
     }
 }

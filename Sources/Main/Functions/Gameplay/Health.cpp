@@ -14,14 +14,14 @@ namespace CTRPluginFramework
     void Gameplay::maxHealthSet(MenuEntry *entry)
     {
         u8 newMaxHealth;
-        std::string maxHealthIntro = "Maximum heart containers\n\nEnter a positive integer. The number of heart containers can range from 1 to 63, but only up to 18 heart containers can be displayed on the HUD.";
+        std::string maxHealthIntro = "Enter a positive integer. The number of heart containers can range from 1 to 63, but only up to 18 heart containers can be displayed on the HUD.";
 
         if (entry->Name() == "Set maximum heart containers")
         {
-            Keyboard editMaxHealth(maxHealthIntro);
+            Keyboard editMaxHealth("Maximum heart containers", maxHealthIntro);
             editMaxHealth.IsHexadecimal(false);
 
-            if (editMaxHealth.Open(newMaxHealth) == 0)
+            if (editMaxHealth.Open(newMaxHealth, 9) == 0)
             {
                 // bounds limiting...
                 if (newMaxHealth > 63)
@@ -62,7 +62,7 @@ namespace CTRPluginFramework
 
         if (currentHealth < maxHP)
         {
-            if (GeneralHelpers::showMsgKbd("Refill hearts?", DialogType::DialogYesNo))
+            if (GeneralHelpers::showMsgKbd("Update HP Bar", "Refill current HP?", DialogType::DialogYesNo))
                 Process::Write8(AddressList::getAddress("HealthCurrent"), maxHP);
         }
     }

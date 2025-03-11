@@ -117,7 +117,7 @@ namespace CTRPluginFramework
 
         worldSelectionList.insert(worldSelectionList.begin(), "Other");
 
-        Keyboard chooseWorld("Select a world:");
+        Keyboard chooseWorld("World Selection", "Select an option below to get a list of materials available in that world.");
         chooseWorld.Populate(worldSelectionList);
 
         return chooseWorld.Open();
@@ -127,7 +127,7 @@ namespace CTRPluginFramework
     int Material::selectMaterialIndiv(int selectedWorld)
     {
         int materialOffset = 0, chosenMaterial = -1;
-        Keyboard chooseMaterial("Select a material:");
+        Keyboard chooseMaterial("Material Selection", "Select a material.");
 
         switch (selectedWorld)
         {

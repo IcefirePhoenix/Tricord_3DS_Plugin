@@ -2,9 +2,9 @@
 
 namespace CTRPluginFramework
 {
-    bool    GetInput(u8 &input, const std::string &msg, bool useHex)
+    bool GetInput(u8 &input, const std::string &msg, bool useHex)
     {
-        Keyboard    keyboard(msg);
+        Keyboard keyboard("", msg);
 
         if (msg.empty())
             keyboard.DisplayTopScreen = false;
@@ -16,9 +16,9 @@ namespace CTRPluginFramework
         return (false);
     }
 
-    bool    GetInput(u16 &input, const std::string &msg, bool useHex)
+    bool GetInput(u16 &input, const std::string &msg, bool useHex)
     {
-        Keyboard    keyboard(msg);
+        Keyboard keyboard("", msg);
 
         if (msg.empty())
             keyboard.DisplayTopScreen = false;
@@ -30,9 +30,9 @@ namespace CTRPluginFramework
         return (false);
     }
 
-    bool    GetInput(u32 &input, const std::string &msg, bool useHex)
+    bool GetInput(u32 &input, const std::string &msg, bool useHex)
     {
-        Keyboard    keyboard(msg);
+        Keyboard keyboard("", msg);
 
         if (msg.empty())
             keyboard.DisplayTopScreen = false;
@@ -44,9 +44,9 @@ namespace CTRPluginFramework
         return (false);
     }
 
-    bool    GetInput(float &input, const std::string &msg)
+    bool GetInput(float &input, const std::string &msg)
     {
-        Keyboard    keyboard(msg);
+        Keyboard keyboard("", msg);
 
         if (msg.empty())
             keyboard.DisplayTopScreen = false;
@@ -57,9 +57,9 @@ namespace CTRPluginFramework
         return (false);
     }
 
-    bool    GetInput(u16 &input, const StringVector &choices, const std::string &msg)
+    bool GetInput(u16 &input, const StringVector &choices, const std::string &msg)
     {
-        Keyboard    keyboard(msg);
+        Keyboard keyboard("", msg);
 
         if (msg.empty())
             keyboard.DisplayTopScreen = false;

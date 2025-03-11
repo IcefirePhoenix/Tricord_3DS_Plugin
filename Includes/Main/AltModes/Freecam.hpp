@@ -30,7 +30,7 @@ namespace CTRPluginFramework
     void manageDynamicCamShifts(bool reset);
     void manageY_AxisReturnShift(bool disableGradualShifts);
     void manageFreecamPlayerLock(void);
-    float setSensitivity(std::string message);
+    float setSensitivity(std::string title, std::string message);
 
     class Freecam
     {

@@ -23,9 +23,9 @@ namespace CTRPluginFramework
             // Settings
             HIDToggle           = 1,
             AutoSaveCheats      = 1 << 2,
-            AutoSaveFavorites   = 1 << 3,
+            DisableOSDNotifs    = 1 << 3,
             AutoLoadCheats      = 1 << 4,
-            AutoLoadFavorites   = 1 << 5,
+            AutoLoadFavorites   = 1 << 5, // unused
 
             // Misc
             DisplayLoadedFiles  = 1 << 16,
@@ -36,9 +36,7 @@ namespace CTRPluginFramework
             ShowBottomFps       = 1 << 21,
 
             // TFH Settings
-            PretendoPatch       = 1 << 22,
-            DisableMoveOffset   = 1 << 23,
-            DoppelStageCostumeReset   = 1 << 24
+            QoL_Patch           = 1 << 22
         };
 
         /*struct HeaderV1
