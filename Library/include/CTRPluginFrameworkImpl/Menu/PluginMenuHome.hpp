@@ -81,12 +81,7 @@ namespace CTRPluginFramework
         Button              _arBtn;
         Button              _toolsBtn;
 
-        Button              _keyboardBtn;
-        Button              _controllerBtn;
-
-        // Entry button
-        Button              _AddFavoriteBtn;
-        Button              _InfoBtn;
+        Button _discordBtn;
     };
 }
 
