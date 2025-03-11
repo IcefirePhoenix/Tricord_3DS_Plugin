@@ -4,7 +4,7 @@ namespace CTRPluginFramework
 {
     int GeneralHelpers::chooseLink(void)
     {
-        Keyboard player("Choose a Link:");
+        Keyboard player("Player Selection", "Choose a player.");
         static const StringVector linkList =
         {
             "Player 1 (Green)",
@@ -16,32 +16,17 @@ namespace CTRPluginFramework
         return player.Open();
     }
 
-    int GeneralHelpers::chooseShadowLink(void)
-    {
-        Keyboard shadow("Choose a Shadow Link:");
-        static const StringVector shadowList =
-        {
-            "Shadow Link A",
-            "Shadow Link B",
-            "Shadow Link C"
-        };
-        shadow.Populate(shadowList);
-
-        return shadow.Open();
-    }
-
     int GeneralHelpers::chooseSword(void)
     {
-        Keyboard swordMenu("Choose a sword:");
+        Keyboard swordMenu("Sword Model Selection", "Choose a sword model.");
         swordMenu.Populate(GameData::swordList);
 
         return swordMenu.Open();
     }
 
-    // borrowed from OnionFS
-    bool GeneralHelpers::showMsgKbd(std::string text, DialogType digtype)
+    bool GeneralHelpers::showMsgKbd(std::string title, std::string text, DialogType digtype)
     {
-        Keyboard kbd(text);
+        Keyboard kbd(title, text);
         StringVector opts;
 
         switch (digtype)

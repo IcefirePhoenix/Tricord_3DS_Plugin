@@ -13,7 +13,7 @@ namespace CTRPluginFramework
     void openSwordSelMenu(void)
     {
         int swordChoice = -1;
-        Keyboard menu("Menu");
+        Keyboard menu("Sword Model Selection", "Select a player to begin editing the current sword model.");
         StringVector bottomScreenOptions;
 
         bool isMenuOpen = true;
@@ -28,7 +28,6 @@ namespace CTRPluginFramework
             bottomScreenOptions.push_back("Save and exit");
 
             // update top screen with real-time current statuses...
-            menu.GetMessage() = "Sword Model Type Menu";
             menu.Populate(bottomScreenOptions);
 
             int playerChoice = menu.Open();

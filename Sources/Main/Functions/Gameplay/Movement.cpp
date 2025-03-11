@@ -13,14 +13,14 @@ namespace CTRPluginFramework
     void Gameplay::customSpeed(MenuEntry *entry)
     {
         float newSpeed, defaultSpeed = 0.095;
-        std::string speedIntro = "Enter a custom movement speed value.\n\nThe default value is 0.095.\nNegative values will invert movement.";
+        std::string speedIntro = "Enter a custom movement speed value.\n\nThe default value is 0.095.\n\nNote: negative values will invert movement.";
 
         if (entry->Name() == "Set custom movement speed")
         {
-            Keyboard editSpeed(speedIntro);
+            Keyboard editSpeed("Movement Speed Setter", speedIntro);
             editSpeed.IsHexadecimal(false);
 
-            if (editSpeed.Open(newSpeed) == 0)
+            if (editSpeed.Open(newSpeed, 0.095) == 0)
             {
                 entry->SetName("Disable custom movement speed edits");
                 Process::WriteFloat(AddressList::getAddress("SpeedMultiplierAlt"), newSpeed);

@@ -90,11 +90,10 @@ namespace CTRPluginFramework
         //autoBeamCooldown->Enable(); // why is this enabled here?
     }
 
-    // This function only runs once at plugin startup
     int main(void)
     {
-        std::string title = "An advanced utility plugin made for\nThe Legend of Zelda: Tri Force Heroes packed with QoL features, solo and online-compatible cheats, and customizable gameplay options.\n\nForked from the original CTRPluginFramework\n repository.";
-        PluginMenu *menu = new PluginMenu("Tricord", 0, 5, 0, title); // change to actual tags
+        std::string title = "An advanced utility plugin made for\nThe Legend of Zelda: Tri Force Heroes packed with QoL features, solo and online-compatible cheats, and customizable gameplay options.\n\nForked from the original CTRPluginFramework\nrepository.";
+        PluginMenu *menu = new PluginMenu("Tricord", 0, 5, 0, title); // TODO: change to actual tags
 
         InitSequence(FwkSettings::Get());
 

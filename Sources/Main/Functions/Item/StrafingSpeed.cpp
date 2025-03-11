@@ -41,7 +41,7 @@ namespace CTRPluginFramework
 
         readCurrStrafingSpeeds();
 
-        std::string msg = "Select an item to change its strafing speed.\nDefault speed for all items: 1.0";
+        std::string msg = "Select an item to change its strafing speed.\nDefault speed for all items: 1.0\n\nCurrent speeds:\n";
         msg.append("\nBow: " + std::to_string(currStrafingSpeeds[0]));
         msg.append("\nFire Gloves: " + std::to_string(currStrafingSpeeds[1]));
         msg.append("\nWater Rod: " + std::to_string(currStrafingSpeeds[2]));
@@ -49,7 +49,7 @@ namespace CTRPluginFramework
         msg.append("\nGripshot: " + std::to_string(currStrafingSpeeds[4]));
         msg.append("\nHammer: " + std::to_string(currStrafingSpeeds[5]));
 
-        Keyboard speed(msg);
+        Keyboard speed("Item Strafing Speed", msg);
         speed.Populate(items);
 
         int choice = speed.Open();
@@ -68,13 +68,13 @@ namespace CTRPluginFramework
     {
         float result;
 
-        Keyboard speedKB("Set strafing speed:");
+        Keyboard speedKB("Item Strafing Speed", "Input a new strafing speed value.");
         speedKB.IsHexadecimal(false);
 
-        if (speedKB.Open(result) == 0)
+        if (speedKB.Open(result, 1.0) == 0)
         {
             if (result < 0.0)
-                MessageBox(Color::Gainsboro << "Error", "Strafing speed cannot be negative.")();
+                MessageBox("Error", "Strafing speed cannot be negative.")();
             else
                 return result;
         }

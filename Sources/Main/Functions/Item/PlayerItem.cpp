@@ -12,10 +12,10 @@ namespace CTRPluginFramework
         {
             u32 playerOffset = player * PLAYER_OFFSET;
 
-            std::string intro = "Select an item.\n\nCurrent items:\n";
+            std::string intro = "Select an item.\n\nCurrent items:";
             intro.append(readCurrItems(AddressList::getAddress("CurrentItem"), false));
 
-            Keyboard item(intro);
+            Keyboard item("Item Selection", intro);
             item.Populate(GameData::itemList);
 
             int choice = item.Open();
@@ -48,7 +48,7 @@ namespace CTRPluginFramework
         }
 
         if (entry->Name() == "Remove current items")
-            MessageBox(Color::Gainsboro << "Success!", successMsg)();
+            MessageBox("Success", successMsg)();
     }
 
     // Helper function that backs up current player items

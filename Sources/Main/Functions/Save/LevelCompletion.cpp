@@ -30,7 +30,7 @@ namespace CTRPluginFramework
     // Helper function to determine which set of level progress data to overwrite
     int selPlayMode(void)
     {
-        Keyboard mode("Choose a mode:");
+        Keyboard mode("Level Completion Editor", "Choose a mode.");
         StringVector modeList =
         {
             "Single-player",
