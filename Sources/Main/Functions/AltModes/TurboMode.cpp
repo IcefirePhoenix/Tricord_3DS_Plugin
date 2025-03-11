@@ -1,11 +1,13 @@
 #include "Helpers.hpp"
 #include "Cheats.hpp"
+#include "Main/Gameplay.hpp"
 
 namespace CTRPluginFramework
 {
     void TurboMode::enableTurboMode(MenuEntry* entry)
     {
-        if (entry->Name() == "Enable Turbo Mode"){
+        if (entry->WasJustActivated())
+        {
             /*
             TODO
             Check for any conflicting entries and if so, disable them
@@ -29,7 +31,6 @@ namespace CTRPluginFramework
             Process::WriteFloat(AddressList::getAddress("LoadingIconAnimSpeed"), 3);
             Process::WriteFloat(AddressList::getAddress("LiveMsgSpeed"), 2400);
             Process::WriteFloat(AddressList::getAddress("SwordBeamSpeed"), 1);
-            Process::Write8(AddressList::getAddress("SpeedDamageUndo"), 0x41);
             Process::WriteFloat(AddressList::getAddress("BGMSFXSpeed"), 1.2);
             Process::Write8(AddressList::getAddress("TextBoxSpeed"), 0x2D);
             Process::WriteFloat(AddressList::getAddress("EnergyMax"), 100);
@@ -183,8 +184,14 @@ namespace CTRPluginFramework
             Process::WriteFloat(AddressList::getAddress("Link_EdWaitTotem2"), 10);
             Process::WriteFloat(AddressList::getAddress("Link_WaitPinch"), 10);
 
-            entry->SetName("Disable Turbo Mode");
-        } else {
+            // Sword damage fix
+            Process::Write8(AddressList::getAddress("SwordDamageBoostA"), 0x41);
+            Process::Write8(AddressList::getAddress("SpeedDamageUndoA"), 0x41);
+            Process::Write8(AddressList::getAddress("SpeedDamageUndoB"), 0x41);
+            fixSwordSuitDamageAuto->Enable();
+        }
+        else if (!entry->IsActivated())
+        {
             // Restore default values to all addresses
             Process::Write8(AddressList::getAddress("DashTimerNormal"), 0x1E);
             Process::Write8(AddressList::getAddress("DashTimerNinja"), 0x05);
@@ -198,7 +205,6 @@ namespace CTRPluginFramework
             Process::WriteFloat(AddressList::getAddress("LoadingIconAnimSpeed"), 1);
             Process::WriteFloat(AddressList::getAddress("LiveMsgSpeed"), 800);
             Process::WriteFloat(AddressList::getAddress("SwordBeamSpeed"), 0.45);
-            Process::Write8(AddressList::getAddress("SpeedDamageUndo"), 0x1B);
             Process::WriteFloat(AddressList::getAddress("BGMSFXSpeed"), 1);
             Process::Write8(AddressList::getAddress("TextBoxSpeed"), 0x01);
             Process::WriteFloat(AddressList::getAddress("EnergyMax"), 600);
@@ -352,7 +358,11 @@ namespace CTRPluginFramework
             Process::WriteFloat(AddressList::getAddress("Link_EdWaitTotem2"), 1);
             Process::WriteFloat(AddressList::getAddress("Link_WaitPinch"), 1);
 
-            entry->SetName("Enable Turbo Mode");
+            // Restore normal functionality of speed/damage value application
+            Process::Write8(AddressList::getAddress("SwordDamageBoostA"), 0x1B);
+            Process::Write8(AddressList::getAddress("SpeedDamageUndoA"), 0x1B);
+            Process::Write8(AddressList::getAddress("SpeedDamageUndoB"), 0x1B);
+            fixSwordSuitDamageAuto->Disable();
         }
     }
 }

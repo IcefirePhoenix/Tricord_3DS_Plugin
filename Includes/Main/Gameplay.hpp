@@ -27,6 +27,7 @@ namespace CTRPluginFramework
     extern MenuEntry* challengeEditAuto;
 
     extern MenuEntry* controlAllAuto;
+    extern MenuEntry* fixSwordSuitDamageAuto;
 
     std::string physicsSelectMenu(int Link);
     void writePhysicsChanges(int player);
@@ -75,6 +76,7 @@ namespace CTRPluginFramework
         static void midWarpDoppelEnable(MenuEntry* entry);
         static void writeChallengeEdit(MenuEntry* entry);
         static void writePlayerControl(MenuEntry* entry);
+        static void writeSwordSuitDamageFix(MenuEntry* entry);
 
         static void customSpeed(MenuEntry* entry);
     };
