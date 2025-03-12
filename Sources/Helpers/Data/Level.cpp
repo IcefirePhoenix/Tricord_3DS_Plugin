@@ -220,7 +220,7 @@ namespace CTRPluginFramework
     // Helper function that returns level from world
     std::pair<std::string, Level> Level::selLevel(int world)
     {
-        u8 index;
+        int index;
         std::string chosenLevel = "";
         StringVector levelChoices = Level::getLevelNamesFromWorld(world);
 
@@ -231,7 +231,9 @@ namespace CTRPluginFramework
         Keyboard chooseLevel("Level Selection", "Select a level.");
         chooseLevel.Populate(levelChoices);
 
-        if (chooseLevel.Open(index))
+        index = chooseLevel.Open();
+
+        if (index >= 0)
         {
             chosenLevel = levelChoices[index];
             return std::make_pair(chosenLevel, getAllLevels().at(chosenLevel));
