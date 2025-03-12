@@ -16,7 +16,6 @@ namespace CTRPluginFramework
 
     float ascentSpeed = 0.5, descentSpeed = -0.5, lateralSpeed = 0.09, speedToMaintainHover = 0.025;
     u16 physicsStatus[3];
-    u8 cameraDisabled = 0x0;
 
     const StringVector speedOptions =
     {
@@ -136,6 +135,20 @@ namespace CTRPluginFramework
          * Note: South and East are positive, North and West are negative
          */
 
+        // Disable X-button screenshot functionality to avoid hotkey conflicts
+        // Also disables "disabled action" beep SFX on the B, Y and L/R buttons
+        // (B is a hotkey for flight, but all those buttons are tied together)
+        if (entry->WasJustActivated())
+        {
+            Process::Patch(AddressList::getAddress("CameraXButtonDisable"), 0xEA000028);
+            Process::Patch(AddressList::getAddress("DisabledActionSE"), 0xEA000008);
+        }
+        if (!entry->IsActivated())
+        {
+            Process::Patch(AddressList::getAddress("CameraXButtonDisable"), 0x0A000028);
+            Process::Patch(AddressList::getAddress("DisabledActionSE"), 0x0A000008);
+        }
+
         u16 currColl;
         bool isOnTriforceGate;
         int player = GeneralHelpers::getCurrLink();
@@ -152,9 +165,6 @@ namespace CTRPluginFramework
             u32 addrZ = AddressList::getAddress("SpeedZ") + offset;
 
             bool isAirborne;
-
-            // disable X-button screenshot functionality to avoid hotkey conflicts...
-            Process::Write8(AddressList::getAddress("CameraXButtonToggle"), cameraDisabled);
 
             isAirborne = (currColl == Collision::colIDFromName("Air"));
 

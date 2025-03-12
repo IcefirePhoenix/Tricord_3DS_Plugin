@@ -96,16 +96,14 @@ namespace CTRPluginFramework
         // Radio group 1 for mutual exclusivity
         moonJumpEntry = (EntryWithHotkey(new MenuEntry(1, "Enable Moon Jump", Gameplay::moonJumpAndFlight, DescUtils::getDesc("moon_jump_note")),
         {
-            Hotkey(Key::X, "Ascend"),
-            Hotkey(Key::CPad, "Move laterally") // Unused but necessary for entry description
+            Hotkey(Key::X, "Ascend")
         }));
 
 
         flightEntry = (EntryWithHotkey(new MenuEntry(1, "Enable Flight", Gameplay::moonJumpAndFlight, DescUtils::getDesc("flight_note")),
         {
             Hotkey(Key::X, "Ascend"),
-            Hotkey(Key::B, "Descend"),
-            Hotkey(Key::CPad, "Move laterally") // Unused but necessary for entry description
+            Hotkey(Key::B, "Descend")
         }));
 
         *moonJumpFlight += moonJumpEntry;

@@ -129,8 +129,8 @@
         {
             "name": "moon_jump_note",
             "content": {
-                "intro": "Enables moon jumping with lateral movement controls while airborne.",
-                "note": "",
+                "intro": "Enables moon jumping via hotkey.",
+                "note": "Use the Circle Pad while airborne to move laterally.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }
@@ -139,7 +139,7 @@
             "name": "flight_note",
             "content": {
                 "intro": "Enables flight with adjustable height and movement. When stationary, you will automatically hover in place.",
-                "note": "",
+                "note": "Use the Circle Pad while airborne to move laterally.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }
@@ -147,7 +147,7 @@
         {
             "name": "doppel_hover_note",
             "content": {
-                "intro": "Allows Doppels to hover in-place instead of falling when switched out of them.",
+                "intro": "Allows Doppels to hover in place instead of falling when switched out of them.",
                 "note": "",
                 "modeCompatibility": 0,
                 "clientOnly": false
@@ -850,7 +850,7 @@
             "name": "player_invinci_note",
             "content": {
                 "intro": "Makes players invincible, rendering them immune to all damage except for fall damage.",
-                "note": "",
+                "note": "Players will pass straight through enemies unharmed.",
                 "modeCompatibility": 2,
                 "clientOnly": false
             }
@@ -984,9 +984,9 @@
         {
             "name": "load_sp_screen_note",
             "content": {
-                "intro": "Forces a specific loading screen layout in single player mode.\n\nFour layouts are available:\n- Drablands, default\n- Multiplayer\n- Coliseum, 2-player\n- Coliseum, 3-player",
-                "note": "Does not work in multiplayer mode.",
-                "modeCompatibility": 1,
+                "intro": "Forces a specific loading screen layout in place of the single player, Drablands, no challenge layout. Primarily designed for testing mods that edit the Link/Doppel sprites.\n\nThree layouts are available:\n- Default (SP Drablands NC)\n- Multiplayer (Drablands NC)\n- Coliseum (3-player)",
+                "note": "",
+                "modeCompatibility": 0,
                 "clientOnly": true
             }
         },
@@ -1174,7 +1174,7 @@
             "name": "8bit_note",
             "content": {
                 "intro": "Toggles the 8-bit version of BGM tracks, regardless of whether the Timeless Tunic is worn.",
-                "note": "",
+                "note": "Also includes lobby ball melodies.",
                 "modeCompatibility": 1,
                 "clientOnly": true
             }
