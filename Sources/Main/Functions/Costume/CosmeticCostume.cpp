@@ -24,9 +24,9 @@ namespace CTRPluginFramework
             Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraB"), 0xE5D01D61);
             Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraC"), 0xE5D01D61);
             Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraD"), 0xE5D01D61);
-            Process::Patch(AddressList::getAddress("CostumeIDOffsetCheetah"), 0xE5D01D61); // TODO: add more to clarify address name -> env? ptcl?
-            Process::Patch(AddressList::getAddress("CostumeIDOffsetDune"), 0xE5D00D61);
-            Process::Patch(AddressList::getAddress("CostumeIDOffsetCheer"), 0xE5D00D61);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetCheetahPtcl"), 0xE5D01D61);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetDuneRing"), 0xE5D00D61);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetCheerPomPom"), 0xE5D00D61);
             Process::Patch(AddressList::getAddress("CostumeIDOffsetSwordPtcl"), 0xE5D00D61);
 
             // create custom function in text->rodata padding...
@@ -47,14 +47,13 @@ namespace CTRPluginFramework
             Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraB"), 0xE5D01064);
             Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraC"), 0xE5D01064);
             Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraD"), 0xE5D01064);
-            Process::Patch(AddressList::getAddress("CostumeIDOffsetCheetah"), 0xE5D01064);
-            Process::Patch(AddressList::getAddress("CostumeIDOffsetDune"), 0xE5D00064);
-            Process::Patch(AddressList::getAddress("CostumeIDOffsetCheer"), 0xE5D00064);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetCheetahPtcl"), 0xE5D01064);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetDuneRing"), 0xE5D00064);
+            Process::Patch(AddressList::getAddress("CostumeIDOffsetCheerPomPom"), 0xE5D00064);
             Process::Patch(AddressList::getAddress("CostumeIDOffsetSwordPtcl"), 0xE5D00064);
 
             // revert model loader BL instruction...
-            // TODO: Need to know: Does this hold the same offset value in all regions, or not?
-            Process::Patch(AddressList::getAddress("CostumeIDFunBLModel"), 0xEB0FDCF8);
+            Process::Patch(AddressList::getAddress("CostumeIDFunBLModel"), AddressList::getAddress("CostumeIDFunBLModelDefault"));
 
             cosmeticCostumeAuto->Disable();
             entry->SetName("Enable Cosmetic Costumes");
