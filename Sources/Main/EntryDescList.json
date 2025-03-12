@@ -77,7 +77,7 @@
             "content": {
                 "intro": "Adjusts the maximum capacity of the energy gauge.",
                 "note": "Standard gauges have a default capacity of 600 units, while large gauges hold 900 units.",
-                "modeCompatibility": 0,
+                "modeCompatibility": 3,
                 "clientOnly": false
             }
         },
@@ -318,7 +318,7 @@
         {
             "name": "costume_randomizers_note",
             "content": {
-                "intro": "Toggle randomizers for either your effective or cosmetic costume. Changes the costume to a new, random one every stage (changes happen during Triforce portal teleportation).",
+                "intro": "Toggle randomizers for either your effective or cosmetic costume. Changes the costume to a new, random one every loading zone.",
                 "note": "If setting a cosmetic randomizer, you must enable cosmetic costumes. ONLY cosmetic randomizers alone may work in multiplayer (client-side only).",
                 "modeCompatibility": 1,
                 "clientOnly": false
@@ -345,9 +345,9 @@
         {
             "name": "bear_minMax_note",
             "content": {
-                "intro": "Toggles the Bear Maximum costume upgrade, regardless of current Hero Point count. DEVTODO: check below?",
+                "intro": "Toggles the Bear Maximum costume upgrade, regardless of current Hero Point count.",
                 "note": "Bear Maximum is normally unlocked with 30+ Hero Points.",
-                "modeCompatibility": 1,
+                "modeCompatibility": 3,
                 "clientOnly": false
             }
         },
@@ -867,7 +867,7 @@
         {
             "name": "player_size_note",
             "content": {
-                "intro": "Adjusts player sizes. Extremely large sizes are not recommended, as they may make the game unstable/crash. DEVTODO: check this(?)",
+                "intro": "Adjusts player sizes. Note that adjustments can render many puzzles impossible to complete.",
                 "note": "The selected size value applies to all players. Individual sizes cannot be set.",
                 "modeCompatibility": 2,
                 "clientOnly": false
@@ -923,7 +923,7 @@
             "content": {
                 "intro": "Quickly removes equipped items for all players.",
                 "note": "If using in multiplayer matches, all players must refrain from using/equipping items until the entry has been successfully activated by all players.",
-                "modeCompatibility": 1,
+                "modeCompatibility": 2,
                 "clientOnly": false
             }
         },
@@ -939,7 +939,7 @@
         {
             "name": "scroll_text_color_note",
             "content": {
-                "intro": "ustomizes the color of player names that appear in top-screen scrolling event messages. Accepts hex color codes. Changes are preserved between reboots.",
+                "intro": "Customizes the color of player names that appear in top-screen scrolling event messages. Accepts hex color codes. Changes are preserved between reboots.",
                 "note": "Recommended for use with custom Link color modpacks.",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -1083,7 +1083,7 @@
         {
             "name": "hero_point_note",
             "content": {
-                "intro": "Allows you to set your Hero Point count, which affects:\n- the Bear Maximum costume upgrade (requires 30+)\n- online matchmaking",
+                "intro": "Allows you to set your Hero Point count, which affects:\n- The Bear Maximum costume upgrade (requires 30+)\n- Certain NPC/object dialogue",
                 "note": "Valid values range from 0-999.",
                 "modeCompatibility": 1,
                 "clientOnly": false
@@ -1131,7 +1131,7 @@
                 "intro": "Overrides the current position of the system's volume slider.",
                 "note": "",
                 "modeCompatibility": 1,
-                "clientOnly": false
+                "clientOnly": true
             }
         },
         {
@@ -1140,7 +1140,7 @@
                 "intro": "Allows you to change the BGM volume without affecting other audio tracks.",
                 "note": "",
                 "modeCompatibility": 1,
-                "clientOnly": false
+                "clientOnly": true
             }
         },
         {
@@ -1149,7 +1149,7 @@
                 "intro": "Allows you to change the volume of player voice(s) without affecting other audio tracks.",
                 "note": "",
                 "modeCompatibility": 1,
-                "clientOnly": false
+                "clientOnly": true
             }
         },
         {
@@ -1158,7 +1158,7 @@
                 "intro": "Allows you to change the volume of the Low HP Alert SFX without affecting other audio tracks.",
                 "note": "",
                 "modeCompatibility": 1,
-                "clientOnly": false
+                "clientOnly": true
             }
         },
         {
@@ -1167,7 +1167,7 @@
                 "intro": "Allows you to set the Lobby Ball song.",
                 "note": "",
                 "modeCompatibility": 1,
-                "clientOnly": false
+                "clientOnly": true
             }
         },
         {
