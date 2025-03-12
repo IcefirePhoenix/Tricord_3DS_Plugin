@@ -51,7 +51,7 @@ namespace CTRPluginFramework
         std::string message;
         bool isMenuOpen = true;
 
-        Keyboard kbd("Costume Randomizer Toggle Menu", "");
+        Keyboard kbd("Costume Randomizers", "");
         kbd.DisplayTopScreen = true;
         kbd.CanAbort(false);
 
@@ -59,7 +59,8 @@ namespace CTRPluginFramework
         {
             while (isMenuOpen)
             {
-                message = "Use the player toggles to enable the " + (selection == 0) ? "Effective Costume Randomizers." : "Cosmetic Costume Randomizers.";
+                message = "Use the player toggles to enable the ";
+                message += (selection == 0) ? "Effective Costume Randomizers." : "Cosmetic Costume Randomizers.";
 
                 bottomScreenOptions.clear();
                 bottomScreenOptions.push_back(std::string("Player 1 ") << (randomizers[selection][0] ? ENABLED_SLIDER : DISABLED_SLIDER));

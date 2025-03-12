@@ -41,7 +41,7 @@ namespace CTRPluginFramework
 
         readCurrStrafingSpeeds();
 
-        std::string msg = "Select an item to change its strafing speed.\nDefault speed for all items: 1.0\n\nCurrent speeds:\n";
+        std::string msg = "Select an item to change its strafing speed.\nDefault speed for all items: 1.0\n\nCurrent speeds:";
         msg.append("\nBow: " + std::to_string(currStrafingSpeeds[0]));
         msg.append("\nFire Gloves: " + std::to_string(currStrafingSpeeds[1]));
         msg.append("\nWater Rod: " + std::to_string(currStrafingSpeeds[2]));
