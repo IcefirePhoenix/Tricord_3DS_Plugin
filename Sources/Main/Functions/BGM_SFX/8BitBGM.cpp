@@ -21,14 +21,20 @@ namespace CTRPluginFramework
             case 0:
                 // Default BEQ
                 Process::Patch(AddressList::getAddress("BGMType"), 0x0A00003B);
+                Process::Patch(AddressList::getAddress("LobbyBall8bitA"), 0x0A00003D);
+                Process::Patch(AddressList::getAddress("LobbyBall8bitB"), 0x0A00003D);
                 break;
             case 1:
                 // Unconditional branch
                 Process::Patch(AddressList::getAddress("BGMType"), 0xEA00003B);
+                Process::Patch(AddressList::getAddress("LobbyBall8bitA"), 0xEA00003D);
+                Process::Patch(AddressList::getAddress("LobbyBall8bitB"), 0xEA00003D);
                 break;
             case 2:
                 // NOP
                 Process::Patch(AddressList::getAddress("BGMType"), 0xE320F000);
+                Process::Patch(AddressList::getAddress("LobbyBall8bitA"), 0xE320F000);
+                Process::Patch(AddressList::getAddress("LobbyBall8bitB"), 0xE320F000);
                 break;
         }
     }

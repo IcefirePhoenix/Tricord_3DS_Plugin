@@ -66,8 +66,7 @@ namespace CTRPluginFramework
         {
             "Default",
             "Multiplayer",
-            "Coliseum V1",
-            "Coliseum V2"
+            "Coliseum"
         };
 
         Keyboard lsType("Loading Screen Layout Modifier", "Choose an appearance for the single player No Challenge loading screen.");
@@ -76,20 +75,19 @@ namespace CTRPluginFramework
         switch (lsType.Open())
         {
             case 0:
+                // Default single player - Green Link, Blue and Red Doppels
+                Process::Patch(AddressList::getAddress("LoadingScreenSPForcedLink"), 0xE3510000);
                 Process::WriteFloat(AddressList::getAddress("LoadingScreenSPNoChal"), 3);
                 Process::WriteFloat(AddressList::getAddress("LoadingScreenSPIcons"), 3);
                 break;
             case 1:
+                // Multiplayer - All three Links; Forced Link does not matter
                 Process::WriteFloat(AddressList::getAddress("LoadingScreenSPNoChal"), 3);
                 Process::WriteFloat(AddressList::getAddress("LoadingScreenSPIcons"), 0);
                 break;
             case 2:
-                // Blue and Green panels
-                Process::WriteFloat(AddressList::getAddress("LoadingScreenSPNoChal"), 6);
-                Process::WriteFloat(AddressList::getAddress("LoadingScreenSPIcons"), 5);
-                break;
-            case 3:
-                // Red and Blue panels
+                // Coliseum 3P - All three panels
+                Process::Patch(AddressList::getAddress("LoadingScreenSPForcedLink"), 0xE3510003);
                 Process::WriteFloat(AddressList::getAddress("LoadingScreenSPNoChal"), 6);
                 Process::WriteFloat(AddressList::getAddress("LoadingScreenSPIcons"), 6);
                 break;

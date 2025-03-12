@@ -1657,6 +1657,14 @@
             }
         },
         {
+            "name": "DisabledActionSE",
+            "regionAddrs": {
+                "usaAddress": "0x00194F3C",
+                "eurAddress": "0x00194FCC",
+                "jpnAddress": "0x001954C0"
+            }
+        },
+        {
             "name": "CameraXButtonToggle",
             "regionAddrs": {
                 "usaAddress": "0x32D92920",
@@ -1750,14 +1758,6 @@
                 "usaAddress": "0x32841A20",
                 "eurAddress": "0x32841AA0",
                 "jpnAddress": "0x3288C460"
-            }
-        },
-        {
-            "name": "IsInvincible",
-            "regionAddrs": {
-                "usaAddress": "0x32849544",
-                "eurAddress": "0x328495C4",
-                "jpnAddress": "0x32893F84"
             }
         },
         {

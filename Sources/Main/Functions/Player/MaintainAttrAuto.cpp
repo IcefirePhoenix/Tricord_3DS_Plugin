@@ -40,10 +40,21 @@ namespace CTRPluginFramework
 
     void Player::writeInvincibilityChanges(MenuEntry *entry)
     {
-        u8 invincible = 0x16;
-        u8 notInvinci = 0x0;
+        u32 address = AddressList::getAddress("StatusBitB");
+        u32 finalAddress;
+        u8 originalValue, valueToWrite;
+        for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
+        {
+            finalAddress = address + (iterateThruPlayers * PLAYER_OFFSET);
+            Process::Read8(finalAddress, originalValue);
 
-        Player::writePlayerChanges(8, Player::invinciStatus, AddressList::getAddress("IsInvincible"), invincible, notInvinci);
+            if (checkPlayerStatus(Player::invinciStatus, iterateThruPlayers))
+                valueToWrite = originalValue | 0x80; // Bitwise OR to add disabled enemy collision
+            else
+                valueToWrite = originalValue & 0x7F; // Bitwise AND to remove disabled enemy collision
+
+            Process::Write8(finalAddress, valueToWrite);
+        }
     }
 
     void Player::writeAnimStorageChanges(MenuEntry *entry)

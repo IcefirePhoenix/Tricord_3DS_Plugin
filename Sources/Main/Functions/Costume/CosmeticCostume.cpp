@@ -200,7 +200,6 @@ namespace CTRPluginFramework
 
             // Fix issues with Tingle Tights not getting balloons initialized properly
             // If a loading screen started, and the player/team is at 0 health, or are spawning into stage 1, give Tingle players three balloons
-            // TODO: Check if any other costumes have issues applying their effects when cosmetic costumes are enabled
             u8 targetStageID, currCostume;
             Process::Read8(AddressList::getAddress("TargetStageID"), targetStageID);
             if ((GeneralHelpers::getHP() == 0 || targetStageID == 1))
@@ -213,5 +212,9 @@ namespace CTRPluginFramework
                 }
             }
         }
+
+        // If just deactivated, ensure sword model handler is turned off (if dedicated entry not in use)
+        if (!entry->IsActivated() && !Costume::customSwordsActive)
+            swordEditAuto->Disable();
     }
 }
