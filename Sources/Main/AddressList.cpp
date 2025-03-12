@@ -58,7 +58,7 @@ namespace CTRPluginFramework
 						addrStr = addrStr.substr(2);
 
 
-					addrVal = std::stoi(addrStr, nullptr, 16);
+					addrVal = std::stoul(addrStr, nullptr, 16);
 
 					// adjust all addresses within LINEAR mem range...
 					if (addrVal >= 0x14000000)
