@@ -36,7 +36,6 @@ namespace CTRPluginFramework
     Screen      OSDImpl::TopScreen;
     Screen      OSDImpl::BottomScreen;
     RecursiveLock OSDImpl::RecLock;
-    FloatingButton OSDImpl::FloatingBtn(IntRect(0, 0, 40, 40), Icon::DrawRocket);
     std::vector<OSDImpl::OSDMessage*> OSDImpl::Notifications;
     std::vector<OSDCallback> OSDImpl::Callbacks;
     std::vector<OSDCallback> OSDImpl::CallbacksTrashBin;

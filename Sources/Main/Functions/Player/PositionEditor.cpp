@@ -3,9 +3,8 @@
 
 namespace CTRPluginFramework
 {
-    // TODO: create new icons to replace these placeholders...
-    FloatingButton loadBtn(IntRect(100, 210, 15, 15), Icon::DrawCentreOfGravity);
-    FloatingButton saveBtn(IntRect(125, 210, 15, 15), Icon::DrawUnsplash);
+    FloatingButton loadBtn(IntRect(32, 107, 15, 15), Icon::DrawLoadPosition);
+    FloatingButton saveBtn(IntRect(32, 85, 15, 15), Icon::DrawSavePosition);
 
     bool isPositionSaved[3] = {false, false, false};
     float positions[3][3];

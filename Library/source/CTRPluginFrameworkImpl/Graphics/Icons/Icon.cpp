@@ -11,9 +11,10 @@ namespace CTRPluginFramework
     extern "C" unsigned char *AddFavoriteFilled25;
     extern "C" unsigned char *CheckedCheckbox;
     extern "C" unsigned char *UnCheckedCheckbox;
+    extern "C" unsigned char *Camera15;
+    extern "C" unsigned char *Console25;
     extern "C" unsigned char *CapsLockOn15;
     extern "C" unsigned char *CapsLockOnFilled15;
-    extern "C" unsigned char *CentreofGravity15;
     extern "C" unsigned char *ClearSymbol15;
     extern "C" unsigned char *ClearSymbolFilled15;
     extern "C" unsigned char *Clipboard25;
@@ -23,6 +24,7 @@ namespace CTRPluginFramework
     extern "C" unsigned char *Controller15;
     extern "C" unsigned char *Cut25;
     extern "C" unsigned char *CutFilled25;
+    extern "C" unsigned char *Discord25;
     extern "C" unsigned char *Duplicate25;
     extern "C" unsigned char *DuplicateFilled25;
     extern "C" unsigned char *Edit25;
@@ -32,32 +34,24 @@ namespace CTRPluginFramework
     extern "C" unsigned char *FolderFilled;
     extern "C" unsigned char *File15;
     extern "C" unsigned char *GameController15;
-    extern "C" unsigned char *GameController25;
-    extern "C" unsigned char *GameControllerFilled25;
     extern "C" unsigned char *Grid15;
-    extern "C" unsigned char *Happy15;
-    extern "C" unsigned char *HappyFilled15;
     extern "C" unsigned char *Info25;
     extern "C" unsigned char *InfoFilled25;
+    extern "C" unsigned char *LoadPosition15;
+    extern "C" unsigned char *SavePosition15;
     extern "C" unsigned char *HandCursor15;
     extern "C" unsigned char *Maintenance15;
     extern "C" unsigned char *More15;
-    extern "C" unsigned char *Keyboard25;
-    extern "C" unsigned char *KeyboardFilled25;
-    extern "C" unsigned char *Photo32;
     extern "C" unsigned char *Plus25;
     extern "C" unsigned char *PlusFilled25;
     extern "C" unsigned char *RAM15;
-    extern "C" unsigned char *Rocket40;
     extern "C" unsigned char *Restart15;
     extern "C" unsigned char *Save25;
     extern "C" unsigned char *Search15;
     extern "C" unsigned char *Settings15;
     extern "C" unsigned char *Shutdown15;
-    extern "C" unsigned char *Star15;
     extern "C" unsigned char *Trash25;
     extern "C" unsigned char *TrashFilled25;
-    extern "C" unsigned char *Unsplash15;
     extern "C" unsigned char *UserManualFilled15;
     extern "C" unsigned char *DefaultKeyboardCustomIcon;
 
@@ -145,10 +139,19 @@ namespace CTRPluginFramework
     }
 
     /*
+    ** 3DS
+    ** 25px * 25px
+    **************/
+    int Icon::Draw3DS(int posX, int posY)
+    {
+        return (DrawImg(Console25, posX, posY, 25, 25));
+    }
+
+    /*
     ** About
     ** 15px * 15px
     **************/
-    int     Icon::DrawAbout(int posX, int posY)
+    int Icon::DrawAbout(int posX, int posY)
     {
         return (DrawImg(About15, posX, posY, 15, 15));
     }
@@ -160,36 +163,16 @@ namespace CTRPluginFramework
     int Icon::DrawCapsLockOn(int posX, int posY, bool isFilled)
     {
         u8 *img = isFilled ? CapsLockOnFilled15 : CapsLockOn15;
-
         return (DrawImg(img, posX, posY, 15, 15));
-    }
-
-    /*
-    ** CentreOfGravity
-    ** 15px * 15px
-    **************/
-    int     Icon::DrawCentreOfGravity(int posX, int posY)
-    {
-        return (DrawImg(CentreofGravity15, posX, posY, 15, 15));
     }
 
     /*
     ** CheckBox
     ** 15px * 15px
     ************/
-   /* int     Icon::DrawCheckBox(IntVector &pos, bool isChecked)
+    int Icon::DrawCheckBox(int posX, int posY, bool isChecked)
     {
-        // Define which version to draw
         u8 *img = isChecked ? CheckedCheckbox : UnCheckedCheckbox;
-
-        return (DrawImg(img, pos.y, pos.y, 15, 15));
-    }*/
-
-    int     Icon::DrawCheckBox(int posX, int posY, bool isChecked)
-    {
-        // Define which version to draw
-        u8 *img = isChecked ? CheckedCheckbox : UnCheckedCheckbox;
-
         return (DrawImg(img, posX, posY, 15, 15));
     }
 
@@ -197,7 +180,7 @@ namespace CTRPluginFramework
     ** ClearSymbol
     ** 15px * 15px
     **********/
-    int     Icon::DrawClearSymbol(int posX, int posY, bool filled)
+    int Icon::DrawClearSymbol(int posX, int posY, bool filled)
     {
         u8 *img = filled ? ClearSymbolFilled15 : ClearSymbol15;
 
@@ -208,10 +191,9 @@ namespace CTRPluginFramework
     ** Clipboard
     ** 25px * 25px
     *************/
-    int     Icon::DrawClipboard(int posX, int posY, bool filled)
+    int Icon::DrawClipboard(int posX, int posY, bool filled)
     {
         u8 *img = filled ? ClipboardFilled25 : Clipboard25;
-
         return (DrawImg(img, posX, posY, 25, 25));
     }
 
@@ -219,41 +201,19 @@ namespace CTRPluginFramework
     ** Close
     ** 20px * 20px
     **********/
-
-    /*int     Icon::DrawClose(IntVector &pos, bool filled)
+    int Icon::DrawClose(int posX, int posY, bool filled)
     {
-        // Define which version to draw
         u8 *img = filled ? CloseWindowFilled20 : CloseWindow20;
-
-        return (DrawImg(img, pos.x, pos.y, 20, 20));
-    } */
-
-    int     Icon::DrawClose(int posX, int posY, bool filled)
-    {
-        // Define which version to draw
-        u8 *img = filled ? CloseWindowFilled20 : CloseWindow20;
-
         return (DrawImg(img, posX, posY, 20, 20));
-    }
-
-    /*
-    ** Controller
-    ** 15px * 15px
-    ***************/
-
-    int     Icon::DrawController(int posX, int posY)
-    {
-        return (DrawImg(Controller15, posX, posY, 15, 15));
     }
 
     /*
     ** Cut
     ** 25px * 25px
     *************/
-    int     Icon::DrawCut(int posX, int posY, bool filled)
+    int Icon::DrawCut(int posX, int posY, bool filled)
     {
         u8 *img = filled ? CutFilled25 : Cut25;
-
         return (DrawImg(img, posX, posY, 25, 25));
     }
 
@@ -261,10 +221,9 @@ namespace CTRPluginFramework
     ** Cut
     ** 25px * 25px
     *************/
-    int     Icon::DrawDuplicate(int posX, int posY, bool filled)
+    int Icon::DrawDuplicate(int posX, int posY, bool filled)
     {
         u8 *img = filled ? DuplicateFilled25 : Duplicate25;
-
         return (DrawImg(img, posX, posY, 25, 25));
     }
 
@@ -272,7 +231,7 @@ namespace CTRPluginFramework
     ** Edit
     ** 25px * 25px
     *************/
-    int     Icon::DrawEdit(int posX, int posY, bool filled)
+    int Icon::DrawEdit(int posX, int posY, bool filled)
     {
         u8 *img = filled ? EditFilled25 : Edit25;
         return (DrawImg(img, posX, posY, 25, 25));
@@ -282,10 +241,9 @@ namespace CTRPluginFramework
     ** Enter Key
     ** 15px * 15px
     **************/
-    int     Icon::DrawEnterKey(int posX, int posY, bool filled)
+    int Icon::DrawEnterKey(int posX, int posY, bool filled)
     {
         u8 *img = filled ? EnterKeyFilled15 : EnterKey15;
-
         return (DrawImg(img, posX, posY, 15, 15));
     }
 
@@ -293,13 +251,7 @@ namespace CTRPluginFramework
     ** Folder
     ** 15px * 15px
     ***************/
-
-    int     Icon::DrawFolder(IntVector &pos)
-    {
-        return (DrawImg(FolderFilled, pos.x, pos.y, 15, 15));
-    }
-
-    int     Icon::DrawFolder(int posX, int posY)
+    int Icon::DrawFolder(int posX, int posY)
     {
         return (DrawImg(FolderFilled, posX, posY, 15, 15));
     }
@@ -308,34 +260,17 @@ namespace CTRPluginFramework
     ** Favorite
     ** 25px * 25px
     ***************/
-
-    /*int     Icon::DrawAddFavorite(IntVector &pos, bool filled)
-    {
-        u8 *img = filled ? AddFavoriteFilled25 : AddFavorite25;
-        return (DrawImg(img, pos.x, pos.y, 25, 25));
-    }*/
-
-    int     Icon::DrawAddFavorite(int posX, int posY, bool filled)
+    int Icon::DrawAddFavorite(int posX, int posY, bool filled)
     {
         u8 *img = filled ? AddFavoriteFilled25 : AddFavorite25;
         return (DrawImg(img, posX, posY, 25, 25));
-    }
-
-   /* int     Icon::DrawFavorite(IntVector &pos)
-    {
-        return (DrawImg(Star15, pos.x, pos.y, 15, 15));
-    } */
-
-    int     Icon::DrawFavorite(int posX, int posY)
-    {
-        return (DrawImg(Star15, posX, posY, 15, 15));
     }
 
     /*
     ** File
     ** 15px * 15px
     **************/
-    int     Icon::DrawFile(int posX, int posY)
+    int Icon::DrawFile(int posX, int posY)
     {
         return (DrawImg(File15, posX, posY, 15, 15));
     }
@@ -344,22 +279,16 @@ namespace CTRPluginFramework
     ** Game Controller
     ** 15px * 15px
     **************/
-    int     Icon::DrawGameController(int posX, int posY)
+    int Icon::DrawGameController(int posX, int posY)
     {
         return (DrawImg(GameController15, posX, posY, 15, 15));
-    }
-
-    int Icon::DrawGameController25(int posX, int posY, bool filled)
-    {
-        u8 *img = filled ? GameControllerFilled25 : GameController25;
-        return (DrawImg(img, posX, posY, 25, 25));
     }
 
     /*
     ** Grid
     ** 15px * 15px
     **************/
-    int     Icon::DrawGrid(int posX, int posY)
+    int Icon::DrawGrid(int posX, int posY)
     {
         return (DrawImg(Grid15, posX, posY, 15, 15));
     }
@@ -368,94 +297,47 @@ namespace CTRPluginFramework
     ** Info
     ** 25px * 25px
     ***************/
-
-    /*int     Icon::DrawInfo(IntVector &pos, bool filled)
-    {
-        u8 *img = filled ? InfoFilled25 : Info25;
-        return (DrawImg(img, pos.x, pos.y, 25, 25));
-    }*/
-
-    int     Icon::DrawInfo(int posX, int posY, bool filled)
+    int Icon::DrawInfo(int posX, int posY, bool filled)
     {
         u8 *img = filled ? InfoFilled25 : Info25;
         return (DrawImg(img, posX, posY, 25, 25));
-    }
-
-    /*
-    ** Guide
-    ** 15px * 15px
-    ***************/
-
-    /*int     Icon::DrawGuide(IntVector &pos)
-    {
-        return (DrawImg(UserManualFilled15, pos.x, pos.y, 15, 15));
-    }*/
-
-    int     Icon::DrawGuide(int posX, int posY)
-    {
-        return (DrawImg(UserManualFilled15, posX, posY, 15, 15));
     }
 
     /*
     ** Hand Cursor
     ** 15px * 15px
     ***************/
-    int     Icon::DrawHandCursor(int posX, int posY)
+    int Icon::DrawHandCursor(int posX, int posY)
     {
         DrawImg(HandCursor15, posX, posY, 15, 15);
         return (posX + 15);
     }
 
     /*
-    ** Happy face
-    ** 15 px * 15 px
-    ****************/
-    int     Icon::DrawHappyFace(int posX, int posY, bool isFilled)
-    {
-        u8 *img = isFilled ? HappyFilled15 : Happy15;
-
-        return (DrawImg(img, posX, posY, 15, 15));
-    }
-
-    /*
-    ** Keyboard
+    ** Discord
     ** 25px * 25px
     **************/
-    int     Icon::DrawKeyboard(int posX, int posY, bool filled)
+    int Icon::DrawDiscord(int posX, int posY)
     {
-        u8 *img = filled ? KeyboardFilled25 : Keyboard25;
-
-        return (DrawImg(img, posX, posY, 25, 25));
+        return (DrawImg(Discord25, posX, posY, 25, 25));
     }
 
     /*
     ** More
     ** 15px * 15px
     **************/
-    int     Icon::DrawMore(int posX, int posY)
+    int Icon::DrawMore(int posX, int posY)
     {
         return (DrawImg(More15, posX, posY, 15, 15));
     }
 
     /*
-    ** Photo
-    ** 32px * 32px
-    ***************/
-
-    int     Icon::DrawPhoto(int posX, int posY)
-    {
-        return (DrawImg(Photo32, posX, posY, 32, 32));
-    }
-
-
-    /*
     ** Plus
     ** 25px * 25px
     **************/
-    int     Icon::DrawPlus(int posX, int posY, bool filled)
+    int Icon::DrawPlus(int posX, int posY, bool filled)
     {
         u8 *img = filled ? PlusFilled25 : Plus25;
-
         return (DrawImg(img, posX, posY, 25, 25));
     }
 
@@ -464,7 +346,7 @@ namespace CTRPluginFramework
     ** 15px * 15px
     ***************/
 
-    int     Icon::DrawRAM(int posX, int posY)
+    int Icon::DrawRAM(int posX, int posY)
     {
         return (DrawImg(RAM15, posX, posY, 15, 15));
     }
@@ -473,25 +355,16 @@ namespace CTRPluginFramework
     ** Restart
     ** 15px * 15 px
     **************/
-    int     Icon::DrawRestart(int posX, int posY)
+    int Icon::DrawRestart(int posX, int posY)
     {
         return (DrawImg(Restart15, posX, posY, 15, 15));
-    }
-
-    /*
-    ** Rocket
-    ** 40px * 40px
-    **************/
-    int     Icon::DrawRocket(int posX, int posY)
-    {
-        return (DrawImg(Rocket40, posX, posY, 40, 40));
     }
 
     /*
     ** Save
     ** 25px * 25px
     **************/
-    int     Icon::DrawSave(int posX, int posY)
+    int Icon::DrawSave(int posX, int posY)
     {
         return (DrawImg(Save25, posX, posY, 25, 25));
     }
@@ -501,7 +374,7 @@ namespace CTRPluginFramework
     ** 15px * 15px
     ***************/
 
-    int     Icon::DrawSearch(int posX, int posY)
+    int Icon::DrawSearch(int posX, int posY)
     {
         return (DrawImg(Search15, posX, posY, 15, 15));
     }
@@ -511,7 +384,7 @@ namespace CTRPluginFramework
     ** 15px * 15px
     ***************/
 
-    int     Icon::DrawSettings(int posX, int posY)
+    int Icon::DrawSettings(int posX, int posY)
     {
         return (DrawImg(Settings15, posX, posY, 15, 15));
     }
@@ -520,7 +393,7 @@ namespace CTRPluginFramework
     ** Shutdown
     ** 15px * 15 px
     **************/
-    int     Icon::DrawShutdown(int posX, int posY)
+    int Icon::DrawShutdown(int posX, int posY)
     {
         return (DrawImg(Shutdown15, posX, posY, 15, 15));
     }
@@ -530,7 +403,7 @@ namespace CTRPluginFramework
     ** 15px * 15px
     ***************/
 
-    int     Icon::DrawTools(int posX, int posY)
+    int Icon::DrawTools(int posX, int posY)
     {
         return (DrawImg(Maintenance15, posX, posY, 15, 15));
     }
@@ -539,23 +412,40 @@ namespace CTRPluginFramework
     ** Trash
     ** 25px * 25px
     ***************/
-    int     Icon::DrawTrash(int posX, int posY, bool filled)
+    int Icon::DrawTrash(int posX, int posY, bool filled)
     {
         u8 *img = filled ? TrashFilled25 : Trash25;
-
         return (DrawImg(img, posX, posY, 25, 25));
     }
 
     /*
-    ** Unsplash
+    ** Camera
     ** 15px * 15 px
     **************/
-    int     Icon::DrawUnsplash(int posX, int posY)
+    int Icon::DrawCamera(int posX, int posY)
     {
-        return (DrawImg(Unsplash15, posX, posY, 15, 15));
+        return (DrawImg(Camera15, posX, posY, 15, 15));
     }
 
-    int     Icon::DrawCustomIcon(const CustomIcon& icon, int posX, int posY)
+    /*
+     ** LoadPosition
+     ** 15px * 15 px
+     **************/
+    int Icon::DrawLoadPosition(int posX, int posY)
+    {
+        return (DrawImg(LoadPosition15, posX, posY, 15, 15));
+    }
+
+    /*
+     ** SavePosition
+     ** 15px * 15 px
+     **************/
+    int Icon::DrawSavePosition(int posX, int posY)
+    {
+        return (DrawImg(SavePosition15, posX, posY, 15, 15));
+    }
+
+    int Icon::DrawCustomIcon(const CustomIcon& icon, int posX, int posY)
     {
         return (DrawImg((u8*)icon.pixArray, posX, posY, icon.sizeX, icon.sizeY));
     }
