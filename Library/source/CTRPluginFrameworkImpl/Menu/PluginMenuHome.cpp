@@ -160,6 +160,7 @@ namespace CTRPluginFramework
                     home->_AddFavoriteBtn.Unlock();
                     home->_controllerBtn.Unlock();
                     home->_discordBtn.Unlock();
+                    home->_InfoBtn.Unlock();
                     home->_RenderTop();
                 }
             }
