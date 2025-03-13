@@ -511,6 +511,7 @@ namespace CTRPluginFramework
 
         *texture += new MenuEntry("Swap Link textures", nullptr, Rendering::swapLinkTexture, DescUtils::getDesc("swap_link_tex_note"));
         *texture += new MenuEntry("Force visibility of Cheer Outfit pom poms", nullptr, Rendering::forcePomPom, DescUtils::getDesc("cheer_pom_note"));
+        *texture += new MenuEntry("Hide Doppel masks", nullptr, Rendering::hideDoppelMasks, DescUtils::getDesc("doppel_mask_note"));
 
         *env += new MenuEntry("Disable fog effects", Rendering::disableFog, DescUtils::getDesc("fog_disable_note"));
         *env += new MenuEntry("Force costume aura visibility", nullptr, Rendering::forceAura, DescUtils::getDesc("aura_visible_note"));

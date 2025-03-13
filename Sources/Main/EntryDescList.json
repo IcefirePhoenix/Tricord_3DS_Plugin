@@ -1063,6 +1063,15 @@
             }
         },
         {
+            "name": "doppel_mask_note",
+            "content": {
+                "intro": "Hides the grey masks worn by Doppels in single player.",
+                "note": "",
+                "modeCompatibility": 0,
+                "clientOnly": true
+            }
+        },
+        {
             "name": "voiceless_note",
             "content": {
                 "intro": "Disables the main player's voice. Any voice SFX that cannot be disabled are replaced with their Doppel counterpart SFX.",

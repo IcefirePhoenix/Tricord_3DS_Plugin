@@ -99,9 +99,6 @@ namespace CTRPluginFramework
 
         startWarp();
 
-        // since single-lobby is bypassed, manually allow Doppel use...
-        doppelEnableAuto->Enable();
-
         Level::setCurrChal(targetChallenge);
         challengeEditAuto->Enable();
 
@@ -156,6 +153,9 @@ namespace CTRPluginFramework
         u16 warpInit = 0x001E;
         Process::Write16(AddressList::getAddress("WarpActivation"), warpInit);
         Process::Write32(AddressList::getAddress("Warp"), AddressList::getAddress("WarpPointer"));
+
+        // If single player lobby is bypassed, manually allow Doppel use
+        doppelEnableAuto->Enable();
     }
 
     // Warp between stages in the current Drablands level

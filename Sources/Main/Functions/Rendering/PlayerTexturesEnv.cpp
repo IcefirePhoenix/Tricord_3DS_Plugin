@@ -208,4 +208,20 @@ namespace CTRPluginFramework
 
         //FaceSelMenu(0, expressionList[0])(); // Idle expression
     }
+
+    void Rendering::hideDoppelMasks(MenuEntry *entry)
+    {
+        if (entry->Name() == "Hide Doppel masks")
+        {
+            for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
+                Process::Write8(AddressList::getAddress("DoppelMaskVisibility") + iterateThruPlayers * PLAYER_OFFSET, 0x00);
+            entry->SetName("Show Doppel masks");
+        }
+        else
+        {
+            for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
+                Process::Write8(AddressList::getAddress("DoppelMaskVisibility") + iterateThruPlayers * PLAYER_OFFSET, 0x01);
+            entry->SetName("Hide Doppel masks");
+        }
+    }
 }
