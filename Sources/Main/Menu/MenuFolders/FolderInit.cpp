@@ -604,5 +604,8 @@ namespace CTRPluginFramework
         pretendoOnlinePatchManager = new MenuEntry("Pretendo Patch (auto)", Miscellaneous::applyPretendoPatch);
         rotationOffsetManager = new MenuEntry("Disable rotation offset (auto)", Player::disableOffset);
         doppelCostumeStageResetManager = new MenuEntry("Disable Doppel costume stage reset (auto)", Costume::preventDoppelStageReset);
+
+        // apply patches on boot without requiring plugin menu to be opened
+        ManageTFH_Settings();
     }
 }
