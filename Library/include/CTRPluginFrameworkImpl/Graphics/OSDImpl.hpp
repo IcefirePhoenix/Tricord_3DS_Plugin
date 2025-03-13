@@ -60,7 +60,6 @@ namespace CTRPluginFramework
 
         static Hook             OSDHook;
         static RecursiveLock    RecLock;
-        static FloatingButton   FloatingBtn;
         static Screen           TopScreen;
         static Screen           BottomScreen;
         static std::vector<OSDMessage*>    Notifications;

@@ -23,8 +23,8 @@ namespace CTRPluginFramework
         _arBtn(Button::Sysfont | Button::Rounded, "Action Replay", IntRect(45, 160, 110, 28)),
         _toolsBtn(Button::Sysfont | Button::Rounded, "Tools", IntRect(165, 160, 110, 28)),
 
-        _discordBtn(Button::Icon | Button::Toggle, IntRect(250, 50, 25, 25), Icon::DrawKeyboard),
-        _controllerBtn(Button::Icon, IntRect(210, 50, 25, 25), Icon::DrawGameController25),
+        _discordBtn(Button::Icon | Button::Toggle, IntRect(250, 50, 25, 25), Icon::DrawDiscord),
+        _controllerBtn(Button::Icon, IntRect(210, 50, 25, 25), Icon::Draw3DS),
 
         _AddFavoriteBtn(Button::Icon | Button::Toggle, IntRect(50, 50, 25, 25), Icon::DrawAddFavorite),
         _InfoBtn(Button::Icon | Button::Toggle, IntRect(85, 50, 25, 25), Icon::DrawInfo)

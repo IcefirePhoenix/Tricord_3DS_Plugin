@@ -540,7 +540,7 @@ namespace CTRPluginFramework
         _hexEditorEntry = new MenuEntryTools("Hex Editor", [] { g_mode = HEXEDITOR; }, Icon::DrawGrid);
         _mainMenu.Append(_hexEditorEntry);
         _mainMenu.Append(new MenuEntryTools("Gateway RAM Dumper", [] { g_mode = GWRAMDUMP; }, Icon::DrawRAM));
-        _mainMenu.Append(new MenuEntryTools("Screenshot Options", nullptr, Icon::DrawUnsplash, new u32(SCREENSHOT)));
+        _mainMenu.Append(new MenuEntryTools("Screenshot Options", nullptr, Icon::DrawCamera, new u32(SCREENSHOT)));
         _mainMenu.Append(new MenuEntryTools("Miscellaneous", nullptr, Icon::DrawMore, new u32(MISCELLANEOUS)));
         _mainMenu.Append(new MenuEntryTools("Tricord Settings", nullptr, Icon::DrawSettings, this));
         _mainMenu.Append(new MenuEntryTools("Shutdown", Shutdown, Icon::DrawShutdown));
@@ -581,7 +581,7 @@ namespace CTRPluginFramework
                 g_mode = NORMAL;
             return (false);
         }
-        //u32 i = Preferences::IsEnabled(Preferences::UseFloatingBtn);
+
         if (g_mode == ABOUT)
         {
             if (!_abouttb.IsOpen())
