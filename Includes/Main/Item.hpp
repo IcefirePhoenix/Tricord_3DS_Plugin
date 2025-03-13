@@ -28,7 +28,6 @@ namespace CTRPluginFramework
         static void itemOpt(MenuEntry* entry);
         static void shadowItemOpt(MenuEntry* entry);
         static void strafingSpeedSet(MenuEntry* entry);
-        static void upgradeItemAlways(MenuEntry* entry);
         static void resetShadowItems(MenuEntry *entry);
         static void toggleShadowForceSwordUse(MenuEntry *entry);
 
