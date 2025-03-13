@@ -82,8 +82,6 @@ namespace CTRPluginFramework
         if (Preferences::IsEnabled(Preferences::HIDToggle))
             settings.UseGameHidMemory = true;
 
-        // settings.CachedDrawMode = true;
-
         PatchProcess();
         ToggleTouchscreenForceOn();
 
@@ -102,6 +100,7 @@ namespace CTRPluginFramework
         menu->OnClosing = ManageTFH_Settings;
 
         CreateMenu(*menu);
+
         menu->Run();
         return (0);
     }

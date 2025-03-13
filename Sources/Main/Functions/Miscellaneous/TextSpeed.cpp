@@ -4,7 +4,7 @@
 namespace CTRPluginFramework
 {
     MenuEntry *instantTextDisplay;
-    MenuEntry *pretendoOnlinePatchManager;
+    MenuEntry *pretendoOnlinePatchManager = new MenuEntry("", "");
 
     bool useInstantText;
 
@@ -26,6 +26,7 @@ namespace CTRPluginFramework
     // Aligns the MSBT text display timing tags between regions to avoid cross-region online cutscene desyncs
     void Miscellaneous::applyPretendoPatch(MenuEntry* entry)
     {
+
         /* Thanks to Dimitri for figuring out the file patches required to make Pretendo online multiplayer gameplay fully compatible cross-region! */
 
         // TODO: msbt parsing and patching...
