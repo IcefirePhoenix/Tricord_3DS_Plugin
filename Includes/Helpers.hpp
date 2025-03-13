@@ -48,6 +48,8 @@
 namespace CTRPluginFramework
 {
 	using StringVector = std::vector<std::string>;
+
+	void ManageTFH_Settings(void);
 }
 
 
