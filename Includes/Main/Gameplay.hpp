@@ -48,6 +48,7 @@ namespace CTRPluginFramework
         static void maxEnergySet(MenuEntry* entry);
         static void energyConsumeMultiplier(MenuEntry* entry);
         static void useLargeEnergyGauge(MenuEntry* entry);
+        static void setEnergyCostByAction(MenuEntry* entry);
 
         static void maxHealthSet(MenuEntry* entry);
         static void writeMaxHealth(MenuEntry* entry);

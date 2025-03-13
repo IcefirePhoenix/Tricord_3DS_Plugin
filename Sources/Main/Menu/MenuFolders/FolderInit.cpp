@@ -46,6 +46,7 @@ namespace CTRPluginFramework
         *energy += new MenuEntry("Infinite energy", Gameplay::infEnergy, DescUtils::getDesc("inf_energy_note"));
         *energy += new MenuEntry("Set maximum energy", nullptr, Gameplay::maxEnergySet, DescUtils::getDesc("max_energy_note"));
         *energy += new MenuEntry("Set energy consumption multiplier", nullptr, Gameplay::energyConsumeMultiplier, DescUtils::getDesc("energy_consumption_note"));
+        *energy += new MenuEntry("Set energy consumption by item / action", nullptr, Gameplay::setEnergyCostByAction, DescUtils::getDesc("energy_by_action_note"));
         *energy += new MenuEntry("Use large energy gauge graphic", nullptr, Gameplay::useLargeEnergyGauge, DescUtils::getDesc("large_energy_bar_note"));
     }
 

@@ -91,6 +91,15 @@
             }
         },
         {
+            "name": "energy_by_action_note",
+            "content": {
+                "intro": "Sets a custom energy cost for each individual item or action.",
+                "note": "",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "large_energy_bar_note",
             "content": {
                 "intro": "Switches the energy gauge graphic in the UI to the Energy Gear / Cheer Outfit / Tri Suit version.",
