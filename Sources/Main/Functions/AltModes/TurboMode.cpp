@@ -70,6 +70,7 @@ namespace CTRPluginFramework
             Process::WriteFloat(AddressList::getAddress("GripshotExtendSpeed"), 2);
             Process::WriteFloat(AddressList::getAddress("GripshotStrafe"), 2);
             Process::WriteFloat(AddressList::getAddress("HammerStrafe"), 2);
+            Process::WriteFloat(AddressList::getAddress("EnergyCostFireGlovesShield"), 0.15);
 
             // Animation Speeds
             Process::WriteFloat(AddressList::getAddress("Link_Wait"), 10);
@@ -244,6 +245,7 @@ namespace CTRPluginFramework
             Process::WriteFloat(AddressList::getAddress("GripshotExtendSpeed"), 0.55);
             Process::WriteFloat(AddressList::getAddress("GripshotStrafe"), 1);
             Process::WriteFloat(AddressList::getAddress("HammerStrafe"), 1);
+            Process::WriteFloat(AddressList::getAddress("EnergyCostFireGlovesShield"), 0.75);
 
             // Animation Speeds
             Process::WriteFloat(AddressList::getAddress("Link_Wait"), 1);
