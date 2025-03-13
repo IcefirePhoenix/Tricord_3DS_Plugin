@@ -27,6 +27,7 @@ namespace CTRPluginFramework
         static void disablePlayerLight(MenuEntry* entry);
         static void editFaceExpr(MenuEntry *entry);
         static void forceCustomFaceExpr(MenuEntry *entry);
+        static void hideDoppelMasks(MenuEntry* entry);
     };
 }
 #endif
