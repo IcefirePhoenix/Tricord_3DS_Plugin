@@ -3,7 +3,7 @@
 
 namespace CTRPluginFramework
 {
-    MenuEntry *rotationOffsetManager;
+    MenuEntry *rotationOffsetManager = new MenuEntry("", "");
 
     double maxOffset = 0xFFFFFFFF;
     float newOffset = 0.0;

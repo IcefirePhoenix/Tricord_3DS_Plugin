@@ -3,7 +3,7 @@
 
 namespace CTRPluginFramework
 {
-    MenuEntry *doppelCostumeStageResetManager;
+    MenuEntry *doppelCostumeStageResetManager = new MenuEntry("", "");
 
     /* ------------------ */
 
