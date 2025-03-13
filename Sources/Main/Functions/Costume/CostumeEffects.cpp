@@ -716,7 +716,7 @@ namespace CTRPluginFramework
     void Costume::setCheetahMultiplier(MenuEntry* entry)
     {
         float newSpeed = 1.5;
-        Keyboard editSpeed("Custom Cheetah Speed Multiplier", "Enter a custom speed multiplier.\n\nThe default value is 1.5.\n\nNote: negative values will invert movement.");
+        Keyboard editSpeed("Custom Cheetah Speed Multiplier", "Enter a custom speed multiplier.\n\nThe default value is 1.5.\n\nNote: Negative values will invert movement.");
         editSpeed.IsHexadecimal(false);
         if (editSpeed.Open(newSpeed, 1.5) == 0)
         {

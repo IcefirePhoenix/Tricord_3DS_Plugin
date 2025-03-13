@@ -46,7 +46,7 @@ namespace CTRPluginFramework
         }
 
         // select target color texture...
-        Keyboard texture("Player Texture Swapper", "Choose a texture to load for " + linkName + " link.");
+        Keyboard texture("Player Texture Swapper", "Choose a texture to load for " + linkName + " Link.");
         texture.Populate(linkList);
         tex = texture.Open();
 

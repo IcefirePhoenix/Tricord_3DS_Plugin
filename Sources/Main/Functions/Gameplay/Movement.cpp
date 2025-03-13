@@ -16,7 +16,7 @@ namespace CTRPluginFramework
     {
 
         float newSpeed, defaultSpeed = 1.0;
-        std::string speedIntro = "Enter a custom movement speed value.\n\nThe default value is 1.0.\n\nNote: negative values will invert movement.";
+        std::string speedIntro = "Enter a custom movement speed value.\n\nThe default value is 1.0.\n\nNote: Negative values will invert movement.";
 
         if (entry->Name() == "Set custom movement speed")
         {
