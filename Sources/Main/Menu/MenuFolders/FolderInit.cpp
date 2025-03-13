@@ -478,8 +478,6 @@ namespace CTRPluginFramework
 
         *items += playerItem;
         *items += shadowItem;
-
-        // TODO: *items += new MenuEntry("Always use upgraded Items", Item::upgradeItemAlways);
     }
 
     void InitRenderFolder(PluginMenu &menu)
