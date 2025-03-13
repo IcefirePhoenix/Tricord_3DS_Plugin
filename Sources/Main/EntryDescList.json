@@ -244,15 +244,6 @@
             }
         },
         {
-            "name": "edit_freecam_hotkey_note",
-            "content": {
-                "intro": "Allows you to customize the current hotkeys for Freecam. Current hotkeys are listed in Freecam's description.",
-                "note": "",
-                "modeCompatibility": 1,
-                "clientOnly": true
-            }
-        },
-        {
             "name": "zoom_swap_note",
             "content": {
                 "intro": "Switches between Orthographic and Perspective zoom types.\n\nOrthographic: maintains object sizes but reduces depth perception\nPerspective: more realistic; objects get smaller (and potentially distorted/skewed) the farther they are from the camera",

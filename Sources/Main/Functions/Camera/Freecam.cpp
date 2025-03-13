@@ -8,7 +8,6 @@ namespace CTRPluginFramework
 	// TODO: disable Start/Select behavior -> Pause Menu
 
 	MenuEntry* menuFreecam;
-    MenuEntry* editFreecamControls;
     MenuEntry* editFreecamSen;
     MenuEntry* swapZoom;
 
