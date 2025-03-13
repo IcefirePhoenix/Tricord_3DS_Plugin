@@ -61,7 +61,6 @@ namespace CTRPluginFramework
         if (PluginMenu::GetRunningInstance()->FreecamToggle)
         {
             menuFreecam->Show();
-            editFreecamControls->Show();
             editFreecamSen->Show();
             swapZoom->Show();
 
@@ -80,7 +79,6 @@ namespace CTRPluginFramework
         else // gameplay OR normal menu
         {
             menuFreecam->HideWithoutDisable();
-            editFreecamControls->HideWithoutDisable();
             editFreecamSen->HideWithoutDisable();
             swapZoom->HideWithoutDisable();
 
@@ -101,7 +99,6 @@ namespace CTRPluginFramework
             else
             {
                 menuFreecam->HideWithoutDisable();
-                editFreecamControls->HideWithoutDisable();
                 editFreecamSen->HideWithoutDisable();
                 swapZoom->HideWithoutDisable();
 

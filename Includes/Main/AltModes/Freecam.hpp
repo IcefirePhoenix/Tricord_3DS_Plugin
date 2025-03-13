@@ -7,7 +7,6 @@
 namespace CTRPluginFramework
 {
     extern MenuEntry* menuFreecam;
-    extern MenuEntry* editFreecamControls;
     extern MenuEntry* editFreecamSen;
     extern MenuEntry* swapZoom;
 

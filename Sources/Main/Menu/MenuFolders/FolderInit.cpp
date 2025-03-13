@@ -198,15 +198,10 @@ namespace CTRPluginFramework
             Hotkey(Key::CPadRight, "Rotate clockwise (Y-axis)")
         }));
 
-
-        editFreecamControls = new MenuEntry("Edit button controls", nullptr, Freecam::editHotkeys, DescUtils::getDesc("edit_freecam_hotkey_note"));
         editFreecamSen = new MenuEntry("Edit sensitivity", nullptr, Freecam::editSensitivity, DescUtils::getDesc("freecam_sensitivity_note"));
         swapZoom = new MenuEntry("Swap to Perspective Zoom", nullptr, Freecam::setZoomType, DescUtils::getDesc("zoom_swap_note"));
 
-        editFreecamControls->SetAltIcon(false);
-
         menu += menuFreecam;
-        menu += editFreecamControls;
         menu += editFreecamSen;
         menu += swapZoom;
     }
