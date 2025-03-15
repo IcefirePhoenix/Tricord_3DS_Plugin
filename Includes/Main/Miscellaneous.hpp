@@ -15,6 +15,9 @@ namespace CTRPluginFramework
     void displayPhoto(bool photoCheck);
     void setCameraEdits(bool useCamera);
     bool getCameraEdits(void);
+    void pause(int eventID);
+    void resume(void);
+    void displayTime(Time time);
 
     const u16 BUTTON_A = BIT(0);
     const u16 BUTTON_B = BIT(1);
@@ -54,6 +57,8 @@ namespace CTRPluginFramework
         static void toggleCameraShutter (MenuEntry* entry);
         static void writeShutterDisable(MenuEntry* entry);
         static void applyPretendoPatch(MenuEntry *entry);
+        static void speedrunTimer(MenuEntry* entry);
+        static void toggleTimerEvents(MenuEntry* entry);
     };
 }
 #endif
