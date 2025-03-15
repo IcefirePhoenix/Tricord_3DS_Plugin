@@ -411,6 +411,7 @@ namespace CTRPluginFramework
         miscellaneous = new MenuFolder("Miscellaneous");
         MenuFolder *buttonSpam = new MenuFolder("Button Spammer");
         MenuFolder *camera = new MenuFolder("Screenshot");
+        MenuFolder *speedrun = new MenuFolder("Speedrun Timer");
 
         *buttonSpam += new MenuEntry("Enable button spam", Miscellaneous::buttonSpammer, DescUtils::getDesc("button_spam_note"));
         *buttonSpam += new MenuEntry("Set custom timer interval: 10 ms", nullptr, Miscellaneous::selSpamInterval, DescUtils::getDesc("set_spam_interval_note"));
@@ -420,8 +421,33 @@ namespace CTRPluginFramework
         *camera += new MenuEntry("Disable camera shutter", nullptr, Miscellaneous::toggleCameraShutter, DescUtils::getDesc("shutter_note"));
         *camera += new MenuEntry("Use photo viewer touchscreen toggle", Miscellaneous::managePhotoDisp, DescUtils::getDesc("viewer_toggle_note"));
 
+        *speedrun += (EntryWithHotkey(new MenuEntry("Enable Onscreen Speedrun Timer", Miscellaneous::speedrunTimer, DescUtils::getDesc("speedrun_note")),
+        {
+            Hotkey(Key::X, "Create and show split"),
+            Hotkey(Key::L | Key::R, "Restart timer")
+        }));
+
+        MenuEntry* timerEventEntries[5];
+
+        StringVector timerEventInitNames =
+        {
+            "Pause timer during cutscenes",
+            "Pause timer during loading screens",
+            "Pause timer in treasure rooms",
+            "Pause timer while game is paused",
+            "Restart timer upon entering a new level"
+        };
+
+        for (int eventID = 0; eventID < 5; eventID++)
+        {
+            timerEventEntries[eventID] = new MenuEntry(timerEventInitNames[eventID], nullptr, Miscellaneous::toggleTimerEvents, DescUtils::getDesc("timer_event_note_" + std::to_string(eventID)));
+            timerEventEntries[eventID]->SetArg(reinterpret_cast<void*>(eventID));
+            *speedrun += timerEventEntries[eventID];
+        }
+
         *miscellaneous += buttonSpam;
         *miscellaneous += camera;
+        *miscellaneous += speedrun;
 
         *miscellaneous += new MenuEntry("Force instant text boxes", nullptr, Miscellaneous::manageInstantText, DescUtils::getDesc("instant_text_note"));
 

@@ -1214,6 +1214,60 @@
                 "modeCompatibility": 2,
                 "clientOnly": false
             }
+        },
+        {
+            "name": "speedrun_note",
+            "content": {
+                "intro": "Displays the elapsed time in hh:mm:ss onscreen. Useful for tracking time spent in a level if you're a speedrunner.",
+                "note": "Not approved by speedrun.com as an official means of tracking speedrun times. This tool is only an aid for practice.",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "timer_event_note_0",
+            "content": {
+                "intro": "Toggles whether the speedrun timer will automatically pause during in-level cutscenes and resume afterwards.",
+                "note": "Cutscenes may include boss intros/defeat scenes, puzzles being solved, Lady's dialogue, etc.",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "timer_event_note_1",
+            "content": {
+                "intro": "Toggles whether the speedrun timer will automatically pause during loading screens and resume afterwards.",
+                "note": "The timer will resume once you have control of your player again.",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "timer_event_note_2",
+            "content": {
+                "intro": "Toggles whether the speedrun timer will automatically pause while inside a treasure room and resume upon exiting.",
+                "note": "",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "timer_event_note_3",
+            "content": {
+                "intro": "Toggles whether the speedrun timer will automatically pause while the game is paused and resume upon unpausing.",
+                "note": "",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "timer_event_note_4",
+            "content": {
+                "intro": "Toggles whether the speedrun timer will automatically restart upon entering a new level.",
+                "note": "The timer will restart once you have control of your player.",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
         }
     ]
 }
