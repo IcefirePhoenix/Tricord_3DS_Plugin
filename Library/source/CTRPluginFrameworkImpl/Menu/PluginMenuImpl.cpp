@@ -547,14 +547,15 @@ namespace CTRPluginFramework
         }
     }
 
-    void    PluginMenuImpl::WriteFavoritesToFile(Preferences::Header &header, File &settings)
+    void PluginMenuImpl::WriteFavoritesToFile(Preferences::Header &header, File &settings)
     {
         if (_runningInstance == nullptr)
             return;
 
-        std::vector<u32>    uids;
-        MenuFolderImpl      *folder = _runningInstance->_home->_starred;
+        std::vector<u32> uids;
+        MenuFolderImpl *folder = _runningInstance->_home->_starred;
 
+        // restricted MenuFolders/MenuEntries cannot be starred in the first place -> no specific check needed here
         for (MenuItem *item : folder->_items)
         {
             uids.push_back(item->Uid);
