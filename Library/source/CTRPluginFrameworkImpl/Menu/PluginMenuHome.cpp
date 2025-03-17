@@ -1045,6 +1045,13 @@ namespace CTRPluginFramework
             _AddFavoriteBtn.Lock();
             _arBtn.Lock();
             _searchBtn.Lock();
+
+            // this cannot be overrided by a Game Mode onClick update as its button is locked...
+            if (_folder != _root)
+            {
+                _returnFolder = _folder;
+                _folder = _root;
+            }
         }
         else
         {

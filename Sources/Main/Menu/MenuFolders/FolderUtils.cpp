@@ -58,6 +58,7 @@ namespace CTRPluginFramework
         // auto entries added to menu for logging purposes but hidden from users
         menu += autoFolder;
         autoFolder->HideWithoutDisable();
+        menu.AddToHidden(autoFolder);
     }
 
     void ToggleMenuChange(Time time)
