@@ -16,6 +16,7 @@ namespace CTRPluginFramework
         this->_arg = nullptr;
         this->_executeIndex = -1;
         this->_flags.state = false;
+        this->_flags.restricted = false;
         this->_flags.justChanged = false;
         this->_flags.isRadio = false;
         this->_flags.isUnselectable = false;
@@ -57,11 +58,11 @@ namespace CTRPluginFramework
         // Change the state
         _TriggerState();
 
-        // If the entry has a valid funcpointer
         if (GameFunc != nullptr)
-        {
             PluginMenuExecuteLoop::Add(this);
-        }
+
+        if (MenuFunc != nullptr && !NeedsUserInput()) // allows gearboxes to run on boot
+            MenuFunc(_owner);
     }
 
     void    MenuEntryImpl::Disable(void)
@@ -94,6 +95,10 @@ namespace CTRPluginFramework
         _flags.restricted = state;
     }
 
+    void    MenuEntryImpl::SetUserInputReq(bool needsInput)
+    {
+        _flags.needsUserInput = needsInput;
+    }
 
     void    MenuEntryImpl::SetArg(void *arg)
     {
@@ -120,6 +125,11 @@ namespace CTRPluginFramework
     bool MenuEntryImpl::IsRestricted(void) const
     {
         return (_flags.restricted);
+    }
+
+    bool MenuEntryImpl::NeedsUserInput(void) const
+    {
+        return (_flags.needsUserInput);
     }
 
     MenuEntry *MenuEntryImpl::AsMenuEntry(void) const

@@ -111,6 +111,11 @@ namespace CTRPluginFramework
         */
         bool IsRestricted(void) const;
 
+        /**
+        * \brief Check if this gearbox entry requires user input to run
+        * \return true if the entry is bound to user input, false otherwise
+        */
+        bool NeedsUserInput(void) const;
 
         /**
         * \brief Check if this entry is visible in the menu

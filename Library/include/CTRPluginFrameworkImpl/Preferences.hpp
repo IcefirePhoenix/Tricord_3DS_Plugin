@@ -24,6 +24,7 @@ namespace CTRPluginFramework
             HIDToggle           = 1,
             AutoSaveCheats      = 1 << 2,
             DisableOSDNotifs    = 1 << 3,
+            AutoEnableSavedCheats      = 1 << 4,
             AutoEnableFavorites   = 1 << 5,
             ScreenshotEnabled   = 1 << 6,
 
