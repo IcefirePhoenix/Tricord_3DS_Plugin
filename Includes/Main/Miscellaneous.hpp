@@ -17,7 +17,7 @@ namespace CTRPluginFramework
     bool getCameraEdits(void);
     void pause(int eventID);
     void resume(void);
-    void displayTime(Time time);
+    void displayTime(Time time, int x, int y);
 
     const u16 BUTTON_A = BIT(0);
     const u16 BUTTON_B = BIT(1);

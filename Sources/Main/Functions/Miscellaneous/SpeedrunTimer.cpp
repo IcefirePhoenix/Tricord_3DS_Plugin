@@ -6,10 +6,13 @@ namespace CTRPluginFramework
     Clock speedTimer;
     Time pauseStartTime, pauseStartTimeRelative, pauseEndTime, accumulatedPauseDuration = Time::Zero;
 
-    Screen screen = OSD::GetTopScreen();
-    int x = 5, y = 225;
+    Clock splitTimer;
+    Time split;
 
-    bool running = true;
+    Screen screen = OSD::GetTopScreen();
+    int xCoord = 5, yCoord = 225;
+
+    bool running = true, showSplit = false;
     bool autoTimerEvents[5] = {false, false, false, false, false};
     bool autoRestart = false;
     int pauseEventID = -1;
@@ -48,7 +51,7 @@ namespace CTRPluginFramework
         running = true;
     }
 
-    void displayTime(Time time)
+    void displayTime(Time time, int x, int y)
     {
         int secondsRaw = (int)time.AsSeconds();
         int hours = secondsRaw / 3600;
@@ -76,13 +79,22 @@ namespace CTRPluginFramework
             autoRestart = false;
         }
 
-        // TODO: Create and show split
-        /*
+        // Create and show split
         if (entry->Hotkeys[0].IsPressed())
         {
-
+            split = running ? speedTimer.GetElapsedTime() - accumulatedPauseDuration : pauseStartTimeRelative;
+            showSplit = true;
+            splitTimer.Restart();
         }
-        */
+
+        if (showSplit)
+        {
+            // Display 15 pixels above usual timer
+            displayTime(split, xCoord, yCoord - 15);
+            if (splitTimer.HasTimePassed(Seconds(10)))
+                showSplit = false;
+        }
+        
         
         if (running)
         {
@@ -125,12 +137,12 @@ namespace CTRPluginFramework
             // Run and display time
 
             // Draw
-            displayTime(speedTimer.GetElapsedTime() - accumulatedPauseDuration);
+            displayTime(speedTimer.GetElapsedTime() - accumulatedPauseDuration, xCoord, yCoord);
         }
         else
         {
             // Draw pause-time on screen
-            displayTime(pauseStartTimeRelative);
+            displayTime(pauseStartTimeRelative, xCoord, yCoord);
 
             // Wait for appropriate unpause status
             switch (pauseEventID)
