@@ -23,6 +23,7 @@ namespace CTRPluginFramework
         // Return true if the Close Button is pressed, else false
         bool operator()(EventList &eventList, int &mode, Time &delta);
         void Append(MenuItem *item) const;
+        void AddToHidden(MenuItem *item) const;
         void Refresh(void);
         void UnStar(MenuItem* item);
         void Init(void);
@@ -61,6 +62,7 @@ namespace CTRPluginFramework
 
         // Members
         MenuFolderImpl* _root;
+        MenuFolderImpl* _hidden;
         MenuFolderImpl* _folder;
         MenuFolderImpl* _returnFolder;
         MenuFolderImpl* _starred;

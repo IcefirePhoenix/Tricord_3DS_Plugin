@@ -30,6 +30,7 @@ namespace CTRPluginFramework
         ~PluginMenuImpl(void);
 
         void    Append(MenuItem *item) const;
+        void    AddToHidden(MenuItem *item) const;
         void    Callback(CallbackPointer callback);
         void    RemoveCallback(CallbackPointer callback);
         int     Run(void);
@@ -61,6 +62,7 @@ namespace CTRPluginFramework
         void    ShowWelcomeMessage(bool showMsg);
 
         MenuFolderImpl *GetRoot(void) const;
+        MenuFolderImpl *GetHidden(void) const;
         bool    IsOpen(void) const;
         bool    WasOpened(void) const;
         void    AddPluginVersion(u32 version) const;

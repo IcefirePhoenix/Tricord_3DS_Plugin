@@ -55,6 +55,11 @@ namespace CTRPluginFramework
         _home->Append(item);
     }
 
+    void    PluginMenuImpl::AddToHidden(MenuItem *item) const
+    {
+        _home->AddToHidden(item);
+    }
+
     void    PluginMenuImpl::Callback(CallbackPointer callback)
     {
         // If the callback is going to be added, make sure it's not in the trash bin
@@ -709,6 +714,11 @@ namespace CTRPluginFramework
     MenuFolderImpl* PluginMenuImpl::GetRoot() const
     {
         return (_home->_root);
+    }
+
+    MenuFolderImpl* PluginMenuImpl::GetHidden() const
+    {
+        return (_home->_hidden);
     }
 
     bool    PluginMenuImpl::IsOpen(void) const

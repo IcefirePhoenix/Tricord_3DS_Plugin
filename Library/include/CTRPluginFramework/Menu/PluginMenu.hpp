@@ -64,6 +64,9 @@ namespace CTRPluginFramework
         ******************************/
         void    Append(MenuFolder *item) const;
 
+        void    AddToHidden(MenuFolder *item) const;
+        void    AddToHidden(MenuEntry *item) const;
+
         void    operator += (const MenuEntry *entry) const;
         void    operator += (const MenuFolder *folder) const;
         void    operator += (CallbackPointer callback) const;
@@ -93,6 +96,12 @@ namespace CTRPluginFramework
          * \return A std::vector with pointers to all MenuFolder objects
          */
         std::vector<MenuFolder *>   GetFolderList(void) const;
+
+        /**
+         * \brief Get all hidden folders in  the menu
+         * \return A std::vector with pointers to all MenuFolder objects
+         */
+        std::vector<MenuFolder *>   GetHiddenList(void) const;
 
         /**
         * \brief Enable / Disable the HexEditor in Tools

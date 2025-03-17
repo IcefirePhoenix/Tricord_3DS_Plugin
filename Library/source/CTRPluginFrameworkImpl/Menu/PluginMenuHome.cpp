@@ -30,6 +30,7 @@ namespace CTRPluginFramework
         _InfoBtn(Button::Icon | Button::Toggle, IntRect(85, 50, 25, 25), Icon::DrawInfo)
     {
         _root = _folder = new MenuFolderImpl("Main Menu - Code Collection");
+        _hidden = new MenuFolderImpl("Hidden");
         _starredConst = _starred = new MenuFolderImpl("Favorites");
         _returnFolder = nullptr;
 
@@ -246,6 +247,11 @@ namespace CTRPluginFramework
     void PluginMenuHome::Append(MenuItem* item) const
     {
         _folder->Append(item);
+    }
+
+    void PluginMenuHome::AddToHidden(MenuItem* item) const
+    {
+        _hidden->Append(item);
     }
 
     void PluginMenuHome::Refresh(void)
