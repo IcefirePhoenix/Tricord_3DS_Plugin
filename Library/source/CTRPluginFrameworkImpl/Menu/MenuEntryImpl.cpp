@@ -35,6 +35,7 @@ namespace CTRPluginFramework
         this->_arg = nullptr;
         this->_executeIndex = -1;
         this->_flags.state = false;
+        this->_flags.restricted = false;
         this->_flags.justChanged = false;
         this->_flags.isRadio = false;
         this->_flags.isUnselectable = false;
@@ -88,6 +89,12 @@ namespace CTRPluginFramework
         _radioId = id;
     }
 
+    void    MenuEntryImpl::SetRestrictedState(bool state)
+    {
+        _flags.restricted = state;
+    }
+
+
     void    MenuEntryImpl::SetArg(void *arg)
     {
         _arg = arg;
@@ -108,6 +115,11 @@ namespace CTRPluginFramework
     bool    MenuEntryImpl::IsActivated(void) const
     {
         return (_flags.state);
+    }
+
+    bool MenuEntryImpl::IsRestricted(void) const
+    {
+        return (_flags.restricted);
     }
 
     MenuEntry *MenuEntryImpl::AsMenuEntry(void) const

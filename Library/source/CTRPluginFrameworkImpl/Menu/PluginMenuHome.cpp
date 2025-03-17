@@ -1098,14 +1098,18 @@ namespace CTRPluginFramework
 
         if (item)
         {
+            if (item->IsEntry() && reinterpret_cast<MenuEntryImpl *>(item)->IsRestricted())
+                return;
+
+            if (item->IsFolder() && reinterpret_cast<MenuFolderImpl *>(item)->IsRestricted())
+                return;
+
             bool star = item->_TriggerStar();
 
             if (star)
                 _starredConst->Append(item, true);
             else
-            {
                 UnStar(item);
-            }
         }
     }
 

@@ -187,20 +187,18 @@ namespace CTRPluginFramework
         if (OpenConfigFile(settings, header) == 0)
         {
             if (header.favoritesCount != 0)
+            {
                 PluginMenuImpl::LoadFavoritesFromFile(header, settings);
-            _favoritesAlreadyLoaded = true;
-        }
-                    }
 
-    void    Preferences::LoadHotkeysFromFile(void)
-    {
-        File    settings;
-        Header  header = { 0 };
+                if (autoEnableFavorites)
+                    PluginMenuImpl::ActivateFavoritesFromFile(header, settings);
+            }
 
-        if (OpenConfigFile(settings, header) == 0)
-        {
             if (header.hotkeysCount != 0)
                 PluginMenuImpl::LoadHotkeysFromFile(header, settings);
+
+            if (autoEnableSavedCheats && header.enabledCheatsCount != 0)
+                PluginMenuImpl::ActivateEnabledCheatsFromFile(header, settings);
         }
     }
 
@@ -233,7 +231,7 @@ namespace CTRPluginFramework
         if (File::Exists(source + "CustomBoxBG.bmp")) {
             BMPImage* image1 = new BMPImage(source + "CustomBoxBG.bmp");
 
-            if (image1->IsLoaded()) 
+            if (image1->IsLoaded())
                 image1 = PostProcess(image1, 320, 240);
             else
             {
@@ -257,7 +255,7 @@ namespace CTRPluginFramework
         if (bottomBackgroundImage)
         {
             _bmpCanBeLoaded = true;
-            
+
             delete bottomBackgroundImage;
             bottomBackgroundImage = nullptr;
         }

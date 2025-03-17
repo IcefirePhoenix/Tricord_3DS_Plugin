@@ -9,13 +9,14 @@ namespace CTRPluginFramework
         Hotkeys(this),
         _item(new MenuEntryImpl(name, note, this))
     {
+        _item->_flags.restricted = restricted;
     }
 
     MenuEntry::MenuEntry(const std::string &name, FuncPointer func, const std::string &note) :
         Hotkeys(this),
         _item(new MenuEntryImpl(name, func, note, this))
     {
-
+        _item->_flags.restricted = restricted;
     }
 
     MenuEntry::MenuEntry(const std::string &name, FuncPointer GameFunc, FuncPointer MenuFunc, const std::string &note) :
@@ -23,12 +24,14 @@ namespace CTRPluginFramework
         _item(new MenuEntryImpl(name, GameFunc, note, this))
     {
         _item->MenuFunc = MenuFunc;
+        _item->_flags.restricted = restricted;
     }
 
     MenuEntry::MenuEntry(int radioId, const std::string &name, FuncPointer func, const std::string &note) :
         Hotkeys(this),
         _item(new MenuEntryImpl(name, func, note, this))
     {
+        _item->_flags.restricted = restricted;
         _item->SetRadio(radioId);
     }
 
@@ -38,6 +41,7 @@ namespace CTRPluginFramework
     {
         _item->SetRadio(radioGroup);
         _item->MenuFunc = MenuFunc;
+        _item->_flags.restricted = restricted;
     }
 
     MenuEntry::~MenuEntry()
@@ -79,7 +83,11 @@ namespace CTRPluginFramework
         _item->SetRadio(id);
     }
 
-    void    MenuEntry::SetArg(void *arg) const
+    void MenuEntry::SetRestrictedState(bool state) const
+    {
+        _item->SetRestrictedState(state);
+    }
+
     {
         _item->SetArg(arg);
     }
@@ -99,7 +107,10 @@ namespace CTRPluginFramework
         return (_item->IsActivated());
     }
 
-    bool    MenuEntry::IsVisible() const
+    bool MenuEntry::IsRestricted(void) const
+    {
+        return (_item->IsRestricted());
+    }
     {
         return (_item->IsVisible());
     }

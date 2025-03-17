@@ -166,19 +166,12 @@ namespace CTRPluginFramework
 
         // If Start is pressed, don't auto enable the cheats
         if (Controller::IsKeyPressed(Key::Start) || Controller::IsKeyDown(Key::Start))
-            Preferences::Clear(Preferences::AutoLoadCheats);
+            Preferences::Clear(Preferences::AutoEnableSavedCheats);
 
         _tools->UpdateSettings();
 
-        // Load favorites
-        Preferences::LoadSavedFavorites();
-
-        // Enable cheats
-        if (Preferences::IsEnabled(Preferences::AutoLoadCheats))
-            Preferences::LoadSavedEnabledCheats();
-
-        // Load custom hotkeys
-        Preferences::LoadHotkeysFromFile();
+        // Load saved MenuEntry preferences
+        Preferences::LoadEntryPreferences(Preferences::IsEnabled(Preferences::AutoEnableSavedCheats), Preferences::IsEnabled(Preferences::AutoEnableFavorites));
 
         // Update PluginMenuHome variables
         home.Init();
@@ -407,19 +400,43 @@ namespace CTRPluginFramework
         home.Close(folder);
     }
 
-    void PluginMenuImpl::LoadEnabledCheatsFromFile(const Preferences::Header &header, File &settings)
+    void PluginMenuImpl::ActivateEnabledCheatsFromFile(const Preferences::Header &header, File &settings)
     {
         if (_runningInstance == nullptr)
             return;
 
-        std::vector<u32>    uids;
-        MenuFolderImpl      *folder = _runningInstance->_home->_folder;
+        std::vector<u32> uids;
+        MenuFolderImpl *folder = _runningInstance->_home->_folder;
 
         uids.resize(header.enabledCheatsCount);
 
         settings.Seek(header.enabledCheatsOffset, File::SET);
 
         if (settings.Read(uids.data(), sizeof(u32) * header.enabledCheatsCount) == 0)
+        {
+            for (u32 &uid : uids)
+            {
+                MenuItem *item = folder->GetItem(uid);
+
+                if (item != nullptr && item->IsEntry())
+                    reinterpret_cast<MenuEntryImpl *>(item)->Enable();
+            }
+        }
+    }
+
+    void PluginMenuImpl::ActivateFavoritesFromFile(const Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        std::vector<u32> uids;
+        MenuFolderImpl *folder = _runningInstance->_home->_folder;
+
+        uids.resize(header.favoritesCount);
+
+        settings.Seek(header.favoritesOffset, File::SET);
+
+        if (settings.Read(uids.data(), sizeof(u32) * header.favoritesCount) == 0)
         {
             for (u32 &uid : uids)
             {
@@ -500,18 +517,22 @@ namespace CTRPluginFramework
         }
     }
 
-    void    PluginMenuImpl::WriteEnabledCheatsToFile(Preferences::Header &header, File &settings)
+    void PluginMenuImpl::WriteEnabledCheatsToFile(Preferences::Header &header, File &settings)
     {
         if (_runningInstance == nullptr)
             return;
 
-        std::vector<u32>    uids;
-        MenuFolderImpl      *folder = _runningInstance->_home->_folder;
+        std::vector<u32> uids;
+        MenuFolderImpl *folder = _runningInstance->_home->_folder;
 
         for (MenuItem *item : folder->_items)
         {
-            if (item->IsEntry() && reinterpret_cast<MenuEntryImpl *>(item)->IsActivated())
-                uids.push_back(item->Uid);
+            if (item->IsEntry())
+            {
+                MenuEntryImpl* enabledEntry = reinterpret_cast<MenuEntryImpl *>(item);
+                if (enabledEntry->IsActivated() && !enabledEntry->IsRestricted())
+                    uids.push_back(item->Uid);
+            }
         }
 
         if (uids.size())
