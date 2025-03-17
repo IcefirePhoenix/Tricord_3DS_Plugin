@@ -62,6 +62,7 @@ namespace CTRPluginFramework
         // Members
         MenuFolderImpl* _root;
         MenuFolderImpl* _folder;
+        MenuFolderImpl* _returnFolder;
         MenuFolderImpl* _starred;
         MenuFolderImpl* _starredConst;
 

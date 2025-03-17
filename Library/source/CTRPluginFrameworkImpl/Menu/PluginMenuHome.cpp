@@ -31,6 +31,7 @@ namespace CTRPluginFramework
     {
         _root = _folder = new MenuFolderImpl("Main Menu - Code Collection");
         _starredConst = _starred = new MenuFolderImpl("Favorites");
+        _returnFolder = nullptr;
 
         _starMode = false;
         _selector = 0;
@@ -989,9 +990,7 @@ namespace CTRPluginFramework
 
     void PluginMenuHome::_gameModeBtn_OnClick(void)
     {
-        std::string msg = PluginMenu::GetRunningInstance()->GameplayToggle ?
-            "If you exit this menu, any chosen Gameplay Modes will be disabled.\n\nWould you like to continue to the Main Menu?" :
-            "Choosing a custom Gameplay Mode will auto-disable any codes that may cause conflicts (see the FAQ and/or the Wiki for details). You will also be unable to access the Main Menu until you quit.\n\nWould you like to proceed?\n";
+        std::string msg = PluginMenu::GetRunningInstance()->GameplayToggle ? "If you exit this menu, any chosen Gameplay Modes will be disabled.\n\nWould you like to continue to the Main Menu?" : "Choosing a custom Gameplay Mode will auto-disable any codes that may cause conflicts (see the FAQ and/or the Wiki for details). You will also be unable to access the Main Menu until you quit.\n\nWould you like to proceed?\n";
 
         if (MessageBox(Color::Gainsboro << "Gameplay Modes", msg, DialogType::DialogYesNo)())
             PluginMenu::GetRunningInstance()->GameplayToggle = !PluginMenu::GetRunningInstance()->GameplayToggle;
@@ -1005,6 +1004,9 @@ namespace CTRPluginFramework
             _AddFavoriteBtn.Lock();
             _arBtn.Lock();
             _searchBtn.Lock();
+
+            _returnFolder = _folder;
+            _folder = _root;
         }
         else
         {
@@ -1014,6 +1016,12 @@ namespace CTRPluginFramework
             _AddFavoriteBtn.Unlock();
             _arBtn.Unlock();
             _searchBtn.Unlock();
+
+            if (_returnFolder == nullptr)
+                return;
+
+            _folder = _returnFolder;
+            _returnFolder = nullptr;
         }
     }
 
@@ -1021,6 +1029,7 @@ namespace CTRPluginFramework
     {
         PluginMenu::GetRunningInstance()->FreecamToggle = !PluginMenu::GetRunningInstance()->FreecamToggle;
 
+        // if current folder is root, that means we are either in freecam, game mode, or home
         if (PluginMenu::GetRunningInstance()->FreecamToggle)
         {
             _gameModeBtn.Lock();
@@ -1031,18 +1040,28 @@ namespace CTRPluginFramework
             _arBtn.Lock();
             _searchBtn.Lock();
         }
-        else if (!PluginMenu::GetRunningInstance()->GameplayToggle)
+        else
         {
-            _gameModeBtn.Unlock();
-            _faqBtn.Unlock();
-            _toolsBtn.Unlock();
-            _showStarredBtn.Unlock();
-            _AddFavoriteBtn.Unlock();
-            _arBtn.Unlock();
-            _searchBtn.Unlock();
+            // freecam menu closed
+            if (!PluginMenu::GetRunningInstance()->GameplayToggle)
+            {
+                _gameModeBtn.Unlock();
+                _faqBtn.Unlock();
+                _toolsBtn.Unlock();
+                _showStarredBtn.Unlock();
+                _AddFavoriteBtn.Unlock();
+                _arBtn.Unlock();
+                _searchBtn.Unlock();
+
+                if (_returnFolder == nullptr)
+                    return;
+
+                _folder = _returnFolder;
+                _returnFolder = nullptr;
+            }
+            else // should still be in root folder here
+                _gameModeBtn.Unlock();
         }
-        else if (PluginMenu::GetRunningInstance()->GameplayToggle)
-            _gameModeBtn.Unlock();
     }
 
     void PluginMenuHome::_faqBtn_OnClick(void)
