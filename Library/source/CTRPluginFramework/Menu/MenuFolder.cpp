@@ -4,22 +4,26 @@
 
 namespace CTRPluginFramework
 {
-    MenuFolder::MenuFolder(const std::string &name, const std::string &note) :
+    MenuFolder::MenuFolder(const std::string &name, const std::string &note, bool restricted) :
         OnAction{ nullptr }, _item(new MenuFolderImpl(this, name, note))
     {
-
+        _item->SetRestrictedState(restricted);
     }
 
-    MenuFolder::MenuFolder(const std::string& name, const std::vector<MenuEntry*>& entries) :
+    MenuFolder::MenuFolder(const std::string& name, const std::vector<MenuEntry*>& entries, bool restricted) :
         OnAction{ nullptr }, _item(new MenuFolderImpl(this, name))
     {
+        _item->SetRestrictedState(restricted);
+
         for (MenuEntry *entry : entries)
             Append(entry);
     }
 
-    MenuFolder::MenuFolder(const std::string& name, const std::string& note, const std::vector<MenuEntry*>& entries) :
+    MenuFolder::MenuFolder(const std::string& name, const std::string& note, const std::vector<MenuEntry*>& entries, bool restricted) :
         OnAction{ nullptr }, _item(new MenuFolderImpl(this, name, note))
     {
+        _item->SetRestrictedState(restricted);
+
         for (MenuEntry *entry : entries)
             Append(entry);
     }
@@ -58,7 +62,7 @@ namespace CTRPluginFramework
     {
         _item->Flags.useSeparatorAfter = type != Separator::None;
         _item->Flags.useStippledLineForBefore = type == Separator::None;
-        
+
     }
 
     void    MenuFolder::Append(MenuEntry *item) const

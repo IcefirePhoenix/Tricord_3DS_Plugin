@@ -36,7 +36,7 @@ namespace CTRPluginFramework
 
         static void    Close(MenuFolderImpl *menuFolderImpl);
 
-        static void LoadEnabledCheatsFromFile(const Preferences::Header &header, File &settings);
+        static void ActivateFavoritesFromFile(const Preferences::Header &header, File &settings);
         static void LoadFavoritesFromFile(const Preferences::Header &header, File &settings);
         static void LoadHotkeysFromFile(const Preferences::Header &header, File &settings);
 

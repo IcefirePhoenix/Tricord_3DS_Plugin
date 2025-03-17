@@ -28,9 +28,9 @@ namespace CTRPluginFramework
     {
 
     public:
-        MenuFolder(const std::string &name, const std::string &note = "");
-        MenuFolder(const std::string &name, const std::vector<MenuEntry *> &entries);
-        MenuFolder(const std::string &name, const std::string &note, const std::vector<MenuEntry *> &entries);
+        MenuFolder(const std::string &name, const std::string &note = "", bool restricted = false);
+        MenuFolder(const std::string &name, const std::vector<MenuEntry *> &entries, bool restricted = false);
+        MenuFolder(const std::string &name, const std::string &note, const std::vector<MenuEntry *> &entries, bool restricted = false);
 
         /**
          * \brief Destroy a MenuFolder.\n

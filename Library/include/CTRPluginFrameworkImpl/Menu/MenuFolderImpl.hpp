@@ -25,13 +25,8 @@ namespace CTRPluginFramework
         MenuItem    *GetItem(u32 uid);
         void        DisableAll(void);
 
-        std::vector<MenuEntry *>    GetEntryList(void) const;
-        std::vector<MenuFolder *>   GetFolderList(void) const;
-        MenuItem    *operator[](u32 index);
-        bool        HasParent(void);
-        void        Remove(MenuItem *item);
-        void        Remove(u32 start, u32 count = 1, bool destroy = false);
-        void        Clear(void);
+        bool IsRestricted(void);
+        void SetRestrictedState(bool state);
 
         using MenuItemIter = std::vector<MenuItem *>::iterator;
 

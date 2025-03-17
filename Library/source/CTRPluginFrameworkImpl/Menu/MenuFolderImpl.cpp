@@ -22,6 +22,7 @@ namespace CTRPluginFramework
         this->name = name;
         this->firstName = name;
         this->note = note;
+        this->_restricted = false;
         this->_position[0] = -1;
         this->_position[1] = -1;
         this->_parent[0] = nullptr;
@@ -178,6 +179,16 @@ namespace CTRPluginFramework
                 delete item;
         }
         _items.clear();
+    }
+
+    void MenuFolderImpl::SetRestrictedState(bool state)
+    {
+        _restricted = state;
+    }
+
+    bool MenuFolderImpl::IsRestricted(void)
+    {
+        return _restricted;
     }
 
     //#######################################################################

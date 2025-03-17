@@ -5,6 +5,7 @@
 
 namespace CTRPluginFramework
 {
+    extern MenuFolder *autoFolder;
     extern MenuFolder *emotes;
     extern MenuFolder *chaos;
     extern MenuFolder *turbo;

@@ -15,13 +15,13 @@ namespace CTRPluginFramework
     {
         struct EntryImplFlags
         {
-            bool    state : 1;
-            bool    justChanged : 1;
-            bool    isRadio : 1;
-            bool    isUnselectable: 1;
-            // lazy... might rewrite later
-            bool    disableIcon : 1;
-            bool    useControllerIcon : 1;
+            bool state : 1;
+            bool justChanged : 1;
+            bool isRadio : 1;
+            bool isUnselectable: 1;
+            bool disableIcon : 1;
+            bool useControllerIcon : 1;
+            bool restricted : 1;
         };
 
     public:
@@ -36,7 +36,8 @@ namespace CTRPluginFramework
         // Set the entry as radio, an ID must be provided
         void    SetRadio(int id);
         // Set an alternative icon
-        void    SetAltIcon(bool noIcon);
+        // Set the entry's restricted state
+        void SetRestrictedState(bool state);
         // Set an argument for the entry
         void    SetArg(void *arg);
         // Get the argument
