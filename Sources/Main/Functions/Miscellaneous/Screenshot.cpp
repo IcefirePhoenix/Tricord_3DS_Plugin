@@ -3,7 +3,7 @@
 
 namespace CTRPluginFramework
 {
-    FloatingButton photoBtn(IntRect(120, 50, 32, 32), Icon::DrawCamera);
+    Button photoBtn(Button::Icon | Button::Toggle, IntRect(120, 50, 32, 32), Icon::DrawCamera);
 
     MenuEntry *autoWriteCameraStatus;
     MenuEntry *autoDisableCamShutter;
