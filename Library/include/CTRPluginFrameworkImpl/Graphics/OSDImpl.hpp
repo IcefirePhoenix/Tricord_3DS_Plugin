@@ -8,7 +8,6 @@
 #include "CTRPluginFramework/System/Hook.hpp"
 #include "CTRPluginFramework/Graphics/Color.hpp"
 #include "CTRPluginFramework/System/Clock.hpp"
-#include "CTRPluginFrameworkImpl/Graphics/FloatingButton.hpp"
 
 #include <string>
 #include <vector>
