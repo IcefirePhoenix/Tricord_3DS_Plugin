@@ -75,7 +75,7 @@ namespace CTRPluginFramework
         if (_container != nullptr)
         {
             MenuFolderImpl* container = reinterpret_cast<MenuFolderImpl*>(_container);
-            std::vector<MenuItem*>& items = container->_items;
+            std::vector<MenuItem *> &items = container->_items;
 
             items.erase(std::remove(items.begin(), items.end(), this), items.end());
         }

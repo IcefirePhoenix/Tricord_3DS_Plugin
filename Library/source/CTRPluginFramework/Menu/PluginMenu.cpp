@@ -62,6 +62,24 @@ namespace CTRPluginFramework
         _menu->Append(folder);
     }
 
+    void PluginMenu::AddToHidden(MenuEntry *item) const
+    {
+        if (item == nullptr)
+            return;
+
+        MenuEntryImpl *entry = item->_item.get();
+        _menu->AddToHidden(entry);
+    }
+
+    void PluginMenu::AddToHidden(MenuFolder *item) const
+    {
+        if (item == nullptr)
+            return;
+
+        MenuFolderImpl *folder = item->_item.get();
+        _menu->AddToHidden(folder);
+    }
+
     void    PluginMenu::operator+=(const MenuEntry *entry) const
     {
         if (entry == nullptr)
@@ -122,6 +140,11 @@ namespace CTRPluginFramework
     std::vector<MenuFolder*> PluginMenu::GetFolderList() const
     {
         return (_menu->GetRoot()->GetFolderList());
+    }
+
+    std::vector<MenuFolder*> PluginMenu::GetHiddenList() const
+    {
+        return (_menu->GetHidden()->GetFolderList());
     }
 
     void    PluginMenu::SetHexEditorState(bool isEnabled) const
