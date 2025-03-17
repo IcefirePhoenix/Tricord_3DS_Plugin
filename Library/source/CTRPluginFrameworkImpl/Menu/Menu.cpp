@@ -94,7 +94,7 @@ namespace CTRPluginFramework
         return (_folder);
     }
 
-    MenuFolderImpl * Menu::GetRootFolder() const
+    MenuFolderImpl *Menu::GetRootFolder() const
     {
         return (_root);
     }

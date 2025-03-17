@@ -169,14 +169,15 @@ namespace CTRPluginFramework
         {
             if (header.enabledCheatsCount != 0)
                 PluginMenuImpl::LoadEnabledCheatsFromFile(header, settings);
-           _cheatsAlreadyLoaded = true;
         }
     }
 
-    void    Preferences::LoadSavedFavorites(void)
+
+    // handles favorites, auto-enabled saved entries, hotkeys, auto-enable favs
+    void Preferences::LoadEntryPreferences(bool autoEnableSavedCheats, bool autoEnableFavorites)
     {
-        File    settings;
-        Header  header = { 0 };
+        File settings;
+        Header header = { 0 };
 
         if (_favoritesAlreadyLoaded)
         {

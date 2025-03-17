@@ -3,6 +3,7 @@
 
 namespace CTRPluginFramework
 {
+    MenuFolder *autoFolder = new MenuFolder("Auto");
     MenuFolder *emotes = nullptr;
     MenuFolder *chaos = nullptr;
     MenuFolder *turbo = nullptr;
@@ -53,6 +54,10 @@ namespace CTRPluginFramework
         menu += save;
         menu += sound;
         menu += miscellaneous;
+
+        // auto entries added to menu for logging purposes but hidden from users
+        menu += autoFolder;
+        autoFolder->HideWithoutDisable();
     }
 
     void ToggleMenuChange(Time time)
