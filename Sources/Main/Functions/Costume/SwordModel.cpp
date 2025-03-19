@@ -4,7 +4,7 @@
 namespace CTRPluginFramework
 {
     MenuEntry *swordEditAuto;
-    u8 Costume::swordType[3] = {0xFF, 0xFF, 0xFF};
+    u8 Costume::swordType[3] = {cosmeticNotInUse, cosmeticNotInUse, cosmeticNotInUse};
     bool Costume::customSwordsActive = false;
 
     /* ------------------ */
@@ -55,9 +55,26 @@ namespace CTRPluginFramework
         for (int iterateThruPlayers = 0; iterateThruPlayers < 3; iterateThruPlayers++)
         {
             u32 finalAddress = AddressList::getAddress("SwordType") + (iterateThruPlayers * PLAYER_OFFSET);
+            u32 statusBitAddress = AddressList::getAddress("StatusBitB") + (iterateThruPlayers * PLAYER_OFFSET);
+            u8 sword = Costume::swordType[iterateThruPlayers];
 
-            if (Costume::swordType[iterateThruPlayers] != 0xFF)
-                Process::Write8(finalAddress, Costume::swordType[iterateThruPlayers]);
+            u8 statusBitsB;
+            Process::Read8(statusBitAddress, statusBitsB);
+
+            if (sword == 0x0B)
+            {
+                // No sword - Hide and disable sword usage
+                statusBitsB |= 0x01;
+                Process::Write8(statusBitAddress, statusBitsB);
+            }
+            else if (sword != cosmeticNotInUse)
+            {
+                // Ensure sword is enabled
+                // Note: This cannot bypass "no sword" challenges, but it can let you use your sword inside Hytopia Shops
+                statusBitsB &= 0xFE;
+                Process::Write8(statusBitAddress, statusBitsB);
+                Process::Write8(finalAddress, sword);
+            }
         }
     }
 

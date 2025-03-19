@@ -55,18 +55,18 @@ namespace CTRPluginFramework
     const StringVector GameData::swordList =
     {
         "Default sword",
-        "Spin Attack Attire sword",
-        "Ninja Gi sword",
-        "Sword Suit sword",
-        "Sword Master Suit sword",
-        "Dapper Spinner sword",
-        "Lady's Ensemble sword",
-        "Tri Suit sword",
-        "Timeless Tunic sword",
-        "Linebeck's Uniform sword",
-        "Fierce Deity Armor sword",
-        "No sword - crashes game",
-        "Fire Glove - dev/debug"
+        "Spin Attack Attire's katana",
+        "Ninja Gi's ninjato",
+        "Sword Suit's gladius",
+        "Sword Master Suit's gladius",
+        "Dapper Spinner's rapier",
+        "Lady's parasol",
+        "Tri Suit's cinquedea",
+        "Timeless Tunic's retro sword",
+        "Linebeck's telescope",
+        "Fierce Deity's blade",
+        "Hide and disable sword",
+        "Fire Glove - Dev/debug"
     };
 
     const StringVector GameData::itemList =

@@ -184,7 +184,7 @@ namespace CTRPluginFramework
                 else
                 {
                     // Ensure custom sword model is disabled if cosmetic is disabled
-                    Costume::swordType[iterateThruPlayers] = 0xFF;
+                    Costume::swordType[iterateThruPlayers] = cosmeticNotInUse;
                 }
             }
 
@@ -192,7 +192,7 @@ namespace CTRPluginFramework
             // Can only edit the state of the sword model handler if custom swords are not actively in use
             if (!Costume::customSwordsActive)
             {
-                if (Costume::swordType[0] != 0xFF || Costume::swordType[1] != 0xFF || Costume::swordType[2] != 0xFF)
+                if (Costume::swordType[0] != cosmeticNotInUse || Costume::swordType[1] != cosmeticNotInUse || Costume::swordType[2] != cosmeticNotInUse)
                     swordEditAuto->Enable();
                 else
                     swordEditAuto->Disable();
