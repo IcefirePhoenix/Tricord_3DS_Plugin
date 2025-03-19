@@ -57,6 +57,7 @@ namespace CTRPluginFramework
 
         static void autoKillEnemy(MenuEntry* entry);
         static void enemyInvinci(MenuEntry* entry);
+        static void disableColiWallmaster(MenuEntry* entry);
 
         static void controlAllPlayers(MenuEntry* entry);
 

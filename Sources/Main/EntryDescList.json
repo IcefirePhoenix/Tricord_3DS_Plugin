@@ -127,6 +127,15 @@
             }
         },
         {
+            "name": "coli_wallmaster_note",
+            "content": {
+                "intro": "Prevents the Wallmaster from spawning in two-player Coliseum mode.",
+                "note": "Allows Wallmaster-free 1v1s without the need of a third player spectating.",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "physics_note",
             "content": {
                 "intro": "Sets custom physics types that alter player movement + interactions with the environment.\n\nAvailable types include:\n- Water\n- Lava\n- Ice\n-Quicksand",
