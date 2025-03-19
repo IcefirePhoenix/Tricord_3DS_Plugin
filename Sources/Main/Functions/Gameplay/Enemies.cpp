@@ -53,4 +53,18 @@ namespace CTRPluginFramework
             cooldownTimer.Restart();
         }
     }
+
+    void Gameplay::disableColiWallmaster(MenuEntry* entry)
+    {
+        if (entry->Name() == "Disable Coliseum Wallmaster")
+        {
+            Process::Patch(AddressList::getAddress("ColiseumWallmasterSpawn"), 0xEA000011);
+            entry->SetName("Enable Coliseum Wallmaster");
+        }
+        else
+        {
+            Process::Patch(AddressList::getAddress("ColiseumWallmasterSpawn"), 0x1A000011);
+            entry->SetName("Disable Coliseum Wallmaster");
+        }
+    }
 }

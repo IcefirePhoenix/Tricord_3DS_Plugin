@@ -58,6 +58,8 @@ namespace CTRPluginFramework
 
         *enemies += (EntryWithHotkey(new MenuEntry(2, "Make all spawned enemies invincible", Gameplay::enemyInvinci, DescUtils::getDesc("invinci_note")),
             { Hotkey(Key::R | Key::B, "Make all spawned enemies invincible") }));
+
+        *enemies += new MenuEntry("Disable Coliseum Wallmaster", nullptr, Gameplay::disableColiWallmaster, DescUtils::getDesc("coli_wallmaster_note"));
     }
 
     void InitPhysicsCodes(PluginMenu &menu)
