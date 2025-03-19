@@ -1076,40 +1076,40 @@
             "name": "ABXY",
             "regionAddrs": {
                 "usaAddress": "0x31A0110C",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "eurAddress": "0x31A01164",
+                "jpnAddress": "0x31A00E54"
             }
         },
         {
             "name": "StartSelLRTouch",
             "regionAddrs": {
                 "usaAddress": "0x31A0110D",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "eurAddress": "0x31A01165",
+                "jpnAddress": "0x31A00E55"
             }
         },
         {
             "name": "DPadCPad",
             "regionAddrs": {
                 "usaAddress": "0x31A0110E",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "eurAddress": "0x31A01166",
+                "jpnAddress": "0x31A00E56"
             }
         },
         {
             "name": "CPadXCoord",
             "regionAddrs": {
                 "usaAddress": "0x31A01118",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "eurAddress": "0x31A01170",
+                "jpnAddress": "0x31A00E60"
             }
         },
         {
             "name": "CPadYCoord",
             "regionAddrs": {
                 "usaAddress": "0x31A0111C",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "eurAddress": "0x31A01174",
+                "jpnAddress": "0x31A00E64"
             }
         },
         {
@@ -1574,6 +1574,14 @@
                 "usaAddress": "0x32989190",
                 "eurAddress": "0x00000000",
                 "jpnAddress": "0x00000000"
+            }
+        },
+        {
+            "name": "ColiseumWallmasterSpawn",
+            "regionAddrs": {
+                "usaAddress": "0x0037D098",
+                "eurAddress": "0x0037D440",
+                "jpnAddress": "0x0037E01C"
             }
         },
         {
