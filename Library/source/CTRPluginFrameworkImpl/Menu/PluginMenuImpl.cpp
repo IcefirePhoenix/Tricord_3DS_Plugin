@@ -522,6 +522,25 @@ namespace CTRPluginFramework
         }
     }
 
+    void PluginMenuImpl::WriteScreenshotConfigToFile(Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        u64 offset = settings.Tell();
+        header.screenshotScreenCapture = Screenshot::Screens;
+        header.screenshotHotkeys = Screenshot::Hotkeys;
+        header.screenshotTimer = static_cast<u32>(Screenshot::Timer.AsSeconds());
+
+        std::strncpy(header.screenshotCustomName, Screenshot::Prefix.c_str(), sizeof(header.screenshotCustomName) - 1);
+        header.screenshotCustomName[sizeof(header.screenshotCustomName) - 1] = '\0';
+
+        std::strncpy(header.screenshotCustomDir, Screenshot::Path.c_str(), sizeof(header.screenshotCustomDir) - 1);
+        header.screenshotCustomDir[sizeof(header.screenshotCustomDir) - 1] = '\0';
+
+        header.screenshotOffset = offset;
+    }
+
     void PluginMenuImpl::WriteEnabledCheatsToFile(Preferences::Header &header, File &settings)
     {
         if (_runningInstance == nullptr)
