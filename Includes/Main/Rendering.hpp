@@ -21,6 +21,8 @@ namespace CTRPluginFramework
         static void swapLinkTexture(MenuEntry* entry);
         static void swapSPLoadingScreen(MenuEntry* entry);
         static void editLiveMsgColor(MenuEntry* entry);
+        static void loadCustomNameColors(void);
+        static void restoreNameColors(MenuEntry *entry);
         static void forcePomPom(MenuEntry* entry);
         static void forceAura(MenuEntry* entry);
         static void forceBlueSwordParticles(MenuEntry* entry);

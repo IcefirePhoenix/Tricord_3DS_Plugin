@@ -937,10 +937,19 @@
             }
         },
         {
-            "name": "scroll_text_color_note",
+            "name": "new_status_color_note",
             "content": {
-                "intro": "Customizes the color of player names that appear in top-screen scrolling event messages. Accepts hex color codes. Changes are preserved between reboots.",
+                "intro": "Enables usage of custom player name colors used in top-screen status messages. Accepts 6-digit hex color codes. Custom colors are preserved between reboots.",
                 "note": "Recommended for use with custom Link color modpacks.",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "restore_status_color_note",
+            "content": {
+                "intro": "Restores default player name colors used in status messages.",
+                "note": "Default colors are:\nGreen: 0x40FF40\nBlue: 0xFF4040\nRed: 0x4040FF",
                 "modeCompatibility": 1,
                 "clientOnly": true
             }

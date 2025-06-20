@@ -13,6 +13,7 @@ namespace CTRPluginFramework
     BMPImage *  Preferences::bottomBackgroundImage = nullptr;
     BMPImage *  Preferences::bottomBoxBGImage = nullptr;
 
+    u32 Preferences::CustomNameColors[3] = { 0xFF40FF40, 0xFFFF4040, 0xFF4040FF }; // default before loading any saved values from file
 
     u32         Preferences::MenuHotkeys = static_cast<u32>(Key::Select);
     u64         Preferences::Flags = 0;
@@ -236,6 +237,8 @@ namespace CTRPluginFramework
 
             if (autoEnableSavedCheats && header.enabledCheatsCount != 0)
                 PluginMenuImpl::ActivateEnabledCheatsFromFile(header, settings);
+
+            PluginMenuImpl::LoadNameColorsFromFile(header, settings);
         }
     }
 

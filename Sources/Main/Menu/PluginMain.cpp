@@ -73,6 +73,11 @@ namespace CTRPluginFramework
         }
     }
 
+    void LoadSavedEntryData(void)
+    {
+        Rendering::loadCustomNameColors();
+    }
+
     void InitSequence(FwkSettings &settings)
     {
         AddressList::InitMemoryRange();
@@ -96,6 +101,7 @@ namespace CTRPluginFramework
         InitSequence(FwkSettings::Get());
 
         menu->SynchronizeWithFrame(true);
+        menu->OnFirstOpening = LoadSavedEntryData;
         menu->OnNewFrame = ToggleMenuChange;
         menu->OnClosing = ManageTFH_Settings;
 

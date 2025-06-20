@@ -522,6 +522,18 @@ namespace CTRPluginFramework
         }
     }
 
+    void PluginMenuImpl::LoadNameColorsFromFile(const Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        int players = 3;
+        settings.Seek(header.nameColorOffset, File::SET);
+
+        if (!settings.Read(Preferences::CustomNameColors, sizeof(u32) * players) == 0)
+            return;
+    }
+
     void PluginMenuImpl::WriteScreenshotConfigToFile(Preferences::Header &header, File &settings)
     {
         if (_runningInstance == nullptr)
@@ -596,6 +608,21 @@ namespace CTRPluginFramework
             }
         }
     }
+
+    void PluginMenuImpl::WriteCustomNameColorToFile(Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        u64 offset = settings.Tell();
+        for (int index = 0; index < 3; index++)
+        {
+            if (settings.Write(&Preferences::CustomNameColors[index], sizeof(u32)) != 0)
+                return;
+        }
+        header.nameColorOffset = offset;
+    }
+
 
     void    PluginMenuImpl::ExtractHotkeys(HotkeysVector &hotkeys, MenuFolderImpl *folder, u32 &size)
     {
