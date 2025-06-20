@@ -47,7 +47,7 @@ namespace CTRPluginFramework
         SETTINGS,
     };
 
-    static int  g_mode = NORMAL;
+    static int g_mode = NORMAL;
 
     // DO NOT REMOVE THIS COPYRIGHT NOTICE
     static const char g_ctrpfText[] = "Tricord is powered by CTRPluginFramework.";
@@ -69,7 +69,7 @@ namespace CTRPluginFramework
         CreateMenu();
     }
 
-    static void    MenuHotkeyModifier(void)
+    static void MenuHotkeyModifier(void)
     {
         u32 keys = Preferences::MenuHotkeys;
 
@@ -79,7 +79,7 @@ namespace CTRPluginFramework
             Preferences::MenuHotkeys = keys;
     }
 
-    void    PluginMenuTools::UpdateSettings(void)
+    void PluginMenuTools::UpdateSettings(void)
     {
         // Settings
         auto item = _tricordSettingsMenu.begin() + 2; // skip first two entries -> NOT checkboxes w/saved status
@@ -120,9 +120,15 @@ namespace CTRPluginFramework
 
         if (Preferences::IsEnabled(Preferences::ShowBottomFps)) (*item)->AsMenuEntryTools().Enable();
         else (*item)->AsMenuEntryTools().Disable();
+
+        // Screenshots
+        item = _screenshotMenu.begin();
+
+        if (Preferences::IsEnabled(Preferences::ScreenshotEnabled)) (*item++)->AsMenuEntryTools().Enable();
+        else (*item++)->AsMenuEntryTools().Disable();
     }
 
-    using   FsTryOpenFileType = u32(*)(u32, u16*, u32);
+    using FsTryOpenFileType = u32(*)(u32, u16*, u32);
 
     enum HookFilesMode
     {
@@ -130,14 +136,14 @@ namespace CTRPluginFramework
         OSD = 1,
         FILE = 2
     };
-    static Hook         g_FsTryOpenFileHook;
-    static u32          g_HookMode = NONE;
-    //static u32          g_returncode[4];
-    static File         g_hookExportFile;
-    u32                 g_FsTryOpenFileAddress = 0;
-    static LightLock    g_OpenFileLock;
+    static Hook g_FsTryOpenFileHook;
+    static u32 g_HookMode = NONE;
+    //static u32 g_returncode[4];
+    static File g_hookExportFile;
+    u32 g_FsTryOpenFileAddress = 0;
+    static LightLock g_OpenFileLock;
 
-    static u32      FindNearestSTMFD(u32 addr)
+    static u32 FindNearestSTMFD(u32 addr)
     {
         for (u32 i = 0; i < 1024; i++)
         {
@@ -148,7 +154,7 @@ namespace CTRPluginFramework
         return (0);
     }
 
-    static void      FindFunction(u32 &FsTryOpenFile)
+    static void FindFunction(u32 &FsTryOpenFile)
     {
         const u8 tryOpenFilePat1[] = { 0x0D, 0x10, 0xA0, 0xE1, 0x00, 0xC0, 0x90, 0xE5, 0x04, 0x00, 0xA0, 0xE1, 0x3C, 0xFF, 0x2F, 0xE1 };
         const u8 tryOpenFilePat2[] = { 0x10, 0x10, 0x8D, 0xE2, 0x00, 0xC0, 0x90, 0xE5, 0x05, 0x00, 0xA0, 0xE1, 0x3C, 0xFF, 0x2F, 0xE1 };
@@ -168,8 +174,8 @@ namespace CTRPluginFramework
     }
 
     // TODO: clean this whole code
-    static u32      FsTryOpenFileCallback(u32 a1, u16 *fileName, u32 mode);
-    static bool     InitFsTryOpenFileHook(void)
+    static u32 FsTryOpenFileCallback(u32 a1, u16 *fileName, u32 mode);
+    static bool InitFsTryOpenFileHook(void)
     {
         static bool isInitialized = false;
 
@@ -212,7 +218,7 @@ namespace CTRPluginFramework
         return isInitialized;
     }
 
-    static u32      FsTryOpenFileCallback(u32 a1, u16 *fileName, u32 mode)
+    static u32 FsTryOpenFileCallback(u32 a1, u16 *fileName, u32 mode)
     {
         std::string str;
 
@@ -245,7 +251,7 @@ namespace CTRPluginFramework
         return HookContext::GetCurrent().OriginalFunction<u32>(a1, fileName, mode);
     }
 
-    static void    _DisplayLoadedFiles(MenuEntryTools *entry)
+    static void _DisplayLoadedFiles(MenuEntryTools *entry)
     {
         // If we must enable the hook
         if (entry->WasJustActivated())
@@ -272,7 +278,7 @@ namespace CTRPluginFramework
         }
     }
 
-    static void    _WriteLoadedFiles(MenuEntryTools *entry)
+    static void _WriteLoadedFiles(MenuEntryTools *entry)
     {
         // If we must enable the hook
         if (entry->WasJustActivated())
@@ -320,7 +326,7 @@ namespace CTRPluginFramework
         }
     }
 
-    static bool     ConfirmBeforeProceed(const std::string &task)
+    static bool ConfirmBeforeProceed(const std::string &task)
     {
         std::string msg = Color::Gainsboro << "Do you really want to " + task + "?";
         MessageBox  msgBox("Warning", msg, DialogType::DialogYesNo);
@@ -357,20 +363,26 @@ namespace CTRPluginFramework
 
         int mode = kb.Open();
         if (mode != -1)
+        {
             Screenshot::Screens = mode + 1;
+        }
     }
 
-    std::string     KeysToString(u32 keys);
-    bool            stou32(std::string &input, u32 &res);
+    std::string KeysToString(u32 keys);
+    bool stou32(std::string &input, u32 &res);
 
-    static bool g_manualScreenshotTrigger = false;
-    static void Screenshot_Enabler(MenuEntryTools *entry)
+    // static bool g_manualScreenshotTrigger = false;
+    // static void Screenshot_Enabler(MenuEntryTools *entry)
+    // {
+    //     if (!g_manualScreenshotTrigger)
+    //     {
+    //         Preferences::Toggle(Preferences::ScreenshotEnabled);
+    //     }
+    //     OSD::Notify(std::to_string(Preferences::IsEnabled(Preferences::ScreenshotEnabled)));
+    // }
+
+    static void UpdateScreenshotText(void)
     {
-        if (!g_manualScreenshotTrigger)
-            Screenshot::IsEnabled = !Screenshot::IsEnabled;
-    }
-
-    static void     UpdateScreenshotText(void) {
         // Update entry
         const char *screens[3] = {"Top screen", "Bottom screen", "Both screens"};
 
@@ -380,23 +392,19 @@ namespace CTRPluginFramework
 
         u32 time = static_cast<u32>(Screenshot::Timer.AsSeconds());
 
-
         if (time)
         {
-            g_screenshotEntry->name += time;
+            g_screenshotEntry->name.append(", " + std::to_string(time) + " second(s)");
             Screenshot::Screens |= 4; ///< TIMED flags
         }
-        g_manualScreenshotTrigger = true;
 
-        if (Screenshot::IsEnabled)
+        if (Preferences::IsEnabled(Preferences::ScreenshotEnabled))
             g_screenshotEntry->Enable();
         else
             g_screenshotEntry->Disable();
-
-        g_manualScreenshotTrigger = false;
     }
 
-    static void     ScreenshotMenuCallback(void)
+    static void ScreenshotMenuCallback(void)
     {
         Keyboard kb("Screenshot Options", "What setting would you like to change?");
         kb.Populate({"Screens", "Hotkeys", "Timer", "Name", "Directory"});
@@ -405,7 +413,6 @@ namespace CTRPluginFramework
         do
         {
             choice = kb.Open();
-
             switch (choice)
             {
                 case 0: ///< Screens
@@ -424,7 +431,7 @@ namespace CTRPluginFramework
                 case 2: ///< Timer
                 {
                     u32 current = static_cast<u32>(Screenshot::Timer.AsSeconds());
-                    Keyboard keyboard("Screenshot Timer", "Enter the amount of seconds you would like to continuously take screenshots.\n\nTo disable the timer, enter 0.\n\nNote: While taking timed screenshots, you can't access the Tricord menu.");
+                    Keyboard keyboard("Screenshot Timer", "Enter the amount of seconds you would like to continuously take screenshots.\n\nTo disable the timer, enter 0.\n\nNote: May not work as expected on emulator. Timer may also be inconsistent on console.");
 
                     keyboard.IsHexadecimal(false);
                     keyboard.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
@@ -442,7 +449,6 @@ namespace CTRPluginFramework
 
                     if (keyboard.Open(current, current) != -1)
                         Screenshot::Timer = Seconds(static_cast<float>(current));
-
                     break;
                 }
 
@@ -459,7 +465,6 @@ namespace CTRPluginFramework
                 case 4: ///< Directory
                 {
                     std::string out;
-
                     if (Utils::DirectoryPicker(out) == -1)
                         break;
 
@@ -476,8 +481,6 @@ namespace CTRPluginFramework
         while (choice != -1);
 
         UpdateScreenshotText();
-
-        // Update file count
         Screenshot::UpdateFileCount();
     }
 
@@ -515,7 +518,6 @@ namespace CTRPluginFramework
             if (userchoice == 0)
             {
                 LCDBacklight *  backlights = Preferences::Backlights;
-
                 backlights += userchoice == 2;
                 backlights->isEnabled = !backlights->isEnabled;
                 continue;
@@ -523,10 +525,11 @@ namespace CTRPluginFramework
 
             screen = userchoice == 3 ? ScreenImpl::Bottom : ScreenImpl::Top;
             backlight = screen->GetBacklight();
-            kb.IsHexadecimal(false);
+
             title = "Backlight Brightness Setter";
             message = "Set a brightness value between 2 - 1023.\n\nCurrent value: " + backlight;
 
+            kb.IsHexadecimal(false);
             if (kb.Open(backlight, 2) != -1)
             {
                 backlight = std::max(backlight, static_cast<u16>(2));
@@ -551,7 +554,7 @@ namespace CTRPluginFramework
         _mainMenu.Append(new MenuEntryTools("Reboot", Reboot, Icon::DrawRestart));
 
         // Screenshots menu
-        _screenshotMenu.Append((g_screenshotEntry = new MenuEntryTools( "Enable screenshot tool: " << KeysToString(Screenshot::Hotkeys) << "Both screens", Screenshot_Enabler, true)));
+        _screenshotMenu.Append((g_screenshotEntry = new MenuEntryTools( "Enable screenshot tool: " << KeysToString(Screenshot::Hotkeys) << "Both screens", [] { Preferences::Toggle(Preferences::ScreenshotEnabled); }, true, Preferences::IsEnabled(Preferences::ScreenshotEnabled))));
         _screenshotMenu.Append(new MenuEntryTools("Change screenshot settings", ScreenshotMenuCallback, Icon::DrawSettings));
 
         // Miscellaneous menu
@@ -578,7 +581,7 @@ namespace CTRPluginFramework
         g_textXpos[1] = (320 - Renderer::LinuxFontSize(g_copyrightText)) / 2;
     }
 
-    bool    PluginMenuTools::operator()(EventList &eventList, Time &delta)
+    bool PluginMenuTools::operator()(EventList &eventList, Time &delta)
     {
         if (g_mode == HEXEDITOR)
         {
@@ -644,7 +647,7 @@ namespace CTRPluginFramework
     /*
     ** Process Event
     *****************/
-    void    PluginMenuTools::_ProcessEvent(Event &event)
+    void PluginMenuTools::_ProcessEvent(Event &event)
     {
         if (_abouttb.IsOpen())
         {
@@ -654,8 +657,8 @@ namespace CTRPluginFramework
             return;
         }
 
-        MenuItem    *item = nullptr;
-        static int  selector = -1;
+        MenuItem *item = nullptr;
+        static int selector = -1;
 
         int ret = _menu.ProcessEvent(event, &item);
 
@@ -704,7 +707,7 @@ namespace CTRPluginFramework
     ** Render Top
     **************/
 
-    void    PluginMenuTools::_RenderTop(void)
+    void PluginMenuTools::_RenderTop(void)
     {
         // Enable renderer
         Renderer::SetTarget(TOP);

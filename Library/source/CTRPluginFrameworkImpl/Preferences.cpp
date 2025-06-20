@@ -147,6 +147,42 @@ namespace CTRPluginFramework
             MenuHotkeys = header.hotkeys & ((System::IsNew3DS() && Settings.AreN3DSButtonsAvailable) ? ~0x0 : ~(Key::CStick | Key::ZL | Key::ZR));
             Flags = header.flags;
             memcpy(reinterpret_cast<void*>(Backlights), &header.lcdbacklights, sizeof(Backlights));
+
+            // set last saved screenshot preferences
+            std::string dirPath = "/Tricord/Screenshots";
+            if (!Directory::IsExists(dirPath))
+                Directory::Create(dirPath);
+
+            switch (Process::GetTitleID())
+            {
+            case TID_USA:
+                dirPath.append("/NA/");
+                break;
+            case TID_EUR:
+                dirPath.append("/NA/");
+                break;
+            case TID_JPN:
+                dirPath.append("/JP/");
+                break;
+            }
+
+            if (!Directory::IsExists(dirPath))
+                Directory::Create(dirPath);
+
+            Screenshot::Path = std::strlen(header.screenshotCustomDir) == 0 ? dirPath : header.screenshotCustomDir;
+            Screenshot::Prefix = std::strlen(header.screenshotCustomName) == 0 ? "Screenshot" : header.screenshotCustomName;
+
+            // these have already been given default values under Screenshot.cpp, so only update if necessary
+            if (header.screenshotHotkeys != 0)
+                Screenshot::Hotkeys = header.screenshotHotkeys;
+
+            if (header.screenshotScreenCapture != 0)
+                Screenshot::Screens = header.screenshotScreenCapture; // this has already been 1-indexed when previously saved
+
+            if (header.screenshotTimer != 0)
+                Screenshot::Timer = Seconds(static_cast<float>(header.screenshotTimer));
+
+            Screenshot::Initialize();
         }
 
         // Check for hotkeys to be valid

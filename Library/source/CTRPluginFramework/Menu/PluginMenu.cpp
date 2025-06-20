@@ -200,12 +200,6 @@ namespace CTRPluginFramework
         Screenshot::UpdateFileCount();
     }
 
-    void                PluginMenu::ScreenshotSettings(bool** enabled, u32** hotkey)
-    {
-        *enabled = &Screenshot::IsEnabled;
-        *hotkey = &Screenshot::Hotkeys;
-    }
-
     void                PluginMenu::ScreenshotSetcallback(OnScreenshotCallback callback)
     {
         Screenshot::ScreenshotCallback = callback;

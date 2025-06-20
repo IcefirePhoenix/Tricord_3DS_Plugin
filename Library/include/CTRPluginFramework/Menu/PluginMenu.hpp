@@ -197,13 +197,6 @@ namespace CTRPluginFramework
         static void                ScreenshotUpdatePaths();
 
         /**
-         * \brief Gets the screenshot settings references, can be read or written to.
-         * \param enabled Screenshot feature enabled reference
-         * \param hotkey Screenshot feature hotkey reference
-         */
-        static void                ScreenshotSettings(bool** enabled, u32** hotkey);
-
-        /**
          * \brief Sets the screenshot callback, called whenever an screenshot is taken.
          * If the callback function returns false, the screenshot will be aborted.
          * \param callback The callback function

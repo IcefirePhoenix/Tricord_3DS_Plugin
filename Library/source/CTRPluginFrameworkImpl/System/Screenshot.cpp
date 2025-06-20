@@ -21,7 +21,6 @@ namespace CTRPluginFramework
     #define TIMED 4
 
     // Static variables
-    bool        Screenshot::IsEnabled = false;
     u32         Screenshot::Hotkeys = Key::Start;
     u32         Screenshot::Screens = SCREENSHOT_BOTH;
     Time        Screenshot::Timer;
@@ -69,8 +68,8 @@ namespace CTRPluginFramework
 
     bool    Screenshot::OSDCallback(u32 isBottom, void *addr, void *addrB, int stride, int format)
     {
-        if (!IsEnabled)
-            return IsEnabled;
+        if (!Preferences::IsEnabled(Preferences::ScreenshotEnabled))
+            return false;
 
         if (!_mode && (Controller::GetKeysDown() & Hotkeys) == Hotkeys && _hotkeyTimer.HasTimePassed(Seconds(0.25f)) && (!ScreenshotCallback || ScreenshotCallback()))
         {

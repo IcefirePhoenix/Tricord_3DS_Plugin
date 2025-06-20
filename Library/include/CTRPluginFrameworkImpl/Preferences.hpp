@@ -40,43 +40,6 @@ namespace CTRPluginFramework
             QoL_Patch           = 1 << 22
         };
 
-        /*struct HeaderV1
-        {
-            u8      sig[8];
-            u32     version;
-            u32     pluginVersion;
-            u64     size;
-            u64     flags;
-            u32     hotkeys;
-            u32     freeCheatsCount;
-            u64     freeCheatsOffset;
-            u32     enabledCheatsCount;
-            u64     enabledCheatsOffset;
-            u32     favoritesCount;
-            u64     favoritesOffset;
-            u32     hotkeysCount;
-            u64     hotkeysOffset;
-        } PACKED; */
-
-        struct HeaderV11
-        {
-            u8      sig[8];
-            u32     version;
-            u32     pluginVersion;
-            u64     size;
-            u64     flags;
-            u32     hotkeys;
-            u64     lcdbacklights;
-            u32     enabledCheatsCount;
-            u64     enabledCheatsOffset;
-            u32     favoritesCount;
-            u64     favoritesOffset;
-            u32     hotkeysCount;
-            u64     hotkeysOffset;
-            u32     reserved[100];
-        } PACKED;
-
-        using Header = HeaderV11;
 
         struct EnabledCheats
         {
@@ -100,6 +63,72 @@ namespace CTRPluginFramework
             u16     isEnabled{0};
             u16     value{0};
         };
+
+        /*struct HeaderV1
+{
+    u8      sig[8];
+    u32     version;
+    u32     pluginVersion;
+    u64     size;
+    u64     flags;
+    u32     hotkeys;
+    u32     freeCheatsCount;
+    u64     freeCheatsOffset;
+    u32     enabledCheatsCount;
+    u64     enabledCheatsOffset;
+    u32     favoritesCount;
+    u64     favoritesOffset;
+    u32     hotkeysCount;
+    u64     hotkeysOffset;
+} PACKED; */
+
+        struct HeaderV11
+        {
+            u8 sig[8];
+            u32 version;
+            u32 pluginVersion;
+            u64 size;
+            u64 flags;
+            u32 hotkeys;
+            u64 lcdbacklights;
+            u32 enabledCheatsCount;
+            u64 enabledCheatsOffset;
+            u32 favoritesCount;
+            u64 favoritesOffset;
+            u32 hotkeysCount;
+            u64 hotkeysOffset;
+            u32 reserved[100];
+        } PACKED;
+
+        struct TricordHeaderV1
+        {
+            u8 sig[8];
+            u32 version;
+            u32 pluginVersion;
+            u64 size;
+            u64 flags;
+            u32 hotkeys;
+            u64 lcdbacklights;
+            u32 enabledCheatsCount;
+            u64 enabledCheatsOffset;
+            u32 favoritesCount;
+            u64 favoritesOffset;
+            u32 hotkeysCount;
+            u64 hotkeysOffset;
+            u32 nameColor;
+            u64 nameColorOffset;
+            WarpDestination warpDestinationData[3];
+            u64 warpDestOffset;
+            u32 screenshotScreenCapture;
+            u32 screenshotHotkeys;
+            u32 screenshotTimer;
+            char screenshotCustomName[64];
+            char screenshotCustomDir[64];
+            u64 screenshotOffset;
+            u32 reserved[100];
+        } PACKED;
+
+        using Header = TricordHeaderV1;
 
         static bool         IsEnabled(u64 setting)
         {
