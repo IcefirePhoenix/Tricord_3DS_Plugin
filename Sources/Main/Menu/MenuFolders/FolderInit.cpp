@@ -520,10 +520,11 @@ namespace CTRPluginFramework
         MenuFolder *texture = new MenuFolder("Textures");
         MenuFolder *env = new MenuFolder("Environment & Other");
         MenuFolder *face = new MenuFolder("Facial Expressions");
-        MenuFolder *scrollText = new MenuFolder("Top Screen Scrolling Messages");
+        MenuFolder *scrollText = new MenuFolder("Status Messages");
 
-        *scrollText += new MenuEntry("Edit top screen scrolling text colors", nullptr, Rendering::editLiveMsgColor, true, DescUtils::getDesc("scroll_text_color_note"));
-        *scrollText += new MenuEntry("Disable top screen scrolling text", nullptr, Rendering::disableScrollingText, false, DescUtils::getDesc("disable_scroll_text_note"));
+        *scrollText += new MenuEntry("Edit name colors", nullptr, Rendering::editLiveMsgColor, true, DescUtils::getDesc("new_status_color_note"));
+        *scrollText += new MenuEntry("Restore default name colors", nullptr, Rendering::restoreNameColors, false, DescUtils::getDesc("restore_status_color_note"));
+        *scrollText += new MenuEntry("Disable status messages", nullptr, Rendering::disableScrollingText, false, DescUtils::getDesc("disable_scroll_text_note"));
         *overlay += scrollText;
 
         *overlay += new MenuEntry("Hide HUD", Rendering::triggerHideHUD, DescUtils::getDesc("hide_HUD_note"));

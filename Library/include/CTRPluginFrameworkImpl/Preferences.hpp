@@ -154,6 +154,7 @@ namespace CTRPluginFramework
         static BMPImage     *bottomBoxBGImage;
 
         static u32          MenuHotkeys;
+        static u32          CustomNameColors[3];
         static u64          Flags;
         static LCDBacklight Backlights[2];
         static FwkSettings  Settings;

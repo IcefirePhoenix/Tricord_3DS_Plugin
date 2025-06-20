@@ -52,25 +52,25 @@ namespace CTRPluginFramework
         }
     }
 
-    // TODO: save changes to disk for persistent edits
-    // Allows player names' colors to be edited within top-screen scrolling event text
+    // Allows player names' colors to be edited within status message text
     void Rendering::editLiveMsgColor(MenuEntry *entry)
     {
         u32 targetaddr, result, newColor;
+        int playerChoice = GeneralHelpers::chooseLink();
 
-        switch (GeneralHelpers::chooseLink())
+        switch (playerChoice)
         {
-            case 0:
-                targetaddr = AddressList::getAddress("LiveNameColorG");
-                break;
-            case 1:
-                targetaddr = AddressList::getAddress("LiveNameColorB");
-                break;
-            case 2:
-                targetaddr = AddressList::getAddress("LiveNameColorR");
-                break;
-            default:
-                return;
+        case 0:
+            targetaddr = AddressList::getAddress("LiveNameColorG");
+            break;
+        case 1:
+            targetaddr = AddressList::getAddress("LiveNameColorB");
+            break;
+        case 2:
+            targetaddr = AddressList::getAddress("LiveNameColorR");
+            break;
+        default:
+            return;
         }
 
         Keyboard HexColor("Custom Scrolling Text Name Color", "Enter a 6-digit RGB hex code.");
@@ -82,10 +82,33 @@ namespace CTRPluginFramework
             u8 g = result >> 8;
             u8 b = result;
 
-            newColor = r + (g << 8) + (b << 16) + (0xFF << 24);
+            newColor = r + (g << 8) + (b << 16) + (0xFF << 24); // little-endian
             Process::Write32(targetaddr, newColor);
+
+            // save to Settings
+            Preferences::CustomNameColors[playerChoice] = newColor;
         }
     }
+
+    // Updates status message name colors on boot
+    void Rendering::loadCustomNameColors(void)
+    {
+        Process::Write32(AddressList::getAddress("LiveNameColorG"), Preferences::CustomNameColors[0]);
+        Process::Write32(AddressList::getAddress("LiveNameColorB"), Preferences::CustomNameColors[1]);
+        Process::Write32(AddressList::getAddress("LiveNameColorR"), Preferences::CustomNameColors[2]);
+    }
+
+    // Resets custom name colors back to default -- bit shifting as done in-game is too extra here, using predefined color values instead
+    void Rendering::restoreNameColors(MenuEntry *entry)
+    {
+        u32 defaultColors[3] = {0xFF40FF40, 0xFFFF4040, 0xFF4040FF}; // little-endian RGBA
+        std::memcpy(Preferences::CustomNameColors, defaultColors, sizeof(defaultColors));
+
+        Process::Write32(AddressList::getAddress("LiveNameColorG"), defaultColors[0]);
+        Process::Write32(AddressList::getAddress("LiveNameColorB"), defaultColors[1]);
+        Process::Write32(AddressList::getAddress("LiveNameColorR"), defaultColors[2]);
+    }
+
 
     // Display custom player respawn indicator arrows
     void Rendering::respawnIndicator(MenuEntry *entry)
