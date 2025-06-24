@@ -1,9 +1,10 @@
 #ifndef CTRPLUGINFRAMEWORK_MENUFOLDER_HPP
 #define CTRPLUGINFRAMEWORK_MENUFOLDER_HPP
 
+#include "CTRPluginFramework/Menu/MenuEntryLabel.hpp"
 #include "types.h"
-#include <string>
 #include <memory>
+#include <string>
 
 namespace CTRPluginFramework
 {
@@ -142,6 +143,20 @@ namespace CTRPluginFramework
          * \return A pointer to this MenuFolder
          */
         MenuFolder    *operator -= (const MenuEntry *entry);
+
+        /**
+         * \brief Add a label/spacer to this folder
+         * \param entry The MenuEntryLabel object that must be added
+         * \return A pointer to this MenuFolder
+         */
+        MenuFolder    *operator += (const MenuEntryLabel *entry);
+
+        /**
+         * \brief Remove a label/spacer from this folder
+         * \param entry The MenuEntryLabel object that must be removed
+         * \return A pointer to this MenuFolder
+         */
+        MenuFolder    *operator -= (const MenuEntryLabel *entry);
 
         /**
          * \brief Add a (sub)folder to this folder

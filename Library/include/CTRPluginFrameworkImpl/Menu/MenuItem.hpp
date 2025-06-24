@@ -10,6 +10,7 @@ namespace CTRPluginFramework
     {
         Folder,
         Entry,
+        EntryLabel,
         EntryTools,
         ActionReplay,
         FreeCheat
@@ -18,6 +19,7 @@ namespace CTRPluginFramework
     struct ItemFlags
     {
         bool    useSeparatorBefore : 1;
+        bool    useSeparatorSpacer : 1;
         bool    useSeparatorAfter : 1;
         bool    useStippledLineForBefore : 1;
         bool    useStippledLineForAfter : 1;
@@ -26,6 +28,7 @@ namespace CTRPluginFramework
         bool    noteChanged : 1;
     };
 
+    class MenuEntryLabel;
     class MenuEntryImpl;
     class MenuEntryTools;
     class MenuFolderImpl;
@@ -39,6 +42,7 @@ namespace CTRPluginFramework
         _type(type), _container(nullptr), _index(0)
         {
             Flags.useSeparatorBefore = false;
+            Flags.useSeparatorSpacer = false;
             Flags.useSeparatorAfter = false;
             Flags.useStippledLineForBefore = false;
             Flags.useStippledLineForAfter = false;

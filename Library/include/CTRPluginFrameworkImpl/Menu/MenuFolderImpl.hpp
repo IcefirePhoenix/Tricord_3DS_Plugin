@@ -12,6 +12,7 @@ namespace CTRPluginFramework
 {
     class Menu;
     class MenuEntry;
+    class MenuEntryLabel;
     class MenuFolder;
     class MenuFolderImpl : public MenuItem
     {

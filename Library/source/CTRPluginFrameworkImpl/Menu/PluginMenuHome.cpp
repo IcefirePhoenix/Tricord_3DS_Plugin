@@ -629,6 +629,11 @@ namespace CTRPluginFramework
                     Renderer::DrawLine(posX, posY - 1, 320, Color::Gainsboro, 1);
             }
 
+            if (flags.useSeparatorSpacer)
+            {
+                Renderer::DrawLine(posX, posY + 10, 320, Color::Gainsboro, 1);
+            }
+
             // Draw cursor
             if (drawSelector && i == _selector)
                 Renderer::MenuSelector(posX - 5, posY - 3, 330, 20);
