@@ -534,6 +534,24 @@ namespace CTRPluginFramework
             return;
     }
 
+    void PluginMenuImpl::LoadBookmarkWarpsFromFile(const Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        Preferences::WarpDestination warps[3];
+
+        settings.Seek(header.warpDestOffset, File::SET);
+        if (settings.Read(warps, sizeof(Preferences::WarpDestination) * 3) == 0)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                Preferences::SavedWarps[i] = warps[i];
+                OSD::Notify("loaded a save warp on boot");
+            }
+        }
+    }
+
     void PluginMenuImpl::WriteScreenshotConfigToFile(Preferences::Header &header, File &settings)
     {
         if (_runningInstance == nullptr)
@@ -623,6 +641,17 @@ namespace CTRPluginFramework
         header.nameColorOffset = offset;
     }
 
+    void PluginMenuImpl::WriteBookmarkWarpsToFile(Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        u64 listOffset = settings.Tell();
+        if (!settings.Write(Preferences::SavedWarps, sizeof(Preferences::WarpDestination) * 3) == 0)
+            return;
+
+        header.warpDestOffset = listOffset;
+    }
 
     void    PluginMenuImpl::ExtractHotkeys(HotkeysVector &hotkeys, MenuFolderImpl *folder, u32 &size)
     {

@@ -64,6 +64,12 @@ namespace CTRPluginFramework
             u16     value{0};
         };
 
+        struct WarpDestination
+        {
+            u8 levelID;
+            u8 stageID;
+        };
+
         /*struct HeaderV1
 {
     u8      sig[8];
@@ -162,6 +168,8 @@ namespace CTRPluginFramework
         static std::string  CheatsFile;
         static std::string  ScreenshotPath;
         static std::string  ScreenshotPrefix;
+
+        static Preferences::WarpDestination SavedWarps[3];
 
         static int          OpenConfigFile(File &file, Header &header);
         static void         LoadSettings(void);
