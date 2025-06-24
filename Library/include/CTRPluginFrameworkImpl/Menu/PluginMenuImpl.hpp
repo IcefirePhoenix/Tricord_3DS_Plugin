@@ -41,10 +41,12 @@ namespace CTRPluginFramework
         static void ActivateFavoritesFromFile(const Preferences::Header &header, File &settings);
         static void LoadFavoritesFromFile(const Preferences::Header &header, File &settings);
         static void LoadHotkeysFromFile(const Preferences::Header &header, File &settings);
+        static void LoadBookmarkWarpsFromFile(const Preferences::Header &header, File &settings);
         static void LoadNameColorsFromFile(const Preferences::Header &header, File &settings);
 
         static void WriteEnabledCheatsToFile(Preferences::Header &header, File &settings);
         static void WriteFavoritesToFile(Preferences::Header &header, File &settings);
+        static void WriteBookmarkWarpsToFile(Preferences::Header &header, File &settings);
         static void WriteCustomNameColorToFile(Preferences::Header &header, File &settings);
         static void WriteScreenshotConfigToFile(Preferences::Header &header, File &settings);
         static void ExtractHotkeys(HotkeysVector &hotkeys, MenuFolderImpl *folder, u32 &size);

@@ -24,6 +24,24 @@ namespace CTRPluginFramework
 
     void InitWarpCodes(PluginMenu& menu)
     {
+        bookmarks = new MenuFolder("Bookmarked Locations");
+        bookmark1 = new MenuEntry("Go to: (Warp bookmark not set)", nullptr, Gameplay::returnToBookmark, true, DescUtils::getDesc("bookmark_note"));
+        bookmark2 = new MenuEntry("Go to: (Warp bookmark not set)", nullptr, Gameplay::returnToBookmark, true, DescUtils::getDesc("bookmark_note"));
+        bookmark3 = new MenuEntry("Go to: (Warp bookmark not set)", nullptr, Gameplay::returnToBookmark, true, DescUtils::getDesc("bookmark_note"));
+
+        bookmark1->SetArg(reinterpret_cast<void *>(0));
+        bookmark2->SetArg(reinterpret_cast<void *>(1));
+        bookmark3->SetArg(reinterpret_cast<void *>(2));
+
+        *bookmarks += new MenuEntry("Bookmark current location", nullptr, Gameplay::setBookmark, true, DescUtils::getDesc("overwrite_bookmark_note"));
+        *bookmarks += new MenuEntry("Reset bookmark list", nullptr, Gameplay::resetBookmarks, true, DescUtils::getDesc("overwrite_bookmark_note"));
+
+        *bookmarks += new MenuEntryLabel();
+        *bookmarks += bookmark1;
+        *bookmarks += bookmark2;
+        *bookmarks += bookmark3;
+
+        *warp += bookmarks;
         *warp += new MenuEntry("Warp to any location", nullptr, Gameplay::instantWarp, true, DescUtils::getDesc("warp_note"));
         *warp += new MenuEntry("Warp to any stage in current Drablands level", nullptr, Gameplay::stageWarp, true, DescUtils::getDesc("warp_stage_note"));
 

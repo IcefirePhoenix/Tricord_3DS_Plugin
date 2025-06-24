@@ -42,6 +42,7 @@ namespace CTRPluginFramework
 		static std::map<std::string, Level> getAllLevels(void);
 		static std::pair<std::string, Level> selLevel(int world);
 		static u8 levelIDFromName(std::string name);
+		static const std::pair<const std::string, Level> *getLevelByID(u8 levelID);
 
 		// level menu selection helpers
 		static int selDrablandsWorld(bool useDoT);

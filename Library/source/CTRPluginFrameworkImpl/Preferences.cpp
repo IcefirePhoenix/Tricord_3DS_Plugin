@@ -24,9 +24,7 @@ namespace CTRPluginFramework
     std::string Preferences::ScreenshotPath;
     std::string Preferences::ScreenshotPrefix;
 
-    bool        Preferences::_cheatsAlreadyLoaded = false;
-    bool        Preferences::_favoritesAlreadyLoaded = false;
-    bool        Preferences::_bmpCanBeLoaded = true;
+    Preferences::WarpDestination Preferences::SavedWarps[3];
 
     static const char *g_signature = "CTRPF\0\0";
 
@@ -239,6 +237,7 @@ namespace CTRPluginFramework
                 PluginMenuImpl::ActivateEnabledCheatsFromFile(header, settings);
 
             PluginMenuImpl::LoadNameColorsFromFile(header, settings);
+            PluginMenuImpl::LoadBookmarkWarpsFromFile(header, settings);
         }
     }
 
@@ -328,8 +327,12 @@ namespace CTRPluginFramework
             PluginMenuImpl::WriteFavoritesToFile(header, settings);
             PluginMenuImpl::WriteHotkeysToFile(header, settings);
 
-            header.size = settings.Tell();
+            // save name colors and warp locations...
+            PluginMenuImpl::WriteCustomNameColorToFile(header, settings);
+            PluginMenuImpl::WriteBookmarkWarpsToFile(header, settings);
+            PluginMenuImpl::WriteScreenshotConfigToFile(header, settings);
 
+            header.size = settings.Tell();
             settings.Rewind();
             settings.Write(&header, sizeof(Header));
         }

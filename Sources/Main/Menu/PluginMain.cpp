@@ -76,6 +76,7 @@ namespace CTRPluginFramework
     void LoadSavedEntryData(void)
     {
         Rendering::loadCustomNameColors();
+        Gameplay::restoreBookmarks();
     }
 
     void InitSequence(FwkSettings &settings)

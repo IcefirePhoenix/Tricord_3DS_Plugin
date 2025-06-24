@@ -10,6 +10,7 @@ namespace CTRPluginFramework
     MenuFolder *effects = nullptr;
     MenuFolder *gameplay = nullptr;
     MenuFolder *warp = nullptr;
+    MenuFolder *bookmarks = nullptr;
     MenuFolder *healthFairies = nullptr;
     MenuFolder *energy = nullptr;
     MenuFolder *enemies = nullptr;
