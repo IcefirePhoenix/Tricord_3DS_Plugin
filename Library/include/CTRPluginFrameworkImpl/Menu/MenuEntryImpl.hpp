@@ -54,6 +54,10 @@ namespace CTRPluginFramework
         bool IsRestricted(void) const;
         // Return if the entry needs user input
         bool NeedsUserInput(void) const;
+        //Set if the entry can be selected in the menu or not.
+        void CanBeSelected(bool canBeSelected);
+        // Set the menu name of this entry
+        void SetName(std::string name);
 
         MenuEntry *AsMenuEntry(void) const;
 
@@ -76,7 +80,6 @@ namespace CTRPluginFramework
         bool _Execute(void);
         int _executeIndex;
         MenuEntry *_owner;
-
 
         int _radioId;
         void *_arg;

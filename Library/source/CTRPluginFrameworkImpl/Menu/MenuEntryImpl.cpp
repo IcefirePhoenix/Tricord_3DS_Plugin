@@ -137,6 +137,18 @@ namespace CTRPluginFramework
         return (_owner);
     }
 
+    void MenuEntryImpl::SetName(std::string newName)
+    {
+        this->name = newName;
+    }
+
+    void MenuEntryImpl::CanBeSelected(bool canBeSelected)
+    {
+        _flags.isUnselectable = !canBeSelected;
+        if (!canBeSelected && IsActivated())
+            Disable();
+    }
+
     //##############################################################
 
     std::string &MenuEntryImpl::GetNote()

@@ -119,11 +119,24 @@ namespace CTRPluginFramework
         MenuEntryImpl *entry = item->_item.get();
 
         _item->Append(entry);
-
         return (this);
     }
 
     MenuFolder *MenuFolder::operator-=(const MenuEntry *entry)
+    {
+        _item->Remove(entry->_item.get());
+        return (this);
+    }
+
+    MenuFolder    *MenuFolder::operator += (const MenuEntryLabel *item)
+    {
+        MenuEntryImpl *entry = item->_item.get();
+
+        _item->Append(entry);
+        return (this);
+    }
+
+    MenuFolder    *MenuFolder::operator -= (const MenuEntryLabel *entry)
     {
         _item->Remove(entry->_item.get());
         return (this);
