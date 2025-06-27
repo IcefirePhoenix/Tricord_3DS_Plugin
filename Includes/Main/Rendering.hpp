@@ -8,6 +8,10 @@
 
 namespace CTRPluginFramework
 {
+    extern MenuEntryLabel *colorLabel1;
+    extern MenuEntryLabel *colorLabel2;
+    extern MenuEntryLabel *colorLabel3;
+
     void hideHUD(void);
 
     class Rendering

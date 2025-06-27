@@ -41,4 +41,9 @@ namespace CTRPluginFramework
     {
         return (_item->IsVisible());
     }
+
+    void MenuEntryLabel::SetName(std::string newLabel)
+    {
+        _item->name = newLabel;
+    }
 }
