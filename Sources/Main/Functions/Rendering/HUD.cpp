@@ -3,6 +3,10 @@
 
 namespace CTRPluginFramework
 {
+    MenuEntryLabel *colorLabel1;
+    MenuEntryLabel *colorLabel2;
+    MenuEntryLabel *colorLabel3;
+
     bool showChestContents, isScrollTextDisabled = false;
 
     /* ------------------ */
@@ -57,17 +61,21 @@ namespace CTRPluginFramework
     {
         u32 targetaddr, result, newColor;
         int playerChoice = GeneralHelpers::chooseLink();
+        MenuEntryLabel *label = nullptr;
 
         switch (playerChoice)
         {
         case 0:
             targetaddr = AddressList::getAddress("LiveNameColorG");
+            label = colorLabel1;
             break;
         case 1:
             targetaddr = AddressList::getAddress("LiveNameColorB");
+            label = colorLabel2;
             break;
         case 2:
             targetaddr = AddressList::getAddress("LiveNameColorR");
+            label = colorLabel3;
             break;
         default:
             return;
@@ -87,15 +95,31 @@ namespace CTRPluginFramework
 
             // save to Settings
             Preferences::CustomNameColors[playerChoice] = newColor;
+            label->SetName("Player " + std::to_string(playerChoice + 1) + " color: #" + Hex(r) + Hex(g) + Hex(b));
         }
     }
 
     // Updates status message name colors on boot
     void Rendering::loadCustomNameColors(void)
     {
+        MenuEntryLabel *colorEntries[3] =
+        {
+            colorLabel1,
+            colorLabel2,
+            colorLabel3
+        };
+
         Process::Write32(AddressList::getAddress("LiveNameColorG"), Preferences::CustomNameColors[0]);
         Process::Write32(AddressList::getAddress("LiveNameColorB"), Preferences::CustomNameColors[1]);
         Process::Write32(AddressList::getAddress("LiveNameColorR"), Preferences::CustomNameColors[2]);
+
+        for (int color = 0; color < 3; color++)
+        {
+            u8 r = Preferences::CustomNameColors[color] & 0xFF;
+            u8 g = (Preferences::CustomNameColors[color] >> 8) & 0xFF;
+            u8 b = (Preferences::CustomNameColors[color] >> 16) & 0xFF;
+            colorEntries[color]->SetName("Player " + std::to_string(color + 1) +" color: #" + Hex(r) + Hex(g) + Hex(b));
+        }
     }
 
     // Resets custom name colors back to default -- bit shifting as done in-game is too extra here, using predefined color values instead

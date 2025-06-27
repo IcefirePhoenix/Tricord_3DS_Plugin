@@ -32,6 +32,12 @@ namespace CTRPluginFramework
         */
         bool IsVisible(void) const;
 
+        /**
+         * \brief Set the menu name of this entry
+         * \param newLabel  The new name of the entry
+         */
+        void SetName(std::string newLabel);
+
     private:
         friend class MenuFolder;
         friend class PluginMenu;

@@ -540,10 +540,19 @@ namespace CTRPluginFramework
         MenuFolder *face = new MenuFolder("Facial Expressions");
         MenuFolder *scrollText = new MenuFolder("Status Messages");
 
+        colorLabel1 = new MenuEntryLabel("Player 1 color: ");
+        colorLabel2 = new MenuEntryLabel("Player 2 color: ");
+        colorLabel3 = new MenuEntryLabel("Player 3 color: ");
+
         *scrollText += new MenuEntry("Edit name colors", nullptr, Rendering::editLiveMsgColor, true, DescUtils::getDesc("new_status_color_note"));
         *scrollText += new MenuEntry("Restore default name colors", nullptr, Rendering::restoreNameColors, false, DescUtils::getDesc("restore_status_color_note"));
         *scrollText += new MenuEntry("Disable status messages", nullptr, Rendering::disableScrollingText, false, DescUtils::getDesc("disable_scroll_text_note"));
         *overlay += scrollText;
+
+        *scrollText += new MenuEntryLabel();
+        *scrollText += colorLabel1;
+        *scrollText += colorLabel2;
+        *scrollText += colorLabel3;
 
         *overlay += new MenuEntry("Hide HUD", Rendering::triggerHideHUD, DescUtils::getDesc("hide_HUD_note"));
         *overlay += new MenuEntry("Display current respawn location", Rendering::respawnIndicator, DescUtils::getDesc("respawn_locator_note"));
