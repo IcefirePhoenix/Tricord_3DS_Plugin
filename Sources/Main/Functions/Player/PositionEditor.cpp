@@ -3,8 +3,8 @@
 
 namespace CTRPluginFramework
 {
-    FloatingButton loadBtn(IntRect(32, 107, 15, 15), Icon::DrawLoadPosition);
-    FloatingButton saveBtn(IntRect(32, 85, 15, 15), Icon::DrawSavePosition);
+    Button loadBtn(Button::Icon | Button::Toggle, IntRect(32, 107, 15, 15), Icon::DrawLoadPosition);
+    Button saveBtn(Button::Icon | Button::Toggle, IntRect(32, 85, 15, 15), Icon::DrawSavePosition);
 
     bool isPositionSaved[3] = {false, false, false};
     float positions[3][3];

@@ -23,6 +23,9 @@ namespace CTRPluginFramework
     extern MenuEntry* flightEntry;
 
     extern MenuEntry* reWarp;
+    extern MenuEntry* bookmark1;
+    extern MenuEntry* bookmark2;
+    extern MenuEntry* bookmark3;
     extern MenuEntry* doppelEnableAuto;
     extern MenuEntry* challengeEditAuto;
 
@@ -71,7 +74,12 @@ namespace CTRPluginFramework
 
         static void infTime(MenuEntry* entry);
 
-        static void instantWarp(MenuEntry* entry);
+        static std::string retrieveNonStageName(int targetLevelID, int targetStage, std::string levelName);
+        static void restoreBookmarks(void);
+        static void resetBookmarks(MenuEntry *entry);
+        static void setBookmark(MenuEntry* entry);
+        static void returnToBookmark(MenuEntry* entry);
+        static void instantWarp(MenuEntry *entry);
         static void stageWarp(MenuEntry* entry);
         static void warpAgain(MenuEntry* entry);
         static void resetRoom(MenuEntry *entry);

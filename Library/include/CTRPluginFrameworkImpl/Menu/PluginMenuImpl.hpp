@@ -30,21 +30,29 @@ namespace CTRPluginFramework
         ~PluginMenuImpl(void);
 
         void    Append(MenuItem *item) const;
+        void    AddToHidden(MenuItem *item) const;
         void    Callback(CallbackPointer callback);
         void    RemoveCallback(CallbackPointer callback);
         int     Run(void);
 
         static void    Close(MenuFolderImpl *menuFolderImpl);
 
-        static void LoadEnabledCheatsFromFile(const Preferences::Header &header, File &settings);
+        static void ActivateEnabledCheatsFromFile(const Preferences::Header &header, File &settings);
+        static void ActivateFavoritesFromFile(const Preferences::Header &header, File &settings);
         static void LoadFavoritesFromFile(const Preferences::Header &header, File &settings);
         static void LoadHotkeysFromFile(const Preferences::Header &header, File &settings);
+        static void LoadBookmarkWarpsFromFile(const Preferences::Header &header, File &settings);
+        static void LoadNameColorsFromFile(const Preferences::Header &header, File &settings);
 
         static void WriteEnabledCheatsToFile(Preferences::Header &header, File &settings);
         static void WriteFavoritesToFile(Preferences::Header &header, File &settings);
+        static void WriteBookmarkWarpsToFile(Preferences::Header &header, File &settings);
+        static void WriteCustomNameColorToFile(Preferences::Header &header, File &settings);
+        static void WriteScreenshotConfigToFile(Preferences::Header &header, File &settings);
         static void ExtractHotkeys(HotkeysVector &hotkeys, MenuFolderImpl *folder, u32 &size);
         static void WriteHotkeysToFile(Preferences::Header &header, File &file);
         static void GetRegionsList(std::vector<Region> &list);
+
         // Used to forcefully exit a menu
         static void ForceExit(void);
         static void ForceOpen(void);
@@ -59,6 +67,7 @@ namespace CTRPluginFramework
         void    ShowWelcomeMessage(bool showMsg);
 
         MenuFolderImpl *GetRoot(void) const;
+        MenuFolderImpl *GetHidden(void) const;
         bool    IsOpen(void) const;
         bool    WasOpened(void) const;
         void    AddPluginVersion(u32 version) const;

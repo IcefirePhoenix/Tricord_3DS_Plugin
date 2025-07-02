@@ -1,12 +1,12 @@
 #include "types.h"
 
-#include "CTRPluginFrameworkImpl/Graphics.hpp"
 #include "CTRPluginFramework/Graphics.hpp"
-
-#include "CTRPluginFrameworkImpl/Menu.hpp"
-#include "CTRPluginFrameworkImpl/System.hpp"
 #include "CTRPluginFramework/System.hpp"
+#include "CTRPluginFrameworkImpl/Graphics.hpp"
+#include "CTRPluginFrameworkImpl/Menu.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
+#include "CTRPluginFrameworkImpl/System.hpp"
+#include "CTRPluginFrameworkImpl/System/Screenshot.hpp"
 
 #include <string>
 #include <vector>
@@ -53,6 +53,11 @@ namespace CTRPluginFramework
     void    PluginMenuImpl::Append(MenuItem *item) const
     {
         _home->Append(item);
+    }
+
+    void    PluginMenuImpl::AddToHidden(MenuItem *item) const
+    {
+        _home->AddToHidden(item);
     }
 
     void    PluginMenuImpl::Callback(CallbackPointer callback)
@@ -162,23 +167,14 @@ namespace CTRPluginFramework
         // Refresh hid
         Controller::Update();
 
-        // set preferences here -> autosaveloadcheats and favorites
-
         // If Start is pressed, don't auto enable the cheats
         if (Controller::IsKeyPressed(Key::Start) || Controller::IsKeyDown(Key::Start))
-            Preferences::Clear(Preferences::AutoLoadCheats);
+            Preferences::Clear(Preferences::AutoEnableSavedCheats);
 
         _tools->UpdateSettings();
 
-        // Load favorites
-        Preferences::LoadSavedFavorites();
-
-        // Enable cheats
-        if (Preferences::IsEnabled(Preferences::AutoLoadCheats))
-            Preferences::LoadSavedEnabledCheats();
-
-        // Load custom hotkeys
-        Preferences::LoadHotkeysFromFile();
+        // Load saved MenuEntry preferences
+        Preferences::LoadEntryPreferences(Preferences::IsEnabled(Preferences::AutoEnableSavedCheats), Preferences::IsEnabled(Preferences::AutoEnableFavorites));
 
         // Update PluginMenuHome variables
         home.Init();
@@ -189,7 +185,6 @@ namespace CTRPluginFramework
         if (!Directory::IsExists("/Tricord/AR_Backups/"))
             Directory::Create("/Tricord/AR_Backups/");
 
-        // Load AR Cheats
         ar.Initialize();
         PluginMenuActionReplay::BackupCodes(false);
 
@@ -198,7 +193,6 @@ namespace CTRPluginFramework
             OSD::Notify("Plugin ready!", Color::White, Color());
             OSD::Notify("Tricord can now be started.", Color::White, Color());
         }
-
 
         // Main loop
         while (_pluginRun)
@@ -407,19 +401,43 @@ namespace CTRPluginFramework
         home.Close(folder);
     }
 
-    void PluginMenuImpl::LoadEnabledCheatsFromFile(const Preferences::Header &header, File &settings)
+    void PluginMenuImpl::ActivateEnabledCheatsFromFile(const Preferences::Header &header, File &settings)
     {
         if (_runningInstance == nullptr)
             return;
 
-        std::vector<u32>    uids;
-        MenuFolderImpl      *folder = _runningInstance->_home->_folder;
+        std::vector<u32> uids;
+        MenuFolderImpl *folder = _runningInstance->_home->_folder;
 
         uids.resize(header.enabledCheatsCount);
 
         settings.Seek(header.enabledCheatsOffset, File::SET);
 
         if (settings.Read(uids.data(), sizeof(u32) * header.enabledCheatsCount) == 0)
+        {
+            for (u32 &uid : uids)
+            {
+                MenuItem *item = folder->GetItem(uid);
+
+                if (item != nullptr && item->IsEntry())
+                    reinterpret_cast<MenuEntryImpl *>(item)->Enable();
+            }
+        }
+    }
+
+    void PluginMenuImpl::ActivateFavoritesFromFile(const Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        std::vector<u32> uids;
+        MenuFolderImpl *folder = _runningInstance->_home->_folder;
+
+        uids.resize(header.favoritesCount);
+
+        settings.Seek(header.favoritesOffset, File::SET);
+
+        if (settings.Read(uids.data(), sizeof(u32) * header.favoritesCount) == 0)
         {
             for (u32 &uid : uids)
             {
@@ -459,7 +477,7 @@ namespace CTRPluginFramework
         }
     }
 
-    void    PluginMenuImpl::LoadHotkeysFromFile(const Preferences::Header &header, File &settings)
+    void PluginMenuImpl::LoadHotkeysFromFile(const Preferences::Header &header, File &settings)
     {
         if (_runningInstance == nullptr || header.hotkeysCount == 0)
             return;
@@ -500,18 +518,71 @@ namespace CTRPluginFramework
         }
     }
 
-    void    PluginMenuImpl::WriteEnabledCheatsToFile(Preferences::Header &header, File &settings)
+    void PluginMenuImpl::LoadNameColorsFromFile(const Preferences::Header &header, File &settings)
     {
         if (_runningInstance == nullptr)
             return;
 
-        std::vector<u32>    uids;
-        MenuFolderImpl      *folder = _runningInstance->_home->_folder;
+        int players = 3;
+        settings.Seek(header.nameColorOffset, File::SET);
+
+        if (!settings.Read(Preferences::CustomNameColors, sizeof(u32) * players) == 0)
+            return;
+    }
+
+    void PluginMenuImpl::LoadBookmarkWarpsFromFile(const Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        Preferences::WarpDestination warps[3];
+
+        settings.Seek(header.warpDestOffset, File::SET);
+        if (settings.Read(warps, sizeof(Preferences::WarpDestination) * 3) == 0)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                Preferences::SavedWarps[i] = warps[i];
+                OSD::Notify("loaded a save warp on boot");
+            }
+        }
+    }
+
+    void PluginMenuImpl::WriteScreenshotConfigToFile(Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        u64 offset = settings.Tell();
+        header.screenshotScreenCapture = Screenshot::Screens;
+        header.screenshotHotkeys = Screenshot::Hotkeys;
+        header.screenshotTimer = static_cast<u32>(Screenshot::Timer.AsSeconds());
+
+        std::strncpy(header.screenshotCustomName, Screenshot::Prefix.c_str(), sizeof(header.screenshotCustomName) - 1);
+        header.screenshotCustomName[sizeof(header.screenshotCustomName) - 1] = '\0';
+
+        std::strncpy(header.screenshotCustomDir, Screenshot::Path.c_str(), sizeof(header.screenshotCustomDir) - 1);
+        header.screenshotCustomDir[sizeof(header.screenshotCustomDir) - 1] = '\0';
+
+        header.screenshotOffset = offset;
+    }
+
+    void PluginMenuImpl::WriteEnabledCheatsToFile(Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        std::vector<u32> uids;
+        MenuFolderImpl *folder = _runningInstance->_home->_folder;
 
         for (MenuItem *item : folder->_items)
         {
-            if (item->IsEntry() && reinterpret_cast<MenuEntryImpl *>(item)->IsActivated())
-                uids.push_back(item->Uid);
+            if (item->IsEntry())
+            {
+                MenuEntryImpl* enabledEntry = reinterpret_cast<MenuEntryImpl *>(item);
+                if (enabledEntry->IsActivated() && !enabledEntry->IsRestricted())
+                    uids.push_back(item->Uid);
+            }
         }
 
         if (uids.size())
@@ -526,14 +597,15 @@ namespace CTRPluginFramework
         }
     }
 
-    void    PluginMenuImpl::WriteFavoritesToFile(Preferences::Header &header, File &settings)
+    void PluginMenuImpl::WriteFavoritesToFile(Preferences::Header &header, File &settings)
     {
         if (_runningInstance == nullptr)
             return;
 
-        std::vector<u32>    uids;
-        MenuFolderImpl      *folder = _runningInstance->_home->_starred;
+        std::vector<u32> uids;
+        MenuFolderImpl *folder = _runningInstance->_home->_starred;
 
+        // restricted MenuFolders/MenuEntries cannot be starred in the first place -> no specific check needed here
         for (MenuItem *item : folder->_items)
         {
             uids.push_back(item->Uid);
@@ -549,6 +621,32 @@ namespace CTRPluginFramework
                 header.favoritesOffset = offset;
             }
         }
+    }
+
+    void PluginMenuImpl::WriteCustomNameColorToFile(Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        u64 offset = settings.Tell();
+        for (int index = 0; index < 3; index++)
+        {
+            if (settings.Write(&Preferences::CustomNameColors[index], sizeof(u32)) != 0)
+                return;
+        }
+        header.nameColorOffset = offset;
+    }
+
+    void PluginMenuImpl::WriteBookmarkWarpsToFile(Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        u64 listOffset = settings.Tell();
+        if (!settings.Write(Preferences::SavedWarps, sizeof(Preferences::WarpDestination) * 3) == 0)
+            return;
+
+        header.warpDestOffset = listOffset;
     }
 
     void    PluginMenuImpl::ExtractHotkeys(HotkeysVector &hotkeys, MenuFolderImpl *folder, u32 &size)
@@ -687,6 +785,11 @@ namespace CTRPluginFramework
     MenuFolderImpl* PluginMenuImpl::GetRoot() const
     {
         return (_home->_root);
+    }
+
+    MenuFolderImpl* PluginMenuImpl::GetHidden() const
+    {
+        return (_home->_hidden);
     }
 
     bool    PluginMenuImpl::IsOpen(void) const

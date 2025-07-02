@@ -263,6 +263,10 @@ namespace CTRPluginFramework
         for (MenuFolder *folder : folderList)
             recursiveEntrySearch(enabledList, folder);
 
+        std::vector<MenuFolder *> hiddenFolders = menu->GetHiddenList();
+        for (MenuFolder *folder : hiddenFolders)
+            recursiveEntrySearch(enabledList, folder);
+
         return enabledList;
     }
 

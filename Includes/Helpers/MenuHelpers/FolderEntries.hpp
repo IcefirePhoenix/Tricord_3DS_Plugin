@@ -5,12 +5,14 @@
 
 namespace CTRPluginFramework
 {
+    extern MenuFolder *autoFolder;
     extern MenuFolder *emotes;
     extern MenuFolder *chaos;
     extern MenuFolder *turbo;
     extern MenuFolder *effects;
     extern MenuFolder *gameplay;
     extern MenuFolder *warp;
+    extern MenuFolder *bookmarks;
     extern MenuFolder *healthFairies;
     extern MenuFolder *energy;
     extern MenuFolder *enemies;

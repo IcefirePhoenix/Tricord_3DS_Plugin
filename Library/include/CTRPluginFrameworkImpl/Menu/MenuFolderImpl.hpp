@@ -12,6 +12,7 @@ namespace CTRPluginFramework
 {
     class Menu;
     class MenuEntry;
+    class MenuEntryLabel;
     class MenuFolder;
     class MenuFolderImpl : public MenuItem
     {
@@ -20,18 +21,20 @@ namespace CTRPluginFramework
         MenuFolderImpl(MenuFolder *owner, const std::string &name, const std::string &note = "");
         virtual ~MenuFolderImpl();
 
-        void        Append(MenuItem *item, bool isStar = false);
-        u32         ItemsCount(void) const;
-        MenuItem    *GetItem(u32 uid);
-        void        DisableAll(void);
+        void Append(MenuItem *item, bool isStar = false);
+        u32 ItemsCount(void) const;
+        MenuItem *GetItem(u32 uid);
+        void DisableAll(void);
 
-        std::vector<MenuEntry *>    GetEntryList(void) const;
-        std::vector<MenuFolder *>   GetFolderList(void) const;
-        MenuItem    *operator[](u32 index);
-        bool        HasParent(void);
-        void        Remove(MenuItem *item);
-        void        Remove(u32 start, u32 count = 1, bool destroy = false);
-        void        Clear(void);
+        std::vector<MenuEntry *> GetEntryList(void) const;
+        std::vector<MenuFolder *> GetFolderList(void) const;
+        MenuItem *operator[](u32 index);
+        bool HasParent(void);
+        void Remove(MenuItem *item);
+        void Remove(u32 start, u32 count = 1, bool destroy = false);
+        void Clear(void);
+        bool IsRestricted(void);
+        void SetRestrictedState(bool state);
 
         using MenuItemIter = std::vector<MenuItem *>::iterator;
 
@@ -52,14 +55,15 @@ namespace CTRPluginFramework
         friend class Menu;
 
         // Private methods
-        void            _Open(MenuFolderImpl *parent, int position, bool starMode = false);
-        MenuFolderImpl      *_Close(int &position, bool starMode = false);
+        void _Open(MenuFolderImpl *parent, int position, bool starMode = false);
+        MenuFolderImpl *_Close(int &position, bool starMode = false);
 
         // Private members
-        MenuFolder                  *_owner;
-        MenuFolderImpl              *_parent[2];
-        std::vector<MenuItem *>     _items;
-        int                         _position[2];
+        MenuFolder *_owner;
+        MenuFolderImpl *_parent[2];
+        std::vector<MenuItem *> _items;
+        int _position[2];
+        bool _restricted;
 
     };
 }

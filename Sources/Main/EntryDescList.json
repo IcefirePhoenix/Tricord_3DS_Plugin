@@ -3,7 +3,7 @@
         {
             "name": "warp_note",
             "content": {
-                "intro": "Enables warping to any location -- not just individual levels. Doppels are automatically activated in areas where they might be required.",
+                "intro": "Enables warping to any location -- not just individual levels. Doppels are automatically activated in areas where they might be required. Up to five of your most recent warps get saved to warp history.",
                 "note": "If entering the Drablands, you can also choose to enable a challenge.",
                 "modeCompatibility": 0,
                 "clientOnly": false
@@ -19,10 +19,28 @@
             }
         },
         {
+            "name": "bookmark_note",
+            "content": {
+                "intro": "This is a bookmarked warp location.",
+                "note": "Can be overwritten with the current location. Saved between reboots.",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "overwrite_bookmark_note",
+            "content": {
+                "intro": "Overwrites a bookmark slot with the current location, allowing you to easily revisit it later.",
+                "note": "Up to three bookmarks can exist at once. Bookmarks are saved between reboots.",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "rewarp_note",
             "content": {
-                "intro": "Returns you to the last location you warped to.",
-                "note": "",
+                "intro": "Returns you to one of the last locations you warped to, chosen from your warp history.",
+                "note": "Up to five locations can be saved to warp history.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }
@@ -946,10 +964,19 @@
             }
         },
         {
-            "name": "scroll_text_color_note",
+            "name": "new_status_color_note",
             "content": {
-                "intro": "Customizes the color of player names that appear in top-screen scrolling event messages. Accepts hex color codes. Changes are preserved between reboots.",
+                "intro": "Enables usage of custom player name colors used in top-screen status messages. Accepts 6-digit hex color codes. Custom colors are preserved between reboots.",
                 "note": "Recommended for use with custom Link color modpacks.",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "restore_status_color_note",
+            "content": {
+                "intro": "Restores default player name colors used in status messages.",
+                "note": "Default colors are:\nGreen: 0x40FF40\nBlue: 0xFF4040\nRed: 0x4040FF",
                 "modeCompatibility": 1,
                 "clientOnly": true
             }

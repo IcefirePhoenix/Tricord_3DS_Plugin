@@ -522,33 +522,6 @@ namespace CTRPluginFramework
             if (!File::Exists(cheatPath))
                 File::Create(cheatPath);
         }
-
-        // Set default screenshot path
-        std::string dirPath = "/Tricord/Screenshots";
-        if (!Directory::IsExists(dirPath))
-            Directory::Create(dirPath);
-
-        switch (Process::GetTitleID())
-        {
-            case TID_USA:
-                dirPath.append("/NA/");
-                break;
-            case TID_EUR:
-                dirPath.append("/NA/");
-                break;
-            case TID_JPN:
-                dirPath.append("/JP/");
-                break;
-        }
-
-        if (!Directory::IsExists(dirPath))
-            Directory::Create(dirPath);
-
-        Screenshot::Path = dirPath;
-
-        // Set default screenshot prefix
-        Screenshot::Prefix = "Screenshot";
-        Screenshot::Initialize();
     }
 
     // Main thread's start

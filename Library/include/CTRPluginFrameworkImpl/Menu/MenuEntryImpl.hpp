@@ -15,13 +15,14 @@ namespace CTRPluginFramework
     {
         struct EntryImplFlags
         {
-            bool    state : 1;
-            bool    justChanged : 1;
-            bool    isRadio : 1;
-            bool    isUnselectable: 1;
-            // lazy... might rewrite later
-            bool    disableIcon : 1;
-            bool    useControllerIcon : 1;
+            bool state : 1;
+            bool justChanged : 1;
+            bool isRadio : 1;
+            bool isUnselectable: 1;
+            bool disableIcon : 1;
+            bool useControllerIcon : 1;
+            bool restricted : 1;
+            bool needsUserInput : 1;
         };
 
     public:
@@ -30,46 +31,58 @@ namespace CTRPluginFramework
         virtual ~MenuEntryImpl();
 
         // Enable the entry
-        virtual void    Enable(void);
+        virtual void Enable(void);
         // Disable the entry
-        virtual void    Disable(void);
+        virtual void Disable(void);
         // Set the entry as radio, an ID must be provided
-        void    SetRadio(int id);
+        void SetRadio(int id);
         // Set an alternative icon
-        void    SetAltIcon(bool noIcon);
+        void SetAltIcon(bool noIcon);
+        // Set the entry's restricted state
+        void SetRestrictedState(bool state);
+        // Set the entry's user input requirement state
+        void SetUserInputReq(bool needsInput);
         // Set an argument for the entry
-        void    SetArg(void *arg);
+        void SetArg(void *arg);
         // Get the argument
-        void    *GetArg(void) const;
+        void *GetArg(void) const;
         // Return if the entry just got activated
-        bool    WasJustActivated(void) const;
+        bool WasJustActivated(void) const;
         // Return if the entry is activated
-        bool    IsActivated(void) const;
+        bool IsActivated(void) const;
+        // Return if the entry cannot be tracked or starred
+        bool IsRestricted(void) const;
+        // Return if the entry needs user input
+        bool NeedsUserInput(void) const;
+        //Set if the entry can be selected in the menu or not.
+        void CanBeSelected(bool canBeSelected);
+        // Set the menu name of this entry
+        void SetName(std::string name);
+
         MenuEntry *AsMenuEntry(void) const;
 
         // Public members
-        FuncPointer     GameFunc;
-        FuncPointer     MenuFunc;
+        FuncPointer GameFunc;
+        FuncPointer MenuFunc;
 
         virtual std::string &GetNote(void) override;
 
-        std::string     Note2;
+        std::string Note2;
 
-        EntryImplFlags       _flags;
+        EntryImplFlags _flags;
     protected:
         friend class PluginMenuHome;
         friend class PluginMenuExecuteLoop;
         friend class MenuEntry;
         // Functions used by the menu
-        bool    _TriggerState(void);
-        bool    _MustBeRemoved(void) const;
-        bool    _Execute(void);
-        int     _executeIndex;
+        bool _TriggerState(void);
+        bool _MustBeRemoved(void) const;
+        bool _Execute(void);
+        int _executeIndex;
         MenuEntry *_owner;
 
-
-        int         _radioId;
-        void        *_arg;
+        int _radioId;
+        void *_arg;
     };
 }
 

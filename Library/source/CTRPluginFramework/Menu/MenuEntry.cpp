@@ -5,136 +5,162 @@
 
 namespace CTRPluginFramework
 {
-    MenuEntry::MenuEntry(const std::string &name, const std::string &note) :
+    MenuEntry::MenuEntry(const std::string &name, const std::string &note, bool restricted) :
         Hotkeys(this),
         _item(new MenuEntryImpl(name, note, this))
     {
+        _item->_flags.restricted = restricted;
     }
 
-    MenuEntry::MenuEntry(const std::string &name, FuncPointer func, const std::string &note) :
+    MenuEntry::MenuEntry(const std::string &name, FuncPointer func, const std::string &note, bool restricted) :
         Hotkeys(this),
         _item(new MenuEntryImpl(name, func, note, this))
     {
-
+        _item->_flags.restricted = restricted;
     }
 
-    MenuEntry::MenuEntry(const std::string &name, FuncPointer GameFunc, FuncPointer MenuFunc, const std::string &note) :
+    MenuEntry::MenuEntry(const std::string &name, FuncPointer GameFunc, FuncPointer MenuFunc, bool needsUserInput, const std::string &note, bool restricted) :
         Hotkeys(this),
         _item(new MenuEntryImpl(name, GameFunc, note, this))
     {
         _item->MenuFunc = MenuFunc;
+        _item->_flags.restricted = restricted;
+        _item->_flags.needsUserInput = needsUserInput;
     }
 
-    MenuEntry::MenuEntry(int radioId, const std::string &name, FuncPointer func, const std::string &note) :
+    MenuEntry::MenuEntry(int radioId, const std::string &name, FuncPointer func, const std::string &note, bool restricted) :
         Hotkeys(this),
         _item(new MenuEntryImpl(name, func, note, this))
     {
         _item->SetRadio(radioId);
+        _item->_flags.restricted = restricted;
     }
 
-    MenuEntry::MenuEntry(int radioGroup, const std::string &name, FuncPointer GameFunc, FuncPointer MenuFunc, const std::string &note) :
+    MenuEntry::MenuEntry(int radioGroup, const std::string &name, FuncPointer GameFunc, FuncPointer MenuFunc, bool needsUserInput, const std::string &note, bool restricted) :
         Hotkeys(this),
         _item(new MenuEntryImpl(name, GameFunc, note, this))
     {
         _item->SetRadio(radioGroup);
         _item->MenuFunc = MenuFunc;
+        _item->_flags.restricted = restricted;
+        _item->_flags.needsUserInput = needsUserInput;
     }
 
     MenuEntry::~MenuEntry()
     {
     }
 
-    void    MenuEntry::Enable(void) const
+    void MenuEntry::Enable(void) const
     {
         _item->Enable();
     }
 
-    void    MenuEntry::Disable(void) const
+    void MenuEntry::Disable(void) const
     {
         _item->Disable();
     }
 
-    void    MenuEntry::Hide(void) const
+    void MenuEntry::Hide(void) const
     {
         _item->Hide();
     }
 
-    void    MenuEntry::SetAltIcon(bool noIcon) const
+    void MenuEntry::SetAltIcon(bool noIcon) const
     {
         _item->SetAltIcon(noIcon);
     }
 
-    void    MenuEntry::HideWithoutDisable(void) const
+    void MenuEntry::HideWithoutDisable(void) const
     {
         _item->HideWithoutDisable();
     }
 
-    void    MenuEntry::Show(void) const
+    void MenuEntry::Show(void) const
     {
         _item->Show();
     }
 
-    void    MenuEntry::SetRadio(int id) const
+    void MenuEntry::SetRadio(int id) const
     {
         _item->SetRadio(id);
     }
 
-    void    MenuEntry::SetArg(void *arg) const
+    void MenuEntry::SetRestrictedState(bool state) const
+    {
+        _item->SetRestrictedState(state);
+    }
+
+    void MenuEntry::SetUserInputReq(bool needsInput) const
+    {
+        _item->SetUserInputReq(needsInput);
+    }
+
+    void MenuEntry::SetArg(void *arg) const
     {
         _item->SetArg(arg);
     }
 
-    void    *MenuEntry::GetArg(void) const
+    void *MenuEntry::GetArg(void) const
     {
         return (_item->GetArg());
     }
 
-    bool    MenuEntry::WasJustActivated(void) const
+    bool MenuEntry::WasJustActivated(void) const
     {
         return (_item->WasJustActivated());
     }
 
-    bool    MenuEntry::IsActivated(void) const
+    bool MenuEntry::IsActivated(void) const
     {
         return (_item->IsActivated());
     }
 
-    bool    MenuEntry::IsVisible() const
+    bool MenuEntry::IsRestricted(void) const
+    {
+        return (_item->IsRestricted());
+    }
+
+    bool MenuEntry::NeedsUserInput(void) const
+    {
+        return (_item->NeedsUserInput());
+    }
+
+    bool MenuEntry::IsVisible() const
     {
         return (_item->IsVisible());
     }
 
-    void    MenuEntry::UseTopSeparator(Separator type) const
+    void MenuEntry::UseTopSeparator(Separator type) const
     {
         _item->Flags.useSeparatorBefore = type != Separator::None;
         _item->Flags.useStippledLineForBefore = type == Separator::Stippled;
     }
 
-    void    MenuEntry::UseBottomSeparator(Separator type) const
+    void MenuEntry::UseBottomSeparator(Separator type) const
     {
         _item->Flags.useSeparatorAfter = type != Separator::None;
         _item->Flags.useStippledLineForAfter = type == Separator::Stippled;
-        
+
     }
 
-    void    MenuEntry::CanBeSelected(bool canBeSelected) const
+    void MenuEntry::CanBeSelected(bool canBeSelected) const
     {
         _item->_flags.isUnselectable = !canBeSelected;
         if (!canBeSelected && _item->IsActivated())
             _item->Disable();
     }
 
-    void    MenuEntry::SetGameFunc(FuncPointer func) const
+    void MenuEntry::SetGameFunc(FuncPointer func) const
     {
         _item->GameFunc = func;
     }
 
-    void    MenuEntry::SetMenuFunc(FuncPointer func) const
+    void MenuEntry::SetMenuFunc(FuncPointer func) const
     {
         _item->MenuFunc = func;
     }
 
-    void    MenuEntry::SetName(std::string newName) const
+    void MenuEntry::SetName(std::string newName) const
     {
         _item->name = newName;
     }
