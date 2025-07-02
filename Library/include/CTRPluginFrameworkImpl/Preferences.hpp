@@ -173,9 +173,7 @@ namespace CTRPluginFramework
 
         static int          OpenConfigFile(File &file, Header &header);
         static void         LoadSettings(void);
-        static void         LoadSavedEnabledCheats(void);
-        static void         LoadSavedFavorites(void);
-        static void         LoadHotkeysFromFile(void);
+        static void         LoadEntryPreferences(bool autoEnableSavedCheats, bool autoEnableFavorites);
         static void         LoadBackgrounds(void);
         static void         UnloadBackgrounds(void);
         static void         WriteSettings(void);
