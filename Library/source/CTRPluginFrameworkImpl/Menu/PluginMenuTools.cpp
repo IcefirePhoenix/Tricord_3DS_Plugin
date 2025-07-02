@@ -353,134 +353,123 @@ namespace CTRPluginFramework
         }
     }
 
+    const std::vector<std::string> screens = {"Top screen", "Bottom screen", "Both screens"};
+
     static MenuEntryTools *g_screenshotEntry;
-
-    static void getScreenShotMode(void)
-    {
-        Keyboard kb("Screenshot settings", "Which screen(s) would you like to capture?");
-
-        kb.Populate({"Top screen", "Bottom screen", "Both screens"});
-
-        int mode = kb.Open();
-        if (mode != -1)
-        {
-            Screenshot::Screens = mode + 1;
-        }
-    }
+    static MenuEntryTools *ss_Screen;
+    static MenuEntryTools *ss_Hotkey;
+    static MenuEntryTools *ss_Timer;
+    static MenuEntryTools *ss_Name;
+    static MenuEntryTools *ss_Dir;
 
     std::string KeysToString(u32 keys);
     bool stou32(std::string &input, u32 &res);
 
-    // static bool g_manualScreenshotTrigger = false;
-    // static void Screenshot_Enabler(MenuEntryTools *entry)
-    // {
-    //     if (!g_manualScreenshotTrigger)
-    //     {
-    //         Preferences::Toggle(Preferences::ScreenshotEnabled);
-    //     }
-    //     OSD::Notify(std::to_string(Preferences::IsEnabled(Preferences::ScreenshotEnabled)));
-    // }
-
-    static void UpdateScreenshotText(void)
+    static void UpdateScreenshotStatus(void)
     {
-        // Update entry
-        const char *screens[3] = {"Top screen", "Bottom screen", "Both screens"};
-
-        g_screenshotEntry->name = "Screenshot: ";
-        g_screenshotEntry->name.append(KeysToString(Screenshot::Hotkeys) + ", ");
-        g_screenshotEntry->name.append(screens[(Screenshot::Screens & SCREENSHOT_BOTH) - 1]);
-
-        u32 time = static_cast<u32>(Screenshot::Timer.AsSeconds());
-
-        if (time)
-        {
-            g_screenshotEntry->name.append(", " + std::to_string(time) + " second(s)");
-            Screenshot::Screens |= 4; ///< TIMED flags
-        }
-
         if (Preferences::IsEnabled(Preferences::ScreenshotEnabled))
             g_screenshotEntry->Enable();
         else
             g_screenshotEntry->Disable();
     }
 
-    static void ScreenshotMenuCallback(void)
+    static void setScreenShotMode(void)
     {
-        Keyboard kb("Screenshot Options", "What setting would you like to change?");
-        kb.Populate({"Screens", "Hotkeys", "Timer", "Name", "Directory"});
+        Keyboard kb("Screenshot Settings", "Which screen(s) would you like to capture?");
+        kb.Populate(screens);
 
-        int choice;
-        do
+        int mode = kb.Open();
+        if (mode != -1)
         {
-            choice = kb.Open();
-            switch (choice)
-            {
-                case 0: ///< Screens
-                    getScreenShotMode();
-                    break;
-                case 1: ///< Hotkeys
-                {
-                    u32 keys = Screenshot::Hotkeys;
-                    (HotkeysModifier(keys, "Select the hotkeys you'd like to use to take a\nnew screenshot."))();
-
-                    if (keys != 0)
-                        Screenshot::Hotkeys = keys;
-                    break;
-                }
-
-                case 2: ///< Timer
-                {
-                    u32 current = static_cast<u32>(Screenshot::Timer.AsSeconds());
-                    Keyboard keyboard("Screenshot Timer", "Enter the amount of seconds you would like to continuously take screenshots.\n\nTo disable the timer, enter 0.\n\nNote: May not work as expected on emulator. Timer may also be inconsistent on console.");
-
-                    keyboard.IsHexadecimal(false);
-                    keyboard.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
-                    {
-                        if (event.type == KeyboardEvent::CharacterAdded)
-                        {
-                            std::string &input = kb.GetInput();
-                            u32  value;
-                            stou32(input, value);
-
-                            if (value > 120)
-                                input = "120";
-                        }
-                    });
-
-                    if (keyboard.Open(current, current) != -1)
-                        Screenshot::Timer = Seconds(static_cast<float>(current));
-                    break;
-                }
-
-                case 3: ///< Name
-                {
-                    Keyboard nameKb("Screenshot Name", "What would you like your screenshot filenames to begin with?");
-                    std::string out;
-
-                    if (nameKb.Open(out, Screenshot::Prefix) != -1)
-                        Screenshot::Prefix = out;
-                    break;
-                }
-
-                case 4: ///< Directory
-                {
-                    std::string out;
-                    if (Utils::DirectoryPicker(out) == -1)
-                        break;
-
-                    Screenshot::Path = std::move(out);
-                    if (Screenshot::Path[Screenshot::Path.size() - 1] != '/')
-                        Screenshot::Path += '/';
-                    break;
-                }
-
-                default:
-                    break;
-            }
+            Screenshot::Screens = mode + 1;
+            ss_Screen->SetName(std::string("Change captured screens: ") + screens[(Screenshot::Screens & SCREENSHOT_BOTH) - 1]);
         }
-        while (choice != -1);
 
-        UpdateScreenshotText();
+        UpdateScreenshotStatus();
+        Screenshot::UpdateFileCount();
+    }
+
+    static void setScreenshotHotkeys(void)
+    {
+        u32 keys = Screenshot::Hotkeys;
+        (HotkeysModifier(keys, "Select the hotkeys you'd like to use to take a\nnew screenshot."))();
+
+        if (keys != 0)
+        {
+            Screenshot::Hotkeys = keys;
+            ss_Hotkey->SetName("Change hotkeys: " + (KeysToString(Screenshot::Hotkeys)));
+        }
+
+        UpdateScreenshotStatus();
+        Screenshot::UpdateFileCount();
+    }
+
+    static void setScreenshotTimer(void)
+    {
+        std::string desc = "Enter the amount of seconds you would like to continuously take screenshots.\n\nTo disable the timer, enter 0.\n\nNote: May not work as expected on emulator. Timer may also be inconsistent on console.";
+
+        u32 current = static_cast<u32>(Screenshot::Timer.AsSeconds());
+        Keyboard keyboard("Screenshot Timer", desc);
+
+        keyboard.IsHexadecimal(false);
+        keyboard.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
+        {
+            if (event.type == KeyboardEvent::CharacterAdded)
+            {
+                std::string &input = kb.GetInput();
+                u32 value;
+                stou32(input, value);
+
+                if (value > 120)
+                    input = "120";
+            }
+        });
+
+        if (keyboard.Open(current, current) != -1)
+        {
+            Screenshot::Timer = Seconds(static_cast<float>(current));
+            if (current)
+            {
+                ss_Timer->SetName("Set timer: " + std::to_string(current) + " second(s)");
+                Screenshot::Screens |= 4; ///< TIMED flags
+            }
+            else
+                ss_Timer->SetName("Set timer: Not enabled");
+        }
+
+        UpdateScreenshotStatus();
+        Screenshot::UpdateFileCount();
+    }
+
+    static void setScreenshotName(void)
+    {
+        Keyboard nameKb("Screenshot Settings", "What would you like your screenshot filenames to begin with?");
+        std::string out;
+
+        if (nameKb.Open(out, Screenshot::Prefix) != -1)
+        {
+            Screenshot::Prefix = out;
+            ss_Name->SetName("Edit filename: " + Screenshot::Prefix);
+        }
+
+        UpdateScreenshotStatus();
+        Screenshot::UpdateFileCount();
+    }
+
+    static void setScreenshotDir(void)
+    {
+        std::string out;
+        if (Utils::DirectoryPicker(out) == -1)
+            return;
+
+        Screenshot::Path = std::move(out);
+        if (Screenshot::Path[Screenshot::Path.size() - 1] != '/')
+        {
+            Screenshot::Path += '/';
+            ss_Dir->SetName("Edit directory: [root]" + Screenshot::Path);
+        }
+
+        UpdateScreenshotStatus();
         Screenshot::UpdateFileCount();
     }
 
@@ -543,7 +532,6 @@ namespace CTRPluginFramework
     {
         // Main menu
         _mainMenu.Append(new MenuEntryTools("About", [] { g_mode = ABOUT; }, Icon::DrawAbout));
-
         _hexEditorEntry = new MenuEntryTools("Hex Editor", [] { g_mode = HEXEDITOR; }, Icon::DrawGrid);
         _mainMenu.Append(_hexEditorEntry);
         _mainMenu.Append(new MenuEntryTools("Gateway RAM Dumper", [] { g_mode = GWRAMDUMP; }, Icon::DrawRAM));
@@ -554,8 +542,15 @@ namespace CTRPluginFramework
         _mainMenu.Append(new MenuEntryTools("Reboot", Reboot, Icon::DrawRestart));
 
         // Screenshots menu
-        _screenshotMenu.Append((g_screenshotEntry = new MenuEntryTools( "Enable screenshot tool: " << KeysToString(Screenshot::Hotkeys) << "Both screens", [] { Preferences::Toggle(Preferences::ScreenshotEnabled); }, true, Preferences::IsEnabled(Preferences::ScreenshotEnabled))));
-        _screenshotMenu.Append(new MenuEntryTools("Change screenshot settings", ScreenshotMenuCallback, Icon::DrawSettings));
+        u32 time = static_cast<u32>(Screenshot::Timer.AsSeconds());
+        std::string timerName = time ? "Set timer: " + std::to_string(time) + " second(s)" : "Set timer: Not enabled";
+
+        _screenshotMenu.Append((g_screenshotEntry = new MenuEntryTools("Enable screenshot tool", [] { Preferences::Toggle(Preferences::ScreenshotEnabled); }, true, Preferences::IsEnabled(Preferences::ScreenshotEnabled))));
+        _screenshotMenu.Append((ss_Screen = new MenuEntryTools(std::string("Change captured screens: ") + screens[(Screenshot::Screens & SCREENSHOT_BOTH) - 1], setScreenShotMode, Icon::DrawSettings)));
+        _screenshotMenu.Append((ss_Hotkey = new MenuEntryTools("Change hotkeys: " + (KeysToString(Screenshot::Hotkeys)), setScreenshotHotkeys, Icon::DrawSettings)));
+        _screenshotMenu.Append((ss_Timer = new MenuEntryTools(timerName, setScreenshotTimer, Icon::DrawSettings)));
+        _screenshotMenu.Append((ss_Name = new MenuEntryTools("Edit filename: " + Screenshot::Prefix, setScreenshotName, Icon::DrawSettings)));
+        _screenshotMenu.Append((ss_Dir = new MenuEntryTools("Edit directory: [root]" + Screenshot::Path, setScreenshotDir, Icon::DrawSettings)));
 
         // Miscellaneous menu
         _miscellaneousMenu.Append(new MenuEntryTools("Display loaded game files on-screen", _DisplayLoadedFiles, true));
@@ -679,7 +674,7 @@ namespace CTRPluginFramework
             else if (arg != nullptr &&  *(u32 *)arg == SCREENSHOT)
             {
                 selector = _menu._selector;
-                UpdateScreenshotText();
+                UpdateScreenshotStatus();
                 _menu.Open(&_screenshotMenu);
             }
         }
