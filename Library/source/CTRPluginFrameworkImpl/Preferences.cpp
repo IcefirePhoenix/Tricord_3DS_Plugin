@@ -1,7 +1,8 @@
-#include "CTRPluginFramework/System/Controller.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
-#include "CTRPluginFrameworkImpl/Menu/PluginMenuImpl.hpp"
+#include "CTRPluginFramework/System/Controller.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/KeyboardBG.hpp"
+#include "CTRPluginFrameworkImpl/Menu/PluginMenuImpl.hpp"
+#include "CTRPluginFrameworkImpl/System/Screenshot.hpp"
 
 #include "3ds.h"
 #include <cmath>
@@ -10,19 +11,23 @@ namespace CTRPluginFramework
 {
     using LCDBacklight = Preferences::LCDBacklight;
 
-    BMPImage *  Preferences::bottomBackgroundImage = nullptr;
-    BMPImage *  Preferences::bottomBoxBGImage = nullptr;
+    BMPImage* Preferences::bottomBackgroundImage = nullptr;
+    BMPImage* Preferences::bottomBoxBGImage = nullptr;
 
+    u32 Preferences::MenuHotkeys = static_cast<u32>(Key::Select);
     u32 Preferences::CustomNameColors[3] = { 0xFF40FF40, 0xFFFF4040, 0xFF4040FF }; // default before loading any saved values from file
 
-    u32         Preferences::MenuHotkeys = static_cast<u32>(Key::Select);
-    u64         Preferences::Flags = 0;
+    u64 Preferences::Flags = 0;
     LCDBacklight Preferences::Backlights[2];
     FwkSettings Preferences::Settings;
 
     std::string Preferences::CheatsFile;
     std::string Preferences::ScreenshotPath;
     std::string Preferences::ScreenshotPrefix;
+
+    bool Preferences::_cheatsAlreadyLoaded = false; // TODO: reuse for something else
+    bool Preferences::_favoritesAlreadyLoaded = false;
+    bool Preferences::_bmpCanBeLoaded = true;
 
     Preferences::WarpDestination Preferences::SavedWarps[3];
 
@@ -189,36 +194,11 @@ namespace CTRPluginFramework
             MenuHotkeys = Key::Select;
     }
 
-    void    Preferences::LoadSavedEnabledCheats(void)
-    {
-        File    settings;
-        Header  header = { 0 };
-
-        if (_cheatsAlreadyLoaded)
-        {
-            //MessageBox("Error\nCheats already loaded")();
-            return;
-        }
-
-        if (OpenConfigFile(settings, header) == 0)
-        {
-            if (header.enabledCheatsCount != 0)
-                PluginMenuImpl::LoadEnabledCheatsFromFile(header, settings);
-        }
-    }
-
-
     // handles favorites, auto-enabled saved entries, hotkeys, auto-enable favs
     void Preferences::LoadEntryPreferences(bool autoEnableSavedCheats, bool autoEnableFavorites)
     {
         File settings;
         Header header = { 0 };
-
-        if (_favoritesAlreadyLoaded)
-        {
-            //MessageBox("Error\nFavorites already loaded")();
-            return;
-        }
 
         if (OpenConfigFile(settings, header) == 0)
         {

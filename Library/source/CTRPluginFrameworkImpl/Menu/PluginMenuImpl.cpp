@@ -1,12 +1,12 @@
 #include "types.h"
 
-#include "CTRPluginFrameworkImpl/Graphics.hpp"
 #include "CTRPluginFramework/Graphics.hpp"
-
-#include "CTRPluginFrameworkImpl/Menu.hpp"
-#include "CTRPluginFrameworkImpl/System.hpp"
 #include "CTRPluginFramework/System.hpp"
+#include "CTRPluginFrameworkImpl/Graphics.hpp"
+#include "CTRPluginFrameworkImpl/Menu.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
+#include "CTRPluginFrameworkImpl/System.hpp"
+#include "CTRPluginFrameworkImpl/System/Screenshot.hpp"
 
 #include <string>
 #include <vector>
@@ -167,8 +167,6 @@ namespace CTRPluginFramework
         // Refresh hid
         Controller::Update();
 
-        // set preferences here -> autosaveloadcheats and favorites
-
         // If Start is pressed, don't auto enable the cheats
         if (Controller::IsKeyPressed(Key::Start) || Controller::IsKeyDown(Key::Start))
             Preferences::Clear(Preferences::AutoEnableSavedCheats);
@@ -187,7 +185,6 @@ namespace CTRPluginFramework
         if (!Directory::IsExists("/Tricord/AR_Backups/"))
             Directory::Create("/Tricord/AR_Backups/");
 
-        // Load AR Cheats
         ar.Initialize();
         PluginMenuActionReplay::BackupCodes(false);
 
@@ -196,7 +193,6 @@ namespace CTRPluginFramework
             OSD::Notify("Plugin ready!", Color::White, Color());
             OSD::Notify("Tricord can now be started.", Color::White, Color());
         }
-
 
         // Main loop
         while (_pluginRun)
@@ -481,7 +477,7 @@ namespace CTRPluginFramework
         }
     }
 
-    void    PluginMenuImpl::LoadHotkeysFromFile(const Preferences::Header &header, File &settings)
+    void PluginMenuImpl::LoadHotkeysFromFile(const Preferences::Header &header, File &settings)
     {
         if (_runningInstance == nullptr || header.hotkeysCount == 0)
             return;
