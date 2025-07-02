@@ -119,7 +119,7 @@ namespace CTRPluginFramework
         Type = (Type_e)(savedCheats.flags & 0xFF);
         Value.Bits32 = savedCheats.value;
 
-        if (savedCheats.flags >> 8 && Preferences::AutoLoadCheats)
+        if (savedCheats.flags >> 8 && Preferences::AutoEnableSavedCheats)
             Enable();
 
         Func = nullptr;

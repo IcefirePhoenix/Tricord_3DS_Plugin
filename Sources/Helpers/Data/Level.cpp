@@ -315,6 +315,18 @@ namespace CTRPluginFramework
         return 0xFF; // wasn't found
     }
 
+    // Gets all Level data via search by levelID
+    const std::pair<const std::string, Level> *Level::getLevelByID(u8 levelID)
+    {
+        const std::map<std::string, Level> &levels = getAllLevels();
+        for (auto &entry : levels)
+        {
+            if (entry.second.getLevelID() == levelID)
+                return &entry;
+        }
+        return nullptr;
+    }
+
     // Retrieves the ID of the previous location
 	u8 Level::getPrevLevel(void)
 	{

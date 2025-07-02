@@ -3,12 +3,14 @@
 
 namespace CTRPluginFramework
 {
+    MenuFolder *autoFolder = new MenuFolder("Auto");
     MenuFolder *emotes = nullptr;
     MenuFolder *chaos = nullptr;
     MenuFolder *turbo = nullptr;
     MenuFolder *effects = nullptr;
     MenuFolder *gameplay = nullptr;
     MenuFolder *warp = nullptr;
+    MenuFolder *bookmarks = nullptr;
     MenuFolder *healthFairies = nullptr;
     MenuFolder *energy = nullptr;
     MenuFolder *enemies = nullptr;
@@ -53,6 +55,11 @@ namespace CTRPluginFramework
         menu += save;
         menu += sound;
         menu += miscellaneous;
+
+        // auto entries added to menu for logging purposes but hidden from users
+        menu += autoFolder;
+        autoFolder->HideWithoutDisable();
+        menu.AddToHidden(autoFolder);
     }
 
     void ToggleMenuChange(Time time)

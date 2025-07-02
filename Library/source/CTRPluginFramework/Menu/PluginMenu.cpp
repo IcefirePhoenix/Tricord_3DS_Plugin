@@ -62,6 +62,24 @@ namespace CTRPluginFramework
         _menu->Append(folder);
     }
 
+    void PluginMenu::AddToHidden(MenuEntry *item) const
+    {
+        if (item == nullptr)
+            return;
+
+        MenuEntryImpl *entry = item->_item.get();
+        _menu->AddToHidden(entry);
+    }
+
+    void PluginMenu::AddToHidden(MenuFolder *item) const
+    {
+        if (item == nullptr)
+            return;
+
+        MenuFolderImpl *folder = item->_item.get();
+        _menu->AddToHidden(folder);
+    }
+
     void    PluginMenu::operator+=(const MenuEntry *entry) const
     {
         if (entry == nullptr)
@@ -124,6 +142,11 @@ namespace CTRPluginFramework
         return (_menu->GetRoot()->GetFolderList());
     }
 
+    std::vector<MenuFolder*> PluginMenu::GetHiddenList() const
+    {
+        return (_menu->GetHidden()->GetFolderList());
+    }
+
     void    PluginMenu::SetHexEditorState(bool isEnabled) const
     {
         _menu->SetHexEditorState(isEnabled);
@@ -175,12 +198,6 @@ namespace CTRPluginFramework
     void                PluginMenu::ScreenshotUpdatePaths(void)
     {
         Screenshot::UpdateFileCount();
-    }
-
-    void                PluginMenu::ScreenshotSettings(bool** enabled, u32** hotkey)
-    {
-        *enabled = &Screenshot::IsEnabled;
-        *hotkey = &Screenshot::Hotkeys;
     }
 
     void                PluginMenu::ScreenshotSetcallback(OnScreenshotCallback callback)

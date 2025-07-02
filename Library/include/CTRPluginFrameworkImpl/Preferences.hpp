@@ -24,8 +24,9 @@ namespace CTRPluginFramework
             HIDToggle           = 1,
             AutoSaveCheats      = 1 << 2,
             DisableOSDNotifs    = 1 << 3,
-            AutoLoadCheats      = 1 << 4,
-            AutoLoadFavorites   = 1 << 5, // unused
+            AutoEnableSavedCheats      = 1 << 4,
+            AutoEnableFavorites   = 1 << 5,
+            ScreenshotEnabled   = 1 << 6,
 
             // Misc
             DisplayLoadedFiles  = 1 << 16,
@@ -39,43 +40,6 @@ namespace CTRPluginFramework
             QoL_Patch           = 1 << 22
         };
 
-        /*struct HeaderV1
-        {
-            u8      sig[8];
-            u32     version;
-            u32     pluginVersion;
-            u64     size;
-            u64     flags;
-            u32     hotkeys;
-            u32     freeCheatsCount;
-            u64     freeCheatsOffset;
-            u32     enabledCheatsCount;
-            u64     enabledCheatsOffset;
-            u32     favoritesCount;
-            u64     favoritesOffset;
-            u32     hotkeysCount;
-            u64     hotkeysOffset;
-        } PACKED; */
-
-        struct HeaderV11
-        {
-            u8      sig[8];
-            u32     version;
-            u32     pluginVersion;
-            u64     size;
-            u64     flags;
-            u32     hotkeys;
-            u64     lcdbacklights;
-            u32     enabledCheatsCount;
-            u64     enabledCheatsOffset;
-            u32     favoritesCount;
-            u64     favoritesOffset;
-            u32     hotkeysCount;
-            u64     hotkeysOffset;
-            u32     reserved[100];
-        } PACKED;
-
-        using Header = HeaderV11;
 
         struct EnabledCheats
         {
@@ -99,6 +63,78 @@ namespace CTRPluginFramework
             u16     isEnabled{0};
             u16     value{0};
         };
+
+        struct WarpDestination
+        {
+            u8 levelID;
+            u8 stageID;
+        };
+
+        /*struct HeaderV1
+{
+    u8      sig[8];
+    u32     version;
+    u32     pluginVersion;
+    u64     size;
+    u64     flags;
+    u32     hotkeys;
+    u32     freeCheatsCount;
+    u64     freeCheatsOffset;
+    u32     enabledCheatsCount;
+    u64     enabledCheatsOffset;
+    u32     favoritesCount;
+    u64     favoritesOffset;
+    u32     hotkeysCount;
+    u64     hotkeysOffset;
+} PACKED; */
+
+        struct HeaderV11
+        {
+            u8 sig[8];
+            u32 version;
+            u32 pluginVersion;
+            u64 size;
+            u64 flags;
+            u32 hotkeys;
+            u64 lcdbacklights;
+            u32 enabledCheatsCount;
+            u64 enabledCheatsOffset;
+            u32 favoritesCount;
+            u64 favoritesOffset;
+            u32 hotkeysCount;
+            u64 hotkeysOffset;
+            u32 reserved[100];
+        } PACKED;
+
+        struct TricordHeaderV1
+        {
+            u8 sig[8];
+            u32 version;
+            u32 pluginVersion;
+            u64 size;
+            u64 flags;
+            u32 hotkeys;
+            u64 lcdbacklights;
+            u32 enabledCheatsCount;
+            u64 enabledCheatsOffset;
+            u32 favoritesCount;
+            u64 favoritesOffset;
+            u32 hotkeysCount;
+            u64 hotkeysOffset;
+            u32 nameColor;
+            u64 nameColorOffset;
+            WarpDestination warpDestinationData[3];
+            u64 warpDestOffset;
+            u32 screenshotScreenCapture;
+            u32 screenshotHotkeys;
+            u32 screenshotTimer;
+            char screenshotCustomName[64];
+            char screenshotCustomDir[64];
+            u64 screenshotOffset;
+            u32 reserved[100];
+        } PACKED;
+
+        using Header = TricordHeaderV1;
 
         static bool         IsEnabled(u64 setting)
         {
@@ -124,6 +160,7 @@ namespace CTRPluginFramework
         static BMPImage     *bottomBoxBGImage;
 
         static u32          MenuHotkeys;
+        static u32          CustomNameColors[3];
         static u64          Flags;
         static LCDBacklight Backlights[2];
         static FwkSettings  Settings;
@@ -132,11 +169,11 @@ namespace CTRPluginFramework
         static std::string  ScreenshotPath;
         static std::string  ScreenshotPrefix;
 
+        static Preferences::WarpDestination SavedWarps[3];
+
         static int          OpenConfigFile(File &file, Header &header);
         static void         LoadSettings(void);
-        static void         LoadSavedEnabledCheats(void);
-        static void         LoadSavedFavorites(void);
-        static void         LoadHotkeysFromFile(void);
+        static void         LoadEntryPreferences(bool autoEnableSavedCheats, bool autoEnableFavorites);
         static void         LoadBackgrounds(void);
         static void         UnloadBackgrounds(void);
         static void         WriteSettings(void);

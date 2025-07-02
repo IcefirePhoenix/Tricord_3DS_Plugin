@@ -1,7 +1,8 @@
-#include "CTRPluginFramework/System/Controller.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
-#include "CTRPluginFrameworkImpl/Menu/PluginMenuImpl.hpp"
+#include "CTRPluginFramework/System/Controller.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/KeyboardBG.hpp"
+#include "CTRPluginFrameworkImpl/Menu/PluginMenuImpl.hpp"
+#include "CTRPluginFrameworkImpl/System/Screenshot.hpp"
 
 #include "3ds.h"
 #include <cmath>
@@ -10,12 +11,13 @@ namespace CTRPluginFramework
 {
     using LCDBacklight = Preferences::LCDBacklight;
 
-    BMPImage *  Preferences::bottomBackgroundImage = nullptr;
-    BMPImage *  Preferences::bottomBoxBGImage = nullptr;
+    BMPImage* Preferences::bottomBackgroundImage = nullptr;
+    BMPImage* Preferences::bottomBoxBGImage = nullptr;
 
+    u32 Preferences::MenuHotkeys = static_cast<u32>(Key::Select);
+    u32 Preferences::CustomNameColors[3] = { 0xFF40FF40, 0xFFFF4040, 0xFF4040FF }; // default before loading any saved values from file
 
-    u32         Preferences::MenuHotkeys = static_cast<u32>(Key::Select);
-    u64         Preferences::Flags = 0;
+    u64 Preferences::Flags = 0;
     LCDBacklight Preferences::Backlights[2];
     FwkSettings Preferences::Settings;
 
@@ -23,9 +25,11 @@ namespace CTRPluginFramework
     std::string Preferences::ScreenshotPath;
     std::string Preferences::ScreenshotPrefix;
 
-    bool        Preferences::_cheatsAlreadyLoaded = false;
-    bool        Preferences::_favoritesAlreadyLoaded = false;
-    bool        Preferences::_bmpCanBeLoaded = true;
+    bool Preferences::_cheatsAlreadyLoaded = false; // TODO: reuse for something else
+    bool Preferences::_favoritesAlreadyLoaded = false;
+    bool Preferences::_bmpCanBeLoaded = true;
+
+    Preferences::WarpDestination Preferences::SavedWarps[3];
 
     static const char *g_signature = "CTRPF\0\0";
 
@@ -147,6 +151,42 @@ namespace CTRPluginFramework
             MenuHotkeys = header.hotkeys & ((System::IsNew3DS() && Settings.AreN3DSButtonsAvailable) ? ~0x0 : ~(Key::CStick | Key::ZL | Key::ZR));
             Flags = header.flags;
             memcpy(reinterpret_cast<void*>(Backlights), &header.lcdbacklights, sizeof(Backlights));
+
+            // set last saved screenshot preferences
+            std::string dirPath = "/Tricord/Screenshots";
+            if (!Directory::IsExists(dirPath))
+                Directory::Create(dirPath);
+
+            switch (Process::GetTitleID())
+            {
+            case TID_USA:
+                dirPath.append("/NA/");
+                break;
+            case TID_EUR:
+                dirPath.append("/NA/");
+                break;
+            case TID_JPN:
+                dirPath.append("/JP/");
+                break;
+            }
+
+            if (!Directory::IsExists(dirPath))
+                Directory::Create(dirPath);
+
+            Screenshot::Path = std::strlen(header.screenshotCustomDir) == 0 ? dirPath : header.screenshotCustomDir;
+            Screenshot::Prefix = std::strlen(header.screenshotCustomName) == 0 ? "Screenshot" : header.screenshotCustomName;
+
+            // these have already been given default values under Screenshot.cpp, so only update if necessary
+            if (header.screenshotHotkeys != 0)
+                Screenshot::Hotkeys = header.screenshotHotkeys;
+
+            if (header.screenshotScreenCapture != 0)
+                Screenshot::Screens = header.screenshotScreenCapture; // this has already been 1-indexed when previously saved
+
+            if (header.screenshotTimer != 0)
+                Screenshot::Timer = Seconds(static_cast<float>(header.screenshotTimer));
+
+            Screenshot::Initialize();
         }
 
         // Check for hotkeys to be valid
@@ -154,53 +194,30 @@ namespace CTRPluginFramework
             MenuHotkeys = Key::Select;
     }
 
-    void    Preferences::LoadSavedEnabledCheats(void)
+    // handles favorites, auto-enabled saved entries, hotkeys, auto-enable favs
+    void Preferences::LoadEntryPreferences(bool autoEnableSavedCheats, bool autoEnableFavorites)
     {
-        File    settings;
-        Header  header = { 0 };
-
-        if (_cheatsAlreadyLoaded)
-        {
-            //MessageBox("Error\nCheats already loaded")();
-            return;
-        }
-
-        if (OpenConfigFile(settings, header) == 0)
-        {
-            if (header.enabledCheatsCount != 0)
-                PluginMenuImpl::LoadEnabledCheatsFromFile(header, settings);
-           _cheatsAlreadyLoaded = true;
-        }
-    }
-
-    void    Preferences::LoadSavedFavorites(void)
-    {
-        File    settings;
-        Header  header = { 0 };
-
-        if (_favoritesAlreadyLoaded)
-        {
-            //MessageBox("Error\nFavorites already loaded")();
-            return;
-        }
+        File settings;
+        Header header = { 0 };
 
         if (OpenConfigFile(settings, header) == 0)
         {
             if (header.favoritesCount != 0)
+            {
                 PluginMenuImpl::LoadFavoritesFromFile(header, settings);
-            _favoritesAlreadyLoaded = true;
-        }
-                    }
 
-    void    Preferences::LoadHotkeysFromFile(void)
-    {
-        File    settings;
-        Header  header = { 0 };
+                if (autoEnableFavorites)
+                    PluginMenuImpl::ActivateFavoritesFromFile(header, settings);
+            }
 
-        if (OpenConfigFile(settings, header) == 0)
-        {
             if (header.hotkeysCount != 0)
                 PluginMenuImpl::LoadHotkeysFromFile(header, settings);
+
+            if (autoEnableSavedCheats && header.enabledCheatsCount != 0)
+                PluginMenuImpl::ActivateEnabledCheatsFromFile(header, settings);
+
+            PluginMenuImpl::LoadNameColorsFromFile(header, settings);
+            PluginMenuImpl::LoadBookmarkWarpsFromFile(header, settings);
         }
     }
 
@@ -233,7 +250,7 @@ namespace CTRPluginFramework
         if (File::Exists(source + "CustomBoxBG.bmp")) {
             BMPImage* image1 = new BMPImage(source + "CustomBoxBG.bmp");
 
-            if (image1->IsLoaded()) 
+            if (image1->IsLoaded())
                 image1 = PostProcess(image1, 320, 240);
             else
             {
@@ -257,7 +274,7 @@ namespace CTRPluginFramework
         if (bottomBackgroundImage)
         {
             _bmpCanBeLoaded = true;
-            
+
             delete bottomBackgroundImage;
             bottomBackgroundImage = nullptr;
         }
@@ -290,8 +307,12 @@ namespace CTRPluginFramework
             PluginMenuImpl::WriteFavoritesToFile(header, settings);
             PluginMenuImpl::WriteHotkeysToFile(header, settings);
 
-            header.size = settings.Tell();
+            // save name colors and warp locations...
+            PluginMenuImpl::WriteCustomNameColorToFile(header, settings);
+            PluginMenuImpl::WriteBookmarkWarpsToFile(header, settings);
+            PluginMenuImpl::WriteScreenshotConfigToFile(header, settings);
 
+            header.size = settings.Tell();
             settings.Rewind();
             settings.Write(&header, sizeof(Header));
         }
