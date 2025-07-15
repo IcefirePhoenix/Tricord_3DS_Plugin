@@ -13,10 +13,14 @@ namespace CTRPluginFramework
 
     int xCoord = 5, yCoord = 225;
 
+    bool running = true;
+    bool alwaysShowSplits = false;
+
     bool autoSplit = false;
     bool autoTimerEvents[6] = {};
     bool autoRestart = false;
     int pauseEventID = -1;
+
     const StringVector timerEvents =
     {
         "Pause timer during cutscenes",
@@ -211,5 +215,16 @@ namespace CTRPluginFramework
             autoTimerEvents[arg] = false;
             entry->SetName(timerEvents[arg]);
         }
+    }
+
+    // Toggles display status of splits
+    void Miscellaneous::toggleSplits(MenuEntry *entry)
+    {
+        alwaysShowSplits = !alwaysShowSplits;
+
+        if (alwaysShowSplits)
+            entry->SetName("Auto-hide splits after 10 seconds");
+        else
+            entry->SetName("Always show splits on-screen");
     }
 }

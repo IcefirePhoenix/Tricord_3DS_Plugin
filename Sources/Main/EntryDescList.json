@@ -1261,6 +1261,15 @@
             }
         },
         {
+            "name": "speedrun_splits_note",
+            "content": {
+                "intro": "Prevents splits from auto-hiding after 10 seconds.",
+                "note": "Up to four splits can be displayed.",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
             "name": "timer_event_note_0",
             "content": {
                 "intro": "Toggles whether the speedrun timer will automatically pause during in-level cutscenes and resume afterwards.",

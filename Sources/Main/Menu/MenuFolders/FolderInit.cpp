@@ -465,6 +465,7 @@ namespace CTRPluginFramework
             Hotkey(Key::X, "Create and show split"),
             Hotkey(Key::L | Key::R, "Restart timer")
         }));
+        *speedrun += new MenuEntry("Always show splits on-screen", nullptr, Miscellaneous::toggleSplits, false, DescUtils::getDesc("speedrun_splits_note"));
 
         MenuEntry* timerEventEntries[5];
 
