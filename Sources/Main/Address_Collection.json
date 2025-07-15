@@ -1529,6 +1529,22 @@
             }
         },
         {
+            "name": "FinalDestinationLevelID",
+            "regionAddrs": {
+                "usaAddress": "0x3280EDCC",
+                "eurAddress": "0x3280EE4C",
+                "jpnAddress": "0x3285980C"
+            }
+        },
+        {
+            "name": "FinalDestinationStageID",
+            "regionAddrs": {
+                "usaAddress": "0x3280EDD0",
+                "eurAddress": "0x3280EE50",
+                "jpnAddress": "0x32859810"
+            }
+        },
+        {
             "name": "Warp",
             "regionAddrs": {
                 "usaAddress": "0x3282C4EC",

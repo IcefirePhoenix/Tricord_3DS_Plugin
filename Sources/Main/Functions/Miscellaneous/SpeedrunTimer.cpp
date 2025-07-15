@@ -101,17 +101,30 @@ namespace CTRPluginFramework
             autoSplitCooldown.Restart();
 
         // Restart conditions
-        if (Level::getElapsedTime() == 105)
-            prevLvl = Level::getCurrLevel(); // Always store level as "previous" after each loading zone
-
-        if (autoTimerEvents[4] && GeneralHelpers::isLoadingScreen(false))
-            autoRestart = Level::getCurrLevel() != prevLvl; // Check current (new) level against stored "previous" level
-
-        if (entry->WasJustActivated() || entry->Hotkeys[1].IsPressed() || (autoRestart && Level::getElapsedTime() == (Level::getCurrLevel() < 4 ? 31 : 101)))
+        if (GeneralHelpers::isLoadingScreen(true) && autoSplitCooldown.HasTimePassed(Seconds(2.0)))
         {
-            speedTimer.Restart();
-            accumulatedPauseDuration = Time::Zero;
-            autoRestart = false;
+            u8 targetLevel = Level::getTargetLevel();
+            u8 targetStage = Level::getTargetStage();
+
+            if (targetLevel == 0xFF || targetStage == 0xFF)
+            {
+                OSD::Notify("[ERROR] Speedrun timer cannot determine current location data.", Color::Red);
+                return;
+            }
+            else
+            {
+                // written a bit strangely; this logic accommodates the usage of autoRestart for autoSplit
+                autoRestart = Level::getCurrLevel() != targetLevel;
+
+                if (autoTimerEvents[5])
+                    autoSplit = (Level::getCurrStage() != targetStage) || autoRestart;
+
+                if (!autoTimerEvents[4])
+                    autoRestart = false;
+
+                // Used to prevent multiple overwrites during loading screen checks...
+                autoSplitCooldown.Restart();
+            }
         }
 
         // Reset conditions

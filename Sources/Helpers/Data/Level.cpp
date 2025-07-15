@@ -327,14 +327,31 @@ namespace CTRPluginFramework
         return nullptr;
     }
 
-    // Retrieves the ID of the previous location
-	u8 Level::getPrevLevel(void)
+    // Retrieves the level ID of the target location
+    // Note: MUST be used in conjunction with loading screen init check; value cannot be retrieved (or is invalid) otherwise
+    u8 Level::getTargetLevel(void)
 	{
 		u8 levelID;
-		Process::Read8(AddressList::getAddress("PreviousLevelID"), levelID);
+        Process::Read8(AddressList::getAddress("FinalDestinationLevelID"), levelID);
 
-		return levelID;
-	}
+        if (GeneralHelpers::isLoadingScreen(true))
+            return levelID;
+        else
+            return 0xFF; // caller MUST check for this return case!
+    }
+
+    // Retrieves the stage number of the target location
+    // Note: MUST be used in conjunction with loading screen init check; value cannot be retrieved (or is invalid) otherwise
+    u8 Level::getTargetStage(void)
+    {
+		u8 stageID;
+        Process::Read8(AddressList::getAddress("FinalDestinationStageID"), stageID);
+
+        if (GeneralHelpers::isLoadingScreen(true))
+            return stageID;
+        else
+            return 0xFF; // caller MUST check for this return case!
+    }
 
     // Retrieves the ID of the current location
     u8 Level::getCurrLevel(void)
