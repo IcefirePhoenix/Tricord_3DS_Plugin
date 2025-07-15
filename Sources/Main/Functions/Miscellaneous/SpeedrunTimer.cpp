@@ -124,47 +124,30 @@ namespace CTRPluginFramework
         }
         displaySplits();
 
+        // Manage pause events
         if (running)
         {
-            // Check for pause events
-            if (autoTimerEvents[0])
+            if (autoTimerEvents[0] && (Freecam::getCameraType() > CameraMode::DYNAMIC))
             {
-                u8 camMode;
-                Process::Read8(AddressList::getAddress("CameraMode"), camMode);
-                if (camMode > 1)
-                {
-                    pause(0);
-                    return;
-                }
+                pause(0);
+                return;
             }
-            if (autoTimerEvents[1])
+            if (autoTimerEvents[3] && GeneralHelpers::isPauseScreen())
             {
-                if (GeneralHelpers::isLoadingScreen(true))
-                {
-                    pause(1);
-                    return;
-                }
+                pause(3);
+                return;
             }
-            if (autoTimerEvents[2])
+            if (autoTimerEvents[2] && (GeneralHelpers::isLoadingScreen(true) && Level::getTargetStage() == 5))
             {
-                if (Level::getCurrStage() == 5)
-                {
-                    pause(2);
-                    return;
-                }
+                pause(2);
+                return;
             }
-            if (autoTimerEvents[3])
+            if (autoTimerEvents[1] && GeneralHelpers::isLoadingScreen(true))
             {
-                if (GeneralHelpers::isPauseScreen())
-                {
-                    pause(3);
-                    return;
-                }
+                pause(1);
+                return;
             }
 
-            // Run and display time
-
-            // Draw
             displayTime(speedTimer.GetElapsedTime() - accumulatedPauseDuration, xCoord, yCoord);
         }
         else
@@ -176,18 +159,21 @@ namespace CTRPluginFramework
             switch (pauseEventID)
             {
                 case 0:
-                    u8 camMode;
-                    Process::Read8(AddressList::getAddress("CameraMode"), camMode);
-                    if (camMode <= 1)
+                    if (Freecam::getCameraType() <= CameraMode::DYNAMIC)
                         resume();
                     break;
                 case 1:
-                    if (Level::getElapsedTime() == (Level::getCurrLevel() < 4 ? 30 : 100))
+                    if (Level::getElapsedTime() == (Level::getCurrLevel() < 4 ? 30 : 100) && !(autoTimerEvents[2] && Level::getCurrStage() == 5))
                         resume();
                     break;
                 case 2:
-                    if (Level::getCurrStage() != 5)
+                    if (GeneralHelpers::isLoadingScreen(true) && Level::getTargetStage() != 5)
+                    {
+                        do reset();
+                        while (speedTimer.GetElapsedTime().AsMilliseconds() != 0);
+
                         resume();
+                    }
                     break;
                 case 3:
                     if (!GeneralHelpers::isPauseScreen())
