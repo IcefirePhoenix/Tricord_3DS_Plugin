@@ -51,7 +51,8 @@ namespace CTRPluginFramework
 		static int selChallenge(std::array<u8, 3> challenges);
 
 		// real-time level data
-		static u8 getPrevLevel(void);
+		static u8 getTargetLevel(void);
+		static u8 getTargetStage(void);
 		static u8 getCurrLevel(void);
 		static u8 getCurrStage(void);
 		static u8 getCurrChallenge(void);
