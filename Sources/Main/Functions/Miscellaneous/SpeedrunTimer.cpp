@@ -9,7 +9,6 @@ namespace CTRPluginFramework
     Clock splitTimer;
     Time split;
 
-    Screen screen = OSD::GetTopScreen();
     int xCoord = 5, yCoord = 225;
 
     bool running = true, showSplit = false;
@@ -59,8 +58,12 @@ namespace CTRPluginFramework
         int seconds = secondsRaw - hours*3600 - minutes*60;
         int milliseconds = time.AsMilliseconds() - hours*3600000 - minutes*60000 - seconds*1000;
         char timeStr[13];
+
         sprintf(timeStr, "%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
-        screen.Draw(timeStr, x, y, Color::White, Color(0,0,0,0));
+        Renderer::SetTarget(TOP);
+        Renderer::DrawString(timeStr, x, y, Color::White, Color::Black);
+    }
+
     }
 
     void Miscellaneous::speedrunTimer(MenuEntry* entry)
