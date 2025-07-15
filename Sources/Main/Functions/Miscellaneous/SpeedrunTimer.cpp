@@ -1,18 +1,20 @@
 #include "Helpers.hpp"
 #include "Cheats.hpp"
 
+#define MAX_SPLITS 4
 namespace CTRPluginFramework
 {
     Clock speedTimer;
+    Clock autoSplitCooldown;
     Time pauseStartTime, pauseStartTimeRelative, pauseEndTime, accumulatedPauseDuration = Time::Zero;
 
     Clock splitTimer;
-    Time split;
+    std::deque<Time> splits;
 
     int xCoord = 5, yCoord = 225;
 
-    bool running = true, showSplit = false;
-    bool autoTimerEvents[5] = {false, false, false, false, false};
+    bool autoSplit = false;
+    bool autoTimerEvents[6] = {};
     bool autoRestart = false;
     int pauseEventID = -1;
     const StringVector timerEvents =
@@ -22,16 +24,14 @@ namespace CTRPluginFramework
         "Pause timer in treasure rooms",
         "Pause timer while game is paused",
         "Restart timer upon entering a new level",
+        "Auto-split upon entering a new area",
         "Run timer during cutscenes",
         "Run timer during loading screens",
         "Run timer in treasure rooms",
         "Run timer while game is paused",
-        "Continue timer upon entering a new level"
+        "Continue timer upon entering a new level",
+        "Don't auto-split when entering a new area"
     };
-
-    u8 prevLvl = 0;
-
-    // Implement pause and resume functions
 
     // Stop updating time and store time at which timer was paused
     void pause(int eventID)
@@ -64,10 +64,28 @@ namespace CTRPluginFramework
         Renderer::DrawString(timeStr, x, y, Color::White, Color::Black);
     }
 
+    void displaySplits(void)
+    {
+        if (splits.empty())
+            return;
+
+        if (!splitTimer.HasTimePassed(Seconds(10)) || alwaysShowSplits)
+        {
+            for (int rendered = 0; rendered < splits.size(); rendered++)
+            {
+                // Each split is positioned 15 pixels apart
+                int yDist = 15 * (rendered + 1);
+                displayTime(splits[splits.size() - rendered - 1], xCoord, yCoord - yDist);
+            }
+        }
     }
 
     void Miscellaneous::speedrunTimer(MenuEntry* entry)
     {
+        // Init cooldown timer
+        if (entry->WasJustActivated())
+            autoSplitCooldown.Restart();
+
         // Restart conditions
         if (Level::getElapsedTime() == 105)
             prevLvl = Level::getCurrLevel(); // Always store level as "previous" after each loading zone
@@ -82,23 +100,26 @@ namespace CTRPluginFramework
             autoRestart = false;
         }
 
-        // Create and show split
-        if (entry->Hotkeys[0].IsPressed())
+        // Reset conditions
+        if (entry->WasJustActivated() || entry->Hotkeys[1].IsPressed() || autoRestart)
+            reset();
+
+        // Create and show splits
+        if (entry->Hotkeys[0].IsPressed() || autoSplit)
         {
-            split = running ? speedTimer.GetElapsedTime() - accumulatedPauseDuration : pauseStartTimeRelative;
-            showSplit = true;
+            Time newSplit = running ? speedTimer.GetElapsedTime() - accumulatedPauseDuration : pauseStartTimeRelative;
+
+            if (splits.size() >= MAX_SPLITS)
+                splits.pop_front();
+
+            if (newSplit != Time::Zero)
+                splits.push_back(newSplit);
+
+            autoSplit = false;
             splitTimer.Restart();
         }
+        displaySplits();
 
-        if (showSplit)
-        {
-            // Display 15 pixels above usual timer
-            displayTime(split, xCoord, yCoord - 15);
-            if (splitTimer.HasTimePassed(Seconds(10)))
-                showSplit = false;
-        }
-        
-        
         if (running)
         {
             // Check for pause events
@@ -177,13 +198,13 @@ namespace CTRPluginFramework
     }
 
     // Toggle various automatic triggers to pause/restart the timer
-    void Miscellaneous::toggleTimerEvents(MenuEntry* entry)
+    void Miscellaneous::toggleTimerEvents(MenuEntry *entry)
     {
         int arg = reinterpret_cast<int>(entry->GetArg());
         if (entry->Name() == timerEvents[arg])
         {
             autoTimerEvents[arg] = true;
-            entry->SetName(timerEvents[arg + 5]);
+            entry->SetName(timerEvents[arg + 6]);
         }
         else
         {
