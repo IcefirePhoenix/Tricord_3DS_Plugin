@@ -1254,7 +1254,7 @@
         {
             "name": "speedrun_note",
             "content": {
-                "intro": "Displays the elapsed time in hh:mm:ss onscreen. Useful for tracking time spent in a level if you're a speedrunner.",
+                "intro": "Displays the elapsed time in hh:mm:ss format on-screen. Useful for tracking time spent in a level for speedrunners.",
                 "note": "Not approved by speedrun.com as an official means of tracking speedrun times. This tool is only an aid for practice.",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -1290,7 +1290,7 @@
         {
             "name": "timer_event_note_2",
             "content": {
-                "intro": "Toggles whether the speedrun timer will automatically pause while inside a treasure room and resume upon exiting.",
+                "intro": "Toggles whether the speedrun timer will automatically end while inside a treasure room and reset upon exiting to the lobby.",
                 "note": "",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -1309,7 +1309,16 @@
             "name": "timer_event_note_4",
             "content": {
                 "intro": "Toggles whether the speedrun timer will automatically restart upon entering a new level.",
-                "note": "The timer will restart once you have control of your player.",
+                "note": "The timer will restart at the beginning of the level's initial loading zone.",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "timer_event_note_5",
+            "content": {
+                "intro": "Toggles whether the speedrun timer will automatically split upon entering a new area.",
+                "note": "Up to four splits can be displayed.",
                 "modeCompatibility": 1,
                 "clientOnly": true
             }
