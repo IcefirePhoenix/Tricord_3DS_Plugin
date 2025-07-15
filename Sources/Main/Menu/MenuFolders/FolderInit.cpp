@@ -451,6 +451,7 @@ namespace CTRPluginFramework
         MenuFolder *buttonSpam = new MenuFolder("Button Spammer");
         MenuFolder *camera = new MenuFolder("Screenshot");
         MenuFolder *speedrun = new MenuFolder("Speedrun Timer");
+        MenuFolder *speedrunOpts = new MenuFolder("Speedrun Timer Options");
 
         *buttonSpam += new MenuEntry("Enable button spam", Miscellaneous::buttonSpammer, DescUtils::getDesc("button_spam_note"));
         *buttonSpam += new MenuEntry("Set custom timer interval: 10 ms", nullptr, Miscellaneous::selSpamInterval, true, DescUtils::getDesc("set_spam_interval_note"));
@@ -467,23 +468,26 @@ namespace CTRPluginFramework
         }));
         *speedrun += new MenuEntry("Always show splits on-screen", nullptr, Miscellaneous::toggleSplits, false, DescUtils::getDesc("speedrun_splits_note"));
 
-        MenuEntry* timerEventEntries[5];
+        MenuEntry* timerEventEntries[6];
 
         StringVector timerEventInitNames =
         {
             "Pause timer during cutscenes",
             "Pause timer during loading screens",
-            "Pause timer in treasure rooms",
+            "End timer upon entering treasure room",
             "Pause timer while game is paused",
-            "Restart timer upon entering a new level"
+            "Restart timer upon entering a new level",
+            "Auto-split upon entering a new area"
         };
 
-        for (int eventID = 0; eventID < 5; eventID++)
+        for (int eventID = 0; eventID < 6; eventID++)
         {
-            timerEventEntries[eventID] = new MenuEntry(timerEventInitNames[eventID], nullptr, Miscellaneous::toggleTimerEvents, DescUtils::getDesc("timer_event_note_" + std::to_string(eventID)));
+            timerEventEntries[eventID] = new MenuEntry(timerEventInitNames[eventID], nullptr, Miscellaneous::toggleTimerEvents, false, DescUtils::getDesc("timer_event_note_" + std::to_string(eventID)));
             timerEventEntries[eventID]->SetArg(reinterpret_cast<void*>(eventID));
-            *speedrun += timerEventEntries[eventID];
+            *speedrunOpts += timerEventEntries[eventID];
         }
+
+        *speedrun += speedrunOpts;
 
         *miscellaneous += buttonSpam;
         *miscellaneous += camera;

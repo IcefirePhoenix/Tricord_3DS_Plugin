@@ -25,13 +25,13 @@ namespace CTRPluginFramework
     {
         "Pause timer during cutscenes",
         "Pause timer during loading screens",
-        "Pause timer in treasure rooms",
+        "End timer upon entering treasure room",
         "Pause timer while game is paused",
         "Restart timer upon entering a new level",
         "Auto-split upon entering a new area",
         "Run timer during cutscenes",
         "Run timer during loading screens",
-        "Run timer in treasure rooms",
+        "Don't end timer in treasure rooms",
         "Run timer while game is paused",
         "Continue timer upon entering a new level",
         "Don't auto-split when entering a new area"
