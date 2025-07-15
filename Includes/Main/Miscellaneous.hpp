@@ -58,6 +58,7 @@ namespace CTRPluginFramework
         static void writeShutterDisable(MenuEntry* entry);
         static void applyPretendoPatch(MenuEntry *entry);
         static void speedrunTimer(MenuEntry* entry);
+        static void toggleSplits(MenuEntry *entry);
         static void toggleTimerEvents(MenuEntry* entry);
     };
 }
