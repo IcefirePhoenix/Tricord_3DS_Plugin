@@ -142,6 +142,11 @@ namespace CTRPluginFramework
             if (newSplit != Time::Zero)
                 splits.push_back(newSplit);
 
+            // cannot compare to Time::Zero as it is inaccurate
+            // approx 268111856 ticks per second => timer can read 0ms while not being equal to 0 ticks
+            if (newSplit.AsMilliseconds() != 0)
+                splits.push_back(newSplit);
+
             autoSplit = false;
             splitTimer.Restart();
         }
