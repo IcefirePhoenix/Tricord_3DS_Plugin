@@ -54,6 +54,14 @@ namespace CTRPluginFramework
         running = true;
     }
 
+    void reset(void)
+    {
+        accumulatedPauseDuration = Time::Zero;
+        autoRestart = false;
+        speedTimer.Restart();
+        splits.clear();
+    }
+
     void displayTime(Time time, int x, int y)
     {
         int secondsRaw = (int)time.AsSeconds();
