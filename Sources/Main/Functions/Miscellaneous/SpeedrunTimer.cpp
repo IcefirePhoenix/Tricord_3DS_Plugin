@@ -56,6 +56,8 @@ namespace CTRPluginFramework
 
     void reset(void)
     {
+        pauseStartTime = Time::Zero;
+        pauseStartTimeRelative = Time::Zero;
         accumulatedPauseDuration = Time::Zero;
         autoRestart = false;
         speedTimer.Restart();
