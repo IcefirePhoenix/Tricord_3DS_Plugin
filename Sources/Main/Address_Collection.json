@@ -1077,7 +1077,7 @@
             "regionAddrs": {
                 "usaAddress": "0x31A0110C",
                 "eurAddress": "0x31A01164",
-                "jpnAddress": "0x31A00E54"
+                "jpnAddress": "0x31A00E58"
             }
         },
         {
@@ -1085,7 +1085,7 @@
             "regionAddrs": {
                 "usaAddress": "0x31A0110D",
                 "eurAddress": "0x31A01165",
-                "jpnAddress": "0x31A00E55"
+                "jpnAddress": "0x31A00E59"
             }
         },
         {
@@ -1093,7 +1093,7 @@
             "regionAddrs": {
                 "usaAddress": "0x31A0110E",
                 "eurAddress": "0x31A01166",
-                "jpnAddress": "0x31A00E56"
+                "jpnAddress": "0x31A00E5A"
             }
         },
         {
@@ -1101,7 +1101,7 @@
             "regionAddrs": {
                 "usaAddress": "0x31A01118",
                 "eurAddress": "0x31A01170",
-                "jpnAddress": "0x31A00E60"
+                "jpnAddress": "0x31A00E64"
             }
         },
         {
@@ -1109,7 +1109,7 @@
             "regionAddrs": {
                 "usaAddress": "0x31A0111C",
                 "eurAddress": "0x31A01174",
-                "jpnAddress": "0x31A00E64"
+                "jpnAddress": "0x31A00E68"
             }
         },
         {
@@ -1782,6 +1782,14 @@
                 "usaAddress": "0x32841A20",
                 "eurAddress": "0x32841AA0",
                 "jpnAddress": "0x3288C460"
+            }
+        },
+        {
+            "name": "IsInvincible",
+            "regionAddrs": {
+                "usaAddress": "0x32849544",
+                "eurAddress": "0x328495C4",
+                "jpnAddress": "0x32893F84"
             }
         },
         {
@@ -2488,7 +2496,7 @@
                 "jpnAddress": "0x32893FAC"
             }
         },
-        
+
         {
             "name": "SpeedMultiplierNormal",
             "regionAddrs": {
