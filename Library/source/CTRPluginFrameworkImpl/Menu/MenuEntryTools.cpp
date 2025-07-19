@@ -13,6 +13,16 @@ namespace CTRPluginFramework
         _arg = arg;
     }
 
+    MenuEntryTools::MenuEntryTools(const std::string& text, FuncPointerA func, IconCallback icon) :
+        MenuEntryImpl(text),
+        Icon(icon),
+        Func(nullptr),
+        FuncArg(func),
+        UseCheckBox(false)
+    {
+        _type = EntryTools;
+    }
+
     MenuEntryTools::MenuEntryTools(const std::string& text, FuncPointer func, IconCallback icon, const std::string& note) :
         MenuEntryImpl(text, note),
         Icon(icon),
