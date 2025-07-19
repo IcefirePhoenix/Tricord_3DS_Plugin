@@ -32,7 +32,7 @@ namespace CTRPluginFramework
     // Stop updating time and store time at which timer was paused
     void pause(int eventID)
     {
-        running = false;
+        isRunning = false;
         pauseStartTime = speedTimer.GetElapsedTime();
         pauseStartTimeRelative = pauseStartTime - accumulatedPauseDuration;
         pauseEventID = eventID;
@@ -43,7 +43,7 @@ namespace CTRPluginFramework
     {
         pauseEndTime = speedTimer.GetElapsedTime();
         accumulatedPauseDuration += (pauseEndTime - pauseStartTime);
-        running = true;
+        isRunning = true;
     }
 
     void reset(void)
@@ -90,7 +90,10 @@ namespace CTRPluginFramework
     {
         // Init cooldown timer
         if (entry->WasJustActivated())
+        {
             autoSplitCooldown.Restart();
+            isRunning = true;
+        }
 
         // Restart conditions
         if (GeneralHelpers::isLoadingScreen(true) && autoSplitCooldown.HasTimePassed(Seconds(2.0)))
@@ -126,13 +129,10 @@ namespace CTRPluginFramework
         // Create and show splits
         if (entry->Hotkeys[0].IsPressed() || autoSplit)
         {
-            Time newSplit = running ? speedTimer.GetElapsedTime() - accumulatedPauseDuration : pauseStartTimeRelative;
+            Time newSplit = isRunning ? speedTimer.GetElapsedTime() - accumulatedPauseDuration : pauseStartTimeRelative;
 
             if (splits.size() >= MAX_SPLITS)
                 splits.pop_front();
-
-            if (newSplit != Time::Zero)
-                splits.push_back(newSplit);
 
             // cannot compare to Time::Zero as it is inaccurate
             // approx 268111856 ticks per second => timer can read 0ms while not being equal to 0 ticks
@@ -145,7 +145,7 @@ namespace CTRPluginFramework
         displaySplits();
 
         // Manage pause events
-        if (running)
+        if (isRunning)
         {
             if (autoTimerEvents[0] && (Freecam::getCameraType() > CameraMode::DYNAMIC))
             {
