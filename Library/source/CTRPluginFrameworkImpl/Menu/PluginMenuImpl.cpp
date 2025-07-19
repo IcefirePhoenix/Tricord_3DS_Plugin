@@ -543,7 +543,6 @@ namespace CTRPluginFramework
             for (int i = 0; i < 3; i++)
             {
                 Preferences::SavedWarps[i] = warps[i];
-                OSD::Notify("loaded a save warp on boot");
             }
         }
     }
