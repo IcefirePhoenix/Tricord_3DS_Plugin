@@ -4,22 +4,14 @@
 #define MAX_SPLITS 4
 namespace CTRPluginFramework
 {
-    Clock speedTimer;
-    Clock autoSplitCooldown;
+    Clock speedTimer, splitTimer, autoSplitCooldown;
     Time pauseStartTime, pauseStartTimeRelative, pauseEndTime, accumulatedPauseDuration = Time::Zero;
 
-    Clock splitTimer;
-    std::deque<Time> splits;
-
-    int xCoord = 5, yCoord = 225;
-
-    bool running = true;
-    bool alwaysShowSplits = false;
-
-    bool autoSplit = false;
+    int xCoord = 5, yCoord = 225, pauseEventID = -1;
+    bool isRunning, alwaysShowSplits, autoSplit, autoRestart;
     bool autoTimerEvents[6] = {};
-    bool autoRestart = false;
-    int pauseEventID = -1;
+
+    std::deque<Time> splits;
 
     const StringVector timerEvents =
     {
