@@ -56,7 +56,7 @@ namespace CTRPluginFramework
         splits.clear();
     }
 
-    void displayTime(Time time, int x, int y)
+    void displayTime(Time time, int x, int y, bool isSplit)
     {
         int secondsRaw = (int)time.AsSeconds();
         int hours = secondsRaw / 3600;
@@ -67,7 +67,7 @@ namespace CTRPluginFramework
 
         sprintf(timeStr, "%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
         Renderer::SetTarget(TOP);
-        Renderer::DrawString(timeStr, x, y, Color::White, Color::Black);
+        Renderer::DrawString(timeStr, x, y, isSplit ? Color::Gray : Color::White, Color::Black);
     }
 
     void displaySplits(void)
@@ -81,7 +81,7 @@ namespace CTRPluginFramework
             {
                 // Each split is positioned 15 pixels apart
                 int yDist = 15 * (rendered + 1);
-                displayTime(splits[splits.size() - rendered - 1], xCoord, yCoord - yDist);
+                displayTime(splits[splits.size() - rendered - 1], xCoord, yCoord - yDist, true);
             }
         }
     }
@@ -168,12 +168,12 @@ namespace CTRPluginFramework
                 return;
             }
 
-            displayTime(speedTimer.GetElapsedTime() - accumulatedPauseDuration, xCoord, yCoord);
+            displayTime(speedTimer.GetElapsedTime() - accumulatedPauseDuration, xCoord, yCoord, false);
         }
         else
         {
             // Draw pause-time on screen
-            displayTime(pauseStartTimeRelative, xCoord, yCoord);
+            displayTime(pauseStartTimeRelative, xCoord, yCoord, false);
 
             // Wait for appropriate unpause status
             switch (pauseEventID)
