@@ -131,6 +131,8 @@ namespace CTRPluginFramework
         Process::Write32(AddressList::getAddress("LiveNameColorG"), defaultColors[0]);
         Process::Write32(AddressList::getAddress("LiveNameColorB"), defaultColors[1]);
         Process::Write32(AddressList::getAddress("LiveNameColorR"), defaultColors[2]);
+
+        MessageBox("Success", "Name colors have been reset!")();
     }
 
 
