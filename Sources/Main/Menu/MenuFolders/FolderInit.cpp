@@ -106,12 +106,11 @@ namespace CTRPluginFramework
             // integer division always rounds up, so iterator / 2 should always result in 0-2 values
             physicsSlots[iterator]->SetArg(reinterpret_cast<void *>(iterator / 2));
 
-            // add the physicsSel entries to the menu
-            *physics += physicsSlots[iterator];
-
-            // hide the auto entries
+            // hide the auto entries, not the Sel entries
             if (iterator % 2 == 0)
                 *autoFolder += physicsSlots[iterator];
+            else
+                *physics += physicsSlots[iterator];
         }
     }
 
