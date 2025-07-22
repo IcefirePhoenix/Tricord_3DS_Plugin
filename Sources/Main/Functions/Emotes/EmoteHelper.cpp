@@ -94,7 +94,7 @@ namespace CTRPluginFramework
 
             default:
                 OSD::Notify("Emote Swapper: Cannot determine region.", Color::Red);
-                break;
+                return;
         }
 
         // update graphic pointers using hardcoded array...
@@ -138,9 +138,9 @@ namespace CTRPluginFramework
 
     // Disables custom emote edits by force-switching to Drablands emote set
     // Note: custom emote layouts are applied ONLY onto Den of Trials emote set
-    void Emotes::forceDefaultEmotes(bool shouldDisable)
+    void Emotes::toggleDefaultEmotes(bool shouldDisableEdits)
     {
-        u32 forceDotLayoutEdit = shouldDisable ? 0xEA00000D : 0x0A00000D; // edit : default
+        u32 forceDotLayoutEdit = shouldDisableEdits ? 0xEA00000D : 0x0A00000D; // edit : default
         Process::Patch(AddressList::getAddress("UseDoTLayoutAlways"), forceDotLayoutEdit);
     }
 }
