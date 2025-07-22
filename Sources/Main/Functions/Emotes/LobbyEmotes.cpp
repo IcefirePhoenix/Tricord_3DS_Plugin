@@ -3,13 +3,21 @@
 
 namespace CTRPluginFramework
 {
+
+    // The previous location seems to influence which emote set is currently in-use
+    // To avoid complicated checks determining which set to use, simply copy over edits from Gameplay -> Lobby sets
+    void replicateEditsForLobby(void)
+    {
+        u64 currGameplayLayout;
+        Process::Read64(AddressList::getAddress("GameplayEmotes"), currGameplayLayout);
+        Process::Write64(AddressList::getAddress("LobbyEmotes"), currGameplayLayout);
+    }
+
     // Driver code for emote swapper in multiplayer lobby
     void Emotes::lobbyEmoteSwapper(MenuEntry *entry)
     {
         if (entry->WasJustActivated())
             initEmoteAddresses();
-        // when previous location is NOT Drablands, emote menu data defaults to Drablands emote set for some reason...
-        u32 finalAddress = (Level::getPrevLevel() < Level::levelIDFromName("Deku Forest")) ? AddressList::getAddress("GameplayEmotes") : AddressList::getAddress("LobbyEmotes");
 
         // when entering new area, it's not possible to override current bottom-screen emote menu graphics...
         // restore default emote set to avoid button-graphic mix-ups...
@@ -17,6 +25,7 @@ namespace CTRPluginFramework
         {
             initEmoteValueLayout(AddressList::getAddress("GameplayEmotes"), 0x05080A0B, 0x00000706, true, {11, 6, 5, 3, 4, 9, 0});
             toggleDefaultEmotes(false);
+            replicateEditsForLobby();
             return;
         }
 
@@ -27,17 +36,19 @@ namespace CTRPluginFramework
             {
                 initEmoteValueLayout(AddressList::getAddress("GameplayEmotes"), 0x05080A0B, 0x00000706, true, {11, 6, 5, 3, 4, 9, 0});
                 toggleDefaultEmotes(true);
+                replicateEditsForLobby();
             }
             else if (entry->Hotkeys[1].IsPressed())
             {
                 initEmoteValueLayout(AddressList::getAddress("GameplayEmotes"), 0x04090100, 0x00000302, true, {0, 1, 10, 8, 2, 7, 0});
                 toggleDefaultEmotes(true);
-                initEmoteValueLayout(finalAddress, 0x04090100, 0x00000302, true, {0, 1, 10, 8, 2, 7, 0});
-                forceDefaultEmotes(true);
+                replicateEditsForLobby();
             }
             else if (entry->Hotkeys[2].IsPressed())
             {
                 Process::Write32(Emotes::graphicsAddresses[5], blankEmotePointer);
+                Process::Write8(AddressList::getAddress("GameplayEmotes") + 0x5, 0xC);
+                Process::Write8(AddressList::getAddress("LobbyEmotes") + 0x5, 0xC);
                 toggleDefaultEmotes(true);
             }
         }
