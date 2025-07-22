@@ -138,9 +138,36 @@ namespace CTRPluginFramework
 
     // Disables custom emote edits by force-switching to Drablands emote set
     // Note: custom emote layouts are applied ONLY onto Den of Trials emote set
-    void Emotes::toggleDefaultEmotes(bool shouldDisableEdits)
+    void toggleDefaultEmotes(bool shouldDisableEdits)
     {
         u32 forceDotLayoutEdit = shouldDisableEdits ? 0xEA00000D : 0x0A00000D; // edit : default
         Process::Patch(AddressList::getAddress("UseDoTLayoutAlways"), forceDotLayoutEdit);
+    }
+
+    // The previous location seems to influence which emote set is currently in-use
+    // To avoid complicated checks determining which set to use, simply copy over edits from Gameplay -> Lobby sets
+    void replicateEditsForLobby(void)
+    {
+        u64 currGameplayLayout;
+        Process::Read64(AddressList::getAddress("GameplayEmotes"), currGameplayLayout);
+        Process::Write64(AddressList::getAddress("LobbyEmotes"), currGameplayLayout);
+    }
+
+    // Restore default emote set to avoid button mix-ups upon entering new area (as bottom-screen emote menu graphics can't be overridden on load-in)
+    void restoreDefaultEmotes(void)
+    {
+        if (GeneralHelpers::isLoadingScreen(true))
+        {
+            if (Level::levelIDFromName("Hytopia Castle") == Level::getTargetLevel())
+            {
+                initEmoteValueLayout(AddressList::getAddress("GameplayEmotes"), 0x05080A0B, 0x00000706, true, {11, 6, 5, 3, 4, 9, 0});
+                replicateEditsForLobby();
+            }
+            else
+                initEmoteValueLayout(AddressList::getAddress("GameplayEmotes"), 0x03020100, 0x07060504, false, {0, 1, 2, 7, 8, 3, 4, 9});
+
+            toggleDefaultEmotes(false);
+            return;
+        }
     }
 }
