@@ -6,9 +6,6 @@ namespace CTRPluginFramework
     // Driver code for emote swapper in Drablands
     void Emotes::drablandEmoteSwapper(MenuEntry *entry)
     {
-        if (entry->WasJustActivated())
-            initEmoteAddresses();
-
         if (GeneralHelpers::isLoadingScreen(true))
             restoreDefaultEmotes();
 

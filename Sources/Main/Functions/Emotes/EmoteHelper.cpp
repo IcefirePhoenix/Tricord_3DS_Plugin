@@ -62,7 +62,7 @@ namespace CTRPluginFramework
     /* ------------------ */
 
     // Places relevant addresses into array for easier access
-    void initEmoteAddresses(void)
+    void Emotes::initEmoteAddresses(void)
     {
         Emotes::graphicsAddresses[0] = AddressList::getAddress("EmoteAGraphic");
         Emotes::graphicsAddresses[1] = AddressList::getAddress("EmoteBGraphic");
