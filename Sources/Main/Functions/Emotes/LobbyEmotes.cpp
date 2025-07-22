@@ -6,6 +6,8 @@ namespace CTRPluginFramework
     // Driver code for emote swapper in multiplayer lobby
     void Emotes::lobbyEmoteSwapper(MenuEntry *entry)
     {
+        if (entry->WasJustActivated())
+            initEmoteAddresses();
         // when previous location is NOT Drablands, emote menu data defaults to Drablands emote set for some reason...
         u32 finalAddress = (Level::getPrevLevel() < Level::levelIDFromName("Deku Forest")) ? AddressList::getAddress("GameplayEmotes") : AddressList::getAddress("LobbyEmotes");
 
@@ -13,8 +15,8 @@ namespace CTRPluginFramework
         // restore default emote set to avoid button-graphic mix-ups...
         if (GeneralHelpers::isLoadingScreen(false))
         {
-            initEmoteValueLayout(finalAddress, 0x05080A0B, 0x00000706, true, {11, 6, 5, 3, 4, 9, 0});
-            forceDefaultEmotes(false);
+            initEmoteValueLayout(AddressList::getAddress("GameplayEmotes"), 0x05080A0B, 0x00000706, true, {11, 6, 5, 3, 4, 9, 0});
+            toggleDefaultEmotes(false);
             return;
         }
 
@@ -23,19 +25,20 @@ namespace CTRPluginFramework
         {
             if (entry->Hotkeys[0].IsPressed())
             {
-                initEmoteValueLayout(finalAddress, 0x05080A0B, 0x00000706, true, {11, 6, 5, 3, 4, 9, 0});
-                forceDefaultEmotes(true);
+                initEmoteValueLayout(AddressList::getAddress("GameplayEmotes"), 0x05080A0B, 0x00000706, true, {11, 6, 5, 3, 4, 9, 0});
+                toggleDefaultEmotes(true);
             }
             else if (entry->Hotkeys[1].IsPressed())
             {
+                initEmoteValueLayout(AddressList::getAddress("GameplayEmotes"), 0x04090100, 0x00000302, true, {0, 1, 10, 8, 2, 7, 0});
+                toggleDefaultEmotes(true);
                 initEmoteValueLayout(finalAddress, 0x04090100, 0x00000302, true, {0, 1, 10, 8, 2, 7, 0});
                 forceDefaultEmotes(true);
             }
             else if (entry->Hotkeys[2].IsPressed())
             {
                 Process::Write32(Emotes::graphicsAddresses[5], blankEmotePointer);
-                Process::Write8(finalAddress + 0x5, 0xC);
-                forceDefaultEmotes(true);
+                toggleDefaultEmotes(true);
             }
         }
     }
