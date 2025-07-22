@@ -264,7 +264,7 @@
         {
             "name": "freecam_note",
             "content": {
-                "intro": "Enables unrestricted camera movement along all axes with zoom + rotation options. The camera can also be locked to prevent auto-resets when switching Doppels, using an item, or dropping into the fall plane.",
+                "intro": "Enables unrestricted camera movement along all axes with zoom + orbit options. The camera can also be locked to prevent auto-resets when switching Doppels, using an item, or dropping into the fall plane.",
                 "note": "Hotkeys can be edited. Current hotkeys can be viewed below.",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -282,7 +282,7 @@
         {
             "name": "freecam_sensitivity_note",
             "content": {
-                "intro": "Adjusts Freecam sensitivity for movement, height, zoom, and rotation.\n\nRecommended values:\n- Shift sensitivity: 0.05 - 0.30\n- Height sensitivity: 0.40 - 1.00\n- Zoom sensitivity: 0.02 - 0.04\n- Rotation sensitivity: 0.10 - 0.50",
+                "intro": "Adjusts Freecam sensitivity for movement, height, zoom, and orbit.\n\nRecommended values:\n- Shift sensitivity: 0.05 - 0.30\n- Height sensitivity: 0.40 - 1.00\n- Zoom sensitivity: 0.02 - 0.04\n- Orbit sensitivity: 0.10 - 0.50",
                 "note": "",
                 "modeCompatibility": 1,
                 "clientOnly": true
