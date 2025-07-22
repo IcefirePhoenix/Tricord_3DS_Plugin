@@ -220,10 +220,10 @@ namespace CTRPluginFramework
             Hotkey(Key::DPadRight, "Zoom out"),
             Hotkey(Key::DPadUp, "Raise camera"),
             Hotkey(Key::DPadDown, "Lower camera"),
-            Hotkey(Key::CPadDown, "Rotate counterclockwise (X-axis)"),
-            Hotkey(Key::CPadUp, "Rotate clockwise (X-axis)"),
-            Hotkey(Key::CPadLeft, "Rotate counterclockwise (Y-axis)"),
-            Hotkey(Key::CPadRight, "Rotate clockwise (Y-axis)")
+            Hotkey(Key::CPadDown, "Orbit downwards"),
+            Hotkey(Key::CPadUp, "Orbit upwards"),
+            Hotkey(Key::CPadLeft, "Orbit clockwise"),
+            Hotkey(Key::CPadRight, "Orbit counterclockwise")
         }));
 
         editFreecamSen = new MenuEntry("Edit sensitivity", nullptr, Freecam::editSensitivity, true, DescUtils::getDesc("freecam_sensitivity_note"), true);
