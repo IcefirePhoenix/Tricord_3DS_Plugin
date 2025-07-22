@@ -720,7 +720,7 @@ namespace CTRPluginFramework
         editSpeed.IsHexadecimal(false);
         if (editSpeed.Open(newSpeed, 1.5) == 0)
         {
-            entry->SetName("Cheetah Costume - Set speed mult.: "+std::to_string(newSpeed)+"x");
+            entry->SetName("Cheetah Costume - Set speed mult.: " + Utils::ToString(newSpeed, 2) + "x");
             Process::WriteFloat(AddressList::getAddress("SpeedMultiplierCheetah"), newSpeed);
         }
     }
@@ -753,7 +753,7 @@ namespace CTRPluginFramework
         editDmg.IsHexadecimal(false);
         if (editDmg.Open(customSwordHammerDmgMult, 2.0) == 0)
         {
-            entry->SetName("Set boosted sword & hammer dmg mult.: "+std::to_string(customSwordHammerDmgMult)+"x");
+            entry->SetName("Set boosted sword & hammer dmg mult.: " + Utils::ToString(customSwordHammerDmgMult, 2) + "x");
             Process::WriteFloat(AddressList::getAddress("SwordHammerDmgBoost"), customSwordHammerDmgMult);
         }
     }

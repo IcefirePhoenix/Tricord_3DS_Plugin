@@ -41,13 +41,13 @@ namespace CTRPluginFramework
 
         readCurrStrafingSpeeds();
 
-        std::string msg = "Select an item to change its strafing speed.\nDefault speed for all items: 1.0\n\nCurrent speeds:";
-        msg.append("\nBow: " + std::to_string(currStrafingSpeeds[0]));
-        msg.append("\nFire Gloves: " + std::to_string(currStrafingSpeeds[1]));
-        msg.append("\nWater Rod: " + std::to_string(currStrafingSpeeds[2]));
-        msg.append("\nGust Jar: " + std::to_string(currStrafingSpeeds[3]));
-        msg.append("\nGripshot: " + std::to_string(currStrafingSpeeds[4]));
-        msg.append("\nHammer: " + std::to_string(currStrafingSpeeds[5]));
+        std::string msg = "Select an item to change its strafing speed.\nDefault speed for all items: 1.00\n\nCurrent speeds:";
+        msg.append("\nBow: " + Utils::ToString(currStrafingSpeeds[0], 2));
+        msg.append("\nFire Gloves: " + Utils::ToString(currStrafingSpeeds[1], 2));
+        msg.append("\nWater Rod: " + Utils::ToString(currStrafingSpeeds[2], 2));
+        msg.append("\nGust Jar: " + Utils::ToString(currStrafingSpeeds[3], 2));
+        msg.append("\nGripshot: " + Utils::ToString(currStrafingSpeeds[4], 2));
+        msg.append("\nHammer: " + Utils::ToString(currStrafingSpeeds[5], 2));
 
         Keyboard speed("Item Strafing Speed", msg);
         speed.Populate(items);
