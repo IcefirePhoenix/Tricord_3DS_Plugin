@@ -376,9 +376,9 @@ namespace CTRPluginFramework
         MenuFolder* bonusEffects = new MenuFolder("Bonus Effects", DescUtils::getDesc("bonus_costume_effects_note"));
         *bonusEffects += new MenuEntry("Tingle Tights - Set number of balloons", nullptr, Costume::tingle, true, DescUtils::getDesc("tingle_note"));
         *bonusEffects += new MenuEntry("Dapper Spinner - Reduce # swings to spin", nullptr, Costume::dapperInstant, true, DescUtils::getDesc("dapper_instant_note"));
-        *bonusEffects += new MenuEntry("Cheetah Costume - Set speed mult.: 1.5x", nullptr, Costume::setCheetahMultiplier, true, DescUtils::getDesc("cheetah_mult_note"));
+        *bonusEffects += new MenuEntry("Cheetah Costume - Set speed mult.: 1.50x", nullptr, Costume::setCheetahMultiplier, true, DescUtils::getDesc("cheetah_mult_note"));
         *bonusEffects += new MenuEntry("Cacto Clothes - Set damage: 2 hearts", nullptr, Costume::setCactoDmg, true, DescUtils::getDesc("cacto_dmg_note"));
-        *bonusEffects += new MenuEntry("Set boosted sword & hammer dmg mult.: 2x", nullptr, Costume::setSwordHammerDmgMult, true, DescUtils::getDesc("sword_hammer_mult_note"));
+        *bonusEffects += new MenuEntry("Set boosted sword & hammer dmg mult.: 2.00x", nullptr, Costume::setSwordHammerDmgMult, true, DescUtils::getDesc("sword_hammer_mult_note"));
         *bonusEffects += new MenuEntry("Enable sword beams at any health", nullptr, Costume::swordBeamsAnyHealth, false, DescUtils::getDesc("beam_any_health_note"));
         *bonusEffects += new MenuEntry("Toggle sword beam cooldown", nullptr, Costume::selectLinkBeam, true, DescUtils::getDesc("beam_cooldown_note"));
         *costumeEffects += bonusEffects;

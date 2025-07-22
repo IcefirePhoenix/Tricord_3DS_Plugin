@@ -621,7 +621,7 @@ namespace CTRPluginFramework
         _keyboard->DisplayTopScreen = DisplayTopScreen;
 
         std::string &input = _keyboard->GetInput();
-        input = Utils::ToString(start, 4);
+        input = Utils::ToString(start, 2);
 
         int ret = _keyboard->Run();
 
