@@ -18,13 +18,15 @@ namespace CTRPluginFramework
     void initGraphicsRefresh(bool useBlankEmote);
 	void initEmoteValueLayout(u32 address, u32 buttonID_A, u32 buttonID_B, bool isBlankEmote, std::vector<u8> pointerVector);
     void initEmoteAddresses(void);
+    void restoreDefaultEmotes(void);
+    void replicateEditsForLobby(void);
+    void toggleDefaultEmotes(bool shouldDisable);
 
     class Emotes
     {
     public:
         static void lobbyEmoteSwapper(MenuEntry* entry);
         static void drablandEmoteSwapper(MenuEntry* entry);
-        static void toggleDefaultEmotes(bool shouldDisable);
 
         // column order: NA, EU, JP
         static const u32 greenEmotePointers[12][3];

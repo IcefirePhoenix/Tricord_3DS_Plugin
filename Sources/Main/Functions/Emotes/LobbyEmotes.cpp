@@ -3,31 +3,14 @@
 
 namespace CTRPluginFramework
 {
-
-    // The previous location seems to influence which emote set is currently in-use
-    // To avoid complicated checks determining which set to use, simply copy over edits from Gameplay -> Lobby sets
-    void replicateEditsForLobby(void)
-    {
-        u64 currGameplayLayout;
-        Process::Read64(AddressList::getAddress("GameplayEmotes"), currGameplayLayout);
-        Process::Write64(AddressList::getAddress("LobbyEmotes"), currGameplayLayout);
-    }
-
     // Driver code for emote swapper in multiplayer lobby
     void Emotes::lobbyEmoteSwapper(MenuEntry *entry)
     {
         if (entry->WasJustActivated())
             initEmoteAddresses();
 
-        // when entering new area, it's not possible to override current bottom-screen emote menu graphics...
-        // restore default emote set to avoid button-graphic mix-ups...
-        if (GeneralHelpers::isLoadingScreen(true) && (Level::levelIDFromName("Hytopia Castle") == Level::getTargetLevel()))
-        {
-            initEmoteValueLayout(AddressList::getAddress("GameplayEmotes"), 0x05080A0B, 0x00000706, true, {11, 6, 5, 3, 4, 9, 0});
-            toggleDefaultEmotes(false);
-            replicateEditsForLobby();
-            return;
-        }
+        if (GeneralHelpers::isLoadingScreen(true))
+            restoreDefaultEmotes();
 
         // hotkey behavior for toggling between emote sets...
         if (Level::getCurrLevel() == Level::levelIDFromName("Hytopia Castle"))
