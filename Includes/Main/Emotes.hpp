@@ -24,7 +24,7 @@ namespace CTRPluginFramework
     public:
         static void lobbyEmoteSwapper(MenuEntry* entry);
         static void drablandEmoteSwapper(MenuEntry* entry);
-        static void forceDefaultEmotes(bool shouldDisable);
+        static void toggleDefaultEmotes(bool shouldDisable);
 
         // column order: NA, EU, JP
         static const u32 greenEmotePointers[12][3];
