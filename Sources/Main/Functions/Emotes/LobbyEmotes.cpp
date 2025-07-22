@@ -6,9 +6,6 @@ namespace CTRPluginFramework
     // Driver code for emote swapper in multiplayer lobby
     void Emotes::lobbyEmoteSwapper(MenuEntry *entry)
     {
-        if (entry->WasJustActivated())
-            initEmoteAddresses();
-
         if (GeneralHelpers::isLoadingScreen(true))
             restoreDefaultEmotes();
 
