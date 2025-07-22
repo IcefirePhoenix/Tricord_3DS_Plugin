@@ -13,7 +13,8 @@ Compatible with most major regional releases of TFH on version 2.1.0. Due to a d
 
 Runnable on:
 - Nintendo 2/3DS hardware running Luma3DS, v13.3 or higher.
-- Citra emulator, preferably version r608383e. (See the [archived repository](https://github.com/PabloMK7/citra/releases/tag/r608383e) or  [official Citra website](https://citra-emulator.com/download)).
+- Azahar emulator, v2122 or higher. (Latest release [here](https://azahar-emu.org/pages/download/).)
+- Citra emulator, preferably version r608383e. (See the [archived repository](https://github.com/PabloMK7/citra/releases/tag/r608383e) or  [official Citra website](https://citra-emulator.com/download).)
 
 Older versions of Luma3DS / Citra may or may not be compatible. If Tricord causes a crash, freezes, or stalls on game boot, try updating to the latest Luma3DS / Citra version.
 
@@ -36,22 +37,11 @@ All data used to create this plugin has been manually datamined by the Developme
 If you would like to contribute to either of these sources, please contact someone on the Development Team. See the Contact section below.
 
 ## 🎮 Emulator Compatibility Notes
+Tricord works by manipulating RAM data, and since the memory layout found on emulators (Azahar, Citra, Lime3DS, etc.) may not be 1:1 with original hardware memory, we can't always guarantee compatibility. Our testing is done on the [latest release](https://azahar-emu.org/pages/download/) of Azahar. Your mileage may vary on older builds or other emulators.
 
-### Azahar Compatibility
-We currently do not support Azahar. While Tricord does run on the [latest release](https://azahar-emu.org/pages/download/), many entries are broken.
+In addition, it has been found that having mods installed on Citra / Azahar will cause the majority of Tricord's entries to have no effect. It is recommended to disable mods before using Tricord. To do this, right-click on Tri Force Heroes in the emulator's title list. On Azahar, hover on "Open" and select "Mods Location". On Citra, simply click on "Open Mods Location".
 
-### Citra Compatibility
-Some menu entries may not work as expected on Citra. Your mileage may vary depending on the specific Citra build, though the following entries are known to have issues running on the latest release.
-
-As of our last tests on build r608383e:
-- Force Instant Text Boxes
-- Show Treasure Chest Contents
-- Lobby Emote Swapper
-- Drablands Emote Swapper
-
-This plugin works by manipulating RAM data, and since Citra's memory layout may not be 1:1 with original hardware memory, we can't always guarantee compatibility.
-
-In addition, it has been found that having mods installed on Citra will cause the majority of Tricord's entries to have no effect. It is recommended to disable mods before using Tricord. To do this, right-click on Tri Force Heroes in the Citra title list. Click "Open Mods Location". From there, you can backup and delete the `romfs` folder. Or, alternatively, rename the `romfs` folder to something else, for example, `romfs-disabled`. This will prevent the mods from being applied -- making Tricord more usable -- while keeping the mod's files in the same location. This way, the mods can be easily reinstalled whenever you want by renaming the folder back to `romfs`.
+From there, you can backup and delete the `romfs` folder. Or, alternatively, rename the `romfs` folder to something else, for example, `romfs-disabled`. This will prevent the mods from being applied—making Tricord more usable—while keeping the mod's files in the same location. This way, the mods can be easily reinstalled whenever you want by renaming the folder back to `romfs`.
 
 ## 🐛 Bug-catching
 
@@ -63,7 +53,7 @@ If you encounter a bug, please let us know! You can do this by opening an Issue 
 - Description of the issue
 - Exact steps to replicate the issue
 
-To save an error log to your SD card, be sure to press X while in the crash screen. The log can be found under `Tricord/Logs/[NA/EU/JP]`.
+To save an error log to your SD card, be sure to press X while on the crash screen. The log can be found under `Tricord/Logs/[NA/EU/JP]`.
 
 If you do not have a GitHub account, you can also reach out via the [TFH Modding Discord server](https://discord.gg/P6csr4jc5U). Your feedback is greatly appreciated and helps make this project better for everyone!
 
@@ -98,7 +88,7 @@ If the problem still persists OR if you are not a wumiibo user, please contact s
 #### Title IDs:
 * 0004000000176F00 - North America
 * 0004000000177000 - Europe
-* 004000000176E00 - Japan
+* 0004000000176E00 - Japan
 
 ### Updating
 Download the latest files from the [releases page](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/releases) and reinstall them to the SD card (or emulated SD card) in the same places as described above, overwriting previous files. Don't worry about other newly generated files that you may find in the plugins folder (such as `CTRPFData.bin` or .txt files); they usually do not need to be removed or replaced **unless explicitly mentioned in a release**.
