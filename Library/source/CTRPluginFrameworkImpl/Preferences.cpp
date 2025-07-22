@@ -163,7 +163,7 @@ namespace CTRPluginFramework
                 dirPath.append("/NA/");
                 break;
             case TID_EUR:
-                dirPath.append("/NA/");
+                dirPath.append("/EU/");
                 break;
             case TID_JPN:
                 dirPath.append("/JP/");
