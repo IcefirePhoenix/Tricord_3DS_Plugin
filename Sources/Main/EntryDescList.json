@@ -679,7 +679,7 @@
             "name": "tingle_note",
             "content": {
                 "intro": "Allows you to set a specific number of Tingle balloons for a player to have, including infinite balloons. Tingle balloons rescue you from falling into pits or lava.",
-                "note": "You do not need to be wearing Tingle Tights.",
+                "note": "You do not need to be wearing Tingle Tights. Only 3 balloons at a time can be displayed, regardless of whether your actual balloon count is higher.",
                 "modeCompatibility": 3,
                 "clientOnly": false
             }
