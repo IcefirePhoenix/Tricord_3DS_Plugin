@@ -237,6 +237,11 @@ namespace CTRPluginFramework
         return _title;
     }
 
+    u32&    KeyboardImpl::GetMax(void)
+    {
+        return _max;
+    }
+
     void    KeyboardImpl::SetError(std::string &error)
     {
         _errorMessage = true;
