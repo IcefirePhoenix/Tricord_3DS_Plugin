@@ -139,7 +139,7 @@ namespace CTRPluginFramework
 
         if (targetLevelData.first.empty())
         {
-            if (targetWorld != 2)
+            if (targetCategory != 2)
                 goto selectCategory;
             else
                 goto selectWorld;
