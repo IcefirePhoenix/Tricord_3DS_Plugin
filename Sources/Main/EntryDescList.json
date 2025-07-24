@@ -1164,8 +1164,17 @@
         {
             "name": "merchant_restock_note",
             "content": {
-                "intro": "Forces the Merchant to immediately restock the material stall, which normally resets daily.",
-                "note": "",
+                "intro": "Forces the Merchant to immediately restock the material stall, which normally happens daily.",
+                "note": "Existing materials will get restocked. This does not replace them with a new material selection.",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "merchant_reset_note",
+            "content": {
+                "intro": "Resets the Merchant's material selection, which normally happens daily. Existing materials will get replaced with a new random selection.",
+                "note": "Any selections made to \"Set Nth material slot\" will also be reset.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }

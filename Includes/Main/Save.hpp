@@ -1,6 +1,8 @@
 #ifndef SAVE_HPP
 #define SAVE_HPP
 
+#define JAN1_1970 0
+
 #include "CTRPF.hpp"
 #include "Cheats.hpp"
 #include "Helpers.hpp"
@@ -25,6 +27,7 @@ namespace CTRPluginFramework
         static void heroPointCountSet(MenuEntry* entry);
         static void coliseumWinCountSet(MenuEntry* entry);
         static void selMerchantSlot(MenuEntry* entry);
+        static void restockMerchant(MenuEntry* entry);
         static void resetMerchant(MenuEntry* entry);
         static void selLevelCompletion(MenuEntry* entry);
     };
