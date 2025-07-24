@@ -64,16 +64,48 @@ namespace CTRPluginFramework
              * Since each slot's data has a 8-bit spacer between them, the entry's Arg value (even int 0-8)
              * is used as an offset to navigate between slots without having to define 5 separate addresses.
              */
-            Process::Write8(AddressList::getAddress("EditMerchantStock") + slotNumber, static_cast<u8>(material));
-            return Material::getMaterialName(world, material);
+            if (Process::Write8(AddressList::getAddress("EditMerchantStock") + slotNumber, static_cast<u8>(material)))
+                return Material::getMaterialName(world, material);
         }
         return "";
     }
 
-    // Force-triggers refresh of merchant selection
+    // Force-triggers restock of merchant material selection
+    void Save::restockMerchant(MenuEntry *entry)
+    {
+        if (Process::Write8(AddressList::getAddress("RestockMerchant"), 0x0))
+            MessageBox("Success", "Street Merchant Stall has been restocked. Please reload the current area to observe changes.")();
+    }
+
+    // Force-triggers refresh of merchant materials, randomizing the selection
+    // This normally occurs when 24 hours has passed since the last refresh, verified via timestamp
     void Save::resetMerchant(MenuEntry *entry)
     {
-        Process::Write8(AddressList::getAddress("ResetMerchantStock"), 0x0);
-        MessageBox("Success", "Street Merchant Stall has been re-stocked.")();
+        int charIndex;
+        std::string slotName;
+
+        MenuEntry* matSlots[5] =
+        {
+            merchantA,
+            merchantB,
+            merchantC,
+            merchantD,
+            merchantE
+        };
+
+        // Overwrite "last refresh" timestamp with something earlier than the earliest possible system date (Jan 1, 2011)
+        // Easiest candidate = default UNIX timestamp (Jan 1, 1970)
+        if (Process::Write32(AddressList::getAddress("ResetMerchant"), JAN1_1970))
+        {
+            for (MenuEntry* slot : matSlots)
+            {
+                slotName = slot->Name();
+                charIndex = slotName.find(':');
+
+                if (charIndex != std::string::npos)
+                    slot->SetName(slotName.substr(0, charIndex));
+            }
+            MessageBox("Success", "Street Merchant Stall has been reset. Please reload the current area to observe changes.")();
+        }
     }
 }

@@ -618,12 +618,15 @@ namespace CTRPluginFramework
         *save += new MenuEntry("Edit Level Completion", nullptr, Save::selLevelCompletion, true, DescUtils::getDesc("level_completion_note"));
 
         MenuFolder *merchant = new MenuFolder("Street Merchant Codes");
+        *merchant += new MenuEntry("Restock Street Merchant stall", nullptr, Save::restockMerchant, false, DescUtils::getDesc("merchant_restock_note"));
+        *merchant += new MenuEntry("Reset Street Merchant materials", nullptr, Save::resetMerchant, false, DescUtils::getDesc("merchant_reset_note"));
+        *merchant += new MenuEntryLabel();
+
         merchantA = new MenuEntry("Set 1st material slot", nullptr, Save::selMerchantSlot, true, DescUtils::getDesc("merchant_mat_note"));
         merchantB = new MenuEntry("Set 2nd material slot", nullptr, Save::selMerchantSlot, true, DescUtils::getDesc("merchant_mat_note"));
         merchantC = new MenuEntry("Set 3rd material slot", nullptr, Save::selMerchantSlot, true, DescUtils::getDesc("merchant_mat_note"));
         merchantD = new MenuEntry("Set 4th material slot", nullptr, Save::selMerchantSlot, true, DescUtils::getDesc("merchant_mat_note"));
         merchantE = new MenuEntry("Set 5th material slot", nullptr, Save::selMerchantSlot, true, DescUtils::getDesc("merchant_mat_note"));
-        *merchant += new MenuEntry("Force re-stock Street Merchant stall", nullptr, Save::resetMerchant, false, DescUtils::getDesc("merchant_restock_note"));
 
         MenuEntry *slots[5] =
         {

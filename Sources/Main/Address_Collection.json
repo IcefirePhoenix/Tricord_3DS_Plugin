@@ -2265,11 +2265,19 @@
             }
         },
         {
-            "name": "ResetMerchantStock",
+            "name": "RestockMerchant",
             "regionAddrs": {
                 "usaAddress": "0x31A077AE",
                 "eurAddress": "0x31A07806",
                 "jpnAddress": "0x31A074FA"
+            }
+        },
+        {
+            "name": "ResetMerchant",
+            "regionAddrs": {
+                "usaAddress": "0x31A0779C",
+                "eurAddress": "0x31A077F4",
+                "jpnAddress": "0x31A074E8"
             }
         },
         {
