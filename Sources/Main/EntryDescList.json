@@ -732,7 +732,7 @@
         {
             "name": "button_spam_note",
             "content": {
-                "intro": "Allows you to spam buttons at specified time intervals by pressing and holding them.\n\nSpammable button list:\nA, B, X, Y, L, R\nSpamming speeds:\n10ms, 50ms, 100ms, 150ms",
+                "intro": "Allows you to spam buttons at specified time intervals by pressing and holding them.\n\nSpammable button list:\nA, B, X, Y*, L*, R*\n\nSpamming speeds:\n10ms, 50ms, 100ms, 150ms",
                 "note": "L, R, and Y do not spam as quickly as A, B, and X and may even stall briefly. This is due to charge-up animation periods and system limitations. It's not possible to improve the performance of these buttons without using an entirely different implementation that would affect multiplayer compatibility.",
                 "modeCompatibility": 1,
                 "clientOnly": false
