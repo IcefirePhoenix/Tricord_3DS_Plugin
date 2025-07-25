@@ -14,7 +14,7 @@ namespace CTRPluginFramework
         _inSearch(false),
         _inEditor(false),
         _firstRegionInit(false),
-        _hexInput(false),
+        _hexInput(true),
         _step(0),
         _searchMenu(_currentSearch, hexEditor, _inEditor, _hexInput),
         // _closeBtn(*this, nullptr, IntRect(275, 24, 20, 20), Icon::DrawClose),
@@ -58,7 +58,7 @@ namespace CTRPluginFramework
         _endRangeTextBox.SetValue((u32)(0xFFFFFFF0));
         _startRangeTextBox.IsEnabled = false;
         _endRangeTextBox.IsEnabled = false;
-	    _valueTextBox.UseHexadecimal(false);
+	    _valueTextBox.UseHexadecimal(true);
         _valueTextBox.SetValue((u32)0);
 
         _uiContainer += &_memoryRegions;
