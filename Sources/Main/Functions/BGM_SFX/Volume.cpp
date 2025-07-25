@@ -8,6 +8,7 @@ namespace CTRPluginFramework
     MenuEntry *voiceVol;
     MenuEntry *lowHPVol;
     MenuEntry *emoteVol;
+    MenuEntry *lobbyBallVol;
 
     StringVector percentages =
     {
