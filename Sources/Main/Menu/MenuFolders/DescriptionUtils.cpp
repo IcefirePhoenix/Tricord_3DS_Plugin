@@ -55,7 +55,7 @@ namespace CTRPluginFramework
 
         if (jsonData.empty())
         {
-            OSD::Notify("ERROR: Entry descriptions cannot be loaded.", Color::Red);
+            OSD::Notify("[ERROR] Entry descriptions cannot be loaded.", Color::Red);
             return false;
         }
 

@@ -20,7 +20,7 @@ namespace CTRPluginFramework
 
 		if (JSON_content.empty())
 		{
-			OSD::Notify("ERROR: Address list cannot be loaded.", Color::Red);
+			OSD::Notify("[ERROR] Address list cannot be loaded.", Color::Red);
 			AddressList::cancelAddrInit();
 		}
 		else

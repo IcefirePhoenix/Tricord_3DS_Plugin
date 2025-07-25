@@ -123,7 +123,7 @@ namespace CTRPluginFramework
             "Reset all to default"
         };
 
-        Keyboard chooseAction("Item / Action Selection", "Choose an item or action to edit the energy cost of.");
+        Keyboard chooseAction("Item / Action Selection", "Choose an item or action to edit its energy cost.");
         chooseAction.Populate(actionList);
         actionChoice = chooseAction.Open();
 
