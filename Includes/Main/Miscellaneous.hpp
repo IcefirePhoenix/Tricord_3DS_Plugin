@@ -53,7 +53,6 @@ namespace CTRPluginFramework
         static void keepCameraEdits(MenuEntry *entry);
         static void writeCameraEdits(bool allowCamUsage);
         static bool getCameraStatus(void);
-        static void setLobbyBallCounter(MenuEntry* entry);
         static void toggleCameraShutter (MenuEntry* entry);
         static void writeShutterDisable(MenuEntry* entry);
         static void applyPretendoPatch(MenuEntry *entry);

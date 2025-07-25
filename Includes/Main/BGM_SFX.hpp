@@ -11,6 +11,7 @@ namespace CTRPluginFramework
     extern MenuEntry* voiceVol;
     extern MenuEntry* lowHPVol;
     extern MenuEntry* emoteVol;
+    extern MenuEntry* lobbyBallVol;
     extern MenuEntry* lobbyBallAuto;
 
     class BGM_SFX
@@ -22,6 +23,7 @@ namespace CTRPluginFramework
         static void lobbyBallSong(MenuEntry* entry);
         static void writeLobbyBallSel(MenuEntry* entry);
         static int selLobbyBallSong(void);
+        static void setLobbyBallCounter(MenuEntry *entry);
 
         static std::string getPercentAsStr(int selection);
         static int selVolPreset(void);
