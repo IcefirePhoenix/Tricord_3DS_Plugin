@@ -3,7 +3,7 @@
         {
             "name": "warp_note",
             "content": {
-                "intro": "Enables warping to any location -- not just individual levels. Doppels are automatically activated in areas where they might be required. Up to five of your most recent warps get saved to warp history.",
+                "intro": "Enables warping to any location -- not just individual levels. Doppels are automatically activated in areas where they might be required.",
                 "note": "If entering the Drablands, you can also choose to enable a challenge.",
                 "modeCompatibility": 0,
                 "clientOnly": false
@@ -39,8 +39,8 @@
         {
             "name": "rewarp_note",
             "content": {
-                "intro": "Returns you to one of the last locations you warped to, chosen from your warp history.",
-                "note": "Up to five locations can be saved to warp history.",
+                "intro": "Allows you to return to the last location you warped to.",
+                "note": "",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }
@@ -67,7 +67,7 @@
             "name": "inf_heart_note",
             "content": {
                 "intro": "Keeps your health fixed at the maximum number of heart containers.",
-                "note": "You still flinch from damage. You can still be defeated if your heart container maximum is 1.",
+                "note": "You still flinch from damage. Also, you can still be defeated if your heart container capacity is 1.",
                 "modeCompatibility": 2,
                 "clientOnly": false
             }
@@ -192,7 +192,7 @@
         {
             "name": "ascent_note",
             "content": {
-                "intro": "Adjusts the ascent strength for moon-jumping or flying.",
+                "intro": "Adjusts the ascent strength for moon jumping or flying.",
                 "note": "",
                 "modeCompatibility": 0,
                 "clientOnly": false
@@ -201,7 +201,7 @@
         {
             "name": "descent_note",
             "content": {
-                "intro": "Adjusts the descent strength for moon-jumping or flying.",
+                "intro": "Adjusts the descent strength for moon jumping or flying.",
                 "note": "",
                 "modeCompatibility": 0,
                 "clientOnly": false
@@ -210,7 +210,7 @@
         {
             "name": "lateral_note",
             "content": {
-                "intro": "Adjusts the lateral movement strength for moon-jumping or flying.",
+                "intro": "Adjusts the lateral movement strength for moon jumping or flying.",
                 "note": "",
                 "modeCompatibility": 0,
                 "clientOnly": false
@@ -256,7 +256,7 @@
             "name": "lobby_emote_note",
             "content": {
                 "intro": "Enables use of emotes that are not usually accessible in the multiplayer lobbies. Also restores functionality of an unused emote (yawning Link) and allows you to send blank emotes.",
-                "note": "Blank emotes can only be sent if NO other emotes have been used since creating/joining a lobby.",
+                "note": "Blank emotes can only be sent if NO other emotes have been used since creating/entering a lobby.",
                 "modeCompatibility": 4,
                 "clientOnly": false
             }
@@ -363,7 +363,7 @@
         {
             "name": "sword_model_note",
             "content": {
-                "intro": "Allows player sword models to be changed, regardless of current costume. DEVTODO: check below?",
+                "intro": "Allows player sword models to be changed, regardless of current costume.",
                 "note": "Overrides settings from cosmetic costumes.",
                 "modeCompatibility": 0,
                 "clientOnly": false
@@ -391,7 +391,7 @@
             "name": "ind_costume_effects_note",
             "content": {
                 "intro": "Set costume effects that apply only to this player. A loading zone may be required to fully disable effects.",
-                "note": "Not all costume effects in the game are able to be forced on for one player at a time.",
+                "note": "Not all costume effects in the game can be enabled for only one player at a time. These all-player effects can instead be found under \"All-Player Costume Effects\" below.",
                 "modeCompatibility": 3,
                 "clientOnly": false
             }
@@ -400,7 +400,7 @@
             "name": "allp_costume_effects_note",
             "content": {
                 "intro": "Set costume effects that apply to all three players at once. Some may require a loading zone to see full effects.",
-                "note": "For any costume effects you don't find here, look for them under the individual costume effects subfolders above.",
+                "note": "For any costume effects you don't find here, look for them under one of the \"Costume Effects - Player #\" subfolders above.",
                 "modeCompatibility": 3,
                 "clientOnly": false
             }
@@ -472,7 +472,7 @@
             "name": "dune_note",
             "content": {
                 "intro": "Allows you to stand still on quicksand without sinking.",
-                "note": "Does not some with the sand ripple effect.",
+                "note": "Does not come with the sand ripple visual effect.",
                 "modeCompatibility": 2,
                 "clientOnly": false
             }
@@ -570,7 +570,7 @@
         {
             "name": "boomeranger_note",
             "content": {
-                "intro": "The Boomerang is larger, can carry two players, deals damage and pierces enemies.",
+                "intro": "The Boomerang is larger, can carry two players, deals damage, and pierces enemies.",
                 "note": "",
                 "modeCompatibility": 2,
                 "clientOnly": false
@@ -615,7 +615,7 @@
         {
             "name": "goron_allp_note",
             "content": {
-                "intro": "Includes burn immunity, lava swimming, no damage from lava pillars, walking through fire curtains and picking up flaming rupees.",
+                "intro": "Includes burn immunity, lava swimming, no damage from lava pillars, walking through fire curtains, and picking up flaming rupees.",
                 "note": "",
                 "modeCompatibility": 2,
                 "clientOnly": false
@@ -633,7 +633,7 @@
         {
             "name": "linebeck_time_note",
             "content": {
-                "intro": "Grants +30 seconds at the start of a timed challenge, and grants 1.5x time for collected hourglasses.",
+                "intro": "Grants +30 seconds at the start of a timed challenge as well as 1.5x time for collected hourglasses.",
                 "note": "For viewing the contents of treasure chests, see the Rendering folder.",
                 "modeCompatibility": 2,
                 "clientOnly": false
@@ -732,8 +732,8 @@
         {
             "name": "button_spam_note",
             "content": {
-                "intro": "Allows you to spam buttons at specified time intervals by pressing and holding them.\n\nSpammable button list:\nA, B, X, Y, L, R, Start/Select\nSpamming speeds:\n10ms, 50ms, 100ms, 150ms",
-                "note": "",
+                "intro": "Allows you to spam buttons at specified time intervals by pressing and holding them.\n\nSpammable button list:\nA, B, X, Y, L, R\nSpamming speeds:\n10ms, 50ms, 100ms, 150ms",
+                "note": "L, R, and Y do not spam as quickly as A, B, and X and may even stall briefly. This is due to charge-up animation periods and system limitations. It's not possible to improve the performance of these buttons without using an entirely different implementation that would affect multiplayer compatibility.",
                 "modeCompatibility": 1,
                 "clientOnly": false
             }
@@ -750,7 +750,7 @@
         {
             "name": "set_spam_button_note",
             "content": {
-                "intro": "Allows you to choose the buttons to spam.\n\nSpammable button list: A, B, X, Y, L, R, Start/Select",
+                "intro": "Allows you to choose the buttons to spam.\n\nSpammable button list: A, B, X, Y, L, R",
                 "note": "",
                 "modeCompatibility": 1,
                 "clientOnly": false
@@ -795,7 +795,7 @@
         {
             "name": "instant_text_note",
             "content": {
-                "intro": "Forces text box strings to render instantly instead of per-word. DEVTODO: check below?",
+                "intro": "Forces text box strings to render instantly instead of per-word.",
                 "note": "",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -966,7 +966,7 @@
         {
             "name": "new_status_color_note",
             "content": {
-                "intro": "Enables usage of custom player name colors used in top-screen status messages. Accepts 6-digit hex color codes. Custom colors are preserved between reboots.",
+                "intro": "Enables usage of custom player name colors used in status messages. Accepts 6-digit hex color codes. Custom colors are preserved between reboots.",
                 "note": "Recommended for use with custom Link color modpacks.",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -984,7 +984,7 @@
         {
             "name": "disable_scroll_text_note",
             "content": {
-                "intro": "Prevents top-screen scrolling event messages from appearing.",
+                "intro": "Prevents status messages from appearing.",
                 "note": "",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -1155,8 +1155,8 @@
         {
             "name": "merchant_mat_note",
             "content": {
-                "intro": "Allows you to edit the materials sold by the Merchant (including story materials).",
-                "note": "",
+                "intro": "Allows you to edit the materials sold by the Merchant.",
+                "note": "Story materials and Freebies can be purchased using this entry.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }
@@ -1272,8 +1272,17 @@
         {
             "name": "speedrun_splits_note",
             "content": {
-                "intro": "Prevents splits from auto-hiding after 10 seconds.",
+                "intro": "Prevents splits from auto-hiding after some time has elasped. By default, this happens after 10 seconds. The auto-hide timer can be changed via \"Set display duration for splits\".",
                 "note": "Up to four splits can be displayed.",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "speedrun_splits_autohide_note",
+            "content": {
+                "intro": "Allows you to change the amount of time that splits are displayed on-screen. Available timer values are:\n- 2 seconds\n- 5 seconds\n- 10 seconds",
+                "note": "",
                 "modeCompatibility": 1,
                 "clientOnly": true
             }
