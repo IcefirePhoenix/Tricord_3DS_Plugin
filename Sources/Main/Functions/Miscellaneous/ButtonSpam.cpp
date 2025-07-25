@@ -12,22 +12,20 @@ namespace CTRPluginFramework
     // Allows press-hold button spamming for specific buttons at specified intervals
     void Miscellaneous::buttonSpammer(MenuEntry *entry)
     {
-        // documentation in spreadsheet; A B X Y L R Start/Sel Touch
-        u8 keyBits[] = {0x1, 0x2, 0x8, 0x10, 0x20, 0x40, 0x8, 0x80};
+        // documentation in spreadsheet; A B X Y L R
+        u8 keyBits[] = {0x1, 0x2, 0x8, 0x10, 0x20, 0x40};
         u8 ABXY_status, othersStatus, forceClearStatus = 0;
 
         if (entry->WasJustActivated())
             timer.Restart();
 
-        // timer update behavior...
         if (timer.HasTimePassed(Seconds(interval)))
         {
-            // get current button input statuses...
             Process::Read8(AddressList::getAddress("ABXY"), ABXY_status);
             Process::Read8(AddressList::getAddress("StartSelLRTouch"), othersStatus);
 
             // clear per-button status if spam enabled...
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 6; i++)
             {
                 if (Controller::IsKeyDown(keys[i]) && (spamHotkeys & (BIT(i))))
                 {
@@ -35,12 +33,14 @@ namespace CTRPluginFramework
                         ABXY_status &= ~keyBits[i];
                     else
                         othersStatus &= ~keyBits[i];
+
+                    if (i > 2)
+                        Controller::ClearKeys(); // to emulate button releases for L/R and Y
                 }
             }
 
-            // update with new statuses...
-            Process::Write8(AddressList::getAddress("ABXY"), forceClearStatus);
-            Process::Write8(AddressList::getAddress("StartSelLRTouch"), forceClearStatus);
+            Process::Write8(AddressList::getAddress("ABXY"), ABXY_status);
+            Process::Write8(AddressList::getAddress("StartSelLRTouch"), othersStatus);
             timer.Restart();
         }
     }
@@ -103,8 +103,6 @@ namespace CTRPluginFramework
             bottomScreenOptions.push_back(std::string(FONT_Y) << " " << (spamHotkeys & BUTTON_Y ? ENABLED_SLIDER : DISABLED_SLIDER));
             bottomScreenOptions.push_back(std::string(FONT_L) << " " << (spamHotkeys & BUTTON_L ? ENABLED_SLIDER : DISABLED_SLIDER));
             bottomScreenOptions.push_back(std::string(FONT_R) << " " << (spamHotkeys & BUTTON_R ? ENABLED_SLIDER : DISABLED_SLIDER));
-            bottomScreenOptions.push_back(std::string("Start/Select ") << (spamHotkeys & BUTTON_STARTSEL ? ENABLED_SLIDER : DISABLED_SLIDER));
-            bottomScreenOptions.push_back(std::string("Touchscreen ") << (spamHotkeys & BUTTON_TOUCH ? ENABLED_SLIDER : DISABLED_SLIDER));
 
             kbd.Populate(bottomScreenOptions);
 
@@ -130,12 +128,6 @@ namespace CTRPluginFramework
                     break;
                 case 6:
                     spamHotkeys ^= BUTTON_R;
-                    break;
-                case 7:
-                    spamHotkeys ^= BUTTON_STARTSEL;
-                    break;
-                case 8:
-                    spamHotkeys ^= BUTTON_TOUCH;
                     break;
                 default:
                     break;

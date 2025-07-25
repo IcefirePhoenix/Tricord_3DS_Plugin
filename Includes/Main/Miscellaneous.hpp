@@ -25,8 +25,6 @@ namespace CTRPluginFramework
     const u16 BUTTON_Y = BIT(3);
     const u16 BUTTON_L = BIT(4);
     const u16 BUTTON_R = BIT(5);
-    const u16 BUTTON_STARTSEL = BIT(6);
-    const u16 BUTTON_TOUCH = BIT(7);
 
     const Key keys[] =
     {
@@ -36,9 +34,6 @@ namespace CTRPluginFramework
         Key::Y,
         Key::L,
         Key::R,
-        Key::Start,
-        Key::Select,
-        Key::Touchpad
     };
 
     class Miscellaneous
