@@ -29,13 +29,12 @@ namespace CTRPluginFramework
             {
                 if (Controller::IsKeyDown(keys[i]) && (spamHotkeys & (BIT(i))))
                 {
+                    Controller::ClearKeys(); // to emulate button releases
+
                     if (i < 4)
                         ABXY_status &= ~keyBits[i];
                     else
                         othersStatus &= ~keyBits[i];
-
-                    if (i > 2)
-                        Controller::ClearKeys(); // to emulate button releases for L/R and Y
                 }
             }
 
