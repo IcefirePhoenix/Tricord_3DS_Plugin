@@ -23,8 +23,11 @@ namespace CTRPluginFramework
       Process::Read32(_memLocation + internalNameOffset, namePtr);
 
       _UNIQ = actorID;
-      _internalName = getInternalName(namePtr);
-      _genericName = getGenericName(_internalName);
+      _internalName = "";
+      _genericName = "";
+
+      // _internalName = getInternalName(namePtr);
+      // _genericName = getGenericName(_internalName);
 
       if (actorType > 5)
          _type = static_cast<ActorType>(ActorType::NONE);
@@ -74,7 +77,6 @@ namespace CTRPluginFramework
    // Sets the Actor's health -- applicable only to ENEMY types
    void Actor::setHealth(u32 HP)
    {
-      u32 healthOffset = 0x598;
       u32 currHealth;
 
       if (verifyValidity() && isType(ENEMY))
