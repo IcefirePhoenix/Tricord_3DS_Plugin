@@ -55,11 +55,10 @@ namespace CTRPluginFramework
             int j = 10 + i * 4;
             *(u32 *)(&hidSharedMem[j]) = 0x0;
 
-            // (unused for now, keeping for reference)
             // emulate button releases:
             // adding 2 to reach entry offset 0x8 (2 * sizeof(u32) = 0x8)
             // 0x00000FFF to set bits 0-11 (all input except GPIO inverted + C-Pad)
-            // *(u32 *)(&hidSharedMem[j + 2]) = 0x00000FFF;
+            *(u32 *)(&hidSharedMem[j + 2]) = 0x00000FFF;
         }
     }
 
