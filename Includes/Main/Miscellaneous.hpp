@@ -33,7 +33,7 @@ namespace CTRPluginFramework
         Key::X,
         Key::Y,
         Key::L,
-        Key::R,
+        Key::R
     };
 
     class Miscellaneous
