@@ -1,26 +1,56 @@
 #include "Helpers.hpp"
 #include "Cheats.hpp"
 #include "Main/Gameplay.hpp"
+#include "Main/Costume.hpp"
 
 namespace CTRPluginFramework
 {
+    /*
+    Dealing with conflicting entries:
+
+    - Costume/Costume Effects/Bonus Effects/Cheetah Costume - Set speed mult. -> Save and restore value
+    - Costume/Costume Effects/Bonus Effects/Toggle sword beam cooldown -> Disable beamCooldownAuto
+    - Gameplay/Set custom movement speed -> Save and restore value; upon Turbo Mode disable, if saved value == 1.0 ? disable fixSwordSuitDamageAuto : keep it enabled
+    - Gameplay/Energy/Set maximum energy -> Save and restore value
+    - Gameplay/Energy/Set energy consumption multiplier -> Save and restore value
+    - Gameplay/Energy/Set energy consumption by item / action -> Save and restore value of EnergyCostFireGlovesShield
+    - Items/Player Items/Set strafing speed -> Save and restore values
+    - Miscellaneous/Force instant text boxes -> Save and restore value
+
+    */
+
+    // Storage variables, initialized with default values
+    float cheetahSpeed = 1.5, normalSpeed = 1.0;
+    float energyMax = 600, energyCostMultiplier = 600, energyBarStretch = 1.0, energyCostFireGlovesShield = 0.75;
+    float bowStrafe = 1.0, fireGloveStrafe = 1.0, waterRodStrafe = 1.0, gustStrafe = 1.0, gripshotStrafe = 1.0, hammerStrafe = 1.0;
+    u8 textSpeed = 0x1;
+
     void TurboMode::enableTurboMode(MenuEntry* entry)
     {
         if (entry->WasJustActivated())
         {
-            /*
-            TODO
-            Check for any conflicting entries and if so, disable them
-            Conflicting entries:
-            - Speed multipliers
-            - Instant text
-            - No sword beam cooldown
-            - Energy maximum, consumption multiplier
-            */
+            // Deal with conflicting menu entries by storing values that may have been changed through other menu entries:
+            beamCooldownAuto->Disable();
+            Process::ReadFloat(AddressList::getAddress("SpeedMultiplierCheetah"), cheetahSpeed);
+            Process::ReadFloat(AddressList::getAddress("SpeedMultiplierNormal"), normalSpeed);
+            Process::ReadFloat(AddressList::getAddress("EnergyMax"), energyMax);
+            Process::ReadFloat(AddressList::getAddress("EnergyMaxMultiplicand"), energyCostMultiplier);
+            Process::ReadFloat(AddressList::getAddress("EnergyBarStretch"), energyBarStretch);
+            Process::ReadFloat(AddressList::getAddress("EnergyCostFireGlovesShield"), energyCostFireGlovesShield);
+            Process::ReadFloat(AddressList::getAddress("BowStrafe"), bowStrafe);
+            Process::ReadFloat(AddressList::getAddress("FireGloveStrafe"), fireGloveStrafe);
+            Process::ReadFloat(AddressList::getAddress("WaterRodStrafe"), waterRodStrafe);
+            Process::ReadFloat(AddressList::getAddress("GustStrafe"), gustStrafe);
+            Process::ReadFloat(AddressList::getAddress("GripshotStrafe"), gripshotStrafe);
+            Process::ReadFloat(AddressList::getAddress("HammerStrafe"), hammerStrafe);
+            Process::Read8(AddressList::getAddress("TextBoxSpeed"), textSpeed);
 
             // Write Turbo Mode values to all addresses
+
+            // TODO: Consider updating to 360-degree dash tech
             Process::Write8(AddressList::getAddress("DashTimerNormal"), 0x00);
             Process::Write8(AddressList::getAddress("DashTimerNinja"), 0x00);
+
             Process::Write8(AddressList::getAddress("SwordBeamCDExe"), 0x00);
             Process::WriteFloat(AddressList::getAddress("HammerwearSpeed"), 5);
             Process::WriteFloat(AddressList::getAddress("SL_SwordSpeed"), 5);
@@ -193,9 +223,27 @@ namespace CTRPluginFramework
         }
         else if (!entry->IsActivated())
         {
-            // Restore default values to all addresses
+            // Restore saved values to conflicting addresses
+            Process::Write8(AddressList::getAddress("TextBoxSpeed"), textSpeed);
+            Process::WriteFloat(AddressList::getAddress("EnergyMax"), energyMax);
+            Process::WriteFloat(AddressList::getAddress("EnergyMaxMultiplicand"), energyCostMultiplier);
+            Process::WriteFloat(AddressList::getAddress("EnergyBarStretch"), energyBarStretch);
+            Process::WriteFloat(AddressList::getAddress("SpeedMultiplierNormal"), normalSpeed);
+            Process::WriteFloat(AddressList::getAddress("SpeedMultiplierCheetah"), cheetahSpeed);
+            Process::WriteFloat(AddressList::getAddress("BowStrafe"), bowStrafe);
+            Process::WriteFloat(AddressList::getAddress("FireGloveStrafe"), fireGloveStrafe);
+            Process::WriteFloat(AddressList::getAddress("WaterRodStrafe"), waterRodStrafe);
+            Process::WriteFloat(AddressList::getAddress("GustStrafe"), gustStrafe);
+            Process::WriteFloat(AddressList::getAddress("GripshotStrafe"), gripshotStrafe);
+            Process::WriteFloat(AddressList::getAddress("HammerStrafe"), hammerStrafe);
+            Process::WriteFloat(AddressList::getAddress("EnergyCostFireGlovesShield"), energyCostFireGlovesShield);
+
+            // Restore default values to all other addresses
+
+            // TODO: Consider updating to 360-degree dash tech
             Process::Write8(AddressList::getAddress("DashTimerNormal"), 0x1E);
             Process::Write8(AddressList::getAddress("DashTimerNinja"), 0x05);
+
             Process::Write8(AddressList::getAddress("SwordBeamCDExe"), 0x1E);
             Process::WriteFloat(AddressList::getAddress("HammerwearSpeed"), 2);
             Process::WriteFloat(AddressList::getAddress("SL_SwordSpeed"), 1);
@@ -207,12 +255,6 @@ namespace CTRPluginFramework
             Process::WriteFloat(AddressList::getAddress("LiveMsgSpeed"), 800);
             Process::WriteFloat(AddressList::getAddress("SwordBeamSpeed"), 0.45);
             Process::WriteFloat(AddressList::getAddress("BGMSFXSpeed"), 1);
-            Process::Write8(AddressList::getAddress("TextBoxSpeed"), 0x01);
-            Process::WriteFloat(AddressList::getAddress("EnergyMax"), 600);
-            Process::WriteFloat(AddressList::getAddress("EnergyMaxMultiplicand"), 600);
-            Process::WriteFloat(AddressList::getAddress("EnergyBarStretch"), 1);
-            Process::WriteFloat(AddressList::getAddress("SpeedMultiplierNormal"), 1);
-            Process::WriteFloat(AddressList::getAddress("SpeedMultiplierCheetah"), 1.5);
             Process::WriteFloat(AddressList::getAddress("DashStaggerSpeed"), 0.8);
             Process::WriteFloat(AddressList::getAddress("DashSpeed"), 0.125);
             Process::WriteFloat(AddressList::getAddress("DashBrakeDuration"), 0.14);
@@ -227,25 +269,19 @@ namespace CTRPluginFramework
             Process::WriteFloat(AddressList::getAddress("SwimBoostSpeedNormal"), 1);
             Process::WriteFloat(AddressList::getAddress("SwimTurnaroundSpeed"), 0.06);
             Process::WriteFloat(AddressList::getAddress("SwimSpeed"), 0.075);
-            Process::WriteFloat(AddressList::getAddress("BowStrafe"), 1);
             Process::WriteFloat(AddressList::getAddress("ArrowSpeedPlayer"), 0.3);
             Process::WriteFloat(AddressList::getAddress("FireballHeight"), 0.225);
             Process::WriteFloat(AddressList::getAddress("FireballSpeed"), 0.15);
             Process::WriteFloat(AddressList::getAddress("FireballBounceHeight"), 0.36);
             Process::WriteFloat(AddressList::getAddress("FireballThrowHeight"), -0.025);
             Process::WriteFloat(AddressList::getAddress("FireballReleaseTime"), 10);
-            Process::WriteFloat(AddressList::getAddress("FireGloveStrafe"), 1);
             Process::WriteFloat(AddressList::getAddress("BoomerangReturnSpeed"), 0.3);
             Process::WriteFloat(AddressList::getAddress("BoomerangDistance"), 0.1);
             Process::WriteFloat(AddressList::getAddress("BoomerangSpeed"), 0.3);
-            Process::WriteFloat(AddressList::getAddress("WaterRodStrafe"), 1);
             Process::WriteFloat(AddressList::getAddress("GustSpeed"), 0.3);
-            Process::WriteFloat(AddressList::getAddress("GustStrafe"), 1);
+            
             Process::WriteFloat(AddressList::getAddress("GripshotRetractSpeed"), 8);
             Process::WriteFloat(AddressList::getAddress("GripshotExtendSpeed"), 0.55);
-            Process::WriteFloat(AddressList::getAddress("GripshotStrafe"), 1);
-            Process::WriteFloat(AddressList::getAddress("HammerStrafe"), 1);
-            Process::WriteFloat(AddressList::getAddress("EnergyCostFireGlovesShield"), 0.75);
 
             // Animation Speeds
             Process::WriteFloat(AddressList::getAddress("Link_Wait"), 1);
@@ -361,10 +397,14 @@ namespace CTRPluginFramework
             Process::WriteFloat(AddressList::getAddress("Link_WaitPinch"), 1);
 
             // Restore normal functionality of speed/damage value application
-            Process::Write8(AddressList::getAddress("SwordDamageBoostA"), 0x1B);
-            Process::Write8(AddressList::getAddress("SpeedDamageUndoA"), 0x1B);
-            Process::Write8(AddressList::getAddress("SpeedDamageUndoB"), 0x1B);
-            fixSwordSuitDamageAuto->Disable();
+            // This condition should work because 1.0 is a float value with two-way conversion accuracy
+            if (normalSpeed == 1.0)
+            {
+                Process::Write8(AddressList::getAddress("SwordDamageBoostA"), 0x1B);
+                Process::Write8(AddressList::getAddress("SpeedDamageUndoA"), 0x1B);
+                Process::Write8(AddressList::getAddress("SpeedDamageUndoB"), 0x1B);
+                fixSwordSuitDamageAuto->Disable();
+            }
         }
     }
 }
