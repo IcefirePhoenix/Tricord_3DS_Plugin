@@ -31,9 +31,30 @@ namespace CTRPluginFramework
         }
     }
 
+    // Toggles the boss intro cutscene
+    void toggleEnemyIntro(bool skipIntro)
+    {
+        Process::Patch(AddressList::getAddress("BossIntroCutsceneInit"), skipIntro ? 0xEA000000 : 0x0A0000056);
+        Process::Patch(AddressList::getAddress("BossIntroCameraInit"), skipIntro ? 0xEA000000 : 0x0A0000053);
+        Process::Patch(AddressList::getAddress("BossIntroBGMInit"), skipIntro ? 0xEA000007 : 0x0A000007);
+    }
+
     // Toggles the boss defeat sequence by force-setting its status flag
+    // When Margoma and Arrghus are defeated early, some stage progression flags aren't triggered; handle manually
     void setBossDefeatFlag(bool defeat)
     {
+        u8 levelID = Level::getCurrLevel();
+        if (levelID == Level::levelIDFromName("Forest Temple") || levelID == Level::levelIDFromName("Water Temple"))
+        {
+            if (defeat)
+            {
+                toggleEnemyIntro(true);
+                setAllProgressionFlags(); // to open stone gate + lower water level, respectively
+            }
+            else
+                toggleEnemyIntro(false);
+        }
+
         Process::Write32(AddressList::getAddress("BossDefeatFlagSet"), defeat ? 0xC3A00001 : 0xC3A00000);
         bossCooldownTimer.Restart();
     }
