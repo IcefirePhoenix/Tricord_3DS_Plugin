@@ -129,8 +129,8 @@
         {
             "name": "instakill_note",
             "content": {
-                "intro": " Instantly defeats all currently spawned enemies when hotkeys are pressed. Modeled after a debug feature found in the EU DLP Debug Build.",
-                "note": "",
+                "intro": "Instantly defeats all currently spawned enemies when hotkeys are pressed. Modeled after a debug feature found in the EU DLP Debug Build.\n\nWhen using in The Lady's Lair or Sky Temple, please wait until the current phase has finished loading in before using to avoid softlocks.",
+                "note": "Note: This entry applies to all enemies in a stage, sometimes including ones that haven't yet spawned. In stages with multiple enemy waves, this entry can sometimes also eliminate future waves in advance. Some exceptions may apply; please see the Wiki for details.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }
@@ -138,8 +138,8 @@
         {
             "name": "invinci_note",
             "content": {
-                "intro": "Grants infinite health to all currently spawned enemies when hotkeys are pressed.",
-                "note": "Ideal for practicing enemy-fighting strategies.",
+                "intro": "Grants infinite health to all currently spawned enemies when hotkeys are pressed. Ideal for practicing enemy-fighting strategies.\n\nBosses/minibosses are not officially supported; this entry may or may not work when used on them.",
+                "note": "This entry may sometimes need to be reapplied if new enemies have spawned recently. Some exceptions may also apply; please see the Wiki for details.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }

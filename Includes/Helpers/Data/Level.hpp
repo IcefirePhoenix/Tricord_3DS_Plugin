@@ -63,6 +63,7 @@ namespace CTRPluginFramework
 		static void setCurrChal(u8 chalID);
 
 		static bool isInDrablands(u8 optionalLevel = 0x0);
+		static bool isInBossLevel(u8 optionalLevel = 0x0);
 		static bool isInDoT(bool includeWarpRoom, u8 optionalLevel = 0x0);
 		static bool hasStageBegan(void);
 		static bool hasCertainTimeElapsed(int time);

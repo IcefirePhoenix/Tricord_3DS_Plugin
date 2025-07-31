@@ -1249,6 +1249,22 @@
             }
         },
         {
+            "name": "BossDefeatFlagSet",
+            "regionAddrs": {
+                "usaAddress": "0x00601800",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "BossDataPointer",
+            "regionAddrs": {
+                "usaAddress": "0x3282C92C",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
             "name": "HealthCurrent",
             "regionAddrs": {
                 "usaAddress": "0x32C824F4",

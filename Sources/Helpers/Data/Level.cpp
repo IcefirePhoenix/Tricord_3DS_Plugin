@@ -414,6 +414,23 @@ namespace CTRPluginFramework
 		return (level >= levelIDFromName("Deku Forest")) && (level <= levelIDFromName("Baneful Zone"));
 	}
 
+    // Checks if the current location belongs to a boss level
+    bool Level::isInBossLevel(u8 optionalLevel)
+    {
+        u8 level = optionalLevel == 0x0 ? getCurrLevel() : optionalLevel;
+
+        if (level == levelIDFromName("Baneful Zone"))
+            return true;
+        else if (level < levelIDFromName("Buzz Blob Cave") || level > levelIDFromName("Sky Temple"))
+            return false;
+
+        // Every world's miniboss/boss is 10 levelIDs away from the next world's
+        // Miniboss levelIDs end with 1; boss levelIDs end with 3
+        u8 tensDigit = level / 10;
+        u8 onesDigit = level % 10;
+        return (tensDigit >= 1 && tensDigit <= 8) && (onesDigit == 1 || onesDigit == 3);
+    }
+
     // Checks if the current location belongs to DoT
     bool Level::isInDoT(bool includeWarpRoom, u8 optionalLevel)
     {
