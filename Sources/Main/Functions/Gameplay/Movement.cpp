@@ -23,7 +23,7 @@ namespace CTRPluginFramework
             Keyboard editSpeed("Movement Speed Setter", speedIntro);
             editSpeed.IsHexadecimal(false);
 
-            if (editSpeed.Open(newSpeed, 0.095) == 0)
+            if (editSpeed.Open(newSpeed, defaultSpeed) == 0)
             {
                 entry->SetName("Disable custom movement speed edits");
                 Process::WriteFloat(AddressList::getAddress("SpeedMultiplierNormal"), newSpeed);
