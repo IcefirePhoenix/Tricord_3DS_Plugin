@@ -6,6 +6,7 @@
 
 namespace CTRPluginFramework
 {
+    MenuEntry *challengeEditAuto;
     MenuEntry *doppelEnableAuto;
     MenuEntry *reWarp;
     MenuEntry *bookmark1;

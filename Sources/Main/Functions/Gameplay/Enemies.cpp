@@ -34,8 +34,8 @@ namespace CTRPluginFramework
     // Toggles the boss intro cutscene
     void toggleEnemyIntro(bool skipIntro)
     {
-        Process::Patch(AddressList::getAddress("BossIntroCutsceneInit"), skipIntro ? 0xEA000000 : 0x0A0000056);
-        Process::Patch(AddressList::getAddress("BossIntroCameraInit"), skipIntro ? 0xEA000000 : 0x0A0000053);
+        Process::Patch(AddressList::getAddress("BossIntroCutsceneInit"), skipIntro ? 0xEA000000 : 0x0A000056);
+        Process::Patch(AddressList::getAddress("BossIntroCameraInit"), skipIntro ? 0xEA000000 : 0x0A000053);
         Process::Patch(AddressList::getAddress("BossIntroBGMInit"), skipIntro ? 0xEA000007 : 0x0A000007);
     }
 
