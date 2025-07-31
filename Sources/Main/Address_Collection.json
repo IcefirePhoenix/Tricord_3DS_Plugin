@@ -1265,6 +1265,38 @@
             }
         },
         {
+            "name": "BossIntroCutsceneInit",
+            "regionAddrs": {
+                "usaAddress": "0x001CAD9C",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "BossIntroCameraInit",
+            "regionAddrs": {
+                "usaAddress": "0x001CADA8",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "BossIntroBGMInit",
+            "regionAddrs": {
+                "usaAddress": "0x00587250",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "StageProgressionFlags",
+            "regionAddrs": {
+                "usaAddress": "0x32D73214",
+                "eurAddress": "0x32D73294",
+                "jpnAddress": "0x32DC5A38"
+            }
+        },
+        {
             "name": "HealthCurrent",
             "regionAddrs": {
                 "usaAddress": "0x32C824F4",
