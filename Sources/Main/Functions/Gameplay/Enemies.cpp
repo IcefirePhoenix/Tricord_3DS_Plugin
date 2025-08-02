@@ -9,13 +9,15 @@ namespace CTRPluginFramework
     Clock execCooldownTimer;
     Clock bossCooldownTimer;
 
+    bool pauseReset;
+
     /* ------------------ */
 
     // Freezes enemies' HP values or sets them to zero
     void manageEnemy(bool keepAlive)
     {
         u32 healthEdit = keepAlive ? 0x7FFFFFFF : 0x0;
-        std::map<int, Actor> currActors = MapActorMngr::retrieveActorList();
+        std::multimap<int, Actor> currActors = MapActorMngr::retrieveActorList();
 
         if ((Freecam::getCameraType() > CameraMode::DYNAMIC))
             return;
@@ -25,7 +27,7 @@ namespace CTRPluginFramework
             for (auto &mapEntry : currActors)
             {
                 auto &actorInstance = mapEntry.second;
-                if (actorInstance.isType(ActorType::ENEMY))
+                if (actorInstance.isType(ActorType::ENEMY) || actorInstance.isType(ActorType::SPECIAL))
                     actorInstance.setHealth(healthEdit);
             }
         }
@@ -37,6 +39,9 @@ namespace CTRPluginFramework
         Process::Patch(AddressList::getAddress("BossIntroCutsceneInit"), skipIntro ? 0xEA000000 : 0x0A000056);
         Process::Patch(AddressList::getAddress("BossIntroCameraInit"), skipIntro ? 0xEA000000 : 0x0A000053);
         Process::Patch(AddressList::getAddress("BossIntroBGMInit"), skipIntro ? 0xEA000007 : 0x0A000007);
+
+        if (!skipIntro)
+            pauseReset = true;
     }
 
     // Toggles the boss defeat sequence by force-setting its status flag
@@ -46,17 +51,17 @@ namespace CTRPluginFramework
         u8 levelID = Level::getCurrLevel();
         if (levelID == Level::levelIDFromName("Forest Temple") || levelID == Level::levelIDFromName("Water Temple"))
         {
-            if (defeat)
+            if (defeat) // timer-dependent
             {
                 toggleEnemyIntro(true);
-                setAllProgressionFlags(); // to open stone gate + lower water level, respectively
+                setSpecificProgressionFlags(0x3); // catch-all to open stone gate + lower water level
+                bossCooldownTimer.Restart();
+                pauseReset = false;
             }
             else
                 toggleEnemyIntro(false);
         }
-
         Process::Write32(AddressList::getAddress("BossDefeatFlagSet"), defeat ? 0xC3A00001 : 0xC3A00000);
-        bossCooldownTimer.Restart();
     }
 
     // Sets the boss defeat flag; any fights with multiple phases are handled a bit differently to prevent softlocks
@@ -114,10 +119,7 @@ namespace CTRPluginFramework
     void Gameplay::autoKillEnemy(MenuEntry *entry)
     {
         if (entry->WasJustActivated())
-        {
             execCooldownTimer.Restart();
-            bossCooldownTimer.Restart();
-        }
 
         if (execCooldownTimer.HasTimePassed(Milliseconds(500)) && entry->Hotkeys[0].IsPressed())
         {
@@ -129,9 +131,10 @@ namespace CTRPluginFramework
                     tryKillBosses();
             }
             execCooldownTimer.Restart();
+            bossCooldownTimer.Restart();
         }
 
-        if (bossCooldownTimer.HasTimePassed(Milliseconds(100)))
+        if ((bossCooldownTimer.HasTimePassed(Milliseconds(100)) && !pauseReset) || GeneralHelpers::isLoadingScreen(true))
             setBossDefeatFlag(false);
     }
 
