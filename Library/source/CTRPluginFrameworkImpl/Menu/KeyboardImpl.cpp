@@ -962,7 +962,7 @@ namespace CTRPluginFramework
         if (_displayScrollbar)
         {
             if (!_manualScrollUpdate)
-                _scrollSize = (_inertialVelocity * INERTIA_SCROLL_FACTOR * delta);
+                _scrollSize = (-_inertialVelocity * INERTIA_SCROLL_FACTOR * delta);
 
             _manualScrollUpdate = false;
 
