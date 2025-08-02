@@ -17,4 +17,10 @@ namespace CTRPluginFramework
     {
         Process::Write64(AddressList::getAddress("StageProgressionFlags"), UINT64_MAX);
     }
+
+    // Sets the status of certain progression flags in the current area
+    void setSpecificProgressionFlags(u64 flags)
+    {
+        Process::Write64(AddressList::getAddress("StageProgressionFlags"), flags);
+    }
 }

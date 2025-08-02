@@ -2,12 +2,12 @@
 
 namespace CTRPluginFramework
 {
-    std::map<int, Actor> actorList;
+    std::multimap<int, Actor> actorList;
 
     /* ------------------ */
 
     // Retrieves a list of all Actors in the current area
-    std::map<int, Actor> MapActorMngr::retrieveActorList(void)
+    std::multimap<int, Actor> MapActorMngr::retrieveActorList(void)
     {
         u32 currActorPtr;
 
