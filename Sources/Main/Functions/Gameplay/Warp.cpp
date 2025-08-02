@@ -17,7 +17,7 @@ namespace CTRPluginFramework
     MenuEntry *bookmarkEntries[3];
 
     bool firstWarp = true;
-    int warpData[3] = {-1, -1, -1};
+    int warpData[2] = {-1, -1};
 
     /* ------------------ */
 
@@ -180,7 +180,6 @@ namespace CTRPluginFramework
         // save this warp's data for future re-warps...
         warpData[0] = targetLevelID;
         warpData[1] = targetStage;
-        warpData[2] = targetChallenge;
 
         reWarp->SetName("Return to last warp: " + retrieveNonStageName(targetLevelID, targetStage, levelName));
 
@@ -216,6 +215,9 @@ namespace CTRPluginFramework
                     return;
 
                 startWarp();
+
+                Level::setCurrChal(challenge);
+                challengeEditAuto->Enable();
             }
         }
         else
@@ -246,10 +248,12 @@ namespace CTRPluginFramework
             }
             startWarp();
 
+            Level::setCurrChal(challenge);
+            challengeEditAuto->Enable();
+
             // save this warp's data for future re-warps...
             warpData[0] = levelID;
             warpData[1] = stageID;
-            warpData[2] = challenge;
 
             // update rewarp; isolate location name from this entry...
             int pos = entry->Name().find(':');
