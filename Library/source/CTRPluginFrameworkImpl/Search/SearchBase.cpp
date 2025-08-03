@@ -31,15 +31,15 @@ namespace CTRPluginFramework
         _header({0}),
         _previous(previous)
     {
-        // Create files's path
-        std::string path = "Search/";
-        Process::GetTitleID(path);
+        if (!Directory::IsExists("/Tricord/Search/"))
+            Directory::Create("/Tricord/Search/");
 
+        std::string path = "Search/" + Process::GetRegionCode() + "/";
         path += std::string("-Step") + std::to_string(Step) + ".bin";
 
         // Open current directory
         Directory dir;
-        if (Directory::Open(dir, "Search", true) == 0)
+        if (Directory::Open(dir, "Search/" + Process::GetRegionCode(), true) == 0)
         {
             // Open file
             int res = File::Open(_file, path, File::READ | File::WRITE | File::CREATE | File::TRUNCATE);
@@ -74,12 +74,14 @@ namespace CTRPluginFramework
         _header({ 0 }),
         _previous(previous)
     {
-        // Create files's path
-        std::string path = "Search/" + filename;
+        if (!Directory::IsExists("/Tricord/Search/"))
+            Directory::Create("/Tricord/Search/");
+
+        std::string path = "Search/" + Process::GetRegionCode() + "/" + filename;
 
         // Open current directory
         Directory dir;
-        if (Directory::Open(dir, "Search", true) == 0)
+        if (Directory::Open(dir, "Search/" + Process::GetRegionCode(), true) == 0)
         {
             // Open file
             int res = File::Open(_file, path, File::READ);

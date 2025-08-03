@@ -36,6 +36,8 @@ namespace CTRPluginFramework
     void writePhysicsChanges(int player);
     float setHeightAdjustmentSpeed(float originalSpeed);
 
+    void setAllProgressionFlags(void);
+    void setSpecificProgressionFlags(u64 flags);
     void manageEnemy(bool keepAlive);
     void startWarp(void);
 

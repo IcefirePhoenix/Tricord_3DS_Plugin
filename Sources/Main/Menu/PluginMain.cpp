@@ -79,6 +79,12 @@ namespace CTRPluginFramework
         Gameplay::restoreBookmarks();
     }
 
+    void RetrieveAddressArrays(void)
+    {
+        Item::initItemAddresses();
+        Emotes::initEmoteAddresses();
+    }
+
     void InitSequence(FwkSettings &settings)
     {
         AddressList::InitMemoryRange();
@@ -90,6 +96,8 @@ namespace CTRPluginFramework
 
         PatchProcess();
         ToggleTouchscreenForceOn();
+
+        RetrieveAddressArrays();
 
         //autoBeamCooldown->Enable(); // why is this enabled here?
     }

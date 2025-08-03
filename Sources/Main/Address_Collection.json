@@ -1077,7 +1077,7 @@
             "regionAddrs": {
                 "usaAddress": "0x31A0110C",
                 "eurAddress": "0x31A01164",
-                "jpnAddress": "0x31A00E54"
+                "jpnAddress": "0x31A00E58"
             }
         },
         {
@@ -1085,7 +1085,7 @@
             "regionAddrs": {
                 "usaAddress": "0x31A0110D",
                 "eurAddress": "0x31A01165",
-                "jpnAddress": "0x31A00E55"
+                "jpnAddress": "0x31A00E59"
             }
         },
         {
@@ -1093,7 +1093,7 @@
             "regionAddrs": {
                 "usaAddress": "0x31A0110E",
                 "eurAddress": "0x31A01166",
-                "jpnAddress": "0x31A00E56"
+                "jpnAddress": "0x31A00E5A"
             }
         },
         {
@@ -1101,7 +1101,7 @@
             "regionAddrs": {
                 "usaAddress": "0x31A01118",
                 "eurAddress": "0x31A01170",
-                "jpnAddress": "0x31A00E60"
+                "jpnAddress": "0x31A00E64"
             }
         },
         {
@@ -1109,7 +1109,7 @@
             "regionAddrs": {
                 "usaAddress": "0x31A0111C",
                 "eurAddress": "0x31A01174",
-                "jpnAddress": "0x31A00E64"
+                "jpnAddress": "0x31A00E68"
             }
         },
         {
@@ -1246,6 +1246,54 @@
                 "usaAddress": "0x32989188",
                 "eurAddress": "0x32989208",
                 "jpnAddress": "0x329D3BC8"
+            }
+        },
+        {
+            "name": "BossDefeatFlagSet",
+            "regionAddrs": {
+                "usaAddress": "0x00601800",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "BossDataPointer",
+            "regionAddrs": {
+                "usaAddress": "0x3282C92C",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "BossIntroCutsceneInit",
+            "regionAddrs": {
+                "usaAddress": "0x001CAD9C",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "BossIntroCameraInit",
+            "regionAddrs": {
+                "usaAddress": "0x001CADA8",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "BossIntroBGMInit",
+            "regionAddrs": {
+                "usaAddress": "0x00587250",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "StageProgressionFlags",
+            "regionAddrs": {
+                "usaAddress": "0x32D73214",
+                "eurAddress": "0x32D73294",
+                "jpnAddress": "0x32DC5A38"
             }
         },
         {
@@ -1529,6 +1577,22 @@
             }
         },
         {
+            "name": "FinalDestinationLevelID",
+            "regionAddrs": {
+                "usaAddress": "0x3280EDCC",
+                "eurAddress": "0x3280EE4C",
+                "jpnAddress": "0x3285980C"
+            }
+        },
+        {
+            "name": "FinalDestinationStageID",
+            "regionAddrs": {
+                "usaAddress": "0x3280EDD0",
+                "eurAddress": "0x3280EE50",
+                "jpnAddress": "0x32859810"
+            }
+        },
+        {
             "name": "Warp",
             "regionAddrs": {
                 "usaAddress": "0x3282C4EC",
@@ -1766,6 +1830,14 @@
                 "usaAddress": "0x32841A20",
                 "eurAddress": "0x32841AA0",
                 "jpnAddress": "0x3288C460"
+            }
+        },
+        {
+            "name": "IsInvincible",
+            "regionAddrs": {
+                "usaAddress": "0x32849544",
+                "eurAddress": "0x328495C4",
+                "jpnAddress": "0x32893F84"
             }
         },
         {
@@ -2241,11 +2313,19 @@
             }
         },
         {
-            "name": "ResetMerchantStock",
+            "name": "RestockMerchant",
             "regionAddrs": {
                 "usaAddress": "0x31A077AE",
                 "eurAddress": "0x31A07806",
                 "jpnAddress": "0x31A074FA"
+            }
+        },
+        {
+            "name": "ResetMerchant",
+            "regionAddrs": {
+                "usaAddress": "0x31A0779C",
+                "eurAddress": "0x31A077F4",
+                "jpnAddress": "0x31A074E8"
             }
         },
         {
@@ -2472,7 +2552,7 @@
                 "jpnAddress": "0x32893FAC"
             }
         },
-        
+
         {
             "name": "SpeedMultiplierNormal",
             "regionAddrs": {

@@ -10,7 +10,7 @@ namespace CTRPluginFramework
     extern MenuEntry* editFreecamSen;
     extern MenuEntry* swapZoom;
 
-    enum cameraMode
+    enum class CameraMode
     {
         GAMEPLAY,
         DYNAMIC,
@@ -18,7 +18,7 @@ namespace CTRPluginFramework
         CAM_ANIMATION
     };
 
-    bool setCameraType(cameraMode mode);
+    bool setCameraType(CameraMode mode);
     void shiftCamZ(bool south);
     void shiftCamX(bool west);
     void adjustCamZoom(bool zoomIn);
@@ -38,6 +38,7 @@ namespace CTRPluginFramework
         static void editHotkeys(MenuEntry* entry);
         static void editSensitivity(MenuEntry* entry);
         static void setZoomType(MenuEntry* entry);
+        static CameraMode getCameraType(void);
     };
 }
 #endif

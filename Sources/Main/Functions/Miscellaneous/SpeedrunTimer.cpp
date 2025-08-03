@@ -1,43 +1,38 @@
 #include "Helpers.hpp"
 #include "Cheats.hpp"
 
+#define MAX_SPLITS 4
 namespace CTRPluginFramework
 {
-    Clock speedTimer;
+    Clock speedTimer, splitTimer, autoSplitCooldown;
     Time pauseStartTime, pauseStartTimeRelative, pauseEndTime, accumulatedPauseDuration = Time::Zero;
 
-    Clock splitTimer;
-    Time split;
+    int xCoord = 5, yCoord = 225, pauseEventID = -1;
+    bool isRunning, alwaysShowSplits, autoSplit, autoRestart;
+    bool autoTimerEvents[6] = {};
 
-    Screen screen = OSD::GetTopScreen();
-    int xCoord = 5, yCoord = 225;
+    std::deque<Time> splits;
 
-    bool running = true, showSplit = false;
-    bool autoTimerEvents[5] = {false, false, false, false, false};
-    bool autoRestart = false;
-    int pauseEventID = -1;
     const StringVector timerEvents =
     {
         "Pause timer during cutscenes",
         "Pause timer during loading screens",
-        "Pause timer in treasure rooms",
+        "End timer upon entering treasure room",
         "Pause timer while game is paused",
         "Restart timer upon entering a new level",
+        "Auto-split upon entering a new area",
         "Run timer during cutscenes",
         "Run timer during loading screens",
-        "Run timer in treasure rooms",
+        "Don't end timer in treasure rooms",
         "Run timer while game is paused",
-        "Continue timer upon entering a new level"
+        "Continue timer upon entering a new level",
+        "Don't auto-split when entering a new area"
     };
-
-    u8 prevLvl = 0;
-
-    // Implement pause and resume functions
 
     // Stop updating time and store time at which timer was paused
     void pause(int eventID)
     {
-        running = false;
+        isRunning = false;
         pauseStartTime = speedTimer.GetElapsedTime();
         pauseStartTimeRelative = pauseStartTime - accumulatedPauseDuration;
         pauseEventID = eventID;
@@ -48,10 +43,20 @@ namespace CTRPluginFramework
     {
         pauseEndTime = speedTimer.GetElapsedTime();
         accumulatedPauseDuration += (pauseEndTime - pauseStartTime);
-        running = true;
+        isRunning = true;
     }
 
-    void displayTime(Time time, int x, int y)
+    void reset(void)
+    {
+        pauseStartTime = Time::Zero;
+        pauseStartTimeRelative = Time::Zero;
+        accumulatedPauseDuration = Time::Zero;
+        autoRestart = false;
+        speedTimer.Restart();
+        splits.clear();
+    }
+
+    void displayTime(Time time, int x, int y, bool isSplit)
     {
         int secondsRaw = (int)time.AsSeconds();
         int hours = secondsRaw / 3600;
@@ -59,107 +64,136 @@ namespace CTRPluginFramework
         int seconds = secondsRaw - hours*3600 - minutes*60;
         int milliseconds = time.AsMilliseconds() - hours*3600000 - minutes*60000 - seconds*1000;
         char timeStr[13];
+
         sprintf(timeStr, "%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
-        screen.Draw(timeStr, x, y, Color::White, Color(0,0,0,0));
+        Renderer::SetTarget(TOP);
+        Renderer::DrawString(timeStr, x, y, isSplit ? Color::Gray : Color::White, Color::Black);
+    }
+
+    void displaySplits(void)
+    {
+        if (splits.empty())
+            return;
+
+        if (!splitTimer.HasTimePassed(Seconds(10)) || alwaysShowSplits)
+        {
+            for (int rendered = 0; rendered < splits.size(); rendered++)
+            {
+                // Each split is positioned 15 pixels apart
+                int yDist = 15 * (rendered + 1);
+                displayTime(splits[splits.size() - rendered - 1], xCoord, yCoord - yDist, true);
+            }
+        }
     }
 
     void Miscellaneous::speedrunTimer(MenuEntry* entry)
     {
-        // Restart conditions
-        if (Level::getElapsedTime() == 105)
-            prevLvl = Level::getCurrLevel(); // Always store level as "previous" after each loading zone
-
-        if (autoTimerEvents[4] && GeneralHelpers::isLoadingScreen(false))
-            autoRestart = Level::getCurrLevel() != prevLvl; // Check current (new) level against stored "previous" level
-
-        if (entry->WasJustActivated() || entry->Hotkeys[1].IsPressed() || (autoRestart && Level::getElapsedTime() == (Level::getCurrLevel() < 4 ? 31 : 101)))
+        // Init cooldown timer
+        if (entry->WasJustActivated())
         {
-            speedTimer.Restart();
-            accumulatedPauseDuration = Time::Zero;
-            autoRestart = false;
+            autoSplitCooldown.Restart();
+            isRunning = true;
         }
 
-        // Create and show split
-        if (entry->Hotkeys[0].IsPressed())
+        // Restart conditions
+        if (GeneralHelpers::isLoadingScreen(true) && autoSplitCooldown.HasTimePassed(Seconds(2.0)))
         {
-            split = running ? speedTimer.GetElapsedTime() - accumulatedPauseDuration : pauseStartTimeRelative;
-            showSplit = true;
+            u8 targetLevel = Level::getTargetLevel();
+            u8 targetStage = Level::getTargetStage();
+
+            if (targetLevel == 0xFF || targetStage == 0xFF)
+            {
+                OSD::Notify("[ERROR] Speedrun timer cannot determine current location data.", Color::Red);
+                return;
+            }
+            else
+            {
+                // written a bit strangely; this logic accommodates the usage of autoRestart for autoSplit
+                autoRestart = Level::getCurrLevel() != targetLevel;
+
+                if (autoTimerEvents[5])
+                    autoSplit = (Level::getCurrStage() != targetStage) || autoRestart;
+
+                if (!autoTimerEvents[4])
+                    autoRestart = false;
+
+                // Used to prevent multiple overwrites during loading screen checks...
+                autoSplitCooldown.Restart();
+            }
+        }
+
+        // Reset conditions
+        if (entry->WasJustActivated() || entry->Hotkeys[1].IsPressed() || autoRestart)
+            reset();
+
+        // Create and show splits
+        if (entry->Hotkeys[0].IsPressed() || autoSplit)
+        {
+            Time newSplit = isRunning ? speedTimer.GetElapsedTime() - accumulatedPauseDuration : pauseStartTimeRelative;
+
+            if (splits.size() >= MAX_SPLITS)
+                splits.pop_front();
+
+            // cannot compare to Time::Zero as it is inaccurate
+            // approx 268111856 ticks per second => timer can read 0ms while not being equal to 0 ticks
+            if (newSplit.AsMilliseconds() != 0)
+                splits.push_back(newSplit);
+
+            autoSplit = false;
             splitTimer.Restart();
         }
+        displaySplits();
 
-        if (showSplit)
+        // Manage pause events
+        if (isRunning)
         {
-            // Display 15 pixels above usual timer
-            displayTime(split, xCoord, yCoord - 15);
-            if (splitTimer.HasTimePassed(Seconds(10)))
-                showSplit = false;
-        }
-        
-        
-        if (running)
-        {
-            // Check for pause events
-            if (autoTimerEvents[0])
+            if (autoTimerEvents[0] && (Freecam::getCameraType() > CameraMode::DYNAMIC))
             {
-                u8 camMode;
-                Process::Read8(AddressList::getAddress("CameraMode"), camMode);
-                if (camMode > 1)
-                {
-                    pause(0);
-                    return;
-                }
+                pause(0);
+                return;
             }
-            if (autoTimerEvents[1])
+            if (autoTimerEvents[3] && GeneralHelpers::isPauseScreen())
             {
-                if (GeneralHelpers::isLoadingScreen(true))
-                {
-                    pause(1);
-                    return;
-                }
+                pause(3);
+                return;
             }
-            if (autoTimerEvents[2])
+            if (autoTimerEvents[2] && (GeneralHelpers::isLoadingScreen(true) && Level::getTargetStage() == 5))
             {
-                if (Level::getCurrStage() == 5)
-                {
-                    pause(2);
-                    return;
-                }
+                pause(2);
+                return;
             }
-            if (autoTimerEvents[3])
+            if (autoTimerEvents[1] && GeneralHelpers::isLoadingScreen(true))
             {
-                if (GeneralHelpers::isPauseScreen())
-                {
-                    pause(3);
-                    return;
-                }
+                pause(1);
+                return;
             }
 
-            // Run and display time
-
-            // Draw
-            displayTime(speedTimer.GetElapsedTime() - accumulatedPauseDuration, xCoord, yCoord);
+            displayTime(speedTimer.GetElapsedTime() - accumulatedPauseDuration, xCoord, yCoord, false);
         }
         else
         {
             // Draw pause-time on screen
-            displayTime(pauseStartTimeRelative, xCoord, yCoord);
+            displayTime(pauseStartTimeRelative, xCoord, yCoord, false);
 
             // Wait for appropriate unpause status
             switch (pauseEventID)
             {
                 case 0:
-                    u8 camMode;
-                    Process::Read8(AddressList::getAddress("CameraMode"), camMode);
-                    if (camMode <= 1)
+                    if (Freecam::getCameraType() <= CameraMode::DYNAMIC)
                         resume();
                     break;
                 case 1:
-                    if (Level::getElapsedTime() == (Level::getCurrLevel() < 4 ? 30 : 100))
+                    if (Level::getElapsedTime() == (Level::getCurrLevel() < 4 ? 30 : 100) && !(autoTimerEvents[2] && Level::getCurrStage() == 5))
                         resume();
                     break;
                 case 2:
-                    if (Level::getCurrStage() != 5)
+                    if (GeneralHelpers::isLoadingScreen(true) && Level::getTargetStage() != 5)
+                    {
+                        do reset();
+                        while (speedTimer.GetElapsedTime().AsMilliseconds() != 0);
+
                         resume();
+                    }
                     break;
                 case 3:
                     if (!GeneralHelpers::isPauseScreen())
@@ -174,18 +208,29 @@ namespace CTRPluginFramework
     }
 
     // Toggle various automatic triggers to pause/restart the timer
-    void Miscellaneous::toggleTimerEvents(MenuEntry* entry)
+    void Miscellaneous::toggleTimerEvents(MenuEntry *entry)
     {
         int arg = reinterpret_cast<int>(entry->GetArg());
         if (entry->Name() == timerEvents[arg])
         {
             autoTimerEvents[arg] = true;
-            entry->SetName(timerEvents[arg + 5]);
+            entry->SetName(timerEvents[arg + 6]);
         }
         else
         {
             autoTimerEvents[arg] = false;
             entry->SetName(timerEvents[arg]);
         }
+    }
+
+    // Toggles display status of splits
+    void Miscellaneous::toggleSplits(MenuEntry *entry)
+    {
+        alwaysShowSplits = !alwaysShowSplits;
+
+        if (alwaysShowSplits)
+            entry->SetName("Auto-hide splits after 10 seconds");
+        else
+            entry->SetName("Always show splits on-screen");
     }
 }

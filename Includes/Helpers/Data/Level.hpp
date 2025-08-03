@@ -51,7 +51,8 @@ namespace CTRPluginFramework
 		static int selChallenge(std::array<u8, 3> challenges);
 
 		// real-time level data
-		static u8 getPrevLevel(void);
+		static u8 getTargetLevel(void);
+		static u8 getTargetStage(void);
 		static u8 getCurrLevel(void);
 		static u8 getCurrStage(void);
 		static u8 getCurrChallenge(void);
@@ -62,6 +63,7 @@ namespace CTRPluginFramework
 		static void setCurrChal(u8 chalID);
 
 		static bool isInDrablands(u8 optionalLevel = 0x0);
+		static bool isInBossLevel(u8 optionalLevel = 0x0);
 		static bool isInDoT(bool includeWarpRoom, u8 optionalLevel = 0x0);
 		static bool hasStageBegan(void);
 		static bool hasCertainTimeElapsed(int time);

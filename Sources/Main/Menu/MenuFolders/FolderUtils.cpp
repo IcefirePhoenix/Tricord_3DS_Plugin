@@ -16,6 +16,7 @@ namespace CTRPluginFramework
     MenuFolder *enemies = nullptr;
     MenuFolder *physics = nullptr;
     MenuFolder *moonJumpFlight = nullptr;
+    MenuFolder *challenges = nullptr;
     MenuFolder *costume = nullptr;
     MenuFolder *miscellaneous = nullptr;
     MenuFolder *player = nullptr;
@@ -44,7 +45,7 @@ namespace CTRPluginFramework
 
     void AddAllFolders(PluginMenu &menu)
     {
-        menu += chaos;
+        //menu += chaos;
         menu += turbo;
         menu += costume;
         menu += emotes;
@@ -71,7 +72,7 @@ namespace CTRPluginFramework
             editFreecamSen->Show();
             swapZoom->Show();
 
-            chaos->HideWithoutDisable();
+            //chaos->HideWithoutDisable();
             turbo->HideWithoutDisable();
             costume->HideWithoutDisable();
             emotes->HideWithoutDisable();
@@ -91,7 +92,7 @@ namespace CTRPluginFramework
 
             if (!PluginMenu::GetRunningInstance()->GameplayToggle)
             {
-                chaos->Hide();
+                //chaos->Hide();
                 turbo->Hide();
                 costume->Show();
                 emotes->Show();
@@ -109,7 +110,7 @@ namespace CTRPluginFramework
                 editFreecamSen->HideWithoutDisable();
                 swapZoom->HideWithoutDisable();
 
-                chaos->Show();
+                //chaos->Show();
                 turbo->Show();
                 costume->HideWithoutDisable();
                 emotes->HideWithoutDisable();

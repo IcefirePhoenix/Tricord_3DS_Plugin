@@ -324,7 +324,7 @@ namespace CTRPluginFramework
         }
 
         _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
-        if (_hexadecimal)
+        if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(2);
         }
@@ -355,7 +355,7 @@ namespace CTRPluginFramework
 
         _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
         std::string &input = _keyboard->GetInput();
-        if (_hexadecimal)
+        if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(2);
             input = Utils::Format("%X", start);
@@ -391,7 +391,7 @@ namespace CTRPluginFramework
         }
 
         _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
-        if (_hexadecimal)
+        if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(4);
         }
@@ -422,7 +422,7 @@ namespace CTRPluginFramework
 
         _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
         std::string &input = _keyboard->GetInput();
-        if (_hexadecimal)
+        if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(4);
             input = Utils::Format("%X", start);
@@ -458,7 +458,7 @@ namespace CTRPluginFramework
         }
 
         _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
-        if (_hexadecimal)
+        if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(8);
         }
@@ -489,7 +489,7 @@ namespace CTRPluginFramework
 
         _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
         std::string &input = _keyboard->GetInput();
-        if (_hexadecimal)
+        if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(8);
             input = Utils::Format("%X", start);
@@ -525,7 +525,7 @@ namespace CTRPluginFramework
         }
 
         _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
-        if (_hexadecimal)
+        if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(16);
         }
@@ -556,7 +556,7 @@ namespace CTRPluginFramework
 
         _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
         std::string &input = _keyboard->GetInput();
-        if (_hexadecimal)
+        if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(16);
             input = Utils::Format("%X", start);
@@ -621,7 +621,7 @@ namespace CTRPluginFramework
         _keyboard->DisplayTopScreen = DisplayTopScreen;
 
         std::string &input = _keyboard->GetInput();
-        input = Utils::ToString(start, 4);
+        input = Utils::ToString(start, 2);
 
         int ret = _keyboard->Run();
 

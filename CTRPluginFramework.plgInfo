@@ -1,16 +1,21 @@
-Author: Nanquitas (CTRPF), WinterPhoenix (Tricord)
+# 3gxtool: https://gitlab.com/thepixellizeross/3gxtool/
 
-Version: # Plugin version
+Author: The Tricord Team
+
+# Plugin version
+Version:
     Major: 0
     Minor: 5
     Revision: 0
 
 MemorySize: 5MiB
 
-Targets: # Low TitleID of games compatible with this plugin (0 for all)
+# Compatible low TitleIDs
+Targets: 00176F00, 00177000, 00176E00
 
 Title: Tricord
 
-Summary: A CTRPF-based plugin, made specifically for The Legend of Zelda, Tri Force Heroes.
+Summary: A multipurpose utility plugin made for The Legend of Zelda, Tri Force Heroes.
 
+# Allows both console and Citra-based emulator use
 Compatibility: Any

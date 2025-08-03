@@ -204,10 +204,12 @@ namespace CTRPluginFramework
         std::string registerStr = "";
 
         // log general registers...
-        for (int registerIndex = 0; registerIndex < 7; registerIndex++)
+        for (int registerIndex = 0; registerIndex <= 12; registerIndex += 2)
         {
-            registerStr += (Utils::Format("R%02d:   %08X", registerIndex, regs->r[registerIndex])) + "   ";
-            registerStr += (Utils::Format("R%02d:   %08X", registerIndex * 2, regs->r[registerIndex * 2])) + "\n";
+            registerStr += Utils::Format("R%d:   %08X", registerIndex, regs->r[registerIndex]) + "   ";
+            if (registerIndex <= 11) // avoid accessing index 12
+                registerStr += Utils::Format("R%d:   %08X", registerIndex + 1, regs->r[registerIndex + 1]);
+            registerStr += "\n";
         }
 
         // log special registers...
@@ -280,18 +282,7 @@ namespace CTRPluginFramework
             Directory::Create(logPath);
 
         // build path to log file...
-        switch (Process::GetTitleID())
-        {
-            case TID_USA:
-                logPath.append("NA/");
-                break;
-            case TID_EUR:
-                logPath.append("EU/");
-                break;
-            case TID_JPN:
-                logPath.append("JP/");
-                break;
-        }
+        logPath.append(Process::GetRegionCode() + "/");
 
         if (!Directory::IsExists(logPath))
             Directory::Create(logPath);

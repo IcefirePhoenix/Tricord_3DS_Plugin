@@ -39,7 +39,7 @@ namespace CTRPluginFramework
         Process::Write8(AddressList::getAddress("OffScreenLocation"), disableOffScrArrow);
     }
 
-    // Forces top-screen scrolling event text to be transparent
+    // Forces status message text to be transparent
     void Rendering::disableScrollingText(MenuEntry *entry)
     {
         isScrollTextDisabled = !isScrollTextDisabled;
@@ -47,12 +47,12 @@ namespace CTRPluginFramework
         if (isScrollTextDisabled)
         {
             Process::WriteFloat(AddressList::getAddress("ScrollingTextOpacity"), 0.0);
-            entry->SetName("Enable top screen scrolling text");
+            entry->SetName("Enable status messages");
         }
         else
         {
             Process::WriteFloat(AddressList::getAddress("ScrollingTextOpacity"), 1.0);
-            entry->SetName("Disable top screen scrolling text");
+            entry->SetName("Disable status messages");
         }
     }
 
@@ -83,6 +83,7 @@ namespace CTRPluginFramework
 
         Keyboard HexColor("Custom Scrolling Text Name Color", "Enter a 6-digit RGB hex code.");
         HexColor.IsHexadecimal(true);
+        HexColor.SetMaxLength(6);
 
         if (HexColor.Open(result) == 0)
         {
@@ -131,6 +132,8 @@ namespace CTRPluginFramework
         Process::Write32(AddressList::getAddress("LiveNameColorG"), defaultColors[0]);
         Process::Write32(AddressList::getAddress("LiveNameColorB"), defaultColors[1]);
         Process::Write32(AddressList::getAddress("LiveNameColorR"), defaultColors[2]);
+
+        MessageBox("Success", "Name colors have been reset!")();
     }
 
 
