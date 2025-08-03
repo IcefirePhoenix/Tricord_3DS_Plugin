@@ -1272,7 +1272,7 @@
         {
             "name": "speedrun_splits_note",
             "content": {
-                "intro": "Prevents splits from auto-hiding after some time has elasped. By default, this happens after 10 seconds. The auto-hide timer can be changed via \"Set display duration for splits\".",
+                "intro": "Prevents splits from auto-hiding after some time has elasped. By default, this happens after 5 seconds. The auto-hide timer can be changed via \"Set splits display duration\".",
                 "note": "Up to four splits can be displayed.",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -1281,7 +1281,7 @@
         {
             "name": "speedrun_splits_autohide_note",
             "content": {
-                "intro": "Allows you to change the amount of time that splits are displayed on-screen. Available timer values are:\n- 2 seconds\n- 5 seconds\n- 10 seconds",
+                "intro": "Allows you to change the amount of time that splits are displayed on-screen. Available timer values are:\n\n- 2 seconds\n- 5 seconds\n- 10 seconds",
                 "note": "",
                 "modeCompatibility": 1,
                 "clientOnly": true
