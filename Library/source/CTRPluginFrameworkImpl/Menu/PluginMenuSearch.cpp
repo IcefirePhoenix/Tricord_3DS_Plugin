@@ -271,7 +271,7 @@ namespace CTRPluginFramework
 
     void    PluginMenuSearch::RestoreSearchState(void)
     {
-        Directory                   dir("Search");
+        Directory dir("Search/" + Process::GetRegionCode());
         std::vector<std::string>    filenames;
 
         if (dir.IsOpen() && dir.ListFiles(filenames, "Step"))
@@ -446,14 +446,14 @@ namespace CTRPluginFramework
     {
         // Delete every file in Search
         // Open current directory
-        Directory dir("Search");
+        Directory dir("Search/" + Process::GetRegionCode());
         std::vector<std::string> files;
 
         // List files
         if (dir.ListFiles(files) > 0)
         {
             for (std::string &name : files)
-                File::Remove("Search/" + name);
+                File::Remove("Search/" + Process::GetRegionCode() + "/" + name);
         }
     }
 

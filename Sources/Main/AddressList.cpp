@@ -48,8 +48,7 @@ namespace CTRPluginFramework
 							break;
 
 						default:
-							OSD::Notify("The current title is not a supported retail version of TFH!", Color::Red);
-							OSD::Notify("Supported TFH regions include NA, EU/AUS, and JPN.", Color::Red);
+							MessageBox("Error", "The current title is not a supported retail version of The Legend of Zelda: Tri Force Heroes! Supported regions of this game include NA, EU/AUS, and JPN.\n\nTricord will now exit.")();
 							AddressList::cancelAddrInit();
 					}
 
@@ -69,7 +68,7 @@ namespace CTRPluginFramework
 				}
 				else
 				{
-					OSD::Notify("[ERROR] Invalid address data for " << addrReference << ".", Color::Yellow);
+					MessageBox("Error", "Invalid address data for " << addrReference << ".\n\nAddresses cannot be initialized. Tricord will now exit.")();
 					AddressList::cancelAddrInit();
 				}
 			}
@@ -91,9 +90,8 @@ namespace CTRPluginFramework
 	// Force-terminates the plugin
 	void AddressList::cancelAddrInit(void)
 	{
-		OSD::Notify("Addresses cannot be initialized. Plugin will now abort.", Color::Red);
-		svcSleepThread(150);
-		abort();
+		PluginMenuImpl::ForceExit();
+		svcExitThread();
 	}
 
 	// Retrieves address value via reference key

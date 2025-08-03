@@ -156,35 +156,17 @@ namespace CTRPluginFramework
             FSUSER_OpenArchive(&_sdmcArchive, ARCHIVE_SDMC, sdmcPath);
         }
 
-        // Set current working directory
-        if (FwkSettings::Header->isDefaultPlugin)
+        char path[255] = {0};
+
+        PLGLDR__GetPluginPath(path);
+        for (u32 i = 254; i > 0; --i)
         {
-            std::string path = "/luma/plugins/ActionReplay";
-
-            if (!Directory::IsExists(path))
-                Directory::Create(path);
-
-            path += Utils::Format("/%016llX", Process::GetTitleID());
-
-            if (!Directory::IsExists(path))
-                Directory::Create(path);
-
-            Directory::ChangeWorkingDirectory(path + "/");
+            if (path[i] != '/')
+                continue;
+            path[i] = 0;
+            break;
         }
-        else
-        {
-            char path[255] = { 0 };
-
-            PLGLDR__GetPluginPath(path);
-            for (u32 i = 254; i > 0; --i)
-            {
-                if (path[i] != '/')
-                    continue;
-                path[i] = 0;
-                break;
-            }
-            Directory::ChangeWorkingDirectory(path);
-        }
+        Directory::ChangeWorkingDirectory("/Tricord");
     }
 
     static void     InitHeap(void)
@@ -504,18 +486,18 @@ namespace CTRPluginFramework
 
         // Init sysfont
         Font::Initialize();
-        {
-            // If /cheats/ doesn't exists, create it
-            const char* dirpath = "/cheats";
-            if (!Directory::IsExists(dirpath))
-                Directory::Create(dirpath);
-        }
+
+        // If /cheats/ doesn't exists, create it
+        const char *dirpath = "/cheats";
+        if (!Directory::IsExists(dirpath))
+            Directory::Create(dirpath);
 
         // Set AR file path
         Preferences::CheatsFile = "cheats.txt";
 
         // Default: cheats.txt in cwd
-        if (!File::Exists(Preferences::CheatsFile)) {
+        if (!File::Exists(Preferences::CheatsFile))
+        {
             const std::string cheatPath = Utils::Format("/cheats/%016llX.txt", Process::GetTitleID());
             Preferences::CheatsFile = cheatPath;
 

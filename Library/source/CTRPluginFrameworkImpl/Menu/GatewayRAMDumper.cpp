@@ -145,9 +145,10 @@ namespace CTRPluginFramework
         Heap::Free(buffer);
 
         // Remove file
-        std::string path("Dumps/" + _fileName);
-        File::Remove(path);
+        std::string path("Dumps/" + Process::GetRegionCode());
+        path.append(_fileName);
 
+        File::Remove(path);
         Heap::Free(buffer);
         return (true);
     }
@@ -278,14 +279,18 @@ namespace CTRPluginFramework
         _fileName += "-";
         _fileName += timeString + ".bin";
 
-        std::string path("Dumps");
+        std::string path("Dumps/");
 
         // Create Dump directory if doesn't exists
         if (!Directory::IsExists(path))
             Directory::Create(path);
 
-        // Assemble path
-        path += "/";
+        path += Process::GetRegionCode() + "/";
+
+        // Create subdir if needed
+        if (!Directory::IsExists(path))
+            Directory::Create(path);
+
         path += _fileName;
 
         // Open file
