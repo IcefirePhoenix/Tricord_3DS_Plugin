@@ -14,7 +14,7 @@ namespace CTRPluginFramework
     MenuEntry *ascentSpeedSet;
     MenuEntry *descentSpeedSet;
 
-    float ascentSpeed = 0.5, descentSpeed = -0.5, lateralSpeed = 0.09, speedToMaintainHover = 0.025;
+    float ascentSpeed = 0.5, descentSpeed = -0.5, lateralSpeed = 0.1, speedToMaintainHover = 0.025;
     u16 physicsStatus[3];
 
     const StringVector speedOptions =

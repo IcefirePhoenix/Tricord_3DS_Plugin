@@ -2,7 +2,7 @@
 #include "CTRPluginFrameworkImpl/System.hpp"
 #include "CTRPluginFramework/Utils/Utils.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/OSDImpl.hpp"
-
+#include "TID.h"
 #include "csvc.h"
 
 extern Handle gspThreadEventHandle;
@@ -25,6 +25,20 @@ namespace CTRPluginFramework
     u64 Process::GetTitleID(void)
     {
         return ProcessImpl::TitleId;
+    }
+
+    std::string Process::GetRegionCode(void)
+    {
+        switch (ProcessImpl::TitleId)
+        {
+            case TID_USA:
+                return "NA";
+            case TID_EUR:
+                return "EU";
+            case TID_JPN:
+                return "JP";
+        }
+        return "";
     }
 
     void Process::GetTitleID(std::string &output)

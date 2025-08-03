@@ -3,7 +3,7 @@
         {
             "name": "warp_note",
             "content": {
-                "intro": "Enables warping to any location -- not just individual levels. Doppels are automatically activated in areas where they might be required. Up to five of your most recent warps get saved to warp history.",
+                "intro": "Enables warping to any location -- not just individual levels. Doppels are automatically activated in areas where they might be required.",
                 "note": "If entering the Drablands, you can also choose to enable a challenge.",
                 "modeCompatibility": 0,
                 "clientOnly": false
@@ -39,8 +39,8 @@
         {
             "name": "rewarp_note",
             "content": {
-                "intro": "Returns you to one of the last locations you warped to, chosen from your warp history.",
-                "note": "Up to five locations can be saved to warp history.",
+                "intro": "Allows you to return to the last location you warped to.",
+                "note": "",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }
@@ -67,7 +67,7 @@
             "name": "inf_heart_note",
             "content": {
                 "intro": "Keeps your health fixed at the maximum number of heart containers.",
-                "note": "You still flinch from damage. You can still be defeated if your heart container maximum is 1.",
+                "note": "You still flinch from damage. Also, you can still be defeated if your heart container capacity is 1.",
                 "modeCompatibility": 2,
                 "clientOnly": false
             }
@@ -129,8 +129,8 @@
         {
             "name": "instakill_note",
             "content": {
-                "intro": " Instantly defeats all currently spawned enemies when hotkeys are pressed. Modeled after a debug feature found in the EU DLP Debug Build.",
-                "note": "",
+                "intro": "Instantly defeats all currently spawned enemies when hotkeys are pressed. Modeled after a debug feature found in the EU DLP Debug Build.\n\nWhen using in The Lady's Lair or Sky Temple, please wait until the previous phase has fully disappeared and the next one is loaded in completely before using to avoid softlocks.",
+                "note": "Note: This entry applies to all enemies in a stage, sometimes including ones that haven't yet spawned. In stages with multiple enemy waves, this entry can sometimes also eliminate future waves in advance. Some exceptions may apply; please see the Wiki for details.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }
@@ -138,8 +138,8 @@
         {
             "name": "invinci_note",
             "content": {
-                "intro": "Grants infinite health to all currently spawned enemies when hotkeys are pressed.",
-                "note": "Ideal for practicing enemy-fighting strategies.",
+                "intro": "Grants infinite health to all currently spawned enemies when hotkeys are pressed. Ideal for practicing enemy-fighting strategies.\n\nBosses/minibosses are not officially supported; this entry may or may not work when used on them.",
+                "note": "This entry may sometimes need to be reapplied if new enemies have spawned recently. Some exceptions may also apply; please see the Wiki for details.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }
@@ -192,7 +192,7 @@
         {
             "name": "ascent_note",
             "content": {
-                "intro": "Adjusts the ascent strength for moon-jumping or flying.",
+                "intro": "Adjusts the ascent strength for moon jumping or flying.",
                 "note": "",
                 "modeCompatibility": 0,
                 "clientOnly": false
@@ -201,7 +201,7 @@
         {
             "name": "descent_note",
             "content": {
-                "intro": "Adjusts the descent strength for moon-jumping or flying.",
+                "intro": "Adjusts the descent strength for moon jumping or flying.",
                 "note": "",
                 "modeCompatibility": 0,
                 "clientOnly": false
@@ -210,7 +210,7 @@
         {
             "name": "lateral_note",
             "content": {
-                "intro": "Adjusts the lateral movement strength for moon-jumping or flying.",
+                "intro": "Adjusts the lateral movement strength for moon jumping or flying.",
                 "note": "",
                 "modeCompatibility": 0,
                 "clientOnly": false
@@ -256,7 +256,7 @@
             "name": "lobby_emote_note",
             "content": {
                 "intro": "Enables use of emotes that are not usually accessible in the multiplayer lobbies. Also restores functionality of an unused emote (yawning Link) and allows you to send blank emotes.",
-                "note": "Blank emotes can only be sent if NO other emotes have been used since creating/joining a lobby.",
+                "note": "Blank emotes can only be sent if NO other emotes have been used since creating/entering a lobby.",
                 "modeCompatibility": 4,
                 "clientOnly": false
             }
@@ -264,7 +264,7 @@
         {
             "name": "freecam_note",
             "content": {
-                "intro": "Enables unrestricted camera movement along all axes with zoom + rotation options. The camera can also be locked to prevent auto-resets when switching Doppels, using an item, or dropping into the fall plane.",
+                "intro": "Enables unrestricted camera movement along all axes with zoom + orbit options. The camera can also be locked to prevent auto-resets when switching Doppels, using an item, or dropping into the fall plane.",
                 "note": "Hotkeys can be edited. Current hotkeys can be viewed below.",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -282,7 +282,7 @@
         {
             "name": "freecam_sensitivity_note",
             "content": {
-                "intro": "Adjusts Freecam sensitivity for movement, height, zoom, and rotation.\n\nRecommended values:\n- Shift sensitivity: 0.05 - 0.30\n- Height sensitivity: 0.40 - 1.00\n- Zoom sensitivity: 0.02 - 0.04\n- Rotation sensitivity: 0.10 - 0.50",
+                "intro": "Adjusts Freecam sensitivity for movement, height, zoom, and orbit.\n\nRecommended values:\n- Shift sensitivity: 0.05 - 0.30\n- Height sensitivity: 0.40 - 1.00\n- Zoom sensitivity: 0.02 - 0.04\n- Orbit sensitivity: 0.10 - 0.50",
                 "note": "",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -363,7 +363,7 @@
         {
             "name": "sword_model_note",
             "content": {
-                "intro": "Allows player sword models to be changed, regardless of current costume. DEVTODO: check below?",
+                "intro": "Allows player sword models to be changed, regardless of current costume.",
                 "note": "Overrides settings from cosmetic costumes.",
                 "modeCompatibility": 0,
                 "clientOnly": false
@@ -391,7 +391,7 @@
             "name": "ind_costume_effects_note",
             "content": {
                 "intro": "Set costume effects that apply only to this player. A loading zone may be required to fully disable effects.",
-                "note": "Not all costume effects in the game are able to be forced on for one player at a time.",
+                "note": "Not all costume effects in the game can be enabled for only one player at a time. These all-player effects can instead be found under \"All-Player Costume Effects\" below.",
                 "modeCompatibility": 3,
                 "clientOnly": false
             }
@@ -400,7 +400,7 @@
             "name": "allp_costume_effects_note",
             "content": {
                 "intro": "Set costume effects that apply to all three players at once. Some may require a loading zone to see full effects.",
-                "note": "For any costume effects you don't find here, look for them under the individual costume effects subfolders above.",
+                "note": "For any costume effects you don't find here, look for them under one of the \"Costume Effects - Player #\" subfolders above.",
                 "modeCompatibility": 3,
                 "clientOnly": false
             }
@@ -472,7 +472,7 @@
             "name": "dune_note",
             "content": {
                 "intro": "Allows you to stand still on quicksand without sinking.",
-                "note": "Does not some with the sand ripple effect.",
+                "note": "Does not come with the sand ripple visual effect.",
                 "modeCompatibility": 2,
                 "clientOnly": false
             }
@@ -570,7 +570,7 @@
         {
             "name": "boomeranger_note",
             "content": {
-                "intro": "The Boomerang is larger, can carry two players, deals damage and pierces enemies.",
+                "intro": "The Boomerang is larger, can carry two players, deals damage, and pierces enemies.",
                 "note": "",
                 "modeCompatibility": 2,
                 "clientOnly": false
@@ -615,7 +615,7 @@
         {
             "name": "goron_allp_note",
             "content": {
-                "intro": "Includes burn immunity, lava swimming, no damage from lava pillars, walking through fire curtains and picking up flaming rupees.",
+                "intro": "Includes burn immunity, lava swimming, no damage from lava pillars, walking through fire curtains, and picking up flaming rupees.",
                 "note": "",
                 "modeCompatibility": 2,
                 "clientOnly": false
@@ -633,7 +633,7 @@
         {
             "name": "linebeck_time_note",
             "content": {
-                "intro": "Grants +30 seconds at the start of a timed challenge, and grants 1.5x time for collected hourglasses.",
+                "intro": "Grants +30 seconds at the start of a timed challenge as well as 1.5x time for collected hourglasses.",
                 "note": "For viewing the contents of treasure chests, see the Rendering folder.",
                 "modeCompatibility": 2,
                 "clientOnly": false
@@ -679,7 +679,7 @@
             "name": "tingle_note",
             "content": {
                 "intro": "Allows you to set a specific number of Tingle balloons for a player to have, including infinite balloons. Tingle balloons rescue you from falling into pits or lava.",
-                "note": "You do not need to be wearing Tingle Tights.",
+                "note": "You do not need to be wearing Tingle Tights. Only 3 balloons at a time can be displayed, regardless of whether your actual balloon count is higher.",
                 "modeCompatibility": 3,
                 "clientOnly": false
             }
@@ -732,8 +732,8 @@
         {
             "name": "button_spam_note",
             "content": {
-                "intro": "Allows you to spam buttons at specified time intervals by pressing and holding them.\n\nSpammable button list:\nA, B, X, Y, L, R, Start/Select\nSpamming speeds:\n10ms, 50ms, 100ms, 150ms",
-                "note": "",
+                "intro": "Allows you to spam buttons at specified time intervals by pressing and holding them.\n\nSpammable button list:\nA, B, X, Y*, L*, R*\n\nSpamming speeds:\n10ms, 50ms, 100ms, 150ms\n\nOnline support is a work in progress! Performance may be very poor in online lobbies.",
+                "note": "*Note: L, R, and Y do not spam as quickly as A, B, and X and may even stall briefly. This is due to charge-up animation periods and system limitations. It's not possible to improve the performance of these buttons without using an entirely different implementation that would affect multiplayer compatibility.",
                 "modeCompatibility": 1,
                 "clientOnly": false
             }
@@ -741,7 +741,7 @@
         {
             "name": "set_spam_interval_note",
             "content": {
-                "intro": "Adjusts the button spamming speed\n\nSpamming speeds: 10ms, 50ms, 100ms, 150ms",
+                "intro": "Adjusts the button spamming speed.\n\nSpamming speeds:\n10ms, 50ms, 100ms, 150ms",
                 "note": "",
                 "modeCompatibility": 1,
                 "clientOnly": false
@@ -750,8 +750,8 @@
         {
             "name": "set_spam_button_note",
             "content": {
-                "intro": "Allows you to choose the buttons to spam.\n\nSpammable button list: A, B, X, Y, L, R, Start/Select",
-                "note": "",
+                "intro": "Allows you to choose which buttons to spam.\n\nSpammable button list: A, B, X, Y*, L*, R*",
+                "note": "*Note: L, R, and Y do not spam as quickly as A, B, and X and may even stall briefly. This is due to charge-up animation periods and system limitations. It's not possible to improve the performance of these buttons without using an entirely different implementation that would affect multiplayer compatibility.",
                 "modeCompatibility": 1,
                 "clientOnly": false
             }
@@ -795,7 +795,7 @@
         {
             "name": "instant_text_note",
             "content": {
-                "intro": "Forces text box strings to render instantly instead of per-word. DEVTODO: check below?",
+                "intro": "Forces text box strings to render instantly instead of per-word.",
                 "note": "",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -966,7 +966,7 @@
         {
             "name": "new_status_color_note",
             "content": {
-                "intro": "Enables usage of custom player name colors used in top-screen status messages. Accepts 6-digit hex color codes. Custom colors are preserved between reboots.",
+                "intro": "Enables usage of custom player name colors used in status messages. Accepts 6-digit hex color codes. Custom colors are preserved between reboots.",
                 "note": "Recommended for use with custom Link color modpacks.",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -984,7 +984,7 @@
         {
             "name": "disable_scroll_text_note",
             "content": {
-                "intro": "Prevents top-screen scrolling event messages from appearing.",
+                "intro": "Prevents status messages from appearing.",
                 "note": "",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -1155,8 +1155,8 @@
         {
             "name": "merchant_mat_note",
             "content": {
-                "intro": "Allows you to edit the materials sold by the Merchant (including story materials).",
-                "note": "",
+                "intro": "Allows you to edit the materials sold by the Merchant.",
+                "note": "Story materials and Freebies can be purchased using this entry.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }
@@ -1164,8 +1164,17 @@
         {
             "name": "merchant_restock_note",
             "content": {
-                "intro": "Forces the Merchant to immediately restock the material stall, which normally resets daily.",
-                "note": "",
+                "intro": "Forces the Merchant to immediately restock the material stall, which normally happens daily.",
+                "note": "Existing materials will get restocked. This does not replace them with a new material selection.",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "merchant_reset_note",
+            "content": {
+                "intro": "Resets the Merchant's material selection, which normally happens daily. Existing materials will get replaced with a new random selection.",
+                "note": "Any selections made to \"Set Nth material slot\" will also be reset.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }
@@ -1254,8 +1263,26 @@
         {
             "name": "speedrun_note",
             "content": {
-                "intro": "Displays the elapsed time in hh:mm:ss onscreen. Useful for tracking time spent in a level if you're a speedrunner.",
+                "intro": "Displays the elapsed time in hh:mm:ss format on-screen. Useful for tracking time spent in a level for speedrunners.",
                 "note": "Not approved by speedrun.com as an official means of tracking speedrun times. This tool is only an aid for practice.",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "speedrun_splits_note",
+            "content": {
+                "intro": "Prevents splits from auto-hiding after some time has elasped. By default, this happens after 10 seconds. The auto-hide timer can be changed via \"Set display duration for splits\".",
+                "note": "Up to four splits can be displayed.",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "speedrun_splits_autohide_note",
+            "content": {
+                "intro": "Allows you to change the amount of time that splits are displayed on-screen. Available timer values are:\n- 2 seconds\n- 5 seconds\n- 10 seconds",
+                "note": "",
                 "modeCompatibility": 1,
                 "clientOnly": true
             }
@@ -1281,7 +1308,7 @@
         {
             "name": "timer_event_note_2",
             "content": {
-                "intro": "Toggles whether the speedrun timer will automatically pause while inside a treasure room and resume upon exiting.",
+                "intro": "Toggles whether the speedrun timer will automatically end while inside a treasure room and reset upon exiting to the lobby.",
                 "note": "",
                 "modeCompatibility": 1,
                 "clientOnly": true
@@ -1300,7 +1327,16 @@
             "name": "timer_event_note_4",
             "content": {
                 "intro": "Toggles whether the speedrun timer will automatically restart upon entering a new level.",
-                "note": "The timer will restart once you have control of your player.",
+                "note": "The timer will restart at the beginning of the level's initial loading zone.",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
+            "name": "timer_event_note_5",
+            "content": {
+                "intro": "Toggles whether the speedrun timer will automatically split upon entering a new area.",
+                "note": "Up to four splits can be displayed.",
                 "modeCompatibility": 1,
                 "clientOnly": true
             }

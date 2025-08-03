@@ -182,6 +182,24 @@ namespace CTRPluginFramework
         // Restore Search state
         search.RestoreSearchState();
 
+        if (FwkSettings::Header->isDefaultPlugin)
+        {
+            MessageBox("Error", "Tricord must be loaded as a title-specific plugin and not the default plugin. Please place Tricord.3gx into \"/luma/plugins/[title ID]\" and try again.\n\nThe plugin will now exit.")();
+
+            ForceExit();
+            svcExitThread();
+        }
+        else
+        {
+            if (Process::GetRegionCode().empty())
+            {
+                MessageBox("Error", "The current title is not a supported retail version of The Legend of Zelda: Tri Force Heroes! Supported regions of this game include NA, EU/AUS, and JPN.\n\nTricord will now exit.")();
+
+                ForceExit();
+                svcExitThread();
+            }
+        }
+
         if (!Directory::IsExists("/Tricord/AR_Backups/"))
             Directory::Create("/Tricord/AR_Backups/");
 
@@ -543,7 +561,6 @@ namespace CTRPluginFramework
             for (int i = 0; i < 3; i++)
             {
                 Preferences::SavedWarps[i] = warps[i];
-                OSD::Notify("loaded a save warp on boot");
             }
         }
     }

@@ -480,10 +480,9 @@ namespace CTRPluginFramework
         File::Rename("AR.temp", path);
     }
 
-    // TODO: decide whether backup folder should be placed under default "cheats" folder or under "Tricord"
     void    PluginMenuActionReplay::BackupCodes(bool manualMode)
     {
-        std::string region = "NA";
+        std::string region = Process::GetRegionCode();
         std::string sourcePath = Preferences::CheatsFile;
         std::string backupPath = manualMode ? "/Tricord/AR_Backups/manual/" : "/Tricord/AR_Backups/auto/";
         std::string backupFileName = "";
@@ -495,19 +494,6 @@ namespace CTRPluginFramework
 
         if (!Directory::IsExists(backupPath))
             Directory::Create(backupPath);
-
-        switch (Process::GetTitleID())
-        {
-            case TID_USA:
-                region = "NA";
-                break;
-            case TID_EUR:
-                region = "EU";
-                break;
-            case TID_JPN:
-                region = "JP";
-                break;
-        }
 
         backupPath.append(region + "/");
 

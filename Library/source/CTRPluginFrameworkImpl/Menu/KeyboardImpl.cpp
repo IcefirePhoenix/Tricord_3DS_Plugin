@@ -237,6 +237,11 @@ namespace CTRPluginFramework
         return _title;
     }
 
+    u32&    KeyboardImpl::GetMax(void)
+    {
+        return _max;
+    }
+
     void    KeyboardImpl::SetError(std::string &error)
     {
         _errorMessage = true;
@@ -957,7 +962,7 @@ namespace CTRPluginFramework
         if (_displayScrollbar)
         {
             if (!_manualScrollUpdate)
-                _scrollSize = (_inertialVelocity * INERTIA_SCROLL_FACTOR * delta);
+                _scrollSize = (-_inertialVelocity * INERTIA_SCROLL_FACTOR * delta);
 
             _manualScrollUpdate = false;
 

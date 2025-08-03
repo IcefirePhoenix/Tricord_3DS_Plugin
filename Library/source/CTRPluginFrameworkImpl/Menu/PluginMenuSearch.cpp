@@ -14,7 +14,7 @@ namespace CTRPluginFramework
         _inSearch(false),
         _inEditor(false),
         _firstRegionInit(false),
-        _hexInput(false),
+        _hexInput(true),
         _step(0),
         _searchMenu(_currentSearch, hexEditor, _inEditor, _hexInput),
         // _closeBtn(*this, nullptr, IntRect(275, 24, 20, 20), Icon::DrawClose),
@@ -58,7 +58,7 @@ namespace CTRPluginFramework
         _endRangeTextBox.SetValue((u32)(0xFFFFFFF0));
         _startRangeTextBox.IsEnabled = false;
         _endRangeTextBox.IsEnabled = false;
-	    _valueTextBox.UseHexadecimal(false);
+	    _valueTextBox.UseHexadecimal(true);
         _valueTextBox.SetValue((u32)0);
 
         _uiContainer += &_memoryRegions;
@@ -271,7 +271,7 @@ namespace CTRPluginFramework
 
     void    PluginMenuSearch::RestoreSearchState(void)
     {
-        Directory                   dir("Search");
+        Directory dir("Search/" + Process::GetRegionCode());
         std::vector<std::string>    filenames;
 
         if (dir.IsOpen() && dir.ListFiles(filenames, "Step"))
@@ -446,14 +446,14 @@ namespace CTRPluginFramework
     {
         // Delete every file in Search
         // Open current directory
-        Directory dir("Search");
+        Directory dir("Search/" + Process::GetRegionCode());
         std::vector<std::string> files;
 
         // List files
         if (dir.ListFiles(files) > 0)
         {
             for (std::string &name : files)
-                File::Remove("Search/" + name);
+                File::Remove("Search/" + Process::GetRegionCode() + "/" + name);
         }
     }
 

@@ -37,13 +37,14 @@
 
 #include <array>
 #include <bitset>
+#include <deque>
 #include <fstream>
 #include <functional>
 #include <iostream>
 #include <map>
 #include <string>
-#include <vector>
 #include <utility>
+#include <vector>
 
 namespace CTRPluginFramework
 {

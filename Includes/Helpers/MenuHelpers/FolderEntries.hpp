@@ -18,6 +18,7 @@ namespace CTRPluginFramework
     extern MenuFolder *enemies;
     extern MenuFolder *physics;
     extern MenuFolder *moonJumpFlight;
+    extern MenuFolder *challenges;
     extern MenuFolder *costume;
     extern MenuFolder *miscellaneous;
     extern MenuFolder *player;

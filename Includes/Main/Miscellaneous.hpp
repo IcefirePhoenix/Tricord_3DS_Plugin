@@ -25,8 +25,6 @@ namespace CTRPluginFramework
     const u16 BUTTON_Y = BIT(3);
     const u16 BUTTON_L = BIT(4);
     const u16 BUTTON_R = BIT(5);
-    const u16 BUTTON_STARTSEL = BIT(6);
-    const u16 BUTTON_TOUCH = BIT(7);
 
     const Key keys[] =
     {
@@ -35,10 +33,7 @@ namespace CTRPluginFramework
         Key::X,
         Key::Y,
         Key::L,
-        Key::R,
-        Key::Start,
-        Key::Select,
-        Key::Touchpad
+        Key::R
     };
 
     class Miscellaneous
@@ -53,11 +48,11 @@ namespace CTRPluginFramework
         static void keepCameraEdits(MenuEntry *entry);
         static void writeCameraEdits(bool allowCamUsage);
         static bool getCameraStatus(void);
-        static void setLobbyBallCounter(MenuEntry* entry);
         static void toggleCameraShutter (MenuEntry* entry);
         static void writeShutterDisable(MenuEntry* entry);
         static void applyPretendoPatch(MenuEntry *entry);
         static void speedrunTimer(MenuEntry* entry);
+        static void toggleSplits(MenuEntry *entry);
         static void toggleTimerEvents(MenuEntry* entry);
     };
 }

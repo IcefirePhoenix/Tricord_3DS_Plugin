@@ -45,6 +45,7 @@ namespace CTRPluginFramework
         std::string &GetInput(void);
         std::string &GetMessage(void);
         std::string &GetTitle(void);
+        u32         &GetMax(void);
         void        SetError(std::string &error);
 
         void        SetConvertCallback(ConvertCallback callback);

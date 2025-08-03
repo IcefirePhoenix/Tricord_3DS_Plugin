@@ -22,7 +22,7 @@ namespace CTRPluginFramework
 	float shiftSensitivity = 0.2;
 	float heightSensitivity = 0.6;
 	float zoomSensitivity = 0.03;
-	float rotationSensitivity = 0.5;
+	float orbitSensitivity = 0.5;
 	float cameraX_Coord;
 	float cameraY_Coord;
 	float cameraZ_Coord;
@@ -60,7 +60,7 @@ namespace CTRPluginFramework
 
 			// unhook camera from player...
 			OSD::Notify(isFreecamInUse ? "[FREECAM] Freecam in-use." : "[FREECAM] Freecam disabled.");
-			setCameraType(CUTSCENE);
+			setCameraType(CameraMode::CUTSCENE);
 		}
 
 		// toggle camera lock...
@@ -76,7 +76,7 @@ namespace CTRPluginFramework
 				manageY_AxisReturnShift(isCameraLocked);
 
 				// unhook/reattach camera to player...
-				setCameraType(isCameraLocked ? CUTSCENE : GAMEPLAY);
+				setCameraType(isCameraLocked ? CameraMode::CUTSCENE : CameraMode::GAMEPLAY);
 
 				std::string notif = isCameraLocked ? "locked in-place." : "re-attached to player.";
 				OSD::Notify("[FREECAM] Camera position has been " + notif);
@@ -87,7 +87,7 @@ namespace CTRPluginFramework
 		if (entry->Hotkeys[2].IsPressed())
 		{
 			// re-orient camera back to player...
-			if (setCameraType(GAMEPLAY))
+			if (setCameraType(CameraMode::GAMEPLAY))
 			{
 				// restore DYNAMIC camera behavior...
 				manageDynamicCamShifts(false);
@@ -107,7 +107,7 @@ namespace CTRPluginFramework
 					Sleep(Milliseconds(100)); // allow time to reorient camera before desync...
 
 					manageDynamicCamShifts(true);
-					setCameraType(CUTSCENE);
+					setCameraType(CameraMode::CUTSCENE);
 				}
 				else
 					manageY_AxisReturnShift(false);
@@ -164,13 +164,21 @@ namespace CTRPluginFramework
 
 		// allow camera lock to be maintained after entering new area...
 		if (GeneralHelpers::isLoadingScreen(false) && isCameraLocked)
-			setCameraType(CUTSCENE);
+			setCameraType(CameraMode::CUTSCENE);
 	}
 
 	// Sets the current camera mode -- used to toggle the camera's ability to follow the player
-	bool setCameraType(cameraMode mode)
+	bool setCameraType(CameraMode mode)
 	{
 		return Process::Write8(AddressList::getAddress("CameraMode"), static_cast<int>(mode));
+	}
+
+	// Gets the current camera mode
+	CameraMode Freecam::getCameraType(void)
+	{
+		u8 camMode;
+		Process::Read8(AddressList::getAddress("CameraMode"), camMode);
+		return static_cast<CameraMode>(camMode);
 	}
 
 	// Shifts the camera position along the X-axis (east-west)
@@ -211,7 +219,7 @@ namespace CTRPluginFramework
 	void rotateCamX(bool counterclockwise)
 	{
 		u32 maxThreshold = 0x40000000;
-		s32 rotationScale = static_cast<s32>(rotationFactor * rotationSensitivity);
+		s32 rotationScale = static_cast<s32>(rotationFactor * orbitSensitivity);
 
 		if (counterclockwise)
 			rotationScale = -rotationScale;
@@ -231,7 +239,7 @@ namespace CTRPluginFramework
 	// Rotates the camera along the Y-axis
 	void rotateCamY(bool counterclockwise)
 	{
-		s32 rotationScale = static_cast<s32>(rotationFactor * rotationSensitivity);
+		s32 rotationScale = static_cast<s32>(rotationFactor * orbitSensitivity);
 
 		if (counterclockwise)
 			rotationScale = -rotationScale;
@@ -276,10 +284,10 @@ namespace CTRPluginFramework
 			opts.push_back(std::string("Zoom camera out"));
 			opts.push_back(std::string("Raise camera"));
 			opts.push_back(std::string("Lower camera"));
-			opts.push_back(std::string("Counterclockwise X-rotation"));
-			opts.push_back(std::string("Clockwise X-rotation"));
-			opts.push_back(std::string("Counterclockwise Y-rotation"));
-			opts.push_back(std::string("Clockwise Y-rotation"));
+			opts.push_back(std::string("Orbit downwards"));
+			opts.push_back(std::string("Orbit upwards"));
+			opts.push_back(std::string("Orbit clockwise"));
+			opts.push_back(std::string("Orbit counterclockwise"));
 
 			menu.Populate(opts);
 
@@ -329,7 +337,7 @@ namespace CTRPluginFramework
 	{
 		Keyboard menu("Freecam Sensitivity Selection", "");
 
-		std::string message = "Current Freecam sensitivity levels:\n\n";
+		std::string message = "";
 		StringVector opts;
 
 		bool isMenuOpen = true;
@@ -338,17 +346,19 @@ namespace CTRPluginFramework
 
 		while (isMenuOpen)
 		{
-			message.append("Shift sensitivity: " + std::to_string(shiftSensitivity));
-			message.append("\nHeight sensitivity: " + std::to_string(heightSensitivity));
-			message.append("\nZoom sensitivity: " + std::to_string(zoomSensitivity));
-			message.append("\nRotation sensitivity: " + std::to_string(rotationSensitivity));
+			message.clear();
+			message.append("Current Freecam sensitivity levels:\n\n");
+			message.append("Shift sensitivity: " + Utils::ToString(shiftSensitivity, 2));
+			message.append("\nHeight sensitivity: " + Utils::ToString(heightSensitivity, 2));
+			message.append("\nZoom sensitivity: " + Utils::ToString(zoomSensitivity, 2));
+			message.append("\nOrbit sensitivity: " + Utils::ToString(orbitSensitivity, 2));
 
 			// update bottom screen options...
 			opts.clear();
 			opts.push_back(std::string("Set shift sensitivity"));
 			opts.push_back(std::string("Set height sensitivity"));
 			opts.push_back(std::string("Set zoom sensitivity"));
-			opts.push_back(std::string("Set rotation sensitivity"));
+			opts.push_back(std::string("Set orbit sensitivity"));
 			opts.push_back(std::string("Save and exit"));
 
 			menu.GetMessage() = message;
@@ -366,7 +376,7 @@ namespace CTRPluginFramework
 					zoomSensitivity = setSensitivity("Zoom Sensitivity", "Input a new sensitivity value. This value cannot be negative.\n\nRecommended values: [0.02 - 0.04]");
 					break;
 				case 3:
-					rotationSensitivity = setSensitivity("Rotation Sensitivity", "Input a new sensitivity value. This value cannot be negative.\n\nRecommended values: [0.10 - 0.50]");
+					orbitSensitivity = setSensitivity("Orbit Sensitivity", "Input a new sensitivity value. This value cannot be negative.\n\nRecommended values: [0.10 - 0.50]");
 					break;
 				default:
 					isMenuOpen = false;

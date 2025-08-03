@@ -165,6 +165,7 @@ namespace CTRPluginFramework
          * @param key Key to inject
          */
         static void     InjectKey(u32 key);
+        static void     ClearKeys(void);
     private:
         static u32      _keysDown;
         static u32      _keysHeld;
