@@ -54,6 +54,7 @@ namespace CTRPluginFramework
         static void speedrunTimer(MenuEntry* entry);
         static void toggleSplits(MenuEntry *entry);
         static void toggleTimerEvents(MenuEntry* entry);
+        static void adjustSplitDisplayDuration(MenuEntry *entry);
     };
 }
 #endif

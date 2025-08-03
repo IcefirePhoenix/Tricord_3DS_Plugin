@@ -469,15 +469,13 @@ namespace CTRPluginFramework
         *camera += new MenuEntry("Disable camera shutter", nullptr, Miscellaneous::toggleCameraShutter, false, DescUtils::getDesc("shutter_note"));
         *camera += new MenuEntry("Use photo viewer touchscreen toggle", Miscellaneous::managePhotoDisp, DescUtils::getDesc("viewer_toggle_note"));
 
-        *speedrun += (EntryWithHotkey(new MenuEntry("Enable Onscreen Speedrun Timer", Miscellaneous::speedrunTimer, DescUtils::getDesc("speedrun_note")),
+        *speedrun += (EntryWithHotkey(new MenuEntry("Enable On-screen Speedrun Timer", Miscellaneous::speedrunTimer, DescUtils::getDesc("speedrun_note")),
         {
             Hotkey(Key::X, "Create and show split"),
             Hotkey(Key::L | Key::R, "Restart timer")
         }));
-        *speedrun += new MenuEntry("Always show splits on-screen", nullptr, Miscellaneous::toggleSplits, false, DescUtils::getDesc("speedrun_splits_note"));
 
         MenuEntry* timerEventEntries[6];
-
         StringVector timerEventInitNames =
         {
             "Pause timer during cutscenes",
@@ -496,6 +494,9 @@ namespace CTRPluginFramework
         }
 
         *speedrun += speedrunOpts;
+
+        *speedrun += new MenuEntry("Always show splits on-screen", nullptr, Miscellaneous::toggleSplits, false, DescUtils::getDesc("speedrun_splits_note"));
+        *speedrun += new MenuEntry("Set splits display duration: 5 seconds", nullptr, Miscellaneous::adjustSplitDisplayDuration, true, DescUtils::getDesc("speedrun_splits_autohide_note"));
 
         *miscellaneous += buttonSpam;
         *miscellaneous += camera;

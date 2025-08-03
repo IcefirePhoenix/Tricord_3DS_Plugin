@@ -7,7 +7,7 @@ namespace CTRPluginFramework
     Clock speedTimer, splitTimer, autoSplitCooldown;
     Time pauseStartTime, pauseStartTimeRelative, pauseEndTime, accumulatedPauseDuration = Time::Zero;
 
-    int xCoord = 5, yCoord = 225, pauseEventID = -1;
+    int xCoord = 5, yCoord = 225, pauseEventID = -1, displayDuration = 5;
     bool isRunning, alwaysShowSplits, autoSplit, autoRestart;
     bool autoTimerEvents[6] = {};
 
@@ -75,7 +75,7 @@ namespace CTRPluginFramework
         if (splits.empty())
             return;
 
-        if (!splitTimer.HasTimePassed(Seconds(10)) || alwaysShowSplits)
+        if (!splitTimer.HasTimePassed(Seconds(displayDuration)) || alwaysShowSplits)
         {
             for (int rendered = 0; rendered < splits.size(); rendered++)
             {
@@ -229,8 +229,32 @@ namespace CTRPluginFramework
         alwaysShowSplits = !alwaysShowSplits;
 
         if (alwaysShowSplits)
-            entry->SetName("Auto-hide splits after 10 seconds");
+            entry->SetName("Auto-hide splits after display duration");
         else
             entry->SetName("Always show splits on-screen");
+    }
+
+    // Adjust the amount of time splits are displayed on-screen
+    void Miscellaneous::adjustSplitDisplayDuration(MenuEntry *entry)
+    {
+        StringVector durations = {"2 seconds", "5 seconds", "10 seconds"};
+        Keyboard display("Split Display Duration", "Choose a display duration.");
+        display.Populate(durations);
+
+        switch (display.Open())
+        {
+            case 0:
+                displayDuration = 2;
+                entry->SetName(Utils::Format("Set splits display duration: %s", durations[0].c_str()));
+                break;
+            case 1:
+                displayDuration = 5;
+                entry->SetName(Utils::Format("Set splits display duration: %s", durations[1].c_str()));
+                break;
+            case 2:
+                displayDuration = 10;
+                entry->SetName(Utils::Format("Set splits display duration: %s", durations[2].c_str()));
+                break;
+        }
     }
 }
