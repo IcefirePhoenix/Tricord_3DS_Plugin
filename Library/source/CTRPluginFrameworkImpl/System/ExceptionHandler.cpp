@@ -282,18 +282,7 @@ namespace CTRPluginFramework
             Directory::Create(logPath);
 
         // build path to log file...
-        switch (Process::GetTitleID())
-        {
-            case TID_USA:
-                logPath.append("NA/");
-                break;
-            case TID_EUR:
-                logPath.append("EU/");
-                break;
-            case TID_JPN:
-                logPath.append("JP/");
-                break;
-        }
+        logPath.append(Process::GetRegionCode() + "/");
 
         if (!Directory::IsExists(logPath))
             Directory::Create(logPath);

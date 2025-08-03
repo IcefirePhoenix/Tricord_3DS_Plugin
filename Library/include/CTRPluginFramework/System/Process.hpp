@@ -42,6 +42,12 @@ namespace CTRPluginFramework
         static u32      GetProcessID(void);
 
         /**
+         * \brief Get abbreviated region code (NA, EU, JP)
+         * \return Region code of the current process
+         */
+        static std::string  GetRegionCode(void);
+
+        /**
          * \brief Get the title ID of the current process
          * \return TitleID of the current process
          */

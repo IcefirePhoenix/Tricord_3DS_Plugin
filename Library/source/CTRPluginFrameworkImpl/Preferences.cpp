@@ -153,27 +153,16 @@ namespace CTRPluginFramework
             memcpy(reinterpret_cast<void*>(Backlights), &header.lcdbacklights, sizeof(Backlights));
 
             // set last saved screenshot preferences
-            std::string dirPath = "/Tricord/Screenshots";
+            std::string dirPath = "/Tricord/Screenshots/";
             if (!Directory::IsExists(dirPath))
                 Directory::Create(dirPath);
 
-            switch (Process::GetTitleID())
-            {
-            case TID_USA:
-                dirPath.append("/NA/");
-                break;
-            case TID_EUR:
-                dirPath.append("/EU/");
-                break;
-            case TID_JPN:
-                dirPath.append("/JP/");
-                break;
-            }
+            dirPath.append(Process::GetRegionCode() + "/");
 
             if (!Directory::IsExists(dirPath))
                 Directory::Create(dirPath);
 
-            Screenshot::Path = std::strlen(header.screenshotCustomDir) == 0 ? dirPath : header.screenshotCustomDir;
+            Screenshot::Path = dirPath;
             Screenshot::Prefix = std::strlen(header.screenshotCustomName) == 0 ? "Screenshot" : header.screenshotCustomName;
 
             // these have already been given default values under Screenshot.cpp, so only update if necessary
