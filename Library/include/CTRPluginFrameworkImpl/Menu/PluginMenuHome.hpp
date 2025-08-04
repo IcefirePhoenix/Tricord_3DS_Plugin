@@ -28,7 +28,7 @@ namespace CTRPluginFramework
         void UnStar(MenuItem* item);
         void Init(void);
 
-        void AddPluginVersion(u32 version);
+        void AddPluginVersion(void);
         void Close(MenuFolderImpl *folder);
 
         void UpdateNote(void);

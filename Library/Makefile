@@ -8,23 +8,23 @@ endif
 
 include $(DEVKITARM)/3ds_rules
 
-export CTRPF_REVISION		:=	$(shell printf "%s.r%s" "$$(git describe --abbrev=0)" "$$(git rev-list --count HEAD)")
-export CTRPF_VERSION_MAJOR	:=	$(shell git describe --always --tags | cut -f1 -d- | cut -f1 -d.)
-export CTRPF_VERSION_MINOR	:=	$(shell git describe --always --tags | cut -f1 -d- | cut -f2 -d.)
-export CTRPF_VERSION_BUILD	:=	$(shell git describe --always --tags | cut -f1 -d- | cut -f3 -d.)
-export COMMIT			:=	$(shell git rev-parse --short=8 HEAD)
-export COMPILE_DATE 	:=  $(shell date -u +"%Y-%m-%dT%H:%M:%S%Z")
-export INVITE 			:=	P6csr4jc5U
+# GitHub commit hash (short) = 7 chars | GitLab commit hash (short) = 8 chars
+TRICORD_VERSION_TAG 			:= $(shell git describe --always --tags | cut -f1 -d-)
+TRICORD_VERSION_COMMIT_SHORT	:= $(shell git rev-parse --short=7 HEAD)
+CTRPF_VERSION_TAG 				:= $(shell curl -s https://gitlab.com/api/v4/projects/thepixellizeross%2Fctrpluginframework/repository/tags | grep -oP '"name":\s*"\K[^"]+' | head -n 1)
+CTRPF_VERSION_COMMIT_SHORT 		:= $(shell curl -s "https://gitlab.com/api/v4/projects/thepixellizeross%2Fctrpluginframework/repository/commits" | grep -oP '"id":"\K[^"]+' | head -n 1 | cut -c1-8)
 
+TRICORD_VERSION_MAJOR := $(shell echo $(TRICORD_VERSION_TAG) | cut -d. -f1)
+TRICORD_VERSION_MINOR := $(shell echo $(TRICORD_VERSION_TAG) | cut -d. -f2)
+TRICORD_VERSION_REV   := $(shell echo $(TRICORD_VERSION_TAG) | cut -d. -f3)
+
+export CTRPF_REVISION			:= $(shell printf "%s.r%s" "$$(git describe --abbrev=0 --tags)" "$$(git rev-list --count HEAD)")
+export CTRPF_BUILD_METADATA 	:= $(shell printf "%s [%s]" "$(CTRPF_VERSION_TAG)" "$(CTRPF_VERSION_COMMIT_SHORT)")
+export TRICORD_BUILD_METADATA 	:= $(shell printf "%s [%s]" "$(TRICORD_VERSION_TAG)" "$(TRICORD_VERSION_COMMIT_SHORT)")
+export COMPILE_DATE 			:= $(shell date -u +"%Y-%m-%d at %H:%M:%S%Z")
+export INVITE 					:= P6csr4jc5U
 
 ENABLE_LINK_TIME_OPTIMIZATIONS = 1
-
-#ifeq ($(strip $(CTRPF_REVISION)),)
-#	export CTRPF_REVISION			:=	v0.0.0-0
-#	export CTRPF_VERSION_MAJOR	:=	0
-#	export CTRPF_VERSION_MINOR	:=	0
-#	export CTRPF_VERSION_BUILD	:=	0
-#endif
 
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
@@ -70,8 +70,13 @@ INCLUDES	:=	include
 #---------------------------------------------------------------------------------
 ARCH	:=	-march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 
-DEFINES	:=	-DCTRPF_VERSION_MAJOR="\"$(CTRPF_VERSION_MAJOR)\"" -DCTRPF_VERSION_MINOR="\"$(CTRPF_VERSION_MINOR)\"" \
-			-DCTRPF_VERSION_BUILD="\"$(CTRPF_VERSION_BUILD)\"" -DCOMMIT_HASH="\"$(COMMIT)\"" -DCOMPILE_DATE="\"$(COMPILE_DATE)\"" -DINVITE="\"$(INVITE)\""
+DEFINES	:=	-DTRICORD_BUILD_METADATA="\"$(TRICORD_BUILD_METADATA)\"" \
+			-DCTRPF_BUILD_METADATA="\"$(CTRPF_BUILD_METADATA)\"" \
+			-DCOMPILE_DATE="\"$(COMPILE_DATE)\"" \
+			-DINVITE="\"$(INVITE)\"" \
+			-DTRICORD_VERSION_MAJOR="\"$(TRICORD_VERSION_MAJOR)"\" \
+			-DTRICORD_VERSION_MINOR="\"$(TRICORD_VERSION_MINOR)"\" \
+			-DTRICORD_VERSION_REV="\"$(TRICORD_VERSION_REV)"\"
 
 GCC11_FALSEPOSITIVES := -Wno-array-bounds -Wno-stringop-overflow -Wno-stringop-overread
 CFLAGS	:=	-Wall -Werror -Wno-psabi -mword-relocations \
@@ -208,6 +213,11 @@ lib/libctrpfd.a : libcwav-build lib debug
 clean:
 	@echo clean ...
 	@rm -fr release debug lib docs libcwav
+
+version:
+	@echo "Latest Lib: $(CTRPF_BUILD_METADATA)"
+	@echo "Latest Tricord: $(TRICORD_BUILD_METADATA)"
+	@echo "Compile Date: $(COMPILE_DATE)"
 
 #---------------------------------------------------------------------------------
 else

@@ -13,6 +13,8 @@ namespace CTRPluginFramework
         FreecamToggle = false;
         GameplayToggle = false;
         ShowInvite = false;
+
+        _menu->AddPluginVersion();
     }
 
     PluginMenu::PluginMenu(std::string name, void *about, DecipherPointer func, u32 menuType) :
@@ -26,18 +28,6 @@ namespace CTRPluginFramework
         ShowInvite = false;
 
         _menu = std::unique_ptr<PluginMenuImpl>(new PluginMenuImpl(name, aboutStr, menuType));
-    }
-
-    PluginMenu::PluginMenu(std::string name, u32 major, u32 minor, u32 revision, std::string about, u32 menuType) :
-        OnFirstOpening{ nullptr }, OnOpening{ nullptr }, OnClosing{ nullptr }, OnNewFrame{ nullptr }, _menu(new PluginMenuImpl(name, about, menuType))
-    {
-        u32 version = (major & 0xFF) | ((minor & 0xFF) << 8) | ((revision & 0xFF) << 16);
-
-        FreecamToggle = false;
-        GameplayToggle = false;
-        ShowInvite = false;
-
-        _menu->AddPluginVersion(version);
     }
 
     PluginMenu::~PluginMenu(void)

@@ -173,8 +173,9 @@ namespace CTRPluginFramework
     {
         std::string infoStr = "";
 
-        // infoStr += ("Tricord version: " + TRICORD_BUILD_METADATA + "\n"; // use this later
-        infoStr += "Tricord version: 0.5.0\n"; // TODO: placeholder version
+        infoStr += Utils::Format("Tricord version: %s\n", TRICORD_BUILD_METADATA);
+        infoStr += Utils::Format("CTRPF version: %s\n", CTRPF_BUILD_METADATA);
+        infoStr += ("Timestamp: " + Time::GetDate(true) + "\n\n");
 
         switch (excep->type)
         {

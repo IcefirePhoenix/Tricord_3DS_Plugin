@@ -70,7 +70,7 @@ namespace CTRPluginFramework
         MenuFolderImpl *GetHidden(void) const;
         bool    IsOpen(void) const;
         bool    WasOpened(void) const;
-        void    AddPluginVersion(u32 version) const;
+        void    AddPluginVersion(void) const;
 
         FuncPointer			OnFirstOpening;
 		OnOpeningCallback	OnOpening;
