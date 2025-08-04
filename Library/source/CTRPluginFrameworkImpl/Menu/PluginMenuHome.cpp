@@ -1173,11 +1173,11 @@ namespace CTRPluginFramework
         _InfoBtn.Enable(item != nullptr ? !item->GetNote().empty() : false);
     }
 
-    void PluginMenuHome::AddPluginVersion(u32 version)
+    void PluginMenuHome::AddPluginVersion(void)
     {
         char buffer[100];
 
-        sprintf(buffer, "[%d.%d.%d]", static_cast<int>(version & 0xFF), static_cast<int>((version >> 8) & 0xFF), static_cast<int>(version >> 16));
+        sprintf(buffer, "[%s.%s.%s]", TRICORD_VERSION_MAJOR, TRICORD_VERSION_MINOR,TRICORD_VERSION_REV);
         _versionStr.clear();
         _versionStr = buffer;
 

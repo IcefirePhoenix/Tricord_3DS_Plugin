@@ -23,17 +23,6 @@
 #include <cstring>
 #include <cstdio>
 
-#define ALPHA 0
-
-#define TAG_VERSION CTRPF_VERSION_MAJOR "." CTRPF_VERSION_MINOR "." CTRPF_VERSION_BUILD
-
-// Maybe add branch as metadata ?
-#if ALPHA
-#define VersionStr "CTRPluginFramework Alpha V.0.6.0"
-#else
-#define VersionStr "CTRPluginFramework Beta V" TAG_VERSION
-#endif
-
 namespace CTRPluginFramework
 {
     enum Mode
@@ -741,18 +730,20 @@ namespace CTRPluginFramework
 
         // Draw Framework version
         {
-            //static const char *version = VersionStr;
-            static const char *tagVersion = "0.5.0"; // CHANGE
-            static const char *commit = "0.7.4";
+            static const char *CTRPFVersion = CTRPF_BUILD_METADATA;
+            static const char *TricordVersion = TRICORD_BUILD_METADATA;
             static const char *compilationDate = COMPILE_DATE;
 
             int posY = 105, posYY = 125;
-            Renderer::DrawString("Tricord Build Information:",  40, posY, blank);
-            Renderer::DrawLine(40, posY, 25 * 6, blank); posY += 10;
-            Renderer::DrawString("Tricord Version: ",  40, posY, blank);    Renderer::DrawString(tagVersion,  140, posYY, blank);
-            Renderer::DrawString("CTRPF Version: ",  40, posY, blank);     Renderer::DrawString(commit,  129, posYY, blank);
-            Renderer::DrawString("Compile Date: ",  40, posY, blank);   Renderer::DrawString(compilationDate,  124, posYY, blank);
-
+            Renderer::DrawString("Tricord Build Information:", 40, posY, blank);
+            Renderer::DrawLine(40, posY, 25 * 6, blank);
+            posY += 10;
+            Renderer::DrawString("Tricord Version: ", 40, posY, blank);
+            Renderer::DrawString(TricordVersion, 140, posYY, blank);
+            Renderer::DrawString("CTRPF Version: ", 40, posY, blank);
+            Renderer::DrawString(CTRPFVersion, 129, posYY, blank);
+            Renderer::DrawString("Compile Date: ", 40, posY, blank);
+            Renderer::DrawString(compilationDate, 124, posYY, blank);
 
             posY = 175;
             Renderer::DrawString(g_ctrpfText, g_textXpos[0], posY, Color::Gainsboro);
