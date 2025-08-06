@@ -78,7 +78,7 @@ namespace CTRPluginFramework
             int     maxX = _uiProperties.leftTop.x + _uiProperties.size.x - 1;
 
             // Text
-            Renderer::DrawSysString(_content.c_str(), posX, posY, maxX, text);
+            Renderer::DrawGameFontString(_content.c_str(), posX, posY, maxX, text);
         }
         else {
             // Icon

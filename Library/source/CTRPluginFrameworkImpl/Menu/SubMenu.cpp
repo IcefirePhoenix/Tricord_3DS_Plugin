@@ -44,7 +44,7 @@ namespace CTRPluginFramework
         int posY = 25;
 
         // Draw title's menu
-        const int xx = Renderer::DrawSysString("Options", 245, posY, 340, textcolor);
+        const int xx = Renderer::DrawGameFontString("Options", 245, posY, 340, textcolor);
         Renderer::DrawLine(245, posY, xx - 225, textcolor);
 
         posY = 46;

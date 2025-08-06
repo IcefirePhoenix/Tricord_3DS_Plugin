@@ -245,19 +245,19 @@ namespace CTRPluginFramework
             posY += 5;
             Renderer::DrawString("Apply changes: ", 44, posY, maintextcolor);
             posY -= 14;
-            Renderer::DrawSysString("\uE000", 149, posY, 330, maintextcolor);
+            Renderer::DrawGameFontString("\uE000", 149, posY, 330, maintextcolor);
 
             posY +=2;
             Renderer::DrawString("Discard changes: ", 44, posY, maintextcolor);
             posY -= 14;
-            Renderer::DrawSysString("\uE001", 149, posY, 330, maintextcolor);
+            Renderer::DrawGameFontString("\uE001", 149, posY, 330, maintextcolor);
         }
         else
         {
             posY += 5;
             Renderer::DrawString("Options: ", 44, posY, maintextcolor);
             posY -= 14;
-            Renderer::DrawSysString("\uE002", 99, posY, 330, maintextcolor);
+            Renderer::DrawGameFontString("\uE002", 99, posY, 330, maintextcolor);
         }
 
         // Render submenu

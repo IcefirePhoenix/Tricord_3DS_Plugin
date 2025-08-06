@@ -15,15 +15,15 @@ namespace CTRPluginFramework
     PluginMenuHome::PluginMenuHome(std::string& name, bool showNoteBottom) :
         _noteTB("", "", showNoteBottom ? IntRect(20, 46, 280, 124) : IntRect(40, 30, 320, 180)),
 
-        _showStarredBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Favorites", IntRect(45, 125, 110, 28)),
-        _freecamBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Freecam", IntRect(45, 90, 110, 28)),
-        _gameModeBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Game Modes", IntRect(165, 90, 110, 28)),
-        _faqBtn(Button::Sysfont | Button::Rounded, "FAQ/Credits", IntRect(105, 195, 110, 28)),
-        _searchBtn(Button::Sysfont | Button::Rounded, "Search", IntRect(165, 125, 110, 28)),
-        _arBtn(Button::Sysfont | Button::Rounded, "Action Replay", IntRect(45, 160, 110, 28)),
-        _toolsBtn(Button::Sysfont | Button::Rounded, "Tools", IntRect(165, 160, 110, 28)),
+        _showStarredBtn(Button::Toggle | Button::GameFont | Button::Rounded, "Favorites", IntRect(45, 125, 110, 28)),
+        _freecamBtn(Button::Toggle | Button::GameFont | Button::Rounded, "Freecam", IntRect(45, 90, 110, 28)),
+        _gameModeBtn(Button::Toggle | Button::GameFont | Button::Rounded, "Game Modes", IntRect(165, 90, 110, 28)),
+        _faqBtn(Button::GameFont | Button::Rounded, "FAQ/Credits", IntRect(105, 195, 110, 28)),
+        _searchBtn(Button::GameFont | Button::Rounded, "Search", IntRect(165, 125, 110, 28)),
+        _arBtn(Button::GameFont | Button::Rounded, "Action Replay", IntRect(45, 160, 110, 28)),
+        _toolsBtn(Button::GameFont | Button::Rounded, "Tools", IntRect(165, 160, 110, 28)),
 
-        _discordBtn(Button::Icon | Button::Toggle, IntRect(250, 50, 25, 25), Icon::DrawDiscord),
+
         _controllerBtn(Button::Icon, IntRect(210, 50, 25, 25), Icon::Draw3DS),
 
         _AddFavoriteBtn(Button::Icon | Button::Toggle, IntRect(50, 50, 25, 25), Icon::DrawAddFavorite),
@@ -87,7 +87,7 @@ namespace CTRPluginFramework
 
         int posLabel = 190;
         std::string message = std::string("Prefer typing? Use: discord.gg/") + INVITE;
-        Renderer::DrawSysStringReturn((const u8 *)message.c_str(), 40, posLabel, 362, Color::White);
+        Renderer::DrawGameFontStringReturn((const u8 *)message.c_str(), 40, posLabel, 362, Color::White);
     }
 
     void drawInviteInfo(void)
@@ -98,7 +98,7 @@ namespace CTRPluginFramework
         // really lazy workaround to avoid creating a custom UI box just for this...
         Renderer::SetTarget(TOP);
         Window::TopWindow.Draw("TFH Modding Discord Server");
-        Renderer::DrawSysStringReturn((const u8 *)message.c_str(), 180, posY, 370, Color::White);
+        Renderer::DrawGameFontStringReturn((const u8 *)message.c_str(), 180, posY, 370, Color::White);
     }
 
     bool PluginMenuHome::operator()(EventList& eventList, int& mode, Time& delta)
@@ -598,12 +598,12 @@ namespace CTRPluginFramework
         // Draw Title
         int maxWidth = _showVersion ? _versionPosX - 10 : 360;
         int posYbak = posY;
-        int width = Renderer::DrawSysString(folder->name.c_str(), posX, posY, maxWidth, maintext);
+        int width = Renderer::DrawGameFontString(folder->name.c_str(), posX, posY, maxWidth, maintext);
         Renderer::DrawLine(posX, posY, width, maintext);
         posY += 7;
 
         if (_showVersion && !_starMode && !folder->HasParent())
-            Renderer::DrawSysString(_versionStr.c_str(), _versionPosX, posYbak, 360, maintext);
+            Renderer::DrawGameFontString(_versionStr.c_str(), _versionPosX, posYbak, 360, maintext);
 
         // Draw Entry
         u32  drawSelector = SelectableEntryCount(*folder);
@@ -645,11 +645,11 @@ namespace CTRPluginFramework
 
                 // lazy... might rewrite later
                 if (entry->_flags.disableIcon && !entry->_flags.isUnselectable) {
-                    Renderer::DrawSysString(name, posX + 20, posY, 350, Color::Gainsboro, offset);
+                    Renderer::DrawGameFontString(name, posX + 20, posY, 350, Color::Gainsboro, offset);
                 }
                 else if (entry->_flags.useControllerIcon && !entry->_flags.isUnselectable) {
                     Icon::DrawGameController(posX, posY);
-                    Renderer::DrawSysString(name, posX + 20, posY, 350, Color::Gainsboro, offset);
+                    Renderer::DrawGameFontString(name, posX + 20, posY, 350, Color::Gainsboro, offset);
                     posY += 1;
                 }
                 else {
@@ -660,7 +660,7 @@ namespace CTRPluginFramework
                         if (entry->MenuFunc != nullptr && !entry->_flags.isUnselectable)
                             Icon::DrawSettings(posX, posY);
 
-                        Renderer::DrawSysString(name, posX + 20, posY, 350, Color::Gainsboro, offset);
+                        Renderer::DrawGameFontString(name, posX + 20, posY, 350, Color::Gainsboro, offset);
                         posY += 1;
                     }
                 }

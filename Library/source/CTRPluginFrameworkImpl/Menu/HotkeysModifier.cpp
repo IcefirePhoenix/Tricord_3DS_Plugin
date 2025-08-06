@@ -152,7 +152,7 @@ namespace CTRPluginFramework
         Window::TopWindow.Draw("Hotkey Modifier");
 
         int posY = 55;
-        Renderer::DrawSysStringReturn((const u8*)_message.c_str(), 40, posY, 345, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontStringReturn((const u8*)_message.c_str(), 40, posY, 345, Preferences::Settings.MainTextColor);
     }
 
     void    HotkeysModifier::_DrawBottom(void)
@@ -166,19 +166,19 @@ namespace CTRPluginFramework
 
         // Draw labels
         for (int i = 0, posY = 88; i < 5; ++i, posY += 9)
-            Renderer::DrawSysString(stable[i], 50, posY, 290, Preferences::Settings.MainTextColor);
+            Renderer::DrawGameFontString(stable[i], 50, posY, 290, Preferences::Settings.MainTextColor);
         for (int i = 5, posY = 88; i < 10; ++i, posY += 9)
-            Renderer::DrawSysString(stable[i], 100, posY, 290, Preferences::Settings.MainTextColor);
+            Renderer::DrawGameFontString(stable[i], 100, posY, 290, Preferences::Settings.MainTextColor);
         for (int i = 10, posY = 88; i < 15; ++i, posY += 9)
-            Renderer::DrawSysString(stable[i], 150, posY, 290, Preferences::Settings.MainTextColor);
+            Renderer::DrawGameFontString(stable[i], 150, posY, 290, Preferences::Settings.MainTextColor);
         for (int i = 15, posY = 88; i < 20; ++i, posY += 9)
-            Renderer::DrawSysString(stable[i], 235, posY, 300, Preferences::Settings.MainTextColor);
+            Renderer::DrawGameFontString(stable[i], 235, posY, 300, Preferences::Settings.MainTextColor);
 
         int startY = 215;
         int selY = 215;
 
-        Renderer::DrawSysString(stable[20], 113, startY, 290, Preferences::Settings.MainTextColor);
-        Renderer::DrawSysString(stable[21], 185, selY, 290, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontString(stable[20], 113, startY, 290, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontString(stable[21], 185, selY, 290, Preferences::Settings.MainTextColor);
     }
 
     void    HotkeysModifier::_Update(void)

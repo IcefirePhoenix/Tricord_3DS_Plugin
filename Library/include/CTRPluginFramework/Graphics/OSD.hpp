@@ -41,14 +41,14 @@ namespace CTRPluginFramework
         u32     Draw(const std::string &str, u32 posX, u32 posY, const Color &foreground = Color::White, const Color &background = Color::Black) const;
 
         /**
-         * \brief Draw a string using system font (support utf8 strings with special chars & unicode)
+         * \brief Draw a string using game font (support utf8 strings with special chars & unicode)
          * \param str The string to draw
          * \param posX The position on screen to draw the string to
          * \param posY The position on screen to draw the string to
          * \param foreground The color of the characters
          * \return posY + 16 (line feed)
          */
-        u32     DrawSysfont(const std::string &str, u32 posX, u32 posY, const Color &foreground = Color::White) const;
+        u32     DrawGameFont(const std::string &str, u32 posX, u32 posY, const Color &foreground = Color::White) const;
 
         /**
          * \brief Draw a rectangle
@@ -117,11 +117,11 @@ namespace CTRPluginFramework
 
         /**
          * \brief Returns the width in pixels of the specified string
-         * \param sysfont Which font will be used to compute the width
+         * \param GameFont Which font will be used to compute the width (Linux vs TFH)
          * \param text
          * \return The width in pixels
          */
-        static float    GetTextWidth(bool sysfont, const std::string& text);
+        static float    GetTextWidth(bool GameFont, const std::string& text);
 
         /* Those are to be used only when the process is paused */
         static const Screen&    GetTopScreen(void);

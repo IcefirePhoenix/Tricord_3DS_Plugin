@@ -701,15 +701,6 @@ namespace CTRPluginFramework
             _abouttb.Draw();
             return;
         }
-
-      /*  // Window
-        Window::TopWindow.Draw();
-
-        // Title
-        int posY = 25;
-        int xx = Renderer::DrawSysString("Tools", 40, posY, 330, Color::Blank);
-        Renderer::DrawLine(40, posY, xx, Color::Blank);*/
-
         _menu.Draw();
     }
 

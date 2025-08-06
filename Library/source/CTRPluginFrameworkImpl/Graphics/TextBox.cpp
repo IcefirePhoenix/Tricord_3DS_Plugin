@@ -255,7 +255,7 @@ namespace CTRPluginFramework
         if (!_title.empty())
         {
             int width;
-            width = Renderer::DrawSysString((const char *)_title.c_str(), posX, posY, xLimit, settings.WindowTitleColor);
+            width = Renderer::DrawGameFontString((const char *)_title.c_str(), posX, posY, xLimit, settings.WindowTitleColor);
             int length = width - posX + 30;
             if (posX + length > xLimit)
                 length = xLimit - posX;
@@ -269,7 +269,7 @@ namespace CTRPluginFramework
         RendererPriv::g_customColor = textColor;
         for (int i = _currentLine; i < max; i++)
         {
-            Renderer::DrawSysString((char *)_newline[i], posX, posY, xLimit, RendererPriv::g_customColor, 0, (char *)_newline[i + 1]);
+            Renderer::DrawGameFontString((char *)_newline[i], posX, posY, xLimit, RendererPriv::g_customColor, 0, (char *)_newline[i + 1]);
         }
 
         if (!_displayScrollbar)

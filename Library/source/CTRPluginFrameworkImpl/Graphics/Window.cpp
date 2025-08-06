@@ -62,7 +62,7 @@ namespace CTRPluginFramework
         Color &color = Preferences::Settings.WindowTitleColor;
         int posY = _rect.leftTop.y + 5;
         int posX = _rect.leftTop.x + 10;
-        int xx = Renderer::DrawSysString(title.c_str(),posX, posY, 330, color);
+        int xx = Renderer::DrawGameFontString(title.c_str(),posX, posY, 330, color);
         Renderer::DrawLine(posX, posY, xx, color);
 
         // Close button
