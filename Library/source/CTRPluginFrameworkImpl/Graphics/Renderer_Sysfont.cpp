@@ -1,5 +1,7 @@
 #include "types.h"
+#include "fontTFH_Structs.h"
 
+#include "CTRPluginFramework/Graphics/CustomFont.hpp"
 #include "CTRPluginFramework/Graphics/Render.hpp"
 #include "CTRPluginFrameworkImpl/Graphics.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/Font.hpp"
@@ -9,7 +11,7 @@
 
 namespace CTRPluginFramework
 {
-    extern "C" CFNT_s* g_sharedFont;
+    extern "C" CFNT_TFH* TFH_Font;
     extern "C" int g_charPerSheet;
 
     inline u32   GetFramebufferOffset(int posX, int posY, int bpp, int rowsize)
@@ -19,9 +21,10 @@ namespace CTRPluginFramework
 
     void Renderer::FontCalcGlyphPos(fontGlyphPos_s *out,  charWidthInfo_s **cwout, int glyphIndex, float scaleX, float scaleY)
     {
-        FINF_s* finf = &g_sharedFont->finf;
-        TGLP_s* tglp = finf->tglp;
-        charWidthInfo_s *cwi = fontGetCharWidthInfo(nullptr, glyphIndex);
+        g_charPerSheet = TFH_Font->finf.tglp->nRows * TFH_Font->finf.tglp->nLines;
+        FINF_TFH *finf = &TFH_Font->finf;
+        TGLP_TFH* tglp = finf->tglp;
+        charWidthInfo_s *cwi = fontGetTFHCharWidthInfo(TFH_Font, glyphIndex);
         *cwout = cwi;
 
         int sheetId = glyphIndex / g_charPerSheet;
@@ -29,19 +32,19 @@ namespace CTRPluginFramework
         out->sheetIndex = sheetId;
         out->xOffset = scaleX * cwi->left;
         out->xAdvance = scaleX * cwi->charWidth;
-        out->width = scaleX * cwi->glyphWidth;
+        out->width = scaleX * 19; // glyphWidth is inaccurate due to 1px padding
 
         int lineId = glInSheet / tglp->nRows;
         int rowId = glInSheet % tglp->nRows;
 
-        float tp = (float)(rowId*(tglp->cellWidth+1)+1);
-        float tx = (float)(tp / tglp->sheetWidth)   ;
-        float ty = 1.0f - (float)((lineId+1)*(tglp->cellHeight+1)+1) / tglp->sheetHeight;
-        float tw = (float)cwi->glyphWidth / tglp->sheetWidth;
-        float th = (float)tglp->cellHeight / tglp->sheetHeight;
+        float tp = (float)(rowId * (20) + 1); // 19px cell width + 1px padding = 20px
+        float tx = (float)(tp / tglp->sheetWidth);
+        float ty = 1.0f - (float)((lineId + 1) * (26) + 1) / tglp->sheetHeight; // 25px cell height + 1px padding = 26px
+        float tw = 19.0 / tglp->sheetWidth;
+        float th = 25.0 / tglp->sheetHeight;
         out->texcoord.left = tx;
         out->texcoord.top = ty;
-        out->texcoord.right = tx+tw;
+        out->texcoord.right = tx + tw;
         out->texcoord.bottom = ty + th;
     }
 
@@ -254,7 +257,7 @@ namespace CTRPluginFramework
     {
         Icon::DrawCheckBox(posX, posY, isChecked);
         posX += 20;
-        DrawSysString(str, posX, posY, xLimits, color, offset);
+        DrawGameFontString(str, posX, posY, xLimits, color, offset);
         posY += 1;
 
     }
@@ -263,7 +266,7 @@ namespace CTRPluginFramework
     {
         Icon::DrawFolder(posX, posY);
         posX += 20;
-        DrawSysString(str, posX, posY, xLimits, color, offset);
+        DrawGameFontString(str, posX, posY, xLimits, color, offset);
         posY += 1;
     }
 
@@ -287,7 +290,8 @@ namespace CTRPluginFramework
         u8   italicOffset = (flags & Render::FontDrawMode::ITALIC) ? 3 : 0;
         u32  lineCount = 0;
 
-        for (int i = 0; i < 208; i++)
+        // glyph final, resized dimensions are 13*17 (w*h) = 221 pixels
+        for (int i = 0; i < 221; i++)
         {
             if (i != 0 && i % 13 == 0)
             {
@@ -303,6 +307,15 @@ namespace CTRPluginFramework
             // Don't waste time on pixels which are only 5% visible
             for (int j = 0; (alpha > 12) && j < ((flags & Render::FontDrawMode::BOLD) ? 2 : 1); j++)
             {
+                float tintFactor = (255.0f - alpha) / 255.0f;
+
+                // Blend body text color and outline tint based on alpha
+                u8 r = static_cast<u8>(Preferences::Settings.MainTextColor.r * (1.0f - tintFactor) + 0 * tintFactor);
+                u8 g = static_cast<u8>(Preferences::Settings.MainTextColor.g * (1.0f - tintFactor) + 0 * tintFactor);
+                u8 b = static_cast<u8>(Preferences::Settings.MainTextColor.b * (1.0f - tintFactor) + 0 * tintFactor);
+
+                color = Color(r, g, b, alpha);
+
                 color.a = alpha;
                 Color &&l = PrivColor::FromFramebuffer(fb + stride * j + italicOffset * stride);
                 Color &&c = l.Blend(color, Color::BlendMode::Alpha);
@@ -330,7 +343,8 @@ namespace CTRPluginFramework
         u8   italicOffset = (flags & Render::FontDrawMode::ITALIC) ? 3 : 0;
         u32  lineCount = 0;
 
-        for (int i = static_cast<int>(offset); i < 208; i++)
+        // glyph final, resized dimensions are 13*17 (w*h) = 221 pixels
+        for (int i = static_cast<int>(offset); i < 221; i++)
         {
             if (i != 0 && i % 13 == 0)
             {
@@ -348,6 +362,15 @@ namespace CTRPluginFramework
             // Don't waste time on pixels which are only 5% visible
             for (int j = 0; (alpha > 12) && j < ((flags & Render::FontDrawMode::BOLD) ? 2 : 1); j++)
             {
+                float tintFactor = (255.0f - alpha) / 255.0f;
+
+                // Blend body text color and outline tint based on alpha
+                u8 r = static_cast<u8>(Preferences::Settings.MainTextColor.r * (1.0f - tintFactor) + 0 * tintFactor);
+                u8 g = static_cast<u8>(Preferences::Settings.MainTextColor.g * (1.0f - tintFactor) + 0 * tintFactor);
+                u8 b = static_cast<u8>(Preferences::Settings.MainTextColor.b * (1.0f - tintFactor) + 0 * tintFactor);
+
+                color = Color(r, g, b, alpha);
+
                 color.a = alpha;
                 Color &&l = PrivColor::FromFramebuffer(fb + stride * j + italicOffset * stride);
                 Color &&c = l.Blend(color, Color::BlendMode::Alpha);
@@ -365,7 +388,7 @@ namespace CTRPluginFramework
         return (posX + glyph->xAdvance);
     }
 
-    int Renderer::DrawSysStringReturn(const unsigned char *stri, int posX, int& posY, int xLimits, Color color, int maxY, u32 flags)
+    int Renderer::DrawGameFontStringReturn(const unsigned char *stri, int posX, int& posY, int xLimits, Color color, int maxY, u32 flags)
     {
         // Check for a valid pointer
         if (!(stri && *stri))
@@ -567,7 +590,7 @@ namespace CTRPluginFramework
         Color   g_customColor;
     }
 
-    int Renderer::DrawSysString(const char *stri, int posX, int &posY, int xLimits, Color color, float offset, const char *end, u32 flags)
+    int Renderer::DrawGameFontString(const char *stri, int posX, int &posY, int xLimits, Color color, float offset, const char *end, u32 flags)
     {
         Glyph   *glyph;
         int      x = posX;
