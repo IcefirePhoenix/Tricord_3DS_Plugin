@@ -720,7 +720,7 @@ namespace CTRPluginFramework
 
             int     posY = 90;
 
-            Renderer::DrawSysString("Done", 173, posY, 300, skyblue);
+            Renderer::DrawGameFontString("Done", 173, posY, 300, skyblue);
             posY += 10;
 
             // Progressbar
@@ -737,7 +737,7 @@ namespace CTRPluginFramework
             Renderer::DrawString((char *)res.c_str(), 131, posY, blank);
             Renderer::DrawString((char *)res2.c_str(), 131, posY, blank);
             posY -= 10;
-            Renderer::DrawSysString("\uE000", 255, posY, 300, skyblue);
+            Renderer::DrawGameFontString("\uE000", 255, posY, 300, skyblue);
 
             // Render bottom screen
             _this->_RenderBottom();

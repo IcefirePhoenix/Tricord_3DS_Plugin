@@ -21,7 +21,7 @@ namespace CTRPluginFramework
             LINEDOTTED = (1 << 4)
         };
         /**
-        * \brief Gets the amount of pixels the text takes using the sysfont.
+        * \brief Gets the amount of pixels the text takes using the GameFont.
         * \param text Input text to calculate its width
         * \return Value of pixels the text takes.
         */
@@ -114,7 +114,7 @@ namespace CTRPluginFramework
             void     DrawRect(const IntRect& rect, const Color& color, bool fill = true, int thickness = 1);
 
             /**
-             * @brief Draws an string with the system font
+             * @brief Draws an string with the game font
              *
              * @param str String to draw
              * @param posX Starting X position of the string
@@ -124,7 +124,7 @@ namespace CTRPluginFramework
              * @param yLimit Limit Y coordinate. Drawing will stop after reaching this Y coordinate
              * @param autoWrap Automatically wrap text to the next line
              */
-            void     DrawSysString(const std::string& str, int posX, int posY, Color color, int xLimit = 320, int yLimit = 240, bool autoWrap = false);
+            void     DrawGameFontString(const std::string& str, int posX, int posY, Color color, int xLimit = 320, int yLimit = 240, bool autoWrap = false);
 
             /**
              * @brief Draws a custom icon

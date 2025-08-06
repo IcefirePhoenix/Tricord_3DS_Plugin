@@ -23,7 +23,7 @@ namespace CTRPluginFramework
             Normal = 0,
             Toggle = 1 << 1,
             Icon = 1 << 3,
-            Sysfont = 1 << 4,
+            GameFont = 1 << 4,
             Rounded = 1 << 5
         };
 
@@ -64,7 +64,7 @@ namespace CTRPluginFramework
             {
                 bool    _isIconBtn : 1;
                 bool    _isToggleBtn : 1;
-                bool    _useSysfont : 1;
+                bool    _useGamefont : 1;
                 bool    _isRounded : 1;
 
                 bool    _isEnabled : 1;

@@ -125,45 +125,45 @@ namespace CTRPluginFramework
         drawInviteQR(topScreen, 175, 15, qrcodegen::QrCode::encodeText(((std::string("https://discord.com/invite/") + INVITE).c_str()), qrcodegen::QrCode::Ecc::MEDIUM));
 
         // begin drawing text fields...
-        Renderer::DrawSysStringReturn(intro, 220, posYIntro, 380, Color::Gainsboro);
-        Renderer::DrawSysStringReturn(optionA, 220, posYOptions, 380, Color::Gainsboro);
+        Renderer::DrawGameFontStringReturn(intro, 220, posYIntro, 380, Color::Gainsboro);
+        Renderer::DrawGameFontStringReturn(optionA, 220, posYOptions, 380, Color::Gainsboro);
 
         // button-event controlled text fields...
         if (showRegisters)
         {
-            Renderer::DrawSysStringReturn(optionBAlt, 220, posYOptions, 380, Color::Gainsboro);
+            Renderer::DrawGameFontStringReturn(optionBAlt, 220, posYOptions, 380, Color::Gainsboro);
             Renderer::SetTarget(BOTTOM);
-            Renderer::DrawSysStringReturn((const u8 *)registerInfo.c_str(), 35, posYCaption, 400, Color::Gainsboro);
+            Renderer::DrawGameFontStringReturn((const u8 *)registerInfo.c_str(), 35, posYCaption, 400, Color::Gainsboro);
         }
         else
         {
-            Renderer::DrawSysStringReturn(optionB, 220, posYOptions, 380, Color::Gainsboro);
+            Renderer::DrawGameFontStringReturn(optionB, 220, posYOptions, 380, Color::Gainsboro);
             if (!showInviteLink)
             {
                 Renderer::SetTarget(BOTTOM);
-                Renderer::DrawSysStringReturn(captionA, 25, posYCaption, 400, Color::Gainsboro);
+                Renderer::DrawGameFontStringReturn(captionA, 25, posYCaption, 400, Color::Gainsboro);
             }
             else
             {
                 Renderer::SetTarget(BOTTOM);
-                Renderer::DrawSysStringReturn(captionB, 25, posYCaption, 400, Color::Gainsboro);
-                Renderer::DrawSysStringReturn((const u8 *)inviteURL.c_str(), 25, posYCaption, 400, Color::Gainsboro);
+                Renderer::DrawGameFontStringReturn(captionB, 25, posYCaption, 400, Color::Gainsboro);
+                Renderer::DrawGameFontStringReturn((const u8 *)inviteURL.c_str(), 25, posYCaption, 400, Color::Gainsboro);
             }
         }
 
         Renderer::SetTarget(TOP);
 
         if (!savedToSD)
-            Renderer::DrawSysStringReturn(optionX, 220, posYOptions, 380, Color::Gainsboro);
+            Renderer::DrawGameFontStringReturn(optionX, 220, posYOptions, 380, Color::Gainsboro);
         else
-            Renderer::DrawSysStringReturn(optionXAlt, 220, posYOptions, 380, Color::Gainsboro);
+            Renderer::DrawGameFontStringReturn(optionXAlt, 220, posYOptions, 380, Color::Gainsboro);
 
         if (!showInviteLink)
-            Renderer::DrawSysStringReturn(optionY, 220, posYOptions, 380, Color::Gainsboro);
+            Renderer::DrawGameFontStringReturn(optionY, 220, posYOptions, 380, Color::Gainsboro);
         else
-            Renderer::DrawSysStringReturn(optionYAlt, 220, posYOptions, 380, Color::Gainsboro);
+            Renderer::DrawGameFontStringReturn(optionYAlt, 220, posYOptions, 380, Color::Gainsboro);
 
-        Renderer::DrawSysStringReturn(QR_caption, 50, posYLabel, 380, Color::Gainsboro);
+        Renderer::DrawGameFontStringReturn(QR_caption, 50, posYLabel, 380, Color::Gainsboro);
 
         OSD::SwapBuffers();
     }

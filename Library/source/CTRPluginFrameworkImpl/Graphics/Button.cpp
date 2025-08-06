@@ -20,15 +20,15 @@ namespace CTRPluginFramework
             return;
         }
 
-        if (type & Sysfont)
+        if (type & GameFont)
         {
-            _useSysfont = true;
+            _useGamefont = true;
             width = Renderer::GetTextSize(content.c_str());
             _posY = _bounds.leftTop.y + ((_bounds.size.y - 16) >> 1);
         }
         else
         {
-            _useSysfont = false;
+            _useGamefont = false;
             width = 6.f * (float)_content.size();
             _posY = _bounds.leftTop.y + ((_bounds.size.y - 10) >> 1);
         }

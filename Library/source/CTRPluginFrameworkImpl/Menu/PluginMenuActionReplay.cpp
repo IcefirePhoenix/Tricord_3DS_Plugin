@@ -201,7 +201,7 @@ namespace CTRPluginFramework
             "Create New", "Duplicate", "Open Editor", "", "Delete", "Read Note"
         };
 
-        Renderer::DrawSysString(labels[0], 205, yCoordA, 290, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontString(labels[0], 205, yCoordA, 290, Preferences::Settings.MainTextColor);
         _newBtn.Draw();
 
         if (_topMenu.GetSelectedItem())
@@ -213,18 +213,18 @@ namespace CTRPluginFramework
                 _duplicateBtn.Draw();
                 _trashBtn.Draw();
 
-                Renderer::DrawSysString(labels[1], 205, yCoordB, 290, Preferences::Settings.MainTextColor);
+                Renderer::DrawGameFontString(labels[1], 205, yCoordB, 290, Preferences::Settings.MainTextColor);
 
                 if (!_topMenu.GetSelectedItem()->note.empty())
-                    Renderer::DrawSysString(labels[5], 75, yCoordB -= 17, 290, Preferences::Settings.MainTextColor);
+                    Renderer::DrawGameFontString(labels[5], 75, yCoordB -= 17, 290, Preferences::Settings.MainTextColor);
 
                 for (int i = 2, yCoord2 = 95; i < 5; ++i, yCoord2 += 28)
-                    Renderer::DrawSysString(labels[i], 75, yCoord2, 290, Preferences::Settings.MainTextColor);
+                    Renderer::DrawGameFontString(labels[i], 75, yCoord2, 290, Preferences::Settings.MainTextColor);
             }
 
             // cut/paste label
             const char* swapLabel = (_clipboard != nullptr) ? "Paste" : "Cut";
-            Renderer::DrawSysString(swapLabel, 205, cutPasteY, 290, Preferences::Settings.MainTextColor);
+            Renderer::DrawGameFontString(swapLabel, 205, cutPasteY, 290, Preferences::Settings.MainTextColor);
         }
 
     }

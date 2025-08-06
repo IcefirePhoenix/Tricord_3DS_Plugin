@@ -1,3 +1,5 @@
+// Modified slightly from libctru to accommodate BFFNT v4 structure
+
 #include "CTRPluginFramework/Graphics/CustomFont.hpp"
 #include "fontTFH_Structs.h"
 #include <3ds/font.h>
@@ -59,7 +61,7 @@ int fontTFHGlyphIndexFromCodePoint(CFNT_TFH *font, u32 codePoint)
             }
         }
     }
-    if (ret == 0xFFFF) // Bogus CMAP entry. Probably exist to save space by using TABLE mappings?
+    if (ret == 0xFFFF)
     {
         if (font->finf.alterCharIndex == 0xFFFF)
             return -1;

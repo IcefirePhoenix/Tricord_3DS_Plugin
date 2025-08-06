@@ -484,7 +484,7 @@ namespace CTRPluginFramework
         if (!Directory::IsExists(mainPath))
             Directory::Create(mainPath);
 
-        // Init sysfont
+        // Init GameFont
         Font::Initialize();
 
         // If /cheats/ doesn't exists, create it

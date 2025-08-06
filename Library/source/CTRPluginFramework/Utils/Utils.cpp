@@ -402,7 +402,7 @@ namespace CTRPluginFramework
             int posY = 55;
             int posX = forBackup.empty() ? 50 : 35;
 
-            Renderer::DrawSysStringReturn(footer_cstr, posX, posY, 300, Preferences::Settings.MainTextColor);
+            Renderer::DrawGameFontStringReturn(footer_cstr, posX, posY, 300, Preferences::Settings.MainTextColor);
 
             // Swap buffers
             Renderer::EndFrame();

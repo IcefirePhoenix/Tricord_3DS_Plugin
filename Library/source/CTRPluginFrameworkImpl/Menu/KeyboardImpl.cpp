@@ -650,14 +650,12 @@ namespace CTRPluginFramework
 
         TextBox(_title.c_str(), _text.c_str(), background).Draw();
 
-        // Renderer::DrawSysStringReturn(reinterpret_cast<const u8 *>(_text.c_str()), posX, posY, maxX, Preferences::Settings.MainTextColor, maxY);
-
         // IF error
         if (_errorMessage && !_error.empty())
         {
             if (posY < 120)
                 posY += 48;
-            Renderer::DrawSysStringReturn(reinterpret_cast<const u8 *>(_error.c_str()), posX, posY, maxX, red, maxY);
+            Renderer::DrawGameFontStringReturn(reinterpret_cast<const u8 *>(_error.c_str()), posX, posY, maxX, red, maxY);
         }
         if (_onKeyboardEvent != nullptr && _owner != nullptr) {
             Render::Interface interface = Renderer::GetInterface();
@@ -689,7 +687,7 @@ namespace CTRPluginFramework
             Renderer::DrawRect(background, theme.Background);
 
             // Draw input
-            Renderer::DrawSysString(_userInput.c_str(), posX, posY, 300, theme.Input, _offset);
+            Renderer::DrawGameFontString(_userInput.c_str(), posX, posY, 300, theme.Input, _offset);
 
             // Draw cursor
             if (_showCursor && _blinkingClock.GetElapsedTime() < Seconds(0.5f))

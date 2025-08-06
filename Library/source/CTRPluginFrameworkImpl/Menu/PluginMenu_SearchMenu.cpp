@@ -272,7 +272,7 @@ namespace CTRPluginFramework
         posY = 203;
         Renderer::DrawString((char *)"Options:", 260, posY, textcolor);
         posY -= 14;
-        Renderer::DrawSysString((char *)"\uE002", 320, posY, 380, textcolor);
+        Renderer::DrawGameFontString((char *)"\uE002", 320, posY, 380, textcolor);
 
         if (_currentSearch == nullptr || _resultsAddress.size() == 0 || _resultsNewValue.size() == 0)
         {

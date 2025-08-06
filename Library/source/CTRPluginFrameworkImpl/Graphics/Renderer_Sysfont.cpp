@@ -32,7 +32,7 @@ namespace CTRPluginFramework
         out->sheetIndex = sheetId;
         out->xOffset = scaleX * cwi->left;
         out->xAdvance = scaleX * cwi->charWidth;
-        out->width = scaleX * 19; // glyphWidth is inaccurate due to 1px padding
+        out->width = scaleX * 19.0; // glyphWidth is inaccurate due to 1px padding
 
         int lineId = glInSheet / tglp->nRows;
         int rowId = glInSheet % tglp->nRows;

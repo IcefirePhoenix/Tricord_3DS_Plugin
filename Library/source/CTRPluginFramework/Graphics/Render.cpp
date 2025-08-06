@@ -79,11 +79,11 @@ namespace CTRPluginFramework
         Renderer::DrawRect(rect.leftTop.x, rect.leftTop.y, rect.size.x, rect.size.y, color, fill, thickness);
     }
 
-    void Render::Interface::DrawSysString(const std::string& str, int posX, int posY, Color color, int xLimit, int yLimit, bool autoWrap) {
+    void Render::Interface::DrawGameFontString(const std::string& str, int posX, int posY, Color color, int xLimit, int yLimit, bool autoWrap) {
         if (autoWrap)
-            Renderer::DrawSysStringReturn(reinterpret_cast<const unsigned char*>(str.c_str()), posX, posY, xLimit, color, yLimit);
+            Renderer::DrawGameFontStringReturn(reinterpret_cast<const unsigned char*>(str.c_str()), posX, posY, xLimit, color, yLimit);
         else
-            Renderer::DrawSysString(str.c_str(), posX, posY, xLimit, color);
+            Renderer::DrawGameFontString(str.c_str(), posX, posY, xLimit, color);
     }
 
     void Render::Interface::DrawCustomIcon(const CustomIcon& icon, int posX, int posY) {
