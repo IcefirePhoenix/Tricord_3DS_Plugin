@@ -7,8 +7,11 @@
 namespace CTRPluginFramework
 {
     extern "C" unsigned char *About15;
-    extern "C" unsigned char *AddFavorite25;
-    extern "C" unsigned char *AddFavoriteFilled25;
+    extern "C" unsigned char *HeartEmpty25;
+    extern "C" unsigned char *HeartFilled25;
+    extern "C" unsigned char *ButtonActive;
+    extern "C" unsigned char *ButtonInactive;
+    extern "C" unsigned char *BottomBG_Underline;
     extern "C" unsigned char *CheckedCheckbox;
     extern "C" unsigned char *UnCheckedCheckbox;
     extern "C" unsigned char *Camera15;
@@ -37,6 +40,8 @@ namespace CTRPluginFramework
     extern "C" unsigned char *Grid15;
     extern "C" unsigned char *Info25;
     extern "C" unsigned char *InfoFilled25;
+    extern "C" unsigned char *InfoNewSelect25;
+    extern "C" unsigned char *InfoNew25;
     extern "C" unsigned char *LoadPosition15;
     extern "C" unsigned char *SavePosition15;
     extern "C" unsigned char *HandCursor15;
@@ -46,12 +51,15 @@ namespace CTRPluginFramework
     extern "C" unsigned char *PlusFilled25;
     extern "C" unsigned char *RAM15;
     extern "C" unsigned char *Restart15;
+    extern "C" unsigned char *ReturnButton25;
+    extern "C" unsigned char *ReturnButtonPush25;
     extern "C" unsigned char *Save25;
     extern "C" unsigned char *Search15;
     extern "C" unsigned char *Settings15;
     extern "C" unsigned char *Shutdown15;
     extern "C" unsigned char *Trash25;
     extern "C" unsigned char *TrashFilled25;
+    extern "C" unsigned char *TricordIcon25;
     extern "C" unsigned char *UserManualFilled15;
     extern "C" unsigned char *DefaultKeyboardCustomIcon;
 
@@ -157,6 +165,15 @@ namespace CTRPluginFramework
     }
 
     /*
+    ** BG_Underline
+    ** 304px * 22px
+    **************/
+    int Icon::DrawBG_Underline(int posX, int posY)
+    {
+        return (DrawImg(BottomBG_Underline, posX, posY, 304, 22));
+    }
+
+    /*
     ** CapsLockOn
     ** 15px * 15px
     ************/
@@ -199,12 +216,22 @@ namespace CTRPluginFramework
 
     /*
     ** Close
-    ** 20px * 20px
+    ** 25px * 25px
     **********/
     int Icon::DrawClose(int posX, int posY, bool filled)
     {
-        u8 *img = filled ? CloseWindowFilled20 : CloseWindow20;
-        return (DrawImg(img, posX, posY, 20, 20));
+        u8 *img = filled ? ReturnButtonPush25 : ReturnButton25;
+        return (DrawImg(img, posX, posY, 25, 25));
+    }
+
+    /*
+     ** MenuButton
+     ** 120px * 32px
+     **********/
+    int Icon::DrawMenuButton(int posX, int posY, bool filled)
+    {
+        u8 *img = filled ? ButtonActive : ButtonInactive;
+        return (DrawImg(img, posX, posY, 120, 32));
     }
 
     /*
@@ -262,7 +289,7 @@ namespace CTRPluginFramework
     ***************/
     int Icon::DrawAddFavorite(int posX, int posY, bool filled)
     {
-        u8 *img = filled ? AddFavoriteFilled25 : AddFavorite25;
+        u8 *img = filled ? HeartFilled25 : HeartEmpty25;
         return (DrawImg(img, posX, posY, 25, 25));
     }
 
@@ -300,6 +327,16 @@ namespace CTRPluginFramework
     int Icon::DrawInfo(int posX, int posY, bool filled)
     {
         u8 *img = filled ? InfoFilled25 : Info25;
+        return (DrawImg(img, posX, posY, 25, 25));
+    }
+
+    /*
+    ** InfoNew
+    ** 25px * 25px
+    ***************/
+    int Icon::DrawInfoNew(int posX, int posY, bool filled)
+    {
+        u8 *img = filled ? InfoNewSelect25 : InfoNew25;
         return (DrawImg(img, posX, posY, 25, 25));
     }
 
@@ -416,6 +453,15 @@ namespace CTRPluginFramework
     {
         u8 *img = filled ? TrashFilled25 : Trash25;
         return (DrawImg(img, posX, posY, 25, 25));
+    }
+
+    /*
+    ** Tricord
+    ** 25px * 25px
+    ***************/
+    int Icon::DrawTricord(int posX, int posY)
+    {
+        return (DrawImg(TricordIcon25, posX, posY, 25, 25));
     }
 
     /*

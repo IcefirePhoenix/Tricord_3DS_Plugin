@@ -17,7 +17,6 @@ namespace CTRPluginFramework
             _isIconBtn = true;
             _posX = bounds.leftTop.x;
             _posY = bounds.leftTop.y;
-            return;
         }
 
         if (type & GameFont)
@@ -36,7 +35,6 @@ namespace CTRPluginFramework
         if (icon != nullptr)
             width += 18.f;
 
-        _posX = _bounds.leftTop.x + ((_bounds.size.x - (int)width) >> 1);
         _limit = _bounds.leftTop.x + _bounds.size.x;
     }
 
@@ -91,41 +89,41 @@ namespace CTRPluginFramework
 
     void    Button::Draw(void)
     {
+        int posY = _posY;
+
         if (!_isEnabled)
             return;
 
         if (_isIconBtn && _icon != nullptr)
         {
-          reinterpret_cast<IconCallbackState>(_icon)(_posX, _posY, _isToggleBtn ? _state : _isPressed);
-        return;
+            reinterpret_cast<IconCallbackState>(_icon)(_posX, _posY, _isToggleBtn ? _state : _isPressed);
+            return;
         }
 
+        const Color &textColor = Color::Gainsboro;
         const Color &fillColor = _isLocked ? Color::Maroon :
                                 (_isPressed ? Color::Maroon :
                                 (_isToggleBtn && _state ? Color::Magenta : Color::Magenta));
-        const Color &textColor = Color::Gainsboro;
-        //const Color &borderColor = _isLocked ? Color::Gray : Color::DarkGrey;
 
-        // Background
-        if (_isRounded)
-            Renderer::DrawRoundedRectangle(_bounds, Color::Magenta, fillColor);
+        // Content and BG
+        if (_icon != nullptr)
+            reinterpret_cast<IconCallbackState>(_icon)(_bounds.leftTop.x, _bounds.leftTop.y, _isToggleBtn ? _state : _isPressed);
         else
         {
-            Renderer::DrawRect(_bounds, fillColor);
-            Renderer::DrawRect(_bounds, Color::Magenta, false);
+            if (_isRounded)
+                Renderer::DrawRoundedRectangle(_bounds, Color::Magenta, fillColor);
+            else
+            {
+                Renderer::DrawRect(_bounds, fillColor);
+                Renderer::DrawRect(_bounds, Color::Magenta, false);
+            }
         }
 
-        int posX = _posX;
-        int posY = _posY;
-
-        // Content
-        if (_icon != nullptr)
-            posX = reinterpret_cast<IconCallback>(_icon)(posX, _posY) + 3;
-
-        if (_useSysfont)
-            Renderer::DrawSysString(_content.c_str(), posX, posY, _limit, textColor);
-        else
-            Renderer::DrawString((char *)_content.c_str(), posX, posY, textColor);
+        if (_useGamefont)
+        {
+            int centeredX = _bounds.leftTop.x + ((_bounds.size.x - (int)Renderer::GetTextSize(_content.c_str())) >> 1);
+            Renderer::DrawGameFontString(_content.c_str(), centeredX, posY, _limit, textColor);
+        }
     }
 
     void    Button::Update(const bool isTouchDown, const IntVector &touchPos)

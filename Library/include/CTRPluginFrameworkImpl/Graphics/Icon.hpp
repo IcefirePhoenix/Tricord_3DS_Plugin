@@ -23,6 +23,18 @@ namespace CTRPluginFramework
         static int DrawAbout(int posX, int posY);
 
         /*
+        ** BG_Underline
+        ** 15px * 15px
+        ************/
+        static int DrawBG_Underline(int posX, int posY);
+
+        /*
+        ** MenuButton
+        ** 32px * 120px
+        ************/
+        static int DrawMenuButton(int posX, int posY, bool filled);
+
+        /*
         ** CapsLockOn
         ** 15px * 15px
         ************/
@@ -48,7 +60,7 @@ namespace CTRPluginFramework
 
         /*
         ** Close
-        ** 20px * 20px
+        ** 25px * 25px
         ************/
         static int DrawClose(int posX, int posY, bool filled);
 
@@ -112,6 +124,12 @@ namespace CTRPluginFramework
         ** 25px * 25px
         ***********/
         static int DrawInfo(int posX, int posY, bool filled);
+
+        /*
+        ** InfoNew
+        ** 25px * 25px
+        ***********/
+        static int DrawInfoNew(int posX, int posY, bool filled);
 
         /*
         ** Hand Cursor
@@ -185,6 +203,12 @@ namespace CTRPluginFramework
         ** 25px * 25 px
         **************/
         static int DrawTrash(int posX, int posY, bool filled);
+
+        /*
+        ** Tricord
+        ** 25px * 25 px
+        **************/
+        static int DrawTricord(int posX, int posY);
 
         /*
         ** Camera

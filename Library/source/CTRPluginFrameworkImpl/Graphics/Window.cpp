@@ -17,7 +17,7 @@ namespace CTRPluginFramework
     {
         if (closeBtn)
         {
-            _closeBtn = new Button(Button::Icon, IntRect(posX + width - 25, posY + 4, 20, 20), Icon::DrawClose);
+            _closeBtn = new Button(Button::Icon, IntRect(8, 207, 20, 20), Icon::DrawClose);
             _closeBtn->SetAcceptSoundEvent(SoundEngine::Event::NUM_EVENTS);
         }
 
