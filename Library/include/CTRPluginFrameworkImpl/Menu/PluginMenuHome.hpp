@@ -77,7 +77,6 @@ namespace CTRPluginFramework
         float _scrollOffset;
         Clock _scrollClock;
         bool _reverseFlow;
-        bool _showVersion;
         bool _closedRootFolder;
         int _versionPosX;
         std::string _versionStr;
@@ -87,11 +86,11 @@ namespace CTRPluginFramework
         // Mode buttons
         Button _showStarredBtn;
         Button _freecamBtn;
-        Button _gameModeBtn;
-        Button _faqBtn;
-        Button _searchBtn;
         Button _arBtn;
+        Button _gameModeBtn;
+        Button _searchBtn;
         Button _toolsBtn;
+        Button _faqBtn;
 
         // Toggle buttons
         Button _discordBtn;

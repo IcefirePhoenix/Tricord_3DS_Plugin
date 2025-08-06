@@ -15,19 +15,19 @@ namespace CTRPluginFramework
     PluginMenuHome::PluginMenuHome(std::string& name, bool showNoteBottom) :
         _noteTB("", "", showNoteBottom ? IntRect(20, 46, 280, 124) : IntRect(40, 30, 320, 180)),
 
-        _showStarredBtn(Button::Toggle | Button::GameFont | Button::Rounded, "Favorites", IntRect(45, 125, 110, 28)),
-        _freecamBtn(Button::Toggle | Button::GameFont | Button::Rounded, "Freecam", IntRect(45, 90, 110, 28)),
-        _gameModeBtn(Button::Toggle | Button::GameFont | Button::Rounded, "Game Modes", IntRect(165, 90, 110, 28)),
-        _faqBtn(Button::GameFont | Button::Rounded, "FAQ/Credits", IntRect(105, 195, 110, 28)),
-        _searchBtn(Button::GameFont | Button::Rounded, "Search", IntRect(165, 125, 110, 28)),
-        _arBtn(Button::GameFont | Button::Rounded, "Action Replay", IntRect(45, 160, 110, 28)),
-        _toolsBtn(Button::GameFont | Button::Rounded, "Tools", IntRect(165, 160, 110, 28)),
+        _showStarredBtn(Button::Toggle | Button::GameFont, "Favorites", IntRect(35, 80, 120, 32), Icon::DrawMenuButton),
+        _freecamBtn(Button::Toggle | Button::GameFont, "Freecam", IntRect(35, 120, 120, 32), Icon::DrawMenuButton),
+        _arBtn(Button::GameFont, "Action Replay", IntRect(35, 160, 120, 32), Icon::DrawMenuButton),
+        _gameModeBtn(Button::Toggle | Button::GameFont, "Game Modes", IntRect(166, 80, 120, 32), Icon::DrawMenuButton),
+        _searchBtn(Button::GameFont | Button::Rounded, "Search", IntRect(166, 120, 120, 32), Icon::DrawMenuButton),
+        _toolsBtn(Button::GameFont | Button::Rounded, "Tools", IntRect(166, 160, 120, 32), Icon::DrawMenuButton),
 
+        _faqBtn(Button::Icon, IntRect(287, 205, 25, 25), Icon::DrawTricord),
+        _discordBtn(Button::Icon | Button::Toggle, IntRect(254, 207, 25, 25), Icon::DrawDiscord),
+        _controllerBtn(Button::Icon, IntRect(182, 41, 25, 25), Icon::Draw3DS),
 
-        _controllerBtn(Button::Icon, IntRect(210, 50, 25, 25), Icon::Draw3DS),
-
-        _AddFavoriteBtn(Button::Icon | Button::Toggle, IntRect(50, 50, 25, 25), Icon::DrawAddFavorite),
-        _InfoBtn(Button::Icon | Button::Toggle, IntRect(85, 50, 25, 25), Icon::DrawInfo)
+        _AddFavoriteBtn(Button::Icon | Button::Toggle, IntRect(149, 41, 25, 25), Icon::DrawAddFavorite),
+        _InfoBtn(Button::Icon | Button::Toggle, IntRect(116, 41, 25, 25), Icon::DrawInfoNew)
     {
         _root = _folder = new MenuFolderImpl("Main Menu - Code Collection");
         _hidden = new MenuFolderImpl("Hidden");
@@ -40,7 +40,6 @@ namespace CTRPluginFramework
         _scrollOffset = 0.f;
         _maxScrollOffset = 0.f;
         _reverseFlow = false;
-        _showVersion = false;
         _versionPosX = 0;
         _closedRootFolder = false;
 
@@ -596,14 +595,10 @@ namespace CTRPluginFramework
         MenuFolderImpl* folder = _starMode ? _starred : _folder;
 
         // Draw Title
-        int maxWidth = _showVersion ? _versionPosX - 10 : 360;
-        int posYbak = posY;
+        int maxWidth = 360;
         int width = Renderer::DrawGameFontString(folder->name.c_str(), posX, posY, maxWidth, maintext);
         Renderer::DrawLine(posX, posY, width, maintext);
         posY += 7;
-
-        if (_showVersion && !_starMode && !folder->HasParent())
-            Renderer::DrawGameFontString(_versionStr.c_str(), _versionPosX, posYbak, 360, maintext);
 
         // Draw Entry
         u32  drawSelector = SelectableEntryCount(*folder);
@@ -691,23 +686,12 @@ namespace CTRPluginFramework
     void PluginMenuHome::_RenderBottom(void)
     {
         Renderer::SetTarget(BOTTOM);
-
         Window::BottomWindow.Draw();
 
-        //int posY = 205;
+        int posY = 10;
+        Renderer::DrawGameFontString(("Tricord Plugin v" + _versionStr).c_str(), 95, posY, 360, Color::Gainsboro);
 
-        /*if (framework)
-            Renderer::DrawString(g_ctrpfText, g_textXpos[0], posY, blank);
-        else
-            Renderer::DrawString(g_copyrightText, g_textXpos[1], posY, blank);
-
-        if (creditClock.HasTimePassed(Seconds(5)))
-        {
-            creditClock.Restart();
-            framework = !framework;
-        }
-
-        posY = 35;*/
+        Icon::DrawBG_Underline(8, 10);
 
         // Draw buttons
         if (ShowNoteBottom)
@@ -1177,14 +1161,13 @@ namespace CTRPluginFramework
     {
         char buffer[100];
 
-        sprintf(buffer, "[%s.%s.%s]", TRICORD_VERSION_MAJOR, TRICORD_VERSION_MINOR,TRICORD_VERSION_REV);
+        sprintf(buffer, "%s.%s.%s", TRICORD_VERSION_MAJOR, TRICORD_VERSION_MINOR, TRICORD_VERSION_REV);
         _versionStr.clear();
         _versionStr = buffer;
 
         float width = Renderer::GetTextSize(buffer);
 
         _versionPosX = 360 - (width + 1);
-        _showVersion = true;
     }
 
     void PluginMenuHome::Close(MenuFolderImpl *folder)
