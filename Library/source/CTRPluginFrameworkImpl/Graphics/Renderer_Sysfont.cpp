@@ -290,10 +290,10 @@ namespace CTRPluginFramework
         u8   italicOffset = (flags & Render::FontDrawMode::ITALIC) ? 3 : 0;
         u32  lineCount = 0;
 
-        // glyph final, resized dimensions are 13*17 (w*h) = 221 pixels
-        for (int i = 0; i < 221; i++)
+        // glyph final, resized dimensions are 14*18 (w*h) = 252 pixels
+        for (int i = 0; i < 252; i++)
         {
-            if (i != 0 && i % 13 == 0)
+            if (i != 0 && i % 14 == 0)
             {
                 if ((lineCount % 4) == 0 && flags &Render::FontDrawMode::ITALIC)
                     italicOffset--;
@@ -307,16 +307,31 @@ namespace CTRPluginFramework
             // Don't waste time on pixels which are only 5% visible
             for (int j = 0; (alpha > 12) && j < ((flags & Render::FontDrawMode::BOLD) ? 2 : 1); j++)
             {
-                float tintFactor = (255.0f - alpha) / 255.0f;
+                u32 cutoff = 190;
+                u32 edge = 120;
+                u8 r, g, b;
 
-                // Blend body text color and outline tint based on alpha
-                u8 r = static_cast<u8>(Preferences::Settings.MainTextColor.r * (1.0f - tintFactor) + 0 * tintFactor);
-                u8 g = static_cast<u8>(Preferences::Settings.MainTextColor.g * (1.0f - tintFactor) + 0 * tintFactor);
-                u8 b = static_cast<u8>(Preferences::Settings.MainTextColor.b * (1.0f - tintFactor) + 0 * tintFactor);
+                if (alpha >= cutoff)
+                {
+                    r = Preferences::Settings.MainTextColor.r;
+                    g = Preferences::Settings.MainTextColor.g;
+                    b = Preferences::Settings.MainTextColor.b;
+                }
+                else if (alpha <= edge)
+                {
+                    r = 41;
+                    g = 10;
+                    b = 2;
+                }
+                else
+                {
+                    float t = static_cast<float>(cutoff - alpha) / (cutoff - edge);
+                    r = static_cast<u8>(41 * t + 255 * (1.0f - t));
+                    g = static_cast<u8>(10 * t + 255 * (1.0f - t));
+                    b = static_cast<u8>(2 * t + 255 * (1.0f - t));
+                }
 
                 color = Color(r, g, b, alpha);
-
-                color.a = alpha;
                 Color &&l = PrivColor::FromFramebuffer(fb + stride * j + italicOffset * stride);
                 Color &&c = l.Blend(color, Color::BlendMode::Alpha);
 
@@ -343,10 +358,10 @@ namespace CTRPluginFramework
         u8   italicOffset = (flags & Render::FontDrawMode::ITALIC) ? 3 : 0;
         u32  lineCount = 0;
 
-        // glyph final, resized dimensions are 13*17 (w*h) = 221 pixels
-        for (int i = static_cast<int>(offset); i < 221; i++)
+        // glyph final, resized dimensions are 14*18 (w*h) = 252 pixels
+        for (int i = static_cast<int>(offset); i < 252; i++)
         {
-            if (i != 0 && i % 13 == 0)
+            if (i != 0 && i % 14 == 0)
             {
                 if (offset)
                     i += offset;
@@ -362,16 +377,31 @@ namespace CTRPluginFramework
             // Don't waste time on pixels which are only 5% visible
             for (int j = 0; (alpha > 12) && j < ((flags & Render::FontDrawMode::BOLD) ? 2 : 1); j++)
             {
-                float tintFactor = (255.0f - alpha) / 255.0f;
+                u32 cutoff = 190;
+                u32 edge = 120;
+                u8 r, g, b;
 
-                // Blend body text color and outline tint based on alpha
-                u8 r = static_cast<u8>(Preferences::Settings.MainTextColor.r * (1.0f - tintFactor) + 0 * tintFactor);
-                u8 g = static_cast<u8>(Preferences::Settings.MainTextColor.g * (1.0f - tintFactor) + 0 * tintFactor);
-                u8 b = static_cast<u8>(Preferences::Settings.MainTextColor.b * (1.0f - tintFactor) + 0 * tintFactor);
+                if (alpha >= cutoff)
+                {
+                    r = Preferences::Settings.MainTextColor.r;
+                    g = Preferences::Settings.MainTextColor.g;
+                    b = Preferences::Settings.MainTextColor.b;
+                }
+                else if (alpha <= edge)
+                {
+                    r = 41;
+                    g = 10;
+                    b = 2;
+                }
+                else
+                {
+                    float t = static_cast<float>(cutoff - alpha) / (cutoff - edge);
+                    r = static_cast<u8>(41 * t + 255 * (1.0f - t));
+                    g = static_cast<u8>(10 * t + 255 * (1.0f - t));
+                    b = static_cast<u8>(2 * t + 255 * (1.0f - t));
+                }
 
                 color = Color(r, g, b, alpha);
-
-                color.a = alpha;
                 Color &&l = PrivColor::FromFramebuffer(fb + stride * j + italicOffset * stride);
                 Color &&c = l.Blend(color, Color::BlendMode::Alpha);
 
