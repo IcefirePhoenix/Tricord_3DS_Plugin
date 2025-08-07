@@ -266,7 +266,7 @@ namespace CTRPluginFramework
 
 #define GLYPH_HEIGHT    25
 #define GLYPH_WIDTH     19
-#define SHRINK_GLYPH_HEIGHT 17 // (width would be 13)
+#define SHRINK_GLYPH_HEIGHT 18 // (width would be 14)
 
     void    ShrinkGlyph(u8 *dest, u8 *src)
     {
@@ -346,10 +346,10 @@ namespace CTRPluginFramework
         Lock    lock(_mutex);
 
         u8  *originalGlyph = GetOriginalGlyph(glyphIndex);
-        // 13x17 wxh = 221 pixels (A4 image format)
-        u8  *newGlyph = new u8[221];
-        g_fontAllocated += 221;
-        std::memset(newGlyph, 0, 221);
+        // 14x18 wxh = 252 pixels (A4 image format)
+        u8 *newGlyph = new u8[252];
+        g_fontAllocated += 252;
+        std::memset(newGlyph, 0, 252);
 
         // Shrink glyph data to the required size
         ShrinkGlyph(newGlyph, originalGlyph);
