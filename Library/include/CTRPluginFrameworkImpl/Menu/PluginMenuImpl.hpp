@@ -52,6 +52,7 @@ namespace CTRPluginFramework
         static void ExtractHotkeys(HotkeysVector &hotkeys, MenuFolderImpl *folder, u32 &size);
         static void WriteHotkeysToFile(Preferences::Header &header, File &file);
         static void GetRegionsList(std::vector<Region> &list);
+        static PluginMenuSearch* GetSearchInstance(void);
 
         // Used to forcefully exit a menu
         static void ForceExit(void);
@@ -59,11 +60,11 @@ namespace CTRPluginFramework
 
         static void UnStar(MenuItem *item);
         static void Refresh(void);
+        static void OpenSearch(void);
 
         static PluginMenuImpl* GetRunningInstance();
 
         void    SetHexEditorState(bool isEnabled);
-        bool    GetHexEditorState() const;
         void    ShowWelcomeMessage(bool showMsg);
 
         MenuFolderImpl *GetRoot(void) const;
@@ -98,7 +99,6 @@ namespace CTRPluginFramework
         std::vector<CallbackPointer>     _callbacks;
         std::vector<CallbackPointer>     _callbacksTrashBin;
         bool                        _forceOpen;
-        bool                        _hexEditorState;
     };
 }
 

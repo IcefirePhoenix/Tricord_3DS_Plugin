@@ -44,7 +44,6 @@ namespace CTRPluginFramework
     extern "C" unsigned char *InfoNew25;
     extern "C" unsigned char *LoadPosition15;
     extern "C" unsigned char *SavePosition15;
-    extern "C" unsigned char *HandCursor15;
     extern "C" unsigned char *Maintenance15;
     extern "C" unsigned char *More15;
     extern "C" unsigned char *Plus25;
@@ -338,16 +337,6 @@ namespace CTRPluginFramework
     {
         u8 *img = filled ? InfoNewSelect25 : InfoNew25;
         return (DrawImg(img, posX, posY, 25, 25));
-    }
-
-    /*
-    ** Hand Cursor
-    ** 15px * 15px
-    ***************/
-    int Icon::DrawHandCursor(int posX, int posY)
-    {
-        DrawImg(HandCursor15, posX, posY, 15, 15);
-        return (posX + 15);
     }
 
     /*

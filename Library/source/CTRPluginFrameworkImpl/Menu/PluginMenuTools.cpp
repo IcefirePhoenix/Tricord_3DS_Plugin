@@ -1,7 +1,9 @@
 #include "CTRPluginFrameworkImpl/Menu/HotkeysModifier.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuTools.hpp"
 #include "CTRPluginFrameworkImpl/Menu/MenuEntryTools.hpp"
+#include "CTRPluginFrameworkImpl/Menu/PluginMenuHome.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuActionReplay.hpp"
+#include "CTRPluginFrameworkImpl/Menu/PluginMenuImpl.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuExecuteLoop.hpp"
 #include "CTRPluginFrameworkImpl/System/Screenshot.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
@@ -28,12 +30,9 @@ namespace CTRPluginFramework
     enum Mode
     {
         NORMAL = 0,
-        ABOUT,
         HEXEDITOR,
         GWRAMDUMP,
-        SCREENSHOT,
-        MISCELLANEOUS,
-        SETTINGS,
+        SEARCH
     };
 
     static int g_mode = NORMAL;
@@ -43,78 +42,26 @@ namespace CTRPluginFramework
     static const char g_copyrightText[] = "Copyright (c) The Pixellizer Group";
     static u32 g_textXpos[2] = { 0 };
 
-    PluginMenuTools::PluginMenuTools(std::string &about, HexEditor &hexEditor) :
-        _about(about),
-        _mainMenu("Tools"),
-        _miscellaneousMenu("Miscellaneous"),
-        _screenshotMenu("Screenshot Options"),
-        _tricordSettingsMenu("Tricord Settings"),
-        _hexEditorEntry(nullptr),
+    PluginMenuTools::PluginMenuTools(HexEditor &hexEditor) :
+        _devTools("Developer Tools"),
         _hexEditor(hexEditor),
-        _menu(&_mainMenu, nullptr),
-        _abouttb("About", _about, IntRect(30, 20, 340, 200)),
+        _menu(&_devTools, nullptr),
         _exit(false)
     {
         CreateMenu();
     }
 
-    static void MenuHotkeyModifier(void)
-    {
-        u32 keys = Preferences::MenuHotkeys;
-
-        (HotkeysModifier(keys, "Select the hotkeys you'd like to use to open the Tricord menu."))();
-
-        if (keys != 0)
-            Preferences::MenuHotkeys = keys;
-    }
-
     void PluginMenuTools::UpdateSettings(void)
     {
-        // Settings
-        auto item = _tricordSettingsMenu.begin() + 2; // skip first two entries -> NOT checkboxes w/saved status
+        if (Preferences::IsEnabled(Preferences::DisplayLoadedFiles))
+            (*(_devTools.begin() + 3))->AsMenuEntryTools().Enable();
+        else
+            (*(_devTools.begin() + 3))->AsMenuEntryTools().Disable();
 
-        if (Preferences::IsEnabled(Preferences::QoL_Patch)) (*item++)->AsMenuEntryTools().Enable();
-        else (*item++)->AsMenuEntryTools().Disable();
-
-        if (Preferences::IsEnabled(Preferences::HIDToggle)) (*item++)->AsMenuEntryImpl().Enable();
-        else (*item++)->AsMenuEntryImpl().Disable();
-
-        if (Preferences::IsEnabled(Preferences::DisableOSDNotifs)) (*item++)->AsMenuEntryImpl().Enable();
-        else (*item++)->AsMenuEntryImpl().Disable();
-
-        if (Preferences::IsEnabled(Preferences::AutoSaveCheats)) (*item++)->AsMenuEntryImpl().Enable();
-        else (*item++)->AsMenuEntryImpl().Disable();
-
-        if (Preferences::IsEnabled(Preferences::AutoEnableFavorites)) (*item++)->AsMenuEntryImpl().Enable();
-        else (*item++)->AsMenuEntryImpl().Disable();
-
-
-        // Misc.
-        item = _miscellaneousMenu.begin();
-
-        if (Preferences::IsEnabled(Preferences::DisplayLoadedFiles)) (*item++)->AsMenuEntryTools().Enable();
-        else (*item++)->AsMenuEntryTools().Disable();
-
-        if (Preferences::IsEnabled(Preferences::WriteLoadedFiles)) (*item++)->AsMenuEntryTools().Enable();
-        else (*item++)->AsMenuEntryTools().Disable();
-
-        if (Preferences::IsEnabled(Preferences::DrawTouchCursor)) (*item++)->AsMenuEntryTools().Enable();
-        else (*item++)->AsMenuEntryTools().Disable();
-
-        if (Preferences::IsEnabled(Preferences::DrawTouchPosition)) (*item++)->AsMenuEntryTools().Enable();
-        else (*item++)->AsMenuEntryTools().Disable();
-
-        if (Preferences::IsEnabled(Preferences::ShowTopFps)) (*item++)->AsMenuEntryTools().Enable();
-        else (*item++)->AsMenuEntryTools().Disable();
-
-        if (Preferences::IsEnabled(Preferences::ShowBottomFps)) (*item)->AsMenuEntryTools().Enable();
-        else (*item)->AsMenuEntryTools().Disable();
-
-        // Screenshots
-        item = _screenshotMenu.begin();
-
-        if (Preferences::IsEnabled(Preferences::ScreenshotEnabled)) (*item++)->AsMenuEntryTools().Enable();
-        else (*item++)->AsMenuEntryTools().Disable();
+        if (Preferences::IsEnabled(Preferences::WriteLoadedFiles))
+            (*(_devTools.begin() + 4))->AsMenuEntryTools().Enable();
+        else
+            (*(_devTools.begin() + 4))->AsMenuEntryTools().Disable();
     }
 
     using FsTryOpenFileType = u32(*)(u32, u16*, u32);
@@ -247,7 +194,10 @@ namespace CTRPluginFramework
         {
             // Initialize hook
             if (!InitFsTryOpenFileHook())
+            {
+                MessageBox("Note", "Loaded filenames cannot be displayed on screen. If mods are enabled, please disable them before trying again.")();
                 entry->Disable(); ///< Hook failed
+            }
 
             // Enable the hook
             Preferences::Set(Preferences::DisplayLoadedFiles);
@@ -259,7 +209,6 @@ namespace CTRPluginFramework
         {
             // Disable OSD
             Preferences::Clear(Preferences::DisplayLoadedFiles);
-            g_HookMode &= ~OSD;
 
             // If there's no task to do on the hook, disable it
             if (g_HookMode == 0)
@@ -274,7 +223,10 @@ namespace CTRPluginFramework
         {
             // Initialize hook
             if (!InitFsTryOpenFileHook())
+            {
+                MessageBox("Note", "Loaded filenames cannot be logged to the SD card. If mods are enabled, please disable them before trying again.")();
                 entry->Disable(); ///< Hook failed
+            }
 
             // Open the file
             int     mode = File::READ | File::WRITE | File::CREATE | File::APPEND;
@@ -296,6 +248,7 @@ namespace CTRPluginFramework
             }
 
             // Enable the hook
+            Preferences::Set(Preferences::WriteLoadedFiles);
             g_HookMode |= FILE;
             g_FsTryOpenFileHook.Enable();
 
@@ -312,257 +265,25 @@ namespace CTRPluginFramework
             // If there's no task to do on the hook, disable it
             if (g_HookMode == 0)
                 g_FsTryOpenFileHook.Disable();
-        }
-    }
 
-    static bool ConfirmBeforeProceed(const std::string &task)
-    {
-        std::string msg = Color::Gainsboro << "Do you really want to " + task + "?";
-        MessageBox  msgBox("Warning", msg, DialogType::DialogYesNo);
-
-        return (msgBox());
-    }
-
-    static void     Shutdown(void)
-    {
-        if (ConfirmBeforeProceed("shutdown"))
-        {
-            srvPublishToSubscriber(0x203, 0);
-            ProcessImpl::UnlockGameThreads();
-            svcExitThread();
-        }
-    }
-
-    static void     Reboot(void)
-    {
-        if (ConfirmBeforeProceed("reboot"))
-        {
-            svcKernelSetState(7);
-            svcExitThread();
-        }
-    }
-
-    const std::vector<std::string> screens = {"Top screen", "Bottom screen", "Both screens"};
-
-    static MenuEntryTools *g_screenshotEntry;
-    static MenuEntryTools *ss_Screen;
-    static MenuEntryTools *ss_Hotkey;
-    static MenuEntryTools *ss_Timer;
-    static MenuEntryTools *ss_Name;
-    static MenuEntryTools *ss_Dir;
-
-    std::string KeysToString(u32 keys);
-    bool stou32(std::string &input, u32 &res);
-
-    static void UpdateScreenshotStatus(void)
-    {
-        if (Preferences::IsEnabled(Preferences::ScreenshotEnabled))
-            g_screenshotEntry->Enable();
-        else
-            g_screenshotEntry->Disable();
-    }
-
-    static void setScreenShotMode(void)
-    {
-        Keyboard kb("Screenshot Settings", "Which screen(s) would you like to capture?");
-        kb.Populate(screens);
-
-        int mode = kb.Open();
-        if (mode != -1)
-        {
-            Screenshot::Screens = mode + 1;
-            ss_Screen->SetName(std::string("Change captured screens: ") + screens[(Screenshot::Screens & SCREENSHOT_BOTH) - 1]);
-        }
-
-        UpdateScreenshotStatus();
-        Screenshot::UpdateFileCount();
-    }
-
-    static void setScreenshotHotkeys(void)
-    {
-        u32 keys = Screenshot::Hotkeys;
-        (HotkeysModifier(keys, "Select the hotkeys you'd like to use to take a\nnew screenshot."))();
-
-        if (keys != 0)
-        {
-            Screenshot::Hotkeys = keys;
-            ss_Hotkey->SetName("Change hotkeys: " + (KeysToString(Screenshot::Hotkeys)));
-        }
-
-        UpdateScreenshotStatus();
-        Screenshot::UpdateFileCount();
-    }
-
-    static void setScreenshotTimer(void)
-    {
-        std::string desc = "Enter the amount of seconds you would like to continuously take screenshots.\n\nTo disable the timer, enter 0.\n\nNote: May not work as expected on emulator. Timer may also be inconsistent on console.";
-
-        u32 current = static_cast<u32>(Screenshot::Timer.AsSeconds());
-        Keyboard keyboard("Screenshot Timer", desc);
-
-        keyboard.IsHexadecimal(false);
-        keyboard.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
-        {
-            if (event.type == KeyboardEvent::CharacterAdded)
-            {
-                std::string &input = kb.GetInput();
-                u32 value;
-                stou32(input, value);
-
-                if (value > 120)
-                    input = "120";
-            }
-        });
-
-        if (keyboard.Open(current, current) != -1)
-        {
-            Screenshot::Timer = Seconds(static_cast<float>(current));
-            if (current)
-            {
-                ss_Timer->SetName("Set timer: " + std::to_string(current) + " second(s)");
-                Screenshot::Screens |= 4; ///< TIMED flags
-            }
-            else
-                ss_Timer->SetName("Set timer: Not enabled");
-        }
-
-        UpdateScreenshotStatus();
-        Screenshot::UpdateFileCount();
-    }
-
-    static void setScreenshotName(void)
-    {
-        Keyboard nameKb("Screenshot Settings", "What would you like your screenshot filenames to begin with?");
-        std::string out;
-
-        if (nameKb.Open(out, Screenshot::Prefix) != -1)
-        {
-            Screenshot::Prefix = out;
-            ss_Name->SetName("Edit filename: " + Screenshot::Prefix);
-        }
-
-        UpdateScreenshotStatus();
-        Screenshot::UpdateFileCount();
-    }
-
-    static void setScreenshotDir(void)
-    {
-        std::string out;
-        if (Utils::DirectoryPicker(out) == -1)
-            return;
-
-        Screenshot::Path = std::move(out);
-        if (Screenshot::Path[Screenshot::Path.size() - 1] != '/')
-        {
-            Screenshot::Path += '/';
-            ss_Dir->SetName("Edit directory: [root]" + Screenshot::Path);
-        }
-
-        UpdateScreenshotStatus();
-        Screenshot::UpdateFileCount();
-    }
-
-    static void EditBacklight(MenuEntryTools *entry)
-    {
-        using LCDBacklight = Preferences::LCDBacklight;
-
-        int             userchoice;
-        u16             backlight;
-        ScreenImpl *    screen;
-        Keyboard        kb("", "");
-        std::string     trigger;
-        std::string&    title = kb.GetTitle();
-        std::string&    message = kb.GetMessage();
-
-        kb.DisplayTopScreen = true;
-        while (true)
-        {
-            trigger = Preferences::Backlights[0].isEnabled ?
-                            Color::Gainsboro << "Backlight override: Enabled " << Color::LimeGreen << "\u2282\u25CF"
-                          : Color::Gainsboro << "Backlight override: Disabled " << Color::Red << "\u25CF\u2283";
-
-            title = "Backlight Options";
-            message = "Select a screen to configure.\n\n";
-            message += "Top screen - Brightness: " + std::to_string(Preferences::Backlights[0].value);
-            message += "\nBottom screen - Brightness: " + std::to_string(Preferences::Backlights[1].value);
-            message += "\n\nNote: Remember to turn off \"Auto-Brightness\"\nin the \uE073 HOME Menu.";
-
-            kb.Populate({trigger, "Adjust top screen brightness", "Adjust bottom screen brightness"});
-            userchoice = kb.Open();
-
-            if (userchoice == -1)
-                return;
-
-            if (userchoice == 0)
-            {
-                LCDBacklight *  backlights = Preferences::Backlights;
-                backlights += userchoice == 2;
-                backlights->isEnabled = !backlights->isEnabled;
-                continue;
-            }
-
-            screen = userchoice == 3 ? ScreenImpl::Bottom : ScreenImpl::Top;
-            backlight = screen->GetBacklight();
-
-            title = "Backlight Brightness Setter";
-            message = "Set a brightness value between 2 - 1023.\n\nCurrent value: " + backlight;
-
-            kb.IsHexadecimal(false);
-            if (kb.Open(backlight, 2) != -1)
-            {
-                backlight = std::max(backlight, static_cast<u16>(2));
-                backlight = std::min(backlight, static_cast<u16>(0x3FF));
-                Preferences::Backlights[userchoice == 3].value = backlight;
-            }
+            Preferences::Clear(Preferences::WriteLoadedFiles);
         }
     }
 
     void PluginMenuTools::CreateMenu(void)
     {
-        // Main menu
-        _mainMenu.Append(new MenuEntryTools("About", [] { g_mode = ABOUT; }, Icon::DrawAbout));
-        _hexEditorEntry = new MenuEntryTools("Hex Editor", [] { g_mode = HEXEDITOR; }, Icon::DrawGrid);
-        _mainMenu.Append(_hexEditorEntry);
-        _mainMenu.Append(new MenuEntryTools("Gateway RAM Dumper", [] { g_mode = GWRAMDUMP; }, Icon::DrawRAM));
-        _mainMenu.Append(new MenuEntryTools("Screenshot Options", nullptr, Icon::DrawCamera, new u32(SCREENSHOT)));
-        _mainMenu.Append(new MenuEntryTools("Miscellaneous", nullptr, Icon::DrawMore, new u32(MISCELLANEOUS)));
-        _mainMenu.Append(new MenuEntryTools("Tricord Settings", nullptr, Icon::DrawSettings, this));
-        _mainMenu.Append(new MenuEntryTools("Shutdown", Shutdown, Icon::DrawShutdown));
-        _mainMenu.Append(new MenuEntryTools("Reboot", Reboot, Icon::DrawRestart));
-
-        // Screenshots menu
-        u32 time = static_cast<u32>(Screenshot::Timer.AsSeconds());
-        std::string timerName = time ? "Set timer: " + std::to_string(time) + " second(s)" : "Set timer: Not enabled";
-
-        _screenshotMenu.Append((g_screenshotEntry = new MenuEntryTools("Enable screenshot tool", [] { Preferences::Toggle(Preferences::ScreenshotEnabled); }, true, Preferences::IsEnabled(Preferences::ScreenshotEnabled))));
-        _screenshotMenu.Append((ss_Screen = new MenuEntryTools(std::string("Change captured screens: ") + screens[(Screenshot::Screens & SCREENSHOT_BOTH) - 1], setScreenShotMode, Icon::DrawSettings)));
-        _screenshotMenu.Append((ss_Hotkey = new MenuEntryTools("Change hotkeys: " + (KeysToString(Screenshot::Hotkeys)), setScreenshotHotkeys, Icon::DrawSettings)));
-        _screenshotMenu.Append((ss_Timer = new MenuEntryTools(timerName, setScreenshotTimer, Icon::DrawSettings)));
-        _screenshotMenu.Append((ss_Name = new MenuEntryTools("Edit filename: " + Screenshot::Prefix, setScreenshotName, Icon::DrawSettings)));
-        _screenshotMenu.Append((ss_Dir = new MenuEntryTools("Edit directory: [root]" + Screenshot::Path, setScreenshotDir, Icon::DrawSettings)));
-
-        // Miscellaneous menu
-        _miscellaneousMenu.Append(new MenuEntryTools("Display loaded game files on-screen", _DisplayLoadedFiles, true));
-        _miscellaneousMenu.Append(new MenuEntryTools("Log loaded filenames to .txt file (breaks w/mods)", _WriteLoadedFiles, true));
-        _miscellaneousMenu.Append(new MenuEntryTools("Display touchscreen cursor", [] { Preferences::Toggle(Preferences::DrawTouchCursor); }, true, Preferences::IsEnabled(Preferences::DrawTouchCursor)));
-        _miscellaneousMenu.Append(new MenuEntryTools("Display touchcreen cursor coordinates", [] { Preferences::Toggle(Preferences::DrawTouchPosition); }, true, Preferences::IsEnabled(Preferences::DrawTouchPosition)));
-        _miscellaneousMenu.Append(new MenuEntryTools("Display top screen FPS", [] { Preferences::Toggle(Preferences::ShowTopFps); }, true, Preferences::IsEnabled(Preferences::ShowTopFps)));
-        _miscellaneousMenu.Append(new MenuEntryTools("Display bottom screen FPS", [] { Preferences::Toggle(Preferences::ShowBottomFps); }, true, Preferences::IsEnabled(Preferences::ShowBottomFps)));
-
-        // Settings menu
-        _tricordSettingsMenu.Append(new MenuEntryTools("Change Tricord menu hotkeys", MenuHotkeyModifier, Icon::DrawGameController));
-        _tricordSettingsMenu.Append(new MenuEntryTools("Set backlight (Experimental!)", EditBacklight, Icon::DrawSettings));
-        _tricordSettingsMenu.Append(new MenuEntryTools("Enable QoL patches", [] { Preferences::Toggle(Preferences::QoL_Patch); }, true, Preferences::IsEnabled(Preferences::QoL_Patch)));
-        _tricordSettingsMenu.Append(new MenuEntryTools("Disable HID memory allocation", [] { Preferences::Toggle(Preferences::HIDToggle); }, true, Preferences::IsEnabled(Preferences::HIDToggle)));
-        _tricordSettingsMenu.Append(new MenuEntryTools("Disable on-screen notification messages", [] { Preferences::Toggle(Preferences::DisableOSDNotifs); }, true, Preferences::IsEnabled(Preferences::DisableOSDNotifs)));
-        _tricordSettingsMenu.Append(new MenuEntryTools("Automatically re-enable currently active cheats on launch", [] { Preferences::Toggle(Preferences::AutoSaveCheats); Preferences::Toggle(Preferences::AutoEnableSavedCheats); }, true, Preferences::IsEnabled(Preferences::AutoSaveCheats)));
-        _tricordSettingsMenu.Append(new MenuEntryTools("Automatically enable Favorites on launch", [] { Preferences::Toggle(Preferences::AutoEnableFavorites); }, true, Preferences::IsEnabled(Preferences::AutoEnableFavorites)));
-        _tricordSettingsMenu.Append(new MenuEntryTools("Backup Action Replay codes now", [] { PluginMenuActionReplay::BackupCodes(true); }, Icon::DrawSettings));
-        _tricordSettingsMenu.Append(new MenuEntryTools("Restore Action Replay codes from backup", [] { PluginMenuActionReplay::RestoreFromBackup(false); }, Icon::DrawSettings));
+        _devTools.Append(new MenuEntryTools("Hex Editor", [] { g_mode = HEXEDITOR; }, Icon::DrawGrid));
+        _devTools.Append(new MenuEntryTools("Memory Search", [] { g_mode = SEARCH; }, Icon::DrawSearch));
+        _devTools.Append(new MenuEntryTools("Gateway RAM Dumper", [] { g_mode = GWRAMDUMP; }, Icon::DrawRAM));
+        _devTools.Append(new MenuEntryTools("Display loaded game files on-screen", _DisplayLoadedFiles, true));
+        _devTools.Append(new MenuEntryTools("Log loaded filenames to .txt file (breaks w/mods)", _WriteLoadedFiles, true));
+        _devTools.Append(new MenuEntryTools("Display touchcreen cursor coordinates", [] { Preferences::Toggle(Preferences::DrawTouchPosition); }, true, Preferences::IsEnabled(Preferences::DrawTouchPosition)));
+        _devTools.Append(new MenuEntryTools("Display top screen FPS", [] { Preferences::Toggle(Preferences::ShowTopFps); }, true, Preferences::IsEnabled(Preferences::ShowTopFps)));
+        _devTools.Append(new MenuEntryTools("Display bottom screen FPS", [] { Preferences::Toggle(Preferences::ShowBottomFps); }, true, Preferences::IsEnabled(Preferences::ShowBottomFps)));
 
         // Get strings x position
-        g_textXpos[0] = (320 - Renderer::LinuxFontSize(g_ctrpfText)) / 2;
-        g_textXpos[1] = (320 - Renderer::LinuxFontSize(g_copyrightText)) / 2;
+        g_textXpos[0] = (320 - (int)Renderer::GetTextSize(g_ctrpfText)) / 2;
+        g_textXpos[1] = (320 - (int)Renderer::GetTextSize(g_copyrightText)) / 2;
     }
 
     bool PluginMenuTools::operator()(EventList &eventList, Time &delta)
@@ -574,17 +295,16 @@ namespace CTRPluginFramework
             return (false);
         }
 
-        if (g_mode == ABOUT)
-        {
-            if (!_abouttb.IsOpen())
-                _abouttb.Open();
-            else
-                g_mode = NORMAL;
-        }
-
         if (g_mode == GWRAMDUMP)
         {
             _gatewayRamDumper();
+            g_mode = NORMAL;
+            return (false);
+        }
+
+        if (g_mode == SEARCH)
+        {
+            PluginMenuImpl::OpenSearch();
             g_mode = NORMAL;
             return (false);
         }
@@ -602,9 +322,6 @@ namespace CTRPluginFramework
             return 0;
         }, static_cast<void *>(this), Task::AppCores);
 
-        // Render Top
-        //_RenderTop();
-
         task.Start();
 
         // Render Bottom
@@ -615,144 +332,61 @@ namespace CTRPluginFramework
         // Check buttons
         bool exit = _exit || Window::BottomWindow.MustClose();
         _exit = false;
+
         return (exit);
     }
 
-    void PluginMenuTools::TriggerHexEditor(bool isEnabled) const
-    {
-        if (!isEnabled)
-        {
-            _hexEditorEntry->Hide();
-        }
-        else
-            _hexEditorEntry->Show();
-    }
-
-    /*
-    ** Process Event
-    *****************/
     void PluginMenuTools::_ProcessEvent(Event &event)
     {
-        if (_abouttb.IsOpen())
-        {
-            _abouttb.ProcessEvent(event);
-            if (!_abouttb.IsOpen())
-                SoundEngine::PlayMenuSound(SoundEngine::Event::CANCEL);
-            return;
-        }
-
         MenuItem *item = nullptr;
         static int selector = -1;
 
-        int ret = _menu.ProcessEvent(event, &item);
-
-        if (ret == EntrySelected && item != nullptr)
+        if (_menu.ProcessEvent(event, &item) == MenuClose)
         {
-            void *arg = ((MenuEntryTools *)item)->GetArg();
-
-            if (arg == this)
-            {
-                selector = _menu._selector;
-                _menu.Open(&_tricordSettingsMenu);
-            }
-            else if (arg != nullptr && *(u32 *)arg == MISCELLANEOUS)
-            {
-                selector = _menu._selector;
-                _menu.Open(&_miscellaneousMenu);
-            }
-            else if (arg != nullptr &&  *(u32 *)arg == SCREENSHOT)
-            {
-                selector = _menu._selector;
-                UpdateScreenshotStatus();
-                _menu.Open(&_screenshotMenu);
-            }
-        }
-
-        if (ret == MenuClose)
-        {
-            //MenuFolderImpl *cur = _menu.GetFolder();
-
-            if (_menu.GetFolder() == &_mainMenu)
+            if (_menu.GetFolder() == &_devTools)
             {
                 _exit = true;
-                _menu.Open(&_mainMenu, selector);
+                _menu.Open(&_devTools, selector);
             }
             else
-                _menu.Open(&_mainMenu, selector);
+                _menu.Open(&_devTools, selector);
         }
     }
-
-    void PluginMenuTools::_RenderTopMenu(void)
-    {
-
-    }
-
-    /*
-    ** Render Top
-    **************/
 
     void PluginMenuTools::_RenderTop(void)
     {
-        // Enable renderer
         Renderer::SetTarget(TOP);
-
-        if(_abouttb.IsOpen())
-        {
-            _abouttb.Draw();
-            return;
-        }
         _menu.Draw();
     }
 
-    /*
-    ** Render Bottom
-    *****************/
+    // TODO: move to PluginMenu, make public
     void    PluginMenuTools::_RenderBottom(void)
     {
-        //const Color    &black = Color::Black;
-        const Color    &blank = Color::Gainsboro;
-        //const Color    &dimGrey = Color::BlackGrey;
-
-        // Enable renderer
         Renderer::SetTarget(BOTTOM);
-
-        // Window
         Window::BottomWindow.Draw();
 
         // Draw Framework version
         {
-            static const char *CTRPFVersion = CTRPF_BUILD_METADATA;
-            static const char *TricordVersion = TRICORD_BUILD_METADATA;
-            static const char *compilationDate = COMPILE_DATE;
+            int posY = 85;
+            Renderer::DrawGameFontString("Tricord Build Information:", 40, posY, 300, Color::Gainsboro);
+            Renderer::DrawLine(40, posY, 25 * 6, Color::Gainsboro);
 
-            int posY = 105, posYY = 125;
-            Renderer::DrawString("Tricord Build Information:", 40, posY, blank);
-            Renderer::DrawLine(40, posY, 25 * 6, blank);
             posY += 10;
-            Renderer::DrawString("Tricord Version: ", 40, posY, blank);
-            Renderer::DrawString(TricordVersion, 140, posYY, blank);
-            Renderer::DrawString("CTRPF Version: ", 40, posY, blank);
-            Renderer::DrawString(CTRPFVersion, 129, posYY, blank);
-            Renderer::DrawString("Compile Date: ", 40, posY, blank);
-            Renderer::DrawString(compilationDate, 124, posYY, blank);
+            Renderer::DrawGameFontString(Utils::Format("Tricord Version: %s", TRICORD_BUILD_METADATA).c_str(), 40, posY, 300, Color::Gainsboro);
+            Renderer::DrawGameFontString(Utils::Format("CTRPF Version: %s", CTRPF_BUILD_METADATA).c_str(), 40, posY, 300, Color::Gainsboro);
+            Renderer::DrawGameFontString(Utils::Format("Compiled: %s", COMPILE_DATE).c_str(), 40, posY, 300, Color::Gainsboro);
 
-            posY = 175;
-            Renderer::DrawString(g_ctrpfText, g_textXpos[0], posY, Color::Gainsboro);
-            Renderer::DrawString(g_copyrightText, g_textXpos[1], posY, Color::Gainsboro);
+            posY = 165;
+            Renderer::DrawGameFontString(g_ctrpfText, g_textXpos[0], posY, 300, Color::Gainsboro);
+            Renderer::DrawGameFontString(g_copyrightText, g_textXpos[1], posY, 300, Color::Gainsboro);
         }
     }
 
-    /*
-    ** Update
-    ************/
     void    PluginMenuTools::_Update(Time delta)
     {
-        /*
-        ** Buttons
-        *************/
-        bool        isTouched = Touch::IsDown();
-        IntVector   touchPos(Touch::GetPosition());
+        bool isTouched = Touch::IsDown();
 
+        IntVector touchPos(Touch::GetPosition());
         Window::BottomWindow.Update(isTouched, touchPos);
     }
 }
