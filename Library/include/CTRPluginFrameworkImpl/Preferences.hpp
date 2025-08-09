@@ -31,7 +31,6 @@ namespace CTRPluginFramework
             // Misc
             DisplayLoadedFiles  = 1 << 16,
             WriteLoadedFiles    = 1 << 17,
-            DrawTouchCursor     = 1 << 18,
             DrawTouchPosition   = 1 << 19,
             ShowTopFps          = 1 << 20,
             ShowBottomFps       = 1 << 21,

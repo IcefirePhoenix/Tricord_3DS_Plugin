@@ -14,6 +14,8 @@
 
 namespace CTRPluginFramework
 {
+    bool openSearch = false;
+
     PluginMenuImpl  *PluginMenuImpl::_runningInstance = nullptr;
     Mutex           PluginMenuImpl::_trashBinMutex;
 
@@ -25,12 +27,11 @@ namespace CTRPluginFramework
         _actionReplay{ new PluginMenuActionReplay() },
         _home(new PluginMenuHome(name, (menuType == 1))),
         _search(new PluginMenuSearch(_hexEditor)),
-        _tools(new PluginMenuTools(about, _hexEditor)),
+        _tools(new PluginMenuTools(_hexEditor)),
         _executeLoop(new PluginMenuExecuteLoop()),
         _guide(new GuideReader()),
         _hexEditor(0x00100000),
-        _forceOpen(false),
-        _hexEditorState(true)
+        _forceOpen(false)
     {
         SyncOnFrame = false;
         _isOpen = false;
@@ -300,10 +301,10 @@ namespace CTRPluginFramework
                     if (guide(eventList, delta))
                         mode = 0;
                 }
-                else if (mode == 3)
+                else if (openSearch)
                 { /* Search */
                     if (search(eventList, delta))
-                        mode = 0;
+                        openSearch = false;
                     goto __skip;
                 }
                 else if (mode == 4)
@@ -746,6 +747,14 @@ namespace CTRPluginFramework
             _runningInstance->_search->GetRegionsList(list);
     }
 
+    PluginMenuSearch*    PluginMenuImpl::GetSearchInstance(void)
+    {
+        if (_runningInstance != nullptr)
+            return _runningInstance->_search;
+        else
+            return nullptr;
+    }
+
     void    PluginMenuImpl::ForceExit(void)
     {
         if (_runningInstance != nullptr)
@@ -778,20 +787,14 @@ namespace CTRPluginFramework
         }
     }
 
+    void    PluginMenuImpl::OpenSearch(void)
+    {
+        openSearch = true;
+    }
+
     PluginMenuImpl* PluginMenuImpl::GetRunningInstance()
     {
         return _runningInstance;
-    }
-
-    void    PluginMenuImpl::SetHexEditorState(bool isEnabled)
-    {
-        _hexEditorState = isEnabled;
-        _tools->TriggerHexEditor(isEnabled);
-    }
-
-    bool    PluginMenuImpl::GetHexEditorState() const
-    {
-        return _hexEditorState;
     }
 
     void    PluginMenuImpl::ShowWelcomeMessage(bool showMsg)

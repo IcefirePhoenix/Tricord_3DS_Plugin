@@ -17,19 +17,6 @@ namespace CTRPluginFramework
         _menu->AddPluginVersion();
     }
 
-    PluginMenu::PluginMenu(std::string name, void *about, DecipherPointer func, u32 menuType) :
-        OnFirstOpening{ nullptr }, OnOpening{ nullptr }, OnClosing{ nullptr }, OnNewFrame{ nullptr }
-    {
-        std::string aboutStr = "";
-        func(aboutStr, about);
-
-        FreecamToggle = false;
-        GameplayToggle = false;
-        ShowInvite = false;
-
-        _menu = std::unique_ptr<PluginMenuImpl>(new PluginMenuImpl(name, aboutStr, menuType));
-    }
-
     PluginMenu::~PluginMenu(void)
     {
     }
@@ -135,11 +122,6 @@ namespace CTRPluginFramework
     std::vector<MenuFolder*> PluginMenu::GetHiddenList() const
     {
         return (_menu->GetHidden()->GetFolderList());
-    }
-
-    void    PluginMenu::SetHexEditorState(bool isEnabled) const
-    {
-        _menu->SetHexEditorState(isEnabled);
     }
 
 	void    PluginMenu::ShowWelcomeMessage(bool showMsg) const

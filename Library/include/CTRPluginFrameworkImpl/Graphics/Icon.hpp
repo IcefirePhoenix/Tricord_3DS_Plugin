@@ -131,11 +131,6 @@ namespace CTRPluginFramework
         ***********/
         static int DrawInfoNew(int posX, int posY, bool filled);
 
-        /*
-        ** Hand Cursor
-        ** 15 px * 15 px
-        ****************/
-        static int DrawHandCursor(int posX, int posY);
 
         /*
         ** Discord

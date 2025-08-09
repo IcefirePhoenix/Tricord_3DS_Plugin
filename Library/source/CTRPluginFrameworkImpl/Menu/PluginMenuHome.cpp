@@ -20,7 +20,7 @@ namespace CTRPluginFramework
         _arBtn(Button::GameFont, "Action Replay", IntRect(35, 160, 120, 32), Icon::DrawMenuButton),
         _gameModeBtn(Button::Toggle | Button::GameFont, "Game Modes", IntRect(166, 80, 120, 32), Icon::DrawMenuButton),
         _searchBtn(Button::GameFont | Button::Rounded, "Search", IntRect(166, 120, 120, 32), Icon::DrawMenuButton),
-        _toolsBtn(Button::GameFont | Button::Rounded, "Tools", IntRect(166, 160, 120, 32), Icon::DrawMenuButton),
+        _toolsBtn(Button::GameFont | Button::Rounded, "Dev Tools", IntRect(166, 160, 120, 32), Icon::DrawMenuButton),
 
         _faqBtn(Button::Icon, IntRect(287, 205, 25, 25), Icon::DrawTricord),
         _discordBtn(Button::Icon | Button::Toggle, IntRect(254, 207, 25, 25), Icon::DrawDiscord),

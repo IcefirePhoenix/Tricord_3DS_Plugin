@@ -248,14 +248,6 @@ namespace CTRPluginFramework
         if (Touch::IsDown())
         {
             IntVector touchPos(Touch::GetPosition());
-
-            if (Preferences::IsEnabled(Preferences::DrawTouchCursor))
-            {
-                int posX = touchPos.x - 2;
-                int posY = touchPos.y - 1;
-                Icon::DrawHandCursor(posX, posY);
-            }
-
             if (Preferences::IsEnabled(Preferences::DrawTouchPosition))
             {
                 std::string &&str = Utils::Format("Touch.x: %d  Touch.y: %d", touchPos.x, touchPos.y);

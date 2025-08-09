@@ -508,8 +508,6 @@ namespace CTRPluginFramework
 
     void    SearchMenu::_JumpInEditor(void)
     {
-        if (!PluginMenuImpl::GetRunningInstance()->GetHexEditorState())
-            return;
         u32 address = strtoul(_resultsAddress[_selector].c_str(), NULL, 16);
 
         _hexEditor.Goto(address, true);
