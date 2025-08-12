@@ -38,7 +38,6 @@ namespace CTRPluginFramework
         _aboutToOpen = false;
         _wasOpened = false;
         _pluginRun = true;
-        _showMsg = true;
     }
 
     PluginMenuImpl::~PluginMenuImpl(void)
@@ -168,7 +167,7 @@ namespace CTRPluginFramework
         // Refresh hid
         Controller::Update();
 
-        // If Start is pressed, don't auto enable the cheats
+        //TODO: remove If Start is pressed, don't auto enable the cheats
         if (Controller::IsKeyPressed(Key::Start) || Controller::IsKeyDown(Key::Start))
             Preferences::Clear(Preferences::AutoEnableSavedCheats);
 
@@ -207,11 +206,8 @@ namespace CTRPluginFramework
         ar.Initialize();
         PluginMenuActionReplay::BackupCodes(false);
 
-        if (_showMsg)
-        {
-            OSD::Notify("Plugin ready!", Color::White, Color());
-            OSD::Notify("Tricord can now be started.", Color::White, Color());
-        }
+        OSD::Notify("Plugin ready!", Color::White, Color());
+        OSD::Notify("Tricord can now be started.", Color::White, Color());
 
         // Main loop
         while (_pluginRun)
@@ -795,11 +791,6 @@ namespace CTRPluginFramework
     PluginMenuImpl* PluginMenuImpl::GetRunningInstance()
     {
         return _runningInstance;
-    }
-
-    void    PluginMenuImpl::ShowWelcomeMessage(bool showMsg)
-    {
-        _showMsg = showMsg;
     }
 
     MenuFolderImpl* PluginMenuImpl::GetRoot() const

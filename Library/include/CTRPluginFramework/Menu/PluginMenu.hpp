@@ -96,12 +96,6 @@ namespace CTRPluginFramework
         std::vector<MenuFolder *>   GetHiddenList(void) const;
 
         /**
-        * \brief Choose to display or not the "plugin ready" message
-        * \param showMsg If the message must be displayed or not
-        */
-        void    ShowWelcomeMessage(bool showMsg) const;
-
-        /**
          * \brief Check if the menu is currently open
          * \return true if the menu is open, false otherwise
          */
