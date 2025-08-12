@@ -208,6 +208,8 @@ namespace CTRPluginFramework
         if (!entry->IsActivated())
         {
             // Disable OSD
+            g_HookMode &= ~OSD;
+
             Preferences::Clear(Preferences::DisplayLoadedFiles);
 
             // If there's no task to do on the hook, disable it
@@ -228,24 +230,32 @@ namespace CTRPluginFramework
                 entry->Disable(); ///< Hook failed
             }
 
-            // Open the file
-            int     mode = File::READ | File::WRITE | File::CREATE | File::APPEND;
-            std::string filename = Utils::Format("[%016llX] - LoadedFiles.txt", Process::GetTitleID());
+            std::string currDate = Time::GetDate() + Time::GetTime();
+            std::string logPath = "/Tricord/Loaded File Logs/";
 
-            if (File::Open(g_hookExportFile, filename, mode) != 0)
+            if (!Directory::IsExists(logPath))
+                Directory::Create(logPath);
+
+            logPath.append(Process::GetRegionCode() + "/");
+
+            if (!Directory::IsExists(logPath))
+                Directory::Create(logPath);
+
+            logPath.append(Utils::Format("Loaded File Log - %s.txt", currDate.c_str()));
+
+            if (!File::Exists(logPath))
+                File::Create(logPath);
+
+            int mode = File::READ | File::WRITE | File::CREATE | File::APPEND;
+            if (File::Open(g_hookExportFile, logPath, mode) != 0)
             {
-                OSD::Notify(std::string("Error: couldn't open \"").append(filename).append("\""), Color::Red, Color::White);
-                entry->Disable(); ///< Disable the entry
+                OSD::Notify(std::string("Error: Failed to open Loaded File Log"), Color::Red, Color::White);
+                entry->Disable();
                 return;
             }
 
-            static bool firstActivation = true;
-
-            if (firstActivation)
-            {
-                g_hookExportFile.WriteLine("\r\n\r\n### New log ###\r\n");
-                firstActivation = false;
-            }
+            OSD::Notify("File logging started.");
+            g_hookExportFile.WriteLine(Utils::Format("### New log: %s ###\n", currDate.c_str()));
 
             // Enable the hook
             Preferences::Set(Preferences::WriteLoadedFiles);

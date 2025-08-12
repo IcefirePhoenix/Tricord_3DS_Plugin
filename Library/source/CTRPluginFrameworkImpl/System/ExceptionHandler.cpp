@@ -110,7 +110,7 @@ namespace CTRPluginFramework
         const unsigned char optionXAlt[] = FONT_X ": Crash log has been\nsaved to SD card";
         const unsigned char optionY[] = FONT_Y ": Show TFH Modding\nDiscord Server invite\nlink";
         const unsigned char optionYAlt[] = FONT_Y ": Display log help\ninfo";
-        const unsigned char captionA[] = "Need support assistance? Save the crash\nlog to your SD card and post it as an\nattachment under the #bug-reports\nchannel in the TFH Modding Server.\n\nDon’t forget to describe what happened\nand tag @Tricord Team for help! The log\nfile can be found under:\n\nTricord/Logs/[NA/EU/JP]";
+        const unsigned char captionA[] = "Need support assistance? Save the crash\nlog to your SD card and post it as an\nattachment under the #bug-reports\nchannel in the TFH Modding Server.\n\nDon’t forget to describe what happened\nand tag Tricord Team for help! The log\nfile can be found under:\n\nTricord/Crash Logs/[NA/EU/JP]";
         const unsigned char captionB[] = "Need to join the server? The QR invite\nlink is above!\n\nIf you'd prefer to type out the invite link\nyourself, here it is:\n";
 
         exceptionData = generalInfo + registerInfo + getEnabledEntries();
@@ -175,7 +175,7 @@ namespace CTRPluginFramework
 
         infoStr += Utils::Format("Tricord version: %s\n", TRICORD_BUILD_METADATA);
         infoStr += Utils::Format("CTRPF version: %s\n", CTRPF_BUILD_METADATA);
-        infoStr += ("Timestamp: " + Time::GetDate(true) + "\n\n");
+        infoStr += Utils::Format("Timestamp: %s%s\n\n", Time::GetDate().c_str(), Time::GetTime().c_str());
 
         switch (excep->type)
         {
@@ -251,7 +251,7 @@ namespace CTRPluginFramework
         PluginMenu *menu = PluginMenu::GetRunningInstance();
 
         if (menu == nullptr)
-            return "NULL";
+            return "/nNULL: Menu did not initialize successfully.";
 
         // get any freestanding entries...
         std::vector<MenuEntry *> entryList = menu->GetEntryList();
@@ -276,7 +276,7 @@ namespace CTRPluginFramework
     // Writes the crash log to the SD card
     bool ExceptionHandler::saveCrashLog(void)
     {
-        std::string logPath = "/Tricord/Logs/";
+        std::string logPath = "/Tricord/Crash Logs/";
 
         // long directories can't be made in one go -> split into two create events
         if (!Directory::IsExists(logPath))
@@ -288,7 +288,7 @@ namespace CTRPluginFramework
         if (!Directory::IsExists(logPath))
             Directory::Create(logPath);
 
-        logPath.append("Crash Log - " + Time::GetDate(true) + ".txt");
+        logPath.append(Utils::Format("Crash Log - %s%s.txt", Time::GetDate().c_str(), Time::GetTime().c_str()));
 
         if (!File::Exists(logPath))
             File::Create(logPath);

@@ -10,6 +10,7 @@
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuExecuteLoop.hpp"
 #include "TID.h"
 #include <fstream>
+#include <ctime>
 
 namespace CTRPluginFramework
 {
@@ -486,7 +487,7 @@ namespace CTRPluginFramework
         std::string sourcePath = Preferences::CheatsFile;
         std::string backupPath = manualMode ? "/Tricord/AR_Backups/manual/" : "/Tricord/AR_Backups/auto/";
         std::string backupFileName = "";
-        std::string dateStr = Time::GetDate(false);
+        std::string dateStr = Time::GetDate();
 
         // prep read processes
         File sourceFile(sourcePath, File::READ);
@@ -524,7 +525,7 @@ namespace CTRPluginFramework
                 if (!backupFileName.empty()) // backup file found
                     backupPath.append(backupFileName);
                 else
-                    backupPath.append("AutoBackup-" + dateStr + ".txt"); // no backup found; create new
+                    backupPath.append(Utils::Format("AutoBackup-%s.txt", dateStr.c_str())); // no backup found; create new
             }
         }
         else
@@ -582,17 +583,17 @@ namespace CTRPluginFramework
             }
             else
                 // rename the backup file with date
-                File::Rename(backupPath, "/Tricord/AR_Backups/auto/" + region + "/AutoBackup-" + dateStr + ".txt");
+                File::Rename(backupPath, Utils::Format("/Tricord/AR_Backups/auto/%s/AutoBackup-%s.txt", region.c_str(), dateStr.c_str()));
         }
         else
         {
             MessageBox restoreNotif("The Action Replay cheat file is empty. Would you like to restore from a backup?", DialogType::DialogYesNo);
             if (restoreNotif())
-                RestoreFromBackup(true, Time::ParseDate(dateStr));
+                RestoreFromBackup(true);
         }
     }
 
-    void    PluginMenuActionReplay::RestoreFromBackup(bool fromAutoEmptyDetect, std::string autoDate)
+    void    PluginMenuActionReplay::RestoreFromBackup(bool fromAutoEmptyDetect)
     {
         std::string currCheatFilePath = Preferences::CheatsFile;
 
@@ -607,7 +608,22 @@ namespace CTRPluginFramework
         if (fromManual || fromAutoEmptyDetect)
         {
             std::string chosenFilePath = "";
-            if (Utils::FilePicker(chosenFilePath, ".txt", autoDate) == 0)
+            std::string lastBackupDateStr = "Unknown";
+
+            Directory autoFolder;
+            Directory::Open(autoFolder, Utils::Format("/Tricord/AR_Backups/auto/%s/", Process::GetRegionCode().c_str()));
+
+            std::vector<std::string> files;
+            autoFolder.ListFiles(files, ".txt"); // a maximum of one file should exist at any given time
+
+            if (!files.empty() && files[0].find("AutoBackup") != std::string::npos)
+            {
+                size_t pos = files[0].find("AutoBackup-");
+                if (pos != std::string::npos)
+                    lastBackupDateStr = Time::ParseDate(files[0].substr(pos + std::string("AutoBackup-").length()));
+            }
+
+            if (Utils::FilePicker(chosenFilePath, ".txt", lastBackupDateStr) == 0)
                 Preferences::CheatsFile = chosenFilePath;
 
             MenuFolderImpl *root = __pmARinstance->_topMenu.GetRootFolder();

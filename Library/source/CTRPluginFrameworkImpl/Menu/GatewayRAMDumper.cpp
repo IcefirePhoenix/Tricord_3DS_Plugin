@@ -248,36 +248,23 @@ namespace CTRPluginFramework
 
     void    GatewayRAMDumper::_OpenFile(void)
     {
-        char buffer[100] = { 0 };
-        time_t t = time(NULL);
-        struct tm *timeinfo = localtime(&t);
-
-        strftime(buffer, 100, "%x-%X", timeinfo);
-
-        std::string timeString(buffer);
-
-        timeString.erase(std::remove(timeString.begin(), timeString.end(), '/'), timeString.end());
-        timeString.erase(std::remove(timeString.begin(), timeString.end(), ':'), timeString.end());
-
         MessageBox msgBox("New RAM Dump", "Would you like to name the RAM dump?", DialogType::DialogYesNo);
 
         if (msgBox())
         {
-            // Custom name
             Keyboard keyboard("New RAM Dump", "Input a new name for this RAM dump.");
-
             keyboard.DisplayTopScreen = true;
+
             if (keyboard.Open(_fileName) == -1)
                 return;
         }
         else
         {
-            // Default name
             Process::GetTitleID(_fileName);
+            _fileName += Utils::Format("- %s%s", Time::GetDate().c_str(), Time::GetTime().c_str());
         }
 
-        _fileName += "-";
-        _fileName += timeString + ".bin";
+        _fileName += ".bin";
 
         std::string path("Dumps/");
 
