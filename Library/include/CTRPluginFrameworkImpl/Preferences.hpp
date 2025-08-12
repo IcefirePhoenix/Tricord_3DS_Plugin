@@ -7,15 +7,12 @@
 #include "CTRPluginFrameworkImpl/Graphics/BMPImage.hpp"
 #include <vector>
 
+#define SETTINGS_VERSION SYSTEM_VERSION(1, 1, 0)
+
 namespace CTRPluginFramework
 {
     class Preferences
     {
-        #define SETTINGS_VERSION1 SYSTEM_VERSION(1, 0, 0)
-        #define SETTINGS_VERSION11 SYSTEM_VERSION(1, 1, 0)
-        #define SETTINGS_VERSION12 SYSTEM_VERSION(1, 2, 0)
-
-        #define SETTINGS_VERSION SETTINGS_VERSION11
     public:
         // Preferences::Flags = u64 = 64 bits available to use
         enum
@@ -25,7 +22,7 @@ namespace CTRPluginFramework
             AutoSaveCheats      = 1 << 2,
             DisableOSDNotifs    = 1 << 3,
             AutoEnableSavedCheats      = 1 << 4,
-            AutoEnableFavorites   = 1 << 5,
+            AutoEnableFavorites = 1 << 5,
             ScreenshotEnabled   = 1 << 6,
 
             // Misc

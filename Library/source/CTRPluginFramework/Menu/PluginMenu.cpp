@@ -124,11 +124,6 @@ namespace CTRPluginFramework
         return (_menu->GetHidden()->GetFolderList());
     }
 
-	void    PluginMenu::ShowWelcomeMessage(bool showMsg) const
-	{
-		_menu->ShowWelcomeMessage(showMsg);
-	}
-
     bool    PluginMenu::IsOpen(void)
     {
         return (_menu->IsOpen());

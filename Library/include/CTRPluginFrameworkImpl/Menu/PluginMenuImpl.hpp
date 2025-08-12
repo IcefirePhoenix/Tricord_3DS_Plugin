@@ -64,9 +64,6 @@ namespace CTRPluginFramework
 
         static PluginMenuImpl* GetRunningInstance();
 
-        void    SetHexEditorState(bool isEnabled);
-        void    ShowWelcomeMessage(bool showMsg);
-
         MenuFolderImpl *GetRoot(void) const;
         MenuFolderImpl *GetHidden(void) const;
         bool    IsOpen(void) const;
@@ -87,7 +84,6 @@ namespace CTRPluginFramework
         bool                        _aboutToOpen;
         bool                        _wasOpened;
         bool                        _pluginRun;
-        bool                        _showMsg;
 
         PluginMenuActionReplay      *_actionReplay;
         PluginMenuHome              *_home;
