@@ -8,6 +8,7 @@
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuHome.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuSearch.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuTools.hpp"
+#include "CTRPluginFrameworkImpl/Menu/PluginMenuSettings.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuExecuteLoop.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuActionReplay.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
@@ -88,6 +89,7 @@ namespace CTRPluginFramework
         PluginMenuActionReplay      *_actionReplay;
         PluginMenuHome              *_home;
         PluginMenuSearch            *_search;
+        PluginMenuSettings          *_settings;
         PluginMenuTools             *_tools;
         PluginMenuExecuteLoop       *_executeLoop;
         GuideReader                 *_guide;

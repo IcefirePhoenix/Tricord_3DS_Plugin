@@ -19,7 +19,7 @@ namespace CTRPluginFramework
         _freecamBtn(Button::Toggle | Button::GameFont, "Freecam", IntRect(35, 120, 120, 32), Icon::DrawMenuButton),
         _arBtn(Button::GameFont, "Action Replay", IntRect(35, 160, 120, 32), Icon::DrawMenuButton),
         _gameModeBtn(Button::Toggle | Button::GameFont, "Game Modes", IntRect(166, 80, 120, 32), Icon::DrawMenuButton),
-        _searchBtn(Button::GameFont | Button::Rounded, "Search", IntRect(166, 120, 120, 32), Icon::DrawMenuButton),
+        _settingsBtn(Button::GameFont | Button::Rounded, "Settings", IntRect(166, 120, 120, 32), Icon::DrawMenuButton),
         _toolsBtn(Button::GameFont | Button::Rounded, "Dev Tools", IntRect(166, 160, 120, 32), Icon::DrawMenuButton),
 
         _faqBtn(Button::Icon, IntRect(287, 205, 25, 25), Icon::DrawTricord),
@@ -121,7 +121,7 @@ namespace CTRPluginFramework
                     home->_freecamBtn.Lock();
                     home->_gameModeBtn.Lock();
                     home->_faqBtn.Lock();
-                    home->_searchBtn.Lock();
+                    home->_settingsBtn.Lock();
                     home->_arBtn.Lock();
                     home->_toolsBtn.Lock();
                     home->_AddFavoriteBtn.Lock();
@@ -142,7 +142,7 @@ namespace CTRPluginFramework
                     {
                         home->_showStarredBtn.Unlock();
                         home->_faqBtn.Unlock();
-                        home->_searchBtn.Unlock();
+                        home->_settingsBtn.Unlock();
                         home->_arBtn.Unlock();
                         home->_toolsBtn.Unlock();
                     }
@@ -152,7 +152,7 @@ namespace CTRPluginFramework
                         home->_freecamBtn.Unlock();
                         home->_showStarredBtn.Unlock();
                         home->_faqBtn.Unlock();
-                        home->_searchBtn.Unlock();
+                        home->_settingsBtn.Unlock();
                         home->_arBtn.Unlock();
                         home->_toolsBtn.Unlock();
                     }
@@ -199,7 +199,7 @@ namespace CTRPluginFramework
             if (_freecamBtn()) _freecamBtn_OnClick();
             if (_gameModeBtn()) _gameModeBtn_OnClick();
             if (_faqBtn()) _faqBtn_OnClick();
-            if (_searchBtn()) _searchBtn_OnClick();
+            if (_settingsBtn()) _settingsBtn_OnClick();
             if (_arBtn()) _actionReplayBtn_OnClick();
             if (_AddFavoriteBtn()) _StarItem();
             if (_InfoBtn()) _InfoBtn_OnClick();
@@ -213,7 +213,7 @@ namespace CTRPluginFramework
             _freecamBtn.Lock();
             _gameModeBtn.Lock();
             _faqBtn.Lock();
-            _searchBtn.Lock();
+            _settingsBtn.Lock();
             _arBtn.Lock();
             _toolsBtn.Lock();
             _AddFavoriteBtn.Lock();
@@ -704,7 +704,7 @@ namespace CTRPluginFramework
             _freecamBtn.Draw();
             _gameModeBtn.Draw();
             _faqBtn.Draw();
-            _searchBtn.Draw();
+            _settingsBtn.Draw();
             _arBtn.Draw();
             _toolsBtn.Draw();
             _AddFavoriteBtn.Draw();
@@ -821,7 +821,7 @@ namespace CTRPluginFramework
             _freecamBtn.Update(isTouched, touchPos);
             _gameModeBtn.Update(isTouched, touchPos);
             _faqBtn.Update(isTouched, touchPos);
-            _searchBtn.Update(isTouched, touchPos);
+            _settingsBtn.Update(isTouched, touchPos);
             _arBtn.Update(isTouched, touchPos);
             _AddFavoriteBtn.Update(isTouched, touchPos);
             _InfoBtn.Update(isTouched, touchPos);
@@ -998,7 +998,7 @@ namespace CTRPluginFramework
             _showStarredBtn.Lock();
             _AddFavoriteBtn.Lock();
             _arBtn.Lock();
-            _searchBtn.Lock();
+            _settingsBtn.Lock();
 
             _returnFolder = _folder;
             _folder = _root;
@@ -1010,7 +1010,7 @@ namespace CTRPluginFramework
             _showStarredBtn.Unlock();
             _AddFavoriteBtn.Unlock();
             _arBtn.Unlock();
-            _searchBtn.Unlock();
+            _settingsBtn.Unlock();
 
             if (_returnFolder == nullptr)
                 return;
@@ -1033,7 +1033,7 @@ namespace CTRPluginFramework
             _showStarredBtn.Lock();
             _AddFavoriteBtn.Lock();
             _arBtn.Lock();
-            _searchBtn.Lock();
+            _settingsBtn.Lock();
 
             // this cannot be overrided by a Game Mode onClick update as its button is locked...
             if (_folder != _root)
@@ -1053,7 +1053,7 @@ namespace CTRPluginFramework
                 _showStarredBtn.Unlock();
                 _AddFavoriteBtn.Unlock();
                 _arBtn.Unlock();
-                _searchBtn.Unlock();
+                _settingsBtn.Unlock();
 
                 if (_returnFolder == nullptr)
                     return;
@@ -1071,7 +1071,7 @@ namespace CTRPluginFramework
         _mode = 2;
     }
 
-    void PluginMenuHome::_searchBtn_OnClick(void)
+    void PluginMenuHome::_settingsBtn_OnClick(void)
     {
         _mode = 3;
     }

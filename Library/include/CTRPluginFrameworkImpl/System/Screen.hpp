@@ -78,8 +78,6 @@ namespace CTRPluginFramework
         void                        SwapBuffer(void);
         // Arbitrary buffer swapping, do not reflect changes on screen
         void                        SwapBufferInternal(void);
-        u32                         GetBacklight(void);
-        void                        SetBacklight(u32 value);
 
         GSPGPU_FramebufferFormat    GetFormat(void) const;
         u16                         GetWidth(void) const;
@@ -108,7 +106,6 @@ namespace CTRPluginFramework
 
         u32                         _LCDSetup;  ///< Address of this screen LCD configuration
         u32                         _FillColor; ///< Address of this screen fill color register
-        u32                         _backlightOffset;
         u32                         _currentBuffer;
         u32                         _leftFrameBuffers[2];
         u32                         _rightFrameBuffers[2];
