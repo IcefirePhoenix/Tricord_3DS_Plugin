@@ -12,16 +12,11 @@
 #include "CTRPluginFramework/Menu/MessageBox.hpp"
 #include "CTRPluginFramework/Menu/PluginMenu.hpp"
 #include "CTRPluginFramework/System/Directory.hpp"
-#include "CTRPluginFramework/System/System.hpp"
 #include "CTRPluginFramework/System/Hook.hpp"
-#include "CTRPluginFramework/System/Sleep.hpp"
 #include "CTRPluginFramework/System/Process.hpp"
-#include "CTRPluginFramework/Utils/StringExtensions.hpp"
 #include "CTRPluginFramework/Utils/Utils.hpp"
 
 #include <3ds.h>
-
-#include <ctime>
 #include <cstring>
 #include <cstdio>
 
@@ -36,11 +31,6 @@ namespace CTRPluginFramework
     };
 
     static int g_mode = NORMAL;
-
-    // DO NOT REMOVE THIS COPYRIGHT NOTICE
-    static const char g_ctrpfText[] = "Tricord is powered by CTRPluginFramework.";
-    static const char g_copyrightText[] = "Copyright (c) The Pixellizer Group";
-    static u32 g_textXpos[2] = { 0 };
 
     PluginMenuTools::PluginMenuTools(HexEditor &hexEditor) :
         _devTools("Developer Tools"),
@@ -290,10 +280,6 @@ namespace CTRPluginFramework
         _devTools.Append(new MenuEntryTools("Display touchcreen cursor coordinates", [] { Preferences::Toggle(Preferences::DrawTouchPosition); }, true, Preferences::IsEnabled(Preferences::DrawTouchPosition)));
         _devTools.Append(new MenuEntryTools("Display top screen FPS", [] { Preferences::Toggle(Preferences::ShowTopFps); }, true, Preferences::IsEnabled(Preferences::ShowTopFps)));
         _devTools.Append(new MenuEntryTools("Display bottom screen FPS", [] { Preferences::Toggle(Preferences::ShowBottomFps); }, true, Preferences::IsEnabled(Preferences::ShowBottomFps)));
-
-        // Get strings x position
-        g_textXpos[0] = (320 - (int)Renderer::GetTextSize(g_ctrpfText)) / 2;
-        g_textXpos[1] = (320 - (int)Renderer::GetTextSize(g_copyrightText)) / 2;
     }
 
     bool PluginMenuTools::operator()(EventList &eventList, Time &delta)
@@ -325,16 +311,7 @@ namespace CTRPluginFramework
 
         // Update
         _Update(delta);
-
-        static Task task([](void *arg) -> s32
-        {
-            static_cast<PluginMenuTools *>(arg)->_RenderTop();
-            return 0;
-        }, static_cast<void *>(this), Task::AppCores);
-
-        task.Start();
-
-        // Render Bottom
+        _RenderTop();
         _RenderBottom();
 
         task.Wait();
@@ -369,27 +346,9 @@ namespace CTRPluginFramework
         _menu.Draw();
     }
 
-    // TODO: move to PluginMenu, make public
     void    PluginMenuTools::_RenderBottom(void)
     {
-        Renderer::SetTarget(BOTTOM);
-        Window::BottomWindow.Draw();
-
-        // Draw Framework version
-        {
-            int posY = 85;
-            Renderer::DrawGameFontString("Tricord Build Information:", 40, posY, 300, Color::Gainsboro);
-            Renderer::DrawLine(40, posY, 25 * 6, Color::Gainsboro);
-
-            posY += 10;
-            Renderer::DrawGameFontString(Utils::Format("Tricord Version: %s", TRICORD_BUILD_METADATA).c_str(), 40, posY, 300, Color::Gainsboro);
-            Renderer::DrawGameFontString(Utils::Format("CTRPF Version: %s", CTRPF_BUILD_METADATA).c_str(), 40, posY, 300, Color::Gainsboro);
-            Renderer::DrawGameFontString(Utils::Format("Compiled: %s", COMPILE_DATE).c_str(), 40, posY, 300, Color::Gainsboro);
-
-            posY = 165;
-            Renderer::DrawGameFontString(g_ctrpfText, g_textXpos[0], posY, 300, Color::Gainsboro);
-            Renderer::DrawGameFontString(g_copyrightText, g_textXpos[1], posY, 300, Color::Gainsboro);
-        }
+        Render::DisplayPluginInfo();
     }
 
     void    PluginMenuTools::_Update(Time delta)
