@@ -429,8 +429,6 @@ namespace CTRPluginFramework
         int             underLineStart = -1, strikeLineStart = -1;
         ScreenImpl      *screen = GetContext()->screen;
         void (*lineDrawer)(int posX, int posY, int width, const Color &color, int height) = Renderer::DrawLine;
-        u32 shakingH = 0, shakingV = 0;
-        int randomTextID = -1;
 
         if (!screen)
             return posY;
@@ -536,38 +534,11 @@ namespace CTRPluginFramework
 
                     }
                 }
-                else if (control & 0x2000) // Argumented formatting
-                {
-                    u32 mode = (control & 0xF00) >> 8;
-
-                    if (mode == 1) // Text shake
-                    {
-                        bool setH = control & 0x80;
-                        bool setV = control & 0x40;
-                        u32 shakeAmount = (control & 0x3F) - 1;
-                        if (setH) shakingH = shakeAmount;
-                        if (setV) shakingV = shakeAmount;
-                    }
-                    else if (mode == 2) // Random text
-                    {
-                        bool disable = control & 0x80;
-                        if (disable)
-                            randomTextID = -1;
-                        else
-                            randomTextID = (control & 0x3F) - 1;
-                    }
-
-                }
                 continue;
             }
 
 
             Glyph *glyph = Font::GetGlyph(str);
-            if (randomTextID != -1) // Not a bug, the first GetGlyph consumes a character from str.
-            {
-                u8* rstr = (u8*)Render::PullRandomCharacter(randomTextID).c_str();
-                glyph = Font::GetGlyph(rstr);
-            }
 
             if (glyph == nullptr)
                 break;
@@ -589,18 +560,10 @@ namespace CTRPluginFramework
                 posY += 16;
             }
 
-            int offsetX = 0;
-            int offsetY = 0;
-            if (shakingH) {
-                offsetX = Utils::Random(-shakingH, shakingH);
-            }
-            if (shakingV) {
-                offsetY = Utils::Random(-shakingV, shakingV);
-            }
+            x = DrawGlyph(screen, glyph, x, posY, color, flags);
 
-            x = DrawGlyph(screen, glyph, x + offsetX, posY + offsetY, color, flags) - offsetX;
-
-        } while (*str);
+        }
+        while (*str);
 
         if (posY < maxY && flags & Render::FontDrawMode::UNDERLINE) {
             if (underLineStart != x)
@@ -629,8 +592,6 @@ namespace CTRPluginFramework
         int             underLineStart = -1, strikeLineStart = -1;
         void            (*lineDrawer)(int posX, int posY, int width, const Color &color, int height) = DrawLine;
         ScreenImpl *screen = GetContext()->screen;
-        u32 shakingH = 0, shakingV = 0;
-        int randomTextID = -1;
 
         if (!(str && *str) || !screen)
             return (x);
@@ -719,27 +680,6 @@ namespace CTRPluginFramework
 
                     }
                 }
-                else if (control & 0x2000) // Argumented formatting
-                {
-                    u32 mode = (control & 0xF00) >> 8;
-
-                    if (mode == 1) // Text shake
-                    {
-                        bool setH = control & 0x80;
-                        bool setV = control & 0x40;
-                        u32 shakeAmount = (control & 0x3F) - 1;
-                        if (setH) shakingH = shakeAmount;
-                        if (setV) shakingV = shakeAmount;
-                    }
-                    else if (mode == 2) // Random text
-                    {
-                        bool disable = control & 0x80;
-                        if (disable)
-                            randomTextID = -1;
-                        else
-                            randomTextID = (control & 0x3F) - 1;
-                    }
-                }
                 continue;
             }
 
@@ -747,11 +687,6 @@ namespace CTRPluginFramework
                 break;
 
             glyph = Font::GetGlyph(str);
-            if (randomTextID != -1) // Not a bug, the first GetGlyph consumes a character from str.
-            {
-                u8* rstr = (u8*)Render::PullRandomCharacter(randomTextID).c_str();
-                glyph = Font::GetGlyph(rstr);
-            }
 
             if (glyph == nullptr)
                 break;
@@ -769,17 +704,9 @@ namespace CTRPluginFramework
                 continue;
             }
 
-            int offsetX = 0;
-            int offsetY = 0;
-            if (shakingH) {
-                offsetX = Utils::Random(-shakingH, shakingH);
-            }
-            if (shakingV) {
-                offsetY = Utils::Random(-shakingV, shakingV);
-            }
-
-            x = DrawGlyph(screen, glyph, x + offsetX, posY + offsetY, offset, color, flags) - offsetX;
-        } while (*str);
+            x = DrawGlyph(screen, glyph, x, posY, offset, color, flags);
+        }
+        while (*str);
 
         if (flags & Render::FontDrawMode::UNDERLINE) {
             if (underLineStart != x)

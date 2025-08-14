@@ -22,7 +22,6 @@ namespace CTRPluginFramework
     std::string Preferences::ScreenshotPath;
     std::string Preferences::ScreenshotPrefix;
 
-    bool Preferences::_cheatsAlreadyLoaded = false; // TODO: reuse for something else
     bool Preferences::_favoritesAlreadyLoaded = false;
     bool Preferences::_bmpCanBeLoaded = true;
 

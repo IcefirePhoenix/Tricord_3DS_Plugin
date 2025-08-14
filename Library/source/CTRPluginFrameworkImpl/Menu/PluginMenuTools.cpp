@@ -1,11 +1,8 @@
-#include "CTRPluginFrameworkImpl/Menu/HotkeysModifier.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuTools.hpp"
 #include "CTRPluginFrameworkImpl/Menu/MenuEntryTools.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuHome.hpp"
-#include "CTRPluginFrameworkImpl/Menu/PluginMenuActionReplay.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuImpl.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuExecuteLoop.hpp"
-#include "CTRPluginFrameworkImpl/System/Screenshot.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
 
 #include "CTRPluginFramework/Graphics/OSD.hpp"
@@ -62,12 +59,12 @@ namespace CTRPluginFramework
         OSD = 1,
         FILE = 2
     };
+
     static Hook g_FsTryOpenFileHook;
     static u32 g_HookMode = NONE;
-    //static u32 g_returncode[4];
     static File g_hookExportFile;
-    u32 g_FsTryOpenFileAddress = 0;
     static LightLock g_OpenFileLock;
+    u32 g_FsTryOpenFileAddress = 0;
 
     static u32 FindNearestSTMFD(u32 addr)
     {
@@ -123,11 +120,7 @@ namespace CTRPluginFramework
         // Check that we found the function
         if (FsTryOpenFileAddress != 0)
         {
-            // Create lock
             LightLock_Init(&g_OpenFileLock);
-
-            // Initialize the return code
-            //createReturncode(FsTryOpenFileAddress, g_returncode);
 
             // Initialize the hook
             g_FsTryOpenFileHook.InitializeForMitm(FsTryOpenFileAddress, (u32)FsTryOpenFileCallback);
@@ -137,7 +130,6 @@ namespace CTRPluginFramework
         else
         {
             OSD::Notify("Error: couldn't find OpenFile function");
-            // Disable the option
             Preferences::Clear(Preferences::DisplayLoadedFiles);
         }
 
@@ -290,37 +282,30 @@ namespace CTRPluginFramework
                 g_mode = NORMAL;
             return (false);
         }
-
-        if (g_mode == GWRAMDUMP)
+        else if (g_mode == GWRAMDUMP)
         {
             _gatewayRamDumper();
             g_mode = NORMAL;
             return (false);
         }
-
-        if (g_mode == SEARCH)
+        else if (g_mode == SEARCH)
         {
             PluginMenuImpl::OpenSearch();
             g_mode = NORMAL;
             return (false);
         }
 
-        // Process Event
         for (size_t i = 0; i < eventList.size(); i++)
             _ProcessEvent(eventList[i]);
 
-        // Update
         _Update(delta);
         _RenderTop();
         _RenderBottom();
 
-        task.Wait();
-
-        // Check buttons
         bool exit = _exit || Window::BottomWindow.MustClose();
         _exit = false;
 
-        return (exit);
+        return exit;
     }
 
     void PluginMenuTools::_ProcessEvent(Event &event)

@@ -60,42 +60,6 @@ namespace CTRPluginFramework
             u8 stageID;
         };
 
-        /*struct HeaderV1
-{
-    u8      sig[8];
-    u32     version;
-    u32     pluginVersion;
-    u64     size;
-    u64     flags;
-    u32     hotkeys;
-    u32     freeCheatsCount;
-    u64     freeCheatsOffset;
-    u32     enabledCheatsCount;
-    u64     enabledCheatsOffset;
-    u32     favoritesCount;
-    u64     favoritesOffset;
-    u32     hotkeysCount;
-    u64     hotkeysOffset;
-} PACKED; */
-
-        struct HeaderV11
-        {
-            u8 sig[8];
-            u32 version;
-            u32 pluginVersion;
-            u64 size;
-            u64 flags;
-            u32 hotkeys;
-            u64 lcdbacklights;
-            u32 enabledCheatsCount;
-            u64 enabledCheatsOffset;
-            u32 favoritesCount;
-            u64 favoritesOffset;
-            u32 hotkeysCount;
-            u64 hotkeysOffset;
-            u32 reserved[100];
-        } PACKED;
-
         struct TricordHeaderV1
         {
             u8 sig[8];
@@ -167,7 +131,6 @@ namespace CTRPluginFramework
         static void         WriteSettings(void);
 
     private:
-        static bool         _cheatsAlreadyLoaded;
         static bool         _favoritesAlreadyLoaded;
         static bool         _bmpCanBeLoaded;
 

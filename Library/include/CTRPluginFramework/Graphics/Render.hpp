@@ -13,13 +13,15 @@ namespace CTRPluginFramework
     class Render
     {
     public:
-        enum FontDrawMode {
+        enum FontDrawMode
+        {
             BOLD = (1 << 0),
             ITALIC = (1 << 1),
             UNDERLINE = (1 << 2),
             STRIKETHROUGH = (1 << 3),
             LINEDOTTED = (1 << 4)
         };
+
         /**
         * \brief Gets the amount of pixels the text takes using the GameFont.
         * \param text Input text to calculate its width
@@ -40,7 +42,7 @@ namespace CTRPluginFramework
              * @param posY Y position of the pixel
              * @param color Color of the pixel
              */
-            void     DrawPixel(int posX, int posY, const Color &color);
+            void DrawPixel(int posX, int posY, const Color &color);
 
             /**
              * @brief Reads a pixel
@@ -49,7 +51,7 @@ namespace CTRPluginFramework
              * @param posY Y position of the pixel
              * @param color Output color of the pixel
              */
-            void     ReadPixel(int posX, int posY, Color &outColor);
+            void ReadPixel(int posX, int posY, Color &outColor);
 
             /**
              * @brief Draws an horizontal line.
@@ -61,7 +63,7 @@ namespace CTRPluginFramework
              * @param thickness Thickness of the line
              * @param stippled The line is stippled
              */
-            void     DrawHLine(int posX, int posY, int length, const Color &color, int thickness = 1, bool stippled = false);
+            void DrawHLine(int posX, int posY, int length, const Color &color, int thickness = 1, bool stippled = false);
 
             /**
              * @brief Draws a vertical line.
@@ -73,7 +75,7 @@ namespace CTRPluginFramework
              * @param thickness Thickness of the line
              * @param stippled The line is stippled
              */
-            void     DrawVLine(int posX, int posY, int length, const Color &color, int thickness = 1, bool stippled = false);
+            void DrawVLine(int posX, int posY, int length, const Color &color, int thickness = 1, bool stippled = false);
 
             /**
              * @brief Draws a line
@@ -82,7 +84,7 @@ namespace CTRPluginFramework
              * @param end End postion of the line
              * @param color Color of the line
              */
-            void     DrawLine(const IntVector &start, const IntVector &end, const Color &color);
+            void DrawLine(const IntVector &start, const IntVector &end, const Color &color);
 
             /**
              * @brief Draws a rectangle
@@ -92,7 +94,7 @@ namespace CTRPluginFramework
              * @param fill Fill the rectangle
              * @param thickness Thickness of the rectangle
              */
-            void     DrawRect(const IntRect& rect, const Color& color, bool fill = true, int thickness = 1);
+            void DrawRect(const IntRect& rect, const Color& color, bool fill = true, int thickness = 1);
 
             /**
              * @brief Draws an string with the game font
@@ -105,7 +107,7 @@ namespace CTRPluginFramework
              * @param yLimit Limit Y coordinate. Drawing will stop after reaching this Y coordinate
              * @param autoWrap Automatically wrap text to the next line
              */
-            void     DrawGameFontString(const std::string& str, int posX, int posY, Color color, int xLimit = 320, int yLimit = 240, bool autoWrap = false);
+            void DrawGameFontString(const std::string& str, int posX, int posY, Color color, int xLimit = 320, int yLimit = 240, bool autoWrap = false);
 
             /**
              * @brief Draws a custom icon
@@ -114,15 +116,12 @@ namespace CTRPluginFramework
              * @param posX X position
              * @param posY Y position
              */
-            void     DrawCustomIcon(const CustomIcon& icon, int posX, int posY);
+            void DrawCustomIcon(const CustomIcon& icon, int posX, int posY);
 
         private:
             friend class Renderer;
             Interface() {}
         };
-
-    private:
-        static std::unordered_map<int, string16> _randomSets;
     };
 
 }
