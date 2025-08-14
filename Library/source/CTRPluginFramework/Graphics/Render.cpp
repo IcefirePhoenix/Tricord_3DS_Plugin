@@ -1,10 +1,35 @@
 #include "CTRPluginFramework/Graphics/Render.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/Renderer.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/Icon.hpp"
+#include "CTRPluginFrameworkImpl/Graphics/Window.hpp"
 
 namespace CTRPluginFramework
 {
-    std::unordered_map<int, string16> Render::_randomSets;
+    void Render::DisplayPluginInfo(void)
+    {
+        const char g_ctrpfText[] = "Tricord is powered by CTRPluginFramework.";
+        const char g_copyrightText[] = "Copyright © The Pixellizer Group";
+        static u32 g_textXpos[2] = { 0 };
+
+        g_textXpos[0] = (320 - (int)Renderer::GetTextSize(g_ctrpfText)) / 2;
+        g_textXpos[1] = (320 - (int)Renderer::GetTextSize(g_copyrightText)) / 2;
+
+        Renderer::SetTarget(BOTTOM);
+        Window::BottomWindow.Draw();
+
+        int posY = 85;
+        Renderer::DrawGameFontString("Tricord Build Information:", 40, posY, 300, Color::Gainsboro);
+        Renderer::DrawLine(40, posY, 25 * 6, Color::Gainsboro);
+
+        posY += 10;
+        Renderer::DrawGameFontString(Utils::Format("Tricord Version: %s", TRICORD_BUILD_METADATA).c_str(), 40, posY, 300, Color::Gainsboro);
+        Renderer::DrawGameFontString(Utils::Format("CTRPF Version: %s", CTRPF_BUILD_METADATA).c_str(), 40, posY, 300, Color::Gainsboro);
+        Renderer::DrawGameFontString(Utils::Format("Compiled: %s", COMPILE_DATE).c_str(), 40, posY, 300, Color::Gainsboro);
+
+        posY = 165;
+        Renderer::DrawGameFontString(g_ctrpfText, g_textXpos[0], posY, 300, Color::Gainsboro);
+        Renderer::DrawGameFontString(g_copyrightText, g_textXpos[1], posY, 300, Color::Gainsboro);
+    }
 
     float Render::GetTextWidth(const std::string& text)
     {

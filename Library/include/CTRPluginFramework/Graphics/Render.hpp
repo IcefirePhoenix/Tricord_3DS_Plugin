@@ -27,28 +27,9 @@ namespace CTRPluginFramework
         */
         static float GetTextWidth(const std::string& text);
 
-        /**
-         * @brief Creates a set of characters that will be used with the random text draw mode (see StringExtensions.hpp).
-         *
-         * @param set A string that contains all the characters that will be randomly selected
-         * @return The ID of the random set. Use this ID to delete the random set with EraseRandomSet
-         */
-        static int CreateRandomSet(const std::string& set);
 
-        /**
-         * @brief Erases the specified random set.
-         *
-         * @param setID Set ID to delete, returned by CreateRandomSet.
-         */
-        static void EraseRandomSet(int setID);
-
-        /**
-         * @brief Pulls a random character from the specified setID.
-         *
-         * @param setID Set ID to pull the random character from.
-         * @return std::string
-         */
-        static std::string PullRandomCharacter(int setID);
+        // Draws plugin build info and copyright strings on bottom screen
+        static void DisplayPluginInfo(void);
 
         class Interface {
         public:

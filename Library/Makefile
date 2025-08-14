@@ -187,7 +187,7 @@ lib/libctrpf.a : libcwav-build lib release
 	@$(MAKE) BUILD=release OUTPUT=$(CURDIR)/$@ WL=--strip-discarded,--strip-debug, \
 	BUILD_CFLAGS="-DNDEBUG=1 -Os -fomit-frame-pointer" DEPSDIR=$(CURDIR)/release \
 	--no-print-directory -C release	-f $(CURDIR)/Makefile
-	@rm release/PluginMenuTools.o # Force update of revision, date etc
+	@rm release/Render.o # Force update of revision, date etc
 	@cp $(CURDIR)/libcwav/lib/libcwav.a lib/libcwav.a
 	@cp $(CURDIR)/libcwav/libncsnd/lib/libncsnd.a lib/libncsnd.a
 	@mv $@ $@tmp
@@ -200,7 +200,7 @@ lib/libctrpfd.a : SHELL := /bin/bash
 lib/libctrpfd.a : libcwav-build lib debug
 	@$(MAKE) BUILD=debug OUTPUT=$(CURDIR)/$@ BUILD_CFLAGS="-DDEBUG=1" G=-g \
 	DEPSDIR=$(CURDIR)/debug --no-print-directory -C debug -f $(CURDIR)/Makefile
-	@rm debug/PluginMenuTools.o # Force update of revision, date etc.
+	@rm debug/Render.o # Force update of revision, date etc.
 	@cp $(CURDIR)/libcwav/lib/libcwav.a lib/libcwav.a
 	@cp $(CURDIR)/libcwav/libncsnd/lib/libncsnd.a lib/libncsnd.a
 	@mv $@ $@tmp
