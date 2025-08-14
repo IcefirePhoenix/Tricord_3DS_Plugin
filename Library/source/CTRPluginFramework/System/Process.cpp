@@ -161,11 +161,6 @@ namespace CTRPluginFramework
         return false;
     }
 
-    void Process::ProtectRegionInRange(u32 startAddress, u32 endAddress, int perm)
-    {
-        // This should be removed in a future update
-    }
-
     bool Process::CopyMemory(void *dst, const void *src, u32 size)
     {
         u32 src32 = (u32)src;
