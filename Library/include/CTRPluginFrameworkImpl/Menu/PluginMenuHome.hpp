@@ -56,7 +56,7 @@ namespace CTRPluginFramework
 
         void _actionReplayBtn_OnClick(void); // 4
         void _faqBtn_OnClick(void); // 2
-        void _searchBtn_OnClick(void); // 3
+        void _settingsBtn_OnClick(void); // 3
         void _toolsBtn_OnClick(void);  // 5
         void _InfoBtn_OnClick(void); // note
 
@@ -88,7 +88,7 @@ namespace CTRPluginFramework
         Button _freecamBtn;
         Button _arBtn;
         Button _gameModeBtn;
-        Button _searchBtn;
+        Button _settingsBtn;
         Button _toolsBtn;
         Button _faqBtn;
 

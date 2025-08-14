@@ -27,6 +27,7 @@ namespace CTRPluginFramework
         _actionReplay{ new PluginMenuActionReplay() },
         _home(new PluginMenuHome(name, (menuType == 1))),
         _search(new PluginMenuSearch(_hexEditor)),
+        _settings(new PluginMenuSettings()),
         _tools(new PluginMenuTools(_hexEditor)),
         _executeLoop(new PluginMenuExecuteLoop()),
         _guide(new GuideReader()),
@@ -48,6 +49,7 @@ namespace CTRPluginFramework
         delete _tools;
         delete _executeLoop;
         delete _guide;
+        delete _settings;
     }
 
     void    PluginMenuImpl::Append(MenuItem *item) const
@@ -148,9 +150,9 @@ namespace CTRPluginFramework
         PluginMenuActionReplay  &ar = *_actionReplay;
         PluginMenuHome          &home = *_home;
         PluginMenuTools         &tools = *_tools;
+        PluginMenuSettings      &settings = *_settings;
         PluginMenuSearch        &search = *_search;
         GuideReader             &guide = *_guide;
-        //PluginMenuExecuteLoop   &executer = *_executeLoop;
 
         Time                    delta;
         std::vector<Event>      eventList;
@@ -295,6 +297,11 @@ namespace CTRPluginFramework
                 else if (mode == 2)
                 { /* Guide */
                     if (guide(eventList, delta))
+                        mode = 0;
+                }
+                else if (mode == 3)
+                { /* Settings */
+                    if (settings(eventList, delta))
                         mode = 0;
                 }
                 else if (openSearch)

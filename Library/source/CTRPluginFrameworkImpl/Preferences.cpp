@@ -9,16 +9,13 @@
 
 namespace CTRPluginFramework
 {
-    using LCDBacklight = Preferences::LCDBacklight;
-
     BMPImage* Preferences::bottomBackgroundImage = nullptr;
     BMPImage* Preferences::bottomBoxBGImage = nullptr;
 
     u32 Preferences::MenuHotkeys = static_cast<u32>(Key::Select);
     u32 Preferences::CustomNameColors[3] = { 0xFF40FF40, 0xFFFF4040, 0xFF4040FF }; // default before loading any saved values from file
-
     u64 Preferences::Flags = 0;
-    LCDBacklight Preferences::Backlights[2];
+
     FwkSettings Preferences::Settings;
 
     std::string Preferences::CheatsFile;
@@ -150,7 +147,6 @@ namespace CTRPluginFramework
         {
             MenuHotkeys = header.hotkeys & ((System::IsNew3DS() && Settings.AreN3DSButtonsAvailable) ? ~0x0 : ~(Key::CStick | Key::ZL | Key::ZR));
             Flags = header.flags;
-            memcpy(reinterpret_cast<void*>(Backlights), &header.lcdbacklights, sizeof(Backlights));
 
             // set last saved screenshot preferences
             std::string dirPath = "/Tricord/Screenshots/";
@@ -284,7 +280,6 @@ namespace CTRPluginFramework
         header.version = SETTINGS_VERSION;
         header.hotkeys = MenuHotkeys;
         header.flags = Flags;
-        memcpy(&header.lcdbacklights, Backlights, sizeof(header.lcdbacklights));
 
         if (File::Open(settings, "CTRPFData.bin", mode) == 0)
         {
@@ -310,14 +305,6 @@ namespace CTRPluginFramework
 
         PluginMenuActionReplay::SaveCodes();
         OSDImpl::DrawSaveIcon = false;
-    }
-
-    void    Preferences::ApplyBacklight(void)
-    {
-        if (Backlights[0].isEnabled && Backlights[0].value > 0)
-            ScreenImpl::Top->SetBacklight(Backlights[0].value);
-        if (Backlights[1].isEnabled && Backlights[1].value > 0)
-            ScreenImpl::Bottom->SetBacklight(Backlights[1].value);
     }
 
     void    Preferences::Initialize(void)

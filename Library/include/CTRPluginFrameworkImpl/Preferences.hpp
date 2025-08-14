@@ -54,12 +54,6 @@ namespace CTRPluginFramework
             std::vector<u32>   hotkeys;
         };
 
-        struct LCDBacklight
-        {
-            u16     isEnabled{0};
-            u16     value{0};
-        };
-
         struct WarpDestination
         {
             u8 levelID;
@@ -110,7 +104,6 @@ namespace CTRPluginFramework
             u64 size;
             u64 flags;
             u32 hotkeys;
-            u64 lcdbacklights;
             u32 enabledCheatsCount;
             u64 enabledCheatsOffset;
             u32 favoritesCount;
@@ -158,7 +151,6 @@ namespace CTRPluginFramework
         static u32          MenuHotkeys;
         static u32          CustomNameColors[3];
         static u64          Flags;
-        static LCDBacklight Backlights[2];
         static FwkSettings  Settings;
 
         static std::string  CheatsFile;
@@ -173,7 +165,6 @@ namespace CTRPluginFramework
         static void         LoadBackgrounds(void);
         static void         UnloadBackgrounds(void);
         static void         WriteSettings(void);
-        static void         ApplyBacklight(void);
 
     private:
         static bool         _cheatsAlreadyLoaded;
