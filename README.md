@@ -60,7 +60,7 @@ A full list of features can be found in the [Wiki](https://github.com/IcefirePho
 Download the latest files from the [releases page](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/releases) and reinstall them to the SD card (or emulated SD card) in the same places as described above, overwriting previous files. Don't worry about other newly generated files that you may find in the plugins folder (such as `CTRPFData.bin` or .txt files); they usually do not need to be removed or replaced **unless explicitly mentioned in a release**.
 
 ## 🎮 Emulator Compatibility Notes
-Tricord works by manipulating RAM data, and since the memory layout found on emulators (Azahar, Citra, Lime3DS, etc.) may not be 1:1 with original hardware memory, we can't always guarantee compatibility. Our testing is done on the [latest release](https://azahar-emu.org/pages/download/) of Azahar. Your mileage may vary on older builds or other emulators.
+Tricord works by manipulating RAM data, and since the memory layout found on emulators (Azahar, Citra, Lime3DS, etc.) may not be 1:1 with the mapping found on original hardware memory, we can't always guarantee compatibility. Our testing is done on the [latest release](https://azahar-emu.org/pages/download/) of Azahar. Your mileage may vary on older builds or other emulators.
 
 In addition, it has been found that having mods installed on Citra / Azahar will cause the majority of Tricord's entries to have no effect. It is recommended to disable mods before using Tricord. To do this, right-click on Tri Force Heroes in the emulator's title list. On Azahar, hover on "Open" and select "Mods Location". On Citra, simply click on "Open Mods Location".
 
@@ -76,7 +76,7 @@ If you encounter a bug, please let us know! You can do this by opening an Issue 
 - Description of the issue
 - Exact steps to replicate the issue
 
-To save an error log to your SD card, be sure to press X while on the crash screen. The log can be found under `Tricord/Logs/[NA/EU/JP]`.
+To save an error log to your SD card, be sure to press X while in the crash screen. The log can be found under `Tricord/Crash Logs/[NA/EU/JP]`.
 
 If you do not have a GitHub account, you can also reach out via the [TFH Modding Discord server](https://discord.gg/P6csr4jc5U). Your feedback is greatly appreciated and helps make this project better for everyone!
 
