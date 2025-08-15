@@ -242,21 +242,21 @@ namespace CTRPluginFramework
 
         if (_ctx._flags & DirtyMemoryCache)
         {
-            posY += 5;
-            Renderer::DrawString("Apply changes: ", 44, posY, maintextcolor);
-            posY -= 14;
-            Renderer::DrawGameFontString("\uE000", 149, posY, 330, maintextcolor);
+            posY += 8;
+            Renderer::DrawGameFontString("Apply changes: ", 44, posY, 330, maintextcolor);
+            posY -= 16;
+            Renderer::DrawGameFontString("\uE000", 143, posY, 330, maintextcolor);
 
-            posY +=2;
-            Renderer::DrawString("Discard changes: ", 44, posY, maintextcolor);
-            posY -= 14;
-            Renderer::DrawGameFontString("\uE001", 149, posY, 330, maintextcolor);
+            posY -= 16;
+            Renderer::DrawGameFontString("Discard changes: ", 180, posY, 330, maintextcolor);
+            posY -= 16;
+            Renderer::DrawGameFontString("\uE001", 290, posY, 330, maintextcolor);
         }
         else
         {
-            posY += 5;
-            Renderer::DrawString("Options: ", 44, posY, maintextcolor);
-            posY -= 14;
+            posY += 8;
+            Renderer::DrawGameFontString("Options: ", 44, posY, 330, maintextcolor);
+            posY -= 16;
             Renderer::DrawGameFontString("\uE002", 99, posY, 330, maintextcolor);
         }
 

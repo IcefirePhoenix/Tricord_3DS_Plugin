@@ -132,9 +132,7 @@ namespace CTRPluginFramework
         int posX = _rectPos.leftTop.x + 5;
         int posY = _rectPos.leftTop.y;
 
-        posY += (_rectPos.size.y - 10) / 2;
-
-        Renderer::DrawString((char *)_text.c_str(), posX, posY, black);
+        Renderer::DrawGameFontString((char *)_text.c_str(), posX, posY, 300, black);
     }
 
     void    NumericTextBox::Update(const bool isTouchDown, const IntVector &touchPos)
