@@ -269,10 +269,10 @@ namespace CTRPluginFramework
         /**/
         /**********************************************************************/
 
-        posY = 203;
-        Renderer::DrawString((char *)"Options:", 260, posY, textcolor);
-        posY -= 14;
-        Renderer::DrawGameFontString((char *)"\uE002", 320, posY, 380, textcolor);
+        posY = 195;
+        Renderer::DrawGameFontString((char *)"Options:", 260, posY, 380, textcolor);
+        posY -= 16;
+        Renderer::DrawGameFontString((char *)"\uE002", 315, posY, 380, textcolor);
 
         if (_currentSearch == nullptr || _resultsAddress.size() == 0 || _resultsNewValue.size() == 0)
         {

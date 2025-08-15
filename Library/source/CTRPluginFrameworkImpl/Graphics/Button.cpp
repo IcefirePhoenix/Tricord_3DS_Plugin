@@ -19,18 +19,8 @@ namespace CTRPluginFramework
             _posY = bounds.leftTop.y;
         }
 
-        if (type & GameFont)
-        {
-            _useGamefont = true;
-            width = Renderer::GetTextSize(content.c_str());
-            _posY = _bounds.leftTop.y + ((_bounds.size.y - 16) >> 1);
-        }
-        else
-        {
-            _useGamefont = false;
-            width = 6.f * (float)_content.size();
-            _posY = _bounds.leftTop.y + ((_bounds.size.y - 10) >> 1);
-        }
+        width = Renderer::GetTextSize(content.c_str());
+        _posY = _bounds.leftTop.y + ((_bounds.size.y - 16) >> 1);
 
         if (icon != nullptr)
             width += 18.f;
@@ -101,9 +91,9 @@ namespace CTRPluginFramework
         }
 
         const Color &textColor = Color::Gainsboro;
-        const Color &fillColor = _isLocked ? Color::Maroon :
-                                (_isPressed ? Color::Maroon :
-                                (_isToggleBtn && _state ? Color::Magenta : Color::Magenta));
+        const Color &fillColor = _isLocked ? Color::Gray :
+                                (_isPressed ? Color::LightMagenta :
+                                (_isToggleBtn && _state ? Color::Maroon : Color::Magenta));
 
         // Content and BG
         if (_icon != nullptr)
@@ -119,11 +109,8 @@ namespace CTRPluginFramework
             }
         }
 
-        if (_useGamefont)
-        {
-            int centeredX = _bounds.leftTop.x + ((_bounds.size.x - (int)Renderer::GetTextSize(_content.c_str())) >> 1);
-            Renderer::DrawGameFontString(_content.c_str(), centeredX, posY, _limit, textColor);
-        }
+        int centeredX = _bounds.leftTop.x + ((_bounds.size.x - (int)Renderer::GetTextSize(_content.c_str())) >> 1);
+        Renderer::DrawGameFontString(_content.c_str(), centeredX, posY, _limit, textColor);
     }
 
     void    Button::Update(const bool isTouchDown, const IntVector &touchPos)
