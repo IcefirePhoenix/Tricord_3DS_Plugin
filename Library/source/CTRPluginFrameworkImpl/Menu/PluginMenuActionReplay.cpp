@@ -84,14 +84,14 @@ namespace CTRPluginFramework
     static PluginMenuActionReplay *__pmARinstance = nullptr;
     PluginMenuActionReplay::PluginMenuActionReplay() :
         _topMenu{ "Action Replay Codes" },
-        _noteBtn(Button::Icon | Button::Toggle, IntRect(40, 125, 110, 28), Icon::DrawInfo),
-        _editorBtn(Button::Icon, IntRect(40, 90, 110, 28), Icon::DrawEdit),
-        _newBtn(Button::Icon, IntRect(170, 90, 110, 28), Icon::DrawPlus),
-        _cutBtn(Button::Icon, IntRect(170, 162, 110, 28), Icon::DrawCut),
-        _pasteBtn(Button::Icon, IntRect(170, 162, 110, 28), Icon::DrawClipboard),
-        _duplicateBtn(Button::Icon, IntRect(170, 127, 110, 28), Icon::DrawDuplicate),
-        _trashBtn(Button::Icon, IntRect(40, 160, 110, 28), Icon::DrawTrash),
-        _openFileBtn(0, "Open", IntRect(30, 200, 34, 15)),
+        _noteBtn(Button::Icon | Button::Toggle, IntRect(40, 115, 110, 28), Icon::DrawInfo),
+        _editorBtn(Button::Icon, IntRect(40, 80, 110, 28), Icon::DrawEdit),
+        _newBtn(Button::Icon, IntRect(170, 80, 110, 28), Icon::DrawPlus),
+        _cutBtn(Button::Icon, IntRect(170, 152, 110, 28), Icon::DrawCut),
+        _pasteBtn(Button::Icon, IntRect(170, 152, 110, 28), Icon::DrawClipboard),
+        _duplicateBtn(Button::Icon, IntRect(170, 117, 110, 28), Icon::DrawDuplicate),
+        _trashBtn(Button::Icon, IntRect(40, 152, 110, 28), Icon::DrawTrash),
+        _openFileBtn(0, "Open file", IntRect(210, 190, 78, 21)),
 
         _clipboard{ nullptr },
         _path{0}
@@ -179,23 +179,24 @@ namespace CTRPluginFramework
         Renderer::SetTarget(BOTTOM);
         Window::BottomWindow.Draw();
 
-        Renderer::DrawRect(IntRect(30, 85, 259, 110), Color::Magenta, true);
+        Renderer::DrawRect(IntRect(30, 75, 259, 110), Color::Magenta, true);
+        Renderer::DrawRect(IntRect(30, 33, 259, 42), Color::Maroon, true);
 
         _cutBtn.Draw();
         _pasteBtn.Draw();
         _openFileBtn.Draw();
 
-        int posX = 30 + 34 + 5;
-        int posY = 200;
+        int posX = 35;
+        int posY = 35;
 
-        // y positions are not consistent?
-        int yCoordA = 95;
-        int yCoordB = 132;
-        int cutPasteY = 168;
+        int yCoordA = 85;
+        int yCoordB = 122;
+        int cutPasteY = 158;
 
-        Renderer::DrawRect(posX, posY, 220, 15, Color::Maroon);
-        posY += 3;
-        Renderer::DrawString((const char *)_path, posX + 2, posY, Color::Gainsboro);
+        Renderer::DrawGameFontString((const char*)("Active cheat file:"), posX + 2, posY, 330, Color::Gainsboro);
+        posY += 2;
+
+        Renderer::DrawGameFontString((const char *)_path, posX + 2, posY, 330, Color::Gainsboro);
 
         const char* labels[6] =
         {
@@ -219,7 +220,7 @@ namespace CTRPluginFramework
                 if (!_topMenu.GetSelectedItem()->note.empty())
                     Renderer::DrawGameFontString(labels[5], 75, yCoordB -= 17, 290, Preferences::Settings.MainTextColor);
 
-                for (int i = 2, yCoord2 = 95; i < 5; ++i, yCoord2 += 28)
+                for (int i = 2, yCoord2 = 85; i < 5; ++i, yCoord2 += 28)
                     Renderer::DrawGameFontString(labels[i], 75, yCoord2, 290, Preferences::Settings.MainTextColor);
             }
 
