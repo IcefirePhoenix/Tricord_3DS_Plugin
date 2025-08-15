@@ -58,6 +58,7 @@ namespace CTRPluginFramework
         // Used to forcefully exit a menu
         static void ForceExit(void);
         static void ForceOpen(void);
+        static void SignalQuit(void);
 
         static void UnStar(MenuItem *item);
         static void Refresh(void);

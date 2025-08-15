@@ -23,6 +23,7 @@
 
 namespace CTRPluginFramework
 {
+    bool earlyQuit;
     enum Mode
     {
         NORMAL = 0,
@@ -87,14 +88,12 @@ namespace CTRPluginFramework
             (*(_screenshotMenu.begin()))->AsMenuEntryTools().Disable();
     }
 
-    static void ExitPlugin(void)
+    void _ExitPlugin(void)
     {
         if (MessageBox("Warning", "Do you really want to exit Tricord? The game will remain running.", DialogType::DialogYesNo)())
         {
-            ProcessImpl::UnlockGameThreads();
-            PluginMenuImpl::ForceExit();
-
-            svcExitThread();
+            PluginMenuImpl::SignalQuit();
+            earlyQuit = true;
         }
     }
 
@@ -228,7 +227,7 @@ namespace CTRPluginFramework
         _settingsMenu.Append(new MenuEntryTools("Enable QoL patches", [] { Preferences::Toggle(Preferences::QoL_Patch); }, true, Preferences::IsEnabled(Preferences::QoL_Patch)));
         _settingsMenu.Append(new MenuEntryTools("Disable HID memory allocation", [] { Preferences::Toggle(Preferences::HIDToggle); }, true, Preferences::IsEnabled(Preferences::HIDToggle)));
         _settingsMenu.Append(new MenuEntryTools("Disable on-screen notification messages", [] { Preferences::Toggle(Preferences::DisableOSDNotifs); }, true, Preferences::IsEnabled(Preferences::DisableOSDNotifs)));
-        _settingsMenu.Append(new MenuEntryTools("Shutdown Tricord", ExitPlugin, Icon::DrawShutdown));
+        _settingsMenu.Append(new MenuEntryTools("Shutdown Tricord", _ExitPlugin, Icon::DrawShutdown));
 
         // Submenus
         u32 time = static_cast<u32>(Screenshot::Timer.AsSeconds());
@@ -240,7 +239,6 @@ namespace CTRPluginFramework
         _screenshotMenu.Append((ss_Timer = new MenuEntryTools(timerName, setScreenshotTimer, Icon::DrawSettings)));
         _screenshotMenu.Append((ss_Name = new MenuEntryTools("Edit filename: " + Screenshot::Prefix, setScreenshotName, Icon::DrawSettings)));
         _screenshotMenu.Append((ss_Dir = new MenuEntryTools("Edit directory: [root]" + Screenshot::Path, setScreenshotDir, Icon::DrawSettings)));
-
 
         _menuEntryOpts.Append(new MenuEntryTools("Automatically re-enable currently active cheats", [] { Preferences::Toggle(Preferences::AutoSaveCheats); Preferences::Toggle(Preferences::AutoEnableSavedCheats); }, true, Preferences::IsEnabled(Preferences::AutoSaveCheats)));
         _menuEntryOpts.Append(new MenuEntryTools("Automatically enable Favorites", [] { Preferences::Toggle(Preferences::AutoEnableFavorites); }, true, Preferences::IsEnabled(Preferences::AutoEnableFavorites)));
@@ -267,7 +265,7 @@ namespace CTRPluginFramework
         _RenderBottom();
         task.Wait();
 
-        bool exit = _exit || Window::BottomWindow.MustClose();
+        bool exit = _exit || Window::BottomWindow.MustClose() || earlyQuit;
         _exit = false;
 
         return exit;

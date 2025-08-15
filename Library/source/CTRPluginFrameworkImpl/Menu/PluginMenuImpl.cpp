@@ -14,7 +14,7 @@
 
 namespace CTRPluginFramework
 {
-    bool openSearch = false;
+    bool openSearch, signalQuit;
 
     PluginMenuImpl  *PluginMenuImpl::_runningInstance = nullptr;
     Mutex           PluginMenuImpl::_trashBinMutex;
@@ -50,6 +50,11 @@ namespace CTRPluginFramework
         delete _executeLoop;
         delete _guide;
         delete _settings;
+    }
+
+    void    PluginMenuImpl::SignalQuit(void)
+    {
+        signalQuit = true;
     }
 
     void    PluginMenuImpl::Append(MenuItem *item) const
@@ -341,7 +346,7 @@ namespace CTRPluginFramework
                 delta = clock.Restart();
 
                 // Close menu
-                if (shouldClose || SystemImpl::WantsToSleep())
+                if (shouldClose || SystemImpl::WantsToSleep() || signalQuit)
                 {
                     if (shouldClose)
                         SoundEngine::PlayMenuSound(SoundEngine::Event::CANCEL);
@@ -350,9 +355,7 @@ namespace CTRPluginFramework
                     openManager.Clear();
                     shouldClose = false;
 
-                    // Save settings
                     Preferences::WriteSettings();
-
                     SystemImpl::ReadyToSleep();
                 }
             }
@@ -360,11 +363,17 @@ namespace CTRPluginFramework
             {
                 if (SyncOnFrame && !ProcessImpl::IsPaused)
                     LightEvent_Wait(&OSDImpl::OnNewFrameEvent);
-                //Sleep(Milliseconds(16));
 
                 if (SystemImpl::Status())
                 {
                     _runningInstance = nullptr;
+                    return 0;
+                }
+
+                if (signalQuit)
+                {
+                    ForceExit();
+                    svcExitThread();
                     return 0;
                 }
 
