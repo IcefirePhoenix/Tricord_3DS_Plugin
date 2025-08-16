@@ -28,6 +28,8 @@ namespace CTRPluginFramework
     extern "C" unsigned char *Cut25;
     extern "C" unsigned char *CutFilled25;
     extern "C" unsigned char *Discord25;
+    extern "C" unsigned char *CPad15;
+    extern "C" unsigned char *DPad15;
     extern "C" unsigned char *Duplicate25;
     extern "C" unsigned char *DuplicateFilled25;
     extern "C" unsigned char *Edit25;
@@ -59,7 +61,10 @@ namespace CTRPluginFramework
     extern "C" unsigned char *Trash25;
     extern "C" unsigned char *TrashFilled25;
     extern "C" unsigned char *TricordIcon25;
-    extern "C" unsigned char *UserManualFilled15;
+    extern "C" unsigned char *Triforce15;
+    extern "C" unsigned char *TriforceFilled15;
+    extern "C" unsigned char *ZL15;
+    extern "C" unsigned char *ZR15;
     extern "C" unsigned char *DefaultKeyboardCustomIcon;
 
     CustomIcon Icon::DefaultCustomIcon{(CustomIcon::Pixel*) DefaultKeyboardCustomIcon, 30, 30, true};
@@ -73,6 +78,50 @@ namespace CTRPluginFramework
         u8 g;
         u8 r;
     };
+
+
+    std::vector<u8> RotateIcon(const u8* src, int width, int height, Icon::Rotation rotation)
+    {
+        int bpp = 4; // bytes-per-pixel, 4 = RGBA
+        int new_width  = (rotation == Icon::ROT_90 || rotation == Icon::ROT_270) ? height : width;
+        int new_height = (rotation == Icon::ROT_90 || rotation == Icon::ROT_270) ? width : height;
+
+        std::vector<u8> rotated(new_width * new_height * bpp, 0);
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                int src_index = (y * width + x) * bpp;  // pixel index in source image
+                int dst_index = 0;                      // pixel index in dest image
+
+                switch (rotation)
+                {
+                    case Icon::ROT_0:
+                        dst_index = src_index;
+                        break;
+                    case Icon::ROT_90:
+                        dst_index = (x * new_height + (new_height - 1 - y)) * bpp;
+                        break;
+                    case Icon::ROT_180:
+                        dst_index = ((new_height - 1 - y) * new_width + (new_width - 1 - x)) * bpp;
+                        break;
+                    case Icon::ROT_270:
+                        dst_index = ((new_width - 1 - x) * new_height + y) * bpp;
+                        break;
+                }
+
+                // RGBA, 4 color channels
+                for (int colorChannel = 0; colorChannel < bpp; colorChannel++)
+                {
+                    rotated[dst_index + colorChannel] = src[src_index + colorChannel];
+                }
+            }
+        }
+
+        return rotated;
+    }
+
 
     inline int Icon::DrawImg(u8 *img, int posX, int posY, int sizeX, int sizeY)
     {
@@ -129,7 +178,7 @@ namespace CTRPluginFramework
                     dst = PrivColor::ToFramebuffer(dst, blended);
                 }
                 else
-                    dst += bpp;
+                    dst += bpp; // advance by bytes-per-pixel (4 = RGBA)
                 img += 4;
             }
         }
@@ -477,7 +526,57 @@ namespace CTRPluginFramework
      **************/
     int Icon::DrawSavePosition(int posX, int posY)
     {
-        return (DrawImg(SavePosition15, posX, posY, 15, 15));
+        return (DrawImg(ClearSymbol15, posX, posY, 15, 15));
+    }
+
+    /*
+     ** ZL/ZR
+     ** 15px * 15 px
+     **************/
+    int Icon::DrawZL(int posX, int posY)
+    {
+        return (DrawImg(ZL15, posX, posY, 15, 15));
+    }
+
+    int Icon::DrawZR(int posX, int posY)
+    {
+        return (DrawImg(ZR15, posX, posY, 15, 15));
+    }
+
+    /*
+     ** Triforce (unfilled and filled)
+     ** 15px * 15 px
+     **************/
+    int Icon::DrawTriforce(int posX, int posY)
+    {
+        return (DrawImg(Triforce15, posX, posY, 15, 15));
+    }
+
+    int Icon::DrawTriforceFilled(int posX, int posY)
+    {
+        return (DrawImg(TriforceFilled15, posX, posY, 15, 15));
+    }
+
+    /*
+     ** D-Pad, all directions
+     ** 15px * 15 px
+     **************/
+    int Icon::DrawDPad(int posX, int posY, Rotation rotation)
+    {
+        u8* rotated = rotation == ROT_0 ? DPad15 : RotateIcon(DPad15, 15, 15, rotation).data();
+
+        return (DrawImg(rotated, posX, posY, 15, 15));
+    }
+
+    /*
+     ** C-Pad, all directions
+     ** 15px * 15 px
+     **************/
+    int Icon::DrawCPad(int posX, int posY, Rotation rotation)
+    {
+        u8* rotated = rotation == ROT_0 ? CPad15 : RotateIcon(CPad15, 15, 15, rotation).data();
+
+        return (DrawImg(rotated, posX, posY, 15, 15));
     }
 
     int Icon::DrawCustomIcon(const CustomIcon& icon, int posX, int posY)
