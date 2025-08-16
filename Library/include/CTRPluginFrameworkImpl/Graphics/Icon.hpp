@@ -10,6 +10,14 @@ namespace CTRPluginFramework
     class Icon
     {
     public:
+        enum Rotation
+        {
+            ROT_0,
+            ROT_90,
+            ROT_180,
+            ROT_270
+        };
+
         /*
         ** 3DS
         ** 25px * 25px
@@ -224,12 +232,32 @@ namespace CTRPluginFramework
         static int DrawSavePosition(int posX, int posY);
 
 
+        /*
+         ** D-Pad and C-Pad, all directions
+         ** 15px * 15 px
+         **************/
+        static int DrawDPad(int posX, int posY, Rotation rotation = ROT_0);
+        static int DrawCPad(int posX, int posY, Rotation rotation = ROT_0);
+
+        /*
+         ** Zl/ZR
+         ** 15px * 15 px
+         **************/
+        static int DrawZL(int posX, int posY);
+        static int DrawZR(int posX, int posY);
+
+        /*
+         ** Triforce, filled and unfilled
+         ** 15px * 15 px
+         **************/
+        static int DrawTriforce(int posX, int posY);
+        static int DrawTriforceFilled(int posX, int posY);
+
         static CustomIcon DefaultCustomIcon;
         static int DrawCustomIcon(const CustomIcon& icon, int posX, int posY);
 
     private:
         static int DrawImg(u8 *img, int posX, int posY, int sizeX, int sizeY);
-
     };
 }
 

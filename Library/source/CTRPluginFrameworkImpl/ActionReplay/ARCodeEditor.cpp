@@ -880,17 +880,16 @@ namespace CTRPluginFramework
     static void ShowHelp(void)
     {
         std::string body = "Controls:\n" \
-            "    - " FONT_B ": Exit editor (changes are applied directly)\n" \
-            "    - " FONT_Y ": Delete current code\n" \
-            "    - " FONT_L ": Insert a new code before current code\n" \
-            "    - " FONT_R ": Insert a new code after current code\n";
+            "- " FONT_B ": Exit editor (changes are applied directly)\n" \
+            "- " FONT_Y ": Delete current code\n" \
+            "- " FONT_L ": Insert a new code before current code\n" \
+            "- " FONT_R ": Insert a new code after current code\n";
         if (System::IsNew3DS())
-            body += "    - " FONT_ZL ": Copy current code to clipboard\n" \
-            "    - " FONT_ZR ": Clear clipboard\n";
-        body += "    - \uE006: Navigate in the code";
+            body += "- ZL: Copy current code to clipboard\n- ZR: Clear clipboard\n";
+
+        body += "- D-Pad: Navigate in the code";
 
         MessageBox(Color::LimeGreen << "Action Replay Code Editor Help",  body)();
-
         ScreenImpl::Top->Clear(true);
     }
 
