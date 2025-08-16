@@ -12,8 +12,8 @@
 namespace CTRPluginFramework
 {
 
-    PluginMenuHome::PluginMenuHome(std::string& name, bool showNoteBottom) :
-        _noteTB("", "", showNoteBottom ? IntRect(20, 46, 280, 124) : IntRect(40, 30, 320, 180)),
+    PluginMenuHome::PluginMenuHome(std::string& name) :
+        _noteTB("", "", IntRect(40, 30, 320, 180)),
 
         _showStarredBtn(Button::Toggle | Button::GameFont, "Favorites", IntRect(35, 80, 120, 32), Icon::DrawMenuButton),
         _freecamBtn(Button::Toggle | Button::GameFont, "Freecam", IntRect(35, 120, 120, 32), Icon::DrawMenuButton),
@@ -43,15 +43,7 @@ namespace CTRPluginFramework
         _versionPosX = 0;
         _closedRootFolder = false;
 
-        ShowNoteBottom = showNoteBottom;
-
         _mode = 0;
-
-        // Disable Toggle buttons
-        _AddFavoriteBtn.Disable();
-        _InfoBtn.Disable();
-        _discordBtn.Disable();
-        _controllerBtn.Disable();
     }
 
     void drawInviteQR(void)
@@ -107,63 +99,56 @@ namespace CTRPluginFramework
         static Task top([](void *arg)
         {
             PluginMenuHome *home = reinterpret_cast<PluginMenuHome *>(arg);
-            if (home->ShowNoteBottom)
+
+            Renderer::SetTarget(TOP);
+            if (home->_noteTB.IsOpen())
             {
-                Renderer::SetTarget(TOP);
-                home->_RenderTop();
+                home->_showStarredBtn.Lock();
+                home->_freecamBtn.Lock();
+                home->_gameModeBtn.Lock();
+                home->_faqBtn.Lock();
+                home->_settingsBtn.Lock();
+                home->_arBtn.Lock();
+                home->_toolsBtn.Lock();
+                home->_AddFavoriteBtn.Lock();
+                home->_controllerBtn.Lock();
+                home->_discordBtn.Lock();
+                home->_noteTB.Draw();
             }
             else
             {
-                Renderer::SetTarget(TOP);
-                if (home->_noteTB.IsOpen())
+                if (PluginMenu::GetRunningInstance()->FreecamToggle) // gamemode toggle remains locked
+                    home->_freecamBtn.Unlock();
+                else if (PluginMenu::GetRunningInstance()->GameplayToggle)
                 {
-                    home->_showStarredBtn.Lock();
-                    home->_freecamBtn.Lock();
-                    home->_gameModeBtn.Lock();
-                    home->_faqBtn.Lock();
-                    home->_settingsBtn.Lock();
-                    home->_arBtn.Lock();
-                    home->_toolsBtn.Lock();
-                    home->_AddFavoriteBtn.Lock();
-                    home->_controllerBtn.Lock();
-                    home->_discordBtn.Lock();
-                    home->_noteTB.Draw();
+                    home->_gameModeBtn.Unlock();
+                    home->_freecamBtn.Unlock();
                 }
-                else
+                else if (home->_starMode) // freecam and gamemode toggle remain locked
                 {
-                    if (PluginMenu::GetRunningInstance()->FreecamToggle) // gamemode toggle remains locked
-                        home->_freecamBtn.Unlock();
-                    else if (PluginMenu::GetRunningInstance()->GameplayToggle)
-                    {
-                        home->_gameModeBtn.Unlock();
-                        home->_freecamBtn.Unlock();
-                    }
-                    else if (home->_starMode) // freecam and gamemode toggle remain locked
-                    {
-                        home->_showStarredBtn.Unlock();
-                        home->_faqBtn.Unlock();
-                        home->_settingsBtn.Unlock();
-                        home->_arBtn.Unlock();
-                        home->_toolsBtn.Unlock();
-                    }
-                    else // no special mode is active
-                    {
-                        home->_gameModeBtn.Unlock();
-                        home->_freecamBtn.Unlock();
-                        home->_showStarredBtn.Unlock();
-                        home->_faqBtn.Unlock();
-                        home->_settingsBtn.Unlock();
-                        home->_arBtn.Unlock();
-                        home->_toolsBtn.Unlock();
-                    }
+                    home->_showStarredBtn.Unlock();
+                    home->_faqBtn.Unlock();
+                    home->_settingsBtn.Unlock();
+                    home->_arBtn.Unlock();
+                    home->_toolsBtn.Unlock();
+                }
+                else // no special mode is active
+                {
+                    home->_gameModeBtn.Unlock();
+                    home->_freecamBtn.Unlock();
+                    home->_showStarredBtn.Unlock();
+                    home->_faqBtn.Unlock();
+                    home->_settingsBtn.Unlock();
+                    home->_arBtn.Unlock();
+                    home->_toolsBtn.Unlock();
+                }
 
-                    // always unlock regardless of active mode
-                    home->_AddFavoriteBtn.Unlock();
-                    home->_controllerBtn.Unlock();
-                    home->_discordBtn.Unlock();
-                    home->_InfoBtn.Unlock();
-                    home->_RenderTop();
-                }
+                // always unlock regardless of active mode
+                home->_AddFavoriteBtn.Unlock();
+                home->_controllerBtn.Unlock();
+                home->_discordBtn.Unlock();
+                home->_InfoBtn.Unlock();
+                home->_RenderTop();
             }
 
             return (s32)0;
@@ -173,7 +158,7 @@ namespace CTRPluginFramework
         _mode = mode;
 
         // Process events
-        if (_noteTB.IsOpen() && !ShowNoteBottom)
+        if (_noteTB.IsOpen())
         {
             for (size_t i = 0; i < eventList.size(); i++)
                 if (_noteTB.ProcessEvent(eventList[i]) == false)
@@ -192,20 +177,17 @@ namespace CTRPluginFramework
         }
 
         if (_toolsBtn()) _toolsBtn_OnClick();
+        if (_showStarredBtn()) _showStarredBtn_OnClick();
+        if (_freecamBtn()) _freecamBtn_OnClick();
+        if (_gameModeBtn()) _gameModeBtn_OnClick();
+        if (_faqBtn()) _faqBtn_OnClick();
+        if (_settingsBtn()) _settingsBtn_OnClick();
+        if (_arBtn()) _actionReplayBtn_OnClick();
+        if (_AddFavoriteBtn()) _StarItem();
+        if (_InfoBtn()) _InfoBtn_OnClick();
+        if (_discordBtn()) _discordBtn_OnClick();
+        if (_controllerBtn()) _controllerBtn_OnClick();
 
-        if (!ShowNoteBottom)
-        {
-            if (_showStarredBtn()) _showStarredBtn_OnClick();
-            if (_freecamBtn()) _freecamBtn_OnClick();
-            if (_gameModeBtn()) _gameModeBtn_OnClick();
-            if (_faqBtn()) _faqBtn_OnClick();
-            if (_settingsBtn()) _settingsBtn_OnClick();
-            if (_arBtn()) _actionReplayBtn_OnClick();
-            if (_AddFavoriteBtn()) _StarItem();
-            if (_InfoBtn()) _InfoBtn_OnClick();
-            if (_discordBtn()) _discordBtn_OnClick();
-            if (_controllerBtn()) _controllerBtn_OnClick();
-        }
 
         if (PluginMenu::GetRunningInstance()->ShowInvite)
         {
@@ -538,11 +520,9 @@ namespace CTRPluginFramework
         {
             _selectedTextSize = 0;
             _AddFavoriteBtn.SetState(false);
-            _AddFavoriteBtn.Enable(false);
-            _InfoBtn.Enable(false);
+            _AddFavoriteBtn.Lock();
             _InfoBtn.SetState(false);
-            _discordBtn.Enable(false);
-            _discordBtn.SetState(false);
+            _InfoBtn.Lock();
         }
 
         /*
@@ -559,21 +539,14 @@ namespace CTRPluginFramework
             {
                 last = item;
 
-                if (!ShowNoteBottom)
+                // Toggle the info button
+                if (item->GetNote().size() > 0)
                 {
-                    // Toggle the info button
-                    if (item->GetNote().size() > 0)
-                    {
-                        _noteTB.Update(item->name, item->GetNote());
-                        _InfoBtn.Enable(true);
-                    }
-                    else
-                        _InfoBtn.Enable(false);
+                    _noteTB.Update(item->name, item->GetNote());
+                    _InfoBtn.Unlock();
                 }
                 else
-                {
-                    _noteTB.Update(item->firstName, item->GetNote());
-                }
+                    _InfoBtn.Lock();
             }
         }
     }
@@ -693,25 +666,17 @@ namespace CTRPluginFramework
 
         Icon::DrawBG_Underline(8, 10);
 
-        // Draw buttons
-        if (ShowNoteBottom)
-        {
-            _noteTB.Draw();
-        }
-        else
-        {
-            _showStarredBtn.Draw();
-            _freecamBtn.Draw();
-            _gameModeBtn.Draw();
-            _faqBtn.Draw();
-            _settingsBtn.Draw();
-            _arBtn.Draw();
-            _toolsBtn.Draw();
-            _AddFavoriteBtn.Draw();
-            _InfoBtn.Draw();
-            _discordBtn.Draw();
-            _controllerBtn.Draw();
-        }
+        _showStarredBtn.Draw();
+        _freecamBtn.Draw();
+        _gameModeBtn.Draw();
+        _faqBtn.Draw();
+        _settingsBtn.Draw();
+        _arBtn.Draw();
+        _toolsBtn.Draw();
+        _AddFavoriteBtn.Draw();
+        _InfoBtn.Draw();
+        _discordBtn.Draw();
+        _controllerBtn.Draw();
     }
 
     //###########################################
@@ -754,26 +719,25 @@ namespace CTRPluginFramework
         if (folder && (*folder)[_selector])
         {
             // If current folder is empty
-            if (folder->ItemsCount() == 0 && !ShowNoteBottom)
+            if (folder->ItemsCount() == 0)
             {
-                _AddFavoriteBtn.Enable(false);
-                _InfoBtn.Enable(false);
-                _discordBtn.Enable(false);
-                _controllerBtn.Enable(false);
+                _AddFavoriteBtn.Lock();
+                _InfoBtn.Lock();
+                _controllerBtn.Lock();
             }
             // If selected object is a folder
             else if ((*folder)[_selector]->IsFolder())
             {
                 MenuFolderImpl *e = reinterpret_cast<MenuFolderImpl *>((*folder)[_selector]);
 
-                if (!ShowNoteBottom)
-                {
-                    _discordBtn.Enable(true);
-                    _InfoBtn.Enable(e->note.size());
-                    _AddFavoriteBtn.Enable(true);
-                    _AddFavoriteBtn.SetState(e->_IsStarred());
-                    _controllerBtn.Enable(false);
-                }
+                if (e->note.size())
+                    _InfoBtn.Unlock();
+                else
+                    _InfoBtn.Lock();
+
+                _AddFavoriteBtn.SetState(e->_IsStarred());
+                _controllerBtn.Lock();
+
                 if (e->HasNoteChanged())
                 {
                     _noteTB.Update(e->firstName, e->GetNote());
@@ -785,16 +749,22 @@ namespace CTRPluginFramework
             else if ((*folder)[_selector]->IsEntry())
             {
                 MenuEntryImpl   *e = reinterpret_cast<MenuEntryImpl *>((*folder)[_selector]);
-                std::string     &note = e->GetNote();
+                std::string &note = e->GetNote();
 
-                if (!ShowNoteBottom)
-                {
-                    _discordBtn.Enable(true);
-                    _InfoBtn.Enable(note.size());
-                    _AddFavoriteBtn.Enable(true);
-                    _AddFavoriteBtn.SetState(e->_IsStarred());
-                    _controllerBtn.Enable(e->_owner != nullptr && e->_owner->Hotkeys.Count() > 0);
-                }
+
+                if (e->note.size())
+                    _InfoBtn.Unlock();
+                else
+                    _InfoBtn.Lock();
+
+                if (e->_owner != nullptr && e->_owner->Hotkeys.Count() > 0)
+                    _controllerBtn.Unlock();
+                else
+                    _controllerBtn.Lock();
+
+                _AddFavoriteBtn.Unlock();
+                _AddFavoriteBtn.SetState(e->_IsStarred());
+
                 if (e->HasNoteChanged())
                 {
                     _noteTB.Update(e->firstName, note);
@@ -814,20 +784,17 @@ namespace CTRPluginFramework
         bool isTouched = Touch::IsDown();
         IntVector touchPos(Touch::GetPosition());
 
-        if (!ShowNoteBottom)
-        {
-            // Update buttons
-            _showStarredBtn.Update(isTouched, touchPos);
-            _freecamBtn.Update(isTouched, touchPos);
-            _gameModeBtn.Update(isTouched, touchPos);
-            _faqBtn.Update(isTouched, touchPos);
-            _settingsBtn.Update(isTouched, touchPos);
-            _arBtn.Update(isTouched, touchPos);
-            _AddFavoriteBtn.Update(isTouched, touchPos);
-            _InfoBtn.Update(isTouched, touchPos);
-            _discordBtn.Update(isTouched, touchPos);
-            _controllerBtn.Update(isTouched, touchPos);
-        }
+        // Update buttons
+        _showStarredBtn.Update(isTouched, touchPos);
+        _freecamBtn.Update(isTouched, touchPos);
+        _gameModeBtn.Update(isTouched, touchPos);
+        _faqBtn.Update(isTouched, touchPos);
+        _settingsBtn.Update(isTouched, touchPos);
+        _arBtn.Update(isTouched, touchPos);
+        _AddFavoriteBtn.Update(isTouched, touchPos);
+        _InfoBtn.Update(isTouched, touchPos);
+        _discordBtn.Update(isTouched, touchPos);
+        _controllerBtn.Update(isTouched, touchPos);
         _toolsBtn.Update(isTouched, touchPos);
 
         Window::BottomWindow.Update(isTouched, touchPos);
@@ -929,18 +896,21 @@ namespace CTRPluginFramework
         MenuFolderImpl* f = _starMode ? _starred : _folder;
         if (f->ItemsCount() == 0)
         {
-            _InfoBtn.Enable(false);
-            _AddFavoriteBtn.Enable(false);
-            _discordBtn.Enable(true);
+            _InfoBtn.Lock();
+            _AddFavoriteBtn.Lock();
 
             _selectedTextSize = 0;
         }
         else
         {
             MenuEntryImpl* e = reinterpret_cast<MenuEntryImpl *>(f->_items[_selector]);
-            _InfoBtn.Enable(e->note.size() > 0);
-            _discordBtn.Enable(true);
-            _AddFavoriteBtn.Enable(true);
+
+            if (e->note.size())
+                _InfoBtn.Unlock();
+            else
+                _InfoBtn.Lock();
+
+            _AddFavoriteBtn.Unlock();
             _AddFavoriteBtn.SetState(e->_IsStarred());
 
             _selectedTextSize = Renderer::GetTextSize(e->name.c_str());
@@ -1152,9 +1122,11 @@ namespace CTRPluginFramework
         MenuFolderImpl* folder = _starMode ? _starred : _folder;
         MenuItem    *item = folder->ItemsCount() != 0 ? folder->_items[0] : nullptr;
 
-        // Init buttons state
-        _AddFavoriteBtn.Enable(folder->ItemsCount() != 0);
-        _InfoBtn.Enable(item != nullptr ? !item->GetNote().empty() : false);
+        if (folder->ItemsCount() != 0)
+            _AddFavoriteBtn.Unlock();
+
+        if (item != nullptr && !item->GetNote().empty())
+            _InfoBtn.Unlock();
     }
 
     void PluginMenuHome::AddPluginVersion(void)
@@ -1183,9 +1155,6 @@ namespace CTRPluginFramework
 
     void PluginMenuHome::UpdateNote(void)
     {
-        if (!ShowNoteBottom)
-            return;
-
         MenuFolderImpl* folder = _starMode ? _starred : _folder;
 
         if (!folder || !((*folder)[_selector]))
