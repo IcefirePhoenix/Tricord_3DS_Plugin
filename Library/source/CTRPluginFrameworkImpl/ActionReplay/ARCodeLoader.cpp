@@ -218,7 +218,7 @@ namespace CTRPluginFramework
                 {
                     PColor("white", Color::White), PColor("black", Color::Black),
                     PColor("red", Color::Red), PColor("green", Color::Green), PColor("blue", Color::Blue),
-                    PColor("cyan", Color::Cyan), PColor("magenta", Color::Magenta), PColor("yellow", Color::Yellow), PColor("gray", Color::Gray)
+                    PColor("cyan", Color::DeepSkyBlue), PColor("magenta", Color::Magenta), PColor("yellow", Color::Yellow), PColor("gray", Color::Gray)
                 };
 
                 for (const PColor &color : colors)
