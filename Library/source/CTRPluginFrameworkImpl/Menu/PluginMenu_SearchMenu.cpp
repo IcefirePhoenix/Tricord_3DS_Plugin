@@ -510,8 +510,13 @@ namespace CTRPluginFramework
     {
         u32 address = strtoul(_resultsAddress[_selector].c_str(), NULL, 16);
 
-        _hexEditor.Goto(address, true);
-        _inEditor = true;
+        if (address == 0x0)
+            MessageBox("Error", "Selected address is not valid.");
+        else
+        {
+            _hexEditor.Goto(address, true);
+            _inEditor = true;
+        }
     }
 
     void    SearchMenu::_Export(void)
