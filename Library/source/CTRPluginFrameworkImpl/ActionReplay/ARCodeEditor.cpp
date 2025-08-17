@@ -881,11 +881,11 @@ namespace CTRPluginFramework
     {
         std::string body = "Controls:\n" \
             "- " FONT_B ": Exit editor (changes are applied directly)\n" \
-            "- " FONT_Y ": Delete current code\n" \
-            "- " FONT_L ": Insert a new code before current code\n" \
-            "- " FONT_R ": Insert a new code after current code\n";
+            "- " FONT_Y ": Delete current line\n" \
+            "- " FONT_L ": Insert a new line before current line\n" \
+            "- " FONT_R ": Insert a new line after current line\n";
         if (System::IsNew3DS())
-            body += "- ZL: Copy current code to clipboard\n- ZR: Clear clipboard\n";
+            body += "- ZL: Copy current line to clipboard\n- ZR: Clear clipboard\n";
 
         body += "- D-Pad: Navigate in the code";
 

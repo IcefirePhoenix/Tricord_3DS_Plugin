@@ -92,8 +92,8 @@ namespace CTRPluginFramework
 
         const Color &textColor = Color::Gainsboro;
         const Color &fillColor = _isLocked ? Color::Gray :
-                                (_isPressed ? Color::LightMagenta :
-                                (_isToggleBtn && _state ? Color::Maroon : Color::Magenta));
+                                (_isPressed ? Color::Maroon :
+                                (_isToggleBtn && _state ? Color::LightMagenta : Color::Magenta));
 
         // Content and BG
         if (_icon != nullptr)

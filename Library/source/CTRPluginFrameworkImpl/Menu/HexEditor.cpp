@@ -31,7 +31,7 @@ namespace CTRPluginFramework
     };
 
     HexEditor::HexEditor(u32 target) :
-        _submenu{ { "New cheat", "Jump to", "Jump relative", "Jump to value",
+        _submenu{ { "New cheat", "Jump to address", "Jump relative", "Jump to value",
                     "Converter", "Move backward", "Move forward", "Save this address",
         "Browse history", "Clear history"}},//, "Play 1 Frame", "Play 2 frames", "Play 5 frames" }},
         _renderTask(_RenderTop, (void *)this, Task::AppCores)
@@ -501,22 +501,22 @@ namespace CTRPluginFramework
         const Color &bgSecondary = Preferences::Settings.BackgroundSecondaryColor;
         static IntRect background(93, 95, 213, 50);
 
-        int posY = 115;
+        int posY = 110;
 
         // Draw "window" background
         Renderer::SetTarget(TOP);
         Renderer::DrawRect2(background, bgMain, bgSecondary);
         Renderer::DrawRect(background, Color::Gainsboro, false);
-        Renderer::DrawString(msg[mode], 103, posY, Color::Gainsboro);
+        Renderer::DrawGameFontString(msg[mode], 103, posY, 330, Color::Gainsboro);
 
         // We write to second framebuffer too because of keyboard below
         Renderer::EndFrame();
-        posY = 115;
+        posY = 110;
 
         Renderer::SetTarget(TOP);
         Renderer::DrawRect2(background, bgMain, bgSecondary);
         Renderer::DrawRect(background, Color::Gainsboro, false);
-        Renderer::DrawString(msg[mode], 103, posY, Color::Gainsboro);
+        Renderer::DrawGameFontString(msg[mode], 103, posY, 330, Color::Gainsboro);
 
         keyboard.DisplayTopScreen = false;
 

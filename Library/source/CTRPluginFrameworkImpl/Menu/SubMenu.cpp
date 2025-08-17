@@ -28,31 +28,32 @@ namespace CTRPluginFramework
         if (!_isOpen)
             return;
 
-        static IntRect  background(240, 20, 130, 200);
+        int posY = 25;
+
+        static IntRect background(233, 20, 137, 200);
+        static IntRect border(235, 22, 133, 196);
 
         const Color    &black = Color::Black;
         const Color    &darkgrey = Color::DarkGrey;
         const Color    &gainsboro = Color::Gainsboro;
         const Color    &textcolor = Preferences::Settings.MainTextColor;
 
-        // Ensure the top screen is the target
         Renderer::SetTarget(TOP);
 
         // Draw background
         Renderer::DrawRect2(background, Preferences::Settings.BackgroundMainColor, Preferences::Settings.BackgroundSecondaryColor);
+        Renderer::DrawRect(border, Preferences::Settings.BackgroundBorderColor, false);
 
-        int posY = 25;
 
-        // Draw title's menu
-        const int xx = Renderer::DrawGameFontString("Options", 245, posY, 340, textcolor);
-        Renderer::DrawLine(245, posY, xx - 225, textcolor);
+        const int xx = Renderer::DrawGameFontString("Options", 243, posY, 340, textcolor);
+        Renderer::DrawLine(243, posY, xx - 205, textcolor);
 
         posY = 46;
 
         if (_options.empty())
             return;
 
-        const IntRect selRect = IntRect(241, 45 + _selector * 12, 110, 12);
+        const IntRect selRect = IntRect(241, 45 + _selector * 16, 120, 20);
 
         for (u32 i = 0; i < _options.size(); i++)
         {
@@ -63,13 +64,9 @@ namespace CTRPluginFramework
                 // If an action is selected, create a little effect (yeah, very little)
                 if (!_fadeClock.HasTimePassed(Seconds(0.2f)))
                 {
-                    // Draw action rectangle
                     Renderer::DrawRect(selRect, gainsboro);
-                    // Draw selector
                     Renderer::DrawRect(selRect, darkgrey, false);
-                    // Draw text
-                    Renderer::DrawString(str, 245, posY, black);
-                    posY += 2;
+                    Renderer::DrawGameFontString(str, 243, posY, 370, black);
                     continue;
                 }
                 else
@@ -78,8 +75,7 @@ namespace CTRPluginFramework
                     Renderer::DrawRect(selRect, darkgrey, false);
                 }
             }
-            Renderer::DrawString(str, 245, posY, textcolor);
-            posY += 2;
+            Renderer::DrawGameFontString(str, 243, posY, 370, textcolor);
         }
     }
 

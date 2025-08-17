@@ -39,7 +39,7 @@ namespace CTRPluginFramework
             return;
 
         // Draw background
-        Renderer::DrawRect(_rectPos, IsEnabled ? Color::Maroon : Color::Magenta);
+        Renderer::DrawRect(_rectPos, IsEnabled ? Color::Magenta : Color::Maroon);
 
 
         if (SelectedItem == -1)

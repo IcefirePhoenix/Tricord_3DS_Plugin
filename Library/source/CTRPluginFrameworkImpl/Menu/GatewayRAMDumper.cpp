@@ -173,10 +173,14 @@ namespace CTRPluginFramework
         bool exit = false;
         bool select = false;
 
-        std::string footer = "\n\n\n\n" + std::string(FONT_A) + ": Select the current region\n" +
-                             std::string(FONT_B) + ": Quit\n\nSelect: Select all regions\nStart: Start the dump";
+        std::string spacer = "          ";
+        std::string footer = "\n\n\n\n";
+        footer += spacer + std::string(FONT_A) + ": Select/Deselect region\n";
+        footer += spacer + std::string(FONT_B) + ": Quit\n\n";
+        footer += spacer + "Select: Select all regions\n";
+        footer += spacer + "Start: Start the dump ";
 
-        menu.drawFooter = true;
+            menu.drawFooter = true;
 
         // get mem regions
         Renderer::SetTarget(TOP);
