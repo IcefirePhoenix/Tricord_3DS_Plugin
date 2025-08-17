@@ -9,7 +9,7 @@
 #include "CTRPluginFrameworkImpl/Disassembler/arm_disasm.h"
 
 #define PATCH_COLOR Color::Gray
-#define TYPE_COLOR Color::Brown
+#define TYPE_COLOR Color::Maroon
 #define IMMEDIATE_COLOR Color::Blue
 #define MASK_COLOR Color::Orange
 #define OFFSET_COLOR Color::ForestGreen

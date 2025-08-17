@@ -7,32 +7,25 @@ namespace CTRPluginFramework
     const Color     Color::Black;
     const Color     Color::White(255, 255, 255);
     const Color     Color::Red(255, 0, 0);
-    const Color     Color::Lime(0, 255, 0);
     const Color     Color::Blue(0, 0, 255);
     const Color     Color::Yellow(255, 255, 0);
-    const Color     Color::Cyan(0, 255, 255);
     const Color     Color::Magenta(46, 0, 9);
     const Color     Color::Silver(192, 192, 192);
     const Color     Color::Gray(128, 128, 128);
     const Color     Color::Maroon(28, 1, 8);
-    const Color     Color::Olive(128, 128, 0);
     const Color     Color::Green(0, 128, 0);
     const Color     Color::LightMagenta(75, 7, 20);
-    const Color     Color::Teal(0, 128, 128);
-    const Color     Color::Navy(0, 0, 128);
 
     const Color     Color::BlackGrey = Color(15, 15, 15);
-    const Color     Color::Brown = Color(165, 42, 42);
     const Color     Color::DarkGrey = Color(169, 169, 169);
     const Color     Color::DeepSkyBlue = Color(0, 191, 255);
     const Color     Color::DimGrey = Color(105, 105, 105);
-    const Color     Color::DodgerBlue = Color(30, 144, 255);
     const Color     Color::Gainsboro = Color(225, 220, 220);
     const Color     Color::ForestGreen = Color(34, 139, 34);
     const Color     Color::LimeGreen = Color(50, 205, 50);
     const Color     Color::Orange = Color(255, 128, 0);
     const Color     Color::SkyBlue = Color(135, 206, 235);
-    const Color     Color::Turquoise = Color(64, 224, 208);
+    const Color     Color::DeepGold = Color(195, 143, 51);
 
     Color&   Color::Fade(float fading)
     {
