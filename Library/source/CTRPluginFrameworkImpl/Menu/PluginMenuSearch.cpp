@@ -72,6 +72,8 @@ namespace CTRPluginFramework
         _uiContainer += &_undoBtn;
         _uiContainer += &_resetBtn;
         _uiContainer += &_hexBtn;
+
+        _hexBtn.SetState(true);
     }
 
     bool    PluginMenuSearch::operator()(EventList &eventList, Time &delta)

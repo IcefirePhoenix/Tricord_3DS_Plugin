@@ -117,22 +117,17 @@ namespace CTRPluginFramework
 
     void    NumericTextBox::Draw(void)
     {
-       // static Color    blank = Color(255, 255, 255);
-        const Color    &black = Color::Black;
-        const Color    &gainsboro = Color::Gainsboro;
-        const Color    &grey = Color::Gray;
-
         if (!IsVisible)
             return;
 
         // Draw background
-        Renderer::DrawRect(_rectPos, IsEnabled ? gainsboro : grey);
+        Renderer::DrawRect(_rectPos, IsEnabled ? Color::Gainsboro : Color::Gray);
 
         // Draw text
         int posX = _rectPos.leftTop.x + 5;
         int posY = _rectPos.leftTop.y;
 
-        Renderer::DrawGameFontString((char *)_text.c_str(), posX, posY, 300, black);
+        Renderer::DrawGameFontString((char *)_text.c_str(), posX, posY, 300, Color::Gainsboro);
     }
 
     void    NumericTextBox::Update(const bool isTouchDown, const IntVector &touchPos)
