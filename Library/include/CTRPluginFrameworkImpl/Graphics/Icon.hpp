@@ -231,6 +231,11 @@ namespace CTRPluginFramework
          **************/
         static int DrawSavePosition(int posX, int posY);
 
+        /*
+         ** User Manual
+         ** 15px * 15 px
+         **************/
+        static int DrawManual(int posX, int posY);
 
         /*
          ** D-Pad and C-Pad, all directions

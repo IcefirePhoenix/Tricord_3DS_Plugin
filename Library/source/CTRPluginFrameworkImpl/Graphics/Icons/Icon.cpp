@@ -65,6 +65,7 @@ namespace CTRPluginFramework
     extern "C" unsigned char *TriforceFilled15;
     extern "C" unsigned char *ZL15;
     extern "C" unsigned char *ZR15;
+    extern "C" unsigned char *UserManual15;
     extern "C" unsigned char *DefaultKeyboardCustomIcon;
 
     CustomIcon Icon::DefaultCustomIcon{(CustomIcon::Pixel*) DefaultKeyboardCustomIcon, 30, 30, true};
@@ -527,6 +528,15 @@ namespace CTRPluginFramework
     int Icon::DrawSavePosition(int posX, int posY)
     {
         return (DrawImg(ClearSymbol15, posX, posY, 15, 15));
+    }
+
+    /*
+     ** User Manual
+     ** 15px * 15 px
+     **************/
+    int Icon::DrawManual(int posX, int posY)
+    {
+        return (DrawImg(UserManual15, posX, posY, 15, 15));
     }
 
     /*
