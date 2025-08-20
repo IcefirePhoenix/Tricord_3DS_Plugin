@@ -11,6 +11,7 @@
 #include "Helpers/GeneralHelpers.hpp"
 
 #include "Helpers/MenuHelpers/DescriptionUtils.hpp"
+#include "Helpers/MenuHelpers/FAQ_Parse.hpp"
 #include "Helpers/MenuHelpers/FolderEntries.hpp"
 
 #include "Helpers/BuiltIn/HoldKey.hpp"

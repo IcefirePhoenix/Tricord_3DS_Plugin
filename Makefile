@@ -69,7 +69,8 @@ export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 CFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
 CPPFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
 SFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
-DESC_JSON		:=	Sources/Main/EntryDescList.json
+DESC_JSON		:=	Sources/Main/TextAssets/EntryDescList.json
+FAQ_JSON		:=	Sources/Main/TextAssets/FAQ_Content.json
 ADDRESS_JSON	:=	Sources/Main/Address_Collection.json
 
 export LD 		:=	$(CXX)
@@ -88,6 +89,7 @@ all: $(BUILD)
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
 	@xxd -i -n $(notdir $(DESC_JSON)) $(DESC_JSON) > Build/EntryDescList.json.h
+	@xxd -i -n $(notdir $(FAQ_JSON)) $(FAQ_JSON) > Build/FAQ_Content.json.h
 	@xxd -i -n $(notdir $(ADDRESS_JSON)) $(ADDRESS_JSON) > Build/Address_Collection.json.h
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 

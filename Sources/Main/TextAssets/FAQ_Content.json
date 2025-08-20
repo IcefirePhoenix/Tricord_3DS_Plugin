@@ -1,0 +1,65 @@
+{
+    "entries": [
+        {
+            "title": "About",
+            "content": [
+                {
+                    "section_header": "",
+                    "body": "Tricord is a multipurpose utility plugin based on CTRPluginFramework. This plugin contains a collection of mods, cheats, and QoL features to either add new gameplay content to TFH or enhance the gameplay experience. Developer features found in the original CTRPF library, such as the ability to view/edit/dump memory, have remained largely unaltered.\n\nSupported platforms include both console and emulator, on the NA, EU, and JP releases of TFH on version 2.1.0."
+                }
+            ]
+        },
+        {
+            "title": "FAQ",
+            "content": [
+                {
+                    "section_header": "☆ Where do these entries come from?",
+                    "body": "\nMost of them are ideas brought to life by from the Tricord Team. Outside contributions made by other talented modders have been added or recreated here with expressed permission. You may find other interesting mods under TFH's GameBanana page."
+                },
+                {
+                    "section_header": "☆ How do I use [this feature]?",
+                    "body": "\nEvery feature has a note explaining how to use it, which can be viewed by pressing the info button on the bottom screen while a feature is currently selected. Complex features may have their own mini-guide in the Wiki. See Useful Links."
+                },
+                {
+                    "section_header": "☆ Will this break my game or corrupt my save file?",
+                    "body": "\nMost likely not. Tricord simply manipulates data loaded into memory, so any in-game changes are not permanent (aside from save file edits, such as changing Hero Point count, resetting Daily Riches, setting level completion, etc.) and will be cleared when the game is closed.\n\nHowever, there are a few things to look out for that could potentially lead to save file corruption:\n\n- Poor SD card health\n- Manually writing invalid memory edits\n- Simultaneous usage of Tricord and other mods\n- Risky actions, such as forcefully closing the game during saving sequences\n\nIt is recommended to use Checkpoint to periodically create backups of your save files. See the Useful Links page."
+                },
+                {
+                    "section_header": "☆ Can I suggest/contribute a new feature or report a bug?",
+                    "body": "\nWe would love to hear your suggestions. Ideas, feedback, or any other general comments can be submitted through the TFH Modding Discord Server or Tricord's GitHub repository. These can be found under Useful Links and the Discord icon in the main menu, respectively."
+                }
+            ]
+        },
+        {
+            "title": "Useful Links",
+            "content": [
+                {
+                    "section_header": "Tricord Wiki:",
+                    "body": "https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/wiki"
+                },
+                {
+                    "section_header": "Checkpoint, for save file management:",
+                    "body": "https://github.com/BernardoGiordano/Checkpoint"
+                }
+            ]
+        },
+        {
+            "title": "Credits",
+            "content": [
+                {
+                    "section_header": "Developer Team:",
+                    "body": "- Wintenix\n- Peanut\n- Glem"
+                },
+                {
+                    "section_header": "Beta Testers:",
+                    "body": "-"
+                },
+                {
+                    "section_header": "Other Credits:",
+                    "body": "- Stratty: For coming up with the Tricord name and letting us use it for this project :)\n- The Pixellizer Group: CTRPluginFramework library\n- Neils Lohmann: JSON for Modern C++ library\n- Nayuki: QR Code generator library"
+                }
+            ]
+        }
+    ]
+}
+

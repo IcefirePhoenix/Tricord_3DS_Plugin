@@ -90,6 +90,7 @@ namespace CTRPluginFramework
         AddressList::InitMemoryRange();
         AddressList::InitAddresses();
         DescUtils::InitDescriptions();
+        FAQ_Parse::GetContent();
 
         if (Preferences::IsEnabled(Preferences::HIDToggle))
             settings.UseGameHidMemory = true;
