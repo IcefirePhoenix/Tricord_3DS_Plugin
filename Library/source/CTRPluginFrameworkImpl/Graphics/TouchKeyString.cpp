@@ -22,8 +22,6 @@ namespace CTRPluginFramework
         : TouchKeyString(ui, isEnabled)
     {
         _content = content;
-        _isIcon = false;
-
         _contentLength = Renderer::GetTextSize(_content.c_str());
 
         while ((int)(_contentLength) > ui.size.x)
@@ -37,14 +35,6 @@ namespace CTRPluginFramework
         _posX = ((_uiProperties.size.x - (int)_contentLength) >> 1) + _uiProperties.leftTop.x;
     }
 
-    TouchKeyString::TouchKeyString(const CustomIcon& icon, IntRect ui, bool isEnabled)
-        : TouchKeyString(ui, isEnabled)
-    {
-        _icon = icon;
-        _isIcon = true;
-        _posX = _uiProperties.leftTop.x;
-    }
-
     void    TouchKeyString::Enable(bool isEnabled)
     {
         _enabled = isEnabled;
@@ -56,7 +46,7 @@ namespace CTRPluginFramework
 
     bool TouchKeyString::CanUse(void)
     {
-        return !(!_enabled || (_isIcon && !_icon.isEnabled) || (!_isIcon && _content.empty()));
+        return !(!_enabled || _content.empty());
     }
 
     void    TouchKeyString::Draw(void)
@@ -72,18 +62,12 @@ namespace CTRPluginFramework
         // Background
         Renderer::DrawRect(_uiProperties, background);
 
-        if (!_isIcon) {
-            int     posX = _posX;
-            int     posY = ((_uiProperties.size.y - 16) >> 1) + _uiProperties.leftTop.y;
-            int     maxX = _uiProperties.leftTop.x + _uiProperties.size.x - 1;
+        int     posX = _posX;
+        int     posY = ((_uiProperties.size.y - 16) >> 1) + _uiProperties.leftTop.y;
+        int     maxX = _uiProperties.leftTop.x + _uiProperties.size.x - 1;
 
-            // Text
-            Renderer::DrawGameFontString(_content.c_str(), posX, posY, maxX, text);
-        }
-        else {
-            // Icon
-            Icon::DrawCustomIcon(_icon, _posX, _posY);
-        }
+        // Text
+        Renderer::DrawGameFontString(_content.c_str(), posX, posY, maxX, text);
     }
 
     void    TouchKeyString::Update(const bool isTouchDown, const IntVector &touchPos)

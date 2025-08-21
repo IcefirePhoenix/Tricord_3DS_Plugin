@@ -289,12 +289,6 @@ namespace CTRPluginFramework
         _isPopulated = true;
     }
 
-    void Keyboard::Populate(const std::vector<CustomIcon> &input, bool resetScroll)
-    {
-        _keyboard->Populate(input, resetScroll);
-        _isPopulated = true;
-    }
-
     int Keyboard::Open(void) const
     {
         if (SystemImpl::IsSleeping())

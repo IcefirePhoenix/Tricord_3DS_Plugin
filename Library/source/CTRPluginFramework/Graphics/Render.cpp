@@ -72,8 +72,4 @@ namespace CTRPluginFramework
         else
             Renderer::DrawGameFontString(str.c_str(), posX, posY, xLimit, color);
     }
-
-    void Render::Interface::DrawCustomIcon(const CustomIcon& icon, int posX, int posY) {
-        Icon::DrawCustomIcon(icon, posX, posY);
-    }
  }

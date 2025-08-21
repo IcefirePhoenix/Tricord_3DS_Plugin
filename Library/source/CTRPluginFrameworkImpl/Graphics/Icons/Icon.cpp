@@ -66,9 +66,6 @@ namespace CTRPluginFramework
     extern "C" unsigned char *ZL15;
     extern "C" unsigned char *ZR15;
     extern "C" unsigned char *UserManual15;
-    extern "C" unsigned char *DefaultKeyboardCustomIcon;
-
-    CustomIcon Icon::DefaultCustomIcon{(CustomIcon::Pixel*) DefaultKeyboardCustomIcon, 30, 30, true};
 
     #define RGBA8 GSP_RGBA8_OES
 
@@ -557,14 +554,10 @@ namespace CTRPluginFramework
      ** Triforce (unfilled and filled)
      ** 15px * 15 px
      **************/
-    int Icon::DrawTriforce(int posX, int posY)
+    int Icon::DrawTriforce(int posX, int posY, bool isFilled)
     {
-        return (DrawImg(Triforce15, posX, posY, 15, 15));
-    }
-
-    int Icon::DrawTriforceFilled(int posX, int posY)
-    {
-        return (DrawImg(TriforceFilled15, posX, posY, 15, 15));
+        u8 *img = isFilled ? TriforceFilled15 : Triforce15;
+        return (DrawImg(img, posX, posY, 15, 15));
     }
 
     /*
@@ -587,10 +580,5 @@ namespace CTRPluginFramework
         u8* rotated = rotation == ROT_0 ? CPad15 : RotateIcon(CPad15, 15, 15, rotation).data();
 
         return (DrawImg(rotated, posX, posY, 15, 15));
-    }
-
-    int Icon::DrawCustomIcon(const CustomIcon& icon, int posX, int posY)
-    {
-        return (DrawImg((u8*)icon.pixArray, posX, posY, icon.sizeX, icon.sizeY));
     }
 }
