@@ -316,10 +316,7 @@ namespace CTRPluginFramework
         if (_menu.ProcessEvent(event, &item) == MenuClose)
         {
             if (_menu.GetFolder() == &_devTools)
-            {
                 _exit = true;
-                _menu.Open(&_devTools, selector);
-            }
             else
                 _menu.Open(&_devTools, selector);
         }

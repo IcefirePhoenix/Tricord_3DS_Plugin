@@ -303,10 +303,7 @@ namespace CTRPluginFramework
         if (ret == MenuClose)
         {
             if (_menu.GetFolder() == &_settingsMenu)
-            {
                 _exit = true;
-                _menu.Open(&_settingsMenu, selector);
-            }
             else
                 _menu.Open(&_settingsMenu, selector);
         }
