@@ -4,6 +4,7 @@
 #include "CTRPluginFramework.hpp"
 #include "CTRPluginFrameworkImpl.hpp"
 #include "CTRPluginFrameworkImpl/Menu/GuideReader.hpp"
+#include "CTRPluginFrameworkImpl/Menu/DiscordInfo.hpp"
 
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuHome.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuSearch.hpp"
@@ -94,6 +95,7 @@ namespace CTRPluginFramework
         PluginMenuTools             *_tools;
         PluginMenuExecuteLoop       *_executeLoop;
         GuideReader                 *_guide;
+        DiscordInfo                 *_discordMenu;
         HexEditor                   _hexEditor;
         std::vector<CallbackPointer>     _callbacks;
         std::vector<CallbackPointer>     _callbacksTrashBin;

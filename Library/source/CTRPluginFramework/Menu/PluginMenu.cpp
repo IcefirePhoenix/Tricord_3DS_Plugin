@@ -12,7 +12,6 @@ namespace CTRPluginFramework
     {
         FreecamToggle = false;
         GameplayToggle = false;
-        ShowInvite = false;
 
         _menu->AddPluginVersion();
     }

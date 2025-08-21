@@ -16,7 +16,6 @@ namespace CTRPluginFramework
     GuideReader::GuideReader(void):
     _isOpen(false), _menu(mFolder, Icon::DrawManual), _guideTB("", "", Window::TopWindow.GetRect()), _text(""), _last(nullptr)
     {
-        // mFolder = new MenuFolderImpl("FAQ and Credits");
     }
 
     bool GuideReader::operator()(EventList &eventList, Time &delta)
@@ -113,10 +112,5 @@ namespace CTRPluginFramework
     void    GuideReader::Close(void)
     {
         _isOpen = false;
-    }
-
-    bool    GuideReader::IsOpen(void)
-    {
-        return (_isOpen);
     }
 }

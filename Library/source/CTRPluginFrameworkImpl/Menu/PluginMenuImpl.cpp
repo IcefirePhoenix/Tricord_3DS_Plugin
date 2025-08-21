@@ -20,7 +20,6 @@ namespace CTRPluginFramework
     Mutex           PluginMenuImpl::_trashBinMutex;
 
     PluginMenuImpl::PluginMenuImpl(std::string &name, std::string &about, u32 menuType) :
-
         OnFirstOpening(nullptr),
         OnOpening(nullptr),
         OnClosing(nullptr),
@@ -31,6 +30,7 @@ namespace CTRPluginFramework
         _tools(new PluginMenuTools(_hexEditor)),
         _executeLoop(new PluginMenuExecuteLoop()),
         _guide(new GuideReader()),
+        _discordMenu(new DiscordInfo()),
         _hexEditor(0x00100000),
         _forceOpen(false)
     {
@@ -49,6 +49,7 @@ namespace CTRPluginFramework
         delete _tools;
         delete _executeLoop;
         delete _guide;
+        delete _discordMenu;
         delete _settings;
     }
 
@@ -158,6 +159,7 @@ namespace CTRPluginFramework
         PluginMenuSettings      &settings = *_settings;
         PluginMenuSearch        &search = *_search;
         GuideReader             &guide = *_guide;
+        DiscordInfo             &discordMenu = *_discordMenu;
 
         Time                    delta;
         std::vector<Event>      eventList;
@@ -293,12 +295,11 @@ namespace CTRPluginFramework
                         home.UpdateNote();
                     shouldClose = home(eventList, mode, delta);
                 }
-                /*
                 else if (mode == 1)
-                { // Mapper
-
+                { /* Discord */
+                    if (discordMenu(eventList, delta))
+                        mode = 0;
                 }
-                */
                 else if (mode == 2)
                 { /* Guide */
                     if (guide(eventList, delta))
