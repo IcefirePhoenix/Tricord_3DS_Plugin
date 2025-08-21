@@ -2,7 +2,6 @@
 #define CTRPLUGINFRAMEWORKIMPL_KEYBOARD_HPP
 
 #include "CTRPluginFrameworkImpl/Graphics.hpp"
-#include "CTRPluginFramework/Graphics/CustomIcon.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/TouchKey.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/TouchKeyString.hpp"
 #include "CTRPluginFramework/Menu/Keyboard.hpp"
@@ -55,7 +54,6 @@ namespace CTRPluginFramework
         int         GetSelectedEntry() {return _manualKey;}
         void        ChangeEntrySound(int entry, SoundEngine::Event soundEvent);
         void        Populate(const std::vector<std::string>& input, bool resetScroll);
-        void        Populate(const std::vector<CustomIcon>& input, bool resetScroll);
         void        Clear(void);
 
         int         Run(void);

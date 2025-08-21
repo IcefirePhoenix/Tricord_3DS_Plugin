@@ -9,7 +9,6 @@
 #include "3ds.h"
 #include "CTRPluginFramework/Utils/Utils.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuImpl.hpp"
-#include "CTRPluginFramework/Graphics/CustomIcon.hpp"
 
 namespace CTRPluginFramework
 {
@@ -376,102 +375,6 @@ namespace CTRPluginFramework
                 tks->SetPosition(0xFFFF, origPosY[i++]);
             _strKeys.push_back(tks);
             if (mustReset) box.leftTop.y += 36;
-        }
-
-        origPosY.clear();
-        _manualScrollUpdate = true;
-        _UpdateScroll(0, true);
-    }
-
-    void    KeyboardImpl::Populate(const std::vector<CustomIcon>& input, bool resetScroll)
-    {
-        bool mustReset = (_strKeys.size() != input.size()) || resetScroll || _customKeyboard;
-
-        int count = input.size() / 4;
-
-        if (mustReset)
-            _ChangeManualKey(0, false);
-
-        mustReset = (mustReset || count < 6);
-
-        _customKeyboard = true;
-        _isIconKeyboard = true;
-
-        if (mustReset)
-            _currentPosition = 0;
-
-        std::vector<float> origPosY;
-
-        for (TouchKeyString* tks : _strKeys)
-        {
-            if (!mustReset)
-            {
-                u16 posX; float posY;
-                tks->GetPosition(posX, posY);
-                origPosY.push_back(posY);
-            }
-            delete tks;
-        }
-        _strKeys.clear();
-
-        if (input.size() % 4 != 0) count++;
-
-        int posY = (count < 6) ? (20 + (200 - ((30 * count) + 6 * (count - 1))) / 2) : 30;
-
-        if (mustReset) {
-            if (count < 6)
-            {
-                _displayScrollbar = false;
-            }
-            else if (mustReset)
-            {
-                int height = 190;
-
-
-                float lsize = 36.f * (float)count + 1;
-
-                float padding = (float)height / lsize;
-                int cursorSize = padding * height;
-                float scrollTrackSpace = lsize - height;
-                float scrollThumbSpace = height - cursorSize;
-
-                _scrollJump = scrollTrackSpace / scrollThumbSpace;
-                _scrollbarSize = height;
-
-                if (cursorSize < 5)
-                    cursorSize = 5;
-
-                _scrollPadding = padding;
-                _scrollCursorSize = cursorSize;
-                _scrollPosition = 0.f;
-                _scrollEnd = _scrollbarSize - _scrollCursorSize;
-                _displayScrollbar = true;
-            }
-        }
-
-        _scrollSize = 0;
-        _inertialVelocity = 0;
-
-        IntRect box(91, posY, 30, 30);
-
-        int i = 1;
-        int j = 0;
-
-        for (const CustomIcon& ico : input)
-        {
-            TouchKeyString* tks;
-
-            if (ico.sizeX != 30 || ico.sizeY != 30) tks = new TouchKeyString(CustomIcon(Icon::DefaultCustomIcon.pixArray, Icon::DefaultCustomIcon.sizeX, Icon::DefaultCustomIcon.sizeY, ico.isEnabled), box, true);
-            else tks = new TouchKeyString(ico, box, true);
-
-            if (!mustReset)
-                tks->SetPosition(0xFFFF, origPosY[j++]);
-
-            _strKeys.push_back(tks);
-
-            if (i == 0 && mustReset) box.leftTop.y += 36;
-            box.leftTop.x = 91 + i * 36;
-            if (i++ == 3) i = 0;
         }
 
         origPosY.clear();

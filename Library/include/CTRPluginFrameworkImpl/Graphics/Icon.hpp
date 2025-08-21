@@ -3,7 +3,6 @@
 
 #include "CTRPluginFramework/System/Vector.hpp"
 #include "CTRPluginFrameworkImpl/Menu/MenuEntryTools.hpp"
-#include "CTRPluginFramework/Graphics/CustomIcon.hpp"
 
 namespace CTRPluginFramework
 {
@@ -255,11 +254,7 @@ namespace CTRPluginFramework
          ** Triforce, filled and unfilled
          ** 15px * 15 px
          **************/
-        static int DrawTriforce(int posX, int posY);
-        static int DrawTriforceFilled(int posX, int posY);
-
-        static CustomIcon DefaultCustomIcon;
-        static int DrawCustomIcon(const CustomIcon& icon, int posX, int posY);
+        static int DrawTriforce(int posX, int posY, bool isFilled);
 
     private:
         static int DrawImg(u8 *img, int posX, int posY, int sizeX, int sizeY);
