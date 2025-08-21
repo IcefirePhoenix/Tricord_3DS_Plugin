@@ -19,7 +19,7 @@
 
 namespace CTRPluginFramework
 {
-    std::string inviteURL = std::string("discord.gg/") + INVITE;
+    std::string inviteURL = std::string("discord.gg/") + MODDING_INVITE;
     std::string exceptionData = "";
     bool savedToSD = false;
     bool showRegisters = false;
@@ -122,7 +122,7 @@ namespace CTRPluginFramework
         bottomScreen.DrawRect(15, 20, 290, 205, Color::Magenta);
         bottomScreen.DrawRect(20, 25, 280, 195, Color::Gainsboro, false);
 
-        drawInviteQR(topScreen, 175, 15, qrcodegen::QrCode::encodeText(((std::string("https://discord.com/invite/") + INVITE).c_str()), qrcodegen::QrCode::Ecc::MEDIUM));
+        drawInviteQR(topScreen, 175, 15, qrcodegen::QrCode::encodeText(((std::string("https://discord.com/invite/") + MODDING_INVITE).c_str()), qrcodegen::QrCode::Ecc::MEDIUM));
 
         // begin drawing text fields...
         Renderer::DrawGameFontStringReturn(intro, 220, posYIntro, 380, Color::Gainsboro);

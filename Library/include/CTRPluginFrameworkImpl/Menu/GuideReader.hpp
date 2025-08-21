@@ -27,7 +27,6 @@ namespace CTRPluginFramework
         bool Draw(void);
         void Open(void);
         void Close(void);
-        bool IsOpen(void);
 
         // Return true if the Close Button is pressed, else false
         bool operator()(EventList &eventList, Time &delta);

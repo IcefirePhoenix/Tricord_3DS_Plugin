@@ -19,8 +19,8 @@ namespace CTRPluginFramework
         _freecamBtn(Button::Toggle | Button::GameFont, "Freecam", IntRect(35, 120, 120, 32), Icon::DrawMenuButton),
         _arBtn(Button::GameFont, "Action Replay", IntRect(35, 160, 120, 32), Icon::DrawMenuButton),
         _gameModeBtn(Button::Toggle | Button::GameFont, "Game Modes", IntRect(166, 80, 120, 32), Icon::DrawMenuButton),
-        _settingsBtn(Button::GameFont | Button::Rounded, "Settings", IntRect(166, 120, 120, 32), Icon::DrawMenuButton),
-        _toolsBtn(Button::GameFont | Button::Rounded, "Dev Tools", IntRect(166, 160, 120, 32), Icon::DrawMenuButton),
+        _settingsBtn(Button::GameFont, "Settings", IntRect(166, 120, 120, 32), Icon::DrawMenuButton),
+        _toolsBtn(Button::GameFont, "Dev Tools", IntRect(166, 160, 120, 32), Icon::DrawMenuButton),
 
         _faqBtn(Button::Icon, IntRect(287, 205, 25, 25), Icon::DrawTricord),
         _discordBtn(Button::Icon | Button::Toggle, IntRect(254, 207, 25, 25), Icon::DrawDiscord),
@@ -44,52 +44,6 @@ namespace CTRPluginFramework
         _closedRootFolder = false;
 
         _mode = 0;
-    }
-
-    void drawInviteQR(void)
-    {
-        qrcodegen::QrCode qrcode = qrcodegen::QrCode::encodeText((std::string("discord.com/invite/") + INVITE).c_str(), qrcodegen::QrCode::Ecc::MEDIUM);
-
-        int currXPos = 47, currYPos = 57;
-        int rightBoundary = 190, bottomBoundary = 190;
-        int qrSideLen = qrcode.getSize();
-        int pixelsPerModule = (bottomBoundary - currYPos) / qrSideLen;
-        int columnsDrawn = 0, modulesDrawn = 0;
-
-        // draw background...
-        const Screen &topScreen = OSD::GetTopScreen();
-        topScreen.DrawRect(40, 50, 130, 130, Color::White);
-
-        Renderer::SetTarget(TOP);
-        while (currXPos < rightBoundary && columnsDrawn < qrSideLen)
-        {
-            modulesDrawn = 0;
-            currYPos = 57;
-
-            while (currYPos < bottomBoundary && modulesDrawn < qrSideLen)
-            {
-                topScreen.DrawRect(currXPos, currYPos, pixelsPerModule, pixelsPerModule, qrcode.getModule(columnsDrawn, modulesDrawn) ? Color::Black : Color::White);
-                currYPos += pixelsPerModule;
-                modulesDrawn++;
-            }
-            columnsDrawn++;
-            currXPos += pixelsPerModule;
-        }
-
-        int posLabel = 190;
-        std::string message = std::string("Prefer typing? Use: discord.gg/") + INVITE;
-        Renderer::DrawGameFontStringReturn((const u8 *)message.c_str(), 40, posLabel, 362, Color::White);
-    }
-
-    void drawInviteInfo(void)
-    {
-        int posY = 50;
-        std::string message = "This is the home of all things\nrelated to TFH modding!\nHere you can connect with\nthe Tricord developers,\nexplore new mods from\nGameBanana, find helpful\nguides, and hang out with\nthe modding community!";
-
-        // really lazy workaround to avoid creating a custom UI box just for this...
-        Renderer::SetTarget(TOP);
-        Window::TopWindow.Draw("TFH Modding Discord Server");
-        Renderer::DrawGameFontStringReturn((const u8 *)message.c_str(), 180, posY, 370, Color::White);
     }
 
     bool PluginMenuHome::operator()(EventList& eventList, int& mode, Time& delta)
@@ -169,11 +123,8 @@ namespace CTRPluginFramework
         }
         else
         {
-            if (!PluginMenu::GetRunningInstance()->ShowInvite)
-            {
-                for (size_t i = 0; i < eventList.size(); i++)
-                    _ProcessEvent(eventList[i]);
-            }
+            for (size_t i = 0; i < eventList.size(); i++)
+                _ProcessEvent(eventList[i]);
         }
 
         if (_toolsBtn()) _toolsBtn_OnClick();
@@ -188,29 +139,8 @@ namespace CTRPluginFramework
         if (_discordBtn()) _discordBtn_OnClick();
         if (_controllerBtn()) _controllerBtn_OnClick();
 
-
-        if (PluginMenu::GetRunningInstance()->ShowInvite)
-        {
-            _showStarredBtn.Lock();
-            _freecamBtn.Lock();
-            _gameModeBtn.Lock();
-            _faqBtn.Lock();
-            _settingsBtn.Lock();
-            _arBtn.Lock();
-            _toolsBtn.Lock();
-            _AddFavoriteBtn.Lock();
-            _InfoBtn.Lock();
-            _controllerBtn.Lock();
-
-            Renderer::SetTarget(TOP);
-            drawInviteInfo();
-            drawInviteQR();
-        }
-        else
-        {
-            top.Start();
-            top.Wait();
-        }
+        top.Start();
+        top.Wait();
 
         _Update(delta);
         _RenderBottom();
@@ -943,11 +873,6 @@ namespace CTRPluginFramework
         }
     }
 
-    void PluginMenuHome::_discordBtn_OnClick(void)
-    {
-        PluginMenu::GetRunningInstance()->ShowInvite = !PluginMenu::GetRunningInstance()->ShowInvite;
-    }
-
     void PluginMenuHome::_actionReplayBtn_OnClick(void)
     {
         _mode = 4;
@@ -1034,6 +959,11 @@ namespace CTRPluginFramework
             else // should still be in root folder here
                 _gameModeBtn.Unlock();
         }
+    }
+
+    void PluginMenuHome::_discordBtn_OnClick(void)
+    {
+        _mode = 1;
     }
 
     void PluginMenuHome::_faqBtn_OnClick(void)

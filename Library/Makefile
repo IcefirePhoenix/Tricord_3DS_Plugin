@@ -22,7 +22,8 @@ export CTRPF_REVISION			:= $(shell printf "%s.r%s" "$$(git describe --abbrev=0 -
 export CTRPF_BUILD_METADATA 	:= $(shell printf "%s [%s]" "$(CTRPF_VERSION_TAG)" "$(CTRPF_VERSION_COMMIT_SHORT)")
 export TRICORD_BUILD_METADATA 	:= $(shell printf "%s [%s]" "$(TRICORD_VERSION_TAG)" "$(TRICORD_VERSION_COMMIT_SHORT)")
 export COMPILE_DATE 			:= $(shell date -u +"%Y-%m-%d at %H:%M:%S%Z")
-export INVITE 					:= P6csr4jc5U
+export MODDING_INVITE 					:= P6csr4jc5U
+export MATCHMAKING_INVITE 				:= 87SaWke
 
 ENABLE_LINK_TIME_OPTIMIZATIONS = 1
 
@@ -73,7 +74,8 @@ ARCH	:=	-march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 DEFINES	:=	-DTRICORD_BUILD_METADATA="\"$(TRICORD_BUILD_METADATA)\"" \
 			-DCTRPF_BUILD_METADATA="\"$(CTRPF_BUILD_METADATA)\"" \
 			-DCOMPILE_DATE="\"$(COMPILE_DATE)\"" \
-			-DINVITE="\"$(INVITE)\"" \
+			-DMODDING_INVITE="\"$(MODDING_INVITE)\"" \
+			-DMATCHMAKING_INVITE="\"$(MATCHMAKING_INVITE)\"" \
 			-DTRICORD_VERSION_MAJOR="\"$(TRICORD_VERSION_MAJOR)"\" \
 			-DTRICORD_VERSION_MINOR="\"$(TRICORD_VERSION_MINOR)"\" \
 			-DTRICORD_VERSION_REV="\"$(TRICORD_VERSION_REV)"\"
