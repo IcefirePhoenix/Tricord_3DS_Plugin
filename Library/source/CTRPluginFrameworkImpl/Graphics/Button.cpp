@@ -97,7 +97,7 @@ namespace CTRPluginFramework
 
         // Content and BG
         if (_icon != nullptr)
-            reinterpret_cast<IconCallbackState>(_icon)(_bounds.leftTop.x, _bounds.leftTop.y, _isToggleBtn ? _state : _isPressed);
+            reinterpret_cast<IconCallbackState>(_icon)(_bounds.leftTop.x, _bounds.leftTop.y, _state || _isPressed);
         else
         {
             if (_isRounded)

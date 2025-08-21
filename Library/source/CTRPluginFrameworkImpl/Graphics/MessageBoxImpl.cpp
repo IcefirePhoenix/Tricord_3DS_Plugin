@@ -128,7 +128,7 @@ namespace CTRPluginFramework
             // Draw box
             _Draw();
             Renderer::SetTarget(BOTTOM);
-            Renderer::EndFrame();
+            Renderer::EndFrame(true);
         }
 
         // Wait until keys are released

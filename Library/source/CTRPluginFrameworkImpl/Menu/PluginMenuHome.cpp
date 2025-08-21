@@ -23,7 +23,7 @@ namespace CTRPluginFramework
         _toolsBtn(Button::GameFont, "Dev Tools", IntRect(166, 160, 120, 32), Icon::DrawMenuButton),
 
         _faqBtn(Button::Icon, IntRect(287, 205, 25, 25), Icon::DrawTricord),
-        _discordBtn(Button::Icon | Button::Toggle, IntRect(254, 207, 25, 25), Icon::DrawDiscord),
+        _discordBtn(Button::Icon, IntRect(254, 207, 25, 25), Icon::DrawDiscord),
         _controllerBtn(Button::Icon, IntRect(182, 41, 25, 25), Icon::Draw3DS),
 
         _AddFavoriteBtn(Button::Icon | Button::Toggle, IntRect(149, 41, 25, 25), Icon::DrawAddFavorite),
@@ -880,7 +880,9 @@ namespace CTRPluginFramework
 
     void PluginMenuHome::_gameModeBtn_OnClick(void)
     {
-        std::string msg = PluginMenu::GetRunningInstance()->GameplayToggle ? "If you exit this menu, any chosen Gameplay Modes will be disabled.\n\nWould you like to continue to the Main Menu?" : "Choosing a custom Gameplay Mode will auto-disable any codes that may cause conflicts (see the FAQ and/or the Wiki for details). You will also be unable to access the Main Menu until you quit.\n\nWould you like to proceed?\n";
+        std::string msg = PluginMenu::GetRunningInstance()->GameplayToggle ? "If you exit this menu, any active Gameplay Modes will be disabled.\n\nWould you like to continue to the Main Menu?" : "Choosing a custom Gameplay Mode will auto-disable any codes that may cause conflicts (see the Wiki for details). You will also be unable to access most of the Main Menu until you quit.\n\nWould you like to proceed?\n";
+
+        _gameModeBtn.SetState(true); // prevent flickering
 
         if (MessageBox(Color::Gainsboro << "Gameplay Modes", msg, DialogType::DialogYesNo)())
             PluginMenu::GetRunningInstance()->GameplayToggle = !PluginMenu::GetRunningInstance()->GameplayToggle;
@@ -888,7 +890,6 @@ namespace CTRPluginFramework
         // Freecam remains selectable here
         if (PluginMenu::GetRunningInstance()->GameplayToggle)
         {
-            _faqBtn.Lock();
             _toolsBtn.Lock();
             _showStarredBtn.Lock();
             _AddFavoriteBtn.Lock();
@@ -900,7 +901,8 @@ namespace CTRPluginFramework
         }
         else
         {
-            _faqBtn.Unlock();
+            _gameModeBtn.SetState(false);
+
             _toolsBtn.Unlock();
             _showStarredBtn.Unlock();
             _AddFavoriteBtn.Unlock();
@@ -922,8 +924,9 @@ namespace CTRPluginFramework
         // if current folder is root, that means we are either in freecam, game mode, or home
         if (PluginMenu::GetRunningInstance()->FreecamToggle)
         {
+            _gameModeBtn.SetState(false);
+
             _gameModeBtn.Lock();
-            _faqBtn.Lock();
             _toolsBtn.Lock();
             _showStarredBtn.Lock();
             _AddFavoriteBtn.Lock();
@@ -943,7 +946,6 @@ namespace CTRPluginFramework
             if (!PluginMenu::GetRunningInstance()->GameplayToggle)
             {
                 _gameModeBtn.Unlock();
-                _faqBtn.Unlock();
                 _toolsBtn.Unlock();
                 _showStarredBtn.Unlock();
                 _AddFavoriteBtn.Unlock();
@@ -957,7 +959,10 @@ namespace CTRPluginFramework
                 _returnFolder = nullptr;
             }
             else // should still be in root folder here
+            {
+                _gameModeBtn.SetState(true);
                 _gameModeBtn.Unlock();
+            }
         }
     }
 
