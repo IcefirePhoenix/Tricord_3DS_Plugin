@@ -252,7 +252,7 @@ namespace CTRPluginFramework
 
         /*
          ** Triforce, filled and unfilled
-         ** 15px * 15 px
+         ** 25px * 25 px
          **************/
         static int DrawTriforce(int posX, int posY, bool isFilled);
 

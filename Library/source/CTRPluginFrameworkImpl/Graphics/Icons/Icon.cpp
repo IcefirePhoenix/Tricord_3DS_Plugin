@@ -61,8 +61,8 @@ namespace CTRPluginFramework
     extern "C" unsigned char *Trash25;
     extern "C" unsigned char *TrashFilled25;
     extern "C" unsigned char *TricordIcon25;
-    extern "C" unsigned char *Triforce15;
-    extern "C" unsigned char *TriforceFilled15;
+    extern "C" unsigned char *Triforce25;
+    extern "C" unsigned char *TriforceFilled25;
     extern "C" unsigned char *ZL15;
     extern "C" unsigned char *ZR15;
     extern "C" unsigned char *UserManual15;
@@ -552,12 +552,12 @@ namespace CTRPluginFramework
 
     /*
      ** Triforce (unfilled and filled)
-     ** 15px * 15 px
+     ** 25px * 25 px
      **************/
     int Icon::DrawTriforce(int posX, int posY, bool isFilled)
     {
-        u8 *img = isFilled ? TriforceFilled15 : Triforce15;
-        return (DrawImg(img, posX, posY, 15, 15));
+        u8 *img = isFilled ? TriforceFilled25 : Triforce25;
+        return (DrawImg(img, posX, posY, 25, 25));
     }
 
     /*
