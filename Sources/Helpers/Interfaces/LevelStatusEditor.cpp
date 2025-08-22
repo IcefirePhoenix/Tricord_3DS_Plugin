@@ -19,13 +19,13 @@ namespace CTRPluginFramework
     LevelStatusEditor::LevelStatusEditor(const std::string &message, StringVector levelNames, int world, int playMode) :
         _message(message), _levelNames(levelNames), _world(world), _playMode(playMode)
     {
-        int posY = 100;
+        int posY = 62;
         for (int rowNum = 0; rowNum < 4; rowNum++)
         {
-            int posX = 180;
+            int posX = 172;
             for (int columnNum = 0; columnNum < 4; columnNum++)
             {
-                Button newButton(Button::Icon | Button::Toggle, IntRect(posX, posY, 20, 20), Icon::DrawCheckBox);
+                Button newButton(Button::Icon | Button::Toggle, IntRect(posX, posY, 20, 20), Icon::DrawTriforce);
                 _checkboxes.push_back(newButton);
 
                 posX += 30;
@@ -33,8 +33,8 @@ namespace CTRPluginFramework
             posY += 32;
         }
 
-        initBitstringAddresses();
-        setCheckboxes();
+        //initBitstringAddresses();
+        //setCheckboxes();
     }
 
     LevelStatusEditor::~LevelStatusEditor()
@@ -185,18 +185,18 @@ namespace CTRPluginFramework
             (*it).Draw();
 
         // draw labels
-        /* Renderer::DrawGameFontString auto-increments posY param by 16 -> this is done to keep menu entries spaced correctly
+        /* Renderer::DrawGameFontString auto-increments posY param -> this is done to keep menu entries spaced correctly
         However, we want posY to remain unchanged... lazy workaround below -> no need to rework the framework library this way */
 
         int yPositions[4];
-        std::fill(yPositions, yPositions + 4, 80);
+        std::fill(yPositions, yPositions + 4, 42);
 
-        Renderer::DrawGameFontString(labels[0].c_str(), 178, yPositions[0], 290, Preferences::Settings.MainTextColor);
-        Renderer::DrawGameFontString(labels[1].c_str(), 208, yPositions[1], 290, Preferences::Settings.MainTextColor);
-        Renderer::DrawGameFontString(labels[2].c_str(), 238, yPositions[2], 290, Preferences::Settings.MainTextColor);
-        Renderer::DrawGameFontString(labels[3].c_str(), 268, yPositions[3], 290, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontString(labels[0].c_str(), 175, yPositions[0], 290, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontString(labels[1].c_str(), 205, yPositions[1], 290, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontString(labels[2].c_str(), 235, yPositions[2], 290, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontString(labels[3].c_str(), 265, yPositions[3], 290, Preferences::Settings.MainTextColor);
 
-        for (int i = 0, lvlY = 100; i < 4; i++, lvlY += 15)
+        for (int i = 0, lvlY = 68; i < 4; i++, lvlY += 16)
             Renderer::DrawGameFontString(_levelNames[i].c_str(), 38, lvlY, 290, Preferences::Settings.MainTextColor);
     }
 
