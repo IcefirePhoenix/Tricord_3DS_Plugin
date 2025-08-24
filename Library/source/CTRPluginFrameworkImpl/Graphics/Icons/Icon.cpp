@@ -54,7 +54,7 @@ namespace CTRPluginFramework
     extern "C" unsigned char *Restart15;
     extern "C" unsigned char *ReturnButton25;
     extern "C" unsigned char *ReturnButtonPush25;
-    extern "C" unsigned char *Save25;
+    extern "C" unsigned char *SavePink30;
     extern "C" unsigned char *Search15;
     extern "C" unsigned char *Settings15;
     extern "C" unsigned char *Shutdown15;
@@ -434,12 +434,12 @@ namespace CTRPluginFramework
     }
 
     /*
-    ** Save
-    ** 25px * 25px
+    ** Save Feather
+    ** 30px * 30px
     **************/
     int Icon::DrawSave(int posX, int posY)
     {
-        return (DrawImg(Save25, posX, posY, 25, 25));
+        return (DrawImg(SavePink30, posX, posY, 30, 30));
     }
 
     /*
