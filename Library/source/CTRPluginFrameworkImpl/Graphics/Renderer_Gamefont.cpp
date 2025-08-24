@@ -280,6 +280,8 @@ namespace CTRPluginFramework
         if (!screen || !glyph)
             return posY;
 
+        const Color base = color;
+
         posX += glyph->xOffset;
 
         u32  stride = screen->_stride;
@@ -295,7 +297,7 @@ namespace CTRPluginFramework
         {
             if (i != 0 && i % 14 == 0)
             {
-                if ((lineCount % 4) == 0 && flags &Render::FontDrawMode::ITALIC)
+                if ((lineCount % 5) == 0 && flags & Render::FontDrawMode::ITALIC)
                     italicOffset--;
                 lineCount++;
                 left -= bpp;
@@ -313,9 +315,9 @@ namespace CTRPluginFramework
 
                 if (alpha >= cutoff)
                 {
-                    r = Preferences::Settings.MainTextColor.r;
-                    g = Preferences::Settings.MainTextColor.g;
-                    b = Preferences::Settings.MainTextColor.b;
+                    r = base.r;
+                    g = base.g;
+                    b = base.b;
                 }
                 else if (alpha <= edge)
                 {
@@ -326,9 +328,9 @@ namespace CTRPluginFramework
                 else
                 {
                     float t = static_cast<float>(cutoff - alpha) / (cutoff - edge);
-                    r = static_cast<u8>(41 * t + 255 * (1.0f - t));
-                    g = static_cast<u8>(10 * t + 255 * (1.0f - t));
-                    b = static_cast<u8>(2 * t + 255 * (1.0f - t));
+                    r = static_cast<u8>(41 * t + base.r * (1.0f - t));
+                    g = static_cast<u8>(10 * t + base.g * (1.0f - t));
+                    b = static_cast<u8>(2 * t + base.b * (1.0f - t));
                 }
 
                 color = Color(r, g, b, alpha);
@@ -348,6 +350,8 @@ namespace CTRPluginFramework
         if (!screen || !glyph)
             return posY;
 
+        const Color base = color;
+
         posX += glyph->xOffset;
 
         u32  stride = screen->_stride;
@@ -365,7 +369,7 @@ namespace CTRPluginFramework
             {
                 if (offset)
                     i += offset;
-                if ((lineCount % 4) == 0 && flags & Render::FontDrawMode::ITALIC)
+                if ((lineCount % 5) == 0 && flags & Render::FontDrawMode::ITALIC)
                     italicOffset--;
                 lineCount++;
                 left -= bpp;
@@ -383,9 +387,9 @@ namespace CTRPluginFramework
 
                 if (alpha >= cutoff)
                 {
-                    r = Preferences::Settings.MainTextColor.r;
-                    g = Preferences::Settings.MainTextColor.g;
-                    b = Preferences::Settings.MainTextColor.b;
+                    r = base.r;
+                    g = base.g;
+                    b = base.b;
                 }
                 else if (alpha <= edge)
                 {
@@ -396,9 +400,9 @@ namespace CTRPluginFramework
                 else
                 {
                     float t = static_cast<float>(cutoff - alpha) / (cutoff - edge);
-                    r = static_cast<u8>(41 * t + 255 * (1.0f - t));
-                    g = static_cast<u8>(10 * t + 255 * (1.0f - t));
-                    b = static_cast<u8>(2 * t + 255 * (1.0f - t));
+                    r = static_cast<u8>(41 * t + base.r * (1.0f - t));
+                    g = static_cast<u8>(10 * t + base.g * (1.0f - t));
+                    b = static_cast<u8>(2 * t + base.b * (1.0f - t));
                 }
 
                 color = Color(r, g, b, alpha);
@@ -624,15 +628,15 @@ namespace CTRPluginFramework
                 continue;
             }
 
-            if (c == 0x1B)
-            {
-                str++;
-                color.r = *str++;
-                color.g = *str++;
-                color.b = *str++;
-                RendererPriv::g_customColor = color;
-                continue;
-            }
+            // if (c == 0x1B)
+            // {
+            //     str++;
+            //     color.r = *str++;
+            //     color.g = *str++;
+            //     color.b = *str++;
+            //     //RendererPriv::g_customColor = color;
+            //     continue;
+            // }
 
             if (c == 0x11)
             {
