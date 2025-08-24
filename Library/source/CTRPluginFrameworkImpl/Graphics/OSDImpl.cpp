@@ -231,7 +231,7 @@ namespace CTRPluginFramework
         PauseFrame();
 
         if (DrawSaveIcon)
-            Icon::DrawSave(10, 10);
+            Icon::DrawSave(365, 25);
 
         // Signal a new frame to all threads waiting for it
        // Controller::Update();code

@@ -125,7 +125,6 @@ namespace CTRPluginFramework
         ************/
         static int DrawGrid(int posX, int posY);
 
-
         /*
         ** Info
         ** 25px * 25px
@@ -137,7 +136,6 @@ namespace CTRPluginFramework
         ** 25px * 25px
         ***********/
         static int DrawInfoNew(int posX, int posY, bool filled);
-
 
         /*
         ** Discord
@@ -169,10 +167,9 @@ namespace CTRPluginFramework
         **************/
         static int DrawRestart(int posX, int posY);
 
-
         /*
-        ** Save
-        ** 25px * 25px
+        ** Save Feather
+        ** 30px * 30px
         **************/
         static int DrawSave(int posX, int posY);
 
