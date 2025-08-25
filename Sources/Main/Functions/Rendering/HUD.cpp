@@ -65,20 +65,20 @@ namespace CTRPluginFramework
 
         switch (playerChoice)
         {
-        case 0:
-            targetaddr = AddressList::getAddress("LiveNameColorG");
-            label = colorLabel1;
-            break;
-        case 1:
-            targetaddr = AddressList::getAddress("LiveNameColorB");
-            label = colorLabel2;
-            break;
-        case 2:
-            targetaddr = AddressList::getAddress("LiveNameColorR");
-            label = colorLabel3;
-            break;
-        default:
-            return;
+            case 0:
+                targetaddr = AddressList::getAddress("LiveNameColorG");
+                label = colorLabel1;
+                break;
+            case 1:
+                targetaddr = AddressList::getAddress("LiveNameColorB");
+                label = colorLabel2;
+                break;
+            case 2:
+                targetaddr = AddressList::getAddress("LiveNameColorR");
+                label = colorLabel3;
+                break;
+            default:
+                return;
         }
 
         Keyboard HexColor("Custom Scrolling Text Name Color", "Enter a 6-digit RGB hex code.");

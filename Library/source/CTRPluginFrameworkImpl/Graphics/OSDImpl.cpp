@@ -29,7 +29,6 @@
 namespace CTRPluginFramework
 {
     bool        OSDImpl::DrawSaveIcon = false;
-    bool        OSDImpl::MessColors = false;
     u32         OSDImpl::WaitingForScreenshot = 0;
     u32         OSDImpl::FramesToPlay = 0;
     Hook        OSDImpl::OSDHook;

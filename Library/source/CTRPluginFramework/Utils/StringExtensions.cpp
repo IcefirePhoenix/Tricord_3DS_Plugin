@@ -111,12 +111,7 @@ namespace CTRPluginFramework
         return RightAlignImpl(str, leftBorder, rightBorder, 0);
     }
 
-    std::string     HorizontalSeparator()
-    {
-        return "\n" << ToggleDrawMode(Render::FontDrawMode::STRIKETHROUGH) << " " << RightAlign(" ", 35, 366) << ToggleDrawMode(Render::FontDrawMode::STRIKETHROUGH) << "\n";
-    }
-
-    std::string operator<<(const std::string &left, const char* right)
+    std::string operator <<(const std::string &left, const char* right)
     {
         return (left + right);
     }
