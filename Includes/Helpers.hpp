@@ -24,6 +24,7 @@
 
 // #include "Helpers/Interfaces/FaceSelMenu.hpp"
 #include "Helpers/Interfaces/LevelStatusEditor.hpp"
+#include "Helpers/Interfaces/PlayerSelector.hpp"
 
 #include "Helpers/Data/Actor.hpp"
 #include "Helpers/Data/Collision.hpp"

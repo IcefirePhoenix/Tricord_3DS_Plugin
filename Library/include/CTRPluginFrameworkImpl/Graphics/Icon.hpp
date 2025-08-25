@@ -253,6 +253,12 @@ namespace CTRPluginFramework
          **************/
         static int DrawTriforce(int posX, int posY, bool isFilled);
 
+        /*
+         ** Link, G/B/R
+         ** 30px * 30 px
+         **************/
+        static int DrawLinkFace(int posX, int posY, int player);
+
     private:
         static int DrawImg(u8 *img, int posX, int posY, int sizeX, int sizeY);
     };

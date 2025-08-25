@@ -659,44 +659,25 @@ namespace CTRPluginFramework
     // Menu interface for force-toggling beam cooldowns for individual players
     void Costume::selectLinkBeam(MenuEntry *entry)
     {
-        std::string message;
-        StringVector bottomScreenOptions;
-        Keyboard kbd("Sword Beam Cooldown", "Use the toggles to disable the Sword Beam cooldown period per player.");
+        int status = PlayerMask::PLAYER_NONE;
 
-        kbd.CanAbort(false);
-        bool loop = true;
-
-        while (loop)
+        if (entry->Name() == "Toggle sword beam cooldown")
         {
-            bottomScreenOptions.clear();
-            bottomScreenOptions.push_back(std::string("Player 1 ") << (beamStatuses[0] ? ENABLED_SLIDER : DISABLED_SLIDER));
-            bottomScreenOptions.push_back(std::string("Player 2 ") << (beamStatuses[1] ? ENABLED_SLIDER : DISABLED_SLIDER));
-            bottomScreenOptions.push_back(std::string("Player 3 ") << (beamStatuses[2] ? ENABLED_SLIDER : DISABLED_SLIDER));
-            bottomScreenOptions.push_back("Save changes");
-            bottomScreenOptions.push_back("Disable entry");
-
-            kbd.Populate(bottomScreenOptions);
-
-            switch (kbd.Open())
+            status = PlayerSelector(true, status, "Sword Beam Cooldown Toggle Menu", "zero-cooldown")();
+            if (status > PLAYER_INVALID)
             {
-                case 0:
-                    beamStatuses[0] = !beamStatuses[0];
-                    break;
-                case 1:
-                    beamStatuses[1] = !beamStatuses[1];
-                    break;
-                case 2:
-                    beamStatuses[2] = !beamStatuses[2];
-                    break;
-                case 3:
+                for (int i = 0; i < 3; i++)
+                {
+                    beamStatuses[i] = (status & (1 << i)) != 0;
+                    entry->SetName("Disable sword beam cooldown edits");
                     beamCooldownAuto->Enable();
-                    loop = false;
-                    break;
-                default:
-                    beamCooldownAuto->Disable();
-                    loop = false;
-                    break;
+                }
             }
+        }
+        else
+        {
+            entry->SetName("Toggle sword beam cooldown");
+            beamCooldownAuto->Disable();
         }
     }
 
