@@ -4,16 +4,17 @@ namespace CTRPluginFramework
 {
     int GeneralHelpers::chooseLink(void)
     {
-        Keyboard player("Player Selection", "Choose a player.");
-        static const StringVector linkList =
+        switch (PlayerSelector(false)())
         {
-            "Player 1 (Green)",
-            "Player 2 (Blue)",
-            "Player 3 (Red)"
-        };
-        player.Populate(linkList);
-
-        return player.Open();
+            case PlayerMask::PLAYER1:
+                return 0;
+            case PlayerMask::PLAYER2:
+                return 1;
+            case PlayerMask::PLAYER3:
+                return 2;
+            default:
+                return -1;
+        }
     }
 
     int GeneralHelpers::chooseSword(void)

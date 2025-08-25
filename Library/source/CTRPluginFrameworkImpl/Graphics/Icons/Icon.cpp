@@ -7,6 +7,7 @@
 namespace CTRPluginFramework
 {
     extern "C" unsigned char *About15;
+    extern "C" unsigned char *BlueLink30;
     extern "C" unsigned char *HeartEmpty25;
     extern "C" unsigned char *HeartFilled25;
     extern "C" unsigned char *ButtonActive;
@@ -39,6 +40,7 @@ namespace CTRPluginFramework
     extern "C" unsigned char *FolderFilled;
     extern "C" unsigned char *File15;
     extern "C" unsigned char *GameController15;
+    extern "C" unsigned char *GreenLink30;
     extern "C" unsigned char *Grid15;
     extern "C" unsigned char *Info25;
     extern "C" unsigned char *InfoFilled25;
@@ -51,6 +53,7 @@ namespace CTRPluginFramework
     extern "C" unsigned char *Plus25;
     extern "C" unsigned char *PlusFilled25;
     extern "C" unsigned char *RAM15;
+    extern "C" unsigned char *RedLink30;
     extern "C" unsigned char *Restart15;
     extern "C" unsigned char *ReturnButton25;
     extern "C" unsigned char *ReturnButtonPush25;
@@ -580,5 +583,27 @@ namespace CTRPluginFramework
         u8* rotated = rotation == ROT_0 ? CPad15 : RotateIcon(CPad15, 15, 15, rotation).data();
 
         return (DrawImg(rotated, posX, posY, 15, 15));
+    }
+
+    /*
+    ** Link, G/B/R
+    ** 30px * 30 px
+    **************/
+    int Icon::DrawLinkFace(int posX, int posY, int player)
+    {
+        u8 *link = GreenLink30;
+        switch (player)
+        {
+            case 1:
+                link = BlueLink30;
+                break;
+            case 2:
+                link = RedLink30;
+                break;
+            default:
+                break;
+        }
+
+        return (DrawImg(link, posX, posY, 30, 30));
     }
 }
