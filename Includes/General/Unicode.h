@@ -6,7 +6,7 @@
 #define FONT_B      "\uE001" // System Font B button
 #define FONT_X      "\uE002" // System Font X button
 #define FONT_Y      "\uE003" // System Font Y button
-#define FONT_L      "\uE052" // System Font L button
-#define FONT_R      "\uE053" // System Font R button
+#define FONT_L      "\uE004" // System Font L button
+#define FONT_R      "\uE005" // System Font R button
 
 #endif

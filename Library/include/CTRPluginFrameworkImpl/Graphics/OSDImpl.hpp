@@ -50,9 +50,7 @@ namespace CTRPluginFramework
         static void    Lock(void);
         static bool    TryLock(void);
         static void    Unlock(void);
-
         static bool             DrawSaveIcon;
-        static bool             MessColors;
         static u32              WaitingForScreenshot;
         static u32              FramesToPlay;
         static bool             NeedToPauseFrame;

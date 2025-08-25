@@ -19,9 +19,6 @@ namespace CTRPluginFramework
     // Aligns the string to the right of the specified borders. (Default values = top window size)
     std::string     RightAlign(const std::string& str, u16 leftBorder = 35, u16 rightBorder = 370);
 
-    // Adds a visual horizontal separator that takes an entire line.
-    std::string     HorizontalSeparator();
-
     std::string operator <<(const std::string &left, const char *right);
     std::string operator <<(const std::string &left, const std::string &right);
 

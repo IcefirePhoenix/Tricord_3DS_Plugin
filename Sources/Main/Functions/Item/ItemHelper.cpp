@@ -46,7 +46,7 @@ namespace CTRPluginFramework
 
 			// Menu interface -> players are labeled via suffixes A, B, or C...
 			char letter = 'A' + checkItems;
-			std::string prefix = useShadow ? "\nShadow Link " + letter : "\nPlayer " + std::to_string(checkItems);
+			std::string prefix = useShadow ? "\nShadow Link " + letter : "\nPlayer " + std::to_string(checkItems + 1);
 
 			// Append the current item name to the player labels...
 			if (useShadow)

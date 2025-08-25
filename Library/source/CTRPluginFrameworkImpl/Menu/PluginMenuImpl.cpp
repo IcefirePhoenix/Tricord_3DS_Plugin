@@ -405,13 +405,7 @@ namespace CTRPluginFramework
                 for (size_t i = 0; i < _callbacks.size(); i++)
                     if (_callbacks[i]) _callbacks[i]();
 
-                // Execute activated cheats
                 PluginMenuExecuteLoop::ExecuteBuiltin();
-
-                //static KeySequenceImpl konamicode({ DPadUp, DPadUp, DPadDown, DPadDown, DPadLeft, DPadRight, DPadLeft, DPadRight, B, A, B, A });
-
-                //if (konamicode())
-                //    OSDImpl::MessColors = !OSDImpl::MessColors;
 
                 if (_wasOpened)
                     _wasOpened = false;

@@ -33,8 +33,8 @@ namespace CTRPluginFramework
             posY += 32;
         }
 
-        //initBitstringAddresses();
-        //setCheckboxes();
+        initBitstringAddresses();
+        setCheckboxes();
     }
 
     LevelStatusEditor::~LevelStatusEditor()
@@ -158,7 +158,7 @@ namespace CTRPluginFramework
         // regardless of edits above, update the *general* completion board (solo and multi progress combined via AND)
         Process::Read64(getBitstringAddress(bitstringID, 0), finalSoloProgress);
         Process::Read64(getBitstringAddress(bitstringID, 1), finalMultiProgress);
-        Process::Write64(getBitstringAddress(bitstringID, _playMode), finalSoloProgress & finalMultiProgress);
+        Process::Write64(getBitstringAddress(bitstringID, 2), finalSoloProgress & finalMultiProgress);
     }
 
     int LevelStatusEditor::getBit(int rowNum)

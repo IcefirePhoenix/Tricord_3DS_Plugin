@@ -55,32 +55,30 @@ namespace CTRPluginFramework
 
     void PluginMenuSettings::UpdateSettings(void)
     {
-        auto checkboxStartIndex = _settingsMenu.begin();
-
         if (Preferences::IsEnabled(Preferences::QoL_Patch))
-            (*checkboxStartIndex++)->AsMenuEntryTools().Enable();
+            (*(_settingsMenu.begin() + 5))->AsMenuEntryTools().Enable();
         else
-            (*checkboxStartIndex++)->AsMenuEntryTools().Disable();
+            (*(_settingsMenu.begin() + 5))->AsMenuEntryTools().Disable();
 
         if (Preferences::IsEnabled(Preferences::HIDToggle))
-            (*checkboxStartIndex++)->AsMenuEntryImpl().Enable();
+            (*(_settingsMenu.begin() + 6))->AsMenuEntryImpl().Enable();
         else
-            (*checkboxStartIndex++)->AsMenuEntryImpl().Disable();
+            (*(_settingsMenu.begin() + 6))->AsMenuEntryImpl().Disable();
 
         if (Preferences::IsEnabled(Preferences::DisableOSDNotifs))
-            (*checkboxStartIndex++)->AsMenuEntryImpl().Enable();
+            (*(_settingsMenu.begin() + 7))->AsMenuEntryImpl().Enable();
         else
-            (*checkboxStartIndex++)->AsMenuEntryImpl().Disable();
+            (*(_settingsMenu.begin() + 7))->AsMenuEntryImpl().Disable();
 
         if (Preferences::IsEnabled(Preferences::AutoSaveCheats))
-            (*checkboxStartIndex++)->AsMenuEntryImpl().Enable();
+            (*_menuEntryOpts.begin())->AsMenuEntryImpl().Enable();
         else
-            (*checkboxStartIndex++)->AsMenuEntryImpl().Disable();
+            (*_menuEntryOpts.begin())->AsMenuEntryImpl().Disable();
 
         if (Preferences::IsEnabled(Preferences::AutoEnableFavorites))
-            (*checkboxStartIndex++)->AsMenuEntryImpl().Enable();
+            (*_menuEntryOpts.begin() + 1)->AsMenuEntryImpl().Enable();
         else
-            (*checkboxStartIndex++)->AsMenuEntryImpl().Disable();
+            (*_menuEntryOpts.begin() + 1)->AsMenuEntryImpl().Disable();
 
         if (Preferences::IsEnabled(Preferences::ScreenshotEnabled))
             (*(_screenshotMenu.begin()))->AsMenuEntryTools().Enable();
