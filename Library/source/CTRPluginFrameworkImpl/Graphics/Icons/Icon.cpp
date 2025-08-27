@@ -54,13 +54,13 @@ namespace CTRPluginFramework
     extern "C" unsigned char *PlusFilled25;
     extern "C" unsigned char *RAM15;
     extern "C" unsigned char *RedLink30;
-    extern "C" unsigned char *Restart15;
     extern "C" unsigned char *ReturnButton25;
     extern "C" unsigned char *ReturnButtonPush25;
     extern "C" unsigned char *SavePink30;
     extern "C" unsigned char *Search15;
     extern "C" unsigned char *Settings15;
     extern "C" unsigned char *Shutdown15;
+    extern "C" unsigned char *TFH_Camera;
     extern "C" unsigned char *Trash25;
     extern "C" unsigned char *TrashFilled25;
     extern "C" unsigned char *TricordIcon25;
@@ -428,15 +428,6 @@ namespace CTRPluginFramework
     }
 
     /*
-    ** Restart
-    ** 15px * 15 px
-    **************/
-    int Icon::DrawRestart(int posX, int posY)
-    {
-        return (DrawImg(Restart15, posX, posY, 15, 15));
-    }
-
-    /*
     ** Save Feather
     ** 30px * 30px
     **************/
@@ -527,7 +518,7 @@ namespace CTRPluginFramework
      **************/
     int Icon::DrawSavePosition(int posX, int posY)
     {
-        return (DrawImg(ClearSymbol15, posX, posY, 15, 15));
+        return (DrawImg(SavePosition15, posX, posY, 15, 15));
     }
 
     /*
@@ -561,6 +552,15 @@ namespace CTRPluginFramework
     {
         u8 *img = isFilled ? TriforceFilled25 : Triforce25;
         return (DrawImg(img, posX, posY, 25, 25));
+    }
+
+    /*
+     ** TFH Camera
+     ** 15px * 15 px
+     **************/
+    int Icon::DrawTFHCamera(int posX, int posY)
+    {
+        return (DrawImg(TFH_Camera, posX, posY, 20, 20));
     }
 
     /*
