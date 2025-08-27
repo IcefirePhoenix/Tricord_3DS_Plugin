@@ -14,15 +14,13 @@ namespace CTRPluginFramework
     // Driver code for managing player coordinates
     void Player::posEditor(MenuEntry *entry)
     {
-        // init behavior...
-        showPosEditorIntroMsg(entry->WasJustActivated());
         resetPositionEditorSaves(entry->WasJustActivated());
 
         // custom touchscreen button display behavior...
         if (GeneralHelpers::isSinglePlayer() && !GeneralHelpers::isLoadingScreen(false) && Level::getCurrLevel() != Level::levelIDFromName("Hytopia Castle"))
         {
-            loadBtn.Draw();
-            saveBtn.Draw();
+            OSDImpl::AddToPriorityDrawQueue(loadBtn);
+            OSDImpl::AddToPriorityDrawQueue(saveBtn);
 
             if (!GeneralHelpers::isPauseScreen())
             {
@@ -82,15 +80,5 @@ namespace CTRPluginFramework
     {
         if (reset)
             std::fill(isPositionSaved, isPositionSaved + 3, false);
-    }
-
-    // Displays intro message upon activation
-    void showPosEditorIntroMsg(bool showMsg)
-    {
-        if (showMsg)
-        {
-            OSD::Notify("[POSITION LOAD/SAVE] Use the touchscreen buttons to save/load");
-            OSD::Notify("the current Link's position.");
-        }
     }
 }
