@@ -221,7 +221,7 @@ namespace CTRPluginFramework
         _settingsMenu.Append(new MenuEntryTools("Change Tricord menu hotkeys", MenuHotkeyModifier, Icon::DrawGameController));
         _settingsMenu.Append(new MenuEntryTools("Startup Options", nullptr, Icon::DrawTools, new u32(STARTUP)));
         _settingsMenu.Append(new MenuEntryTools("Screenshot Options", nullptr, Icon::DrawCamera, new u32(SCREENSHOT)));
-        _settingsMenu.Append(new MenuEntryTools("Action Replay Backups", nullptr, Icon::DrawRestart, new u32(AR_BACKUPS)));
+        _settingsMenu.Append(new MenuEntryTools("Action Replay Backups", nullptr, Icon::DrawLoadPosition, new u32(AR_BACKUPS)));
         _settingsMenu.Append(new MenuEntryTools("Enable QoL patches", [] { Preferences::Toggle(Preferences::QoL_Patch); }, true, Preferences::IsEnabled(Preferences::QoL_Patch)));
         _settingsMenu.Append(new MenuEntryTools("Disable HID memory allocation", [] { Preferences::Toggle(Preferences::HIDToggle); }, true, Preferences::IsEnabled(Preferences::HIDToggle)));
         _settingsMenu.Append(new MenuEntryTools("Disable on-screen notification messages", [] { Preferences::Toggle(Preferences::DisableOSDNotifs); }, true, Preferences::IsEnabled(Preferences::DisableOSDNotifs)));

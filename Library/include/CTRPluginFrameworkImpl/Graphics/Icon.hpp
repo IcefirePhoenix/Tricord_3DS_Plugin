@@ -162,12 +162,6 @@ namespace CTRPluginFramework
         static int DrawRAM(int posX, int posY);
 
         /*
-        ** Restart
-        ** 15px * 15 px
-        **************/
-        static int DrawRestart(int posX, int posY);
-
-        /*
         ** Save Feather
         ** 30px * 30px
         **************/
@@ -252,6 +246,12 @@ namespace CTRPluginFramework
          ** 25px * 25 px
          **************/
         static int DrawTriforce(int posX, int posY, bool isFilled);
+
+        /*
+         ** TFH_Camera
+         ** 15px * 15 px
+         **************/
+        static int DrawTFHCamera(int posX, int posY);
 
         /*
          ** Link, G/B/R
