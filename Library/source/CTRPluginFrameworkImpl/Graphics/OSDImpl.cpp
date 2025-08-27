@@ -1,10 +1,5 @@
 #include "CTRPluginFrameworkImpl/Graphics/OSDImpl.hpp"
 #include "CTRPluginFrameworkImpl/System/Screen.hpp"
-#include "font6x10Linux.h"
-#include "csvc.h"
-
-#include <vector>
-#include <cstring>
 #include "CTRPluginFramework/System/Sleep.hpp"
 #include "CTRPluginFramework/Utils/Utils.hpp"
 #include "CTRPluginFramework/Menu/MessageBox.hpp"
@@ -17,6 +12,10 @@
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuImpl.hpp"
 #include "CTRPluginFrameworkImpl/System/Screenshot.hpp"
+#include "font6x10Linux.h"
+#include "csvc.h"
+#include <vector>
+#include <cstring>
 
 #define THREADVARS_MAGIC  0x21545624 // !TV$
 // Thanks to Luma3DS custom mapping, we have a direct access to those
@@ -47,6 +46,8 @@ namespace CTRPluginFramework
     LightEvent  OSDImpl::OnFrameResume;
     Task        OSDImpl::DrawNotifTask1(OSDImpl::DrawNotif_TaskFunc, nullptr, Task::AppCores);
     Task        OSDImpl::DrawNotifTask2(OSDImpl::DrawNotif_TaskFunc, nullptr, Task::AppCores);
+
+    std::unordered_set<Button*> OSDImpl::PriorityButtonRenderQueue;
 
     static const Time  g_second = Seconds(1.f);
 
@@ -109,6 +110,11 @@ namespace CTRPluginFramework
         foreground = fg;
         background = bg;
         time = Clock();
+    }
+
+    void    OSDImpl::AddToPriorityDrawQueue(Button& btn)
+    {
+        OSDImpl::PriorityButtonRenderQueue.insert(&btn);
     }
 
     void    OSDImpl::Update(void)
@@ -255,6 +261,10 @@ namespace CTRPluginFramework
             }
         }
 
+        for (Button* btn : OSDImpl::PriorityButtonRenderQueue)
+            btn->Draw();
+
+        OSDImpl::PriorityButtonRenderQueue.clear();
         return 0;
     }
 
@@ -283,7 +293,8 @@ namespace CTRPluginFramework
             return;
 
         bool drawFps = (Preferences::IsEnabled(Preferences::ShowBottomFps) && isBottom) || (Preferences::IsEnabled(Preferences::ShowTopFps) && !isBottom);
-        if (drawFps) g_fpsCounter[isBottom].Update();
+        if (drawFps)
+            g_fpsCounter[isBottom].Update();
 
         // Screen shot first
         if (Screenshot::OSDCallback(isBottom, addr, addrB, stride, format))

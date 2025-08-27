@@ -8,9 +8,12 @@
 #include "CTRPluginFramework/System/Hook.hpp"
 #include "CTRPluginFramework/Graphics/Color.hpp"
 #include "CTRPluginFramework/System/Clock.hpp"
+#include "CTRPluginFrameworkImpl/Graphics/Button.hpp"
 
 #include <string>
 #include <vector>
+#include <unordered_set>
+
 #include "CTRPluginFramework/System/Task.hpp"
 
 
@@ -62,6 +65,7 @@ namespace CTRPluginFramework
         static std::vector<OSDMessage*>    Notifications;
         static std::vector<OSDCallback>    Callbacks;
         static std::vector<OSDCallback>    CallbacksTrashBin;
+        static std::unordered_set<Button*> PriorityButtonRenderQueue;
         static void*            previousFBAddr[2][2][2];
 
         static bool             IsFramePaused;
@@ -71,12 +75,13 @@ namespace CTRPluginFramework
         static Task             DrawNotifTask1;
         static Task             DrawNotifTask2;
 
-        static  u32     MainCallback(u32 isBottom, int arg2, void *leftFb, void *rightFb, int stride, int format, int arg7);
-        static  u32     MainCallback2(u32 r0, u32 *params, u32 isBottom, u32 arg);
-        static  Result  OnTopScreenFrame();
-        static  Result  OnBottomScreenFrame();
-        static  void    CallbackCommon(u32 isBottom, void *leftFb, void *rightFb, int stride, int format, int swap);
-        static  void    UpdateScreens(void);
+        static u32      MainCallback(u32 isBottom, int arg2, void *leftFb, void *rightFb, int stride, int format, int arg7);
+        static u32      MainCallback2(u32 r0, u32 *params, u32 isBottom, u32 arg);
+        static Result   OnTopScreenFrame();
+        static Result   OnBottomScreenFrame();
+        static void     CallbackCommon(u32 isBottom, void *leftFb, void *rightFb, int stride, int format, int swap);
+        static void     UpdateScreens(void);
+        static void     AddToPriorityDrawQueue(Button &btn);
 
         static int      PauseFrame(void);
         static void     WaitFramePaused(void);
