@@ -7,6 +7,7 @@
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
 #include "CTRPluginFrameworkImpl/System.hpp"
 #include "CTRPluginFrameworkImpl/System/Screenshot.hpp"
+#include "BottomBG_bin.h"
 
 #include <string>
 #include <vector>
@@ -167,10 +168,7 @@ namespace CTRPluginFramework
         // Set _runningInstance to this menu
         _runningInstance = this;
 
-        // Load backgrounds
-        Preferences::Initialize();
-
-        // Load settings
+        FwkSettings::SetBottomScreenBackground(BottomBG_bin);
         Preferences::LoadSettings();
 
         // Refresh hid

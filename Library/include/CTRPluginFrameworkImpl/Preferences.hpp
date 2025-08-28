@@ -7,8 +7,9 @@
 #include "CTRPluginFrameworkImpl/Graphics/BMPImage.hpp"
 #include <vector>
 
-#define SETTINGS_VERSION SYSTEM_VERSION(1, 1, 0)
-
+// This must be changed every time CTRPFData.bin's structure is updated!
+// Ref: devkitPro/libctru/include/3ds/os.h
+#define SETTINGS_VERSION SYSTEM_VERSION(1, 1, 1)
 namespace CTRPluginFramework
 {
     class Preferences
@@ -110,7 +111,6 @@ namespace CTRPluginFramework
         }
 
         static BMPImage     *bottomBackgroundImage;
-        static BMPImage     *bottomBoxBGImage;
 
         static u32          MenuHotkeys;
         static u32          CustomNameColors[3];
@@ -127,16 +127,12 @@ namespace CTRPluginFramework
         static void         LoadSettings(void);
         static void         LoadEntryPreferences(bool autoEnableSavedCheats, bool autoEnableFavorites);
         static void         LoadBackgrounds(void);
-        static void         UnloadBackgrounds(void);
         static void         WriteSettings(void);
 
     private:
         static bool         _favoritesAlreadyLoaded;
-        static bool         _bmpCanBeLoaded;
 
         friend class PluginMenuImpl;
-
-        static void     Initialize(void);
     };
 }
 
