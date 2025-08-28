@@ -219,7 +219,7 @@ namespace CTRPluginFramework
         FwkSettings& settings = FwkSettings::Get();
 
         settings.ThreadPriority = 0x30;
-        settings.WaitTimeToBoot = Seconds(5.f);
+        settings.WaitTimeToBoot = Seconds(3.f);
         settings.AreN3DSButtonsAvailable = true;
         settings.TryLoadSDSounds = false;
         settings.CloseMenuWithB = true;

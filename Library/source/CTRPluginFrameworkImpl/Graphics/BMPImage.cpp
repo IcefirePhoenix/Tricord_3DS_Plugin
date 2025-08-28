@@ -35,9 +35,8 @@ namespace CTRPluginFramework
     // Default CTOR
     BMPImage::BMPImage() = default;
 
-    BMPImage::BMPImage(void *data)
+    BMPImage::BMPImage(const void *data)
     {
-        // Load the file
         _LoadBitmapFromMemory(data);
         RGBtoBGR();
     }
@@ -753,7 +752,7 @@ namespace CTRPluginFramework
         _loaded = true;
     }
 
-    void     BMPImage::_LoadBitmapFromMemory(void *data)
+    void     BMPImage::_LoadBitmapFromMemory(const void *data)
     {
         Unload();
         _width  = 0;

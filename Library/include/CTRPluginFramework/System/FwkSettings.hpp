@@ -120,7 +120,7 @@ namespace CTRPluginFramework
          * \param bmpData Pointer to the BMP file in memory
          * \return 0 if success
          */
-        static Result SetBottomScreenBackground(void *bmpData);
+        static Result SetBottomScreenBackground(const void *bmpData);
     };
 }
 
