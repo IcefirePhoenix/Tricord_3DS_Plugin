@@ -34,96 +34,16 @@ namespace CTRPluginFramework
         return (xOffset + xAdvance);
     }
 
-    // Stub game' call to APT_MapSharedFont as we do it already
-    static void     PatchGameFontMapping(void)
+    static void LocateTFH_MessageFontBFFNT(u32 fontDataStart)
     {
-        std::vector<u32> pattern =
-        {
-            0xE3A03201, // mov r3, #0x10000000
-            0xE3A02001, // mov r2, #1
-            0xE3A01000, // mov r1, #0
-            0xE5940004, // ldr r0, [r4, #4]
-            0xEF00001F  // svc 0x1F
-        };
-
-        u32 addr = Utils::Search<u32>(0x00100000, Process::GetTextSize(), pattern);
-
-        if (addr)
-            *reinterpret_cast<vu32 *>(addr + 16) = 0xE3A00000; ///< mov r0, #0
+        TFH_Font = reinterpret_cast<CFNT_TFH*>(fontDataStart);
+        fontFixTFHPointers(TFH_Font);
+        g_charPerSheet = TFH_Font->finf.tglp->nRows * TFH_Font->finf.tglp->nLines;
     }
 
-    static void LocateTFH_MessageFontBFFNT(void)
+    void    Font::Initialize(u32 fontDataStart)
     {
-        std::vector<Region> memRegions{};
-        Handle target = Process::GetHandle();
-        PageInfo page_info;
-        MemInfo meminfo;
-        u32 save_addr;
-        Result ret;
-
-        std::vector<u32> filePattern =
-        {
-            0x544E4646,
-            0x0014FEFF,
-            0x04000000,
-            0x00043154,
-            0x00000009,
-            0x464E4946,
-            0x00000020,
-            0x12121802,
-            0x00000018
-        };
-
-        svcQueryProcessMemory(&meminfo, &page_info, target, 0x00100000); // search in heap
-        {
-            Region reg = (Region){meminfo.base_addr, meminfo.base_addr + meminfo.size};
-            memRegions.push_back(reg);
-        }
-
-        save_addr = meminfo.base_addr + meminfo.size + 1;
-        int i = 1;
-        while (save_addr < 0x50000000)
-        {
-            if (i >= 50)
-                break;
-            ret = svcQueryProcessMemory(&meminfo, &page_info, target, save_addr);
-            if (R_FAILED(ret))
-            {
-                if (meminfo.base_addr >= 0x50000000)
-                    break;
-            }
-
-            if (meminfo.state != 0x0 && meminfo.state != 0x2 && meminfo.state != 0x3 && meminfo.state != 0x6)
-            {
-                if (meminfo.perm & MEMPERM_READ)
-                {
-                    Region reg = (Region){meminfo.base_addr, meminfo.base_addr + meminfo.size};
-
-                    if (meminfo.base_addr > 0x14000000)
-                        memRegions.push_back(reg);
-                }
-            }
-
-            i++;
-            save_addr = meminfo.base_addr + meminfo.size + 1;
-
-        }
-
-        u32 heapSize = memRegions[memRegions.size() - 1].endAddress - memRegions[memRegions.size() - 1].startAddress;
-        u32 addr = Utils::Search<u32>(memRegions[memRegions.size() - 1].startAddress, heapSize, filePattern);
-
-        if (addr)
-        {
-            TFH_Font = (CFNT_TFH *)addr;
-            fontFixTFHPointers(TFH_Font);
-            g_charPerSheet = TFH_Font->finf.tglp->nRows * TFH_Font->finf.tglp->nLines;
-        }
-    }
-
-    void    Font::Initialize(void)
-    {
-        LocateTFH_MessageFontBFFNT();
-        PatchGameFontMapping();
+        LocateTFH_MessageFontBFFNT(fontDataStart);
         glyph = (u8 *)new u8[1000];
     }
 

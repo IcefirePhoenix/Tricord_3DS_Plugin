@@ -168,15 +168,10 @@ namespace CTRPluginFramework
         // Set _runningInstance to this menu
         _runningInstance = this;
 
-        FwkSettings::SetBottomScreenBackground(BottomBG_bin);
         Preferences::LoadSettings();
 
         // Refresh hid
         Controller::Update();
-
-        //TODO: remove If Start is pressed, don't auto enable the cheats
-        if (Controller::IsKeyPressed(Key::Start) || Controller::IsKeyDown(Key::Start))
-            Preferences::Clear(Preferences::AutoEnableSavedCheats);
 
         _tools->UpdateSettings();
 
@@ -186,7 +181,8 @@ namespace CTRPluginFramework
         // Update PluginMenuHome variables
         home.Init();
 
-        // Restore Search state
+        FwkSettings::SetBottomScreenBackground(BottomBG_bin);
+
         search.RestoreSearchState();
 
         if (FwkSettings::Header->isDefaultPlugin)
