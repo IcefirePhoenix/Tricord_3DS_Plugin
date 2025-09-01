@@ -1,6 +1,5 @@
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
 #include "CTRPluginFramework/System/Controller.hpp"
-#include "CTRPluginFrameworkImpl/Graphics/KeyboardBG.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuImpl.hpp"
 #include "CTRPluginFrameworkImpl/System/Screenshot.hpp"
 #include "3ds.h"
