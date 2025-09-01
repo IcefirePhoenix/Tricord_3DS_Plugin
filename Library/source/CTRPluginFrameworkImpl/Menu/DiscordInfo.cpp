@@ -8,28 +8,27 @@ namespace CTRPluginFramework
     std::string moddingTitle = "TFH Modding Server";
     std::string MM_Title = "TFH Matchmaking Server";
 
-    std::string moddingIntro = "This is the home of all things related to TFH modding! Here you can connect with the Tricord developers, explore new mods from GameBanana, find helpful guides, and chat with the modding community!";
-    std::string MM_Intro = "This is the main TFH playerbase's community! Here you can find players to play with via online multiplayer on the Pretendo Network, hang out with other TFH/Zelda fans, and partake in occasional events hosted by the staff!";
+    std::string moddingIntro = "This is the home of all things related to TFH modding! Here you can connect with the Tricord developers, explore new mods from GameBanana, find helpful guides, and chat with the modding community!\n\nScan the QR Code on the bottom screen to easily get the invite link.\n\nPrefer typing? Use: discord.gg/";
+    std::string MM_Intro = "This is the main TFH playerbase's community! Here you can find players to play with via online multiplayer on the Pretendo Network, hang out with other TFH/Zelda fans, and partake in occasional events hosted by the staff!\n\nScan the QR Code on the bottom screen to easily get the invite link.\n\nPrefer typing? Use: discord.gg/";
 
+    // note: encodeText() auto-chooses a QR version to best fit the link's size, but because the links are different lengths, the QR dimensions change... solution is to instead force version 3, with auto-masking via encodeSegments()
     DiscordInfo::DiscordInfo(void):
         _textBox("", "", Window::TopWindow.GetRect()),
         _moddingBtn(Button::GameFont | Button::Toggle, "Modding", IntRect(180, 85, 120, 32), Icon::DrawMenuButton),
-        _matchmakingBtn(Button::GameFont | Button::Toggle, "Matchmaking", IntRect(180, 125, 120, 32), Icon::DrawMenuButton)
+        _matchmakingBtn(Button::GameFont | Button::Toggle, "Matchmaking", IntRect(180, 125, 120, 32), Icon::DrawMenuButton),
+        _moddingQR(qrcodegen::QrCode::encodeSegments(qrcodegen::QrSegment::makeSegments(("discord.com/invite/" + std::string(MODDING_INVITE)).c_str()), qrcodegen::QrCode::Ecc::MEDIUM, 3, 3, -1, true)),
+        _matchmakingQR(qrcodegen::QrCode::encodeSegments(qrcodegen::QrSegment::makeSegments(("discord.com/invite/" + std::string(MATCHMAKING_INVITE)).c_str()), qrcodegen::QrCode::Ecc::MEDIUM, 3, 3, -1, true))
     {
         _moddingBtn.SetState(true);
         _isOpen = false;
+
+        _text = moddingIntro;
+        _text += MODDING_INVITE;
+        _textBox.Update(Utils::Format("Discord: %s", moddingTitle.c_str()), _text);
     }
 
     bool DiscordInfo::operator()(EventList &eventList, Time &delta)
     {
-        std::string title = showModding ? moddingTitle : MM_Title;
-
-        currInvite = showModding ? MODDING_INVITE : MATCHMAKING_INVITE;
-
-        _text = showModding ? moddingIntro : MM_Intro;
-        _text += "\n\nScan the QR Code on the bottom screen to easily get the invite link.";
-        _text += Utils::Format("\n\nPrefer typing? Use: discord.gg/%s", currInvite.c_str());
-
         _isOpen = true;
 
         for (size_t i = 0; i < eventList.size(); i++)
@@ -41,8 +40,6 @@ namespace CTRPluginFramework
             _matchmakingBtn_OnClick();
 
         _Update(delta);
-
-        _textBox.Update(Utils::Format("Discord: %s", title.c_str()), _text);
         _textBox.Open();
 
         Draw();
@@ -51,6 +48,11 @@ namespace CTRPluginFramework
 
     void DiscordInfo::_moddingBtn_OnClick(void)
     {
+        _text = moddingIntro;
+        _text += MODDING_INVITE;
+
+        _textBox.Update(Utils::Format("Discord: %s", moddingTitle.c_str()), _text);
+
         showModding = true;
         _matchmakingBtn.SetState(false);
         _moddingBtn.SetState(true);
@@ -58,10 +60,14 @@ namespace CTRPluginFramework
 
     void DiscordInfo::_matchmakingBtn_OnClick(void)
     {
+        _text = MM_Intro;
+        _text += MATCHMAKING_INVITE;
+
+        _textBox.Update(Utils::Format("Discord: %s", MM_Title.c_str()), _text);
+
         showModding = false;
         _moddingBtn.SetState(false);
         _matchmakingBtn.SetState(true);
-
     }
 
     bool DiscordInfo::_ProcessEvent(Event &event)
@@ -77,13 +83,9 @@ namespace CTRPluginFramework
         return true;
     }
 
-    void drawInviteQR(void)
+    void DiscordInfo::DrawInviteQR(void)
     {
-        std::string text = "discord.com/invite/" + currInvite;
-        std::vector<qrcodegen::QrSegment> indivSegments = qrcodegen::QrSegment::makeSegments(text.c_str());
-
-        // note: encodeText() auto-chooses a QR version to best fit the link's size, but because the links are different lengths, the QR dimensions change... solution is to instead force version 6, with auto-masking via encodeSegments()
-        qrcodegen::QrCode qrcode = qrcodegen::QrCode::encodeSegments(indivSegments, qrcodegen::QrCode::Ecc::MEDIUM, 3, 3, -1, true);
+        const qrcodegen::QrCode &qrcode = showModding ? _moddingQR : _matchmakingQR;
 
         int currXPos = 37, currYPos = 52;
         int rightBoundary = 190, bottomBoundary = 190;
@@ -130,7 +132,7 @@ namespace CTRPluginFramework
             Renderer::DrawGameFontString("Discord Server:", 180, posY, 320, Color::Gainsboro);
             Renderer::DrawLine(182, posY, 103, Color::Gainsboro);
 
-            drawInviteQR();
+            DrawInviteQR();
 
             _moddingBtn.Draw();
             _matchmakingBtn.Draw();

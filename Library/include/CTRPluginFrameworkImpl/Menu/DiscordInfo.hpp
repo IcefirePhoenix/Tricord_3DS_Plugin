@@ -18,6 +18,7 @@ namespace CTRPluginFramework
         bool Draw(void);
         void Open(void);
         void Close(void);
+        void DrawInviteQR(void);
 
         // Return true if the Close Button is pressed, else false
         bool operator()(EventList &eventList, Time &delta);
@@ -32,6 +33,9 @@ namespace CTRPluginFramework
         TextBox _textBox;
         Button _moddingBtn;
         Button _matchmakingBtn;
+
+        qrcodegen::QrCode _moddingQR;
+        qrcodegen::QrCode _matchmakingQR;
 
         std::string _text;
         bool _isOpen;
