@@ -2,13 +2,10 @@
 #include "CTRPluginFrameworkImpl/System/ProcessImpl.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
 #include "CTRPluginFramework/Menu/Keyboard.hpp"
-#include "CTRPluginFrameworkImpl/Graphics/KeyboardBG.hpp"
-
-
-#include <cmath>
-#include "3ds.h"
 #include "CTRPluginFramework/Utils/Utils.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuImpl.hpp"
+#include <cmath>
+#include "3ds.h"
 
 namespace CTRPluginFramework
 {
@@ -444,7 +441,7 @@ namespace CTRPluginFramework
             while (manager.PollEvent(event))
             {
                 _ProcessEvent(event);
-                if (_userAbort)
+                if (_userAbort || Window::BottomWindow.MustClose())
                 {
                     ret = USER_ABORT;
                     goto exit;
@@ -573,9 +570,9 @@ namespace CTRPluginFramework
     {
         static IntRect  background(20, 20, 280, 200);
         static IntRect  clampArea(22, 25, 270, 190);
-        KeyboardBG  BottomBox = KeyboardBG(0, 0, 320, 240, true);
 
         Renderer::SetTarget(BOTTOM);
+        Window::BottomWindow.Draw();
 
         // Draw "normal" keyboard
         if (!_customKeyboard)
@@ -678,8 +675,6 @@ namespace CTRPluginFramework
         }
         else
         {
-            BottomBox.Draw();
-
             size_t max = _strKeys.size();
             int offset = _isIconKeyboard ? 24 : 6;
             max = std::min(static_cast<int>(max), _currentPosition + offset);
@@ -980,6 +975,8 @@ namespace CTRPluginFramework
         {
             _UpdateScroll(delta, false);
         }
+
+        Window::BottomWindow.Update(isTouchDown, touchPos);
     }
 
     /*

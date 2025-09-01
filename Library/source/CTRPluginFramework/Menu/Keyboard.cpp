@@ -1,6 +1,5 @@
 #include "CTRPluginFrameworkImpl/Menu/KeyboardImpl.hpp"
 #include "CTRPluginFramework/Menu/Keyboard.hpp"
-#include "CTRPluginFrameworkImpl/Graphics/KeyboardBG.hpp"
 
 #include <string>
 #include <climits>
