@@ -218,7 +218,7 @@ namespace CTRPluginFramework
         // Init default settings
         FwkSettings& settings = FwkSettings::Get();
 
-        settings.ThreadPriority = 0x30;
+        settings.ThreadPriority = 0x3E;
         settings.WaitTimeToBoot = Seconds(3.f);
         settings.AreN3DSButtonsAvailable = true;
         settings.TryLoadSDSounds = false;
@@ -480,30 +480,35 @@ namespace CTRPluginFramework
     // Initialize most subsystem / Global variables
     void    Initialize(void)
     {
+        u32 fontDataStartAddr = 0x0;
+
+        switch (Process::GetTitleID())
+        {
+            case TID_USA:
+                fontDataStartAddr = 0x306CE380;
+                break;
+            case TID_EUR:
+                fontDataStartAddr = 0x30950480; // check?
+                break;
+            case TID_JPN:
+                fontDataStartAddr = 0x3029E100;
+                break;
+        }
+        Font::Initialize(fontDataStartAddr);
+
         const char *mainPath = "/Tricord";
         if (!Directory::IsExists(mainPath))
             Directory::Create(mainPath);
 
-        // Init GameFont
-        Font::Initialize();
-
-        // If /cheats/ doesn't exists, create it
         const char *dirpath = "/cheats";
         if (!Directory::IsExists(dirpath))
             Directory::Create(dirpath);
 
-        // Set AR file path
-        Preferences::CheatsFile = "cheats.txt";
+        const std::string cheatPath = Utils::Format("/cheats/%016llX.txt", Process::GetTitleID());
+        Preferences::CheatsFile = cheatPath;
 
-        // Default: cheats.txt in cwd
-        if (!File::Exists(Preferences::CheatsFile))
-        {
-            const std::string cheatPath = Utils::Format("/cheats/%016llX.txt", Process::GetTitleID());
-            Preferences::CheatsFile = cheatPath;
-
-            if (!File::Exists(cheatPath))
-                File::Create(cheatPath);
-        }
+        if (!File::Exists(cheatPath))
+            File::Create(cheatPath);
     }
 
     // Main thread's start

@@ -63,7 +63,7 @@ SOURCES		:=	source \
 				source/lodepng
 
 
-#DATA		:=	data
+DATA 		:=  source/CTRPluginFrameworkImpl/Graphics/BMP
 INCLUDES	:=	include
 
 #---------------------------------------------------------------------------------
@@ -119,7 +119,7 @@ export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
 CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
 CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
-#BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
+BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
@@ -135,7 +135,7 @@ else
 endif
 #---------------------------------------------------------------------------------
 
-export OFILES_BIN	:=	#$(addsuffix .o,$(BINFILES))
+export OFILES_BIN	:=	$(addsuffix .o,$(BINFILES))
 export OFILES_SRC	:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
 
 export HFILES_BIN	:=	$(addsuffix .h,$(subst .,_,$(BINFILES)))
