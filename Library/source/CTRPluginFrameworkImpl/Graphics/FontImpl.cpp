@@ -11,7 +11,7 @@
 
 #include <cstring>
 #include <cmath>
-#include <unordered_map>
+#include <vector>
 
 namespace CTRPluginFramework
 {
@@ -26,7 +26,27 @@ namespace CTRPluginFramework
     {
         u8 *glyph = nullptr;
         Glyph *defaultGlyph = nullptr;
-        std::unordered_map<u32, u32> defaultSysFont;
+
+        constexpr size_t MAX_GLYPHS = 0x800;
+
+        static Glyph g_glyphPool[MAX_GLYPHS];
+        static bool g_glyphUsed[MAX_GLYPHS] = {false};
+        static u8 g_bitmapPool[MAX_GLYPHS][252];
+
+        static std::vector<Glyph*> glyphCache;
+
+        static Glyph* AllocateGlyph(u32 glyphIndex)
+        {
+            if (glyphIndex >= MAX_GLYPHS)
+                return nullptr;
+
+            if (!g_glyphUsed[glyphIndex])
+            {
+                g_glyphUsed[glyphIndex] = true;
+                return &g_glyphPool[glyphIndex];
+            }
+            return nullptr;
+        }
     }
 
     float Glyph::Width(void) const
@@ -45,6 +65,9 @@ namespace CTRPluginFramework
     {
         LocateTFH_MessageFontBFFNT(fontDataStart);
         glyph = (u8 *)new u8[1000];
+
+        glyphCache.clear();
+        glyphCache.resize(MAX_GLYPHS, nullptr);
     }
 
     Glyph   *Font::GetGlyph(u8* &c)
@@ -256,26 +279,25 @@ namespace CTRPluginFramework
 
     Glyph   *Font::CacheGlyph(u32 glyphIndex)
     {
-        // Check if the glyph already exists
-        {
-            Glyph *glyph = reinterpret_cast<Glyph *>(defaultSysFont[glyphIndex]);
-            if (glyph != nullptr)
-                return glyph;
-        }
+        // Check cache first
+        if (glyphIndex < glyphCache.size() && glyphCache[glyphIndex] != nullptr)
+            return glyphCache[glyphIndex];
 
-        Lock    lock(_mutex);
+        Lock lock(_mutex);
 
-        u8  *originalGlyph = GetOriginalGlyph(glyphIndex);
-        // 14x18 wxh = 252 pixels (A4 image format)
-        u8 *newGlyph = new u8[252];
-        g_fontAllocated += 252;
+        u8 *originalGlyph = GetOriginalGlyph(glyphIndex);
+
+        u8 *newGlyph = g_bitmapPool[glyphIndex];
+        g_fontAllocated += 252; // 14x18 wxh = 252 pixels (A4 image format)
         std::memset(newGlyph, 0, 252);
 
-        // Shrink glyph data to the required size
         ShrinkGlyph(newGlyph, originalGlyph);
 
-        // Allocate new Glyph
-        Glyph *glyph = new Glyph; //static_cast<Glyph *>(linearAlloc(sizeof(Glyph)));
+        // Allocate Glyph from pool
+        Glyph *glyph = AllocateGlyph(glyphIndex);
+        if (glyph == nullptr)
+            return nullptr;
+
         g_fontAllocated += sizeof(Glyph);
         g_glyphAllocated++;
         std::memset(glyph, 0, sizeof(Glyph));
@@ -289,8 +311,9 @@ namespace CTRPluginFramework
         glyph->xAdvance = std::floor((glyphIndex == 0) ? glyphPos.xAdvance : (glyphPos.xAdvance - glyphPos.xOffset));
         glyph->glyph = newGlyph;
 
-        // Add Glyph to defaultSysFont
-        defaultSysFont[glyphIndex] = reinterpret_cast<u32>(glyph);
+        // Add to cache
+        if (glyphIndex < glyphCache.size())
+            glyphCache[glyphIndex] = glyph;
 
         return (glyph);
     }

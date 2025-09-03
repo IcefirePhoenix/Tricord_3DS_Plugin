@@ -884,7 +884,7 @@ namespace CTRPluginFramework
 
         _gameModeBtn.SetState(true); // prevent flickering
 
-        if (MessageBox(Color::Gainsboro << "Gameplay Modes", msg, DialogType::DialogYesNo)())
+        if (MessageBox("Gameplay Modes", msg, DialogType::DialogYesNo)())
             PluginMenu::GetRunningInstance()->GameplayToggle = !PluginMenu::GetRunningInstance()->GameplayToggle;
 
         // Freecam remains selectable here

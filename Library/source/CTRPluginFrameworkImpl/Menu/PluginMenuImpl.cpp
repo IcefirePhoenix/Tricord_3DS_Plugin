@@ -167,21 +167,16 @@ namespace CTRPluginFramework
 
         // Set _runningInstance to this menu
         _runningInstance = this;
+        FwkSettings::SetBottomScreenBackground(BottomBG_bin);
 
         Preferences::LoadSettings();
-
-        // Refresh hid
-        Controller::Update();
-
         _tools->UpdateSettings();
 
-        // Load saved MenuEntry preferences
+
         Preferences::LoadEntryPreferences(Preferences::IsEnabled(Preferences::AutoEnableSavedCheats), Preferences::IsEnabled(Preferences::AutoEnableFavorites));
 
         // Update PluginMenuHome variables
         home.Init();
-
-        FwkSettings::SetBottomScreenBackground(BottomBG_bin);
 
         search.RestoreSearchState();
 
@@ -211,6 +206,9 @@ namespace CTRPluginFramework
 
         OSD::Notify("Plugin ready!", Color::White, Color());
         OSD::Notify("Tricord can now be started.", Color::White, Color());
+
+        // Refresh hid
+        Controller::Update();
 
         // Main loop
         while (_pluginRun)
