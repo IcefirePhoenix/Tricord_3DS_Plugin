@@ -2,7 +2,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/IcefirePhoenix/Tricord_3DS_Plugin?include_prereleases&sort=semver&logo=github&label=Latest%20Release)](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/releases)
 [![Commit History](https://img.shields.io/github/commit-activity/m/IcefirePhoenix/Tricord_3DS_Plugin?logo=github&label=Commit%20Activity)](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/commits)
 [![Discord](https://img.shields.io/discord/906580635819315351?logo=discord&label=TFH%20Modding%20Discord)](https://discord.com/invite/P6csr4jc5U)
-[![Gamebanana Badge](https://img.shields.io/badge/main_page-yellow?style=flat&logo=gamebanana&label=TFH%20Gamebanana)](https://gamebanana.com/games/15553)
+[![Gamebanana Badge](https://img.shields.io/badge/main_page-yellow?style=flat&logo=gamebanana&label=TFH%20GameBanana)](https://gamebanana.com/games/15553)
 
 
 # Tricord
@@ -32,7 +32,7 @@ Older versions of Luma3DS / emulator may or may not be compatible. If Tricord ca
 
 A full list of features can be found in the [Wiki](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/wiki). Online Play is currently supported on Pretendo Network, and will continue to be supported for as long as the Pretendo servers are maintained.
 
-## 🛠️ Installation Instructions
+## Installation Instructions
 ### 2/3DS Console
 
 1. Make sure you are running the latest version of [Luma3DS](https://github.com/LumaTeam/Luma3DS/releases).
@@ -44,9 +44,9 @@ A full list of features can be found in the [Wiki](https://github.com/IcefirePho
 
 ### Citra / Azahar
 
-1. Make sure you are running the latest version of Citra, found on the [archived repository](https://github.com/PabloMK7/citra/releases/tag/r608383e) or the [official Citra website](https://citra-emulator.com/download).
+1. Make sure you are running the latest version of your desired emulator.
 2. Download the latest `Tricord.zip` and `Tricord.3gx` files from the [releases page](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/releases).
-3. On Citra, go to File > Open Citra Folder. Navigate to `sdmc`. Unzip `Tricord.zip` and place the `Tricord` folder inside `sdmc`.
+3. On your emulator, go to File > Open Citra/Azahar Folder. Navigate to `sdmc`. Unzip `Tricord.zip` and place the `Tricord` folder inside `sdmc`.
 4. Navigate to `sdmc/luma/plugins/` (if this folder doesn't exist, create it). Create folders for each title ID of Tri Force Heroes that you intend to use the plugin on (list of title IDs below). Place a copy of `Tricord.3gx` into each folder. This ensures the plugin only runs for Tri Force Heroes titles. You can now close the file explorer window.
 5. Go to Emulation > Configure > System. Check the box that says "Enable 3GX plugin loader".
 6. Boot your Tri Force Heroes title. Wait for the message "Plugin ready! Tricord can now be started." You can access the plugin by pressing Select while the game is running (close the menu with the same button). For details on how to use the various Tricord features, peruse the [Wiki](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/wiki).
@@ -59,7 +59,7 @@ A full list of features can be found in the [Wiki](https://github.com/IcefirePho
 ### Updating
 Download the latest files from the [releases page](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/releases) and reinstall them to the SD card (or emulated SD card) in the same places as described above, overwriting previous files. Don't worry about other newly generated files that you may find in the plugins folder (such as `CTRPFData.bin` or .txt files); they usually do not need to be removed or replaced **unless explicitly mentioned in a release**.
 
-## 🎮 Emulator Compatibility Notes
+## Emulator Compatibility Notes
 Tricord works by manipulating RAM data, and since the memory layout found on emulators (Azahar, Citra, Lime3DS, etc.) may not be 1:1 with the mapping found on original hardware memory, we can't always guarantee compatibility. Our testing is done on the [latest release](https://azahar-emu.org/pages/download/) of Azahar. Your mileage may vary on older builds or other emulators.
 
 In addition, it has been found that having mods installed on Citra / Azahar will cause the majority of Tricord's entries to have no effect. It is recommended to disable mods before using Tricord. To do this, right-click on Tri Force Heroes in the emulator's title list. On Azahar, hover on "Open" and select "Mods Location". On Citra, simply click on "Open Mods Location".
@@ -80,7 +80,7 @@ To save an error log to your SD card, be sure to press X while in the crash scre
 
 If you do not have a GitHub account, you can also reach out via the [TFH Modding Discord server](https://discord.gg/P6csr4jc5U). Your feedback is greatly appreciated and helps make this project better for everyone!
 
-## ⚠️ HID-related ErrDisp and wumiibo
+## HID-related ErrDisp and wumiibo
 CTRPF plugins, including Tricord, may conflict with existing installations of wumiibo depending on your console model. Before troubleshooting, it is recommended to try loading the default CTRPF plugin found [here](https://github.com/PabloMK7/CTRPluginFramework-BlankTemplate/releases) to verify that the issue is not Tricord-specific. If the problem persists, it is likely due to wumiibo. From here, you can either:
 
 - Disable wumiibo or uninstall it completely.
@@ -88,7 +88,7 @@ CTRPF plugins, including Tricord, may conflict with existing installations of wu
 
 If the problem still persists OR if you are not a wumiibo user, please contact someone on the Development Team with a screenshot of your ErrDisp details. See the Contact section below.
 
-## 📖 Data Sources
+## Data Sources
 All data used to create this plugin has been manually datamined by the Development Team and can be found here:
 - [Memory Addresses - documentation spreadsheet](https://docs.google.com/spreadsheets/d/1gg5JByPV6ilyAlF44R_v7AukZ8DQncjPCiPDLiAWxiI/edit?usp=sharing)
 - [Data Values - documentation spreadsheet](https://docs.google.com/spreadsheets/d/1GXdPX1AcOjoOjx7bS8-YmCEngs5gXZHqlwXEymGrk80/edit?usp=sharing)
@@ -96,13 +96,13 @@ All data used to create this plugin has been manually datamined by the Developme
 If you would like to contribute to either of these sources, please contact someone on the Development Team. See the Contact section below.
 
 
-## ⚙️ Build Policy
+## Build Policy
 The Tricord developer team is partnered with the TFH Matchmaking Discord Server. As part of that collaboration, we are committed to promoting  safe and responsible use of Tricord.
 To deter users from modifying Tricord and using it to intentionally disrupt online gameplay, we do not provide instructions nor the means to build the plugin from source.
 
 Please find a ready-to-use build in the Releases page. **Attempting to build the plugin using the makefile from the original CTRPF repository will fail.**
 
-## 📫 Contact
+## Contact
 For inquiries and assistance, please contact someone on the Developer Team via the [TFH Modding Discord server](https://discord.gg/P6csr4jc5U). You may also join this server to see updates on the Tricord plugin and chat with the TFH modding community.
 
 #### Developer Team
@@ -113,7 +113,7 @@ Wintenix - Lead developer.
 
 Peanut - Developer. Created several major features, numerous secondary features, and game modes. Creator of the Tricord Wiki page.
 
-Glem - Contributed extensively to the documentation of internal game mechanics through memory address research and testing.
+Glem - Developer. Contributed extensively to the documentation of internal game mechanics through memory address research and testing.
 
 #### Credits
 
