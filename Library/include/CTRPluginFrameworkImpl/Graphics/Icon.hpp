@@ -21,7 +21,7 @@ namespace CTRPluginFramework
         ** 3DS
         ** 25px * 25px
         ************/
-        static int Draw3DS(int posX, int posY);
+        static int Draw3DS(int posX, int posY, bool enabled);
 
         /*
         ** About

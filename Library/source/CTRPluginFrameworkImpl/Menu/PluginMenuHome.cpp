@@ -24,7 +24,7 @@ namespace CTRPluginFramework
 
         _faqBtn(Button::Icon, IntRect(287, 205, 25, 25), Icon::DrawTricord),
         _discordBtn(Button::Icon, IntRect(254, 207, 25, 25), Icon::DrawDiscord),
-        _controllerBtn(Button::Icon, IntRect(182, 41, 25, 25), Icon::Draw3DS),
+        _controllerBtn(Button::Icon | Button::Toggle, IntRect(182, 41, 25, 25), Icon::Draw3DS),
 
         _AddFavoriteBtn(Button::Icon | Button::Toggle, IntRect(149, 41, 25, 25), Icon::DrawAddFavorite),
         _InfoBtn(Button::Icon | Button::Toggle, IntRect(116, 41, 25, 25), Icon::DrawInfoNew)
@@ -453,6 +453,8 @@ namespace CTRPluginFramework
             _AddFavoriteBtn.Lock();
             _InfoBtn.SetState(false);
             _InfoBtn.Lock();
+            _controllerBtn.SetState(false);
+            _controllerBtn.Lock();
         }
 
         /*
@@ -666,6 +668,7 @@ namespace CTRPluginFramework
                     _InfoBtn.Lock();
 
                 _AddFavoriteBtn.SetState(e->_IsStarred());
+                _controllerBtn.SetState(false);
                 _controllerBtn.Lock();
 
                 if (e->HasNoteChanged())
@@ -688,9 +691,15 @@ namespace CTRPluginFramework
                     _InfoBtn.Lock();
 
                 if (e->_owner != nullptr && e->_owner->Hotkeys.Count() > 0)
+                {
+                    _controllerBtn.SetState(true);
                     _controllerBtn.Unlock();
+                }
                 else
+                {
+                    _controllerBtn.SetState(false);
                     _controllerBtn.Lock();
+                }
 
                 _AddFavoriteBtn.Unlock();
                 _AddFavoriteBtn.SetState(e->_IsStarred());
@@ -828,6 +837,7 @@ namespace CTRPluginFramework
         {
             _InfoBtn.Lock();
             _AddFavoriteBtn.Lock();
+            _controllerBtn.Lock();
 
             _selectedTextSize = 0;
         }

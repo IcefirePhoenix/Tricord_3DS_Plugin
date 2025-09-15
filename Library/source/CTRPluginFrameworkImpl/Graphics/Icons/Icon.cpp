@@ -17,6 +17,7 @@ namespace CTRPluginFramework
     extern "C" unsigned char *UnCheckedCheckbox;
     extern "C" unsigned char *Camera15;
     extern "C" unsigned char *Console25;
+    extern "C" unsigned char *ConsoleDisabled25;
     extern "C" unsigned char *CapsLockOn15;
     extern "C" unsigned char *CapsLockOnFilled15;
     extern "C" unsigned char *ClearSymbol15;
@@ -199,9 +200,11 @@ namespace CTRPluginFramework
     ** 3DS
     ** 25px * 25px
     **************/
-    int Icon::Draw3DS(int posX, int posY)
+    int Icon::Draw3DS(int posX, int posY, bool enabled)
     {
-        return (DrawImg(Console25, posX, posY, 25, 25));
+        u8 *img = enabled ? Console25 : ConsoleDisabled25;
+
+        return (DrawImg(img, posX, posY, 25, 25));
     }
 
     /*
