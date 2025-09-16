@@ -23,7 +23,7 @@ namespace CTRPluginFramework
             Normal = 0,
             Toggle = 1 << 1,
             Icon = 1 << 3,
-            Sysfont = 1 << 4,
+            GameFont = 1 << 4,
             Rounded = 1 << 5
         };
 
@@ -51,7 +51,7 @@ namespace CTRPluginFramework
         u16                     _posX;
         u16                     _posY;
         u16                     _limit;
-        void  *                 _icon{nullptr};
+        void*                   _icon{nullptr};
         std::string             _content;
         IntRect                 _bounds;
         Clock                   _clock;
@@ -64,9 +64,7 @@ namespace CTRPluginFramework
             {
                 bool    _isIconBtn : 1;
                 bool    _isToggleBtn : 1;
-                bool    _useSysfont : 1;
                 bool    _isRounded : 1;
-
                 bool    _isEnabled : 1;
                 bool    _isLocked : 1;
                 bool    _state : 1;

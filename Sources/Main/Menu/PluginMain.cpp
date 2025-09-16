@@ -53,8 +53,9 @@ namespace CTRPluginFramework
         svcCloseHandle(processHandle);
     }
 
-    void PatchProcess(void)
+    void PatchProcess()
     {
+
     }
 
     void ManageTFH_Settings(void)
@@ -90,6 +91,7 @@ namespace CTRPluginFramework
         AddressList::InitMemoryRange();
         AddressList::InitAddresses();
         DescUtils::InitDescriptions();
+        FAQ_Parse::GetContent();
 
         if (Preferences::IsEnabled(Preferences::HIDToggle))
             settings.UseGameHidMemory = true;
@@ -98,14 +100,11 @@ namespace CTRPluginFramework
         ToggleTouchscreenForceOn();
 
         RetrieveAddressArrays();
-
-        //autoBeamCooldown->Enable(); // why is this enabled here?
     }
 
     int main(void)
     {
-        std::string title = "An advanced utility plugin made for The Legend of Zelda: Tri Force Heroes packed with QoL features, solo and online-compatible cheats, and customizable gameplay options.\n\nForked from the original CTRPluginFramework\nrepository.";
-        PluginMenu *menu = new PluginMenu("Tricord", 0, 5, 0, title); // TODO: change to actual tags
+        PluginMenu *menu = new PluginMenu();
 
         InitSequence(FwkSettings::Get());
 

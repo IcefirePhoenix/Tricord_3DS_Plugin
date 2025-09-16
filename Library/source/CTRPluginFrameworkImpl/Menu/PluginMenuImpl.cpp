@@ -7,6 +7,7 @@
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
 #include "CTRPluginFrameworkImpl/System.hpp"
 #include "CTRPluginFrameworkImpl/System/Screenshot.hpp"
+#include "BottomBG_bin.h"
 
 #include <string>
 #include <vector>
@@ -14,30 +15,31 @@
 
 namespace CTRPluginFramework
 {
+    bool openSearch, signalQuit;
+
     PluginMenuImpl  *PluginMenuImpl::_runningInstance = nullptr;
     Mutex           PluginMenuImpl::_trashBinMutex;
 
     PluginMenuImpl::PluginMenuImpl(std::string &name, std::string &about, u32 menuType) :
-
         OnFirstOpening(nullptr),
         OnOpening(nullptr),
         OnClosing(nullptr),
         _actionReplay{ new PluginMenuActionReplay() },
-        _home(new PluginMenuHome(name, (menuType == 1))),
+        _home(new PluginMenuHome(name)),
         _search(new PluginMenuSearch(_hexEditor)),
-        _tools(new PluginMenuTools(about, _hexEditor)),
+        _settings(new PluginMenuSettings()),
+        _tools(new PluginMenuTools(_hexEditor)),
         _executeLoop(new PluginMenuExecuteLoop()),
         _guide(new GuideReader()),
+        _discordMenu(new DiscordInfo()),
         _hexEditor(0x00100000),
-        _forceOpen(false),
-        _hexEditorState(true)
+        _forceOpen(false)
     {
         SyncOnFrame = false;
         _isOpen = false;
         _aboutToOpen = false;
         _wasOpened = false;
         _pluginRun = true;
-        _showMsg = true;
     }
 
     PluginMenuImpl::~PluginMenuImpl(void)
@@ -48,6 +50,13 @@ namespace CTRPluginFramework
         delete _tools;
         delete _executeLoop;
         delete _guide;
+        delete _discordMenu;
+        delete _settings;
+    }
+
+    void    PluginMenuImpl::SignalQuit(void)
+    {
+        signalQuit = true;
     }
 
     void    PluginMenuImpl::Append(MenuItem *item) const
@@ -148,38 +157,27 @@ namespace CTRPluginFramework
         PluginMenuActionReplay  &ar = *_actionReplay;
         PluginMenuHome          &home = *_home;
         PluginMenuTools         &tools = *_tools;
+        PluginMenuSettings      &settings = *_settings;
         PluginMenuSearch        &search = *_search;
         GuideReader             &guide = *_guide;
-        //PluginMenuExecuteLoop   &executer = *_executeLoop;
+        DiscordInfo             &discordMenu = *_discordMenu;
 
         Time                    delta;
         std::vector<Event>      eventList;
 
         // Set _runningInstance to this menu
         _runningInstance = this;
+        FwkSettings::SetBottomScreenBackground(BottomBG_bin);
 
-        // Load backgrounds
-        Preferences::Initialize();
-
-        // Load settings
         Preferences::LoadSettings();
-
-        // Refresh hid
-        Controller::Update();
-
-        // If Start is pressed, don't auto enable the cheats
-        if (Controller::IsKeyPressed(Key::Start) || Controller::IsKeyDown(Key::Start))
-            Preferences::Clear(Preferences::AutoEnableSavedCheats);
-
         _tools->UpdateSettings();
 
-        // Load saved MenuEntry preferences
+
         Preferences::LoadEntryPreferences(Preferences::IsEnabled(Preferences::AutoEnableSavedCheats), Preferences::IsEnabled(Preferences::AutoEnableFavorites));
 
         // Update PluginMenuHome variables
         home.Init();
 
-        // Restore Search state
         search.RestoreSearchState();
 
         if (FwkSettings::Header->isDefaultPlugin)
@@ -206,11 +204,11 @@ namespace CTRPluginFramework
         ar.Initialize();
         PluginMenuActionReplay::BackupCodes(false);
 
-        if (_showMsg)
-        {
-            OSD::Notify("Plugin ready!", Color::White, Color());
-            OSD::Notify("Tricord can now be started.", Color::White, Color());
-        }
+        OSD::Notify("Plugin ready!", Color::White, Color());
+        OSD::Notify("Tricord can now be started.", Color::White, Color());
+
+        // Refresh hid
+        Controller::Update();
 
         // Main loop
         while (_pluginRun)
@@ -289,21 +287,25 @@ namespace CTRPluginFramework
                         home.UpdateNote();
                     shouldClose = home(eventList, mode, delta);
                 }
-                /*
                 else if (mode == 1)
-                { // Mapper
-
+                { /* Discord */
+                    if (discordMenu(eventList, delta))
+                        mode = 0;
                 }
-                */
                 else if (mode == 2)
                 { /* Guide */
                     if (guide(eventList, delta))
                         mode = 0;
                 }
                 else if (mode == 3)
+                { /* Settings */
+                    if (settings(eventList, delta))
+                        mode = 0;
+                }
+                else if (openSearch)
                 { /* Search */
                     if (search(eventList, delta))
-                        mode = 0;
+                        openSearch = false;
                     goto __skip;
                 }
                 else if (mode == 4)
@@ -337,7 +339,7 @@ namespace CTRPluginFramework
                 delta = clock.Restart();
 
                 // Close menu
-                if (shouldClose || SystemImpl::WantsToSleep())
+                if (shouldClose || SystemImpl::WantsToSleep() || signalQuit)
                 {
                     if (shouldClose)
                         SoundEngine::PlayMenuSound(SoundEngine::Event::CANCEL);
@@ -346,9 +348,7 @@ namespace CTRPluginFramework
                     openManager.Clear();
                     shouldClose = false;
 
-                    // Save settings
                     Preferences::WriteSettings();
-
                     SystemImpl::ReadyToSleep();
                 }
             }
@@ -356,11 +356,17 @@ namespace CTRPluginFramework
             {
                 if (SyncOnFrame && !ProcessImpl::IsPaused)
                     LightEvent_Wait(&OSDImpl::OnNewFrameEvent);
-                //Sleep(Milliseconds(16));
 
                 if (SystemImpl::Status())
                 {
                     _runningInstance = nullptr;
+                    return 0;
+                }
+
+                if (signalQuit)
+                {
+                    ForceExit();
+                    svcExitThread();
                     return 0;
                 }
 
@@ -391,13 +397,7 @@ namespace CTRPluginFramework
                 for (size_t i = 0; i < _callbacks.size(); i++)
                     if (_callbacks[i]) _callbacks[i]();
 
-                // Execute activated cheats
                 PluginMenuExecuteLoop::ExecuteBuiltin();
-
-                //static KeySequenceImpl konamicode({ DPadUp, DPadUp, DPadDown, DPadDown, DPadLeft, DPadRight, DPadLeft, DPadRight, B, A, B, A });
-
-                //if (konamicode())
-                //    OSDImpl::MessColors = !OSDImpl::MessColors;
 
                 if (_wasOpened)
                     _wasOpened = false;
@@ -746,6 +746,14 @@ namespace CTRPluginFramework
             _runningInstance->_search->GetRegionsList(list);
     }
 
+    PluginMenuSearch*    PluginMenuImpl::GetSearchInstance(void)
+    {
+        if (_runningInstance != nullptr)
+            return _runningInstance->_search;
+        else
+            return nullptr;
+    }
+
     void    PluginMenuImpl::ForceExit(void)
     {
         if (_runningInstance != nullptr)
@@ -778,25 +786,14 @@ namespace CTRPluginFramework
         }
     }
 
+    void    PluginMenuImpl::OpenSearch(void)
+    {
+        openSearch = true;
+    }
+
     PluginMenuImpl* PluginMenuImpl::GetRunningInstance()
     {
         return _runningInstance;
-    }
-
-    void    PluginMenuImpl::SetHexEditorState(bool isEnabled)
-    {
-        _hexEditorState = isEnabled;
-        _tools->TriggerHexEditor(isEnabled);
-    }
-
-    bool    PluginMenuImpl::GetHexEditorState() const
-    {
-        return _hexEditorState;
-    }
-
-    void    PluginMenuImpl::ShowWelcomeMessage(bool showMsg)
-    {
-        _showMsg = showMsg;
     }
 
     MenuFolderImpl* PluginMenuImpl::GetRoot() const
@@ -819,8 +816,8 @@ namespace CTRPluginFramework
         return (_wasOpened);
     }
 
-    void PluginMenuImpl::AddPluginVersion(u32 version) const
+    void PluginMenuImpl::AddPluginVersion(void) const
     {
-        _home->AddPluginVersion(version);
+        _home->AddPluginVersion();
     }
 }

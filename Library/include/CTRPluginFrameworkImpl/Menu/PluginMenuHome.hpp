@@ -17,7 +17,7 @@ namespace CTRPluginFramework
     {
         using EventList = std::vector<Event>;
     public:
-        PluginMenuHome(std::string &name, bool ShowNoteBottom);
+        PluginMenuHome(std::string &name);
         ~PluginMenuHome(){}
 
         // Return true if the Close Button is pressed, else false
@@ -28,12 +28,10 @@ namespace CTRPluginFramework
         void UnStar(MenuItem* item);
         void Init(void);
 
-        void AddPluginVersion(u32 version);
+        void AddPluginVersion(void);
         void Close(MenuFolderImpl *folder);
 
         void UpdateNote(void);
-
-        bool ShowNoteBottom;
 
     private:
         friend class PluginMenuImpl;
@@ -56,7 +54,7 @@ namespace CTRPluginFramework
 
         void _actionReplayBtn_OnClick(void); // 4
         void _faqBtn_OnClick(void); // 2
-        void _searchBtn_OnClick(void); // 3
+        void _settingsBtn_OnClick(void); // 3
         void _toolsBtn_OnClick(void);  // 5
         void _InfoBtn_OnClick(void); // note
 
@@ -77,7 +75,6 @@ namespace CTRPluginFramework
         float _scrollOffset;
         Clock _scrollClock;
         bool _reverseFlow;
-        bool _showVersion;
         bool _closedRootFolder;
         int _versionPosX;
         std::string _versionStr;
@@ -87,11 +84,11 @@ namespace CTRPluginFramework
         // Mode buttons
         Button _showStarredBtn;
         Button _freecamBtn;
-        Button _gameModeBtn;
-        Button _faqBtn;
-        Button _searchBtn;
         Button _arBtn;
+        Button _gameModeBtn;
+        Button _settingsBtn;
         Button _toolsBtn;
+        Button _faqBtn;
 
         // Toggle buttons
         Button _discordBtn;

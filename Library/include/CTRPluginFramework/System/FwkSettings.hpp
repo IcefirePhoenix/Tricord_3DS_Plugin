@@ -27,7 +27,7 @@ namespace CTRPluginFramework
     struct FwkSettings
     {
         // Plugin init options
-        u32 ThreadPriority; ///< Priority for the main thread of the plugin must be within 0x3E - 0x18 | Default: 0x30
+        u32 ThreadPriority; ///< Priority for the main thread of the plugin must be within 0x3E - 0x18 (highest priority recommended for Homebrew apps) | Default: 0x30
         Time WaitTimeToBoot; ///< Time to wait for the plugin to starts (from when the game will starts) | Default: 5 seconds
         bool CachedDrawMode; ///< Set to true if your plugin heavily uses OSD to draw to the screen to improve performance (only change it during plugin init). | Default: false
         bool CloseMenuWithB;    ///< Set to true to allow closing the plugin menu if B is pressed in the plugin main menu. | Default: false
@@ -120,7 +120,7 @@ namespace CTRPluginFramework
          * \param bmpData Pointer to the BMP file in memory
          * \return 0 if success
          */
-        static Result SetBottomScreenBackground(void *bmpData);
+        static Result SetBottomScreenBackground(const void *bmpData);
     };
 }
 

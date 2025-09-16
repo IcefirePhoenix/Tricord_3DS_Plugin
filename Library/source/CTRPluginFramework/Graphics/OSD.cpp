@@ -44,11 +44,11 @@ namespace CTRPluginFramework
         return (newPosY);
     }
 
-    u32 Screen::DrawSysfont(const std::string &str, u32 posX, u32 posY, const Color &foreground) const
+    u32 Screen::DrawGameFont(const std::string &str, u32 posX, u32 posY, const Color &foreground) const
     {
         Renderer::SetTarget(IsTop ? TOP : BOTTOM);
         int newPosY = posY;
-        Renderer::DrawSysString(str.c_str(), posX, newPosY, 400, foreground);
+        Renderer::DrawGameFontString(str.c_str(), posX, newPosY, 400, foreground);
         return (posY);
     }
 
@@ -123,9 +123,9 @@ namespace CTRPluginFramework
         OSDImpl::Unlock();
     }
 
-    float   OSD::GetTextWidth(bool sysfont, const std::string &text)
+    float   OSD::GetTextWidth(bool GameFont, const std::string &text)
     {
-        if (sysfont)
+        if (GameFont)
             return Renderer::GetTextSize(text.c_str());
         return Renderer::LinuxFontSize(text.c_str());
     }

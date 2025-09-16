@@ -7,15 +7,13 @@
 #include "CTRPluginFrameworkImpl/Graphics/BMPImage.hpp"
 #include <vector>
 
+// This must be changed every time CTRPFData.bin's structure is updated!
+// Ref: devkitPro/libctru/include/3ds/os.h
+#define SETTINGS_VERSION SYSTEM_VERSION(1, 1, 1)
 namespace CTRPluginFramework
 {
     class Preferences
     {
-        #define SETTINGS_VERSION1 SYSTEM_VERSION(1, 0, 0)
-        #define SETTINGS_VERSION11 SYSTEM_VERSION(1, 1, 0)
-        #define SETTINGS_VERSION12 SYSTEM_VERSION(1, 2, 0)
-
-        #define SETTINGS_VERSION SETTINGS_VERSION11
     public:
         // Preferences::Flags = u64 = 64 bits available to use
         enum
@@ -25,13 +23,12 @@ namespace CTRPluginFramework
             AutoSaveCheats      = 1 << 2,
             DisableOSDNotifs    = 1 << 3,
             AutoEnableSavedCheats      = 1 << 4,
-            AutoEnableFavorites   = 1 << 5,
+            AutoEnableFavorites = 1 << 5,
             ScreenshotEnabled   = 1 << 6,
 
             // Misc
             DisplayLoadedFiles  = 1 << 16,
             WriteLoadedFiles    = 1 << 17,
-            DrawTouchCursor     = 1 << 18,
             DrawTouchPosition   = 1 << 19,
             ShowTopFps          = 1 << 20,
             ShowBottomFps       = 1 << 21,
@@ -58,53 +55,11 @@ namespace CTRPluginFramework
             std::vector<u32>   hotkeys;
         };
 
-        struct LCDBacklight
-        {
-            u16     isEnabled{0};
-            u16     value{0};
-        };
-
         struct WarpDestination
         {
             u8 levelID;
             u8 stageID;
         };
-
-        /*struct HeaderV1
-{
-    u8      sig[8];
-    u32     version;
-    u32     pluginVersion;
-    u64     size;
-    u64     flags;
-    u32     hotkeys;
-    u32     freeCheatsCount;
-    u64     freeCheatsOffset;
-    u32     enabledCheatsCount;
-    u64     enabledCheatsOffset;
-    u32     favoritesCount;
-    u64     favoritesOffset;
-    u32     hotkeysCount;
-    u64     hotkeysOffset;
-} PACKED; */
-
-        struct HeaderV11
-        {
-            u8 sig[8];
-            u32 version;
-            u32 pluginVersion;
-            u64 size;
-            u64 flags;
-            u32 hotkeys;
-            u64 lcdbacklights;
-            u32 enabledCheatsCount;
-            u64 enabledCheatsOffset;
-            u32 favoritesCount;
-            u64 favoritesOffset;
-            u32 hotkeysCount;
-            u64 hotkeysOffset;
-            u32 reserved[100];
-        } PACKED;
 
         struct TricordHeaderV1
         {
@@ -114,7 +69,6 @@ namespace CTRPluginFramework
             u64 size;
             u64 flags;
             u32 hotkeys;
-            u64 lcdbacklights;
             u32 enabledCheatsCount;
             u64 enabledCheatsOffset;
             u32 favoritesCount;
@@ -157,12 +111,10 @@ namespace CTRPluginFramework
         }
 
         static BMPImage     *bottomBackgroundImage;
-        static BMPImage     *bottomBoxBGImage;
 
         static u32          MenuHotkeys;
         static u32          CustomNameColors[3];
         static u64          Flags;
-        static LCDBacklight Backlights[2];
         static FwkSettings  Settings;
 
         static std::string  CheatsFile;
@@ -175,18 +127,12 @@ namespace CTRPluginFramework
         static void         LoadSettings(void);
         static void         LoadEntryPreferences(bool autoEnableSavedCheats, bool autoEnableFavorites);
         static void         LoadBackgrounds(void);
-        static void         UnloadBackgrounds(void);
         static void         WriteSettings(void);
-        static void         ApplyBacklight(void);
 
     private:
-        static bool         _cheatsAlreadyLoaded;
         static bool         _favoritesAlreadyLoaded;
-        static bool         _bmpCanBeLoaded;
 
         friend class PluginMenuImpl;
-
-        static void     Initialize(void);
     };
 }
 

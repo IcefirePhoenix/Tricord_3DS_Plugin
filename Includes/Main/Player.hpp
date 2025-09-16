@@ -19,22 +19,12 @@ namespace CTRPluginFramework
     extern MenuEntry* sizeEditAuto;
     extern MenuEntry* rotationOffsetManager;
 
-    enum ColorStatus
-    {
-        greenEnabled = BIT(0), // 0001
-        blueEnabled = BIT(1),  // 0010
-        redEnabled = BIT(2)    // 0100
-    };
-
     enum EditType
     {
         NORMAL,
         PLAYER_SIZE
     };
 
-    void openToggleMenu(std::string entryTitle, std::string desc, EditType type, u8* playerStatus = nullptr);
-    void togglePlayerStatus(u8& playerStatus, ColorStatus color);
-    void initEdit(EditType type, int playerID, ColorStatus color, u8& playerStatus);
     bool checkPlayerStatus(u8 &playerStatus, int playerID);
     float setPlayerSize(void);
 

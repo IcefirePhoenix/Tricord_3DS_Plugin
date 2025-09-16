@@ -3,7 +3,7 @@
 
 namespace CTRPluginFramework
 {
-    Button photoBtn(Button::Icon | Button::Toggle, IntRect(120, 50, 32, 32), Icon::DrawCamera);
+    Button photoBtn(Button::Icon | Button::Toggle, IntRect(120, 47, 20, 20), Icon::DrawTFHCamera);
 
     MenuEntry *autoWriteCameraStatus;
     MenuEntry *autoDisableCamShutter;
@@ -22,12 +22,11 @@ namespace CTRPluginFramework
 
         // init actions...
         Process::Read8(AddressList::getAddress("CheckPhotoExist"), doesPhotoExist);
-        showPhotoBtnIntroMsg(entry->WasJustActivated());
 
         // only draw the floating button during level-based gameplay...
         if (Level::isInDrablands() && !GeneralHelpers::isLoadingScreen(false))
         {
-            photoBtn.Draw();
+            OSDImpl::AddToPriorityDrawQueue(photoBtn);
 
             if (!GeneralHelpers::isPauseScreen())
                 photoBtn.Update(Touch::IsDown(), IntVector(Touch::GetPosition()));
@@ -57,16 +56,6 @@ namespace CTRPluginFramework
         {
             Process::Write8(AddressList::getAddress("DisplayTopPhoto"), clearPhotoDisplay);
             GeneralHelpers::managePlayerLock(false);
-        }
-    }
-
-    // Displays intro message
-    void showPhotoBtnIntroMsg(bool showMsg)
-    {
-        if (showMsg)
-        {
-            OSD::Notify("[DISPLAY PHOTO TOGGLE]: In the Drablands, drag the camera");
-            OSD::Notify("button on the touchscreen to change its location.");
         }
     }
 

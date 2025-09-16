@@ -2,14 +2,10 @@
 #include "CTRPluginFrameworkImpl/System/ProcessImpl.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
 #include "CTRPluginFramework/Menu/Keyboard.hpp"
-#include "CTRPluginFrameworkImpl/Graphics/KeyboardBG.hpp"
-
-
-#include <cmath>
-#include "3ds.h"
 #include "CTRPluginFramework/Utils/Utils.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuImpl.hpp"
-#include "CTRPluginFramework/Graphics/CustomIcon.hpp"
+#include <cmath>
+#include "3ds.h"
 
 namespace CTRPluginFramework
 {
@@ -383,102 +379,6 @@ namespace CTRPluginFramework
         _UpdateScroll(0, true);
     }
 
-    void    KeyboardImpl::Populate(const std::vector<CustomIcon>& input, bool resetScroll)
-    {
-        bool mustReset = (_strKeys.size() != input.size()) || resetScroll || _customKeyboard;
-
-        int count = input.size() / 4;
-
-        if (mustReset)
-            _ChangeManualKey(0, false);
-
-        mustReset = (mustReset || count < 6);
-
-        _customKeyboard = true;
-        _isIconKeyboard = true;
-
-        if (mustReset)
-            _currentPosition = 0;
-
-        std::vector<float> origPosY;
-
-        for (TouchKeyString* tks : _strKeys)
-        {
-            if (!mustReset)
-            {
-                u16 posX; float posY;
-                tks->GetPosition(posX, posY);
-                origPosY.push_back(posY);
-            }
-            delete tks;
-        }
-        _strKeys.clear();
-
-        if (input.size() % 4 != 0) count++;
-
-        int posY = (count < 6) ? (20 + (200 - ((30 * count) + 6 * (count - 1))) / 2) : 30;
-
-        if (mustReset) {
-            if (count < 6)
-            {
-                _displayScrollbar = false;
-            }
-            else if (mustReset)
-            {
-                int height = 190;
-
-
-                float lsize = 36.f * (float)count + 1;
-
-                float padding = (float)height / lsize;
-                int cursorSize = padding * height;
-                float scrollTrackSpace = lsize - height;
-                float scrollThumbSpace = height - cursorSize;
-
-                _scrollJump = scrollTrackSpace / scrollThumbSpace;
-                _scrollbarSize = height;
-
-                if (cursorSize < 5)
-                    cursorSize = 5;
-
-                _scrollPadding = padding;
-                _scrollCursorSize = cursorSize;
-                _scrollPosition = 0.f;
-                _scrollEnd = _scrollbarSize - _scrollCursorSize;
-                _displayScrollbar = true;
-            }
-        }
-
-        _scrollSize = 0;
-        _inertialVelocity = 0;
-
-        IntRect box(91, posY, 30, 30);
-
-        int i = 1;
-        int j = 0;
-
-        for (const CustomIcon& ico : input)
-        {
-            TouchKeyString* tks;
-
-            if (ico.sizeX != 30 || ico.sizeY != 30) tks = new TouchKeyString(CustomIcon(Icon::DefaultCustomIcon.pixArray, Icon::DefaultCustomIcon.sizeX, Icon::DefaultCustomIcon.sizeY, ico.isEnabled), box, true);
-            else tks = new TouchKeyString(ico, box, true);
-
-            if (!mustReset)
-                tks->SetPosition(0xFFFF, origPosY[j++]);
-
-            _strKeys.push_back(tks);
-
-            if (i == 0 && mustReset) box.leftTop.y += 36;
-            box.leftTop.x = 91 + i * 36;
-            if (i++ == 3) i = 0;
-        }
-
-        origPosY.clear();
-        _manualScrollUpdate = true;
-        _UpdateScroll(0, true);
-    }
-
     void    KeyboardImpl::Clear(void)
     {
         _customKeyboard = false;
@@ -541,7 +441,7 @@ namespace CTRPluginFramework
             while (manager.PollEvent(event))
             {
                 _ProcessEvent(event);
-                if (_userAbort)
+                if (_userAbort || Window::BottomWindow.MustClose())
                 {
                     ret = USER_ABORT;
                     goto exit;
@@ -650,14 +550,12 @@ namespace CTRPluginFramework
 
         TextBox(_title.c_str(), _text.c_str(), background).Draw();
 
-        // Renderer::DrawSysStringReturn(reinterpret_cast<const u8 *>(_text.c_str()), posX, posY, maxX, Preferences::Settings.MainTextColor, maxY);
-
         // IF error
         if (_errorMessage && !_error.empty())
         {
             if (posY < 120)
                 posY += 48;
-            Renderer::DrawSysStringReturn(reinterpret_cast<const u8 *>(_error.c_str()), posX, posY, maxX, red, maxY);
+            Renderer::DrawGameFontStringReturn(reinterpret_cast<const u8 *>(_error.c_str()), posX, posY, maxX, red, maxY);
         }
         if (_onKeyboardEvent != nullptr && _owner != nullptr) {
             Render::Interface interface = Renderer::GetInterface();
@@ -672,9 +570,9 @@ namespace CTRPluginFramework
     {
         static IntRect  background(20, 20, 280, 200);
         static IntRect  clampArea(22, 25, 270, 190);
-        KeyboardBG  BottomBox = KeyboardBG(0, 0, 320, 240, true);
 
         Renderer::SetTarget(BOTTOM);
+        Window::BottomWindow.Draw();
 
         // Draw "normal" keyboard
         if (!_customKeyboard)
@@ -689,7 +587,7 @@ namespace CTRPluginFramework
             Renderer::DrawRect(background, theme.Background);
 
             // Draw input
-            Renderer::DrawSysString(_userInput.c_str(), posX, posY, 300, theme.Input, _offset);
+            Renderer::DrawGameFontString(_userInput.c_str(), posX, posY, 300, theme.Input, _offset);
 
             // Draw cursor
             if (_showCursor && _blinkingClock.GetElapsedTime() < Seconds(0.5f))
@@ -777,8 +675,6 @@ namespace CTRPluginFramework
         }
         else
         {
-            BottomBox.Draw();
-
             size_t max = _strKeys.size();
             int offset = _isIconKeyboard ? 24 : 6;
             max = std::min(static_cast<int>(max), _currentPosition + offset);
@@ -1079,6 +975,8 @@ namespace CTRPluginFramework
         {
             _UpdateScroll(delta, false);
         }
+
+        Window::BottomWindow.Update(isTouchDown, touchPos);
     }
 
     /*

@@ -46,8 +46,6 @@ namespace CTRPluginFramework
         static Clock    fpsCounter;
 #endif
 
-        Preferences::ApplyBacklight();
-
         bool isTouchDown = Touch::IsDown();
         IntVector touchPos(Touch::GetPosition());
 
@@ -61,7 +59,7 @@ namespace CTRPluginFramework
             if (background.Contains(touchPos))
             {
                 SetTarget(BOTTOM);
-                DrawSysString("\uE058", posX, posY, 320, Color::White);
+                DrawGameFontString("\uE058", posX, posY, 320, Color::White);
             }
         }
 
@@ -188,7 +186,7 @@ namespace CTRPluginFramework
             "\uE020", "\uE021", "\uE022", "\uE023", "\uE024", "\uE025", "\uE026", "\uE027"
         };
 
-        Renderer::DrawSysString(waitLogo[step], posX, posY, 300, Color::SkyBlue);
+        Renderer::DrawGameFontString(waitLogo[step], posX, posY, 300, Color::SkyBlue);
 
         if (timer.HasTimePassed(Seconds(0.125f)))
         {

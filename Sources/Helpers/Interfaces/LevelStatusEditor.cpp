@@ -19,13 +19,13 @@ namespace CTRPluginFramework
     LevelStatusEditor::LevelStatusEditor(const std::string &message, StringVector levelNames, int world, int playMode) :
         _message(message), _levelNames(levelNames), _world(world), _playMode(playMode)
     {
-        int posY = 100;
+        int posY = 62;
         for (int rowNum = 0; rowNum < 4; rowNum++)
         {
-            int posX = 180;
+            int posX = 172;
             for (int columnNum = 0; columnNum < 4; columnNum++)
             {
-                Button newButton(Button::Icon | Button::Toggle, IntRect(posX, posY, 20, 20), Icon::DrawCheckBox);
+                Button newButton(Button::Icon | Button::Toggle, IntRect(posX, posY, 20, 20), Icon::DrawTriforce);
                 _checkboxes.push_back(newButton);
 
                 posX += 30;
@@ -158,7 +158,7 @@ namespace CTRPluginFramework
         // regardless of edits above, update the *general* completion board (solo and multi progress combined via AND)
         Process::Read64(getBitstringAddress(bitstringID, 0), finalSoloProgress);
         Process::Read64(getBitstringAddress(bitstringID, 1), finalMultiProgress);
-        Process::Write64(getBitstringAddress(bitstringID, _playMode), finalSoloProgress & finalMultiProgress);
+        Process::Write64(getBitstringAddress(bitstringID, 2), finalSoloProgress & finalMultiProgress);
     }
 
     int LevelStatusEditor::getBit(int rowNum)
@@ -172,7 +172,7 @@ namespace CTRPluginFramework
         Window::TopWindow.Draw("Level Completion Editor");
 
         int posY = 61;
-        Renderer::DrawSysStringReturn((const u8*)_message.c_str(), 40, posY, 335, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontStringReturn((const u8*)_message.c_str(), 40, posY, 335, Preferences::Settings.MainTextColor);
     }
 
     void LevelStatusEditor::_DrawBottom(void)
@@ -185,19 +185,19 @@ namespace CTRPluginFramework
             (*it).Draw();
 
         // draw labels
-        /* Renderer::DrawSysString auto-increments posY param by 16 -> this is done to keep menu entries spaced correctly
+        /* Renderer::DrawGameFontString auto-increments posY param -> this is done to keep menu entries spaced correctly
         However, we want posY to remain unchanged... lazy workaround below -> no need to rework the framework library this way */
 
         int yPositions[4];
-        std::fill(yPositions, yPositions + 4, 80);
+        std::fill(yPositions, yPositions + 4, 42);
 
-        Renderer::DrawSysString(labels[0].c_str(), 178, yPositions[0], 290, Preferences::Settings.MainTextColor);
-        Renderer::DrawSysString(labels[1].c_str(), 208, yPositions[1], 290, Preferences::Settings.MainTextColor);
-        Renderer::DrawSysString(labels[2].c_str(), 238, yPositions[2], 290, Preferences::Settings.MainTextColor);
-        Renderer::DrawSysString(labels[3].c_str(), 268, yPositions[3], 290, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontString(labels[0].c_str(), 175, yPositions[0], 290, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontString(labels[1].c_str(), 205, yPositions[1], 290, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontString(labels[2].c_str(), 235, yPositions[2], 290, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontString(labels[3].c_str(), 265, yPositions[3], 290, Preferences::Settings.MainTextColor);
 
-        for (int i = 0, lvlY = 100; i < 4; i++, lvlY += 15)
-            Renderer::DrawSysString(_levelNames[i].c_str(), 38, lvlY, 290, Preferences::Settings.MainTextColor);
+        for (int i = 0, lvlY = 68; i < 4; i++, lvlY += 16)
+            Renderer::DrawGameFontString(_levelNames[i].c_str(), 38, lvlY, 290, Preferences::Settings.MainTextColor);
     }
 
     void LevelStatusEditor::_Update(void)

@@ -4,10 +4,12 @@
 #include "CTRPluginFramework.hpp"
 #include "CTRPluginFrameworkImpl.hpp"
 #include "CTRPluginFrameworkImpl/Menu/GuideReader.hpp"
+#include "CTRPluginFrameworkImpl/Menu/DiscordInfo.hpp"
 
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuHome.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuSearch.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuTools.hpp"
+#include "CTRPluginFrameworkImpl/Menu/PluginMenuSettings.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuExecuteLoop.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuActionReplay.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
@@ -52,25 +54,24 @@ namespace CTRPluginFramework
         static void ExtractHotkeys(HotkeysVector &hotkeys, MenuFolderImpl *folder, u32 &size);
         static void WriteHotkeysToFile(Preferences::Header &header, File &file);
         static void GetRegionsList(std::vector<Region> &list);
+        static PluginMenuSearch* GetSearchInstance(void);
 
         // Used to forcefully exit a menu
         static void ForceExit(void);
         static void ForceOpen(void);
+        static void SignalQuit(void);
 
         static void UnStar(MenuItem *item);
         static void Refresh(void);
+        static void OpenSearch(void);
 
         static PluginMenuImpl* GetRunningInstance();
-
-        void    SetHexEditorState(bool isEnabled);
-        bool    GetHexEditorState() const;
-        void    ShowWelcomeMessage(bool showMsg);
 
         MenuFolderImpl *GetRoot(void) const;
         MenuFolderImpl *GetHidden(void) const;
         bool    IsOpen(void) const;
         bool    WasOpened(void) const;
-        void    AddPluginVersion(u32 version) const;
+        void    AddPluginVersion(void) const;
 
         FuncPointer			OnFirstOpening;
 		OnOpeningCallback	OnOpening;
@@ -86,19 +87,19 @@ namespace CTRPluginFramework
         bool                        _aboutToOpen;
         bool                        _wasOpened;
         bool                        _pluginRun;
-        bool                        _showMsg;
 
         PluginMenuActionReplay      *_actionReplay;
         PluginMenuHome              *_home;
         PluginMenuSearch            *_search;
+        PluginMenuSettings          *_settings;
         PluginMenuTools             *_tools;
         PluginMenuExecuteLoop       *_executeLoop;
         GuideReader                 *_guide;
+        DiscordInfo                 *_discordMenu;
         HexEditor                   _hexEditor;
         std::vector<CallbackPointer>     _callbacks;
         std::vector<CallbackPointer>     _callbacksTrashBin;
         bool                        _forceOpen;
-        bool                        _hexEditorState;
     };
 }
 

@@ -58,6 +58,8 @@ namespace CTRPluginFramework
         bool    drawFooter;
     private:
         friend class PluginMenuTools;
+        friend class PluginMenuSettings;
+
         MenuFolderImpl  *_root;
         MenuFolderImpl  *_folder;
         MenuItem        *_lastSelectedItem;

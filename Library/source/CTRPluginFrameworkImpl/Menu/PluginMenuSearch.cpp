@@ -17,19 +17,18 @@ namespace CTRPluginFramework
         _hexInput(true),
         _step(0),
         _searchMenu(_currentSearch, hexEditor, _inEditor, _hexInput),
-        // _closeBtn(*this, nullptr, IntRect(275, 24, 20, 20), Icon::DrawClose),
-        _memoryRegions(155, 45, 130, 15),
-        _searchSize(155, 85, 130, 15),
-        _searchType(155, 105, 130, 15),
-        _compareType(155, 125, 130, 15),
-        _startRangeTextBox(90, 65, 66, 15),
-        _endRangeTextBox(219, 65, 66, 15),
-        _valueTextBox(155, 145, 130, 15),
-        _searchBtn(0, "Search", IntRect(35, 195, 80, 15)),
-        _cancelBtn(0, "Cancel", IntRect(120, 195, 80, 15)),
-        _undoBtn(0, "Undo", IntRect(120, 195, 80, 15)),
-        _resetBtn(0, "Reset", IntRect(205, 195, 80, 15)),
-        _hexBtn(Button::Toggle, "Hex", IntRect(110, 145, 38, 15))
+        _memoryRegions(135, 30, 155, 20),
+        _searchSize(135, 80, 155, 20),
+        _searchType(135, 105, 155, 20),
+        _compareType(135, 130, 155, 20),
+        _startRangeTextBox(135, 55, 75, 20),
+        _endRangeTextBox(215, 55, 75, 20),
+        _valueTextBox(135, 155, 115, 20),
+        _searchBtn(0, "Search", IntRect(32, 185, 83, 20)),
+        _cancelBtn(0, "Cancel", IntRect(119, 185, 83, 20)),
+        _undoBtn(0, "Undo", IntRect(119, 185, 83, 20)),
+        _resetBtn(0, "Reset", IntRect(207, 185, 83, 20)),
+        _hexBtn(Button::Toggle, "Hex", IntRect(250, 154, 40, 22))
     {
         _currentSearch = nullptr;
 
@@ -73,6 +72,8 @@ namespace CTRPluginFramework
         _uiContainer += &_undoBtn;
         _uiContainer += &_resetBtn;
         _uiContainer += &_hexBtn;
+
+        _hexBtn.SetState(true);
     }
 
     bool    PluginMenuSearch::operator()(EventList &eventList, Time &delta)
@@ -104,10 +105,8 @@ namespace CTRPluginFramework
             }
         }
 
-        // Update
         _Update(delta);
 
-        // Do search
         if (_inSearch)
         {
             if (_cancelBtn())
@@ -115,10 +114,11 @@ namespace CTRPluginFramework
 
             bool finish = _currentSearch->ExecuteSearch();
             _inSearch = !finish;
+
             if (finish)
             {
-                //_waitForUser = true;
                 _compareType.IsEnabled = true;
+
                 // If we just finished first search
                 if (_step == 1)
                     _PopulateSearchType(false);
@@ -129,18 +129,15 @@ namespace CTRPluginFramework
 
                 _cancelBtn.Disable();
                 _resetBtn.Enable();
+
                 if (_searchHistory.size())
                     _undoBtn.Enable();
                 }
             return (false);
         }
 
-        // Render Top
         _RenderTop();
-
-        // Render Bottom
         _RenderBottom();
-
         Renderer::EndFrame();
 
         // Check buttons
@@ -155,8 +152,6 @@ namespace CTRPluginFramework
 			_hexInput = !_hexInput;
 			_valueTextBox.UseHexadecimal(_hexInput);
 		}
-
-        // Check ComboBox
 
         // Changed memory region
         if (_memoryRegions())
@@ -326,25 +321,12 @@ namespace CTRPluginFramework
         }
     }
 
-    /*
-    ** Process Event
-    *****************/
     void    PluginMenuSearch::_ProcessEvent(Event &event)
     {
     }
 
-    /*
-    ** Render Top
-    **************/
-
     void    PluginMenuSearch::_RenderTop(void)
     {
-        //const Color    &black = Color::Black;
-        //const Color    &blank = Color::White;
-        //const Color    &dimGrey = Color::BlackGrey;
-        //static IntRect  background(30, 20, 340, 200);
-
-        // Enable renderer
         Renderer::SetTarget(TOP);
 
         if (_inSearch)
@@ -354,94 +336,46 @@ namespace CTRPluginFramework
         _searchMenu.Draw();
     }
 
-    /*
-    ** Render Bottom
-    *****************/
     void    PluginMenuSearch::_RenderBottom(void)
     {
-        //const Color    &black = Color::Black;
-        const Color    &blank = Color::White;
-        //const Color    &dimGrey = Color::BlackGrey;
-        //static IntRect  background(20, 20, 280, 200);
+        const Color &blank = Color::White;
 
-        // Enable renderer
         Renderer::SetTarget(BOTTOM);
-
         Window::BottomWindow.Draw();
 
-        int posY = 47;
-        int textPosX = 38;
+        int posY = 30;
+        int textPosX = 35;
 
-        // MemRegion
-        Renderer::DrawString((char *)"MemRegion:", textPosX, posY, blank);
-        posY = 67;
+        Renderer::DrawGameFontString((char *)"MemRegion:", textPosX, posY, 330, blank);
+        posY = 55;
 
-        // Start Range
-        Renderer::DrawString((char *)"Start:", textPosX, posY, blank);
-        posY = 67;
+        Renderer::DrawGameFontString((char *)"Range:", textPosX, posY, 330, blank);
+        posY = 80;
 
-        // End Range
-        Renderer::DrawString((char *)"Stop:", 170, posY, blank);
-        posY = 87;
+        Renderer::DrawGameFontString((char *)"Format:", textPosX, posY, 330, blank);
+        posY = 105;
 
-        // Value Type
-        Renderer::DrawString((char *)"Value Type:", textPosX, posY, blank);
-        posY = 107;
+        Renderer::DrawGameFontString((char *)"Search Type:", textPosX, posY, 330, blank);
+        posY = 130;
 
-        // Search Type
-        Renderer::DrawString((char *)"Search Type:", textPosX, posY, blank);
-        posY = 127;
+        Renderer::DrawGameFontString((char *)"Comparison:", textPosX, posY, 330, blank);
+        posY = 155;
 
-        // Scan Type
-        Renderer::DrawString((char *)"Scan Type:", textPosX, posY, blank);
-        posY = 147;
+        Renderer::DrawGameFontString((char *)"Value:", textPosX, posY, 330, blank);
 
-        // Value
-        Renderer::DrawString((char *)"Value:", textPosX, posY, blank);
-        posY = 187;
-
-        // Draw UIControls
         _uiContainer.Draw();
     }
 
-    /*
-    ** Update
-    ************/
     void    PluginMenuSearch::_Update(Time delta)
     {
-        /*
-        ** Buttons
-        *************/
+
         bool        isTouched = Touch::IsDown();
         IntVector   touchPos(Touch::GetPosition());
 
-        // Update Window
         Window::BottomWindow.Update(isTouched, touchPos);
-
-        // Update UIControls
         _uiContainer.Update(isTouched, touchPos);
-
-        /*
-        // Update ComboBoxes
-        _memoryRegions.Update(isTouched, touchPos);
-        _searchSize.Update(isTouched, touchPos);
-        _searchType.Update(isTouched, touchPos);
-        _compareType.Update(isTouched, touchPos);
-
-        // Update NumericTextBoxes
-        _valueTextBox.Update(isTouched, touchPos);
-        _startRangeTextBox.Update(isTouched, touchPos);
-        _endRangeTextBox.Update(isTouched, touchPos);
-
-        // Update buttons
-        //_closeBtn.Update(isTouched, touchPos);
-        _searchBtn.Update(isTouched, touchPos);
-        _cancelBtn.Update(isTouched, touchPos);
-        _undoBtn.Update(isTouched, touchPos);
-        _resetBtn.Update(isTouched, touchPos);
-		_hexBtn.Update(isTouched, touchPos);
-        */
     }
+
     static void ClearSearchFolder(void)
     {
         // Delete every file in Search
@@ -457,9 +391,6 @@ namespace CTRPluginFramework
         }
     }
 
-    /*
-    ** Search button On_Click
-    ************/
     void    PluginMenuSearch::_searchBtn_OnClick(void)
     {
         // If it's not the first search, add it to the history
@@ -474,8 +405,6 @@ namespace CTRPluginFramework
 
             _searchHistory.pop_front();
             delete first;
-
-            // TODO : search-> = nullptr;
         }
 
         if (_memoryRegions.SelectedItem == -1 || _memoryRegions.SelectedItem > static_cast<int>(_regionsList.size()))
@@ -497,8 +426,6 @@ namespace CTRPluginFramework
             parameters.previous = _searchHistory.front();
         }
 
-
-        // Size flags
         switch (_searchSize.SelectedItem)
         {
             case 0: parameters.flags |= (u32)SearchFlags::U8;  break;
@@ -510,13 +437,9 @@ namespace CTRPluginFramework
             default: break;
         }
 
-        // Set Search Flags
         parameters.flags |= _searchType.SelectedItem == 0 ? 0 : (u32)SearchFlags::Unknown;
-
-        // Set Compare Flags
         parameters.flags |= (u32)SearchFlags::Equal << _compareType.SelectedItem;
 
-        // Set CheckValue
         parameters.value32.U32 = _valueTextBox.Bits32;
         //parameters.value64.U64 = _valueTextBox.Bits64;
 
@@ -536,11 +459,7 @@ namespace CTRPluginFramework
             parameters.ranges.push_back(range);
         }
 
-        // Create Search item
-        //if (_searchSize.SelectedItem == 3 || _searchSize.SelectedItem == 5)
-        //    _currentSearch = nullptr;
-       // else
-            _currentSearch = new Search32(parameters);
+        _currentSearch = new Search32(parameters);
 
         // Check for error
         if (_currentSearch->Error.pool)
@@ -559,31 +478,26 @@ namespace CTRPluginFramework
             return;
         }
 
-        // Lock memory region
         _memoryRegions.IsEnabled = false;
         _startRangeTextBox.IsEnabled = false;
         _endRangeTextBox.IsEnabled = false;
-        // Lock search size
         _searchSize.IsEnabled = false;
 
-        // Enable Cancel button
         _cancelBtn.Enable();
-        // Disable Undo button
         _undoBtn.Disable();
 
         _inSearch = true;
-
         _step++;
 
         _progressTask.Start(this);
     }
 
-    void    PluginMenuSearch::_cancelBtn_OnClick(void)
+    void PluginMenuSearch::_cancelBtn_OnClick(void)
     {
-            _currentSearch->Cancel();
+        _currentSearch->Cancel();
     }
 
-    void    PluginMenuSearch::_resetBtn_OnClick(void)
+    void PluginMenuSearch::_resetBtn_OnClick(void)
     {
         // Clear history
         if (_searchHistory.size() > 0)
@@ -596,33 +510,19 @@ namespace CTRPluginFramework
         if (_currentSearch != nullptr)
             delete _currentSearch;
 
-        // Reset _currentSearch
         _currentSearch = nullptr;
 
-        // Update memory regions
         _ListRegion();
 
-        // Unlock memory regions
         _memoryRegions.IsEnabled = true;
-
-        // Set all memory search by default
-        //_startRangeTextBox.SetValue((u32)(0x0));
-        //_endRangeTextBox.SetValue((u32)(0xFFFFFFF0));
-        //_startRangeTextBox.IsEnabled = false;
-        //_endRangeTextBox.IsEnabled = false;
-
-
-        // Unlock search size
         _searchSize.IsEnabled = true;
 
-        // Reset step
         _step = 0;
 
         _resetBtn.Disable();
         _undoBtn.Disable();
         _searchMenu.Update();
 
-        // Reset search type available
         _PopulateSearchType(true);
 
         // If Unknown search is selected
@@ -635,7 +535,7 @@ namespace CTRPluginFramework
         ClearSearchFolder();
     }
 
-    void    PluginMenuSearch::_undoBtn_OnClick(void)
+    void PluginMenuSearch::_undoBtn_OnClick(void)
     {
         // Reset _currentSearch
         if (_currentSearch != nullptr)
@@ -701,7 +601,6 @@ namespace CTRPluginFramework
             Renderer::DrawRect(progBarFill, limegreen);
             posY += 20;
 
-
             // Draw Result count
             sprintf(buf, "Hit(s): %u", static_cast<unsigned int>(currentSearch->ResultsCount));
             Renderer::DrawString(buf, 131, posY, textcolor);
@@ -718,9 +617,9 @@ namespace CTRPluginFramework
             // Draw finish screen
             Renderer::DrawRect2(background2, black, dimGrey);
 
-            int     posY = 90;
+            int posY = 90;
 
-            Renderer::DrawSysString("Done", 173, posY, 300, skyblue);
+            Renderer::DrawGameFontString("Done", 173, posY, 300, skyblue);
             posY += 10;
 
             // Progressbar
@@ -737,7 +636,7 @@ namespace CTRPluginFramework
             Renderer::DrawString((char *)res.c_str(), 131, posY, blank);
             Renderer::DrawString((char *)res2.c_str(), 131, posY, blank);
             posY -= 10;
-            Renderer::DrawSysString("\uE000", 255, posY, 300, skyblue);
+            Renderer::DrawGameFontString("\uE000", 255, posY, 300, skyblue);
 
             // Render bottom screen
             _this->_RenderBottom();

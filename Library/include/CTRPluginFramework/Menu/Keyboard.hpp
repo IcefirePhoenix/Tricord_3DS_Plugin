@@ -1,7 +1,6 @@
 #ifndef CTRPLUGINFRAMEWORK_KEYBOARD_HPP
 #define CTRPLUGINFRAMEWORK_KEYBOARD_HPP
 
-#include "CTRPluginFramework/Graphics/CustomIcon.hpp"
 #include "CTRPluginFramework/Graphics/Render.hpp"
 #include "CTRPluginFramework/System/Controller.hpp"
 #include "CTRPluginFramework/Sound.hpp"
@@ -131,13 +130,6 @@ namespace CTRPluginFramework
          * \param resetScroll  Set to true to reset the scroll position if the list is the same size
          */
         void    Populate(const std::vector<std::string> &input, bool resetScroll = false);
-
-        /**
-         * \brief Populate a keyboard with the CustomIcons contained in an std::vector
-         * \param input A std::vector that contains a list of CustomIcons (icon size must be 30x30 pixels, otherwise a red cross will be displayed)
-         * \param resetScroll  Set to true to reset the scroll position if the list is the same size
-         */
-        void    Populate(const std::vector<CustomIcon>& input, bool resetScroll = false);
 
         /**
          * \brief Open a keyboard which is populated with strings

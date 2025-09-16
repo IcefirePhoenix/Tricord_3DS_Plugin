@@ -7,11 +7,6 @@
 
 namespace CTRPluginFramework
 {
-    std::string     ResetColor(void)
-    {
-        return ("\x18");
-    }
-
     std::string     ToggleDrawMode(u32 flags)
     {
         char code[4];
@@ -32,44 +27,6 @@ namespace CTRPluginFramework
             code[0] = '\x11';
             *(u16*)&code[1] = 0x8000 | (px & 0x1FF);
             code[3] = '\0';
-        }
-        return (code);
-    }
-
-    std::string     SetShake(bool horizontalDirection, bool verticalDirection, u8 amount) {
-        char code[4];
-        if (amount >= 63)
-        {
-            code[0] = '\0';
-        }
-        else
-        {
-            code[0] = '\x11';
-            *(u16*)&code[1] = 0x2100 | (horizontalDirection ? 0x80 : 0) | (verticalDirection ? 0x40 : 0) | ((amount + 1) & 0x3F);
-            code[3] = '\0';
-        }
-        return (code);
-    }
-
-    std::string     SetRandomText(int randomSetID) {
-        char code[4];
-        if (randomSetID < 0) {
-            code[0] = '\x11';
-            *(u16*)&code[1] = 0x2280;
-            code[3] = '\0';
-        }
-        else
-        {
-            if (randomSetID >= 63)
-            {
-                code[0] = '\0';
-            }
-            else
-            {
-                code[0] = '\x11';
-                *(u16*)&code[1] = 0x2200 | ((randomSetID + 1) & 0x3F);
-                code[3] = '\0';
-            }
         }
         return (code);
     }
@@ -154,12 +111,7 @@ namespace CTRPluginFramework
         return RightAlignImpl(str, leftBorder, rightBorder, 0);
     }
 
-    std::string     HorizontalSeparator()
-    {
-        return "\n" << ToggleDrawMode(Render::FontDrawMode::STRIKETHROUGH) << " " << RightAlign(" ", 35, 366) << ToggleDrawMode(Render::FontDrawMode::STRIKETHROUGH) << "\n";
-    }
-
-    std::string operator<<(const std::string &left, const char* right)
+    std::string operator <<(const std::string &left, const char* right)
     {
         return (left + right);
     }
@@ -168,28 +120,4 @@ namespace CTRPluginFramework
     {
         return (left + right);
     }
-
-    /*std::string operator <<(const std::string &left, const Color &color)
-    {
-        char  strColor[5] = { 0 };
-
-        strColor[0] = 0x1B;
-        strColor[1] = std::max((u8)1, color.r);
-        strColor[2] = std::max((u8)1, color.g);
-        strColor[3] = std::max((u8)1, color.b);
-
-        return (left + strColor);
-    }
-
-    std::string operator <<(const Color &color, const std::string &right)
-    {
-        char  strColor[5] = { 0 };
-
-        strColor[0] = 0x1B;
-        strColor[1] = std::max((u8)1, color.r);
-        strColor[2] = std::max((u8)1, color.g);
-        strColor[3] = std::max((u8)1, color.b);
-
-        return (strColor + right);
-    } */
 }

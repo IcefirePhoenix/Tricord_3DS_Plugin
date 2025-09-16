@@ -1,10 +1,10 @@
 #ifndef GENERALHELPER_HPP
 #define GENERALHELPER_HPP
 
-#define PLAYER_OFFSET 	0x10000
+#define PLAYER_OFFSET 0x10000
 
-#define ENABLED_SLIDER 		Color::LimeGreen << "\u2282\u25CF"
-#define DISABLED_SLIDER 		Color::Red << "\u25CF\u2283"
+#define ENABLED_SLIDER "\u2282\u25CF"
+#define DISABLED_SLIDER "\u25CF\u2283"
 
 #include "CTRPF.hpp"
 

@@ -70,32 +70,25 @@ namespace CTRPluginFramework
         static const Color  Black;
         static const Color  White;
         static const Color  Red;
-        static const Color  Lime;
         static const Color  Blue;
         static const Color  Yellow;
-        static const Color  Cyan;
         static const Color  Magenta;
         static const Color  Silver;
         static const Color  Gray;
         static const Color  Maroon;
-        static const Color  Olive;
         static const Color  Green;
         static const Color  LightMagenta;
-        static const Color  Teal;
-        static const Color  Navy;
 
         static const Color  BlackGrey;
-        static const Color  Brown;
         static const Color  DarkGrey;
         static const Color  DeepSkyBlue;
         static const Color  DimGrey;
-        static const Color  DodgerBlue;
         static const Color  Gainsboro;
         static const Color  ForestGreen;
         static const Color  LimeGreen;
         static const Color  Orange;
         static const Color  SkyBlue;
-        static const Color  Turquoise;
+        static const Color  DeepGold;
     };
 }
 

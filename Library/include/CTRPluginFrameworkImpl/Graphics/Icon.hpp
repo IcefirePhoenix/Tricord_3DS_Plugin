@@ -3,24 +3,43 @@
 
 #include "CTRPluginFramework/System/Vector.hpp"
 #include "CTRPluginFrameworkImpl/Menu/MenuEntryTools.hpp"
-#include "CTRPluginFramework/Graphics/CustomIcon.hpp"
 
 namespace CTRPluginFramework
 {
     class Icon
     {
     public:
+        enum Rotation
+        {
+            ROT_0,
+            ROT_90,
+            ROT_180,
+            ROT_270
+        };
+
         /*
         ** 3DS
         ** 25px * 25px
         ************/
-        static int Draw3DS(int posX, int posY);
+        static int Draw3DS(int posX, int posY, bool enabled);
 
         /*
         ** About
         ** 15px * 15px
         ************/
         static int DrawAbout(int posX, int posY);
+
+        /*
+        ** BG_Underline
+        ** 15px * 15px
+        ************/
+        static int DrawBG_Underline(int posX, int posY);
+
+        /*
+        ** MenuButton
+        ** 32px * 120px
+        ************/
+        static int DrawMenuButton(int posX, int posY, bool filled);
 
         /*
         ** CapsLockOn
@@ -48,7 +67,7 @@ namespace CTRPluginFramework
 
         /*
         ** Close
-        ** 20px * 20px
+        ** 25px * 25px
         ************/
         static int DrawClose(int posX, int posY, bool filled);
 
@@ -106,7 +125,6 @@ namespace CTRPluginFramework
         ************/
         static int DrawGrid(int posX, int posY);
 
-
         /*
         ** Info
         ** 25px * 25px
@@ -114,10 +132,10 @@ namespace CTRPluginFramework
         static int DrawInfo(int posX, int posY, bool filled);
 
         /*
-        ** Hand Cursor
-        ** 15 px * 15 px
-        ****************/
-        static int DrawHandCursor(int posX, int posY);
+        ** InfoNew
+        ** 25px * 25px
+        ***********/
+        static int DrawInfoNew(int posX, int posY, bool filled);
 
         /*
         ** Discord
@@ -144,15 +162,8 @@ namespace CTRPluginFramework
         static int DrawRAM(int posX, int posY);
 
         /*
-        ** Restart
-        ** 15px * 15 px
-        **************/
-        static int DrawRestart(int posX, int posY);
-
-
-        /*
-        ** Save
-        ** 25px * 25px
+        ** Save Feather
+        ** 30px * 30px
         **************/
         static int DrawSave(int posX, int posY);
 
@@ -187,6 +198,12 @@ namespace CTRPluginFramework
         static int DrawTrash(int posX, int posY, bool filled);
 
         /*
+        ** Tricord
+        ** 25px * 25 px
+        **************/
+        static int DrawTricord(int posX, int posY);
+
+        /*
         ** Camera
         ** 15px * 15 px
         **************/
@@ -204,13 +221,46 @@ namespace CTRPluginFramework
          **************/
         static int DrawSavePosition(int posX, int posY);
 
+        /*
+         ** User Manual
+         ** 15px * 15 px
+         **************/
+        static int DrawManual(int posX, int posY);
 
-        static CustomIcon DefaultCustomIcon;
-        static int DrawCustomIcon(const CustomIcon& icon, int posX, int posY);
+        /*
+         ** D-Pad and C-Pad, all directions
+         ** 15px * 15 px
+         **************/
+        static int DrawDPad(int posX, int posY, Rotation rotation = ROT_0);
+        static int DrawCPad(int posX, int posY, Rotation rotation = ROT_0);
+
+        /*
+         ** Zl/ZR
+         ** 15px * 15 px
+         **************/
+        static int DrawZL(int posX, int posY);
+        static int DrawZR(int posX, int posY);
+
+        /*
+         ** Triforce, filled and unfilled
+         ** 25px * 25 px
+         **************/
+        static int DrawTriforce(int posX, int posY, bool isFilled);
+
+        /*
+         ** TFH_Camera
+         ** 15px * 15 px
+         **************/
+        static int DrawTFHCamera(int posX, int posY);
+
+        /*
+         ** Link, G/B/R
+         ** 30px * 30 px
+         **************/
+        static int DrawLinkFace(int posX, int posY, int player);
 
     private:
         static int DrawImg(u8 *img, int posX, int posY, int sizeX, int sizeY);
-
     };
 }
 

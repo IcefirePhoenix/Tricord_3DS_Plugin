@@ -1,18 +1,21 @@
+#include "3ds.h"
+#include "CTRPluginFramework/Graphics/CustomFont.hpp"
+#include "CTRPluginFramework/Utils/Utils.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/Font.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/Renderer.hpp"
 #include "CTRPluginFramework/System/Lock.hpp"
-#include "3ds.h"
+#include "CTRPluginFrameworkImpl/Search/Search.hpp"
+
 #include "ctrulibExtension.h"
+#include "fontTFH_Structs.h"
 
 #include <cstring>
 #include <cmath>
-#include <unordered_map>
-#include "CTRPluginFramework/Utils/Utils.hpp"
-
+#include <vector>
 
 namespace CTRPluginFramework
 {
-    extern "C" CFNT_s* g_sharedFont;
+    extern "C" CFNT_TFH* TFH_Font;
     extern "C" int g_charPerSheet;
 
     u32     g_fontAllocated = 0;
@@ -21,9 +24,29 @@ namespace CTRPluginFramework
 
     namespace
     {
-        u8 *                         glyph = nullptr;
-        Glyph *                      defaultGlyph = nullptr;
-        std::unordered_map<u32, u32> defaultSysFont;
+        u8 *glyph = nullptr;
+        Glyph *defaultGlyph = nullptr;
+
+        constexpr size_t MAX_GLYPHS = 0x800;
+
+        static Glyph g_glyphPool[MAX_GLYPHS];
+        static bool g_glyphUsed[MAX_GLYPHS] = {false};
+        static u8 g_bitmapPool[MAX_GLYPHS][252];
+
+        static std::vector<Glyph*> glyphCache;
+
+        static Glyph* AllocateGlyph(u32 glyphIndex)
+        {
+            if (glyphIndex >= MAX_GLYPHS)
+                return nullptr;
+
+            if (!g_glyphUsed[glyphIndex])
+            {
+                g_glyphUsed[glyphIndex] = true;
+                return &g_glyphPool[glyphIndex];
+            }
+            return nullptr;
+        }
     }
 
     float Glyph::Width(void) const
@@ -31,29 +54,20 @@ namespace CTRPluginFramework
         return (xOffset + xAdvance);
     }
 
-    // Stub game' call to APT_MapSharedFont as we do it already
-    static void     PatchGameFontMapping(void)
+    static void LocateTFH_MessageFontBFFNT(u32 fontDataStart)
     {
-        std::vector<u32> pattern =
-        {
-            0xE3A03201, // mov r3, #0x10000000
-            0xE3A02001, // mov r2, #1
-            0xE3A01000, // mov r1, #0
-            0xE5940004, // ldr r0, [r4, #4]
-            0xEF00001F  // svc 0x1F
-        };
-
-        u32 addr = Utils::Search<u32>(0x00100000, Process::GetTextSize(), pattern);
-
-        if (addr)
-            *reinterpret_cast<vu32 *>(addr + 16) = 0xE3A00000; ///< mov r0, #0
+        TFH_Font = reinterpret_cast<CFNT_TFH*>(fontDataStart);
+        fontFixTFHPointers(TFH_Font);
+        g_charPerSheet = TFH_Font->finf.tglp->nRows * TFH_Font->finf.tglp->nLines;
     }
 
-    void    Font::Initialize(void)
+    void    Font::Initialize(u32 fontDataStart)
     {
-        fontEnsureMappedExtension();
-        PatchGameFontMapping();
+        LocateTFH_MessageFontBFFNT(fontDataStart);
         glyph = (u8 *)new u8[1000];
+
+        glyphCache.clear();
+        glyphCache.resize(MAX_GLYPHS, nullptr);
     }
 
     Glyph   *Font::GetGlyph(u8* &c)
@@ -69,11 +83,11 @@ namespace CTRPluginFramework
         c += units;
         if (code > 0)
         {
-            glyphIndex = fontGlyphIndexFromCodePoint(nullptr, code);
+            glyphIndex = fontTFHGlyphIndexFromCodePoint(TFH_Font, code);
             if (glyphIndex == 0xFFFF) // Glyph not found, return "?" instead
             {
                 if (defaultGlyph == nullptr)
-                    defaultGlyph = CacheGlyph(fontGlyphIndexFromCodePoint(nullptr, (u32)'?'));
+                    defaultGlyph = CacheGlyph(fontTFHGlyphIndexFromCodePoint(TFH_Font, (u32)'?'));
 
                 return defaultGlyph;
             }
@@ -112,35 +126,30 @@ namespace CTRPluginFramework
     // https://github.com/ObsidianX/3dstools/blob/master/bffnt.py
     u8    *GetOriginalGlyph(u32 glyphIndex)
     {
-        TGLP_s  *tglp = fontGetGlyphInfo(nullptr);
-        u8      *data = (u8 *)fontGetGlyphSheetTex(nullptr, glyphIndex / g_charPerSheet);
+        TGLP_TFH *tglp = fontGetGlyphInfo(TFH_Font);
+        u8 *data = (u8 *)fontGetGlyphSheetTex(TFH_Font, glyphIndex / g_charPerSheet);
 
-        int     width = tglp->sheetWidth;
-        int     height = tglp->sheetHeight;
+        int     width = tglp->sheetWidth; // 512
+        int     height = tglp->sheetHeight; // 1024
 
         int     dataWidth = width;
         int     dataHeight = height;
 
         int     index = glyphIndex % g_charPerSheet;
 
-        // Increase the size of the image to a power-of-two boundary, if necessary
-        width = 1 << (int)(std::ceil(std::log2(width)));
-        height = 1 << (int)(std::ceil(std::log2(height)));
-
-        int tileWidth = width / 8;
-        int tileHeight = height / 8;
+        int tileWidth = width / 8; // 64
+        int tileHeight = height / 8; // 128
 
         std::memset(glyph, 0, 1000);
 
         // Get the part we're interested in
-        int glyphsPerRow = tglp->nRows;
-        int glyphsPerColumn = tglp->nLines;
+        int glyphsPerRow = tglp->nRows; // 26
         int indexX = index % glyphsPerRow;
         int indexY = index / glyphsPerRow;
 
-        int singleWx = std::round(width / glyphsPerRow);
-        int singleHy = std::round(height / glyphsPerColumn);
-        int startPx = std::round(indexX * singleWx);
+        int singleWx = 19;
+        int singleHy = 25;
+        int startPx = std::round(indexX * singleWx) - 1;
         int endPx = startPx + singleWx;
         int startPy = std::round(indexY * singleHy);
         int endPy = startPy + singleHy;
@@ -198,16 +207,16 @@ namespace CTRPluginFramework
         return (glyph);
     }
 
-#define GLYPH_HEIGHT    32
-#define GLYPH_WIDTH     25
-#define SHRINK_GLYPH_HEIGHT 16
+#define GLYPH_HEIGHT    25
+#define GLYPH_WIDTH     19
+#define SHRINK_GLYPH_HEIGHT 18 // (width would be 14)
 
     void    ShrinkGlyph(u8 *dest, u8 *src)
     {
         constexpr const int  outWidth = std::round(static_cast<float>(GLYPH_WIDTH)
             * (static_cast<float>(SHRINK_GLYPH_HEIGHT) / static_cast<float>(GLYPH_HEIGHT)));
-        constexpr const float dx = std::round(static_cast<float>(GLYPH_WIDTH) / outWidth);
-        constexpr const float dy = std::round(static_cast<float>(GLYPH_HEIGHT) / static_cast<float>(SHRINK_GLYPH_HEIGHT));
+        constexpr const float dx = (static_cast<float>(GLYPH_WIDTH) / outWidth);
+        constexpr const float dy = (static_cast<float>(GLYPH_HEIGHT) / static_cast<float>(SHRINK_GLYPH_HEIGHT));
 
         int i, ii = 0;
 
@@ -270,27 +279,25 @@ namespace CTRPluginFramework
 
     Glyph   *Font::CacheGlyph(u32 glyphIndex)
     {
-        // Check if the glyph already exists
-        {
-            Glyph *glyph = reinterpret_cast<Glyph *>(defaultSysFont[glyphIndex]);
+        // Check cache first
+        if (glyphIndex < glyphCache.size() && glyphCache[glyphIndex] != nullptr)
+            return glyphCache[glyphIndex];
 
-            if (glyph != nullptr)
-                return glyph;
-        }
+        Lock lock(_mutex);
 
-        Lock    lock(_mutex);
+        u8 *originalGlyph = GetOriginalGlyph(glyphIndex);
 
-        u8  *originalGlyph = GetOriginalGlyph(glyphIndex);
-        // 16px * 14px = 224
-        u8  *newGlyph = new u8[224];
-        g_fontAllocated += 224;
-        std::memset(newGlyph, 0, 224);
+        u8 *newGlyph = g_bitmapPool[glyphIndex];
+        g_fontAllocated += 252; // 14x18 wxh = 252 pixels (A4 image format)
+        std::memset(newGlyph, 0, 252);
 
-        // Shrink glyph data to the required size
         ShrinkGlyph(newGlyph, originalGlyph);
 
-        // Allocate new Glyph
-        Glyph *glyph = new Glyph; //static_cast<Glyph *>(linearAlloc(sizeof(Glyph)));
+        // Allocate Glyph from pool
+        Glyph *glyph = AllocateGlyph(glyphIndex);
+        if (glyph == nullptr)
+            return nullptr;
+
         g_fontAllocated += sizeof(Glyph);
         g_glyphAllocated++;
         std::memset(glyph, 0, sizeof(Glyph));
@@ -298,14 +305,15 @@ namespace CTRPluginFramework
         // Get Glyph data
         charWidthInfo_s     *cwi;
         fontGlyphPos_s      glyphPos;
-        Renderer::FontCalcGlyphPos(&glyphPos, &cwi, glyphIndex, 0.5f, 0.5f);
+        Renderer::FontCalcGlyphPos(&glyphPos, &cwi, glyphIndex, 0.75f, 0.75f);
 
         glyph->xOffset =  std::round((glyphIndex == 0) ? 0 : glyphPos.xOffset);
         glyph->xAdvance = std::floor((glyphIndex == 0) ? glyphPos.xAdvance : (glyphPos.xAdvance - glyphPos.xOffset));
         glyph->glyph = newGlyph;
 
-        // Add Glyph to defaultSysFont
-        defaultSysFont[glyphIndex] = reinterpret_cast<u32>(glyph);
+        // Add to cache
+        if (glyphIndex < glyphCache.size())
+            glyphCache[glyphIndex] = glyph;
 
         return (glyph);
     }

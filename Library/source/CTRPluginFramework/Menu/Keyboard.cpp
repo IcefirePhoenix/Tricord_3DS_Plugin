@@ -1,6 +1,5 @@
 #include "CTRPluginFrameworkImpl/Menu/KeyboardImpl.hpp"
 #include "CTRPluginFramework/Menu/Keyboard.hpp"
-#include "CTRPluginFrameworkImpl/Graphics/KeyboardBG.hpp"
 
 #include <string>
 #include <climits>
@@ -284,12 +283,6 @@ namespace CTRPluginFramework
     }
 
     void Keyboard::Populate(const std::vector<std::string> &input, bool resetScroll)
-    {
-        _keyboard->Populate(input, resetScroll);
-        _isPopulated = true;
-    }
-
-    void Keyboard::Populate(const std::vector<CustomIcon> &input, bool resetScroll)
     {
         _keyboard->Populate(input, resetScroll);
         _isPopulated = true;

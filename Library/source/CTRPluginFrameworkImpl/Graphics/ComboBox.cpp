@@ -39,7 +39,7 @@ namespace CTRPluginFramework
             return;
 
         // Draw background
-        Renderer::DrawRect(_rectPos, IsEnabled ? Color::Maroon : Color::Magenta);
+        Renderer::DrawRect(_rectPos, IsEnabled ? Color::Magenta : Color::Maroon);
 
 
         if (SelectedItem == -1)
@@ -49,9 +49,7 @@ namespace CTRPluginFramework
         int posX = _rectPos.leftTop.x + 5;
         int posY = _rectPos.leftTop.y;
 
-        posY += (_rectPos.size.y - 10) / 2;
-
-        Renderer::DrawString((char *)_items[SelectedItem].c_str(), posX, posY, Color::Gainsboro);
+        Renderer::DrawGameFontString((char *)_items[SelectedItem].c_str(), posX, posY, 300, Color::Gainsboro);
     }
 
     void    ComboBox::Update(const bool isTouchDown, const IntVector &touchPos)

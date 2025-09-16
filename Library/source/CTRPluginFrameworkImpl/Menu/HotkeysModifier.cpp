@@ -20,16 +20,15 @@ namespace CTRPluginFramework
         Start, Select
     };
 
-    static const char *stable[22] =
+    static const char *stable[12] =
     {
-        FONT_L, FONT_DU, FONT_DL, FONT_DR, FONT_DD,
-        FONT_R, FONT_A, FONT_B, FONT_X, FONT_Y,
-        FONT_ZL, "\uE077 Up", "\uE077 Left", "\uE077 Right", "\uE077 Down",
-        FONT_ZR, "\uE04A Up", "\uE04A Left", "\uE04A Right", "\uE04A Down",
+        FONT_L, FONT_R,
+        FONT_A, FONT_B, FONT_X, FONT_Y,
+        "C-Stick Up", "C-Stick Left", "C-Stick Right", "C-Stick Down",
         "Start", "Select"
     };
 
-    static int    GetIndex(int code)
+    static int GetIndex(int code)
     {
         for (int i = 0; i < 22; ++i)
             if (ktable[i] == code)
@@ -43,29 +42,29 @@ namespace CTRPluginFramework
     {
         FwkSettings &settings = FwkSettings::Get();
 
-        for (int i = 0, posY = 88; i < 5; ++i, posY += 25)
+        for (int i = 0, posY = 48; i < 5; ++i, posY += 25)
         {
-            Button b(Button::Icon | Button::Toggle, IntRect(30, posY, 20, 20), Icon::DrawCheckBox);
+            Button b(Button::Icon | Button::Toggle, IntRect(35, posY, 20, 20), Icon::DrawCheckBox);
             _checkboxes.push_back(b);
         }
-        for (int i = 0, posY = 88; i < 5; ++i, posY += 25)
+        for (int i = 0, posY = 48; i < 5; ++i, posY += 25)
         {
-            Button b(Button::Icon | Button::Toggle, IntRect(80, posY, 20, 20), Icon::DrawCheckBox);
+            Button b(Button::Icon | Button::Toggle, IntRect(85, posY, 20, 20), Icon::DrawCheckBox);
             _checkboxes.push_back(b);
         }
-        for (int i = 0, posY = 88; i < 5; ++i, posY += 25)
+        for (int i = 0, posY = 48; i < 5; ++i, posY += 25)
         {
-            Button b(Button::Icon | Button::Toggle, IntRect(130, posY, 20, 20), Icon::DrawCheckBox);
+            Button b(Button::Icon | Button::Toggle, IntRect(135, posY, 20, 20), Icon::DrawCheckBox);
             _checkboxes.push_back(b);
         }
-        for (int i = 0, posY = 88; i < 5; ++i, posY += 25)
+        for (int i = 0, posY = 48; i < 5; ++i, posY += 25)
         {
-            Button b(Button::Icon | Button::Toggle, IntRect(215, posY, 20, 20), Icon::DrawCheckBox);
+            Button b(Button::Icon | Button::Toggle, IntRect(185, posY, 20, 20), Icon::DrawCheckBox);
             _checkboxes.push_back(b);
         }
-        for (int i = 0, posX = 95; i < 2; ++i, posX += 70)
+        for (int i = 0, posX = 100; i < 2; ++i, posX += 70)
         {
-            Button b(Button::Icon | Button::Toggle, IntRect(posX, 215, 20, 20), Icon::DrawCheckBox);
+            Button b(Button::Icon | Button::Toggle, IntRect(posX, 175, 20, 20), Icon::DrawCheckBox);
             _checkboxes.push_back(b);
         }
         for (int i = 0; i < 32; ++i)
@@ -92,20 +91,23 @@ namespace CTRPluginFramework
     {
     }
 
-    void    HotkeysModifier::operator()(void)
+    void HotkeysModifier::operator()(void)
     {
 		bool mustclose = false;
         bool sleepClose = false;
         u32 oldKeys = _keys;
+
         while (((!Window::BottomWindow.MustClose() && !mustclose) || !_keys) && !sleepClose)
         {
 
             Controller::Update();
 			mustclose = Controller::IsKeyPressed(Key::B);
             sleepClose = SystemImpl::IsSleeping();
+
             _DrawTop();
             _DrawBottom();
             Renderer::EndFrame();
+
             _Update();
 
             #define DPADX (Key::DPadLeft | Key::DPadRight)
@@ -123,13 +125,11 @@ namespace CTRPluginFramework
             }
 
             // Only keep new DPAD keys
-
             if ((_keys & DPADX) && oldDpadX && (_keys & DPADX) != oldDpadX)
             {
                 _keys ^= oldDpadX;
 
                 auto& checkbox = _checkboxes[GetIndex(oldDpadX)];
-
                 checkbox.SetState(false);
             }
 
@@ -138,53 +138,68 @@ namespace CTRPluginFramework
                 _keys ^= oldDpadY;
 
                 auto& checkbox = _checkboxes[GetIndex(oldDpadY)];
-
                 checkbox.SetState(false);
             }
         }
-        if (sleepClose) _keys = oldKeys;
+
+        if (sleepClose)
+            _keys = oldKeys;
+
         SoundEngine::PlayMenuSound(SoundEngine::Event::CANCEL);
     }
 
-    void    HotkeysModifier::_DrawTop(void) const
+    void HotkeysModifier::_DrawTop(void) const
     {
         Renderer::SetTarget(TOP);
         Window::TopWindow.Draw("Hotkey Modifier");
 
         int posY = 55;
-        Renderer::DrawSysStringReturn((const u8*)_message.c_str(), 40, posY, 345, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontStringReturn((const u8*)_message.c_str(), 40, posY, 345, Preferences::Settings.MainTextColor);
     }
 
-    void    HotkeysModifier::_DrawBottom(void)
+    void HotkeysModifier::_DrawBottom(void)
     {
+        int originalPosY = 48;
         Renderer::SetTarget(BOTTOM);
         Window::BottomWindow.Draw();
 
-        // Draw CheckBoxes
+        // Draw checkboxes
         for (auto it = _checkboxes.begin(); it != _checkboxes.end(); it++)
             (*it).Draw();
 
-        // Draw labels
-        for (int i = 0, posY = 88; i < 5; ++i, posY += 9)
-            Renderer::DrawSysString(stable[i], 50, posY, 290, Preferences::Settings.MainTextColor);
-        for (int i = 5, posY = 88; i < 10; ++i, posY += 9)
-            Renderer::DrawSysString(stable[i], 100, posY, 290, Preferences::Settings.MainTextColor);
-        for (int i = 10, posY = 88; i < 15; ++i, posY += 9)
-            Renderer::DrawSysString(stable[i], 150, posY, 290, Preferences::Settings.MainTextColor);
-        for (int i = 15, posY = 88; i < 20; ++i, posY += 9)
-            Renderer::DrawSysString(stable[i], 235, posY, 300, Preferences::Settings.MainTextColor);
+        // Draw TEXT labels, rows 2 and 4 (rows 1 and 3 are almost entirely icon-based)
+        Renderer::DrawGameFontString(stable[0], 55, originalPosY, 300, Preferences::Settings.MainTextColor);
 
-        int startY = 215;
-        int selY = 215;
+        for (int i = 1, posY = 48; i < 6; ++i, posY += 9)
+            Renderer::DrawGameFontString(stable[i], 105, posY, 290, Preferences::Settings.MainTextColor);
+        for (int i = 6, posY = 73; i < 10; ++i, posY += 9)
+            Renderer::DrawGameFontString(stable[i], 205, posY, 300, Preferences::Settings.MainTextColor);
 
-        Renderer::DrawSysString(stable[20], 113, startY, 290, Preferences::Settings.MainTextColor);
-        Renderer::DrawSysString(stable[21], 185, selY, 290, Preferences::Settings.MainTextColor);
+        int startY = 175;
+        int selY = 175;
+
+        Renderer::DrawGameFontString(stable[10], 118, startY, 290, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontString(stable[11], 190, selY, 290, Preferences::Settings.MainTextColor);
+
+        // Draw hotkey icons (D-Pad, C-Pad, L/R, ZL/ZR)
+        Icon::DrawDPad(55, 73); // row 1 start
+        Icon::DrawDPad(55, 98, Icon::ROT_270);
+        Icon::DrawDPad(55, 123, Icon::ROT_90);
+        Icon::DrawDPad(55, 148, Icon::ROT_180);
+
+        Icon::DrawZL(155, 48); // row 3 start
+        Icon::DrawCPad(155, 73);
+        Icon::DrawCPad(155, 98, Icon::ROT_270);
+        Icon::DrawCPad(155, 123, Icon::ROT_90);
+        Icon::DrawCPad(155, 148, Icon::ROT_180);
+
+        Icon::DrawZR(205, 48); // row 4, icon oddball
     }
 
-    void    HotkeysModifier::_Update(void)
+    void HotkeysModifier::_Update(void)
     {
-        bool        isTouched = Touch::IsDown();
-        IntVector   touchPos(Touch::GetPosition());
+        bool isTouched = Touch::IsDown();
+        IntVector touchPos(Touch::GetPosition());
 
         for (auto it = _checkboxes.begin(); it != _checkboxes.end(); it++)
             (*it).Update(isTouched, touchPos);
