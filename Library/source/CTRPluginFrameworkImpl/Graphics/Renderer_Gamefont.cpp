@@ -1,5 +1,7 @@
 #include "types.h"
+#include "fontTFH_Structs.h"
 
+#include "CTRPluginFramework/Graphics/CustomFont.hpp"
 #include "CTRPluginFramework/Graphics/Render.hpp"
 #include "CTRPluginFrameworkImpl/Graphics.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/Font.hpp"
@@ -9,7 +11,7 @@
 
 namespace CTRPluginFramework
 {
-    extern "C" CFNT_s* g_sharedFont;
+    extern "C" CFNT_TFH* TFH_Font;
     extern "C" int g_charPerSheet;
 
     inline u32   GetFramebufferOffset(int posX, int posY, int bpp, int rowsize)
@@ -19,9 +21,10 @@ namespace CTRPluginFramework
 
     void Renderer::FontCalcGlyphPos(fontGlyphPos_s *out,  charWidthInfo_s **cwout, int glyphIndex, float scaleX, float scaleY)
     {
-        FINF_s* finf = &g_sharedFont->finf;
-        TGLP_s* tglp = finf->tglp;
-        charWidthInfo_s *cwi = fontGetCharWidthInfo(nullptr, glyphIndex);
+        g_charPerSheet = TFH_Font->finf.tglp->nRows * TFH_Font->finf.tglp->nLines;
+        FINF_TFH *finf = &TFH_Font->finf;
+        TGLP_TFH* tglp = finf->tglp;
+        charWidthInfo_s *cwi = fontGetTFHCharWidthInfo(TFH_Font, glyphIndex);
         *cwout = cwi;
 
         int sheetId = glyphIndex / g_charPerSheet;
@@ -29,19 +32,19 @@ namespace CTRPluginFramework
         out->sheetIndex = sheetId;
         out->xOffset = scaleX * cwi->left;
         out->xAdvance = scaleX * cwi->charWidth;
-        out->width = scaleX * cwi->glyphWidth;
+        out->width = scaleX * 19.0; // glyphWidth is inaccurate due to 1px padding
 
         int lineId = glInSheet / tglp->nRows;
         int rowId = glInSheet % tglp->nRows;
 
-        float tp = (float)(rowId*(tglp->cellWidth+1)+1);
-        float tx = (float)(tp / tglp->sheetWidth)   ;
-        float ty = 1.0f - (float)((lineId+1)*(tglp->cellHeight+1)+1) / tglp->sheetHeight;
-        float tw = (float)cwi->glyphWidth / tglp->sheetWidth;
-        float th = (float)tglp->cellHeight / tglp->sheetHeight;
+        float tp = (float)(rowId * (20) + 1); // 19px cell width + 1px padding = 20px
+        float tx = (float)(tp / tglp->sheetWidth);
+        float ty = 1.0f - (float)((lineId + 1) * (26) + 1) / tglp->sheetHeight; // 25px cell height + 1px padding = 26px
+        float tw = 19.0 / tglp->sheetWidth;
+        float th = 25.0 / tglp->sheetHeight;
         out->texcoord.left = tx;
         out->texcoord.top = ty;
-        out->texcoord.right = tx+tw;
+        out->texcoord.right = tx + tw;
         out->texcoord.bottom = ty + th;
     }
 
@@ -254,7 +257,7 @@ namespace CTRPluginFramework
     {
         Icon::DrawCheckBox(posX, posY, isChecked);
         posX += 20;
-        DrawSysString(str, posX, posY, xLimits, color, offset);
+        DrawGameFontString(str, posX, posY, xLimits, color, offset);
         posY += 1;
 
     }
@@ -263,7 +266,7 @@ namespace CTRPluginFramework
     {
         Icon::DrawFolder(posX, posY);
         posX += 20;
-        DrawSysString(str, posX, posY, xLimits, color, offset);
+        DrawGameFontString(str, posX, posY, xLimits, color, offset);
         posY += 1;
     }
 
@@ -277,6 +280,8 @@ namespace CTRPluginFramework
         if (!screen || !glyph)
             return posY;
 
+        const Color base = color;
+
         posX += glyph->xOffset;
 
         u32  stride = screen->_stride;
@@ -287,11 +292,12 @@ namespace CTRPluginFramework
         u8   italicOffset = (flags & Render::FontDrawMode::ITALIC) ? 3 : 0;
         u32  lineCount = 0;
 
-        for (int i = 0; i < 208; i++)
+        // glyph final, resized dimensions are 14*18 (w*h) = 252 pixels
+        for (int i = 0; i < 252; i++)
         {
-            if (i != 0 && i % 13 == 0)
+            if (i != 0 && i % 14 == 0)
             {
-                if ((lineCount % 4) == 0 && flags &Render::FontDrawMode::ITALIC)
+                if ((lineCount % 5) == 0 && flags & Render::FontDrawMode::ITALIC)
                     italicOffset--;
                 lineCount++;
                 left -= bpp;
@@ -303,7 +309,31 @@ namespace CTRPluginFramework
             // Don't waste time on pixels which are only 5% visible
             for (int j = 0; (alpha > 12) && j < ((flags & Render::FontDrawMode::BOLD) ? 2 : 1); j++)
             {
-                color.a = alpha;
+                u32 cutoff = 190;
+                u32 edge = 120;
+                u8 r, g, b;
+
+                if (alpha >= cutoff)
+                {
+                    r = base.r;
+                    g = base.g;
+                    b = base.b;
+                }
+                else if (alpha <= edge)
+                {
+                    r = 41;
+                    g = 10;
+                    b = 2;
+                }
+                else
+                {
+                    float t = static_cast<float>(cutoff - alpha) / (cutoff - edge);
+                    r = static_cast<u8>(41 * t + base.r * (1.0f - t));
+                    g = static_cast<u8>(10 * t + base.g * (1.0f - t));
+                    b = static_cast<u8>(2 * t + base.b * (1.0f - t));
+                }
+
+                color = Color(r, g, b, alpha);
                 Color &&l = PrivColor::FromFramebuffer(fb + stride * j + italicOffset * stride);
                 Color &&c = l.Blend(color, Color::BlendMode::Alpha);
 
@@ -320,6 +350,8 @@ namespace CTRPluginFramework
         if (!screen || !glyph)
             return posY;
 
+        const Color base = color;
+
         posX += glyph->xOffset;
 
         u32  stride = screen->_stride;
@@ -330,13 +362,14 @@ namespace CTRPluginFramework
         u8   italicOffset = (flags & Render::FontDrawMode::ITALIC) ? 3 : 0;
         u32  lineCount = 0;
 
-        for (int i = static_cast<int>(offset); i < 208; i++)
+        // glyph final, resized dimensions are 14*18 (w*h) = 252 pixels
+        for (int i = static_cast<int>(offset); i < 252; i++)
         {
-            if (i != 0 && i % 13 == 0)
+            if (i != 0 && i % 14 == 0)
             {
                 if (offset)
                     i += offset;
-                if ((lineCount % 4) == 0 && flags & Render::FontDrawMode::ITALIC)
+                if ((lineCount % 5) == 0 && flags & Render::FontDrawMode::ITALIC)
                     italicOffset--;
                 lineCount++;
                 left -= bpp;
@@ -348,7 +381,31 @@ namespace CTRPluginFramework
             // Don't waste time on pixels which are only 5% visible
             for (int j = 0; (alpha > 12) && j < ((flags & Render::FontDrawMode::BOLD) ? 2 : 1); j++)
             {
-                color.a = alpha;
+                u32 cutoff = 190;
+                u32 edge = 120;
+                u8 r, g, b;
+
+                if (alpha >= cutoff)
+                {
+                    r = base.r;
+                    g = base.g;
+                    b = base.b;
+                }
+                else if (alpha <= edge)
+                {
+                    r = 41;
+                    g = 10;
+                    b = 2;
+                }
+                else
+                {
+                    float t = static_cast<float>(cutoff - alpha) / (cutoff - edge);
+                    r = static_cast<u8>(41 * t + base.r * (1.0f - t));
+                    g = static_cast<u8>(10 * t + base.g * (1.0f - t));
+                    b = static_cast<u8>(2 * t + base.b * (1.0f - t));
+                }
+
+                color = Color(r, g, b, alpha);
                 Color &&l = PrivColor::FromFramebuffer(fb + stride * j + italicOffset * stride);
                 Color &&c = l.Blend(color, Color::BlendMode::Alpha);
 
@@ -365,7 +422,7 @@ namespace CTRPluginFramework
         return (posX + glyph->xAdvance);
     }
 
-    int Renderer::DrawSysStringReturn(const unsigned char *stri, int posX, int& posY, int xLimits, Color color, int maxY, u32 flags)
+    int Renderer::DrawGameFontStringReturn(const unsigned char *stri, int posX, int& posY, int xLimits, Color color, int maxY, u32 flags)
     {
         // Check for a valid pointer
         if (!(stri && *stri))
@@ -376,8 +433,6 @@ namespace CTRPluginFramework
         int             underLineStart = -1, strikeLineStart = -1;
         ScreenImpl      *screen = GetContext()->screen;
         void (*lineDrawer)(int posX, int posY, int width, const Color &color, int height) = Renderer::DrawLine;
-        u32 shakingH = 0, shakingV = 0;
-        int randomTextID = -1;
 
         if (!screen)
             return posY;
@@ -483,38 +538,11 @@ namespace CTRPluginFramework
 
                     }
                 }
-                else if (control & 0x2000) // Argumented formatting
-                {
-                    u32 mode = (control & 0xF00) >> 8;
-
-                    if (mode == 1) // Text shake
-                    {
-                        bool setH = control & 0x80;
-                        bool setV = control & 0x40;
-                        u32 shakeAmount = (control & 0x3F) - 1;
-                        if (setH) shakingH = shakeAmount;
-                        if (setV) shakingV = shakeAmount;
-                    }
-                    else if (mode == 2) // Random text
-                    {
-                        bool disable = control & 0x80;
-                        if (disable)
-                            randomTextID = -1;
-                        else
-                            randomTextID = (control & 0x3F) - 1;
-                    }
-
-                }
                 continue;
             }
 
 
             Glyph *glyph = Font::GetGlyph(str);
-            if (randomTextID != -1) // Not a bug, the first GetGlyph consumes a character from str.
-            {
-                u8* rstr = (u8*)Render::PullRandomCharacter(randomTextID).c_str();
-                glyph = Font::GetGlyph(rstr);
-            }
 
             if (glyph == nullptr)
                 break;
@@ -536,18 +564,10 @@ namespace CTRPluginFramework
                 posY += 16;
             }
 
-            int offsetX = 0;
-            int offsetY = 0;
-            if (shakingH) {
-                offsetX = Utils::Random(-shakingH, shakingH);
-            }
-            if (shakingV) {
-                offsetY = Utils::Random(-shakingV, shakingV);
-            }
+            x = DrawGlyph(screen, glyph, x, posY, color, flags);
 
-            x = DrawGlyph(screen, glyph, x + offsetX, posY + offsetY, color, flags) - offsetX;
-
-        } while (*str);
+        }
+        while (*str);
 
         if (posY < maxY && flags & Render::FontDrawMode::UNDERLINE) {
             if (underLineStart != x)
@@ -567,7 +587,7 @@ namespace CTRPluginFramework
         Color   g_customColor;
     }
 
-    int Renderer::DrawSysString(const char *stri, int posX, int &posY, int xLimits, Color color, float offset, const char *end, u32 flags)
+    int Renderer::DrawGameFontString(const char *stri, int posX, int &posY, int xLimits, Color color, float offset, const char *end, u32 flags)
     {
         Glyph   *glyph;
         int      x = posX;
@@ -576,8 +596,6 @@ namespace CTRPluginFramework
         int             underLineStart = -1, strikeLineStart = -1;
         void            (*lineDrawer)(int posX, int posY, int width, const Color &color, int height) = DrawLine;
         ScreenImpl *screen = GetContext()->screen;
-        u32 shakingH = 0, shakingV = 0;
-        int randomTextID = -1;
 
         if (!(str && *str) || !screen)
             return (x);
@@ -610,15 +628,15 @@ namespace CTRPluginFramework
                 continue;
             }
 
-            if (c == 0x1B)
-            {
-                str++;
-                color.r = *str++;
-                color.g = *str++;
-                color.b = *str++;
-                RendererPriv::g_customColor = color;
-                continue;
-            }
+            // if (c == 0x1B)
+            // {
+            //     str++;
+            //     color.r = *str++;
+            //     color.g = *str++;
+            //     color.b = *str++;
+            //     //RendererPriv::g_customColor = color;
+            //     continue;
+            // }
 
             if (c == 0x11)
             {
@@ -666,27 +684,6 @@ namespace CTRPluginFramework
 
                     }
                 }
-                else if (control & 0x2000) // Argumented formatting
-                {
-                    u32 mode = (control & 0xF00) >> 8;
-
-                    if (mode == 1) // Text shake
-                    {
-                        bool setH = control & 0x80;
-                        bool setV = control & 0x40;
-                        u32 shakeAmount = (control & 0x3F) - 1;
-                        if (setH) shakingH = shakeAmount;
-                        if (setV) shakingV = shakeAmount;
-                    }
-                    else if (mode == 2) // Random text
-                    {
-                        bool disable = control & 0x80;
-                        if (disable)
-                            randomTextID = -1;
-                        else
-                            randomTextID = (control & 0x3F) - 1;
-                    }
-                }
                 continue;
             }
 
@@ -694,11 +691,6 @@ namespace CTRPluginFramework
                 break;
 
             glyph = Font::GetGlyph(str);
-            if (randomTextID != -1) // Not a bug, the first GetGlyph consumes a character from str.
-            {
-                u8* rstr = (u8*)Render::PullRandomCharacter(randomTextID).c_str();
-                glyph = Font::GetGlyph(rstr);
-            }
 
             if (glyph == nullptr)
                 break;
@@ -716,17 +708,9 @@ namespace CTRPluginFramework
                 continue;
             }
 
-            int offsetX = 0;
-            int offsetY = 0;
-            if (shakingH) {
-                offsetX = Utils::Random(-shakingH, shakingH);
-            }
-            if (shakingV) {
-                offsetY = Utils::Random(-shakingV, shakingV);
-            }
-
-            x = DrawGlyph(screen, glyph, x + offsetX, posY + offsetY, offset, color, flags) - offsetX;
-        } while (*str);
+            x = DrawGlyph(screen, glyph, x, posY, offset, color, flags);
+        }
+        while (*str);
 
         if (flags & Render::FontDrawMode::UNDERLINE) {
             if (underLineStart != x)

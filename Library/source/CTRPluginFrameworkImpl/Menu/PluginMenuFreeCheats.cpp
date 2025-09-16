@@ -292,9 +292,9 @@ namespace CTRPluginFramework
             static const u8 *errorstr = (u8 *)"You don't have any cheats here.\nGo in Search to start finding some !";
             int posY = 70;
 
-            Renderer::DrawSysString("\uE010\uE010  \uE00A  \uE010\uE010", 117, posY, 300, textcolor);
+            Renderer::DrawGameFontString("\uE010\uE010  \uE00A  \uE010\uE010", 117, posY, 300, textcolor);
             posY += 10;
-            Renderer::DrawSysStringReturn(errorstr, 35, posY, 300, textcolor);
+            Renderer::DrawGameFontStringReturn(errorstr, 35, posY, 300, textcolor);
             return;
         }
 

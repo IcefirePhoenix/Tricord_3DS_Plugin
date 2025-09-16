@@ -30,41 +30,43 @@ namespace CTRPluginFramework
         return static_cast<s64>(_ticks / (TicksPerSecond / 1000000.f));
     }
 
-    std::string Time::GetDate(bool addTime)
+    std::string Time::getCurrentTime(bool getDate)
     {
-        char buffer[20] = { 0 };
-        time_t t = time(NULL);
-        struct tm *timeinfo = localtime(&t);
+        std::time_t now = std::time(nullptr);
+        std::tm tm = *std::localtime(&now);
 
-        strftime(buffer, sizeof(buffer), addTime ? "%F_%H.%M" : "%F", timeinfo); // colons not allowed -> auto-truncates string as a side effect
-
-        std::string dateStr(buffer);
-
-        std::replace(dateStr.begin(), dateStr.end(), '/', '.');
-        return dateStr;
+        std::ostringstream out;
+        out << std::put_time(&tm, getDate ? "%F" : "T%H%M%S");
+        return out.str();
     }
 
+    std::string Time::GetDate(void)
+    {
+        return getCurrentTime(true);
+    }
+
+    std::string Time::GetTime(void)
+    {
+        return getCurrentTime(false);
+    }
+
+    // std::get_time is broken in this env, manual parsing needed
     std::string Time::ParseDate(std::string date)
     {
-        std::map<std::string, std::string> monthMap = {
-            {"01", "Jan"}, {"02", "Feb"}, {"03", "Mar"}, {"04", "Apr"},
-            {"05", "May"}, {"06", "Jun"}, {"07", "Jul"}, {"08", "Aug"},
-            {"09", "Sep"}, {"10", "Oct"}, {"11", "Nov"}, {"12", "Dec"}
-        };
+        char buffer[30];
+        int year, month, day;
+        std::tm tm = {};
 
-        std::istringstream stream(date);
-        std::string year, month, day;
+        if (sscanf(date.c_str(), "%d-%d-%d", &year, &month, &day) == 3)
+        {
+            tm.tm_year = year - 1900;
+            tm.tm_mon = month - 1;
+            tm.tm_mday = day;
 
-        std::getline(stream, year, '-');
-        std::getline(stream, month, '-');
-        std::getline(stream, day);
-
-        if (monthMap.find(month) == monthMap.end())
-            return "Invalid Date";
-
-        std::stringstream formattedDate;
-        formattedDate << monthMap[month] << " " << std::stoi(day) << ", " << year;
-
-        return formattedDate.str();
+            std::strftime(buffer, sizeof(buffer), "%b %d, %Y", &tm);
+            return std::string(buffer);
+        }
+        else
+            return "Unknown";
     }
 }

@@ -127,7 +127,7 @@ namespace CTRPluginFramework
         Window::TopWindow.Draw();
 
         // Draw title
-        int width = Renderer::DrawSysString(_folder->name.c_str(), posX, posY, XMAX, title);
+        int width = Renderer::DrawGameFontString(_folder->name.c_str(), posX, posY, XMAX, title);
         Renderer::DrawLine(posX, posY, width, title);
         posY += 7;
 
@@ -156,7 +156,7 @@ namespace CTRPluginFramework
                 if (item->_type != MenuType::Folder)
                 {
                     _iconCallback(posX, posY);
-                    Renderer::DrawSysString(item->name.c_str(), posX + 20, posY, XMAX, c);
+                    Renderer::DrawGameFontString(item->name.c_str(), posX + 20, posY, XMAX, c);
                 }
                 // Draw Folder
                 else
@@ -183,7 +183,6 @@ namespace CTRPluginFramework
                 if (item->_type == MenuType::Entry)
                 {
                     Renderer::DrawSysCheckBox(item->name.c_str(), posX, posY, XMAX, c, item->AsMenuEntryImpl().IsActivated());
-                    //Renderer::DrawSysString(item->name.c_str(), posX + 20, posY, XMAX, c);
                 }
                 // MenuEntryTools
                 else if (item->_type == MenuType::EntryTools)
@@ -198,16 +197,9 @@ namespace CTRPluginFramework
                     {
                         if (e->Icon != nullptr)
                             e->Icon(posX, posY);
-                        Renderer::DrawSysString(item->name.c_str(), posX + 20, posY, XMAX, c);
+                        Renderer::DrawGameFontString(item->name.c_str(), posX + 20, posY, XMAX, c);
                     }
                 }
-                // MenuEntryFreeCheat
-               /* else if (item->_type == MenuType::FreeCheat)
-                {
-                    MenuEntryImpl *e = reinterpret_cast<MenuEntryImpl *>(item);
-
-                    Renderer::DrawSysCheckBox(item->name.c_str(), posX, posY, XMAX, c, e->IsActivated());
-                } */
                 // MenuEntryActionReplay
                 else if (item->_type == MenuType::ActionReplay)
                 {
@@ -234,7 +226,7 @@ namespace CTRPluginFramework
             if (!_folder->GetNote().empty())
             {
                 int posY = 40;
-                Renderer::DrawSysStringReturn((u8 *)_folder->GetNote().c_str(), 35, posY, 295, Preferences::Settings.MainTextColor, 190);
+                Renderer::DrawGameFontStringReturn((u8 *)_folder->GetNote().c_str(), 35, posY, 295, Preferences::Settings.MainTextColor, 190);
             }
         }
     }

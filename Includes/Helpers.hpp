@@ -11,6 +11,7 @@
 #include "Helpers/GeneralHelpers.hpp"
 
 #include "Helpers/MenuHelpers/DescriptionUtils.hpp"
+#include "Helpers/MenuHelpers/FAQ_Parse.hpp"
 #include "Helpers/MenuHelpers/FolderEntries.hpp"
 
 #include "Helpers/BuiltIn/HoldKey.hpp"
@@ -23,6 +24,7 @@
 
 // #include "Helpers/Interfaces/FaceSelMenu.hpp"
 #include "Helpers/Interfaces/LevelStatusEditor.hpp"
+#include "Helpers/Interfaces/PlayerSelector.hpp"
 
 #include "Helpers/Data/Actor.hpp"
 #include "Helpers/Data/Collision.hpp"

@@ -10,6 +10,7 @@
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuExecuteLoop.hpp"
 #include "TID.h"
 #include <fstream>
+#include <ctime>
 
 namespace CTRPluginFramework
 {
@@ -83,14 +84,14 @@ namespace CTRPluginFramework
     static PluginMenuActionReplay *__pmARinstance = nullptr;
     PluginMenuActionReplay::PluginMenuActionReplay() :
         _topMenu{ "Action Replay Codes" },
-        _noteBtn(Button::Icon | Button::Toggle, IntRect(40, 125, 110, 28), Icon::DrawInfo),
-        _editorBtn(Button::Icon, IntRect(40, 90, 110, 28), Icon::DrawEdit),
-        _newBtn(Button::Icon, IntRect(170, 90, 110, 28), Icon::DrawPlus),
-        _cutBtn(Button::Icon, IntRect(170, 162, 110, 28), Icon::DrawCut),
-        _pasteBtn(Button::Icon, IntRect(170, 162, 110, 28), Icon::DrawClipboard),
-        _duplicateBtn(Button::Icon, IntRect(170, 127, 110, 28), Icon::DrawDuplicate),
-        _trashBtn(Button::Icon, IntRect(40, 160, 110, 28), Icon::DrawTrash),
-        _openFileBtn(0, "Open", IntRect(30, 200, 34, 15)),
+        _noteBtn(Button::Icon | Button::Toggle, IntRect(40, 115, 110, 28), Icon::DrawInfo),
+        _editorBtn(Button::Icon, IntRect(40, 80, 110, 28), Icon::DrawEdit),
+        _newBtn(Button::Icon, IntRect(170, 80, 110, 28), Icon::DrawPlus),
+        _cutBtn(Button::Icon, IntRect(170, 152, 110, 28), Icon::DrawCut),
+        _pasteBtn(Button::Icon, IntRect(170, 152, 110, 28), Icon::DrawClipboard),
+        _duplicateBtn(Button::Icon, IntRect(170, 117, 110, 28), Icon::DrawDuplicate),
+        _trashBtn(Button::Icon, IntRect(40, 152, 110, 28), Icon::DrawTrash),
+        _openFileBtn(0, "Open file", IntRect(210, 190, 78, 21)),
 
         _clipboard{ nullptr },
         _path{0}
@@ -178,30 +179,31 @@ namespace CTRPluginFramework
         Renderer::SetTarget(BOTTOM);
         Window::BottomWindow.Draw();
 
-        Renderer::DrawRect(IntRect(30, 85, 259, 110), Color::Magenta, true);
+        Renderer::DrawRect(IntRect(30, 75, 259, 110), Color::Magenta, true);
+        Renderer::DrawRect(IntRect(30, 33, 259, 42), Color::Maroon, true);
 
         _cutBtn.Draw();
         _pasteBtn.Draw();
         _openFileBtn.Draw();
 
-        int posX = 30 + 34 + 5;
-        int posY = 200;
+        int posX = 35;
+        int posY = 35;
 
-        // y positions are not consistent?
-        int yCoordA = 95;
-        int yCoordB = 132;
-        int cutPasteY = 168;
+        int yCoordA = 85;
+        int yCoordB = 122;
+        int cutPasteY = 158;
 
-        Renderer::DrawRect(posX, posY, 220, 15, Color::Maroon);
-        posY += 3;
-        Renderer::DrawString((const char *)_path, posX + 2, posY, Color::Gainsboro);
+        Renderer::DrawGameFontString((const char*)("Active cheat file:"), posX + 2, posY, 330, Color::Gainsboro);
+        posY += 2;
+
+        Renderer::DrawGameFontString((const char *)_path, posX + 2, posY, 330, Color::Gainsboro);
 
         const char* labels[6] =
         {
             "Create New", "Duplicate", "Open Editor", "", "Delete", "Read Note"
         };
 
-        Renderer::DrawSysString(labels[0], 205, yCoordA, 290, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontString(labels[0], 205, yCoordA, 290, Preferences::Settings.MainTextColor);
         _newBtn.Draw();
 
         if (_topMenu.GetSelectedItem())
@@ -213,18 +215,18 @@ namespace CTRPluginFramework
                 _duplicateBtn.Draw();
                 _trashBtn.Draw();
 
-                Renderer::DrawSysString(labels[1], 205, yCoordB, 290, Preferences::Settings.MainTextColor);
+                Renderer::DrawGameFontString(labels[1], 205, yCoordB, 290, Preferences::Settings.MainTextColor);
 
                 if (!_topMenu.GetSelectedItem()->note.empty())
-                    Renderer::DrawSysString(labels[5], 75, yCoordB -= 17, 290, Preferences::Settings.MainTextColor);
+                    Renderer::DrawGameFontString(labels[5], 75, yCoordB -= 17, 290, Preferences::Settings.MainTextColor);
 
-                for (int i = 2, yCoord2 = 95; i < 5; ++i, yCoord2 += 28)
-                    Renderer::DrawSysString(labels[i], 75, yCoord2, 290, Preferences::Settings.MainTextColor);
+                for (int i = 2, yCoord2 = 85; i < 5; ++i, yCoord2 += 28)
+                    Renderer::DrawGameFontString(labels[i], 75, yCoord2, 290, Preferences::Settings.MainTextColor);
             }
 
             // cut/paste label
             const char* swapLabel = (_clipboard != nullptr) ? "Paste" : "Cut";
-            Renderer::DrawSysString(swapLabel, 205, cutPasteY, 290, Preferences::Settings.MainTextColor);
+            Renderer::DrawGameFontString(swapLabel, 205, cutPasteY, 290, Preferences::Settings.MainTextColor);
         }
 
     }
@@ -486,7 +488,7 @@ namespace CTRPluginFramework
         std::string sourcePath = Preferences::CheatsFile;
         std::string backupPath = manualMode ? "/Tricord/AR_Backups/manual/" : "/Tricord/AR_Backups/auto/";
         std::string backupFileName = "";
-        std::string dateStr = Time::GetDate(false);
+        std::string dateStr = Time::GetDate();
 
         // prep read processes
         File sourceFile(sourcePath, File::READ);
@@ -524,7 +526,7 @@ namespace CTRPluginFramework
                 if (!backupFileName.empty()) // backup file found
                     backupPath.append(backupFileName);
                 else
-                    backupPath.append("AutoBackup-" + dateStr + ".txt"); // no backup found; create new
+                    backupPath.append(Utils::Format("AutoBackup-%s.txt", dateStr.c_str())); // no backup found; create new
             }
         }
         else
@@ -582,17 +584,17 @@ namespace CTRPluginFramework
             }
             else
                 // rename the backup file with date
-                File::Rename(backupPath, "/Tricord/AR_Backups/auto/" + region + "/AutoBackup-" + dateStr + ".txt");
+                File::Rename(backupPath, Utils::Format("/Tricord/AR_Backups/auto/%s/AutoBackup-%s.txt", region.c_str(), dateStr.c_str()));
         }
         else
         {
             MessageBox restoreNotif("The Action Replay cheat file is empty. Would you like to restore from a backup?", DialogType::DialogYesNo);
             if (restoreNotif())
-                RestoreFromBackup(true, Time::ParseDate(dateStr));
+                RestoreFromBackup(true);
         }
     }
 
-    void    PluginMenuActionReplay::RestoreFromBackup(bool fromAutoEmptyDetect, std::string autoDate)
+    void    PluginMenuActionReplay::RestoreFromBackup(bool fromAutoEmptyDetect)
     {
         std::string currCheatFilePath = Preferences::CheatsFile;
 
@@ -607,7 +609,22 @@ namespace CTRPluginFramework
         if (fromManual || fromAutoEmptyDetect)
         {
             std::string chosenFilePath = "";
-            if (Utils::FilePicker(chosenFilePath, ".txt", autoDate) == 0)
+            std::string lastBackupDateStr = "Unknown";
+
+            Directory autoFolder;
+            Directory::Open(autoFolder, Utils::Format("/Tricord/AR_Backups/auto/%s/", Process::GetRegionCode().c_str()));
+
+            std::vector<std::string> files;
+            autoFolder.ListFiles(files, ".txt"); // a maximum of one file should exist at any given time
+
+            if (!files.empty() && files[0].find("AutoBackup") != std::string::npos)
+            {
+                size_t pos = files[0].find("AutoBackup-");
+                if (pos != std::string::npos)
+                    lastBackupDateStr = Time::ParseDate(files[0].substr(pos + std::string("AutoBackup-").length()));
+            }
+
+            if (Utils::FilePicker(chosenFilePath, ".txt", lastBackupDateStr) == 0)
                 Preferences::CheatsFile = chosenFilePath;
 
             MenuFolderImpl *root = __pmARinstance->_topMenu.GetRootFolder();

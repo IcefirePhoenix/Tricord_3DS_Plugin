@@ -7,12 +7,17 @@
 namespace CTRPluginFramework
 {
     extern "C" unsigned char *About15;
-    extern "C" unsigned char *AddFavorite25;
-    extern "C" unsigned char *AddFavoriteFilled25;
+    extern "C" unsigned char *BlueLink30;
+    extern "C" unsigned char *HeartEmpty25;
+    extern "C" unsigned char *HeartFilled25;
+    extern "C" unsigned char *ButtonActive;
+    extern "C" unsigned char *ButtonInactive;
+    extern "C" unsigned char *BottomBG_Underline;
     extern "C" unsigned char *CheckedCheckbox;
     extern "C" unsigned char *UnCheckedCheckbox;
     extern "C" unsigned char *Camera15;
     extern "C" unsigned char *Console25;
+    extern "C" unsigned char *ConsoleDisabled25;
     extern "C" unsigned char *CapsLockOn15;
     extern "C" unsigned char *CapsLockOnFilled15;
     extern "C" unsigned char *ClearSymbol15;
@@ -25,6 +30,8 @@ namespace CTRPluginFramework
     extern "C" unsigned char *Cut25;
     extern "C" unsigned char *CutFilled25;
     extern "C" unsigned char *Discord25;
+    extern "C" unsigned char *CPad15;
+    extern "C" unsigned char *DPad15;
     extern "C" unsigned char *Duplicate25;
     extern "C" unsigned char *DuplicateFilled25;
     extern "C" unsigned char *Edit25;
@@ -34,28 +41,35 @@ namespace CTRPluginFramework
     extern "C" unsigned char *FolderFilled;
     extern "C" unsigned char *File15;
     extern "C" unsigned char *GameController15;
+    extern "C" unsigned char *GreenLink30;
     extern "C" unsigned char *Grid15;
     extern "C" unsigned char *Info25;
     extern "C" unsigned char *InfoFilled25;
+    extern "C" unsigned char *InfoNewSelect25;
+    extern "C" unsigned char *InfoNew25;
     extern "C" unsigned char *LoadPosition15;
     extern "C" unsigned char *SavePosition15;
-    extern "C" unsigned char *HandCursor15;
     extern "C" unsigned char *Maintenance15;
     extern "C" unsigned char *More15;
     extern "C" unsigned char *Plus25;
     extern "C" unsigned char *PlusFilled25;
     extern "C" unsigned char *RAM15;
-    extern "C" unsigned char *Restart15;
-    extern "C" unsigned char *Save25;
+    extern "C" unsigned char *RedLink30;
+    extern "C" unsigned char *ReturnButton25;
+    extern "C" unsigned char *ReturnButtonPush25;
+    extern "C" unsigned char *SavePink30;
     extern "C" unsigned char *Search15;
     extern "C" unsigned char *Settings15;
     extern "C" unsigned char *Shutdown15;
+    extern "C" unsigned char *TFH_Camera;
     extern "C" unsigned char *Trash25;
     extern "C" unsigned char *TrashFilled25;
-    extern "C" unsigned char *UserManualFilled15;
-    extern "C" unsigned char *DefaultKeyboardCustomIcon;
-
-    CustomIcon Icon::DefaultCustomIcon{(CustomIcon::Pixel*) DefaultKeyboardCustomIcon, 30, 30, true};
+    extern "C" unsigned char *TricordIcon25;
+    extern "C" unsigned char *Triforce25;
+    extern "C" unsigned char *TriforceFilled25;
+    extern "C" unsigned char *ZL15;
+    extern "C" unsigned char *ZR15;
+    extern "C" unsigned char *UserManual15;
 
     #define RGBA8 GSP_RGBA8_OES
 
@@ -66,6 +80,50 @@ namespace CTRPluginFramework
         u8 g;
         u8 r;
     };
+
+
+    std::vector<u8> RotateIcon(const u8* src, int width, int height, Icon::Rotation rotation)
+    {
+        int bpp = 4; // bytes-per-pixel, 4 = RGBA
+        int new_width  = (rotation == Icon::ROT_90 || rotation == Icon::ROT_270) ? height : width;
+        int new_height = (rotation == Icon::ROT_90 || rotation == Icon::ROT_270) ? width : height;
+
+        std::vector<u8> rotated(new_width * new_height * bpp, 0);
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                int src_index = (y * width + x) * bpp;  // pixel index in source image
+                int dst_index = 0;                      // pixel index in dest image
+
+                switch (rotation)
+                {
+                    case Icon::ROT_0:
+                        dst_index = src_index;
+                        break;
+                    case Icon::ROT_90:
+                        dst_index = (x * new_height + (new_height - 1 - y)) * bpp;
+                        break;
+                    case Icon::ROT_180:
+                        dst_index = ((new_height - 1 - y) * new_width + (new_width - 1 - x)) * bpp;
+                        break;
+                    case Icon::ROT_270:
+                        dst_index = ((new_width - 1 - x) * new_height + y) * bpp;
+                        break;
+                }
+
+                // RGBA, 4 color channels
+                for (int colorChannel = 0; colorChannel < bpp; colorChannel++)
+                {
+                    rotated[dst_index + colorChannel] = src[src_index + colorChannel];
+                }
+            }
+        }
+
+        return rotated;
+    }
+
 
     inline int Icon::DrawImg(u8 *img, int posX, int posY, int sizeX, int sizeY)
     {
@@ -122,7 +180,7 @@ namespace CTRPluginFramework
                     dst = PrivColor::ToFramebuffer(dst, blended);
                 }
                 else
-                    dst += bpp;
+                    dst += bpp; // advance by bytes-per-pixel (4 = RGBA)
                 img += 4;
             }
         }
@@ -142,9 +200,11 @@ namespace CTRPluginFramework
     ** 3DS
     ** 25px * 25px
     **************/
-    int Icon::Draw3DS(int posX, int posY)
+    int Icon::Draw3DS(int posX, int posY, bool enabled)
     {
-        return (DrawImg(Console25, posX, posY, 25, 25));
+        u8 *img = enabled ? Console25 : ConsoleDisabled25;
+
+        return (DrawImg(img, posX, posY, 25, 25));
     }
 
     /*
@@ -154,6 +214,15 @@ namespace CTRPluginFramework
     int Icon::DrawAbout(int posX, int posY)
     {
         return (DrawImg(About15, posX, posY, 15, 15));
+    }
+
+    /*
+    ** BG_Underline
+    ** 304px * 22px
+    **************/
+    int Icon::DrawBG_Underline(int posX, int posY)
+    {
+        return (DrawImg(BottomBG_Underline, posX, posY, 304, 22));
     }
 
     /*
@@ -199,12 +268,22 @@ namespace CTRPluginFramework
 
     /*
     ** Close
-    ** 20px * 20px
+    ** 25px * 25px
     **********/
     int Icon::DrawClose(int posX, int posY, bool filled)
     {
-        u8 *img = filled ? CloseWindowFilled20 : CloseWindow20;
-        return (DrawImg(img, posX, posY, 20, 20));
+        u8 *img = filled ? ReturnButtonPush25 : ReturnButton25;
+        return (DrawImg(img, posX, posY, 25, 25));
+    }
+
+    /*
+     ** MenuButton
+     ** 120px * 32px
+     **********/
+    int Icon::DrawMenuButton(int posX, int posY, bool filled)
+    {
+        u8 *img = filled ? ButtonActive : ButtonInactive;
+        return (DrawImg(img, posX, posY, 120, 32));
     }
 
     /*
@@ -262,7 +341,7 @@ namespace CTRPluginFramework
     ***************/
     int Icon::DrawAddFavorite(int posX, int posY, bool filled)
     {
-        u8 *img = filled ? AddFavoriteFilled25 : AddFavorite25;
+        u8 *img = filled ? HeartFilled25 : HeartEmpty25;
         return (DrawImg(img, posX, posY, 25, 25));
     }
 
@@ -304,13 +383,13 @@ namespace CTRPluginFramework
     }
 
     /*
-    ** Hand Cursor
-    ** 15px * 15px
+    ** InfoNew
+    ** 25px * 25px
     ***************/
-    int Icon::DrawHandCursor(int posX, int posY)
+    int Icon::DrawInfoNew(int posX, int posY, bool filled)
     {
-        DrawImg(HandCursor15, posX, posY, 15, 15);
-        return (posX + 15);
+        u8 *img = filled ? InfoNewSelect25 : InfoNew25;
+        return (DrawImg(img, posX, posY, 25, 25));
     }
 
     /*
@@ -352,21 +431,12 @@ namespace CTRPluginFramework
     }
 
     /*
-    ** Restart
-    ** 15px * 15 px
-    **************/
-    int Icon::DrawRestart(int posX, int posY)
-    {
-        return (DrawImg(Restart15, posX, posY, 15, 15));
-    }
-
-    /*
-    ** Save
-    ** 25px * 25px
+    ** Save Feather
+    ** 30px * 30px
     **************/
     int Icon::DrawSave(int posX, int posY)
     {
-        return (DrawImg(Save25, posX, posY, 25, 25));
+        return (DrawImg(SavePink30, posX, posY, 30, 30));
     }
 
     /*
@@ -419,6 +489,15 @@ namespace CTRPluginFramework
     }
 
     /*
+    ** Tricord
+    ** 25px * 25px
+    ***************/
+    int Icon::DrawTricord(int posX, int posY)
+    {
+        return (DrawImg(TricordIcon25, posX, posY, 25, 25));
+    }
+
+    /*
     ** Camera
     ** 15px * 15 px
     **************/
@@ -445,8 +524,89 @@ namespace CTRPluginFramework
         return (DrawImg(SavePosition15, posX, posY, 15, 15));
     }
 
-    int Icon::DrawCustomIcon(const CustomIcon& icon, int posX, int posY)
+    /*
+     ** User Manual
+     ** 15px * 15 px
+     **************/
+    int Icon::DrawManual(int posX, int posY)
     {
-        return (DrawImg((u8*)icon.pixArray, posX, posY, icon.sizeX, icon.sizeY));
+        return (DrawImg(UserManual15, posX, posY, 15, 15));
+    }
+
+    /*
+     ** ZL/ZR
+     ** 15px * 15 px
+     **************/
+    int Icon::DrawZL(int posX, int posY)
+    {
+        return (DrawImg(ZL15, posX, posY, 15, 15));
+    }
+
+    int Icon::DrawZR(int posX, int posY)
+    {
+        return (DrawImg(ZR15, posX, posY, 15, 15));
+    }
+
+    /*
+     ** Triforce (unfilled and filled)
+     ** 25px * 25 px
+     **************/
+    int Icon::DrawTriforce(int posX, int posY, bool isFilled)
+    {
+        u8 *img = isFilled ? TriforceFilled25 : Triforce25;
+        return (DrawImg(img, posX, posY, 25, 25));
+    }
+
+    /*
+     ** TFH Camera
+     ** 15px * 15 px
+     **************/
+    int Icon::DrawTFHCamera(int posX, int posY)
+    {
+        return (DrawImg(TFH_Camera, posX, posY, 20, 20));
+    }
+
+    /*
+     ** D-Pad, all directions
+     ** 15px * 15 px
+     **************/
+    int Icon::DrawDPad(int posX, int posY, Rotation rotation)
+    {
+        u8* rotated = rotation == ROT_0 ? DPad15 : RotateIcon(DPad15, 15, 15, rotation).data();
+
+        return (DrawImg(rotated, posX, posY, 15, 15));
+    }
+
+    /*
+     ** C-Pad, all directions
+     ** 15px * 15 px
+     **************/
+    int Icon::DrawCPad(int posX, int posY, Rotation rotation)
+    {
+        u8* rotated = rotation == ROT_0 ? CPad15 : RotateIcon(CPad15, 15, 15, rotation).data();
+
+        return (DrawImg(rotated, posX, posY, 15, 15));
+    }
+
+    /*
+    ** Link, G/B/R
+    ** 30px * 30 px
+    **************/
+    int Icon::DrawLinkFace(int posX, int posY, int player)
+    {
+        u8 *link = GreenLink30;
+        switch (player)
+        {
+            case 1:
+                link = BlueLink30;
+                break;
+            case 2:
+                link = RedLink30;
+                break;
+            default:
+                break;
+        }
+
+        return (DrawImg(link, posX, posY, 30, 30));
     }
 }

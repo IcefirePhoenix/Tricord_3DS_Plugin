@@ -19,7 +19,7 @@ namespace CTRPluginFramework
                 if (mode < 2)
                     modeStr = mode ? "Multiplayer Completion." : "Single-player Completion.";
                 else
-                    modeStr = "Multiplayer and Single-player\nCompletion";
+                    modeStr = "Multiplayer and Single-player\nCompletion.";
 
                 msg = "Currently editing Level Completion statuses\nfor " << Level::worldIDToStr(world) << ", " << modeStr << outro;
                 LevelStatusEditor(msg, Level::getLevelNamesFromWorld(world), world, mode)();

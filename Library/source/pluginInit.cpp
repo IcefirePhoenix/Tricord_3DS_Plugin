@@ -218,8 +218,8 @@ namespace CTRPluginFramework
         // Init default settings
         FwkSettings& settings = FwkSettings::Get();
 
-        settings.ThreadPriority = 0x30;
-        settings.WaitTimeToBoot = Seconds(5.f);
+        settings.ThreadPriority = 0x34;
+        settings.WaitTimeToBoot = Seconds(2.5f);
         settings.AreN3DSButtonsAvailable = true;
         settings.TryLoadSDSounds = false;
         settings.CloseMenuWithB = true;
@@ -480,30 +480,20 @@ namespace CTRPluginFramework
     // Initialize most subsystem / Global variables
     void    Initialize(void)
     {
+
         const char *mainPath = "/Tricord";
         if (!Directory::IsExists(mainPath))
             Directory::Create(mainPath);
 
-        // Init sysfont
-        Font::Initialize();
-
-        // If /cheats/ doesn't exists, create it
         const char *dirpath = "/cheats";
         if (!Directory::IsExists(dirpath))
             Directory::Create(dirpath);
 
-        // Set AR file path
-        Preferences::CheatsFile = "cheats.txt";
+        const std::string cheatPath = Utils::Format("/cheats/%016llX.txt", Process::GetTitleID());
+        Preferences::CheatsFile = cheatPath;
 
-        // Default: cheats.txt in cwd
-        if (!File::Exists(Preferences::CheatsFile))
-        {
-            const std::string cheatPath = Utils::Format("/cheats/%016llX.txt", Process::GetTitleID());
-            Preferences::CheatsFile = cheatPath;
-
-            if (!File::Exists(cheatPath))
-                File::Create(cheatPath);
-        }
+        if (!File::Exists(cheatPath))
+            File::Create(cheatPath);
     }
 
     // Main thread's start
@@ -519,6 +509,26 @@ namespace CTRPluginFramework
 
         // Update memory layout
         ProcessImpl::UpdateMemRegions();
+
+        u32 fontDataStartAddr = 0x0;
+        switch (Process::GetTitleID())
+        {
+            case TID_USA:
+                fontDataStartAddr = 0x306CE380;
+                break;
+            case TID_EUR:
+                fontDataStartAddr = 0x30950480;
+                break;
+            case TID_JPN:
+                fontDataStartAddr = 0x3029E100;
+                break;
+        }
+
+        // Addresses cannot be checked/accessed unless memRegions were updated beforehand; this is why font init cannot be done earlier than this!
+        if (!Process::CheckAddress(fontDataStartAddr, MEMPERM_READ))
+            fontDataStartAddr -= 0x1C000000;
+
+        Font::Initialize(fontDataStartAddr);
 
         // Start plugin
         main();
@@ -603,7 +613,7 @@ namespace CTRPluginFramework
         // Create event
         svcCreateEvent(&g_continueGameEvent, RESET_ONESHOT);
         // Start ctrpf's primary thread
-        svcCreateThread(&g_keepThreadHandle, KeepThreadMain, arg, (u32*)&keepThreadStack[0x1000], 0x1A, 0);
+        svcCreateThread(&g_keepThreadHandle, KeepThreadMain, arg, (u32*)&keepThreadStack[0x1000], 0x18, 0);
         // Wait until basic initialization has been made before returning to game
         svcWaitSynchronization(g_continueGameEvent, U64_MAX);
         // Close the event

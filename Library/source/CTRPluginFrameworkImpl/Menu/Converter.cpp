@@ -10,10 +10,10 @@ namespace CTRPluginFramework
     static Converter *__converter = nullptr;
 
     Converter::Converter():
-        _decimalTB(32, 110, 125, 15),
-        _hexadecimalTB(32, 150, 125, 15),
-        _floatTB(165, 110, 125, 15),
-        _hexfloatTB(165, 150, 125, 15)
+        _decimalTB(32, 100, 125, 20),
+        _hexadecimalTB(32, 150, 125, 20),
+        _floatTB(165, 100, 125, 20),
+        _hexfloatTB(165, 150, 125, 20)
     {
         u32 val = 0;
         _decimalTB.SetValue(val);
@@ -127,18 +127,18 @@ namespace CTRPluginFramework
         _hexfloatTB.Draw();
 
         int posX = 32;
-        int posY = 100;
+        int posY = 80;
         const Color &textcolor = Preferences::Settings.MainTextColor;
 
-        Renderer::DrawString("Decimal:", posX, posY, textcolor);
-        posY = 140;
-        Renderer::DrawString("Decimal (hex):", posX, posY, textcolor);
+        Renderer::DrawGameFontString("Decimal:", posX, posY, 300, textcolor);
+        posY = 130;
+        Renderer::DrawGameFontString("Decimal (hex):", posX, posY, 300, textcolor);
 
         posX = 165;
-        posY = 100;
-        Renderer::DrawString("Float: ", posX, posY, textcolor);
-        posY = 140;
-        Renderer::DrawString("Float (hex):", posX, posY, textcolor);
+        posY = 80;
+        Renderer::DrawGameFontString("Float: ", posX, posY, 300, textcolor);
+        posY = 130;
+        Renderer::DrawGameFontString("Float (hex):", posX, posY, 300, textcolor);
         Renderer::EndFrame();
     }
 }

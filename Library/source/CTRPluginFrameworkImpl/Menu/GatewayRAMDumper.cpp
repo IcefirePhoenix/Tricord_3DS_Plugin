@@ -173,10 +173,14 @@ namespace CTRPluginFramework
         bool exit = false;
         bool select = false;
 
-        std::string footer = "\n\n\n\n" + std::string(FONT_A) + ": Select the current region\n" +
-                             std::string(FONT_B) + ": Quit\n\nSelect: Select all regions\nStart: Start the dump";
+        std::string spacer = "          ";
+        std::string footer = "\n\n\n\n";
+        footer += spacer + std::string(FONT_A) + ": Select/Deselect region\n";
+        footer += spacer + std::string(FONT_B) + ": Quit\n\n";
+        footer += spacer + "Select: Select all regions\n";
+        footer += spacer + "Start: Start the dump ";
 
-        menu.drawFooter = true;
+            menu.drawFooter = true;
 
         // get mem regions
         Renderer::SetTarget(TOP);
@@ -248,36 +252,23 @@ namespace CTRPluginFramework
 
     void    GatewayRAMDumper::_OpenFile(void)
     {
-        char buffer[100] = { 0 };
-        time_t t = time(NULL);
-        struct tm *timeinfo = localtime(&t);
-
-        strftime(buffer, 100, "%x-%X", timeinfo);
-
-        std::string timeString(buffer);
-
-        timeString.erase(std::remove(timeString.begin(), timeString.end(), '/'), timeString.end());
-        timeString.erase(std::remove(timeString.begin(), timeString.end(), ':'), timeString.end());
-
         MessageBox msgBox("New RAM Dump", "Would you like to name the RAM dump?", DialogType::DialogYesNo);
 
         if (msgBox())
         {
-            // Custom name
             Keyboard keyboard("New RAM Dump", "Input a new name for this RAM dump.");
-
             keyboard.DisplayTopScreen = true;
+
             if (keyboard.Open(_fileName) == -1)
                 return;
         }
         else
         {
-            // Default name
             Process::GetTitleID(_fileName);
+            _fileName += Utils::Format("- %s%s", Time::GetDate().c_str(), Time::GetTime().c_str());
         }
 
-        _fileName += "-";
-        _fileName += timeString + ".bin";
+        _fileName += ".bin";
 
         std::string path("Dumps/");
 

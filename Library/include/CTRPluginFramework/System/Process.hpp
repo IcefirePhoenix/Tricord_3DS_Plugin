@@ -152,14 +152,6 @@ namespace CTRPluginFramework
         static bool     ProtectRegion(u32 addr, int perm = (MEMPERM_READ | MEMPERM_WRITE |MEMPERM_EXECUTE));
 
         /**
-         * \brief Protect all regions within the provided range
-         * \param startAddress  The address from the range starts
-         * \param endAddress    The address from the range ends
-         * \param perm          The permissions that muse be applied to the regions
-         */
-        static void     ProtectRegionInRange(u32 startAddress, u32 endAddress, int perm = (MEMPERM_READ | MEMPERM_WRITE |MEMPERM_EXECUTE));
-
-        /**
          * \brief Safely copy the current process memory (MemPerm check) \n Like a memcpy but safe
          * \param dst   The destination to copy to
          * \param src   The source to copy from

@@ -31,7 +31,7 @@ namespace CTRPluginFramework
     };
 
     HexEditor::HexEditor(u32 target) :
-        _submenu{ { "New cheat", "Jump to", "Jump relative", "Jump to value",
+        _submenu{ { "New cheat", "Jump to address", "Jump relative", "Jump to value",
                     "Converter", "Move backward", "Move forward", "Save this address",
         "Browse history", "Clear history"}},//, "Play 1 Frame", "Play 2 frames", "Play 5 frames" }},
         _renderTask(_RenderTop, (void *)this, Task::AppCores)
@@ -242,22 +242,22 @@ namespace CTRPluginFramework
 
         if (_ctx._flags & DirtyMemoryCache)
         {
-            posY += 5;
-            Renderer::DrawString("Apply changes: ", 44, posY, maintextcolor);
-            posY -= 14;
-            Renderer::DrawSysString("\uE000", 149, posY, 330, maintextcolor);
+            posY += 8;
+            Renderer::DrawGameFontString("Apply changes: ", 44, posY, 330, maintextcolor);
+            posY -= 16;
+            Renderer::DrawGameFontString("\uE000", 143, posY, 330, maintextcolor);
 
-            posY +=2;
-            Renderer::DrawString("Discard changes: ", 44, posY, maintextcolor);
-            posY -= 14;
-            Renderer::DrawSysString("\uE001", 149, posY, 330, maintextcolor);
+            posY -= 16;
+            Renderer::DrawGameFontString("Discard changes: ", 180, posY, 330, maintextcolor);
+            posY -= 16;
+            Renderer::DrawGameFontString("\uE001", 290, posY, 330, maintextcolor);
         }
         else
         {
-            posY += 5;
-            Renderer::DrawString("Options: ", 44, posY, maintextcolor);
-            posY -= 14;
-            Renderer::DrawSysString("\uE002", 99, posY, 330, maintextcolor);
+            posY += 8;
+            Renderer::DrawGameFontString("Options: ", 44, posY, 330, maintextcolor);
+            posY -= 16;
+            Renderer::DrawGameFontString("\uE002", 99, posY, 330, maintextcolor);
         }
 
         // Render submenu
@@ -501,22 +501,22 @@ namespace CTRPluginFramework
         const Color &bgSecondary = Preferences::Settings.BackgroundSecondaryColor;
         static IntRect background(93, 95, 213, 50);
 
-        int posY = 115;
+        int posY = 110;
 
         // Draw "window" background
         Renderer::SetTarget(TOP);
         Renderer::DrawRect2(background, bgMain, bgSecondary);
         Renderer::DrawRect(background, Color::Gainsboro, false);
-        Renderer::DrawString(msg[mode], 103, posY, Color::Gainsboro);
+        Renderer::DrawGameFontString(msg[mode], 103, posY, 330, Color::Gainsboro);
 
         // We write to second framebuffer too because of keyboard below
         Renderer::EndFrame();
-        posY = 115;
+        posY = 110;
 
         Renderer::SetTarget(TOP);
         Renderer::DrawRect2(background, bgMain, bgSecondary);
         Renderer::DrawRect(background, Color::Gainsboro, false);
-        Renderer::DrawString(msg[mode], 103, posY, Color::Gainsboro);
+        Renderer::DrawGameFontString(msg[mode], 103, posY, 330, Color::Gainsboro);
 
         keyboard.DisplayTopScreen = false;
 

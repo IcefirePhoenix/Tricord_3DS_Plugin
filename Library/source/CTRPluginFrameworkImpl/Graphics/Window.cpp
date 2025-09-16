@@ -17,7 +17,7 @@ namespace CTRPluginFramework
     {
         if (closeBtn)
         {
-            _closeBtn = new Button(Button::Icon, IntRect(posX + width - 25, posY + 4, 20, 20), Icon::DrawClose);
+            _closeBtn = new Button(Button::Icon, IntRect(8, 207, 20, 20), Icon::DrawClose);
             _closeBtn->SetAcceptSoundEvent(SoundEngine::Event::NUM_EVENTS);
         }
 
@@ -62,7 +62,7 @@ namespace CTRPluginFramework
         Color &color = Preferences::Settings.WindowTitleColor;
         int posY = _rect.leftTop.y + 5;
         int posX = _rect.leftTop.x + 10;
-        int xx = Renderer::DrawSysString(title.c_str(),posX, posY, 330, color);
+        int xx = Renderer::DrawGameFontString(title.c_str(),posX, posY, 330, color);
         Renderer::DrawLine(posX, posY, xx, color);
 
         // Close button

@@ -29,14 +29,6 @@ namespace CTRPluginFramework
         ******************************/
         explicit PluginMenu(std::string name = "Cheats", std::string about = "", u32 menuType = 0);
 
-        /*
-        ** Create a new PluginMenu
-        ** name = The name of the menu / main folder
-        ** about = pointer to encrypted about's text data
-        ** func = function to decrypt the about's data
-        ******************************/
-        PluginMenu(std::string name, void *about, DecipherPointer func, u32 menuType = 0);
-
         /**
          * \brief Create a new PluginMenu
          * \param name The name of the menu / main folder
@@ -102,18 +94,6 @@ namespace CTRPluginFramework
          * \return A std::vector with pointers to all MenuFolder objects
          */
         std::vector<MenuFolder *>   GetHiddenList(void) const;
-
-        /**
-        * \brief Enable / Disable the HexEditor in Tools
-        * \param isEnabled If HexEditor must be enabled or not
-        */
-        void    SetHexEditorState(bool isEnabled) const;
-
-        /**
-        * \brief Choose to display or not the "plugin ready" message
-        * \param showMsg If the message must be displayed or not
-        */
-        void    ShowWelcomeMessage(bool showMsg) const;
 
         /**
          * \brief Check if the menu is currently open
@@ -205,7 +185,6 @@ namespace CTRPluginFramework
 
         bool FreecamToggle;
         bool GameplayToggle;
-        bool ShowInvite;
 
     private:
         std::unique_ptr<PluginMenuImpl> _menu;

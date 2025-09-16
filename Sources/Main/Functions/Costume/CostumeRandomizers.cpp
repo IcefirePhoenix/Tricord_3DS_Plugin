@@ -47,46 +47,36 @@ namespace CTRPluginFramework
     // Menu interface for toggling costume randomizers per player
     void openRandomizerToggles(int selection)
     {
-        StringVector bottomScreenOptions;
-        std::string message;
-        bool isMenuOpen = true;
-
-        Keyboard kbd("Costume Randomizers", "");
-        kbd.DisplayTopScreen = true;
-        kbd.CanAbort(false);
-
-        if (selection == 0 || selection == 1)
+        switch (selection)
         {
-            while (isMenuOpen)
-            {
-                message = "Use the player toggles to enable the ";
-                message += (selection == 0) ? "Effective Costume Randomizers." : "Cosmetic Costume Randomizers.";
-
-                bottomScreenOptions.clear();
-                bottomScreenOptions.push_back(std::string("Player 1 ") << (randomizers[selection][0] ? ENABLED_SLIDER : DISABLED_SLIDER));
-                bottomScreenOptions.push_back(std::string("Player 2 ") << (randomizers[selection][1] ? ENABLED_SLIDER : DISABLED_SLIDER));
-                bottomScreenOptions.push_back(std::string("Player 3 ") << (randomizers[selection][2] ? ENABLED_SLIDER : DISABLED_SLIDER));
-                bottomScreenOptions.push_back("Save changes");
-
-                kbd.GetMessage() = message;
-                kbd.Populate(bottomScreenOptions);
-                int choice = kbd.Open();
-
-                if (choice >= 0 && choice <= 2)
-                    randomizers[selection][choice] = !randomizers[selection][choice];
-                else
-                {
-                    if (choice == 3)
-                    {
-                        if (randomizers[0][0] || randomizers[0][1] || randomizers[0][2] || randomizers[1][0] || randomizers[1][1] || randomizers[1][2])
-                            costumeRandomizerAuto->Enable();
-                        else
-                            costumeRandomizerAuto->Disable();
-                    }
-                    isMenuOpen = false;
-                }
-            }
+            case 2:
+                costumeRandomizerAuto->Disable();
+            case -1:
+                return;
         }
+
+        int status = PlayerMask::PLAYER_NONE;
+
+        // read bool arrays...
+        for (int i = 0; i < 3; i++)
+        {
+            if (randomizers[selection][i])
+                status = static_cast<PlayerMask>(status | (1 << i));
+        }
+
+        status = PlayerSelector(true, status, "Costume Randomizer Toggle Menu", "randomizer")();
+
+        // set new values for bool arrays...
+        for (int i = 0; i < 3; i++)
+        {
+            randomizers[selection][i] = (status & (1 << i)) != 0;
+        }
+
+        // auto-enable or disable depending on values...
+        if (randomizers[0][0] || randomizers[0][1] || randomizers[0][2] || randomizers[1][0] || randomizers[1][1] || randomizers[1][2])
+            costumeRandomizerAuto->Enable();
+        else
+            costumeRandomizerAuto->Disable();
     }
 
     // Sets the current cosmetic/effective costume ID

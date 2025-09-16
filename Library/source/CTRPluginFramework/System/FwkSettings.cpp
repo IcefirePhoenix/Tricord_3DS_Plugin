@@ -1,6 +1,7 @@
 #include "CTRPluginFramework/System/FwkSettings.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/Window.hpp"
+#include "CTRPluginFramework/System/Task.hpp"
 
 namespace CTRPluginFramework
 {
@@ -48,18 +49,26 @@ namespace CTRPluginFramework
         }
     }
 
-    Result  FwkSettings::SetBottomScreenBackground(void *bmpData)
+    // MUST be 16-bit, RGB565
+    Result FwkSettings::SetBottomScreenBackground(const void *bmpData)
     {
-        BMPImage *image = new BMPImage(bmpData);
-
-        if (!image->IsLoaded())
+        Task bg([](void* arg) -> s32
         {
-            delete image;
-            return -1;
-        }
+            const void* bmp = arg;
+            BMPImage* image = new BMPImage(bmp);
 
-        Preferences::bottomBackgroundImage = image;
-        Window::UpdateBackgrounds();
+            if (!image->IsLoaded())
+            {
+                delete image;
+                return -1;
+            }
+
+            Preferences::bottomBackgroundImage = image;
+            Window::UpdateBackgrounds();
+            return 0;
+        });
+
+        bg.Start((void*)bmpData);
         return 0;
     }
 }

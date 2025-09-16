@@ -83,8 +83,8 @@ namespace CTRPluginFramework
 
         // System Font
         //#############################################################################################
-        static int      DrawSysString(const char *str, int posX, int &posY, int max, Color color, float offset = 0.f, const char *end = nullptr, u32 flags = 0);
-        static int      DrawSysStringReturn(const unsigned char* stri, int posX, int& posY, int xLimits, Color color, int maxY = 200, u32 flags = 0);
+        static int      DrawGameFontString(const char *str, int posX, int &posY, int max, Color color, float offset = 0.f, const char *end = nullptr, u32 flags = 0);
+        static int      DrawGameFontStringReturn(const unsigned char* stri, int posX, int& posY, int xLimits, Color color, int maxY = 200, u32 flags = 0);
 
         static float    GetTextSize(const char *text);
         static int      GetLineCount(const char *text, float maxWidth);
@@ -99,7 +99,7 @@ namespace CTRPluginFramework
         // Misc
         //#############################################################################################
 
-        // Calulate sysfont glyph
+        // Calulate GameFont glyph
         static void     FontCalcGlyphPos(fontGlyphPos_s *out, charWidthInfo_s **cwout, int glyphIndex, float scaleX, float scaleY);
 
         static inline   RendererContext *GetContext(void)

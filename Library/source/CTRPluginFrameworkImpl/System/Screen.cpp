@@ -51,7 +51,6 @@ namespace CTRPluginFramework
     ScreenImpl::ScreenImpl(const u32 lcdSetupInfo, const u32 fillColorAddress, const bool isTopScreen) :
         _LCDSetup(lcdSetupInfo),
         _FillColor(fillColorAddress),
-        _backlightOffset{isTopScreen ? 0x40u : 0x840u},
         _currentBuffer(0),
         _width(isTopScreen ? 400 : 320),
         _stride(0), _rowSize(0), _bytesPerPixel(0),
@@ -389,16 +388,6 @@ namespace CTRPluginFramework
     void    ScreenImpl::SwapBufferInternal(void)
     {
         _currentBuffer = !_currentBuffer;
-    }
-
-    u32     ScreenImpl::GetBacklight(void)
-    {
-        return REG32(0x10202200 + _backlightOffset);
-    }
-
-    void    ScreenImpl::SetBacklight(u32 value)
-    {
-        REG32(0x10202200 + _backlightOffset) = value;
     }
 
     GSPGPU_FramebufferFormat   ScreenImpl::GetFormat(void) const

@@ -269,10 +269,10 @@ namespace CTRPluginFramework
         /**/
         /**********************************************************************/
 
-        posY = 203;
-        Renderer::DrawString((char *)"Options:", 260, posY, textcolor);
-        posY -= 14;
-        Renderer::DrawSysString((char *)"\uE002", 320, posY, 380, textcolor);
+        posY = 195;
+        Renderer::DrawGameFontString((char *)"Options:", 260, posY, 380, textcolor);
+        posY -= 16;
+        Renderer::DrawGameFontString((char *)"\uE002", 315, posY, 380, textcolor);
 
         if (_currentSearch == nullptr || _resultsAddress.size() == 0 || _resultsNewValue.size() == 0)
         {
@@ -508,12 +508,15 @@ namespace CTRPluginFramework
 
     void    SearchMenu::_JumpInEditor(void)
     {
-        if (!PluginMenuImpl::GetRunningInstance()->GetHexEditorState())
-            return;
         u32 address = strtoul(_resultsAddress[_selector].c_str(), NULL, 16);
 
-        _hexEditor.Goto(address, true);
-        _inEditor = true;
+        if (address == 0x0)
+            MessageBox("Error", "Selected address is not valid.");
+        else
+        {
+            _hexEditor.Goto(address, true);
+            _inEditor = true;
+        }
     }
 
     void    SearchMenu::_Export(void)

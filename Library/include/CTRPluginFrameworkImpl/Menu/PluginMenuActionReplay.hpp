@@ -24,7 +24,7 @@ namespace CTRPluginFramework
         static void SaveCodes(void);
         static void NewARCode(u8 type, u32 address, u32 value);
         static void BackupCodes(bool manualMode);
-        static void RestoreFromBackup(bool fromAutoEmptyDetect, std::string autoDate = "");
+        static void RestoreFromBackup(bool fromAutoEmptyDetect);
 
     private:
         ARCodeEditor    _editor;

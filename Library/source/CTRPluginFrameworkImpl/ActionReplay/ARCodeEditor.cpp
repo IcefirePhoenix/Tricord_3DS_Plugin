@@ -9,7 +9,7 @@
 #include "CTRPluginFrameworkImpl/Disassembler/arm_disasm.h"
 
 #define PATCH_COLOR Color::Gray
-#define TYPE_COLOR Color::Brown
+#define TYPE_COLOR Color::Maroon
 #define IMMEDIATE_COLOR Color::Blue
 #define MASK_COLOR Color::Orange
 #define OFFSET_COLOR Color::ForestGreen
@@ -880,17 +880,16 @@ namespace CTRPluginFramework
     static void ShowHelp(void)
     {
         std::string body = "Controls:\n" \
-            "    - " FONT_B ": Exit editor (changes are applied directly)\n" \
-            "    - " FONT_Y ": Delete current code\n" \
-            "    - " FONT_L ": Insert a new code before current code\n" \
-            "    - " FONT_R ": Insert a new code after current code\n";
+            "- " FONT_B ": Exit editor (changes are applied directly)\n" \
+            "- " FONT_Y ": Delete current line\n" \
+            "- " FONT_L ": Insert a new line before current line\n" \
+            "- " FONT_R ": Insert a new line after current line\n";
         if (System::IsNew3DS())
-            body += "    - " FONT_ZL ": Copy current code to clipboard\n" \
-            "    - " FONT_ZR ": Clear clipboard\n";
-        body += "    - \uE006: Navigate in the code";
+            body += "- ZL: Copy current line to clipboard\n- ZR: Clear clipboard\n";
+
+        body += "- D-Pad: Navigate in the code";
 
         MessageBox(Color::LimeGreen << "Action Replay Code Editor Help",  body)();
-
         ScreenImpl::Top->Clear(true);
     }
 
@@ -1278,7 +1277,7 @@ namespace CTRPluginFramework
         posY = 203;
         Renderer::DrawString((char *)"Options:", 260, posY, textcolor);
         posY -= 14;
-        Renderer::DrawSysString((char *)"\uE002", 320, posY, 380, textcolor);
+        Renderer::DrawGameFontString((char *)"\uE002", 320, posY, 380, textcolor);
         _submenu.Draw();
     }
 

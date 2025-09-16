@@ -156,7 +156,7 @@ namespace CTRPluginFramework
 
         // Acquire screens
         // TODO: error handling
-        ScreenImpl::AcquireFromGsp();
+        ScreenImpl::AcquireFromGsp(false);
 
         OSDImpl::UpdateScreens();
 

@@ -1,33 +1,25 @@
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
 #include "CTRPluginFramework/System/Controller.hpp"
-#include "CTRPluginFrameworkImpl/Graphics/KeyboardBG.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuImpl.hpp"
 #include "CTRPluginFrameworkImpl/System/Screenshot.hpp"
-
 #include "3ds.h"
 #include <cmath>
 
 namespace CTRPluginFramework
 {
-    using LCDBacklight = Preferences::LCDBacklight;
-
     BMPImage* Preferences::bottomBackgroundImage = nullptr;
-    BMPImage* Preferences::bottomBoxBGImage = nullptr;
 
     u32 Preferences::MenuHotkeys = static_cast<u32>(Key::Select);
     u32 Preferences::CustomNameColors[3] = { 0xFF40FF40, 0xFFFF4040, 0xFF4040FF }; // default before loading any saved values from file
-
     u64 Preferences::Flags = 0;
-    LCDBacklight Preferences::Backlights[2];
+
     FwkSettings Preferences::Settings;
 
     std::string Preferences::CheatsFile;
     std::string Preferences::ScreenshotPath;
     std::string Preferences::ScreenshotPrefix;
 
-    bool Preferences::_cheatsAlreadyLoaded = false; // TODO: reuse for something else
     bool Preferences::_favoritesAlreadyLoaded = false;
-    bool Preferences::_bmpCanBeLoaded = true;
 
     Preferences::WarpDestination Preferences::SavedWarps[3];
 
@@ -150,7 +142,6 @@ namespace CTRPluginFramework
         {
             MenuHotkeys = header.hotkeys & ((System::IsNew3DS() && Settings.AreN3DSButtonsAvailable) ? ~0x0 : ~(Key::CStick | Key::ZL | Key::ZR));
             Flags = header.flags;
-            memcpy(reinterpret_cast<void*>(Backlights), &header.lcdbacklights, sizeof(Backlights));
 
             // set last saved screenshot preferences
             std::string dirPath = "/Tricord/Screenshots/";
@@ -210,68 +201,6 @@ namespace CTRPluginFramework
         }
     }
 
-    void    Preferences::LoadBackgrounds(void)
-    {
-        if (!_bmpCanBeLoaded)
-            return;
-
-        std::string source = "/Tricord/Resources/Background/";
-
-        // Try to load bottom background
-        if (bottomBackgroundImage == nullptr && File::Exists(source + "CustomBottomBG.bmp"))
-        {
-            BMPImage* image = new BMPImage(source + "CustomBottomBG.bmp");
-
-            if (image->IsLoaded())
-                image = PostProcess(image, 320, 240);
-            else
-            {
-                delete image;
-                image = nullptr;
-            }
-
-            bottomBackgroundImage = image;
-        }
-        else {
-            OSD::Notify("Cannot find CustomBottomBG.bmp background file!");
-        }
-
-        if (File::Exists(source + "CustomBoxBG.bmp")) {
-            BMPImage* image1 = new BMPImage(source + "CustomBoxBG.bmp");
-
-            if (image1->IsLoaded())
-                image1 = PostProcess(image1, 320, 240);
-            else
-            {
-                delete image1;
-                image1 = nullptr;
-            }
-            bottomBoxBGImage = image1;
-        }
-        else {
-            OSD::Notify("Cannot find CustomBoxBG.bmp background file!");
-        }
-
-        // Update Window
-        Window::UpdateBackgrounds();
-
-        _bmpCanBeLoaded = false;
-    }
-
-    void    Preferences::UnloadBackgrounds(void)
-    {
-        if (bottomBackgroundImage)
-        {
-            _bmpCanBeLoaded = true;
-
-            delete bottomBackgroundImage;
-            bottomBackgroundImage = nullptr;
-        }
-
-        // Update Window
-        Window::UpdateBackgrounds();
-    }
-
     void    Preferences::WriteSettings(void)
     {
         OSDImpl::DrawSaveIcon = true;
@@ -284,7 +213,6 @@ namespace CTRPluginFramework
         header.version = SETTINGS_VERSION;
         header.hotkeys = MenuHotkeys;
         header.flags = Flags;
-        memcpy(&header.lcdbacklights, Backlights, sizeof(header.lcdbacklights));
 
         if (File::Open(settings, "CTRPFData.bin", mode) == 0)
         {
@@ -310,18 +238,5 @@ namespace CTRPluginFramework
 
         PluginMenuActionReplay::SaveCodes();
         OSDImpl::DrawSaveIcon = false;
-    }
-
-    void    Preferences::ApplyBacklight(void)
-    {
-        if (Backlights[0].isEnabled && Backlights[0].value > 0)
-            ScreenImpl::Top->SetBacklight(Backlights[0].value);
-        if (Backlights[1].isEnabled && Backlights[1].value > 0)
-            ScreenImpl::Bottom->SetBacklight(Backlights[1].value);
-    }
-
-    void    Preferences::Initialize(void)
-    {
-        LoadBackgrounds();
     }
 }

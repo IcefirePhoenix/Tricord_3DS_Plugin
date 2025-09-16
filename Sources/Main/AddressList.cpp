@@ -60,7 +60,7 @@ namespace CTRPluginFramework
 					addrVal = std::stoul(addrStr, nullptr, 16);
 
 					// adjust all addresses within LINEAR mem range...
-					if (addrVal >= 0x14000000)
+					if (addrVal >= OS_OLD_FCRAM_VADDR)
 						addrVal -= memOffset;
 
 					// create new address reference...
@@ -78,10 +78,8 @@ namespace CTRPluginFramework
 	// Adjusts the working memory range depending on the current memory allocation scheme
 	void AddressList::InitMemoryRange(void)
 	{
-		u32 startAddress = 0x30000000;
 		u32 temp;
-
-		memOffset = Process::CheckRegion(startAddress, temp) ? 0x0 : 0x1C000000;
+		memOffset = Process::CheckRegion(OS_FCRAM_VADDR, temp) ? 0x0 : 0x1C000000;
 
 		if (memOffset == 0x1C000000)
 			OSD::Notify("Alternate address set loaded.");
