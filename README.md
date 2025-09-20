@@ -1,3 +1,7 @@
+<p align="center">
+<img src="https://github.com/user-attachments/assets/528b7731-0ddc-4674-b219-e56d52452020" />
+</p>
+
 [![GitHub Stars](https://img.shields.io/github/stars/IcefirePhoenix/Tricord_3DS_Plugin?style=flat&logo=github&label=Stars)](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin)
 [![GitHub release](https://img.shields.io/github/v/release/IcefirePhoenix/Tricord_3DS_Plugin?include_prereleases&sort=semver&logo=github&label=Latest%20Release)](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/releases)
 [![Commit History](https://img.shields.io/github/commit-activity/m/IcefirePhoenix/Tricord_3DS_Plugin?logo=github&label=Commit%20Activity)](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/commits)
@@ -21,7 +25,7 @@ Runnable on:
 
 Older versions of Luma3DS / emulator may or may not be compatible. If Tricord causes a crash, freezes, or stalls on game boot, try updating to the latest Luma3DS / emulator version.
 
-###  Major features
+###  Major Features
 - Freecam with button-based controls
 - Custom gameplay modes, some of which are also playable via online multiplayer
 - Visual and UI improvement options
@@ -71,20 +75,25 @@ From there, you can backup and delete the `romfs` folder. Or, alternatively, ren
 Tricord is a passion project developed by our team during our own personal free time. Between real-life commitments like work, school, and everything else, mistakes can (and do!) happen. While we do our best to squash as many bugs as we can during testing, some are sneaky enough to slip by.
 
 If you encounter a bug, please let us know! You can do this by opening an Issue in this repository and providing the following information in your post:
-- Hardware model OR emulator build
-- A copy of the error log as an attachment
-- Description of the issue
-- Exact steps to replicate the issue
+1. A clear and concise title
+2. Your Tri Force Heroes region
+3. Your Tricord version
+4. Your hardware model and CFW version, *or* your emulator build
+5. Description of the issue
+6. Exact steps to replicate the issue
+7. If your device consistently crashes, include a copy of the error log as an attachment
 
 To save an error log to your SD card, be sure to press X while in the crash screen. The log can be found under `Tricord/Crash Logs/[NA/EU/JP]`.
 
-If you do not have a GitHub account, you can also reach out via the [TFH Modding Discord server](https://discord.gg/P6csr4jc5U). Your feedback is greatly appreciated and helps make this project better for everyone!
+If you do not have a GitHub account, you can also reach out via the [TFH Modding Discord server](https://tinyurl.com/TFHmodding). Your feedback is greatly appreciated and helps make this project better for everyone!
 
 ## HID-related ErrDisp and wumiibo
 CTRPF plugins, including Tricord, may conflict with existing installations of wumiibo depending on your console model. Before troubleshooting, it is recommended to try loading the default CTRPF plugin found [here](https://github.com/PabloMK7/CTRPluginFramework-BlankTemplate/releases) to verify that the issue is not Tricord-specific. If the problem persists, it is likely due to wumiibo. From here, you can either:
 
 - Disable wumiibo or uninstall it completely.
 - OR if you do not want to remove wumiibo: try toggling **Disable HID memory allocation** in the Settings menu then restarting your console.
+
+For more information about this error, see the associated [Wiki page](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/wiki/Tricord-Settings#disable-hid-memory-allocation).
 
 If the problem still persists OR if you are not a wumiibo user, please contact someone on the Development Team with a screenshot of your ErrDisp details. See the Contact section below.
 
@@ -97,25 +106,29 @@ If you would like to contribute to either of these sources, please contact someo
 
 
 ## Build Policy
-The Tricord developer team is partnered with the TFH Matchmaking Discord Server. As part of that collaboration, we are committed to promoting  safe and responsible use of Tricord.
+The Tricord developer team is partnered with the TFH Matchmaking Discord Server. As part of that collaboration, we are committed to promoting safe and responsible use of Tricord.
 To deter users from modifying Tricord and using it to intentionally disrupt online gameplay, we do not provide instructions nor the means to build the plugin from source.
 
 Please find a ready-to-use build in the Releases page. **Attempting to build the plugin using the makefile from the original CTRPF repository will fail.**
 
 ## Contact
-For inquiries and assistance, please contact someone on the Developer Team via the [TFH Modding Discord server](https://discord.gg/P6csr4jc5U). You may also join this server to see updates on the Tricord plugin and chat with the TFH modding community.
+For inquiries and assistance, please contact someone on the Developer Team via the [TFH Modding Discord server](https://tinyurl.com/TFHmodding). You may also join this server to see updates on the Tricord plugin and chat with the TFH modding community.
 
-#### Developer Team
+### Developer Team
+
+<p align="center">
+<img src="https://github.com/user-attachments/assets/96176a02-b735-469a-af96-97f8d8f20235" />
+</p>
 
 Our team has done extensive work in reverse engineering various components of TFH, including RAM layouts, the RomFS (file assets), and the game's compiled executable. This research involves identifying variables, flags, and other key data stored in memory, analyzing how in-game data is updated and accessed in real time, and interpreting assembly-level code to better understand gameplay logic / behavior. By identifying memory addresses that manage this data, we’ve been able to develop various quality-of-life features and extra gameplay content found in Tricord!
 
-Wintenix - Lead developer.
+**Wintenix** - Lead developer.
 
-Peanut - Developer. Created several major features, numerous secondary features, and game modes. Creator of the Tricord Wiki page.
+**Peanut** - Developer. Created several major features, numerous secondary features, and game modes. Creator of the Tricord Wiki. Illustrator of the artwork featured on this Readme.
 
-Glem - Developer. Contributed extensively to the documentation of internal game mechanics through memory address research and testing.
+**Glem** - Developer. Contributed extensively to the documentation of internal game mechanics through memory address research and testing.
 
-#### Credits
+## Credits
 
 Stratty - For coming up with the Tricord name and letting us use it for this project :)
 
