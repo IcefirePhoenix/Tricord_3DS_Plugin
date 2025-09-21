@@ -70,6 +70,8 @@ In addition, it has been found that having mods installed on Citra / Azahar will
 
 From there, you can backup and delete the `romfs` folder. Or, alternatively, rename the `romfs` folder to something else, for example, `romfs-disabled`. This will prevent the mods from being applied—making Tricord more usable—while keeping the mod's files in the same location. This way, the mods can be easily reinstalled whenever you want by renaming the folder back to `romfs`.
 
+For a full list of which menu entries / features are compatible on emulator and which aren't (even with no mods installed), visit the dedicated [Azahar Emulator Compatibility Wiki Page](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/wiki/Azahar-Emulator-Compatibility).
+
 ## 🐛 Bug-catching
 
 Tricord is a passion project developed by our team during our own personal free time. Between real-life commitments like work, school, and everything else, mistakes can (and do!) happen. While we do our best to squash as many bugs as we can during testing, some are sneaky enough to slip by.
