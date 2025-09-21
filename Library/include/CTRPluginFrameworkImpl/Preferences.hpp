@@ -34,7 +34,8 @@ namespace CTRPluginFramework
             ShowBottomFps       = 1 << 21,
 
             // TFH Settings
-            QoL_Patch           = 1 << 22
+            QoL_Patch           = 1 << 22,
+            Prevent_Close_Menu_B        = 1 << 23
         };
 
 

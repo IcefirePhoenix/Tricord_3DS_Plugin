@@ -55,20 +55,25 @@ namespace CTRPluginFramework
 
     void PluginMenuSettings::UpdateSettings(void)
     {
-        if (Preferences::IsEnabled(Preferences::QoL_Patch))
-            (*(_settingsMenu.begin() + 5))->AsMenuEntryTools().Enable();
+        if (Preferences::IsEnabled(Preferences::Prevent_Close_Menu_B))
+            (*(_settingsMenu.begin() + 2))->AsMenuEntryTools().Enable();
         else
-            (*(_settingsMenu.begin() + 5))->AsMenuEntryTools().Disable();
+            (*(_settingsMenu.begin() + 2))->AsMenuEntryTools().Disable();
+
+        if (Preferences::IsEnabled(Preferences::QoL_Patch))
+            (*(_settingsMenu.begin() + 6))->AsMenuEntryTools().Enable();
+        else
+            (*(_settingsMenu.begin() + 6))->AsMenuEntryTools().Disable();
 
         if (Preferences::IsEnabled(Preferences::HIDToggle))
-            (*(_settingsMenu.begin() + 6))->AsMenuEntryImpl().Enable();
-        else
-            (*(_settingsMenu.begin() + 6))->AsMenuEntryImpl().Disable();
-
-        if (Preferences::IsEnabled(Preferences::DisableOSDNotifs))
             (*(_settingsMenu.begin() + 7))->AsMenuEntryImpl().Enable();
         else
             (*(_settingsMenu.begin() + 7))->AsMenuEntryImpl().Disable();
+
+        if (Preferences::IsEnabled(Preferences::DisableOSDNotifs))
+            (*(_settingsMenu.begin() + 8))->AsMenuEntryImpl().Enable();
+        else
+            (*(_settingsMenu.begin() + 8))->AsMenuEntryImpl().Disable();
 
         if (Preferences::IsEnabled(Preferences::AutoSaveCheats))
             (*_menuEntryOpts.begin())->AsMenuEntryImpl().Enable();
@@ -219,6 +224,7 @@ namespace CTRPluginFramework
     {
         // Main menu
         _settingsMenu.Append(new MenuEntryTools("Change Tricord menu hotkeys", MenuHotkeyModifier, Icon::DrawGameController));
+        _settingsMenu.Append(new MenuEntryTools("Prevent closing menu with B", [] { Preferences::Toggle(Preferences::Prevent_Close_Menu_B); }, true, Preferences::IsEnabled(Preferences::Prevent_Close_Menu_B)));
         _settingsMenu.Append(new MenuEntryTools("Startup Options", nullptr, Icon::DrawTools, new u32(STARTUP)));
         _settingsMenu.Append(new MenuEntryTools("Screenshot Options", nullptr, Icon::DrawCamera, new u32(SCREENSHOT)));
         _settingsMenu.Append(new MenuEntryTools("Action Replay Backups", nullptr, Icon::DrawLoadPosition, new u32(AR_BACKUPS)));

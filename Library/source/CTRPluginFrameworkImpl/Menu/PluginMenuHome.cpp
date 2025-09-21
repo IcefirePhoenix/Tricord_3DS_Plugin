@@ -148,7 +148,7 @@ namespace CTRPluginFramework
         mode = _mode;
 
         close = Window::BottomWindow.MustClose();
-        close |= _closedRootFolder && Preferences::Settings.CloseMenuWithB;
+        close |= _closedRootFolder && !Preferences::IsEnabled(Preferences::Prevent_Close_Menu_B);
 
         _closedRootFolder = false;
 
