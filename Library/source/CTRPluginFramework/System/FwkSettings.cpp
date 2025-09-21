@@ -49,26 +49,18 @@ namespace CTRPluginFramework
         }
     }
 
-    // MUST be 16-bit, RGB565
     Result FwkSettings::SetBottomScreenBackground(const void *bmpData)
     {
-        Task bg([](void* arg) -> s32
+        BMPImage* image = new BMPImage(bmpData);
+
+        if (!image->IsLoaded())
         {
-            const void* bmp = arg;
-            BMPImage* image = new BMPImage(bmp);
+            delete image;
+            return -1;
+        }
 
-            if (!image->IsLoaded())
-            {
-                delete image;
-                return -1;
-            }
-
-            Preferences::bottomBackgroundImage = image;
-            Window::UpdateBackgrounds();
-            return 0;
-        });
-
-        bg.Start((void*)bmpData);
+        Preferences::bottomBackgroundImage = image;
+        Window::UpdateBackgrounds();
         return 0;
     }
 }

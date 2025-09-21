@@ -218,11 +218,10 @@ namespace CTRPluginFramework
         // Init default settings
         FwkSettings& settings = FwkSettings::Get();
 
-        settings.ThreadPriority = 0x34;
-        settings.WaitTimeToBoot = Seconds(2.5f);
+        settings.ThreadPriority = 0x3E;
+        settings.WaitTimeToBoot = Seconds(3.f);
         settings.AreN3DSButtonsAvailable = true;
         settings.TryLoadSDSounds = false;
-        settings.CloseMenuWithB = true;
 
         // Set default theme
         FwkSettings::SetThemeDefault();
@@ -613,7 +612,7 @@ namespace CTRPluginFramework
         // Create event
         svcCreateEvent(&g_continueGameEvent, RESET_ONESHOT);
         // Start ctrpf's primary thread
-        svcCreateThread(&g_keepThreadHandle, KeepThreadMain, arg, (u32*)&keepThreadStack[0x1000], 0x18, 0);
+        svcCreateThread(&g_keepThreadHandle, KeepThreadMain, arg, (u32*)&keepThreadStack[0x1000], 0x1A, 0);
         // Wait until basic initialization has been made before returning to game
         svcWaitSynchronization(g_continueGameEvent, U64_MAX);
         // Close the event
