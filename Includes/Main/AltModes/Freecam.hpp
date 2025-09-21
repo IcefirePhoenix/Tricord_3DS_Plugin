@@ -18,6 +18,7 @@ namespace CTRPluginFramework
         CAM_ANIMATION
     };
 
+    void resetCameraAngle(void);
     bool setCameraType(CameraMode mode);
     void shiftCamZ(bool south);
     void shiftCamX(bool west);
