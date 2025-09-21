@@ -35,11 +35,15 @@ namespace CTRPluginFramework
 	// Driver code for Freecam
 	void Freecam::useFreecam(MenuEntry* entry)
 	{
-		// if Freecam has been turned off, restore DYNAMIC camera shift ability...
+		// if Freecam has been turned off, restore default camera angle/position and DYNAMIC shift ability...
 		if (!entry->IsActivated())
 		{
+			setCameraType(CameraMode::GAMEPLAY);
 			manageDynamicCamShifts(false);
 			manageY_AxisReturnShift(false);
+
+			Player::resetOffset();
+			resetCameraAngle();
 		}
 
 		// enable/disable freecam...
@@ -93,13 +97,9 @@ namespace CTRPluginFramework
 				manageDynamicCamShifts(false);
 				manageY_AxisReturnShift(true);
 
-				// reset rotation + zoom as these aren't tied to player coordinates...
-				Process::WriteFloat(AddressList::getAddress("PerspectiveZoom"), 1.0);
-				Process::Write32(AddressList::getAddress("OrthographicZoom"), 0x41D80000);
-				Process::Write32(AddressList::getAddress("CameraRotationX"), 0x271C71C6);
-				Process::Write32(AddressList::getAddress("CameraRotationY"), 0x00000000);
-
+				// reset angle, zoom, rotation offset as these aren't tied to player coordinates...
 				Player::resetOffset();
+				resetCameraAngle();
 
 				// camera previously configured to unhook from player...
 				if (isCameraLocked)
@@ -165,6 +165,15 @@ namespace CTRPluginFramework
 		// allow camera lock to be maintained after entering new area...
 		if (GeneralHelpers::isLoadingScreen(false) && isCameraLocked)
 			setCameraType(CameraMode::CUTSCENE);
+	}
+
+	// Resets camera to default top-down angle
+	void resetCameraAngle(void)
+	{
+		Process::WriteFloat(AddressList::getAddress("PerspectiveZoom"), 1.0);
+		Process::Write32(AddressList::getAddress("OrthographicZoom"), 0x41D80000);
+		Process::Write32(AddressList::getAddress("CameraRotationX"), 0x271C71C6);
+		Process::Write32(AddressList::getAddress("CameraRotationY"), 0x00000000);
 	}
 
 	// Sets the current camera mode -- used to toggle the camera's ability to follow the player

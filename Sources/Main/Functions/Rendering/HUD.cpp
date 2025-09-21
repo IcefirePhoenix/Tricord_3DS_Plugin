@@ -7,6 +7,8 @@ namespace CTRPluginFramework
     MenuEntryLabel *colorLabel2;
     MenuEntryLabel *colorLabel3;
 
+    MenuEntryLabel *colorEntries[3] = {0};
+
     bool showChestContents, isScrollTextDisabled = false;
 
     /* ------------------ */
@@ -100,20 +102,17 @@ namespace CTRPluginFramework
         }
     }
 
-    // Updates status message name colors on boot
-    void Rendering::loadCustomNameColors(void)
+    // Places name color addresses in array for easier access
+    void Rendering::initNameColorAddresses(void)
     {
-        MenuEntryLabel *colorEntries[3] =
-        {
-            colorLabel1,
-            colorLabel2,
-            colorLabel3
-        };
+        colorEntries[0] = colorLabel1;
+        colorEntries[1] = colorLabel2;
+        colorEntries[2] = colorLabel3;
+    }
 
-        Process::Write32(AddressList::getAddress("LiveNameColorG"), Preferences::CustomNameColors[0]);
-        Process::Write32(AddressList::getAddress("LiveNameColorB"), Preferences::CustomNameColors[1]);
-        Process::Write32(AddressList::getAddress("LiveNameColorR"), Preferences::CustomNameColors[2]);
-
+    // Refreshes the menu labels to display the current name color hexcode
+    void updateNameColorLabels(void)
+    {
         for (int color = 0; color < 3; color++)
         {
             u8 r = Preferences::CustomNameColors[color] & 0xFF;
@@ -121,6 +120,18 @@ namespace CTRPluginFramework
             u8 b = (Preferences::CustomNameColors[color] >> 16) & 0xFF;
             colorEntries[color]->SetName("Player " + std::to_string(color + 1) +" color: #" + Hex(r) + Hex(g) + Hex(b));
         }
+    }
+
+    // Updates status message name colors on boot
+    void Rendering::loadCustomNameColors(void)
+    {
+        Rendering::initNameColorAddresses();
+
+        Process::Write32(AddressList::getAddress("LiveNameColorG"), Preferences::CustomNameColors[0]);
+        Process::Write32(AddressList::getAddress("LiveNameColorB"), Preferences::CustomNameColors[1]);
+        Process::Write32(AddressList::getAddress("LiveNameColorR"), Preferences::CustomNameColors[2]);
+
+        updateNameColorLabels();
     }
 
     // Resets custom name colors back to default -- bit shifting as done in-game is too extra here, using predefined color values instead
@@ -132,6 +143,8 @@ namespace CTRPluginFramework
         Process::Write32(AddressList::getAddress("LiveNameColorG"), defaultColors[0]);
         Process::Write32(AddressList::getAddress("LiveNameColorB"), defaultColors[1]);
         Process::Write32(AddressList::getAddress("LiveNameColorR"), defaultColors[2]);
+
+        updateNameColorLabels();
 
         MessageBox("Success", "Name colors have been reset!")();
     }

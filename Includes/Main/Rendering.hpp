@@ -17,6 +17,7 @@ namespace CTRPluginFramework
     class Rendering
     {
     public:
+        static void initNameColorAddresses(void);
         static void triggerHideHUD(MenuEntry* entry);
         static void disableFog(MenuEntry* entry);
         static void disableScrollingText(MenuEntry* entry);

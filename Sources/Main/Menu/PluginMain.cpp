@@ -107,13 +107,12 @@ namespace CTRPluginFramework
         PluginMenu *menu = new PluginMenu();
 
         InitSequence(FwkSettings::Get());
+        CreateMenu(*menu);
 
         menu->SynchronizeWithFrame(true);
         menu->OnFirstOpening = LoadSavedEntryData;
         menu->OnNewFrame = ToggleMenuChange;
         menu->OnClosing = ManageTFH_Settings;
-
-        CreateMenu(*menu);
 
         menu->Run();
         return (0);
