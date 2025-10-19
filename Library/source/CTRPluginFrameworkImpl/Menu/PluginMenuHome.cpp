@@ -40,7 +40,6 @@ namespace CTRPluginFramework
         _scrollOffset = 0.f;
         _maxScrollOffset = 0.f;
         _reverseFlow = false;
-        _versionPosX = 0;
         _closedRootFolder = false;
 
         _mode = 0;
@@ -1074,7 +1073,7 @@ namespace CTRPluginFramework
             _InfoBtn.Unlock();
     }
 
-    void PluginMenuHome::AddPluginVersion(void)
+    void PluginMenuHome::AddPluginVersion(bool isDev)
     {
         char buffer[100];
 
@@ -1082,9 +1081,8 @@ namespace CTRPluginFramework
         _versionStr.clear();
         _versionStr = buffer;
 
-        float width = Renderer::GetTextSize(buffer);
-
-        _versionPosX = 360 - (width + 1);
+        if (isDev)
+            _versionStr.append("    (DEV)");
     }
 
     void PluginMenuHome::Close(MenuFolderImpl *folder)

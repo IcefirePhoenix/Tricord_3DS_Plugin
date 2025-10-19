@@ -148,6 +148,11 @@ namespace CTRPluginFramework
         _menu->SyncOnFrame = useSync;
     }
 
+    void    PluginMenu::SpecifyDevBuild(void)
+    {
+        _menu->AddPluginVersion(true);
+    }
+
     std::string &   PluginMenu::Title(void)
     {
         return _menu->_home->_root->name;
