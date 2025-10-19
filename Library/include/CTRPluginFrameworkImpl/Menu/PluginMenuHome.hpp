@@ -28,7 +28,7 @@ namespace CTRPluginFramework
         void UnStar(MenuItem* item);
         void Init(void);
 
-        void AddPluginVersion(void);
+        void AddPluginVersion(bool isDev = false);
         void Close(MenuFolderImpl *folder);
 
         void UpdateNote(void);
@@ -76,7 +76,6 @@ namespace CTRPluginFramework
         Clock _scrollClock;
         bool _reverseFlow;
         bool _closedRootFolder;
-        int _versionPosX;
         std::string _versionStr;
 
         TextBox _noteTB;

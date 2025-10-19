@@ -124,6 +124,9 @@ namespace CTRPluginFramework
          */
         void         SynchronizeWithFrame(const bool useSync);
 
+
+        void         SpecifyDevBuild(void);
+
         /**
          * \brief If a callback is set, the callback will be called - Must be set before calling Run
          * when the menu is opened for the first time

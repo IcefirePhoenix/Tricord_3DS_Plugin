@@ -816,8 +816,8 @@ namespace CTRPluginFramework
         return (_wasOpened);
     }
 
-    void PluginMenuImpl::AddPluginVersion(void) const
+    void PluginMenuImpl::AddPluginVersion(bool isDev) const
     {
-        _home->AddPluginVersion();
+        _home->AddPluginVersion(isDev);
     }
 }
