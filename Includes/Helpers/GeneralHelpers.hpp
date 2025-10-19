@@ -10,6 +10,13 @@
 
 namespace CTRPluginFramework
 {
+	enum Multistatus
+	{
+		NOT_CONNECTED,
+		INET_LOCAL,
+		UNKNOWN
+	};
+
 	class GeneralHelpers
 	{
 	public:
@@ -34,6 +41,8 @@ namespace CTRPluginFramework
 		static bool isLoadingScreen(bool checkInitStateOnly);
 		static bool isPauseScreen(void);
 		static bool isSoloActiveGameplay(void);
+
+		static Multistatus checkMultiStatus(void);
 	};
 }
 #endif

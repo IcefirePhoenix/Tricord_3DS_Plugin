@@ -166,5 +166,23 @@ namespace CTRPluginFramework
     {
         Process::Write8(AddressList::getAddress("CameraLinkFocus"), playerID);
     }
+
+    // Checks online connectivity by verifying if host data is present
+    Multistatus GeneralHelpers::checkMultiStatus(void)
+    {
+        u32 hostData;
+        Process::Read32(AddressList::getAddress("HostDataStart"), hostData);
+
+        switch (hostData)
+        {
+            case 0xFFFFFFFD:
+                return Multistatus::NOT_CONNECTED;
+            default:
+                if (hostData > 0xFFFFFFFD)
+                    return Multistatus::UNKNOWN;
+                else
+                    return Multistatus::INET_LOCAL;
+        }
+    }
 }
 
