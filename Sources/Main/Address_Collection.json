@@ -3736,6 +3736,15 @@
                 "eurAddress": "0x0",
                 "jpnAddress": "0x0"
             }
+        },
+        {
+            "name": "HostDataStart",
+            "regionAddrs": {
+                "usaAddress": "0x31A0360C",
+                "eurAddress": "0x31A03664",
+                "jpnAddress": "0x31A03358"
+            }
+        },
         }
     ]
 }
