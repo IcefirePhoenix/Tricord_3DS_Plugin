@@ -102,4 +102,33 @@ namespace CTRPluginFramework
 
 		return addr;
 	}
+
+	// Helper function to register a new address AFTER init
+	bool AddressList::registerNewAddress(std::string addrLabel, const std::array<u32, 3> &addr)
+	{
+		u32 addrVal = 0x0;
+		switch (Process::GetTitleID())
+		{
+			case TID_USA:
+				addrVal = addr[0];
+				break;
+
+			case TID_EUR:
+				addrVal = addr[1];
+				break;
+
+			case TID_JPN:
+				addrVal = addr[2];
+				break;
+
+			default:
+				return false;
+		}
+
+		if (addrVal >= OS_OLD_FCRAM_VADDR)
+			addrVal -= memOffset;
+
+		AddressList::addresses[addrLabel] = addrVal;
+		return true;
+	}
 }
