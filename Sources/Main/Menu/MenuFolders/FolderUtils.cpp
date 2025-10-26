@@ -39,6 +39,7 @@ namespace CTRPluginFramework
         InitSaveFolder(menu);
         InitSoundFolder(menu);
         InitTFH_Settings(menu);
+        InitStarMarkSettings(menu);
 
         AddAllFolders(menu);
     }

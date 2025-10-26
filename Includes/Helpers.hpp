@@ -33,6 +33,7 @@
 #include "Helpers/Data/Material.hpp"
 #include "Helpers/Data/PlayerAnimation.hpp"
 
+#include "Helpers/Handlers/IconMngr.hpp"
 #include "Helpers/Handlers/MapActorMngr.hpp"
 
 #include "AddressList.hpp"
