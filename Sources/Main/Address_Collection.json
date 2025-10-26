@@ -3745,6 +3745,29 @@
                 "jpnAddress": "0x31A03358"
             }
         },
+        {
+            "name": "HeroPanelTagIconCenter",
+            "regionAddrs": {
+                "usaAddress": "0x32C97990",
+                "eurAddress": "0x32C97A10",
+                "jpnAddress": "0x32CE2580"
+            }
+        },
+        {
+            "name": "HeroPanelTagIconLeft",
+            "regionAddrs": {
+                "usaAddress": "0x32C9B0DC",
+                "eurAddress": "0x32C9B15C",
+                "jpnAddress": "0x32CE5E8C"
+            }
+        },
+        {
+            "name": "HeroPanelTagIconRight",
+            "regionAddrs": {
+                "usaAddress": "0x32C9EA08",
+                "eurAddress": "0x32C9EA88",
+                "jpnAddress": "0x32CE9978"
+            }
         }
     ]
 }

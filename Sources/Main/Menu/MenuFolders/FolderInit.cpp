@@ -728,4 +728,17 @@ namespace CTRPluginFramework
         // apply patches on boot without requiring plugin menu to be opened
         ManageTFH_Settings();
     }
+
+    void InitStarMarkSettings(PluginMenu &menu)
+    {
+#ifdef DEV_BUILD
+        starMarkInit = new MenuEntry("Star Mark Init (auto)", Rendering::setDevID_onConnection, "", true);
+        starMarkInit->Enable();
+        *autoFolder += starMarkInit;
+#endif
+
+        starMarkManager = new MenuEntry("Star Mark Manager (auto)", Rendering::checkDevID, "", true);
+        starMarkManager->Enable();
+        *autoFolder += starMarkManager;
+    }
 }

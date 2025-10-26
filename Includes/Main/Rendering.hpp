@@ -8,6 +8,9 @@
 
 namespace CTRPluginFramework
 {
+    extern MenuEntry* starMarkManager;
+    extern MenuEntry* starMarkInit;
+
     extern MenuEntryLabel *colorLabel1;
     extern MenuEntryLabel *colorLabel2;
     extern MenuEntryLabel *colorLabel3;
@@ -35,6 +38,9 @@ namespace CTRPluginFramework
         static void editFaceExpr(MenuEntry *entry);
         static void forceCustomFaceExpr(MenuEntry *entry);
         static void hideDoppelMasks(MenuEntry* entry);
+        static void setDevID_onConnection(MenuEntry *entry);
+        static void checkDevID(MenuEntry *entry);
+        static void initHeroPanelBasePtrs(void);
     };
 }
 #endif
