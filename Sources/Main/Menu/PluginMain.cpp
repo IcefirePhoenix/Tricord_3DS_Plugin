@@ -4,6 +4,9 @@
 #include "Cheats.hpp"
 #include "CTRPF.hpp"
 
+constexpr std::array<u32, 3> starTagAddrs = STAR_TAG_ADDRS;
+constexpr std::array<u32, 3> multiplayerInfo = MULTIPLAYER_INFO;
+
 namespace CTRPluginFramework
 {
     // Patch NFC disabling the touchscreen when scanning an amiibo
@@ -74,6 +77,14 @@ namespace CTRPluginFramework
         }
     }
 
+    void InitHeroPanelTag(void)
+    {
+        AddressList::registerNewAddress("MultiplayerInfo", multiplayerInfo);
+
+        if (AddressList::registerNewAddress("StarTag", starTagAddrs))
+            Process::Write32(AddressList::getAddress("StarTag"), STAR_TAG);
+    }
+
     void LoadSavedEntryData(void)
     {
         Rendering::loadCustomNameColors();
@@ -84,6 +95,7 @@ namespace CTRPluginFramework
     {
         Item::initItemAddresses();
         Emotes::initEmoteAddresses();
+        Rendering::initHeroPanelBasePtrs();
     }
 
     void InitSequence(FwkSettings &settings)
@@ -100,6 +112,7 @@ namespace CTRPluginFramework
         ToggleTouchscreenForceOn();
 
         RetrieveAddressArrays();
+        InitHeroPanelTag();
     }
 
     int main(void)
@@ -114,6 +127,9 @@ namespace CTRPluginFramework
         menu->OnNewFrame = ToggleMenuChange;
         menu->OnClosing = ManageTFH_Settings;
 
+#ifdef DEV_BUILD
+        menu->SpecifyDevBuild();
+#endif
         menu->Run();
         return (0);
     }

@@ -40,6 +40,7 @@ namespace CTRPluginFramework
     void InitSaveFolder(PluginMenu &menu);
     void InitSoundFolder(PluginMenu &menu);
     void InitTFH_Settings(PluginMenu &menu);
+    void InitStarMarkSettings(PluginMenu &menu);
     void AddAllFolders(PluginMenu &menu);
 
     void ToggleMenuChange(Time time);
