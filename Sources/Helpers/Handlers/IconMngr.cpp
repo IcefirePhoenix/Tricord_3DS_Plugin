@@ -9,14 +9,10 @@ namespace CTRPluginFramework
     u16 texOffset = 0x15C;
     u8 visibilityOffset = 0x30;
 
-    std::unordered_map<std::string, std::array<u32, 3>> iconPtrSets = {
-        // {"SealCommonCTPK_Start",  {0x0, 0x0, 0x0}},
-        // {"SealRegionalCTPK_Start", {0x0, 0x0, 0x0}},
-        // {"MaterialCTPK_Start", {0x0, 0x0, 0x0}},
-        // {"ItemCTPK_Start", {0x0, 0x0, 0x0}},
-        // {"ChallengeCTPK_Start", {0x0, 0x0, 0x0}},
-        // {"WeaponCTPK_Start", {0x0, 0x0, 0x0}}
-    };
+    std::array<std::array<u32, 3>, 2> iconPtrSetStartAddrs = {{
+        {0x20C81080, 0x20D16480, 0x20C31680},    // SealCommonCTPK
+        {0x20300780, 0x208E2080, 0x20329C80}     // SealRegionalCTPK
+    }};
 
     std::unordered_map<std::string, std::array<u32, 3>> standalonePtrs = {
         {"RoyalS_TMark00",  {0x2113FF80, 0x211D0180, 0x210D8B00}},
@@ -48,35 +44,29 @@ namespace CTRPluginFramework
     }
 
     // Helper function to derive a specified texture pointer, ONLY if derivable from calculation
-    u32 IconMngr::retrieveTexPtr(std::string setName, int index, u16 texSize)
+    u32 IconMngr::retrieveTexPtr(IconPtrSet setName, int index, u16 texSize)
     {
         u32 baseAddr = 0x0;
 
-        auto it = iconPtrSets.find(setName);
-        if (it != iconPtrSets.end())
+        const std::array<u32, 3> filePtrs = iconPtrSetStartAddrs[(int)setName];
+        switch (Process::GetTitleID())
         {
-            const std::array<u32, 3> filePtrs = it->second;
-            switch (Process::GetTitleID())
-            {
-                case TID_USA:
-                    baseAddr = filePtrs[0];
-                    break;
-                case TID_EUR:
-                    baseAddr = filePtrs[1];
-                    break;
-                case TID_JPN:
-                    baseAddr = filePtrs[2];
-                    break;
-                default:
-                    OSD::Notify("Icon Manager: Cannot determine region.", Color::Red);
-                    return 0x0;
-            }
+            case TID_USA:
+                baseAddr = filePtrs[0];
+                break;
+            case TID_EUR:
+                baseAddr = filePtrs[1];
+                break;
+            case TID_JPN:
+                baseAddr = filePtrs[2];
+                break;
+            default:
+                OSD::Notify("Icon Manager: Cannot determine region.", Color::Red);
+                return 0x0;
         }
-        else
-            return 0x0;
 
         // Indexes and calculation logic are documented in the Data Documentation Spreadsheet
-        return baseAddr + ((index - 1) * texSize);
+        return baseAddr + ((index) * texSize);
     }
 
     // Retrieve a standalone texture pointer (that cannot be derived via calculations)
