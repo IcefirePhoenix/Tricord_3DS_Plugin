@@ -1252,40 +1252,40 @@
             "name": "BossDefeatFlagSet",
             "regionAddrs": {
                 "usaAddress": "0x00601800",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "eurAddress": "0x00601C30",
+                "jpnAddress": "0x00602798"
             }
         },
         {
             "name": "BossDataPointer",
             "regionAddrs": {
                 "usaAddress": "0x3282C92C",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "eurAddress": "0x3282C9AC",
+                "jpnAddress": "0x3287736C"
             }
         },
         {
             "name": "BossIntroCutsceneInit",
             "regionAddrs": {
                 "usaAddress": "0x001CAD9C",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "eurAddress": "0x001CAE2C",
+                "jpnAddress": "0x001CB320"
             }
         },
         {
             "name": "BossIntroCameraInit",
             "regionAddrs": {
                 "usaAddress": "0x001CADA8",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "eurAddress": "0x001CAE38",
+                "jpnAddress": "0x001CB32C"
             }
         },
         {
             "name": "BossIntroBGMInit",
             "regionAddrs": {
                 "usaAddress": "0x00587250",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "eurAddress": "0x00587680",
+                "jpnAddress": "0x00588120"
             }
         },
         {
@@ -1628,16 +1628,16 @@
             "name": "ActorListStart",
             "regionAddrs": {
                 "usaAddress": "0x32989188",
-                "eurAddress": "0x00000000",
-                "jpnAddress": "0x00000000"
+                "eurAddress": "0x32989208",
+                "jpnAddress": "0x329D3BC8"
             }
         },
         {
             "name": "ActorPtrChainLen",
             "regionAddrs": {
                 "usaAddress": "0x32989190",
-                "eurAddress": "0x00000000",
-                "jpnAddress": "0x00000000"
+                "eurAddress": "0x32989210",
+                "jpnAddress": "0x329D3BD0"
             }
         },
         {
