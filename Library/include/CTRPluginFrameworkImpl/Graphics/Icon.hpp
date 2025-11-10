@@ -138,6 +138,12 @@ namespace CTRPluginFramework
         static int DrawInfoNew(int posX, int posY, bool filled);
 
         /*
+        ** InfoNewDark
+        ** 25px * 25px
+        ***********/
+        static int DrawInfoNewDark(int posX, int posY);
+
+        /*
         ** Discord
         ** 25px * 25px
         **************/

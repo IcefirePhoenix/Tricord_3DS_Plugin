@@ -47,6 +47,7 @@ namespace CTRPluginFramework
     extern "C" unsigned char *InfoFilled25;
     extern "C" unsigned char *InfoNewSelect25;
     extern "C" unsigned char *InfoNew25;
+    extern "C" unsigned char *InfoNew25Dark;
     extern "C" unsigned char *LoadPosition15;
     extern "C" unsigned char *SavePosition15;
     extern "C" unsigned char *Maintenance15;
@@ -390,6 +391,15 @@ namespace CTRPluginFramework
     {
         u8 *img = filled ? InfoNewSelect25 : InfoNew25;
         return (DrawImg(img, posX, posY, 25, 25));
+    }
+
+    /*
+    ** InfoNewDark
+    ** 25px * 25px
+    ***************/
+    int Icon::DrawInfoNewDark(int posX, int posY)
+    {
+        return (DrawImg(InfoNew25Dark, posX, posY, 25, 25));
     }
 
     /*
