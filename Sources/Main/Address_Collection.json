@@ -1737,14 +1737,6 @@
             }
         },
         {
-            "name": "CameraXButtonToggle",
-            "regionAddrs": {
-                "usaAddress": "0x32D92920",
-                "eurAddress": "0x32D929A0",
-                "jpnAddress": "0x32DE5220"
-            }
-        },
-        {
             "name": "CameraXButtonDisable",
             "regionAddrs": {
                 "usaAddress": "0x0034966C",

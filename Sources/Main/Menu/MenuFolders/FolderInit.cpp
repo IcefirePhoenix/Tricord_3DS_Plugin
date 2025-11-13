@@ -465,8 +465,8 @@ namespace CTRPluginFramework
         *buttonSpam += new MenuEntry("Set custom timer interval: 10 ms", nullptr, Miscellaneous::selSpamInterval, true, DescUtils::getDesc("set_spam_interval_note"));
         *buttonSpam += new MenuEntry("Set button spammer keys", nullptr, Miscellaneous::selectSpamKeys, true, DescUtils::getDesc("set_spam_button_note"));
 
-        *camera += new MenuEntry("Toggle camera on X button: No edits", nullptr, Miscellaneous::toggleCameraButton, true, DescUtils::getDesc("toggle_X_cam_note"));
-        *camera += new MenuEntry("Disable camera shutter", nullptr, Miscellaneous::toggleCameraShutter, false, DescUtils::getDesc("shutter_note"));
+        *camera += new MenuEntry("Disable screenshot shutter", nullptr, Miscellaneous::toggleCameraShutter, false, DescUtils::getDesc("shutter_note"));
+        *camera += new MenuEntry("Disable camera on X button", Miscellaneous::toggleCameraButton, DescUtils::getDesc("toggle_X_cam_note"));
         *camera += new MenuEntry("Use photo viewer touchscreen toggle", Miscellaneous::managePhotoDisp, DescUtils::getDesc("viewer_toggle_note"));
 
         *speedrun += (EntryWithHotkey(new MenuEntry("Enable On-screen Speedrun Timer", Miscellaneous::speedrunTimer, DescUtils::getDesc("speedrun_note")),
@@ -505,10 +505,7 @@ namespace CTRPluginFramework
         *miscellaneous += new MenuEntry("Force instant text boxes", nullptr, Miscellaneous::manageInstantText, false, DescUtils::getDesc("instant_text_note"));
 
         // auto-managed by plugin; hidden from users...
-        autoWriteCameraStatus = new MenuEntry("Toggle camera status (auto)", Miscellaneous::keepCameraEdits, "", true);
         autoDisableCamShutter = new MenuEntry("Disable camera shutter (auto)", Miscellaneous::writeShutterDisable, "", true);
-
-        *autoFolder += autoWriteCameraStatus;
         *autoFolder += autoDisableCamShutter;
     }
 
