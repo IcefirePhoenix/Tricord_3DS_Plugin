@@ -1793,14 +1793,6 @@
             }
         },
         {
-            "name": "TextToRodata",
-            "regionAddrs": {
-                "usaAddress": "0x006A9168",
-                "eurAddress": "0x006A9598",
-                "jpnAddress": "0x007239B8"
-            }
-        },
-        {
             "name": "ActiveLink",
             "regionAddrs": {
                 "usaAddress": "0x31A03879",
@@ -3658,25 +3650,9 @@
             }
         },
         {
-            "name": "FileTableRewrite",
+            "name": "CustomCategoryHeaders",
             "regionAddrs": {
-                "usaAddress": "0x006A9600",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
-            }
-        },
-        {
-            "name": "FileTableStart",
-            "regionAddrs": {
-                "usaAddress": "0x32DD7434",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
-            }
-        },
-        {
-            "name": "CustomInfoHeaders",
-            "regionAddrs": {
-                "usaAddress": "0x006A9350",
+                "usaAddress": "0x006A9170",
                 "eurAddress": "0x0",
                 "jpnAddress": "0x0"
             }
@@ -3684,37 +3660,53 @@
         {
             "name": "CustomAnimData",
             "regionAddrs": {
-                "usaAddress": "0x006A922C",
+                "usaAddress": "0x006A91A0",
                 "eurAddress": "0x0",
                 "jpnAddress": "0x0"
             }
         },
         {
-            "name": "CustomFacePointerList",
+            "name": "RedirCategoryHeaderPtrs",
             "regionAddrs": {
-                "usaAddress": "0x006A91DC",
+                "usaAddress": "0x006A9330",
                 "eurAddress": "0x0",
                 "jpnAddress": "0x0"
             }
         },
         {
-            "name": "EditFaceStatusBit",
+            "name": "CustomInfoHeaderPtrs",
             "regionAddrs": {
-                "usaAddress": "0x006A91D8",
+                "usaAddress": "0x006A9340",
                 "eurAddress": "0x0",
                 "jpnAddress": "0x0"
             }
         },
         {
-            "name": "EyeTitleReference",
+            "name": "CustomFilenamePtrList",
             "regionAddrs": {
-                "usaAddress": "0x3033D761",
+                "usaAddress": "0x006A9350",
                 "eurAddress": "0x0",
                 "jpnAddress": "0x0"
             }
         },
         {
-            "name": "HytopiaPMAStart",
+            "name": "Link_anm_mat_MasterAssetListStart",
+            "regionAddrs": {
+                "usaAddress": "0x3033D4E8",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "LFC_MA_MasterStart",
+            "regionAddrs": {
+                "usaAddress": "0x3033C8CC",
+                "eurAddress": "0x0",
+                "jpnAddress": "0x0"
+            }
+        },
+        {
+            "name": "HytopiaLFC_MA_Start",
             "regionAddrs": {
                 "usaAddress": "0x302123FC",
                 "eurAddress": "0x0",
@@ -3722,7 +3714,7 @@
             }
         },
         {
-            "name": "IndivPMAStart",
+            "name": "IndivLFC_MA_Start",
             "regionAddrs": {
                 "usaAddress": "0x32C81A78",
                 "eurAddress": "0x0",
