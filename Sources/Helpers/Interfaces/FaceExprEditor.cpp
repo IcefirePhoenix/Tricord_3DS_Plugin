@@ -11,6 +11,87 @@ namespace CTRPluginFramework
         mayuLabelOffset = 0xF15,
         mouthLabelOffset = 0xF44;
 
+    const std::vector<IconLabel> eyeInfo =
+    {
+        {0.0, Icon::DrawEye0, "Idle"},
+        {16.0, Icon::DrawEye1, "Looking left"},
+        {17.0, Icon::DrawEye2, "Looking right"},
+        {1.0, Icon::DrawEye3, "Happily shut"},
+        {2.0, Icon::DrawEye4, "Squinting"},
+        {18.0, Icon::DrawEye5, "Peacefully shut"},
+        {3.0, Icon::DrawEye6, "Hurt"},
+        {4.0, Icon::DrawEye7, "Half-open"},
+        {5.0, Icon::DrawEye8, "Shocked"}
+    };
+
+    const std::vector<IconLabel> mayuInfo =
+    {
+        {6.0, Icon::DrawMayu0, "Idle"},
+        {7.0, Icon::DrawMayu1, "Scrunched"},
+        {8.0, Icon::DrawMayu2, "Curved upward"},
+        {9.0, Icon::DrawMayu3, "Inquisitive"},
+        {10.0, Icon::DrawMayu4, "Pitiful"}
+    };
+
+    const std::vector<IconLabel> mouthInfo =
+    {
+        {11.0, Icon::DrawMouth0, "Idle"},
+        {12.0, Icon::DrawMouth1, "Wide open"},
+        {13.0, Icon::DrawMouth2, "Teeth clenched"},
+        {14.0, Icon::DrawMouth3, "Partly open"},
+        {15.0, Icon::DrawMouth4, "Smiling"},
+        {19.0, Icon::DrawMouth5, "Sad"}
+    };
+
+    StringVector currLabels =
+    {
+        eyeInfo[0].label,
+        mayuInfo[0].label,
+        mouthInfo[0].label
+    };
+
+    int currExprIndexes[3] = {0, 0, 0};
+    int dataSizes[3] = {9, 5, 6};
+
+    FaceExprEditor::FaceExprEditor(int frameIndex, std::string &frameLabel) : _frameIndex(frameIndex), _frameLabel(frameLabel)
+    {
+        // _getExprIndexes(exprIndex);
+
+        for (int column1 = 0, posY = 90; column1 < 3; column1++, posY += 44)
+        {
+            Button newLButton(Button::Icon, IntRect(100, posY, 25, 25), Icon::DrawLeft);
+            Button newRButton(Button::Icon, IntRect(260, posY, 25, 25), Icon::DrawRight);
+
+            _leftArrs.push_back(newLButton);
+            _rightArrs.push_back(newRButton);
+        }
+    }
+
+    FaceExprEditor::~FaceExprEditor()
+    {
+    }
+
+    void FaceExprEditor::operator()(void)
+    {
+        bool mustclose = false;
+        bool sleepClose = false;
+
+        while (((!Window::BottomWindow.MustClose() && !mustclose)) && !sleepClose)
+        {
+            Controller::Update();
+            mustclose = Controller::IsKeyPressed(Key::B);
+            sleepClose = SystemImpl::IsSleeping();
+
+            _drawTop();
+            _drawBottom();
+
+            Renderer::EndFrame();
+            _updateMenuGraphics();
+        }
+
+        updateAnimData();
+        // call Settings::SaveExprOpts()
+    }
 
     /* -------------- EXECUTED ONCE DURING INIT -------------- */
 
@@ -241,7 +322,7 @@ namespace CTRPluginFramework
         return true;
     }
 
-    /* -------------- EXECUTED PER EDIT CYCLE -------------- */
+    /* -------------- EXECUTED DURING LOADING SEQUENCES -------------- */
 
     // Retrieves the dynamic starting addresses for each LFC_MA child block (4 total: Hytopia, G, B, R) by traversing known pointer chains
     void FaceExprEditor::editChild_FC_MA_Blocks(void)
@@ -274,7 +355,7 @@ namespace CTRPluginFramework
                 Process::Read32(tmpPointerBuffer + LFC_MA_offsets[jump], tmpPointerBuffer);
 
                 if (GeneralHelpers::isNullPointer(tmpPointerBuffer))
-                    goto error;
+                    return;
             }
 
             copyRedirIH_PtrBlock(tmpPointerBuffer + finalLFC_MA_offset);
@@ -284,9 +365,6 @@ namespace CTRPluginFramework
             addresses.push_back(tmpPointerBuffer + finalLFC_MA_offset);
             LFC_MA_start += 4; // to retrieve adjacent address for B/R
         }
-
-        error:
-            OSD::Notify("[ERROR] An LFC_MA intermediate address is null.", Color::Red);
     }
 
     bool FaceExprEditor::copyRedirIH_PtrBlock(u32 LFC_MA_startAddr)
@@ -345,11 +423,21 @@ namespace CTRPluginFramework
 
     /* -------------- EXECUTED ONCE PER EDIT TRIGGER -------------- */
 
-    // // Updates frame data for eye, eyebrow (mayu), and mouth
-    // bool FaceExprEditor::updateAnimData(void)
-    // {
+    // Updates frame data for eye, eyebrow (mayu), and mouth
+    void FaceExprEditor::updateAnimData(void)
+    {
+        const std::vector<IconLabel> infoArrays[] = {eyeInfo, mayuInfo, mouthInfo};
 
-    // }
+        u8 faceSectionSize = 0x60 + animMetadataSize;
+        u32 startAddr = AddressList::getAddress("CustomAnimData") + animMetadataSize;
+        u32 entryOffset = _frameIndex * sizeof(u64); // each entry contains two floats: frameNum and frameVal
+
+        for (int iter = 0; iter < 3; iter++)
+        {
+            // frameNum already exists in the duplicated data block -> only frameVal edited here
+            Process::WriteFloat(startAddr + (faceSectionSize * iter) + entryOffset + sizeof(u32), infoArrays[iter][currExprIndexes[iter]].floatVal);
+        }
+    }
 
     /* -------------- EXECUTED ONCE UPON ENTRY DISABLE -------------- */
 
@@ -362,6 +450,8 @@ namespace CTRPluginFramework
 
     /* -------------- DRIVER CODE -------------- */
 
+    // Edits are maintained by redirecting child LFC_MA block pointers (for CH, IH, and texture filename reference blocks) to custom data placed in padding
+    // Reverting back to original data is done simply by stopping the redirection process and letting the game use its default pointers instead
     void FaceExprEditor::editMngr(MenuEntry* entry)
     {
         u32 noInterruptEdit, noIntrEditOffset = 0x60;
@@ -386,7 +476,7 @@ namespace CTRPluginFramework
                 goto error;
         }
 
-        // if noInterruptEdit is null, the game is currently rearranging dynamic memory
+        // if noInterruptEdit is null, the game is currently rearranging dynamic memory during loading sequences
         // ...interrupting this edit sequence will lead to a crash
         if (GeneralHelpers::isLoadingScreen(false))
         {
@@ -396,13 +486,13 @@ namespace CTRPluginFramework
                 FaceExprEditor::editChild_FC_MA_Blocks();
             }
         }
+        return;
 
         error:
-            OSD::Notify("Facial Expression Editor: An error occurred.", Color::Yellow);
+            OSD::Notify("Facial Expression Editor: An error occurred during init.", Color::Yellow);
             OSD::Notify("Edits have not been saved.", Color::Yellow);
             entry->Disable();
     }
-
 
     /* -------------- UI -------------- */
 

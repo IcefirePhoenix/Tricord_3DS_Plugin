@@ -6,10 +6,22 @@
 namespace CTRPluginFramework
 {
     using StringVector = std::vector<std::string>;
+    using IconCallback = int (*)(int, int);
+
+    struct IconLabel
+    {
+        float floatVal;
+        IconCallback icon;
+        std::string label;
+    };
 
     class FaceExprEditor
     {
     public:
+        FaceExprEditor(int frameIndex, std::string &frameLabel);
+        ~FaceExprEditor(void);
+        void operator()(void);
+
         static bool expandMasterTexRefBlock(u32 LFC_MA_masterStartAddr);
         static bool restoreEyeTexMasterList(u32 LFC_MA_masterStartAddr);
         static bool initCustomCH(u32 LFC_MA_masterStartAddr);
@@ -24,6 +36,11 @@ namespace CTRPluginFramework
         static bool redirCH(u32 LFC_MA_startAddr);
         static bool redirTexRefPtr(u32 LFC_MA_startAddr);
         static void editMngr(MenuEntry *entry);
+
+        void updateAnimData(void);
+
+        std::string _frameLabel;
+        int _frameIndex;
     };
 }
 
