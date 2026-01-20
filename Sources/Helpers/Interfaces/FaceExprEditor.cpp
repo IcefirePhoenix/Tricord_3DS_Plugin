@@ -57,9 +57,6 @@ namespace CTRPluginFramework
     {
         // _getExprIndexes(exprIndex);
 
-        if (frameIndex == 3) // skipping Frame 3 to reach Frame 4
-            frameIndex++;
-
         _frameIndex = frameIndex;
 
         for (int column1 = 0, posY = 90; column1 < 3; column1++, posY += 44)
@@ -99,21 +96,6 @@ namespace CTRPluginFramework
     }
 
     /* -------------- EXECUTED ONCE DURING INIT -------------- */
-
-    // Expands the Master LFC_MA texture filename reference pointer block
-    // Note: any edits made to the Master LFC_MA block automatically propagate to the LFC_MA child blocks
-    bool FaceExprEditor::expandMasterTexRefBlock(u32 LFC_MA_masterStartAddr)
-    {
-        u8 masterListSizeOffset = 0x4;
-
-        // update list size
-        if (!Process::Write8(LFC_MA_masterStartAddr + masterListSizeOffset, increasedTexListSize))
-        {
-            OSD::Notify("[ERROR] Editing LFC_MA master filename list size failed.", Color::Red);
-            return false;
-        }
-        return true;
-    }
 
     // Restores reference to unused texture "eye.1" to the Master Link_anm_mat.bch texture filename list using an extra, unused string
     // Note: this edit propagates to all child LFC_MA blocks
@@ -394,13 +376,31 @@ namespace CTRPluginFramework
                     return;
             }
 
-            copyRedirIH_PtrBlock(tmpPointerBuffer + finalLFC_MA_offset);
-            redirCH(tmpPointerBuffer + finalLFC_MA_offset);
-            redirTexRefPtr(tmpPointerBuffer + finalLFC_MA_offset);
+            u32 childAddr = tmpPointerBuffer + finalLFC_MA_offset;
 
-            addresses.push_back(tmpPointerBuffer + finalLFC_MA_offset);
+            alterTexBlockSize(childAddr, true);
+
+            bool IH_redirClear = copyRedirIH_PtrBlock(childAddr);
+            bool CH_redirClear = redirCH(childAddr);
+            bool texRedirClear = redirTexRefPtr(childAddr);
+
+            if (IH_redirClear && CH_redirClear && texRedirClear)
+            {
+                alterTexBlockSize(childAddr, false);
+            }
+
+            addresses.push_back(childAddr);
             LFC_MA_start += 4; // to retrieve adjacent address for B/R
         }
+    }
+
+    // Expands the child LFC_MA texture filename reference pointer block
+    bool FaceExprEditor::alterTexBlockSize(u32 LFC_MA_startAddr, bool restore)
+    {
+        u8 blockSizeOffset = 0x4;
+        u8 editedSize = restore ? originalTexCount : increasedTexListSize;
+
+        return (Process::Write8(LFC_MA_startAddr + blockSizeOffset, editedSize));
     }
 
     bool FaceExprEditor::copyRedirIH_PtrBlock(u32 LFC_MA_startAddr)
@@ -512,10 +512,11 @@ namespace CTRPluginFramework
                 goto error;
         }
 
-        // if noInterruptEdit is null, the game is currently rearranging dynamic memory during loading sequences
-        // ...interrupting this edit sequence will lead to a crash
-        if (GeneralHelpers::isLoadingScreen(false))
+        // redundant check since edits are not applied during loading screens:
+        // if noInterruptEdit is null, the game is currently rearranging dynamic memory... interrupting this edit sequence will lead to a crash
+        if (Level::hasStageBegan() && !Level::hasCertainTimeElapsed(5))
         {
+            OSD::Notify("eidt!");
             Process::Read32(AddressList::getAddress("IndivLFC_MA_Start") + noIntrEditOffset, noInterruptEdit);
             if (!GeneralHelpers::isNullPointer(noInterruptEdit))
             {

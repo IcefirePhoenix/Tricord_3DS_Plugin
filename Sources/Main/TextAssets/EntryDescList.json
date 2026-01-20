@@ -1029,7 +1029,7 @@
         {
             "name": "face_expr_sel_note",
             "content": {
-                "intro": "Allows you to edit five of Link's facial expressions.\n\nThere are 20 available textures:\n- 9 eye textures\n- 5 eyebrow texture\n- 6 mouth textures\n\nThis includes several unused textures (three eye textures and one mouth texture) that have been restored.",
+                "intro": "Allows you to edit six of Link's facial expressions.\n\nThere are 20 available textures:\n- 9 eye textures\n- 5 eyebrow texture\n- 6 mouth textures\n\nThis includes several unused textures (three eye textures and one mouth texture) that have been restored.",
                 "note": "Changes will be preserved between reboots.",
                 "modeCompatibility": 1,
                 "clientOnly": true
