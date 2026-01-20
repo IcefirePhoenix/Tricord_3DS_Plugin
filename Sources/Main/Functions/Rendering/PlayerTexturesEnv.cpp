@@ -182,31 +182,51 @@ namespace CTRPluginFramework
     // Custom menu interface for changing player facial expressions
     void Rendering::editFaceExpr(MenuEntry *entry)
     {
-        // 11 expressions total; unclear where they are all used... for now, only use Idle
-        StringVector expressionList =
+        Keyboard chooseFrame("Facial Expression Editor", "Select a facial expression to edit.\n\nIdle: This is Link's normal facial expression.");
+        StringVector frameList =
         {
             "Idle",
-            "?",
-            "?",
-            "?",
-            "?",
-            "?",
-            "?",
-            "?",
-            "?",
-            "?",
-            "?"
+            "Shocked",
+            "Death / DMG",
+            "Low HP / Failed Challenge",
+            "Fall / Drown / Capture"
         };
 
-        // TODO: use when multiple facial expressions are supported:
-        // Keyboard expr("Select a facial expression to edit.");
-        // expr.Populate(expressionList);
+        chooseFrame.DisplayTopScreen = true;
+        chooseFrame.Populate(frameList);
 
-        // int selection = expr.Open();
-        // if (selection >= 0)
-        //     FaceSelMenu(selection, expressionList[selection])();
+        chooseFrame.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
+        {
+            if (event.type == KeyboardEvent::SelectionChanged)
+            {
+                std::string &msg = kb.GetMessage();
+                msg.clear();
+                msg.append("Select a facial expression to edit.\n\n");
 
-        //FaceSelMenu(0, expressionList[0])(); // Idle expression
+                switch (kb.GetLastSelectedEntry())
+                {
+                    case 0:
+                        msg.append("Idle: This is Link's normal facial expression.");
+                        break;
+                    case 1:
+                        msg.append("Shocked: This is Link's expression when colliding into objects, getting caught in Boomerangs, or being surprised by totem-related actions.");
+                        break;
+                    case 2:
+                        msg.append("Death / DMG: Link makes this expression when taking damage or when all HP has been depleted.");
+                        break;
+                    case 3:
+                        msg.append("Low HP / Failed Challenge: This is Link's expression when running low on HP or when failing a challenge.");
+                        break;
+                    case 4:
+                        msg.append("Fall / Drown / Capture: Link makes this expression when captured by a Life-Like or when entering a fall plane. This includes waterfalls, lava, and quicksand.");
+                        break;
+                }
+            }
+        });
+
+        int frame = chooseFrame.Open();
+        if (frame >= 0)
+            FaceExprEditor(frame, frameList[frame])();
     }
 
     void Rendering::hideDoppelMasks(MenuEntry *entry)

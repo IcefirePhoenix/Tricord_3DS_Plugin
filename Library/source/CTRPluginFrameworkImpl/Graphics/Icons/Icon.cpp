@@ -72,6 +72,34 @@ namespace CTRPluginFramework
     extern "C" unsigned char *ZR15;
     extern "C" unsigned char *UserManual15;
 
+    extern "C" unsigned char *Eye0;
+    extern "C" unsigned char *Eye1;
+    extern "C" unsigned char *Eye2;
+    extern "C" unsigned char *Eye3;
+    extern "C" unsigned char *Eye4;
+    extern "C" unsigned char *Eye5;
+    extern "C" unsigned char *Eye6;
+    extern "C" unsigned char *Eye7;
+    extern "C" unsigned char *Eye8;
+
+    extern "C" unsigned char *Mayu0;
+    extern "C" unsigned char *Mayu1;
+    extern "C" unsigned char *Mayu2;
+    extern "C" unsigned char *Mayu3;
+    extern "C" unsigned char *Mayu4;
+
+    extern "C" unsigned char *Mouth0;
+    extern "C" unsigned char *Mouth1;
+    extern "C" unsigned char *Mouth2;
+    extern "C" unsigned char *Mouth3;
+    extern "C" unsigned char *Mouth4;
+    extern "C" unsigned char *Mouth5;
+
+    extern "C" unsigned char *MainFace;
+
+    extern "C" unsigned char *LeftArr;
+    extern "C" unsigned char *RightArr;
+
     #define RGBA8 GSP_RGBA8_OES
 
     struct Pixel
@@ -618,5 +646,121 @@ namespace CTRPluginFramework
         }
 
         return (DrawImg(link, posX, posY, 30, 30));
+    }
+
+    /* Facial Expression Editor */
+    int Icon::DrawEye0(int posX, int posY)
+    {
+        return (DrawImg(Eye0, posX, posY, 40, 15));
+    }
+
+    int Icon::DrawEye1(int posX, int posY)
+    {
+        return (DrawImg(Eye1, posX, posY, 40, 15));
+    }
+
+    int Icon::DrawEye2(int posX, int posY)
+    {
+        return (DrawImg(Eye2, posX, posY, 40, 15));
+    }
+
+    int Icon::DrawEye3(int posX, int posY)
+    {
+        return (DrawImg(Eye3, posX, posY, 40, 15));
+    }
+
+    int Icon::DrawEye4(int posX, int posY)
+    {
+        return (DrawImg(Eye4, posX, posY, 40, 15));
+    }
+
+    int Icon::DrawEye5(int posX, int posY)
+    {
+        return (DrawImg(Eye5, posX, posY, 40, 15));
+    }
+
+    int Icon::DrawEye6(int posX, int posY)
+    {
+        return (DrawImg(Eye6, posX, posY, 40, 15));
+    }
+
+    int Icon::DrawEye7(int posX, int posY)
+    {
+        return (DrawImg(Eye7, posX, posY, 40, 15));
+    }
+
+    int Icon::DrawEye8(int posX, int posY)
+    {
+        return (DrawImg(Eye8, posX, posY, 40, 15));
+    }
+
+    int Icon::DrawMayu0(int posX, int posY)
+    {
+        return (DrawImg(Mayu0, posX, posY, 40, 15));
+    }
+
+    int Icon::DrawMayu1(int posX, int posY)
+    {
+        return (DrawImg(Mayu1, posX, posY, 40, 15));
+    }
+
+    int Icon::DrawMayu2(int posX, int posY)
+    {
+        return (DrawImg(Mayu2, posX, posY, 40, 15));
+    }
+
+    int Icon::DrawMayu3(int posX, int posY)
+    {
+        return (DrawImg(Mayu3, posX, posY, 40, 15));
+    }
+
+    int Icon::DrawMayu4(int posX, int posY)
+    {
+        return (DrawImg(Mayu4, posX, posY, 40, 15));
+    }
+
+    int Icon::DrawMouth0(int posX, int posY)
+    {
+        return (DrawImg(Mouth0, posX, posY, 20, 8));
+    }
+
+    int Icon::DrawMouth1(int posX, int posY)
+    {
+        return (DrawImg(Mouth1, posX, posY, 20, 8));
+    }
+
+    int Icon::DrawMouth2(int posX, int posY)
+    {
+        return (DrawImg(Mouth2, posX, posY, 20, 8));
+    }
+
+    int Icon::DrawMouth3(int posX, int posY)
+    {
+        return (DrawImg(Mouth3, posX, posY, 20, 8));
+    }
+
+    int Icon::DrawMouth4(int posX, int posY)
+    {
+        return (DrawImg(Mouth4, posX, posY, 20, 8));
+    }
+
+    int Icon::DrawMouth5(int posX, int posY)
+    {
+        return (DrawImg(Mouth5, posX, posY, 20, 8));
+    }
+
+    int Icon::DrawLeft(int posX, int posY)
+    {
+        return (DrawImg(LeftArr, posX, posY, 25, 25));
+    }
+
+    int Icon::DrawRight(int posX, int posY)
+    {
+        return (DrawImg(RightArr, posX, posY, 25, 25));
+    }
+
+    int Icon::DrawFace(int posX, int posY)
+    {
+        return (DrawImg(MainFace, posX, posY, 75, 90));
     }
 }

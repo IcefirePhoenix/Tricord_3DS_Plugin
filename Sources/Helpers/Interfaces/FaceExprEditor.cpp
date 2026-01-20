@@ -53,9 +53,14 @@ namespace CTRPluginFramework
     int currExprIndexes[3] = {0, 0, 0};
     int dataSizes[3] = {9, 5, 6};
 
-    FaceExprEditor::FaceExprEditor(int frameIndex, std::string &frameLabel) : _frameIndex(frameIndex), _frameLabel(frameLabel)
+    FaceExprEditor::FaceExprEditor(int frameIndex, std::string &frameLabel) : _frameLabel(frameLabel)
     {
         // _getExprIndexes(exprIndex);
+
+        if (frameIndex == 3) // skipping Frame 3 to reach Frame 4
+            frameIndex++;
+
+        _frameIndex = frameIndex;
 
         for (int column1 = 0, posY = 90; column1 < 3; column1++, posY += 44)
         {
@@ -147,8 +152,14 @@ namespace CTRPluginFramework
         // u16 unknownID (always 0x0E00)
         // u32 pointer to category's animation metadata (set to secondary/custom animation blocks)
 
-        u16 targetType = 0x000D, primitiveType = 0x0006;
-        u32 unknown = 0x00000E00;
+        u16 targetType = 0xD, primitiveType = 0x6;
+        u32 unknown = 0xE00;
+
+        if (!Process::CheckAddress(CH_start))
+        {
+            OSD::Notify("[ERROR] Custom CH start address is not accessible.", Color::Red);
+            return false;
+        }
 
         for (int category = 0; category < 3; category++)
         {
@@ -192,6 +203,12 @@ namespace CTRPluginFramework
         u32 currentEyeAnimAddress = LFC_MA_masterStartAddr + eyeOffset;
         u32 tmpFrameDataBuffer;
 
+        if (!Process::CheckAddress(currentEyeAnimAddress))
+        {
+            OSD::Notify("[ERROR] Anim frame start address is not accessible.", Color::Red);
+            return false;
+        }
+
         writeCategoryAnimMetadata(writerCurrAddress, 0);
         writerCurrAddress += animMetadataSize;
 
@@ -224,7 +241,12 @@ namespace CTRPluginFramework
         writeCategoryAnimMetadata(writerCurrAddress, 1);
         writerCurrAddress += animMetadataSize;
 
-        Process::CopyMemory((void *)writerCurrAddress, (void *)mayuCurrAddress, sizeof(u64) * 3);
+        if (!Process::CopyMemory((void *)writerCurrAddress, (void *)mayuCurrAddress, sizeof(u64) * 3))
+        {
+            OSD::Notify("[ERROR] Copying Mayu frame data (1st) failed.", Color::Red);
+            return false;
+        }
+
         mayuCurrAddress += sizeof(u64) * 3;
         writerCurrAddress += sizeof(u64) * 3;
 
@@ -233,7 +255,11 @@ namespace CTRPluginFramework
         Process::WriteFloat(writerCurrAddress + sizeof(u32), 7.0);
         writerCurrAddress += sizeof(u64); // StepLinear64 single frame data = two u32
 
-        Process::CopyMemory((void *)writerCurrAddress, (void *)mayuCurrAddress, sizeof(u64) * 8);
+        if (!Process::CopyMemory((void *)writerCurrAddress, (void *)mayuCurrAddress, sizeof(u64) * 8))
+        {
+            OSD::Notify("[ERROR] Copying Mayu frame data (2nd) failed.", Color::Red);
+            return false;
+        }
 
         return true;
     }
@@ -247,7 +273,12 @@ namespace CTRPluginFramework
         writeCategoryAnimMetadata(writerCurrAddress, 2);
         writerCurrAddress += animMetadataSize;
 
-        Process::CopyMemory((void *)writerCurrAddress, (void *)mouthStartAddress, sizeof(u64) * 4);
+        if (!Process::CopyMemory((void *)writerCurrAddress, (void *)mouthStartAddress, sizeof(u64) * 4))
+        {
+            OSD::Notify("[ERROR] Copying Mouth frame data (1st) failed.", Color::Red);
+            return false;
+        }
+
         mouthStartAddress += sizeof(u64) * 4;
         writerCurrAddress += sizeof(u64) * 4;
 
@@ -258,7 +289,12 @@ namespace CTRPluginFramework
         Process::WriteFloat(writerCurrAddress + sizeof(u32) * 3, 12.0);
         writerCurrAddress += sizeof(u64) * 2;
 
-        Process::CopyMemory((void *)writerCurrAddress, (void *)mouthStartAddress, sizeof(u64) * 6);
+        if (!Process::CopyMemory((void *)writerCurrAddress, (void *)mouthStartAddress, sizeof(u64) * 6))
+        {
+            OSD::Notify("[ERROR] Copying Mouth frame data (2nd) failed.", Color::Red);
+            return false;
+        }
+
         return true;
     }
 
@@ -496,4 +532,128 @@ namespace CTRPluginFramework
 
     /* -------------- UI -------------- */
 
+    void FaceExprEditor::_drawTop(void)
+    {
+        int posY1 = 55, posY2 = 110;
+        std::string intro, outro, reload, preview;
+        const std::vector<IconLabel> infoArrays[] = {eyeInfo, mayuInfo, mouthInfo};
+        IconLabel expression[3];
+
+        Renderer::SetTarget(TOP);
+        Window::TopWindow.Draw("Facial Expression Editor");
+
+        intro = "Currently editing: " << _frameLabel;
+        preview = "Preview:";
+        outro = "Press " + std::string(FONT_B) + " to save and exit this\nmenu. Edits will persist between\nreboots.";
+        reload = "Be sure to reload the current\narea for changes to take effect.";
+
+        Renderer::DrawGameFontStringReturn(intro.c_str(), 52, posY1, 360, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontStringReturn(outro.c_str(), 160, posY2, 360, Preferences::Settings.MainTextColor);
+
+        posY1 = 85;
+        posY2 = 170;
+
+        Renderer::DrawGameFontStringReturn(preview.c_str(), 52, posY1, 360, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontStringReturn(reload.c_str(), 160, posY2, 360, Preferences::Settings.MainTextColor);
+
+        Renderer::DrawRect(52, 108, 90, 102, Color::Maroon);
+
+        Icon::DrawFace(60, 112);
+
+        int faceTexPosX[3] = {77, 78, 88};
+        int faceTexPosY[3] = {141, 133, 159};
+        for (int faceSection = 0; faceSection < 3; faceSection++) // 0 = eye, 1 = mayu, 2 = mouth
+        {
+            int currTextureIndex = currExprIndexes[faceSection];
+            expression[faceSection] = infoArrays[faceSection][currTextureIndex]; // duplicate iconLabel content
+            expression[faceSection].icon(faceTexPosX[faceSection], faceTexPosY[faceSection]); // draw icon
+        }
+    }
+
+    void FaceExprEditor::_drawBottom(void)
+    {
+        const StringVector mainLabels =
+        {
+            "Eye",
+            "Brow",
+            "Mouth"
+        };
+
+        Renderer::SetTarget(BOTTOM);
+        Window::BottomWindow.Draw();
+
+        for (int faceSection = 0; faceSection < 3; faceSection++)
+        {
+            _leftArrs[faceSection].Draw();
+            _rightArrs[faceSection].Draw();
+
+            // if button(s) are pressed...
+            if (_leftArrs[faceSection]())
+                _updateIcon(faceSection, true);
+
+            if (_rightArrs[faceSection]())
+                _updateIcon(faceSection, false);
+        }
+
+        int yPositions[2] = {95, 95};
+        for (int drawMain = 0; drawMain < 3; drawMain++)
+        {
+            Renderer::DrawRect(127, yPositions[0] - 1, 130, 23, Color::Magenta);
+            Renderer::DrawGameFontString(mainLabels[drawMain].c_str(), 35, yPositions[0], 290, Preferences::Settings.MainTextColor);  // title
+            Renderer::DrawGameFontString(currLabels[drawMain].c_str(), 145, yPositions[1], 290, Preferences::Settings.MainTextColor); // content
+
+            // adjust y-coords for next iter
+            yPositions[0] += 27;
+            yPositions[1] += 27;
+        }
+    }
+
+    bool FaceExprEditor::_updateIcon(int faceSection, bool goingLeft)
+    {
+        int adjustment = goingLeft ? -1 : 1;
+        currExprIndexes[faceSection] = currExprIndexes[faceSection] + adjustment;
+
+        // loop around if necessary
+        for (int iter = 0; iter < 3; iter++)
+        {
+            if (currExprIndexes[iter] >= dataSizes[iter])
+                currExprIndexes[iter] = 0;
+            else if (currExprIndexes[iter] < 0)
+                currExprIndexes[iter] = dataSizes[iter] - 1;
+        }
+
+        IconLabel newLabel = eyeInfo[0]; // default
+        switch (faceSection)
+        {
+            case 0:
+                newLabel = eyeInfo[currExprIndexes[faceSection]];
+                break;
+            case 1:
+                newLabel = mayuInfo[currExprIndexes[faceSection]];
+                break;
+            case 2:
+                newLabel = mouthInfo[currExprIndexes[faceSection]];
+                break;
+            default:
+                return false;
+        }
+
+        currLabels[faceSection] = newLabel.label;
+        return true;
+    }
+
+
+    void FaceExprEditor::_updateMenuGraphics(void)
+    {
+        bool isTouched = Touch::IsDown();
+        IntVector touchPos(Touch::GetPosition());
+
+        for (int arrIndex = 0; arrIndex < 3; arrIndex++)
+        {
+            _leftArrs[arrIndex].Update(isTouched, touchPos);
+            _rightArrs[arrIndex].Update(isTouched, touchPos);
+        }
+
+        Window::BottomWindow.Update(isTouched, touchPos);
+    }
 }

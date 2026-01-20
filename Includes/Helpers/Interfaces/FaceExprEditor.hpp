@@ -39,6 +39,14 @@ namespace CTRPluginFramework
 
         void updateAnimData(void);
 
+    private:
+        void _drawTop(void);
+        void _drawBottom(void);
+        bool _updateIcon(int faceSection, bool goingLeft);
+        void _updateMenuGraphics(void);
+
+        std::vector<Button> _leftArrs;
+        std::vector<Button> _rightArrs;
         std::string _frameLabel;
         int _frameIndex;
     };
