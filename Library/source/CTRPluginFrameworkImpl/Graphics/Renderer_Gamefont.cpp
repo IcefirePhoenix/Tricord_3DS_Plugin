@@ -422,16 +422,16 @@ namespace CTRPluginFramework
         return (posX + glyph->xAdvance);
     }
 
-    int Renderer::DrawGameFontStringReturn(const unsigned char *stri, int posX, int& posY, int xLimits, Color color, int maxY, u32 flags)
+    int Renderer::DrawGameFontStringReturn(const char *stri, int posX, int& posY, int xLimits, Color color, int maxY, u32 flags)
     {
         // Check for a valid pointer
         if (!(stri && *stri))
             return (posX);
-        int             lineCount = 1;
-        u8              *str = const_cast<u8 *>(stri);
-        int             x = posX;
-        int             underLineStart = -1, strikeLineStart = -1;
-        ScreenImpl      *screen = GetContext()->screen;
+        int lineCount = 1;
+        u8 *str = (u8 *)stri;
+        int x = posX;
+        int underLineStart = -1, strikeLineStart = -1;
+        ScreenImpl *screen = GetContext()->screen;
         void (*lineDrawer)(int posX, int posY, int width, const Color &color, int height) = Renderer::DrawLine;
 
         if (!screen)
@@ -589,12 +589,11 @@ namespace CTRPluginFramework
 
     int Renderer::DrawGameFontString(const char *stri, int posX, int &posY, int xLimits, Color color, float offset, const char *end, u32 flags)
     {
-        Glyph   *glyph;
-        int      x = posX;
-        //u8      *str = (u8 *)stri.c_str();
+        Glyph *glyph;
+        int x = posX;
         u8 *str = (u8 *)stri;
-        int             underLineStart = -1, strikeLineStart = -1;
-        void            (*lineDrawer)(int posX, int posY, int width, const Color &color, int height) = DrawLine;
+        int underLineStart = -1, strikeLineStart = -1;
+        void (*lineDrawer)(int posX, int posY, int width, const Color &color, int height) = DrawLine;
         ScreenImpl *screen = GetContext()->screen;
 
         if (!(str && *str) || !screen)

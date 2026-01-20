@@ -226,7 +226,7 @@ namespace CTRPluginFramework
             if (!_folder->GetNote().empty())
             {
                 int posY = 40;
-                Renderer::DrawGameFontStringReturn((u8 *)_folder->GetNote().c_str(), 35, posY, 295, Preferences::Settings.MainTextColor, 190);
+                Renderer::DrawGameFontStringReturn(_folder->GetNote().c_str(), 35, posY, 295, Preferences::Settings.MainTextColor, 190);
             }
         }
     }

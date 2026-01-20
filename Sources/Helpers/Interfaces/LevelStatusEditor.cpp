@@ -172,7 +172,7 @@ namespace CTRPluginFramework
         Window::TopWindow.Draw("Level Completion Editor");
 
         int posY = 61;
-        Renderer::DrawGameFontStringReturn((const u8*)_message.c_str(), 40, posY, 335, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontStringReturn(_message.c_str(), 40, posY, 335, Preferences::Settings.MainTextColor);
     }
 
     void LevelStatusEditor::_DrawBottom(void)
