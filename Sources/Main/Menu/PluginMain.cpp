@@ -123,7 +123,7 @@ namespace CTRPluginFramework
         CreateMenu(*menu);
 
         menu->SynchronizeWithFrame(true);
-        menu->OnFirstOpening = LoadSavedEntryData;
+        menu->OnReady = LoadSavedAndCustomEntryData;
         menu->OnNewFrame = ToggleMenuChange;
         menu->OnClosing = ManageTFH_Settings;
 
