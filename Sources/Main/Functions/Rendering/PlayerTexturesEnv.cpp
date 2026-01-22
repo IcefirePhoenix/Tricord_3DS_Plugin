@@ -188,6 +188,7 @@ namespace CTRPluginFramework
             "Idle",
             "Shocked",
             "Death / DMG",
+            "Triforce Warp",
             "Low HP / Failed Challenge",
             "Fall / Drown / Capture"
         };
@@ -215,9 +216,12 @@ namespace CTRPluginFramework
                         msg.append("Death / DMG: Link makes this expression when taking damage or when all HP has been depleted.");
                         break;
                     case 3:
-                        msg.append("Low HP / Failed Challenge: This is Link's expression when running low on HP or when failing a challenge.");
+                        msg.append("Triforce Warp: Link makes this expression during the Triforce Warp sequence.");
                         break;
                     case 4:
+                        msg.append("Low HP / Failed Challenge: This is Link's expression when running low on HP or when failing a challenge.");
+                        break;
+                    case 5:
                         msg.append("Fall / Drown / Capture: Link makes this expression when captured by a Life-Like or when entering a fall plane. This includes waterfalls, lava, and quicksand.");
                         break;
                 }

@@ -565,6 +565,23 @@ namespace CTRPluginFramework
         }
     }
 
+    void PluginMenuImpl::LoadFaceExprFromFile(const Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        Preferences::FaceExprFrameVal exprs[6];
+
+        settings.Seek(header.customFaceExprOffset, File::SET);
+        if (settings.Read(exprs, sizeof(Preferences::FaceExprFrameVal) * 6) == 0)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                Preferences::SavedFaceExprs[i] = exprs[i];
+            }
+        }
+    }
+
     void PluginMenuImpl::WriteScreenshotConfigToFile(Preferences::Header &header, File &settings)
     {
         if (_runningInstance == nullptr)
@@ -664,6 +681,18 @@ namespace CTRPluginFramework
             return;
 
         header.warpDestOffset = listOffset;
+    }
+
+    void PluginMenuImpl::WriteFaceExprsToFile(Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        u64 listOffset = settings.Tell();
+        if (!settings.Write(Preferences::SavedFaceExprs.data(), sizeof(Preferences::FaceExprFrameVal) * 6) == 0)
+            return;
+
+        header.customFaceExprOffset = listOffset;
     }
 
     void    PluginMenuImpl::ExtractHotkeys(HotkeysVector &hotkeys, MenuFolderImpl *folder, u32 &size)

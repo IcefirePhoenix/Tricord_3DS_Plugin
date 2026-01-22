@@ -1,7 +1,11 @@
 #include "Helpers.hpp"
 
+#define MAX_FRAMES 6
+
 namespace CTRPluginFramework
 {
+    MenuEntry *faceExprManager;
+
     constexpr int frameCount = 12,
         originalTexCount = 16,
         newTexCount = 20;
@@ -53,10 +57,18 @@ namespace CTRPluginFramework
     int currExprIndexes[3] = {0, 0, 0};
     int dataSizes[3] = {9, 5, 6};
 
+    std::array<Preferences::FaceExprFrameVal, 6> defaultExprs =
+    {{
+        {0, 6, 11},
+        {5, 8, 12},
+        {3, 7, 13},
+        {0, 7, 12},
+        {3, 9, 12},
+        {2, 7, 12}
+    }};
+
     FaceExprEditor::FaceExprEditor(int frameIndex, std::string &frameLabel) : _frameLabel(frameLabel)
     {
-        // _getExprIndexes(exprIndex);
-
         _frameIndex = frameIndex;
 
         for (int column1 = 0, posY = 90; column1 < 3; column1++, posY += 44)
@@ -71,12 +83,22 @@ namespace CTRPluginFramework
 
     FaceExprEditor::~FaceExprEditor()
     {
+        updateAnimData();
+
+        // attempt to enable edits if not already active
+        faceExprManager->Enable();
     }
 
     void FaceExprEditor::operator()(void)
     {
         bool mustclose = false;
         bool sleepClose = false;
+
+        // reset the menu
+        for (int index : currExprIndexes)
+        {
+            index = 0;
+        }
 
         while (((!Window::BottomWindow.MustClose() && !mustclose)) && !sleepClose)
         {
@@ -96,6 +118,77 @@ namespace CTRPluginFramework
     }
 
     /* -------------- EXECUTED ONCE DURING INIT -------------- */
+
+    void FaceExprEditor::initSeq(void)
+    {
+        if (!buildCustomData())
+        {
+            OSD::Notify("Facial Expression Editor: An error occurred during init.", Color::Yellow);
+            OSD::Notify("Edits have not been saved. Please try again.", Color::Yellow);
+            faceExprManager->Disable();
+        }
+        else
+        {
+            if (!loadSavedSelectionsFromFile())
+            {
+                resetExprs();
+
+                OSD::Notify("Facial Expression Editor: Cannot load previously saved selections.", Color::Yellow);
+                OSD::Notify("Reverting back to default facial expression data.", Color::Yellow);
+            }
+        }
+    }
+
+    // Writes necessary custom data in padding, see individual functions for details
+    bool FaceExprEditor::buildCustomData(void)
+    {
+        u32 LFC_MA_masterStartAddr = AddressList::getAddress("LFC_MA_MasterStart");
+
+        if (!FaceExprEditor::restoreEyeTexMasterList(LFC_MA_masterStartAddr))
+            return false;
+        if (!FaceExprEditor::copyEyeAnimData(LFC_MA_masterStartAddr))
+            return false;
+        if (!FaceExprEditor::copyMayuAnimData(LFC_MA_masterStartAddr))
+            return false;
+        if (!FaceExprEditor::copyMouthAnimData(LFC_MA_masterStartAddr))
+            return false;
+        if (!FaceExprEditor::initCustomCH(LFC_MA_masterStartAddr))
+            return false;
+        if (!FaceExprEditor::buildTexRefPtrBlock())
+            return false;
+
+        // if nothing failed...
+        return true;
+    }
+
+    // Retrieves saved expression data from file, allowing edits to be preserved between reboots
+    bool FaceExprEditor::loadSavedSelectionsFromFile(void)
+    {
+        const std::vector<IconLabel> infoArrays[] = {eyeInfo, mayuInfo, mouthInfo};
+
+        u8 faceSectionSize = 0x60 + animMetadataSize;
+        u32 animStartAddr = AddressList::getAddress("CustomAnimData") + animMetadataSize;
+
+        if (Preferences::SavedFaceExprs == defaultExprs)
+        {
+            faceExprManager->Disable();
+        }
+        else
+        {
+            // read previously saved frame edits
+            for (int i = 0; i < MAX_FRAMES; i++)
+            {
+                u32 entryOffset = i * sizeof(u64); // each entry contains two floats: frameNum and frameVal
+                u32 sectionOffset = animStartAddr + entryOffset + sizeof(u32);
+
+                Process::WriteFloat(sectionOffset + (faceSectionSize * 0), infoArrays[0][Preferences::SavedFaceExprs[i].eyeVal].floatVal);
+                Process::WriteFloat(sectionOffset + (faceSectionSize * 1), infoArrays[1][Preferences::SavedFaceExprs[i].mayuVal].floatVal);
+                Process::WriteFloat(sectionOffset + (faceSectionSize * 2), infoArrays[2][Preferences::SavedFaceExprs[i].mouthVal].floatVal);
+            }
+            faceExprManager->Enable();
+        }
+        return true;
+    }
 
     // Restores reference to unused texture "eye.1" to the Master Link_anm_mat.bch texture filename list using an extra, unused string
     // Note: this edit propagates to all child LFC_MA blocks
@@ -472,63 +565,38 @@ namespace CTRPluginFramework
         {
             // frameNum already exists in the duplicated data block -> only frameVal edited here
             Process::WriteFloat(startAddr + (faceSectionSize * iter) + entryOffset + sizeof(u32), infoArrays[iter][currExprIndexes[iter]].floatVal);
+
         }
+
+        // prepare edits to be saved to file
+        Preferences::SavedFaceExprs[_frameIndex].eyeVal = currExprIndexes[0];
+        Preferences::SavedFaceExprs[_frameIndex].mayuVal = currExprIndexes[1];
+        Preferences::SavedFaceExprs[_frameIndex].mouthVal = currExprIndexes[2];
     }
 
-    /* -------------- EXECUTED ONCE UPON ENTRY DISABLE -------------- */
-
-    // Reverts edits made to the Master LFC_MA texture filename reference pointer block
-    // Note: this automatically propagates to the LFC_MA child blocks
-    // bool FaceExprEditor::restoreMasterTexRefBlock(void)
-    // {
-
-    // }
-
-    /* -------------- DRIVER CODE -------------- */
+    /* -------------- MAIN DRIVER AND HELPERS -------------- */
 
     // Edits are maintained by redirecting child LFC_MA block pointers (for CH, IH, and texture filename reference blocks) to custom data placed in padding
     // Reverting back to original data is done simply by stopping the redirection process and letting the game use its default pointers instead
     void FaceExprEditor::editMngr(MenuEntry* entry)
     {
         u32 noInterruptEdit, noIntrEditOffset = 0x60;
-        u32 LFC_MA_masterStartAddr = AddressList::getAddress("LFC_MA_MasterStart");
 
-        // if one phase fails, don't continue:
         if (entry->WasJustActivated())
         {
-            if (!FaceExprEditor::restoreEyeTexMasterList(LFC_MA_masterStartAddr))
-                goto error;
-            if (!FaceExprEditor::expandMasterTexRefBlock(LFC_MA_masterStartAddr))
-                goto error;
-            if (!FaceExprEditor::copyEyeAnimData(LFC_MA_masterStartAddr))
-                goto error;
-            if (!FaceExprEditor::copyMayuAnimData(LFC_MA_masterStartAddr))
-                goto error;
-            if (!FaceExprEditor::copyMouthAnimData(LFC_MA_masterStartAddr))
-                goto error;
-            if (!FaceExprEditor::initCustomCH(LFC_MA_masterStartAddr))
-                goto error;
-            if (!FaceExprEditor::buildTexRefPtrBlock())
-                goto error;
+            initSeq();
         }
 
         // redundant check since edits are not applied during loading screens:
         // if noInterruptEdit is null, the game is currently rearranging dynamic memory... interrupting this edit sequence will lead to a crash
         if (Level::hasStageBegan() && !Level::hasCertainTimeElapsed(5))
         {
-            OSD::Notify("eidt!");
             Process::Read32(AddressList::getAddress("IndivLFC_MA_Start") + noIntrEditOffset, noInterruptEdit);
             if (!GeneralHelpers::isNullPointer(noInterruptEdit))
             {
                 FaceExprEditor::editChild_FC_MA_Blocks();
             }
         }
-        return;
-
-        error:
-            OSD::Notify("Facial Expression Editor: An error occurred during init.", Color::Yellow);
-            OSD::Notify("Edits have not been saved.", Color::Yellow);
-            entry->Disable();
     }
 
     /* -------------- UI -------------- */

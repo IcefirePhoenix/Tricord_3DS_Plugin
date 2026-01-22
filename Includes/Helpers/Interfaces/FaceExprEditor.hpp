@@ -22,7 +22,9 @@ namespace CTRPluginFramework
         ~FaceExprEditor(void);
         void operator()(void);
 
-        static bool expandMasterTexRefBlock(u32 LFC_MA_masterStartAddr);
+        static void initSeq(void);
+        static bool buildCustomData(void);
+        static bool loadSavedSelectionsFromFile(void);
         static bool restoreEyeTexMasterList(u32 LFC_MA_masterStartAddr);
         static bool initCustomCH(u32 LFC_MA_masterStartAddr);
         static bool copyEyeAnimData(u32 LFC_MA_masterStartAddr);
@@ -35,6 +37,7 @@ namespace CTRPluginFramework
         static bool copyRedirIH_PtrBlock(u32 LFC_MA_startAddr);
         static bool redirCH(u32 LFC_MA_startAddr);
         static bool redirTexRefPtr(u32 LFC_MA_startAddr);
+        static bool alterTexBlockSize(u32 LFC_MA_startAddr, bool restore);
         static void editMngr(MenuEntry *entry);
 
         void updateAnimData(void);

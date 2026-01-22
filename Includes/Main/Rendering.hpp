@@ -8,6 +8,7 @@
 
 namespace CTRPluginFramework
 {
+    extern MenuEntry* faceExprManager;
     extern MenuEntry* starMarkManager;
     extern MenuEntry* starMarkInit;
 

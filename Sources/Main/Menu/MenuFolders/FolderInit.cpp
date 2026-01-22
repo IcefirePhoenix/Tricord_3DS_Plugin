@@ -600,9 +600,9 @@ namespace CTRPluginFramework
         *overlay += new MenuEntry("Force visibility of Treasure Chest contents", nullptr, Rendering::seeChestContents, false, DescUtils::getDesc("chest_visible_note"));
         *overlay += new MenuEntry("Swap single player loading screen", nullptr, Rendering::swapSPLoadingScreen, true, DescUtils::getDesc("load_sp_screen_note"));
 
-        // *face += new MenuEntry("Enable custom facial expressions", FaceSelMenu::maintainEdits, DescUtils::getDesc("face_expr_enable_note"));
+        *face += new MenuEntry("Edit facial expressions", nullptr, Rendering::editFaceExpr, true, DescUtils::getDesc("face_expr_sel_note"));
         // *face += new MenuEntry("Edit idle facial expression", nullptr, Rendering::editFaceExpr, true, DescUtils::getDesc("face_expr_sel_note"));
-        //*texture += face;
+        *texture += face;
 
         *texture += new MenuEntry("Swap Link textures", nullptr, Rendering::swapLinkTexture, true, DescUtils::getDesc("swap_link_tex_note"));
         *texture += new MenuEntry("Force visibility of Cheer Outfit pom poms", nullptr, Rendering::forcePomPom, false, DescUtils::getDesc("cheer_pom_note"));
@@ -616,6 +616,9 @@ namespace CTRPluginFramework
         *render += overlay;
         *render += texture;
         *render += env;
+
+        faceExprManager = new MenuEntry("Maintain custom facial expressions (auto)", FaceExprEditor::editMngr, "", true);
+        *autoFolder += faceExprManager;
     }
 
     void InitSaveFolder(PluginMenu &menu)
