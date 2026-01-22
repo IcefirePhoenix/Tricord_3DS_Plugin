@@ -599,6 +599,12 @@ namespace CTRPluginFramework
         }
     }
 
+    void FaceExprEditor::resetExprs(void)
+    {
+        Preferences::SavedFaceExprs = defaultExprs;
+        initSeq();
+    }
+
     /* -------------- UI -------------- */
 
     void FaceExprEditor::_drawTop(void)

@@ -1036,6 +1036,15 @@
             }
         },
         {
+            "name": "face_expr_reset_note",
+            "content": {
+                "intro": "Resets all facial expressions, effectively reverting all data back to their defaults.",
+                "note": "All previous edits will be lost and cannot be recovered even after a reboot.",
+                "modeCompatibility": 1,
+                "clientOnly": true
+            }
+        },
+        {
             "name": "swap_link_tex_note",
             "content": {
                 "intro": "Allows you to change the color textures used for each player between:\n- Hytopia Link\n- Green Link\n- Blue Link\n- Red Link",

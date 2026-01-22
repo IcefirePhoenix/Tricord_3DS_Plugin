@@ -37,7 +37,7 @@ namespace CTRPluginFramework
         static void forceBlueSwordParticles(MenuEntry* entry);
         static void disablePlayerLight(MenuEntry* entry);
         static void editFaceExpr(MenuEntry *entry);
-        static void forceCustomFaceExpr(MenuEntry *entry);
+        static void manualTriggerResetExprs(MenuEntry* entry);
         static void hideDoppelMasks(MenuEntry* entry);
         static void setDevID_onConnection(MenuEntry *entry);
         static void checkDevID(MenuEntry *entry);

@@ -38,6 +38,8 @@ namespace CTRPluginFramework
         static bool redirCH(u32 LFC_MA_startAddr);
         static bool redirTexRefPtr(u32 LFC_MA_startAddr);
         static bool alterTexBlockSize(u32 LFC_MA_startAddr, bool restore);
+        static void resetExprs(void);
+
         static void editMngr(MenuEntry *entry);
 
         void updateAnimData(void);

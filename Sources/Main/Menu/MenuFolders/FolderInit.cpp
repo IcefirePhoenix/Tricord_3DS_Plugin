@@ -601,7 +601,7 @@ namespace CTRPluginFramework
         *overlay += new MenuEntry("Swap single player loading screen", nullptr, Rendering::swapSPLoadingScreen, true, DescUtils::getDesc("load_sp_screen_note"));
 
         *face += new MenuEntry("Edit facial expressions", nullptr, Rendering::editFaceExpr, true, DescUtils::getDesc("face_expr_sel_note"));
-        // *face += new MenuEntry("Edit idle facial expression", nullptr, Rendering::editFaceExpr, true, DescUtils::getDesc("face_expr_sel_note"));
+        *face += new MenuEntry("Reset all facial expressions", nullptr, Rendering::manualTriggerResetExprs, true, DescUtils::getDesc("face_expr_reset_note"));
         *texture += face;
 
         *texture += new MenuEntry("Swap Link textures", nullptr, Rendering::swapLinkTexture, true, DescUtils::getDesc("swap_link_tex_note"));

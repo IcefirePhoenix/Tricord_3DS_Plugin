@@ -233,6 +233,12 @@ namespace CTRPluginFramework
             FaceExprEditor(frame, frameList[frame])();
     }
 
+    void Rendering::manualTriggerResetExprs(MenuEntry* entry)
+    {
+        FaceExprEditor::resetExprs();
+    }
+
+
     void Rendering::hideDoppelMasks(MenuEntry *entry)
     {
         if (entry->Name() == "Hide Doppel masks")
