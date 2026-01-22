@@ -207,6 +207,11 @@ namespace CTRPluginFramework
         OSD::Notify("Plugin ready!", Color::White, Color());
         OSD::Notify("Tricord can now be started.", Color::White, Color());
 
+        if (OnReady != nullptr)
+        {
+            OnReady();
+        }
+
         // Refresh hid
         Controller::Update();
 

@@ -76,6 +76,7 @@ namespace CTRPluginFramework
         void    AddPluginVersion(bool isDev = false) const;
 
         FuncPointer			OnFirstOpening;
+        FuncPointer			OnReady;
 		OnOpeningCallback	OnOpening;
         OnClosingCallback	OnClosing;
         FramePointer		OnFrame;
