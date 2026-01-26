@@ -15,6 +15,16 @@ namespace CTRPluginFramework
         mayuLabelOffset = 0xF15,
         mouthLabelOffset = 0xF44;
 
+    StringVector FaceExprEditor::frameList =
+    {
+        "Idle",
+        "Shocked",
+        "Death / DMG",
+        "Triforce Warp",
+        "Low HP / Failed Challenge",
+        "Fall / Drown / Capture"
+    };
+
     const std::vector<IconLabel> eyeInfo =
     {
         {0.0, Icon::DrawEye0, "Idle"},
@@ -54,17 +64,19 @@ namespace CTRPluginFramework
         mouthInfo[0].label
     };
 
+    const std::vector<IconLabel> infoArrays[] = {eyeInfo, mayuInfo, mouthInfo};
+
     int currExprIndexes[3] = {0, 0, 0};
     int dataSizes[3] = {9, 5, 6};
 
     std::array<Preferences::FaceExprFrameVal, 6> defaultExprs =
     {{
-        {0, 6, 11},
-        {5, 8, 12},
-        {3, 7, 13},
-        {0, 7, 12},
-        {3, 9, 12},
-        {2, 7, 12}
+        {0, 0, 0},
+        {8, 2, 1},
+        {6, 1, 2},
+        {0, 1, 1},
+        {6, 3, 1},
+        {5, 1, 1}
     }};
 
     FaceExprEditor::FaceExprEditor(int frameIndex, std::string &frameLabel) : _frameLabel(frameLabel)
@@ -94,10 +106,15 @@ namespace CTRPluginFramework
         bool mustclose = false;
         bool sleepClose = false;
 
-        // reset the menu
-        for (int index : currExprIndexes)
+        // set menu graphics
+        currExprIndexes[0] = Preferences::SavedFaceExprs[_frameIndex].eyeVal;
+        currExprIndexes[1] = Preferences::SavedFaceExprs[_frameIndex].mayuVal;
+        currExprIndexes[2] = Preferences::SavedFaceExprs[_frameIndex].mouthVal;
+
+        // set labels
+        for (int processed = 0; processed < 3; processed++)
         {
-            index = 0;
+            currLabels[processed] = infoArrays[processed][currExprIndexes[processed]].label;
         }
 
         while (((!Window::BottomWindow.MustClose() && !mustclose)) && !sleepClose)
@@ -112,9 +129,6 @@ namespace CTRPluginFramework
             Renderer::EndFrame();
             _updateMenuGraphics();
         }
-
-        updateAnimData();
-        // call Settings::SaveExprOpts()
     }
 
     /* -------------- EXECUTED ONCE DURING INIT -------------- */
@@ -164,8 +178,6 @@ namespace CTRPluginFramework
     // Retrieves saved expression data from file, allowing edits to be preserved between reboots
     bool FaceExprEditor::loadSavedSelectionsFromFile(void)
     {
-        const std::vector<IconLabel> infoArrays[] = {eyeInfo, mayuInfo, mouthInfo};
-
         u8 faceSectionSize = 0x60 + animMetadataSize;
         u32 animStartAddr = AddressList::getAddress("CustomAnimData") + animMetadataSize;
 
@@ -555,8 +567,6 @@ namespace CTRPluginFramework
     // Updates frame data for eye, eyebrow (mayu), and mouth
     void FaceExprEditor::updateAnimData(void)
     {
-        const std::vector<IconLabel> infoArrays[] = {eyeInfo, mayuInfo, mouthInfo};
-
         u8 faceSectionSize = 0x60 + animMetadataSize;
         u32 startAddr = AddressList::getAddress("CustomAnimData") + animMetadataSize;
         u32 entryOffset = _frameIndex * sizeof(u64); // each entry contains two floats: frameNum and frameVal
@@ -611,7 +621,6 @@ namespace CTRPluginFramework
     {
         int posY1 = 55, posY2 = 110;
         std::string intro, outro, reload, preview;
-        const std::vector<IconLabel> infoArrays[] = {eyeInfo, mayuInfo, mouthInfo};
         IconLabel expression[3];
 
         Renderer::SetTarget(TOP);

@@ -21,12 +21,12 @@ namespace CTRPluginFramework
 
     std::array<Preferences::FaceExprFrameVal, 6> Preferences::SavedFaceExprs = // default before loading any saved values from file
     {{
-        {0, 6, 11},
-        {5, 8, 12},
-        {3, 7, 13},
-        {0, 7, 12},
-        {3, 9, 12},
-        {2, 7, 12}
+        {0, 0, 0},
+        {8, 2, 1},
+        {6, 1, 2},
+        {0, 1, 1},
+        {6, 3, 1},
+        {5, 1, 1}
     }};
 
     bool Preferences::_favoritesAlreadyLoaded = false;

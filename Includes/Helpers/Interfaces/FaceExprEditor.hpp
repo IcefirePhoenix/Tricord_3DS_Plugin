@@ -22,6 +22,8 @@ namespace CTRPluginFramework
         ~FaceExprEditor(void);
         void operator()(void);
 
+        static StringVector frameList;
+
         static void initSeq(void);
         static bool buildCustomData(void);
         static bool loadSavedSelectionsFromFile(void);

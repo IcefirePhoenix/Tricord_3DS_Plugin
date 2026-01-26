@@ -183,18 +183,9 @@ namespace CTRPluginFramework
     void Rendering::editFaceExpr(MenuEntry *entry)
     {
         Keyboard chooseFrame("Facial Expression Editor", "Select a facial expression to edit.\n\nIdle: This is Link's normal facial expression.");
-        StringVector frameList =
-        {
-            "Idle",
-            "Shocked",
-            "Death / DMG",
-            "Triforce Warp",
-            "Low HP / Failed Challenge",
-            "Fall / Drown / Capture"
-        };
 
         chooseFrame.DisplayTopScreen = true;
-        chooseFrame.Populate(frameList);
+        chooseFrame.Populate(FaceExprEditor::frameList);
 
         chooseFrame.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
         {
@@ -230,14 +221,13 @@ namespace CTRPluginFramework
 
         int frame = chooseFrame.Open();
         if (frame >= 0)
-            FaceExprEditor(frame, frameList[frame])();
+            FaceExprEditor(frame, FaceExprEditor::frameList[frame])();
     }
 
     void Rendering::manualTriggerResetExprs(MenuEntry* entry)
     {
         FaceExprEditor::resetExprs();
     }
-
 
     void Rendering::hideDoppelMasks(MenuEntry *entry)
     {
