@@ -523,20 +523,23 @@ namespace CTRPluginFramework
             return false;
         }
 
-        Process::CopyMemory((void *)writerCurrAddress, (void *)readerCurrAddress, sizeof(u32) * originalTexCount);
-        writerCurrAddress += sizeof(u32) * originalTexCount;
+        if (!Process::CopyMemory((void *)writerCurrAddress, (void *)readerCurrAddress, sizeof(u32) * originalTexCount))
+        {
+            return false;
+        }
 
         // derive missing pointers manually
-        Process::Read32(readerCurrAddress, pointerBase); // this is eye.0 = tex index 0
-        if (GeneralHelpers::isNullPointer(readerCurrAddress))
+        if (!Process::Read32(readerCurrAddress, pointerBase)) // this is eye.0 = tex index 0
         {
             OSD::Notify("[ERROR] Missing IH pointers cannot be calculated.", Color::Red);
             return false;
         }
 
-        Process::Write32(writerCurrAddress, pointerBase + IH_entrySize); // this is eye.1 = tex index 1
-        Process::Write32(writerCurrAddress + sizeof(u32), pointerBase + IH_entrySize * 2); // this is eye.2 = tex index 2
-        Process::Write32(writerCurrAddress + sizeof(u32) * 2, pointerBase + IH_entrySize * 5); // this is eye.5 = tex index 5
+        writerCurrAddress += sizeof(u32) * originalTexCount;
+
+        Process::Write32(writerCurrAddress, pointerBase + IH_entrySize);                        // this is eye.1 = tex index 1
+        Process::Write32(writerCurrAddress + sizeof(u32), pointerBase + IH_entrySize * 2);      // this is eye.2 = tex index 2
+        Process::Write32(writerCurrAddress + sizeof(u32) * 2, pointerBase + IH_entrySize * 5);  // this is eye.5 = tex index 5
         Process::Write32(writerCurrAddress + sizeof(u32) * 3, pointerBase + IH_entrySize * 23); // this is mouth.5 = tex index 24 (not 19 due to main.0 - main.3)
 
         // update IH location + size references
