@@ -227,6 +227,7 @@ namespace CTRPluginFramework
     void Rendering::manualTriggerResetExprs(MenuEntry* entry)
     {
         FaceExprEditor::resetExprs();
+        MessageBox("Success", "Facial expressions have been reset!")();
     }
 
     void Rendering::hideDoppelMasks(MenuEntry *entry)
