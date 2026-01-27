@@ -197,6 +197,11 @@ namespace CTRPluginFramework
         }
     }
 
+    int KeyboardImpl::GetSelectedEntry(void)
+    {
+        return _manualKey;
+    }
+
     void    KeyboardImpl::SetHexadecimal(bool isHex)
     {
         _isHex = isHex;
@@ -555,7 +560,7 @@ namespace CTRPluginFramework
         {
             if (posY < 120)
                 posY += 48;
-            Renderer::DrawGameFontStringReturn(reinterpret_cast<const u8 *>(_error.c_str()), posX, posY, maxX, red, maxY);
+            Renderer::DrawGameFontStringReturn(_error.c_str(), posX, posY, maxX, red, maxY);
         }
         if (_onKeyboardEvent != nullptr && _owner != nullptr) {
             Render::Interface interface = Renderer::GetInterface();

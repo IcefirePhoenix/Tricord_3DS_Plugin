@@ -58,7 +58,6 @@ namespace CTRPluginFramework
 
     void PatchProcess()
     {
-
     }
 
     void ManageTFH_Settings(void)
@@ -85,10 +84,11 @@ namespace CTRPluginFramework
             Process::Write32(AddressList::getAddress("StarTag"), STAR_TAG);
     }
 
-    void LoadSavedEntryData(void)
+    void LoadSavedAndCustomEntryData(void)
     {
         Rendering::loadCustomNameColors();
         Gameplay::restoreBookmarks();
+        FaceExprEditor::initSeq();
     }
 
     void RetrieveAddressArrays(void)
@@ -123,7 +123,7 @@ namespace CTRPluginFramework
         CreateMenu(*menu);
 
         menu->SynchronizeWithFrame(true);
-        menu->OnFirstOpening = LoadSavedEntryData;
+        menu->OnReady = LoadSavedAndCustomEntryData;
         menu->OnNewFrame = ToggleMenuChange;
         menu->OnClosing = ManageTFH_Settings;
 

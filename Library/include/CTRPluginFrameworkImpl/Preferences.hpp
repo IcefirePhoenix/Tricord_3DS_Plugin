@@ -62,6 +62,20 @@ namespace CTRPluginFramework
             u8 stageID;
         };
 
+        struct FaceExprFrameVal
+        {
+            u8 eyeVal;
+            u8 mayuVal;
+            u8 mouthVal;
+
+            bool operator == (const FaceExprFrameVal &other) const
+            {
+                return eyeVal == other.eyeVal &&
+                       mayuVal == other.mayuVal &&
+                       mouthVal == other.mouthVal;
+            }
+        };
+
         struct TricordHeaderV1
         {
             u8 sig[8];
@@ -86,6 +100,8 @@ namespace CTRPluginFramework
             char screenshotCustomName[64];
             char screenshotCustomDir[64];
             u64 screenshotOffset;
+            FaceExprFrameVal customFaceExprVals[6];
+            u64 customFaceExprOffset;
             u32 reserved[100];
         } PACKED;
 
@@ -121,6 +137,7 @@ namespace CTRPluginFramework
         static std::string  CheatsFile;
         static std::string  ScreenshotPath;
         static std::string  ScreenshotPrefix;
+        static std::array<Preferences::FaceExprFrameVal, 6> SavedFaceExprs;
 
         static Preferences::WarpDestination SavedWarps[3];
 

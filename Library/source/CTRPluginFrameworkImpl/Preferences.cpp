@@ -19,6 +19,16 @@ namespace CTRPluginFramework
     std::string Preferences::ScreenshotPath;
     std::string Preferences::ScreenshotPrefix;
 
+    std::array<Preferences::FaceExprFrameVal, 6> Preferences::SavedFaceExprs = // default before loading any saved values from file
+    {{
+        {0, 0, 0},
+        {8, 2, 1},
+        {6, 1, 2},
+        {0, 1, 1},
+        {6, 3, 1},
+        {4, 1, 1}
+    }};
+
     bool Preferences::_favoritesAlreadyLoaded = false;
 
     Preferences::WarpDestination Preferences::SavedWarps[3];
@@ -198,6 +208,7 @@ namespace CTRPluginFramework
 
             PluginMenuImpl::LoadNameColorsFromFile(header, settings);
             PluginMenuImpl::LoadBookmarkWarpsFromFile(header, settings);
+            PluginMenuImpl::LoadFaceExprFromFile(header, settings);
         }
     }
 
@@ -228,6 +239,7 @@ namespace CTRPluginFramework
             PluginMenuImpl::WriteCustomNameColorToFile(header, settings);
             PluginMenuImpl::WriteBookmarkWarpsToFile(header, settings);
             PluginMenuImpl::WriteScreenshotConfigToFile(header, settings);
+            PluginMenuImpl::WriteFaceExprsToFile(header, settings);
 
             header.size = settings.Tell();
             settings.Rewind();

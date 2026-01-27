@@ -1029,17 +1029,8 @@
         {
             "name": "face_expr_sel_note",
             "content": {
-                "intro": "Allows you to edit Link's default idle facial expression.\n\nThere are 20 available textures:\n- 9 eye textures\n- 5 eyebrow texture\n- 6 mouth textures\n\nThis includes several unused textures (three eye textures and one mouth texture) that have been restored.",
-                "note": "Changes will be preserved between reboots.",
-                "modeCompatibility": 1,
-                "clientOnly": true
-            }
-        },
-        {
-            "name": "face_expr_enable_note",
-            "content": {
-                "intro": "Determines whether the selection made under \"Edit idle facial expression\" gets applied in-game.",
-                "note": "",
+                "intro": "Allows you to edit six of Link's facial expressions.\n\nThere are 20 available textures:\n- 9 eye textures\n- 5 eyebrow texture\n- 6 mouth textures\n\nThis includes several unused textures (three eye textures and one mouth texture) that have been restored.",
+                "note": "Note: Timeless Tunic and Fierce Deity Armor both use flipped eye textures, which causes certain textures (such as Looking Left or Looking Right) to be mirrored! It is unclear why these specific costumes are modeled in this way.\n\nChanges will be preserved between reboots.",
                 "modeCompatibility": 1,
                 "clientOnly": true
             }

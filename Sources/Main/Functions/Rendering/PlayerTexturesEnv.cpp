@@ -182,31 +182,57 @@ namespace CTRPluginFramework
     // Custom menu interface for changing player facial expressions
     void Rendering::editFaceExpr(MenuEntry *entry)
     {
-        // 11 expressions total; unclear where they are all used... for now, only use Idle
-        StringVector expressionList =
+        Keyboard chooseFrame("Facial Expression Editor", "Select a facial expression to edit.\n\nReset All: This option will reset all of Link's facial expressions back to their defaults.");
+        StringVector options = FaceExprEditor::frameList;
+
+        options.insert(options.begin(), "Reset All");
+
+        chooseFrame.DisplayTopScreen = true;
+        chooseFrame.Populate(options);
+
+        chooseFrame.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
         {
-            "Idle",
-            "?",
-            "?",
-            "?",
-            "?",
-            "?",
-            "?",
-            "?",
-            "?",
-            "?",
-            "?"
-        };
+            if (event.type == KeyboardEvent::SelectionChanged)
+            {
+                std::string &msg = kb.GetMessage();
+                msg.clear();
+                msg.append("Select a facial expression to edit.\n\n");
 
-        // TODO: use when multiple facial expressions are supported:
-        // Keyboard expr("Select a facial expression to edit.");
-        // expr.Populate(expressionList);
+                switch (kb.GetLastSelectedEntry())
+                {
+                    case 0:
+                        msg.append("Reset All: This option will reset all of Link's facial expressions back to their defaults.");
+                        break;
+                    case 1:
+                        msg.append("Idle: This is Link's normal facial expression.");
+                        break;
+                    case 2:
+                        msg.append("Shocked: This is Link's expression when colliding into objects, getting caught in Boomerangs, or being surprised by totem-related actions.");
+                        break;
+                    case 3:
+                        msg.append("Death / DMG: Link makes this expression when taking damage or when all HP has been depleted.");
+                        break;
+                    case 4:
+                        msg.append("Triforce Warp: Link makes this expression during the Triforce Warp sequence.");
+                        break;
+                    case 5:
+                        msg.append("Low HP / Failed Challenge: This is Link's expression when running low on HP or when failing a challenge.");
+                        break;
+                    case 6:
+                        msg.append("Fall / Drown / Capture: Link makes this expression when captured by a Life-Like or when entering a fall plane. This includes waterfalls, lava, and quicksand.");
+                        break;
+                }
+            }
+        });
 
-        // int selection = expr.Open();
-        // if (selection >= 0)
-        //     FaceSelMenu(selection, expressionList[selection])();
-
-        //FaceSelMenu(0, expressionList[0])(); // Idle expression
+        int frame = chooseFrame.Open();
+        if (frame == 0)
+        {
+            FaceExprEditor::resetExprs();
+            MessageBox("Success", "Facial expressions have been reset!")();
+        }
+        else if (frame >= 1)
+            FaceExprEditor(frame - 1, FaceExprEditor::frameList[frame - 1])();
     }
 
     void Rendering::hideDoppelMasks(MenuEntry *entry)

@@ -1793,14 +1793,6 @@
             }
         },
         {
-            "name": "TextToRodata",
-            "regionAddrs": {
-                "usaAddress": "0x006A9168",
-                "eurAddress": "0x006A9598",
-                "jpnAddress": "0x007239B8"
-            }
-        },
-        {
             "name": "ActiveLink",
             "regionAddrs": {
                 "usaAddress": "0x31A03879",
@@ -3658,75 +3650,75 @@
             }
         },
         {
-            "name": "FileTableRewrite",
+            "name": "CustomCategoryHeaders",
             "regionAddrs": {
-                "usaAddress": "0x006A9600",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
-            }
-        },
-        {
-            "name": "FileTableStart",
-            "regionAddrs": {
-                "usaAddress": "0x32DD7434",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
-            }
-        },
-        {
-            "name": "CustomInfoHeaders",
-            "regionAddrs": {
-                "usaAddress": "0x006A9350",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "usaAddress": "0x006A9170",
+                "eurAddress": "0x006A95A0",
+                "jpnAddress": "0x00723700"
             }
         },
         {
             "name": "CustomAnimData",
             "regionAddrs": {
-                "usaAddress": "0x006A922C",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "usaAddress": "0x006A91A0",
+                "eurAddress": "0x006A95D0",
+                "jpnAddress": "0x00723730"
             }
         },
         {
-            "name": "CustomFacePointerList",
+            "name": "RedirCategoryHeaderPtrs",
             "regionAddrs": {
-                "usaAddress": "0x006A91DC",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "usaAddress": "0x006A9330",
+                "eurAddress": "0x006A9760",
+                "jpnAddress": "0x007238C0"
             }
         },
         {
-            "name": "EditFaceStatusBit",
+            "name": "CustomInfoHeaderPtrs",
             "regionAddrs": {
-                "usaAddress": "0x006A91D8",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "usaAddress": "0x006A9340",
+                "eurAddress": "0x006A9770",
+                "jpnAddress": "0x007238D0"
             }
         },
         {
-            "name": "EyeTitleReference",
+            "name": "CustomFilenamePtrList",
             "regionAddrs": {
-                "usaAddress": "0x3033D761",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "usaAddress": "0x006A9390",
+                "eurAddress": "0x006A97C0",
+                "jpnAddress": "0x00723920"
             }
         },
         {
-            "name": "HytopiaPMAStart",
+            "name": "Link_anm_mat_MasterAssetListStart",
+            "regionAddrs": {
+                "usaAddress": "0x3033D4E8",
+                "eurAddress": "0x30363B68",
+                "jpnAddress": "0x3037F2E8"
+            }
+        },
+        {
+            "name": "LFC_MA_MasterStart",
+            "regionAddrs": {
+                "usaAddress": "0x3033C8CC",
+                "eurAddress": "0x30362F4C",
+                "jpnAddress": "0x3037E6CC"
+            }
+        },
+        {
+            "name": "HytopiaLFC_MA_Start",
             "regionAddrs": {
                 "usaAddress": "0x302123FC",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "eurAddress": "0x3021238C",
+                "jpnAddress": "0x302121CC"
             }
         },
         {
-            "name": "IndivPMAStart",
+            "name": "IndivLFC_MA_Start",
             "regionAddrs": {
                 "usaAddress": "0x32C81A78",
-                "eurAddress": "0x0",
-                "jpnAddress": "0x0"
+                "eurAddress": "0x32C81AF8",
+                "jpnAddress": "0x32CCC4B8"
             }
         },
         {
