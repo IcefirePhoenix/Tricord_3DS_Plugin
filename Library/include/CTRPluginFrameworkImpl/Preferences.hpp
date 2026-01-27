@@ -137,9 +137,9 @@ namespace CTRPluginFramework
         static std::string  CheatsFile;
         static std::string  ScreenshotPath;
         static std::string  ScreenshotPrefix;
+        static std::array<Preferences::FaceExprFrameVal, 6> SavedFaceExprs;
 
         static Preferences::WarpDestination SavedWarps[3];
-        static Preferences::FaceExprFrameVal SavedFaceExprs[6];
 
         static int          OpenConfigFile(File &file, Header &header);
         static void         LoadSettings(void);

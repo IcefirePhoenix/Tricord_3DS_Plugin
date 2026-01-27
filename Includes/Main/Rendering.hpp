@@ -16,6 +16,13 @@ namespace CTRPluginFramework
     extern MenuEntryLabel *colorLabel2;
     extern MenuEntryLabel *colorLabel3;
 
+    extern MenuEntryLabel *faceExprLabel1;
+    extern MenuEntryLabel *faceExprLabel2;
+    extern MenuEntryLabel *faceExprLabel3;
+    extern MenuEntryLabel *faceExprLabel4;
+    extern MenuEntryLabel *faceExprLabel5;
+    extern MenuEntryLabel *faceExprLabel6;
+
     void hideHUD(void);
 
     class Rendering
@@ -37,7 +44,6 @@ namespace CTRPluginFramework
         static void forceBlueSwordParticles(MenuEntry* entry);
         static void disablePlayerLight(MenuEntry* entry);
         static void editFaceExpr(MenuEntry *entry);
-        static void manualTriggerResetExprs(MenuEntry* entry);
         static void hideDoppelMasks(MenuEntry* entry);
         static void setDevID_onConnection(MenuEntry *entry);
         static void checkDevID(MenuEntry *entry);

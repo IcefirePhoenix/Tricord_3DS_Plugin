@@ -34,7 +34,7 @@ namespace CTRPluginFramework
         static bool copyMouthAnimData(u32 LFC_MA_masterStartAddr);
         static void writeCategoryAnimMetadata(u32 writerStartAddr, int curveIndex);
         static bool buildTexRefPtrBlock(void);
-
+        static void updateLabels(bool updateAll, int workingIndex = 0);
         static void editChild_FC_MA_Blocks(void);
         static bool copyRedirIH_PtrBlock(u32 LFC_MA_startAddr);
         static bool redirCH(u32 LFC_MA_startAddr);

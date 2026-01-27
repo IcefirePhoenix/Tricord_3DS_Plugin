@@ -6,6 +6,13 @@ namespace CTRPluginFramework
 {
     MenuEntry *faceExprManager;
 
+    MenuEntryLabel *faceExprLabel1;
+    MenuEntryLabel *faceExprLabel2;
+    MenuEntryLabel *faceExprLabel3;
+    MenuEntryLabel *faceExprLabel4;
+    MenuEntryLabel *faceExprLabel5;
+    MenuEntryLabel *faceExprLabel6;
+
     constexpr int frameCount = 12,
         originalTexCount = 16,
         newTexCount = 20;
@@ -69,7 +76,7 @@ namespace CTRPluginFramework
     int currExprIndexes[3] = {0, 0, 0};
     int dataSizes[3] = {9, 5, 6};
 
-    std::array<Preferences::FaceExprFrameVal, 6> defaultExprs =
+    std::array<Preferences::FaceExprFrameVal, MAX_FRAMES> defaultExprs =
     {{
         {0, 0, 0},
         {8, 2, 1},
@@ -79,10 +86,8 @@ namespace CTRPluginFramework
         {5, 1, 1}
     }};
 
-    FaceExprEditor::FaceExprEditor(int frameIndex, std::string &frameLabel) : _frameLabel(frameLabel)
+    FaceExprEditor::FaceExprEditor(int frameIndex, std::string &frameLabel) : _frameIndex(frameIndex), _frameLabel(frameLabel)
     {
-        _frameIndex = frameIndex;
-
         for (int column1 = 0, posY = 90; column1 < 3; column1++, posY += 44)
         {
             Button newLButton(Button::Icon, IntRect(100, posY, 25, 25), Icon::DrawLeft);
@@ -188,17 +193,19 @@ namespace CTRPluginFramework
         else
         {
             // read previously saved frame edits
-            for (int i = 0; i < MAX_FRAMES; i++)
+            for (int framesRead = 0; framesRead < MAX_FRAMES; framesRead++)
             {
-                u32 entryOffset = i * sizeof(u64); // each entry contains two floats: frameNum and frameVal
+                u32 entryOffset = framesRead * sizeof(u64); // each entry contains two floats: frameNum and frameVal
                 u32 sectionOffset = animStartAddr + entryOffset + sizeof(u32);
 
-                Process::WriteFloat(sectionOffset + (faceSectionSize * 0), infoArrays[0][Preferences::SavedFaceExprs[i].eyeVal].floatVal);
-                Process::WriteFloat(sectionOffset + (faceSectionSize * 1), infoArrays[1][Preferences::SavedFaceExprs[i].mayuVal].floatVal);
-                Process::WriteFloat(sectionOffset + (faceSectionSize * 2), infoArrays[2][Preferences::SavedFaceExprs[i].mouthVal].floatVal);
+                Process::WriteFloat(sectionOffset + (faceSectionSize * 0), infoArrays[0][Preferences::SavedFaceExprs[framesRead].eyeVal].floatVal);
+                Process::WriteFloat(sectionOffset + (faceSectionSize * 1), infoArrays[1][Preferences::SavedFaceExprs[framesRead].mayuVal].floatVal);
+                Process::WriteFloat(sectionOffset + (faceSectionSize * 2), infoArrays[2][Preferences::SavedFaceExprs[framesRead].mouthVal].floatVal);
             }
             faceExprManager->Enable();
         }
+
+        updateLabels(true);
         return true;
     }
 
@@ -578,13 +585,14 @@ namespace CTRPluginFramework
         {
             // frameNum already exists in the duplicated data block -> only frameVal edited here
             Process::WriteFloat(startAddr + (faceSectionSize * iter) + entryOffset + sizeof(u32), infoArrays[iter][currExprIndexes[iter]].floatVal);
-
         }
 
         // prepare edits to be saved to file
         Preferences::SavedFaceExprs[_frameIndex].eyeVal = currExprIndexes[0];
         Preferences::SavedFaceExprs[_frameIndex].mayuVal = currExprIndexes[1];
         Preferences::SavedFaceExprs[_frameIndex].mouthVal = currExprIndexes[2];
+
+        updateLabels(false, _frameIndex);
     }
 
     /* -------------- MAIN DRIVER AND HELPERS -------------- */
@@ -616,6 +624,30 @@ namespace CTRPluginFramework
     {
         Preferences::SavedFaceExprs = defaultExprs;
         initSeq();
+    }
+
+    void FaceExprEditor::updateLabels(bool updateAll, int workingIndex)
+    {
+        std::array<MenuEntryLabel*, MAX_FRAMES> labels =
+        {
+            faceExprLabel1,
+            faceExprLabel2,
+            faceExprLabel3,
+            faceExprLabel4,
+            faceExprLabel5,
+            faceExprLabel6
+        };
+
+        int frameIndexesToProcess = updateAll ? MAX_FRAMES : workingIndex + 1;
+        int framesDone = updateAll ? 0 : workingIndex;
+
+        for (; framesDone < frameIndexesToProcess; framesDone++)
+        {
+            std::string newLabel = FaceExprEditor::frameList[framesDone];
+            std::string editedStatus = Preferences::SavedFaceExprs[framesDone] == defaultExprs[framesDone] ? ": Default" : ": Edited";
+
+            labels[framesDone]->SetName(newLabel.append(editedStatus));
+        }
     }
 
     /* -------------- UI -------------- */

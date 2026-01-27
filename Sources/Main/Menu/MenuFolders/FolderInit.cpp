@@ -600,8 +600,22 @@ namespace CTRPluginFramework
         *overlay += new MenuEntry("Force visibility of Treasure Chest contents", nullptr, Rendering::seeChestContents, false, DescUtils::getDesc("chest_visible_note"));
         *overlay += new MenuEntry("Swap single player loading screen", nullptr, Rendering::swapSPLoadingScreen, true, DescUtils::getDesc("load_sp_screen_note"));
 
+        faceExprLabel1 = new MenuEntryLabel("Idle: Default");
+        faceExprLabel2 = new MenuEntryLabel("Shocked: Default");
+        faceExprLabel3 = new MenuEntryLabel("Death / DMG: Default");
+        faceExprLabel4 = new MenuEntryLabel("Triforce Warp: Default");
+        faceExprLabel5 = new MenuEntryLabel("Low HP / Failed Challenge: Default");
+        faceExprLabel6 = new MenuEntryLabel("Fall / Drown / Capture: Default");
+
         *face += new MenuEntry("Edit facial expressions", nullptr, Rendering::editFaceExpr, true, DescUtils::getDesc("face_expr_sel_note"));
-        *face += new MenuEntry("Reset all facial expressions", nullptr, Rendering::manualTriggerResetExprs, true, DescUtils::getDesc("face_expr_reset_note"));
+
+        *face += new MenuEntryLabel();
+        *face += faceExprLabel1;
+        *face += faceExprLabel2;
+        *face += faceExprLabel3;
+        *face += faceExprLabel4;
+        *face += faceExprLabel5;
+        *face += faceExprLabel6;
         *texture += face;
 
         *texture += new MenuEntry("Swap Link textures", nullptr, Rendering::swapLinkTexture, true, DescUtils::getDesc("swap_link_tex_note"));
