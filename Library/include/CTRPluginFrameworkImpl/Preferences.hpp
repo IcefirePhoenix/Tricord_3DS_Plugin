@@ -90,7 +90,7 @@ namespace CTRPluginFramework
             u64 favoritesOffset;
             u32 hotkeysCount;
             u64 hotkeysOffset;
-            u32 nameColor;
+            u32 nameColor[3];
             u64 nameColorOffset;
             WarpDestination warpDestinationData[3];
             u64 warpDestOffset;
