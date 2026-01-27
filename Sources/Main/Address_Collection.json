@@ -3670,7 +3670,7 @@
             "regionAddrs": {
                 "usaAddress": "0x006A9330",
                 "eurAddress": "0x006A9760",
-                "jpnAddress": "0x00723AC0"
+                "jpnAddress": "0x007238C0"
             }
         },
         {
@@ -3678,7 +3678,7 @@
             "regionAddrs": {
                 "usaAddress": "0x006A9340",
                 "eurAddress": "0x006A9770",
-                "jpnAddress": "0x00723AD0"
+                "jpnAddress": "0x007238D0"
             }
         },
         {
@@ -3686,7 +3686,7 @@
             "regionAddrs": {
                 "usaAddress": "0x006A9390",
                 "eurAddress": "0x006A97C0",
-                "jpnAddress": "0x00723B20"
+                "jpnAddress": "0x00723920"
             }
         },
         {

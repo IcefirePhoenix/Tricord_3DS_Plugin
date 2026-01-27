@@ -26,7 +26,7 @@ namespace CTRPluginFramework
         {6, 1, 2},
         {0, 1, 1},
         {6, 3, 1},
-        {5, 1, 1}
+        {4, 1, 1}
     }};
 
     bool Preferences::_favoritesAlreadyLoaded = false;

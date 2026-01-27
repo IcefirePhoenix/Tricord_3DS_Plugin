@@ -83,7 +83,7 @@ namespace CTRPluginFramework
         {6, 1, 2},
         {0, 1, 1},
         {6, 3, 1},
-        {5, 1, 1}
+        {4, 1, 1}
     }};
 
     FaceExprEditor::FaceExprEditor(int frameIndex, std::string &frameLabel) : _frameIndex(frameIndex), _frameLabel(frameLabel)
@@ -434,7 +434,7 @@ namespace CTRPluginFramework
     bool FaceExprEditor::buildTexRefPtrBlock(void)
     {
         // TODO: could grab these values from master block instead of hardcoding...
-        std::array<u16, newTexCount> masterListRelativeOffsets = { 0x27D, 0x289, 0x28F, 0x29B, 0x2A1, 0x2A7, 0x2FE, 0x305, 0x30C, 0x313, 0x31A, 0x32E, 0x336, 0x33E, 0x346, 0x34E, 0x2BE, 0x283, 0x295, 0x356 };
+        std::array<u16, newTexCount> masterListRelativeOffsets = { 0x27D, 0x289, 0x28F, 0x29B, 0x2A1, 0x2A7, 0x2FE, 0x305, 0x30C, 0x313, 0x31A, 0x32E, 0x336, 0x33E, 0x346, 0x34E, 0x2AD, 0x283, 0x295, 0x356 };
 
         u32 writerCurrAddress = AddressList::getAddress("CustomFilenamePtrList");
         u32 baseAddr = AddressList::getAddress("Link_anm_mat_MasterAssetListStart");
