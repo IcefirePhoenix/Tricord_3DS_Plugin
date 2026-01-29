@@ -3752,6 +3752,14 @@
                 "eurAddress": "0x32C9EA88",
                 "jpnAddress": "0x32CE9978"
             }
+        },
+        {
+            "name": "HighfairyReference",
+            "regionAddrs": {
+                "usaAddress": "0x006A93E0",
+                "eurAddress": "0x006A9810",
+                "jpnAddress": "0x00723970"
+            }
         }
     ]
 }
