@@ -16,8 +16,8 @@ namespace CTRPluginFramework
     {
         if (entry->Name() == "Enable Cosmetic Costumes")
         {
-            u32 custFuncStart = AddressList::getAddress("TextToRodata") + 0x64;
-            u32 blOffset = (custFuncStart - 0x8 - AddressList::getAddress("CostumeIDFunBLModel")) / 4; // division by 4 as all instructions are 32-bit...
+            u32 custFuncStart = AddressList::getAddress("CosmeticCostumeOverrideFunc");
+            u32 blOffset = (custFuncStart - (sizeof(u32) * 2) - AddressList::getAddress("CostumeIDFunBLModel")) / 4; // division by 4 as all instructions are 32-bit...
 
             // patch LDRB instructions to force graphic/visual costume effects to reference the alternate costume address...
             Process::Patch(AddressList::getAddress("CostumeIDOffsetAuraA"), 0xE5D00D61);
@@ -31,8 +31,8 @@ namespace CTRPluginFramework
 
             // create custom function in text->rodata padding...
             Process::Patch(custFuncStart, 0xE5900008);
-            Process::Patch(custFuncStart + 0x4, 0xE5D00D61);
-            Process::Patch(custFuncStart + 0x8, 0xE12FFF1E);
+            Process::Patch(custFuncStart + sizeof(u32), 0xE5D00D61);
+            Process::Patch(custFuncStart + (sizeof(u32) * 2), 0xE12FFF1E);
 
             // redirect model loader to custom function via BL instruction...
             Process::Patch(AddressList::getAddress("CostumeIDFunBLModel"), 0xEB000000 + blOffset);
@@ -60,7 +60,35 @@ namespace CTRPluginFramework
         }
     }
 
-    // Driver code for setting the costume MODEL | TODO: add support for custom costumes IF they are enabled...
+    // Menu interface for selecting cosmetic costume
+    void selCosmeticCostume(int player)
+    {
+        std::string currEffectCostumeName = GameData::getCostumeNameFromID(currEffectCostumeID);
+        std::string currCosmeticCostumeName = GameData::getCostumeNameFromID(currCosmeticCostumeID);
+        std::string selectedPlayer, topscreenMessage;
+
+        selectedPlayer = GeneralHelpers::getPlayerAsStr(player);
+
+        topscreenMessage = "Set a new cosmetic costume?\nOr reset to use the effective costume instead?\n\nSelected: " + selectedPlayer + "\n\nCurrent effective costume: " + currEffectCostumeName + "\nCurrent cosmetic costume: " + currCosmeticCostumeName;
+
+        Keyboard setReset("Cosmetic Costume Settings", topscreenMessage);
+        setReset.Populate(StringVector{"Choose new cosmetic costume", "Reset to effective costume"});
+
+        int setResetResult = setReset.Open();
+        if (setResetResult == 0)
+        {
+            int result = Costume::selectCostumeID();
+            if (result >= 0)
+                Costume::cosmeticIDs[player] = result;
+        }
+        else if (setResetResult == 1)
+        {
+            Costume::cosmeticIDs[player] = cosmeticNotInUse;
+            Costume::setPlayerCostume(player, currEffectCostumeID, true);
+        }
+    }
+
+    // Driver code for setting the costume MODEL
     void Costume::setCosmeticCostume(MenuEntry *entry)
     {
         int linkChoice = GeneralHelpers::chooseLink();
@@ -81,38 +109,6 @@ namespace CTRPluginFramework
 
             // choose a new cosmetic costume...
             selCosmeticCostume(linkChoice);
-        }
-    }
-
-    // Menu interface for selecting cosmetic costume
-    void selCosmeticCostume(int player)
-    {
-        std::string currEffectCostumeName = GameData::getCostumeNameFromID(currEffectCostumeID);
-        std::string currCosmeticCostumeName = GameData::getCostumeNameFromID(currCosmeticCostumeID);
-        std::string selectedPlayer, topscreenMessage;
-
-        selectedPlayer = GeneralHelpers::getPlayerAsStr(player);
-
-        topscreenMessage = "Set a new cosmetic costume?\nOr reset to use the effective costume instead?\n\nSelected: " + selectedPlayer + "\n\nCurrent effective costume: " + currEffectCostumeName + "\nCurrent cosmetic costume: " + currCosmeticCostumeName;
-
-        Keyboard setReset("Cosmetic Costume Settings", topscreenMessage);
-        setReset.Populate(StringVector{"Choose new cosmetic costume", "Reset to effective costume"});
-
-        int setResetResult = setReset.Open();
-        if (setResetResult == 0)
-        {
-            // TODO: just get new costume using helper method? // remove redundant code
-            Keyboard costumeList("Costume Selection", "Choose a new costume.\n\nBe sure to load into a new area for changes to fully take effect.");
-            costumeList.Populate(GameData::universalCostumeList);
-
-            int result = costumeList.Open();
-            if (result >= 0)
-                Costume::cosmeticIDs[player] = result;
-        }
-        else if (setResetResult == 1)
-        {
-            Costume::cosmeticIDs[player] = cosmeticNotInUse;
-            Costume::setPlayerCostume(player, currEffectCostumeID, true);
         }
     }
 

@@ -185,6 +185,14 @@
             }
         },
         {
+            "name": "CosmeticCostumeOverrideFunc",
+            "regionAddrs": {
+                "usaAddress": "0x006A9400",
+                "eurAddress": "0x006A9830",
+                "jpnAddress": "0x00723990"
+            }
+        },
+        {
             "name": "CostumeCatalogMaxSlot",
             "regionAddrs": {
                 "usaAddress": "0x32D72D90",
