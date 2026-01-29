@@ -3,18 +3,8 @@
 
 namespace CTRPluginFramework
 {
-    // MenuEntry* resetCostume;
-    extern MenuEntry* menuCostumeSlotA;
-    extern MenuEntry* menuCostumeSlotB;
-    extern MenuEntry* menuCostumeSlotC;
-    extern MenuEntry* menuCostumeSlotD;
-    extern MenuEntry* triggerCostumeSlots;
-
-    extern MenuEntry* restoreGreatFairy;
-    extern MenuEntry* manageCatalogSize;
-
-    extern MenuEntry* initCustomCostumes;
-    extern MenuEntry* writeCostumeIDToSlot;
+    extern MenuEntry *DLC_SlotWriterA;
+    extern MenuEntry *TricordUseDLC_SlotA;
 
     extern MenuEntry* cosmeticCostumeAuto;
     extern MenuEntry* doppelCostumeStageResetManager;
@@ -26,30 +16,17 @@ namespace CTRPluginFramework
     extern MenuEntry* beamCooldownAuto;
     extern MenuEntry *swordEditAuto;
 
-    int chooseSlotAddNum(void);
-    void selCosmeticCostume(int player);
-    void disableCustomCostumeMenuOpt(void);
-    void enableCustomCostumeOpt(void);
-    void checkCustomCostumeConflict(void);
-    void addCustomSlotsToMenu(int openSlots);
-    void resetCostumeArray(void);
-    void openRandomizerToggles(int selection);
-    int selCostumeType(void);
-    void openSwordSelMenu(void);
-
     static const u8 cosmeticNotInUse = 0xFF;
 
     class Costume
     {
     public:
-        static void manageCatalogSizeAuto(MenuEntry* entry);
-        static void openCustomCostumeSlots(MenuEntry* entry);
-        static void writeToCostumeSlot(MenuEntry* entry);
-        static void greatFairyEnable(MenuEntry* entry);
-        static void changeLinkCostume(MenuEntry* entry);
+        static void toggleTricordCustomCostumeUsage(MenuEntry *entry);
+        static void overrideDLC_CostumeSlotA(MenuEntry *entry);
+        static void setDLCEntryTitles(void);
+        static void changeLinkCostume(MenuEntry *entry);
         static void setPlayerCostume(int player, int costumeID, bool useAltOnly = false);
-        static void selectCostumeID(MenuEntry *entry);
-        static void initCustomCostumesAuto(MenuEntry* entry);
+        static int selectCostumeID(void);
         static void forceBearMinMax(MenuEntry* entry);
         static void setSwordChanges(MenuEntry *entry);
         static void writeSwordChanges(MenuEntry *entry);
@@ -58,7 +35,6 @@ namespace CTRPluginFramework
         static void enableCosmeticCostume(MenuEntry* entry);
         static void setCosmeticCostume(MenuEntry* entry);
         static void writeCosmeticCostume(MenuEntry* entry);
-        static void changeSlotMappings(MenuEntry* entry);
         static void costumeRandomizer(MenuEntry* entry);
         static void writeRandomCostume(MenuEntry* entry);
         static void toggleRandomizeOnDefeat(MenuEntry* entry);
@@ -103,8 +79,6 @@ namespace CTRPluginFramework
         static void setSwordHammerDmgMult(MenuEntry* entry);
         static void swordBeamsAnyHealth(MenuEntry* entry);
 
-        static const int unusedDLC_slotIDs[4];
-        static const StringVector BCH_fileNames;
         static u8 cosmeticIDs[3];
         static u8 swordType[3];
         static bool customSwordsActive;

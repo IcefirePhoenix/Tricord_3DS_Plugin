@@ -319,16 +319,34 @@
             "name": "restore_fairy_note",
             "content": {
                 "intro": "Restores the Great Fairy Costume, an unused costume accidentally left during pre-release development. An additional slot will be added to the TFH costume selection menu to accommodate this extra costume.",
-                "note": "If used in multiplayer, other players will see the Hero's Tunic as a placeholder.",
+                "note": "If used in multiplayer, other players will see the Hero's Tunic as a placeholder.\n\nNote: If you choose to import a custom costume using the method described in the Wiki, this entry will be replaced with \"Enable Custom Costume Slot\".",
                 "modeCompatibility": 1,
                 "clientOnly": false
             }
         },
         {
-            "name": "slot_A_note",
+            "name": "custom_costume_note",
             "content": {
-                "intro": "TODO",
-                "note": "This setting is not accessible if Restore Great Fairy Costume is enabled.",
+                "intro": "Tricord has detected a custom costume imported through LayeredFS. Enabling this entry will add it to the TFH costume selection menu.",
+                "note": "If used in multiplayer, other players will see the Hero's Tunic as a placeholder.\n\nNote: If this costume file is removed in the future, this entry will be replaced with \"Restore Great Fairy Costume\" instead.",
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "allow_Tricord_fairy_note",
+            "content": {
+                "intro": "Allows features such as Change Player Costume, Cosmetic Costumes, and Costume Randomizers to use the Great Fairy Costume. Must have \"Restore Great Fairy Costume\" enabled.",
+                "note": "Note: If a custom costume is imported via LayeredFS in the future, this entry will be replaced with \"Allow Tricord to use the Custom Costume\" instead.",
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "allow_Tricord_custom_note",
+            "content": {
+                "intro": "Allows features such as Change Player Costume, Cosmetic Costumes, and Costume Randomizers to use the Custom Costume imported via LayeredFS. Must have \"Enable Custom Costume Slot\" enabled.",
+                "note": "Note: If this costume file is removed in the future, this entry will be replaced with \"Allow Tricord to use the Great Fairy Costume\" instead.",
                 "modeCompatibility": 1,
                 "clientOnly": false
             }

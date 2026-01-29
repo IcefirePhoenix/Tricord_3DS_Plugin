@@ -403,40 +403,17 @@ namespace CTRPluginFramework
 
         *costume += new MenuEntry("Force Bear Minimum / Maximum", nullptr, Costume::forceBearMinMax, true, DescUtils::getDesc("bear_minMax_note"));
 
-        // Custom costumes
+        DLC_SlotWriterA = new MenuEntry("", Costume::overrideDLC_CostumeSlotA, "");
+        TricordUseDLC_SlotA = new MenuEntry("", Costume::toggleTricordCustomCostumeUsage, "");
 
-        // TODO: restore after custom costume model loaders are ready...
-        triggerCostumeSlots = new MenuEntry("Open Custom Costume Slots", nullptr, Costume::openCustomCostumeSlots, true);
-        menuCostumeSlotA = new MenuEntry("   Set custom costume slot A", nullptr, Costume::selectCostumeID, true, DescUtils::getDesc("slot_A_note"));
-        menuCostumeSlotB = new MenuEntry("   Set custom costume slot B", nullptr, Costume::selectCostumeID, true);
-        menuCostumeSlotC = new MenuEntry("   Set custom costume slot C", nullptr, Costume::selectCostumeID, true);
-        menuCostumeSlotD = new MenuEntry("   Set custom costume slot D", nullptr, Costume::selectCostumeID, true);
-        restoreGreatFairy = new MenuEntry("Restore Great Fairy Costume", Costume::greatFairyEnable, DescUtils::getDesc("restore_fairy_note"));
+        Costume::setDLCEntryTitles();
 
-        // add to costume folder + hide by default
-        // *costume += triggerCostumeSlots;
-        // *costume += menuCostumeSlotA;
-        // *costume += menuCostumeSlotB;
-        // *costume += menuCostumeSlotC;
-        // *costume += menuCostumeSlotD;
-        *costume += restoreGreatFairy;
-
-        menuCostumeSlotA->Hide();
-        menuCostumeSlotB->Hide();
-        menuCostumeSlotC->Hide();
-        menuCostumeSlotD->Hide();
-
-        menuCostumeSlotA->SetAltIcon(true);
-        menuCostumeSlotB->SetAltIcon(true);
-        menuCostumeSlotC->SetAltIcon(true);
-        menuCostumeSlotD->SetAltIcon(true);
+        *costume += DLC_SlotWriterA;
+        *costume += TricordUseDLC_SlotA;
 
         // auto-managed by plugin; hidden from users...
         swordEditAuto = new MenuEntry("Write Sword edits (auto)", Costume::writeSwordChanges, "", true);
         cosmeticCostumeAuto = new MenuEntry("Write cosmetic costumes (auto)", Costume::writeCosmeticCostume, "", true);
-        manageCatalogSize = new MenuEntry("Manage Catalog Size (auto)", Costume::manageCatalogSizeAuto, "", true);
-        initCustomCostumes = new MenuEntry("Init Custom Costume list (auto)", Costume::initCustomCostumesAuto, "", true);
-        writeCostumeIDToSlot = new MenuEntry("Write to costume slots (auto)", Costume::writeToCostumeSlot, "", true);
         costumeRandomizerAuto = new MenuEntry("Costume Randomizers (auto)", Costume::writeRandomCostume, "", true);
         beamCooldownAuto = new MenuEntry("Write beam cooldown (auto)", Costume::writeBeamCooldown, "", true);
         infBalloonsAuto = new MenuEntry("Infinite tingle balloons (auto)", Costume::writeBalloons, "", true);
@@ -444,9 +421,6 @@ namespace CTRPluginFramework
 
         *autoFolder += swordEditAuto;
         *autoFolder += cosmeticCostumeAuto;
-        *autoFolder += manageCatalogSize;
-        *autoFolder += initCustomCostumes;
-        *autoFolder += writeCostumeIDToSlot;
         *autoFolder += costumeRandomizerAuto;
         *autoFolder += beamCooldownAuto;
         *autoFolder += infBalloonsAuto;
