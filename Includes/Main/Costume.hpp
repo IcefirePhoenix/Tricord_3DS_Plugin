@@ -22,6 +22,7 @@ namespace CTRPluginFramework
     {
     public:
         static void toggleTricordCustomCostumeUsage(MenuEntry *entry);
+        static void toggleVisibilityTricordUsageEntry(MenuEntry *entry);
         static void overrideDLC_CostumeSlotA(MenuEntry *entry);
         static void setDLCEntryTitles(void);
         static void changeLinkCostume(MenuEntry *entry);

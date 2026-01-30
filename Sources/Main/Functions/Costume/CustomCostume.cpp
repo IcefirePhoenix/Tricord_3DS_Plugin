@@ -7,6 +7,7 @@ namespace CTRPluginFramework
 
     u8 unusedCostumeSlotID_A = 0x26, bitstringEdit = 0x7F;
     std::string fairyName = "Great Fairy Costume", customName = "Custom Costume";
+    bool toggleEnabled, toggleVisible;
 
     /* ------------------ */
 
@@ -73,52 +74,72 @@ namespace CTRPluginFramework
     // Force-enables an additional slot in the custom selection menu using the first unused DLC slot
     void Costume::overrideDLC_CostumeSlotA(MenuEntry *entry)
     {
-        if (entry->WasJustActivated())
+        if (entry->WasJustActivated()) // bool allows this to run as part of auto-init-Favorites
         {
-            if (!restoreGreatFairyPtrRef() || !forceOwnDLC_SlotA() || !increaseCatalogSize())
+            TricordUseDLC_SlotA->Show();
+
+            if (!restoreGreatFairyPtrRef())
             {
                 OSD::Notify("[ERROR] Cannot init additional costume slot. Cancelling...");
                 entry->Disable();
             }
-            else
-            {
-                updatePluginCostumeData(TricordUseDLC_SlotA->IsActivated());
-            }
         }
-        else if (!entry->IsActivated())
+
+        if (!entry->IsActivated())
         {
             updatePluginCostumeData(false);
-            restoreData();
+        }
+
+        increaseCatalogSize();
+    }
+
+    // Determines whether to show TricordUseDLC_SlotA in the menu
+    void Costume::toggleVisibilityTricordUsageEntry(MenuEntry *entry)
+    {
+        if (!DLC_SlotWriterA->IsActivated())
+        {
+            TricordUseDLC_SlotA->Show();
+        }
+        else
+        {
+            std::string workingName = getCustomCostumeLoaderStatus() ? customName : fairyName;
+
+            TricordUseDLC_SlotA->SetName(Utils::Format("Let Tricord use the %s", workingName.c_str()));
+            TricordUseDLC_SlotA->Hide();
+
+            updatePluginCostumeData(false);
+            toggleEnabled = false;
         }
     }
 
     // Determines whether to update costume data
     void Costume::toggleTricordCustomCostumeUsage(MenuEntry *entry)
     {
-        if (entry->WasJustActivated())
-        {
-            updatePluginCostumeData(true);
-        }
-        else if (!entry->IsActivated())
-        {
-            updatePluginCostumeData(false);
-        }
+        std::string titlePrefix = toggleEnabled ? "Let" : "Do not let";
+        std::string workingName = getCustomCostumeLoaderStatus() ? customName : fairyName;
+
+        toggleEnabled = !toggleEnabled;
+        updatePluginCostumeData(toggleEnabled);
+
+        TricordUseDLC_SlotA->SetName(Utils::Format("%s Tricord use the %s", titlePrefix.c_str(), workingName.c_str()));
     }
 
     // Updates Custom Costume-related MenuEntry titles
     void Costume::setDLCEntryTitles(void)
     {
-        std::string useToggleTitle = "Allow Tricord to use the ";
-        std::string workingName = getCustomCostumeLoaderStatus() ? customName : fairyName;
+        bool isCustomLoaded = getCustomCostumeLoaderStatus();
+
+        std::string useToggleTitle = "Let Tricord use the ";
+        std::string workingName = isCustomLoaded ? customName : fairyName;
 
         std::string &writerNote = DLC_SlotWriterA->Note();
         std::string &useToggleNote = TricordUseDLC_SlotA->Note();
 
-        DLC_SlotWriterA->SetName(getCustomCostumeLoaderStatus() ? Utils::Format("Restore %s", workingName.c_str()) : Utils::Format("Enable %s Slot", workingName.c_str()));
+        DLC_SlotWriterA->SetName(isCustomLoaded ? Utils::Format("Restore %s", workingName.c_str()) : Utils::Format("Enable %s Slot", workingName.c_str()));
         TricordUseDLC_SlotA->SetName(useToggleTitle + workingName);
 
-        writerNote = getCustomCostumeLoaderStatus() ? DescUtils::getDesc("custom_costume_note") : DescUtils::getDesc("restore_fairy_note");
-        useToggleNote = getCustomCostumeLoaderStatus() ? DescUtils::getDesc("allow_Tricord_custom_note") : DescUtils::getDesc("allow_Tricord_fairy_note");
+        writerNote = isCustomLoaded ? DescUtils::getDesc("custom_costume_note") : DescUtils::getDesc("restore_fairy_note");
+        useToggleNote = isCustomLoaded ? DescUtils::getDesc("allow_Tricord_custom_note") : DescUtils::getDesc("allow_Tricord_fairy_note");
 
         DLC_SlotWriterA->RefreshNote();
         TricordUseDLC_SlotA->RefreshNote();

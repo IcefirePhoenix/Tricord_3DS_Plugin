@@ -337,7 +337,7 @@
             "name": "allow_Tricord_fairy_note",
             "content": {
                 "intro": "Allows features such as Change Player Costume, Cosmetic Costumes, and Costume Randomizers to use the Great Fairy Costume. Must have \"Restore Great Fairy Costume\" enabled.",
-                "note": "Note: If a custom costume is imported via LayeredFS in the future, this entry will be replaced with \"Allow Tricord to use the Custom Costume\" instead.",
+                "note": "Note: If a custom costume is imported via LayeredFS in the future, this entry will be replaced with \"Let Tricord use the Custom Costume\" instead.",
                 "modeCompatibility": 1,
                 "clientOnly": false
             }
@@ -346,7 +346,7 @@
             "name": "allow_Tricord_custom_note",
             "content": {
                 "intro": "Allows features such as Change Player Costume, Cosmetic Costumes, and Costume Randomizers to use the Custom Costume imported via LayeredFS. Must have \"Enable Custom Costume Slot\" enabled.",
-                "note": "Note: If this costume file is removed in the future, this entry will be replaced with \"Allow Tricord to use the Great Fairy Costume\" instead.",
+                "note": "Note: If this costume file is removed in the future, this entry will be replaced with \"Let Tricord use the Great Fairy Costume\" instead.",
                 "modeCompatibility": 1,
                 "clientOnly": false
             }

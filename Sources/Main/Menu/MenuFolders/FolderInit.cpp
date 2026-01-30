@@ -403,13 +403,15 @@ namespace CTRPluginFramework
 
         *costume += new MenuEntry("Force Bear Minimum / Maximum", nullptr, Costume::forceBearMinMax, true, DescUtils::getDesc("bear_minMax_note"));
 
-        DLC_SlotWriterA = new MenuEntry("", Costume::overrideDLC_CostumeSlotA, "");
-        TricordUseDLC_SlotA = new MenuEntry("", Costume::toggleTricordCustomCostumeUsage, "");
+        DLC_SlotWriterA = new MenuEntry("", Costume::overrideDLC_CostumeSlotA, Costume::toggleVisibilityTricordUsageEntry, false, "");
+        TricordUseDLC_SlotA = new MenuEntry("", nullptr,Costume::toggleTricordCustomCostumeUsage, false, "", true);
 
         Costume::setDLCEntryTitles();
 
         *costume += DLC_SlotWriterA;
         *costume += TricordUseDLC_SlotA;
+
+        TricordUseDLC_SlotA->Hide();
 
         // auto-managed by plugin; hidden from users...
         swordEditAuto = new MenuEntry("Write Sword edits (auto)", Costume::writeSwordChanges, "", true);
