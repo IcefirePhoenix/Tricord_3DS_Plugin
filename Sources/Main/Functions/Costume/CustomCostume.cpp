@@ -5,7 +5,7 @@ namespace CTRPluginFramework
 {
     MenuEntry *DLC_SlotWriterA, *TricordUseDLC_SlotA;
 
-    u8 unusedCostumeSlotID_A = 0x26, bitstringEdit = 0x7F;
+    u8 unusedCostumeSlotID_A = 0x26;
     std::string fairyName = "Great Fairy Costume", customName = "Custom Costume";
     bool toggleEnabled, toggleVisible;
 
@@ -49,26 +49,30 @@ namespace CTRPluginFramework
         return stringWriteClear && ptrWriteClear;
     }
 
-    // Sets the owned status for first unused DLC costume
-    bool forceOwnDLC_SlotA(void)
-    {
-        u32 finalAddr = AddressList::getAddress("CostumeObtainStatus") + unusedCostumeSlotID_A;
-        return Process::Write8(finalAddr, true);
-    }
-
     // Increases maximum available costume slot count by 1
-    bool increaseCatalogSize(void)
+    void increaseCatalogSize(void)
     {
-        return Process::Write8(AddressList::getAddress("CostumeCatalogMaxSlot"), bitstringEdit);
-    }
+        u8 isObtained, currCatalogSize, vanillaCostumeCount = 0x25;
+        u32 catalogAddr, catalogSizeOffset = 0xE4, catalogStartOffset = 0xE8;
 
-    // Restores catalog data
-    void restoreData(void)
-    {
-        u8 restoreBitstringEdit = 0x3F;
+        // get catalog dynamic location from pointer...
+        Process::Read32(AddressList::getAddress("CostumeCatalogPointer"), catalogAddr);
 
-        Process::Write8(AddressList::getAddress("CostumeCatalogMaxSlot"), restoreBitstringEdit);
-        Process::Write8(AddressList::getAddress("CostumeObtainStatus") + unusedCostumeSlotID_A, false);
+        if (!GeneralHelpers::isNullPointer(catalogAddr))
+        {
+            currCatalogSize = 0;
+            for (u8 slotCount = 0x0; slotCount <= vanillaCostumeCount; slotCount++)
+            {
+                isObtained = 0;
+                Process::Read8((AddressList::getAddress("CostumeObtainStatus") + slotCount), isObtained);
+
+                if (isObtained)
+                    currCatalogSize++;
+            }
+
+            Process::Write8(catalogAddr + catalogSizeOffset, currCatalogSize + 1);
+            Process::Write8(catalogAddr + catalogStartOffset + currCatalogSize, unusedCostumeSlotID_A);
+        }
     }
 
     // Force-enables an additional slot in the custom selection menu using the first unused DLC slot

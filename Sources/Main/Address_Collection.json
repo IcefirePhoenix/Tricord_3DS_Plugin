@@ -193,11 +193,11 @@
             }
         },
         {
-            "name": "CostumeCatalogMaxSlot",
+            "name": "CostumeCatalogPointer",
             "regionAddrs": {
-                "usaAddress": "0x32D72D90",
-                "eurAddress": "0x32D72E10",
-                "jpnAddress": "0x32DC55B4"
+                "usaAddress": "0x32C828E8",
+                "eurAddress": "0x32C82968",
+                "jpnAddress": "0x32CCD328"
             }
         },
         {
