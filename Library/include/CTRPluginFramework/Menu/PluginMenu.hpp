@@ -122,10 +122,17 @@ namespace CTRPluginFramework
          * \brief If set to true, the plugin's loop will only be executed 1 per top screen's frame
          * \param useSync Wheter to wait for the top screen's frame or not
          */
-        void         SynchronizeWithFrame(const bool useSync);
+        void SynchronizeWithFrame(const bool useSync);
 
+        /**
+         * \brief Gets amount of time elasped since plugin boot
+         */
+        Time GetUptime(void);
 
-        void         SpecifyDevBuild(void);
+        /**
+         * \brief Enables display indicating dev build status
+         */
+        void SpecifyDevBuild(void);
 
         /**
          * \brief If a callback is set, the callback will be called - Must be set before calling Run

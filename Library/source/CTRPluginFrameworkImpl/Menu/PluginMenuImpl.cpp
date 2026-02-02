@@ -17,10 +17,11 @@ namespace CTRPluginFramework
 {
     bool openSearch, signalQuit;
 
-    PluginMenuImpl  *PluginMenuImpl::_runningInstance = nullptr;
-    Mutex           PluginMenuImpl::_trashBinMutex;
+    PluginMenuImpl *PluginMenuImpl::_runningInstance = nullptr;
+    Mutex PluginMenuImpl::_trashBinMutex;
 
     PluginMenuImpl::PluginMenuImpl(std::string &name, std::string &about, u32 menuType) :
+        Uptime(new Clock()),
         OnFirstOpening(nullptr),
         OnOpening(nullptr),
         OnClosing(nullptr),
@@ -201,7 +202,9 @@ namespace CTRPluginFramework
         if (!Directory::IsExists("/Tricord/AR_Backups/"))
             Directory::Create("/Tricord/AR_Backups/");
 
+        Uptime->Restart();
         ar.Initialize();
+
         PluginMenuActionReplay::BackupCodes(false);
 
         OSD::Notify("Plugin ready!", Color::White, Color());

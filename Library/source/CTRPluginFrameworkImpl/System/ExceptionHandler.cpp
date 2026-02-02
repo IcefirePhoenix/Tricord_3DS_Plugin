@@ -1,3 +1,4 @@
+#include "CTRPluginFrameworkImpl/Menu/MenuEntryImpl.hpp"
 #include "CTRPluginFrameworkImpl/System/ExceptionHandler.hpp"
 #include "CTRPluginFramework/Graphics/Color.hpp"
 #include "CTRPluginFramework/Menu/MessageBox.hpp"
@@ -172,10 +173,22 @@ namespace CTRPluginFramework
     std::string ExceptionHandler::getErrorInfo(ERRF_ExceptionInfo *excep)
     {
         std::string infoStr = "";
+        Time uptime = PluginMenu::GetRunningInstance()->GetUptime();
 
         infoStr += Utils::Format("Tricord version: %s\n", TRICORD_BUILD_METADATA);
         infoStr += Utils::Format("CTRPF version: %s\n", CTRPF_BUILD_METADATA);
-        infoStr += Utils::Format("Timestamp: %s%s\n\n", Time::GetDate().c_str(), Time::GetTime().c_str());
+        infoStr += Utils::Format("Library compiled: %s\n", LIB_COMPILE_DATE);
+        infoStr += Utils::Format("Plugin compiled: %s\n\n", Process::GetCompileDate().c_str());
+
+        infoStr += Utils::Format("System timestamp: %s%s\n", Time::GetDate().c_str(), Time::GetTime().c_str());
+        infoStr += Utils::Format("Plugin uptime: %s\n\n", uptime.ToHMS().c_str());
+
+        if (SystemImpl::IsCitra)
+            infoStr += "System model: Citra / Azahar Emulator\n\n";
+        else if (SystemImpl::IsNew3DS)
+            infoStr += "System model: New 2/3DS\n\n";
+        else
+            infoStr += "System model: Old 2/3DS\n\n";
 
         switch (excep->type)
         {

@@ -8,24 +8,34 @@
 #include "types.h"
 
 #include "CTRPluginFramework/System/Time.hpp"
+#include "CTRPluginFramework/Utils/Utils.hpp"
 
 namespace CTRPluginFramework
 {
     const Time Time::Zero;
 
-    float   Time::AsSeconds(void) const
+    std::string Time::ToHMS(void)
+    {
+        float totalSeconds = AsSeconds();
+
+        int hours = static_cast<int>(totalSeconds / 3600);
+        int minutes = (static_cast<int>(totalSeconds) % 3600) / 60;
+        int seconds = static_cast<int>(totalSeconds) % 60;
+
+        return Utils::Format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    float Time::AsSeconds(void) const
     {
         return (_ticks / (float)TicksPerSecond);
     }
 
-
-    int     Time::AsMilliseconds(void) const
+    int Time::AsMilliseconds(void) const
     {
         return static_cast<int>(_ticks / (TicksPerSecond / 1000.f));
     }
 
-
-    s64     Time::AsMicroseconds(void) const
+    s64 Time::AsMicroseconds(void) const
     {
         return static_cast<s64>(_ticks / (TicksPerSecond / 1000000.f));
     }

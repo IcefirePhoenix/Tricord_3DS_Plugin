@@ -144,14 +144,19 @@ namespace CTRPluginFramework
 		PluginMenuImpl::ForceOpen();
 	}
 
-    void    PluginMenu::SynchronizeWithFrame(const bool useSync)
+    void PluginMenu::SynchronizeWithFrame(const bool useSync)
     {
         _menu->SyncOnFrame = useSync;
     }
 
-    void    PluginMenu::SpecifyDevBuild(void)
+    void PluginMenu::SpecifyDevBuild(void)
     {
         _menu->AddPluginVersion(true);
+    }
+
+    Time PluginMenu::GetUptime(void)
+    {
+        return _menu->Uptime->GetElapsedTime();
     }
 
     std::string &   PluginMenu::Title(void)

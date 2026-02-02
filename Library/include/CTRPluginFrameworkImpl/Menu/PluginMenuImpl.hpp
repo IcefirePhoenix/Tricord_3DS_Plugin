@@ -31,13 +31,13 @@ namespace CTRPluginFramework
         PluginMenuImpl(std::string &name, std::string &note, u32 menuType);
         ~PluginMenuImpl(void);
 
-        void    Append(MenuItem *item) const;
-        void    AddToHidden(MenuItem *item) const;
-        void    Callback(CallbackPointer callback);
-        void    RemoveCallback(CallbackPointer callback);
-        int     Run(void);
+        void Append(MenuItem *item) const;
+        void AddToHidden(MenuItem *item) const;
+        void Callback(CallbackPointer callback);
+        void RemoveCallback(CallbackPointer callback);
+        int Run(void);
 
-        static void    Close(MenuFolderImpl *menuFolderImpl);
+        static void Close(MenuFolderImpl *menuFolderImpl);
 
         static void ActivateEnabledCheatsFromFile(const Preferences::Header &header, File &settings);
         static void ActivateFavoritesFromFile(const Preferences::Header &header, File &settings);
@@ -71,38 +71,39 @@ namespace CTRPluginFramework
 
         MenuFolderImpl *GetRoot(void) const;
         MenuFolderImpl *GetHidden(void) const;
-        bool    IsOpen(void) const;
-        bool    WasOpened(void) const;
-        void    AddPluginVersion(bool isDev = false) const;
+        bool IsOpen(void) const;
+        bool WasOpened(void) const;
+        void AddPluginVersion(bool isDev = false) const;
 
-        FuncPointer			OnFirstOpening;
-        FuncPointer			OnReady;
-		OnOpeningCallback	OnOpening;
-        OnClosingCallback	OnClosing;
-        FramePointer		OnFrame;
-        bool				SyncOnFrame;
+        Clock *Uptime;
+        FuncPointer OnFirstOpening;
+        FuncPointer OnReady;
+		OnOpeningCallback OnOpening;
+        OnClosingCallback OnClosing;
+        FramePointer OnFrame;
+        bool SyncOnFrame;
     private:
         friend std::string &PluginMenu::Title(void);
-        static PluginMenuImpl       *_runningInstance;
-        static Mutex                _trashBinMutex;
+        static PluginMenuImpl *_runningInstance;
+        static Mutex _trashBinMutex;
 
-        bool                        _isOpen;
-        bool                        _aboutToOpen;
-        bool                        _wasOpened;
-        bool                        _pluginRun;
+        bool _isOpen;
+        bool _aboutToOpen;
+        bool _wasOpened;
+        bool _pluginRun;
 
-        PluginMenuActionReplay      *_actionReplay;
-        PluginMenuHome              *_home;
-        PluginMenuSearch            *_search;
-        PluginMenuSettings          *_settings;
-        PluginMenuTools             *_tools;
-        PluginMenuExecuteLoop       *_executeLoop;
-        GuideReader                 *_guide;
-        DiscordInfo                 *_discordMenu;
-        HexEditor                   _hexEditor;
-        std::vector<CallbackPointer>     _callbacks;
-        std::vector<CallbackPointer>     _callbacksTrashBin;
-        bool                        _forceOpen;
+        PluginMenuActionReplay *_actionReplay;
+        PluginMenuHome *_home;
+        PluginMenuSearch *_search;
+        PluginMenuSettings *_settings;
+        PluginMenuTools *_tools;
+        PluginMenuExecuteLoop *_executeLoop;
+        GuideReader *_guide;
+        DiscordInfo *_discordMenu;
+        HexEditor _hexEditor;
+        std::vector<CallbackPointer> _callbacks;
+        std::vector<CallbackPointer> _callbacksTrashBin;
+        bool _forceOpen;
     };
 }
 
