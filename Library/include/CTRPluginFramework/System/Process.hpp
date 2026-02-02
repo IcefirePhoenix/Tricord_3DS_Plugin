@@ -347,6 +347,16 @@ namespace CTRPluginFramework
          * @param callback The callback to be called or nullptr to disable.
          */
         static void SetProcessEventCallback(ProcessEventCallback callback);
+
+        /**
+         * @brief Retrieves the plugin compile date (separate from lib compile date)
+         */
+        static std::string GetCompileDate(void);
+
+        /**
+         * @brief Sets the plugin compile date, to be called on boot
+         */
+        static void SetCompileDate(std::string date);
     };
 }
 

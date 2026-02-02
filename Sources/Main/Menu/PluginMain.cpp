@@ -100,6 +100,8 @@ namespace CTRPluginFramework
 
     void InitSequence(FwkSettings &settings)
     {
+        Process::SetCompileDate(COMPILE_DATE);
+
         AddressList::InitMemoryRange();
         AddressList::InitAddresses();
         DescUtils::InitDescriptions();
