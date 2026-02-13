@@ -173,6 +173,7 @@ namespace CTRPluginFramework
         Preferences::LoadSettings();
         _tools->UpdateSettings();
 
+        KeyboardImpl::InitKeyboards();
 
         Preferences::LoadEntryPreferences(Preferences::IsEnabled(Preferences::AutoEnableSavedCheats), Preferences::IsEnabled(Preferences::AutoEnableFavorites));
 
