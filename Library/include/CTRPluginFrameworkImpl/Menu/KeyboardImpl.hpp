@@ -69,17 +69,22 @@ namespace CTRPluginFramework
         friend class HexEditor;
         friend class ARCodeEditor;
 
+        Task _DisplayLoadStatus{_ShowLoadProgress, nullptr, Task::AppCores};
+
         void _RenderTop(void);
         void _RenderBottom(void);
         void _ProcessEvent(Event &event);
         void _UpdateScroll(float delta, bool ignoreTouch);
         void _UpdateActiveKeyIndexes(void);
         void _Update(float delta);
+        static s32 _ShowLoadProgress(void *arg);
 
         static void _InitQwertySequence(void);
         static void _InitQwertyLowercase(void);
         static void _InitQwertyUppercase(void);
         static void _InitQwertyNumRow(void);
+        static void _InitQwertyJPN(void);
+        static void _InitQwertyJPNAlt(void);
         static void _InitQwertySymbols(void);
         static void _InitQwertyOther(void);
         static void _InitDigitKeys(IntRect &keyPosition, std::vector<TouchKey> &keys, int xStartCoord);
@@ -116,6 +121,7 @@ namespace CTRPluginFramework
         bool _isHex{true};
         bool _mustRelease{false};
         bool _useCaps{false};
+        bool _useJPN{false};
         bool _useSymbols{false};
         bool _useNumRow{false};
         int _pageIndex{0};

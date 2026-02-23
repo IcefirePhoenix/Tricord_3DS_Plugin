@@ -267,11 +267,6 @@ namespace CTRPluginFramework
         _keyboard->SetCompareCallback(callback);
     }
 
-    void Keyboard::ChangeSelectedEntry(int entry)
-    {
-        _keyboard->ChangeSelectedEntry(entry);
-    }
-
     int Keyboard::GetLastSelectedEntry()
     {
         return _keyboard->GetSelectedEntry();

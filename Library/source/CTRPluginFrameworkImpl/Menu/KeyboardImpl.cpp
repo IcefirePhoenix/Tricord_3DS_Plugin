@@ -21,6 +21,9 @@ namespace CTRPluginFramework
     #define KEY_PLUS_MINUS -7
     #define KEY_ASCII_TOGGLE -8
     #define KEY_NUM_TOGGLE -10
+    #define KEY_SYMBOLS_TOGGLE -11
+    #define KEY_JPN_TOGGLE -12
+
     int charKeyWidth = 25,
         charKeyHeight = 32,
         charKeyboardStartX = 35,
@@ -35,7 +38,7 @@ namespace CTRPluginFramework
     std::vector<TouchKey> KeyboardImpl::_HexadecimalLiteKeys;
     std::vector<TouchKey> KeyboardImpl::_QwertyKeys;
 
-    int digitKeyWidthLen = 38;
+    bool isLoadingChars = false;
 
     KeyboardImpl::KeyboardImpl(const std::string &text) : submitBtn(Button(Button::GameFont, "Submit", IntRect(190, 200, 120, 32), Icon::DrawMenuButton))
     {
@@ -558,6 +561,30 @@ namespace CTRPluginFramework
         }
     }
 
+    s32 KeyboardImpl::_ShowLoadProgress(void *arg)
+    {
+        IntRect background(55, 86, 210, 35);
+        ProcessingLogo waitLogo;
+        int posY = 95;
+
+        while (isLoadingChars)
+        {
+            Renderer::SetTarget(BOTTOM);
+
+            Renderer::DrawRect2(background, Color::Maroon, Color::Maroon);
+            Renderer::DrawRect(background, Color::Gainsboro, false);
+            Renderer::DrawGameFontString("Preparing JPN keyboard...", 87, posY, 320, Color::Gainsboro);
+
+            waitLogo.Draw(65, 95);
+            posY = 95;
+
+            Renderer::EndFrame();
+        }
+
+        return 0;
+    }
+
+
     void    KeyboardImpl::_ProcessEvent(Event &event)
     {
         static Clock inputClock;
@@ -891,7 +918,7 @@ namespace CTRPluginFramework
 
     void BuildShortcutRow(IntRect &pos, std::vector<TouchKey> &keys, bool addPageBtns)
     {
-        int shortcutKeyWidth = 67;
+        int shortcutKeyWidth = 68;
         int spaceWidth = addPageBtns ? 125 : 200;
 
         pos.leftTop.x = charKeyboardStartX;
@@ -907,12 +934,12 @@ namespace CTRPluginFramework
 
         if (addPageBtns)
         {
-            pos.size.x = 48;
+            pos.size.x = 55;
 
             keys.emplace_back("Prev", pos, KEY_PREV_PAGE);
-            pos.leftTop.x += shortcutKeyWidth;
+            pos.leftTop.x += pos.size.x;
             keys.emplace_back("Next", pos, KEY_NEXT_PAGE);
-            pos.leftTop.x += shortcutKeyWidth;
+            pos.leftTop.x += pos.size.x;
         }
 
         pos.leftTop.x = 23;
@@ -1181,8 +1208,365 @@ namespace CTRPluginFramework
         BuildShortcutRow(pos, _QwertyKeys, true); // [200 - 208]
     }
 
-    void KeyboardImpl::_InitQwertySequence(void)
+    void KeyboardImpl::_InitQwertyJPN(void)
     {
+        IntRect pos(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
+
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [209]
+
+        // page 1: 209 - 248
+        AddToKeySet("あ", pos, _QwertyKeys); // [210]
+        AddToKeySet("い", pos, _QwertyKeys); // [211]
+        AddToKeySet("う", pos, _QwertyKeys); // [212]
+        AddToKeySet("え", pos, _QwertyKeys); // [213]
+        AddToKeySet("お", pos, _QwertyKeys); // [214]
+        AddToKeySet("か", pos, _QwertyKeys); // [215]
+        AddToKeySet("き", pos, _QwertyKeys); // [216]
+        AddToKeySet("く", pos, _QwertyKeys); // [217]
+        AddToKeySet("け", pos, _QwertyKeys); // [218]
+        AddToKeySet("こ", pos, _QwertyKeys); // [219]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("さ", pos, _QwertyKeys); // [220]
+        AddToKeySet("し", pos, _QwertyKeys); // [221]
+        AddToKeySet("す", pos, _QwertyKeys); // [222]
+        AddToKeySet("せ", pos, _QwertyKeys); // [223]
+        AddToKeySet("そ", pos, _QwertyKeys); // [224]
+        AddToKeySet("た", pos, _QwertyKeys); // [225]
+        AddToKeySet("ち", pos, _QwertyKeys); // [226]
+        AddToKeySet("つ", pos, _QwertyKeys); // [227]
+        AddToKeySet("て", pos, _QwertyKeys); // [228]
+        AddToKeySet("と", pos, _QwertyKeys); // [229]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("な", pos, _QwertyKeys); // [230]
+        AddToKeySet("に", pos, _QwertyKeys); // [231]
+        AddToKeySet("ぬ", pos, _QwertyKeys); // [232]
+        AddToKeySet("ね", pos, _QwertyKeys); // [233]
+        AddToKeySet("の", pos, _QwertyKeys); // [234]
+        AddToKeySet("ま", pos, _QwertyKeys); // [235]
+        AddToKeySet("み", pos, _QwertyKeys); // [236]
+        AddToKeySet("む", pos, _QwertyKeys); // [237]
+        AddToKeySet("め", pos, _QwertyKeys); // [238]
+        AddToKeySet("も", pos, _QwertyKeys); // [239]
+        UpdateCharRowPos(pos);
+
+        BuildShortcutRow(pos, _QwertyKeys, true); // [240 - 248]
+
+        pos = IntRect(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [249]
+
+        // page 2: 249 - 284
+        AddToKeySet("ぁ", pos, _QwertyKeys); // [250]
+        AddToKeySet("ぃ", pos, _QwertyKeys); // [251]
+        AddToKeySet("ぅ", pos, _QwertyKeys); // [252]
+        AddToKeySet("ぇ", pos, _QwertyKeys); // [253]
+        AddToKeySet("ぉ", pos, _QwertyKeys); // [254]
+        AddToKeySet("が", pos, _QwertyKeys); // [255]
+        AddToKeySet("ぎ", pos, _QwertyKeys); // [256]
+        AddToKeySet("ぐ", pos, _QwertyKeys); // [257]
+        AddToKeySet("げ", pos, _QwertyKeys); // [258]
+        AddToKeySet("ご", pos, _QwertyKeys); // [259]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("ざ", pos, _QwertyKeys); // [260]
+        AddToKeySet("じ", pos, _QwertyKeys); // [261]
+        AddToKeySet("ず", pos, _QwertyKeys); // [262]
+        AddToKeySet("ぜ", pos, _QwertyKeys); // [263]
+        AddToKeySet("ぞ", pos, _QwertyKeys); // [264]
+        AddToKeySet("だ", pos, _QwertyKeys); // [265]
+        AddToKeySet("ぢ", pos, _QwertyKeys); // [266]
+        AddToKeySet("づ", pos, _QwertyKeys); // [267]
+        AddToKeySet("で", pos, _QwertyKeys); // [268]
+        AddToKeySet("ど", pos, _QwertyKeys); // [269]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("ら", pos, _QwertyKeys); // [270]
+        AddToKeySet("り", pos, _QwertyKeys); // [271]
+        AddToKeySet("る", pos, _QwertyKeys); // [272]
+        AddToKeySet("れ", pos, _QwertyKeys); // [273]
+        AddToKeySet("ろ", pos, _QwertyKeys); // [274]
+        pos.leftTop.x += charKeyWidth * 2;
+        AddToKeySet("っ", pos, _QwertyKeys); // [275]
+        UpdateCharRowPos(pos);
+
+        BuildShortcutRow(pos, _QwertyKeys, true); // [276 - 284]
+
+        pos = IntRect(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [285]
+
+        // page 3: 285 - 321
+        AddToKeySet("や", pos, _QwertyKeys); // [286]
+        AddToKeySet("ゆ", pos, _QwertyKeys); // [287]
+        AddToKeySet("よ", pos, _QwertyKeys); // [288]
+        AddToKeySet("わ", pos, _QwertyKeys); // [289]
+        AddToKeySet("を", pos, _QwertyKeys); // [290]
+        AddToKeySet("は", pos, _QwertyKeys); // [291]
+        AddToKeySet("ひ", pos, _QwertyKeys); // [292]
+        AddToKeySet("ふ", pos, _QwertyKeys); // [293]
+        AddToKeySet("へ", pos, _QwertyKeys); // [294]
+        AddToKeySet("ほ", pos, _QwertyKeys); // [295]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("ゃ", pos, _QwertyKeys); // [296]
+        AddToKeySet("ゅ", pos, _QwertyKeys); // [297]
+        AddToKeySet("ょ", pos, _QwertyKeys); // [298]
+        AddToKeySet("ゎ", pos, _QwertyKeys); // [299]
+        AddToKeySet("ん", pos, _QwertyKeys); // [300]
+        AddToKeySet("ば", pos, _QwertyKeys); // [301]
+        AddToKeySet("び", pos, _QwertyKeys); // [302]
+        AddToKeySet("ぶ", pos, _QwertyKeys); // [303]
+        AddToKeySet("べ", pos, _QwertyKeys); // [304]
+        AddToKeySet("ぼ", pos, _QwertyKeys); // [305]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("ゝ", pos, _QwertyKeys); // [306]
+        AddToKeySet("ゞ", pos, _QwertyKeys); // [307]
+        pos.leftTop.x += charKeyWidth * 3;
+        AddToKeySet("ぱ", pos, _QwertyKeys); // [308]
+        AddToKeySet("ぴ", pos, _QwertyKeys); // [309]
+        AddToKeySet("ぷ", pos, _QwertyKeys); // [310]
+        AddToKeySet("ぺ", pos, _QwertyKeys); // [311]
+        AddToKeySet("ぽ", pos, _QwertyKeys); // [312]
+        UpdateCharRowPos(pos);
+
+        BuildShortcutRow(pos, _QwertyKeys, true); // [313 - 321]
+
+        pos = IntRect(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [322]
+
+        // page 4: 322 - 361
+        AddToKeySet("乗", pos, _QwertyKeys); // [323]
+        AddToKeySet("事", pos, _QwertyKeys); // [324]
+        AddToKeySet("仝", pos, _QwertyKeys); // [325]
+        AddToKeySet("何", pos, _QwertyKeys); // [326]
+        AddToKeySet("魔", pos, _QwertyKeys); // [327]
+        AddToKeySet("倒", pos, _QwertyKeys); // [328]
+        AddToKeySet("利", pos, _QwertyKeys); // [329]
+        AddToKeySet("前", pos, _QwertyKeys); // [330]
+        AddToKeySet("動", pos, _QwertyKeys); // [331]
+        AddToKeySet("北", pos, _QwertyKeys); // [332]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("南", pos, _QwertyKeys); // [333]
+        AddToKeySet("名", pos, _QwertyKeys); // [334]
+        AddToKeySet("場", pos, _QwertyKeys); // [335]
+        AddToKeySet("塞", pos, _QwertyKeys); // [336]
+        AddToKeySet("変", pos, _QwertyKeys); // [337]
+        AddToKeySet("天", pos, _QwertyKeys); // [338]
+        AddToKeySet("女", pos, _QwertyKeys); // [339]
+        AddToKeySet("字", pos, _QwertyKeys); // [340]
+        AddToKeySet("川", pos, _QwertyKeys); // [341]
+        AddToKeySet("戦", pos, _QwertyKeys); // [342]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("文", pos, _QwertyKeys); // [343]
+        AddToKeySet("更", pos, _QwertyKeys); // [344]
+        AddToKeySet("服", pos, _QwertyKeys); // [345]
+        AddToKeySet("本", pos, _QwertyKeys); // [346]
+        AddToKeySet("東", pos, _QwertyKeys); // [347]
+        AddToKeySet("止", pos, _QwertyKeys); // [348]
+        AddToKeySet("毛", pos, _QwertyKeys); // [349]
+        AddToKeySet("水", pos, _QwertyKeys); // [350]
+        AddToKeySet("漢", pos, _QwertyKeys); // [351]
+        AddToKeySet("火", pos, _QwertyKeys); // [352]
+        UpdateCharRowPos(pos);
+
+        BuildShortcutRow(pos, _QwertyKeys, true); // [353 - 361]
+
+        pos = IntRect(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [362]
+
+        // page 5: 362 - 386
+        AddToKeySet("牧", pos, _QwertyKeys); // [363]
+        AddToKeySet("王", pos, _QwertyKeys); // [364]
+        AddToKeySet("砂", pos, _QwertyKeys); // [365]
+        AddToKeySet("示", pos, _QwertyKeys); // [366]
+        AddToKeySet("移", pos, _QwertyKeys); // [367]
+        AddToKeySet("空", pos, _QwertyKeys); // [368]
+        AddToKeySet("緑", pos, _QwertyKeys); // [369]
+        AddToKeySet("表", pos, _QwertyKeys); // [370]
+        AddToKeySet("西", pos, _QwertyKeys); // [371]
+        AddToKeySet("要", pos, _QwertyKeys); // [372]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("走", pos, _QwertyKeys); // [373]
+        AddToKeySet("返", pos, _QwertyKeys); // [374]
+        AddToKeySet("間", pos, _QwertyKeys); // [375]
+        AddToKeySet("闇", pos, _QwertyKeys); // [376]
+        AddToKeySet("雪", pos, _QwertyKeys); // [377]
+
+        pos.leftTop.x = charKeyboardStartX;
+        pos.leftTop.y += charKeyHeight * 2;
+
+        BuildShortcutRow(pos, _QwertyKeys, true); // [378 - 386]
+
+        pos = IntRect(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [387]
+
+        // page 6: 387 - 411
+        AddToKeySet("、", pos, _QwertyKeys); // [388]
+        AddToKeySet("〃", pos, _QwertyKeys); // [389]
+        AddToKeySet("々", pos, _QwertyKeys); // [390]
+        AddToKeySet("〆", pos, _QwertyKeys); // [391]
+        AddToKeySet("「", pos, _QwertyKeys); // [392]
+        AddToKeySet("」", pos, _QwertyKeys); // [393]
+        AddToKeySet("『", pos, _QwertyKeys); // [394]
+        AddToKeySet("』", pos, _QwertyKeys); // [395]
+        AddToKeySet("【", pos, _QwertyKeys); // [396]
+        AddToKeySet("】", pos, _QwertyKeys); // [397]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("〒", pos, _QwertyKeys); // [398]
+        AddToKeySet("！", pos, _QwertyKeys); // [399]
+        AddToKeySet("？", pos, _QwertyKeys); // [400]
+        AddToKeySet("～", pos, _QwertyKeys); // [401]
+        AddToKeySet("・", pos, _QwertyKeys); // [402]
+        UpdateCharRowPos(pos);
+
+        pos.leftTop.x = charKeyboardStartX;
+        pos.leftTop.y += charKeyHeight;
+
+        BuildShortcutRow(pos, _QwertyKeys, true); // [403 - 411]
+    }
+
+    void KeyboardImpl::_InitQwertyJPNAlt(void)
+    {
+        IntRect pos(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
+
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [412]
+
+        // page 1: 412 - 451
+        AddToKeySet("ア", pos, _QwertyKeys); // [413]
+        AddToKeySet("イ", pos, _QwertyKeys); // [414]
+        AddToKeySet("ウ", pos, _QwertyKeys); // [415]
+        AddToKeySet("エ", pos, _QwertyKeys); // [416]
+        AddToKeySet("オ", pos, _QwertyKeys); // [417]
+        AddToKeySet("カ", pos, _QwertyKeys); // [418]
+        AddToKeySet("キ", pos, _QwertyKeys); // [419]
+        AddToKeySet("ク", pos, _QwertyKeys); // [420]
+        AddToKeySet("ケ", pos, _QwertyKeys); // [421]
+        AddToKeySet("コ", pos, _QwertyKeys); // [422]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("サ", pos, _QwertyKeys); // [423]
+        AddToKeySet("シ", pos, _QwertyKeys); // [424]
+        AddToKeySet("ス", pos, _QwertyKeys); // [425]
+        AddToKeySet("セ", pos, _QwertyKeys); // [426]
+        AddToKeySet("ソ", pos, _QwertyKeys); // [427]
+        AddToKeySet("タ", pos, _QwertyKeys); // [428]
+        AddToKeySet("チ", pos, _QwertyKeys); // [429]
+        AddToKeySet("ツ", pos, _QwertyKeys); // [430]
+        AddToKeySet("テ", pos, _QwertyKeys); // [431]
+        AddToKeySet("ト", pos, _QwertyKeys); // [432]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("ナ", pos, _QwertyKeys); // [433]
+        AddToKeySet("ニ", pos, _QwertyKeys); // [434]
+        AddToKeySet("ヌ", pos, _QwertyKeys); // [435]
+        AddToKeySet("ネ", pos, _QwertyKeys); // [436]
+        AddToKeySet("ノ", pos, _QwertyKeys); // [437]
+        AddToKeySet("マ", pos, _QwertyKeys); // [438]
+        AddToKeySet("ミ", pos, _QwertyKeys); // [439]
+        AddToKeySet("ム", pos, _QwertyKeys); // [440]
+        AddToKeySet("メ", pos, _QwertyKeys); // [441]
+        AddToKeySet("モ", pos, _QwertyKeys); // [442]
+        UpdateCharRowPos(pos);
+
+        BuildShortcutRow(pos, _QwertyKeys, true); // [443 - 451]
+
+        pos = IntRect(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [452]
+
+        // page 2: 452 - 489
+        AddToKeySet("ァ", pos, _QwertyKeys); // [453]
+        AddToKeySet("ィ", pos, _QwertyKeys); // [454]
+        AddToKeySet("ゥ", pos, _QwertyKeys); // [455]
+        AddToKeySet("ェ", pos, _QwertyKeys); // [456]
+        AddToKeySet("ォ", pos, _QwertyKeys); // [457]
+        AddToKeySet("ガ", pos, _QwertyKeys); // [458]
+        AddToKeySet("ギ", pos, _QwertyKeys); // [459]
+        AddToKeySet("グ", pos, _QwertyKeys); // [460]
+        AddToKeySet("ゲ", pos, _QwertyKeys); // [461]
+        AddToKeySet("ゴ", pos, _QwertyKeys); // [462]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("ザ", pos, _QwertyKeys); // [463]
+        AddToKeySet("ジ", pos, _QwertyKeys); // [464]
+        AddToKeySet("ズ", pos, _QwertyKeys); // [465]
+        AddToKeySet("ゼ", pos, _QwertyKeys); // [466]
+        AddToKeySet("ゾ", pos, _QwertyKeys); // [467]
+        AddToKeySet("ダ", pos, _QwertyKeys); // [468]
+        AddToKeySet("ヂ", pos, _QwertyKeys); // [469]
+        AddToKeySet("ヅ", pos, _QwertyKeys); // [470]
+        AddToKeySet("デ", pos, _QwertyKeys); // [471]
+        AddToKeySet("ド", pos, _QwertyKeys); // [472]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("ラ", pos, _QwertyKeys); // [473]
+        AddToKeySet("リ", pos, _QwertyKeys); // [474]
+        AddToKeySet("ル", pos, _QwertyKeys); // [475]
+        AddToKeySet("レ", pos, _QwertyKeys); // [476]
+        AddToKeySet("ロ", pos, _QwertyKeys); // [477]
+        pos.leftTop.x += charKeyWidth;
+        AddToKeySet("ッ", pos, _QwertyKeys); // [478]
+        pos.leftTop.x += charKeyWidth;
+        AddToKeySet("・", pos, _QwertyKeys); // [479]
+        AddToKeySet("ー", pos, _QwertyKeys); // [480]
+        UpdateCharRowPos(pos);
+
+        BuildShortcutRow(pos, _QwertyKeys, true); // [481 - 489]
+
+        pos = IntRect(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [490]
+
+        // page 3: 490 - 527
+        AddToKeySet("ヤ", pos, _QwertyKeys); // [491]
+        AddToKeySet("ユ", pos, _QwertyKeys); // [492]
+        AddToKeySet("ヨ", pos, _QwertyKeys); // [493]
+        AddToKeySet("ワ", pos, _QwertyKeys); // [494]
+        AddToKeySet("ヲ", pos, _QwertyKeys); // [495]
+        AddToKeySet("ハ", pos, _QwertyKeys); // [496]
+        AddToKeySet("ヒ", pos, _QwertyKeys); // [497]
+        AddToKeySet("フ", pos, _QwertyKeys); // [498]
+        AddToKeySet("ヘ", pos, _QwertyKeys); // [499]
+        AddToKeySet("ホ", pos, _QwertyKeys); // [500]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("ャ", pos, _QwertyKeys); // [501]
+        AddToKeySet("ュ", pos, _QwertyKeys); // [502]
+        AddToKeySet("ョ", pos, _QwertyKeys); // [503]
+        AddToKeySet("ヮ", pos, _QwertyKeys); // [504]
+        AddToKeySet("ン", pos, _QwertyKeys); // [505]
+        AddToKeySet("バ", pos, _QwertyKeys); // [506]
+        AddToKeySet("ビ", pos, _QwertyKeys); // [507]
+        AddToKeySet("ブ", pos, _QwertyKeys); // [508]
+        AddToKeySet("ベ", pos, _QwertyKeys); // [509]
+        AddToKeySet("ボ", pos, _QwertyKeys); // [510]
+        UpdateCharRowPos(pos);
+
+        pos.leftTop.x += charKeyWidth;
+        AddToKeySet("ヵ", pos, _QwertyKeys); // [511]
+        AddToKeySet("ヶ", pos, _QwertyKeys); // [512]
+        AddToKeySet("ヴ", pos, _QwertyKeys); // [513]
+        pos.leftTop.x += charKeyWidth;
+        AddToKeySet("パ", pos, _QwertyKeys); // [514]
+        AddToKeySet("ピ", pos, _QwertyKeys); // [515]
+        AddToKeySet("プ", pos, _QwertyKeys); // [516]
+        AddToKeySet("ペ", pos, _QwertyKeys); // [517]
+        AddToKeySet("ポ", pos, _QwertyKeys); // [518]
+        UpdateCharRowPos(pos);
+
+        BuildShortcutRow(pos, _QwertyKeys, true); // [519 - 527]
+
+        isLoadingChars = false;
+    }
+
+    void KeyboardImpl::_InitQwertyOther(void)
+    {
+        // TODO: If needed in the future: Greek, Coptic, Latin Extensions, and Cyrillic
+    }
+
     void KeyboardImpl::_InitQwertySequence(void)
     {
         if (!_QwertyKeys.empty())
@@ -1674,6 +2058,24 @@ namespace CTRPluginFramework
                     _useJPN = false;
                     _useSymbols = false;
                     _useCaps = false;
+                }
+                else if (ret == KEY_JPN_TOGGLE)
+                {
+                    if (_QwertyKeys.size() < 298)
+                    {
+                        isLoadingChars = true;
+                        _DisplayLoadStatus.Start();
+
+                        _InitQwertyJPN(); // [209 - 248] [249 - 284] [285 - 321] [322 - 361] [362 - 386] [387 - 411]
+                        _InitQwertyJPNAlt(); // [412 - 451] [452 - 489] [490 - 527]
+                     }
+
+                    _useJPN = !_useJPN;
+                    _useNumRow = false;
+                    _useSymbols = false;
+                    _useCaps = false;
+
+                    _pageIndex = 0;
                 }
                 else if (ret == KEY_SYMBOLS_TOGGLE)
                 {
