@@ -1,5 +1,4 @@
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuExecuteLoop.hpp"
-#include "CTRPluginFrameworkImpl/Menu/MenuEntryFreeCheat.hpp"
 #include "CTRPluginFrameworkImpl/ActionReplay/MenuEntryActionReplay.hpp"
 
 #include <queue>
@@ -209,21 +208,6 @@ namespace CTRPluginFramework
             {
                 needToRemove = true;
             }
-            // Execute FreeCheat
-            /*else if (entry->IsFreeCheat())
-            {
-                MenuEntryFreeCheat *fc = reinterpret_cast<MenuEntryFreeCheat *>(entry);
-
-                if (fc->Func != nullptr)
-                    fc->Func(fc);
-            }*/
-            /*else if (entry->_type == ActionReplay)
-            {
-                MenuEntryActionReplay *ar = reinterpret_cast<MenuEntryActionReplay *>(entry);
-
-                if (ar->GameFunc != nullptr)
-                    ar->GameFunc((MenuEntry *)ar); ///< cast only to silence a warning
-            } */
         }
 
         if (needToRemove)

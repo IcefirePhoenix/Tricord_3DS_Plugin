@@ -152,7 +152,7 @@ namespace CTRPluginFramework
                     Renderer::MenuSelector(posX - 5, posY - 3, 330, 20);
                 }
 
-                // Draw Entry / EntryTools / FreeCheat
+                // Draw Entry / EntryTools
                 if (item->_type != MenuType::Folder)
                 {
                     _iconCallback(posX, posY);
@@ -335,20 +335,6 @@ namespace CTRPluginFramework
 
                         return (MenuEvent::EntrySelected);
                     }
-                    // MenuEntryFreeCheat
-                    /*else if (item->_type == MenuType::FreeCheat)
-                    {
-                        MenuEntryFreeCheat *e = reinterpret_cast<MenuEntryFreeCheat *>(item);
-
-                        bool state = e->TriggerState();
-
-                        if (state)
-                            PluginMenuExecuteLoop::Add(e);
-                        else
-                            PluginMenuExecuteLoop::Remove(e);
-
-                        return (MenuEvent::EntrySelected);
-                    } */
                     // MenuEntryActionReplay
                     else if (item->_type == MenuType::ActionReplay)
                     {

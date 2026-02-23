@@ -12,8 +12,7 @@ namespace CTRPluginFramework
         Entry,
         EntryLabel,
         EntryTools,
-        ActionReplay,
-        FreeCheat
+        ActionReplay
     };
 
     struct ItemFlags
@@ -77,11 +76,6 @@ namespace CTRPluginFramework
         bool    IsEntryTools(void) const
         {
             return (_type == EntryTools);
-        }
-
-        bool    IsFreeCheat(void) const
-        {
-            return (_type == FreeCheat);
         }
 
         MenuEntryImpl &AsMenuEntryImpl(void)
