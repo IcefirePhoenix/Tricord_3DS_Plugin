@@ -105,12 +105,6 @@ namespace CTRPluginFramework
         void    SetError(std::string error) const;
 
         /**
-         * \brief Selects and scroll to the specified entry, must be called after Populate
-         * \param entry Entry index to select, -1 to deselect all.
-         */
-        void	ChangeSelectedEntry(int entry);
-
-        /**
          * @brief Gets the last selected entry before the keyboard was closed
          *
          * @return Last selected entry, or -1 if none was selected.

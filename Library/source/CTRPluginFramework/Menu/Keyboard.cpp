@@ -267,11 +267,6 @@ namespace CTRPluginFramework
         _keyboard->SetCompareCallback(callback);
     }
 
-    void Keyboard::ChangeSelectedEntry(int entry)
-    {
-        _keyboard->ChangeSelectedEntry(entry);
-    }
-
     int Keyboard::GetLastSelectedEntry()
     {
         return _keyboard->GetSelectedEntry();
@@ -316,7 +311,8 @@ namespace CTRPluginFramework
             _isPopulated = false;
         }
 
-        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
+        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
+
         if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(2);
@@ -346,7 +342,7 @@ namespace CTRPluginFramework
             _isPopulated = false;
         }
 
-        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
+        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
         std::string &input = _keyboard->GetInput();
         if (_hexadecimal && _keyboard->GetMax() == 0)
         {
@@ -383,7 +379,7 @@ namespace CTRPluginFramework
             _isPopulated = false;
         }
 
-        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
+        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
         if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(4);
@@ -413,7 +409,7 @@ namespace CTRPluginFramework
             _isPopulated = false;
         }
 
-        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
+        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
         std::string &input = _keyboard->GetInput();
         if (_hexadecimal && _keyboard->GetMax() == 0)
         {
@@ -450,7 +446,7 @@ namespace CTRPluginFramework
             _isPopulated = false;
         }
 
-        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
+        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
         if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(8);
@@ -480,7 +476,7 @@ namespace CTRPluginFramework
             _isPopulated = false;
         }
 
-        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
+        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
         std::string &input = _keyboard->GetInput();
         if (_hexadecimal && _keyboard->GetMax() == 0)
         {
@@ -517,7 +513,7 @@ namespace CTRPluginFramework
             _isPopulated = false;
         }
 
-        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
+        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
         if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(16);
@@ -547,7 +543,7 @@ namespace CTRPluginFramework
             _isPopulated = false;
         }
 
-        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL : Layout::DECIMAL);
+        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
         std::string &input = _keyboard->GetInput();
         if (_hexadecimal && _keyboard->GetMax() == 0)
         {
@@ -766,4 +762,4 @@ namespace CTRPluginFramework
     {
         _keyboard->OnKeyboardEvent(callback);
     }
-} // namespace CTRPluginFramework
+}

@@ -168,6 +168,9 @@ namespace CTRPluginFramework
 
         // Set _runningInstance to this menu
         _runningInstance = this;
+
+        KeyboardImpl::InitKeyboards();
+
         FwkSettings::SetBottomScreenBackground(BottomBG_bin);
 
         Preferences::LoadSettings();

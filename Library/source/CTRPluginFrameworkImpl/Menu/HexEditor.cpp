@@ -40,7 +40,7 @@ namespace CTRPluginFramework
         _indexHistory = -1;
 
         // Construct keyboard
-        _keyboard.SetLayout(Layout::HEXADECIMAL);
+        _keyboard.SetLayout(Layout::HEXADECIMAL_LITE);
         _keyboard._showCursor = false;
 
         __g_hexEditor = this;
@@ -65,17 +65,6 @@ namespace CTRPluginFramework
 
     bool    HexEditor::operator()(EventList &eventList)
     {
-        static bool     keysAreDisabled = false;
-
-        if (!keysAreDisabled)
-        {
-            // Disable clear key
-            _keyboard._keys->at(15).Enable(false);
-            // Disable enter key
-            _keyboard._keys->at(16).Enable(false);
-            keysAreDisabled = true;
-        }
-
         // Process events
         bool isSubMenuOpen = _submenu.IsOpen();
 
@@ -104,23 +93,13 @@ namespace CTRPluginFramework
             else if (!subchoice--)    _JumpTo(JumpToValue);
             else if (!subchoice--)    ///< Converter
             {
-                // Enable clear key
-                _keyboard._keys->at(15).Enable(true);
-                // Enable enter key
-                _keyboard._keys->at(16).Enable(true);
-
                 Converter *conv = Converter::Instance();
 
                 if (conv)
                 {
                     Item& item = _GetSelectedItem();
                     (*conv)(item.value32);
-                }
-
-                // Disable clear key
-                _keyboard._keys->at(15).Enable(false);
-                // Disable enter key
-                _keyboard._keys->at(16).Enable(false);
+                };
             }
             else if (!subchoice--)  _MoveBackward();
             else if (!subchoice--)  _MoveForward();
@@ -147,15 +126,10 @@ namespace CTRPluginFramework
 
         if (Window::BottomWindow.MustClose())
         {
-            // Enable clear key
-            _keyboard._keys->at(15).Enable(true);
-            // Enable enter key
-            _keyboard._keys->at(16).Enable(true);
-            keysAreDisabled = false;
-            return (true);
+            return true;
         }
 
-        return (false);
+        return false;
     }
 
     u32     HexEditor::GetCursorAddress(void)
@@ -522,10 +496,6 @@ namespace CTRPluginFramework
 
         u32 address = mode == 0 ? _ctx._address : 0;
 
-        // Enable clear key
-        _keyboard._keys->at(15).Enable(true);
-        // Enable enter key
-        _keyboard._keys->at(16).Enable(true);
         // Enable cursor
         _keyboard._showCursor = true;
 
@@ -535,10 +505,6 @@ namespace CTRPluginFramework
         else if (mode == JumpRelative)
             address += _ctx._cursorAddress;
 
-        // Disable clear key
-        _keyboard._keys->at(15).Enable(false);
-        // Disable enter key
-        _keyboard._keys->at(16).Enable(false);
         // Disable cursor
         _keyboard._showCursor = false;
 
