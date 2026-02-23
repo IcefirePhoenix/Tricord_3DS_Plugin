@@ -14,13 +14,21 @@ namespace CTRPluginFramework
     #define SLEEP_ABORT -2
     #define KEY_ENTER 0xA
     #define KEY_BACKSPACE 0x8
-    #define KEY_SYMBOLS -2
-    #define KEY_CAPS -3
-    #define KEY_SMILEY -4
+    #define KEY_PREV_PAGE -3
+    #define KEY_NEXT_PAGE -4
     #define KEY_SPACE -5
-    #define KEY_SYMBOLS_PAGE -6
-    #define KEY_NINTENDO_PAGE -7
-    #define KEY_PLUS_MINUS -8
+    #define KEY_CAPS -6
+    #define KEY_PLUS_MINUS -7
+    #define KEY_ASCII_TOGGLE -8
+    #define KEY_NUM_TOGGLE -10
+    int charKeyWidth = 25,
+        charKeyHeight = 32,
+        charKeyboardStartX = 35,
+        digitKeyWidthLen = 38,
+        activeKeySetStartIndex = 0,
+        activeKeySetEndIndex = 37;
+
+    IntRect backspaceKeyPos(252, 17, 25, 16);
 
     std::vector<TouchKey> KeyboardImpl::_DecimalKeys;
     std::vector<TouchKey> KeyboardImpl::_HexadecimalFullKeys;
@@ -31,152 +39,39 @@ namespace CTRPluginFramework
 
     KeyboardImpl::KeyboardImpl(const std::string &text) : submitBtn(Button(Button::GameFont, "Submit", IntRect(190, 200, 120, 32), Icon::DrawMenuButton))
     {
-        _owner = nullptr;
-
-
         _title = "";
         _text = text;
         _error = "";
         _userInput = "";
-        _canChangeLayout = false;
-        _canAbort = true;
-        _isOpen = false;
-        _userAbort = false;
-        _mustRelease = false;
-        _useCaps = false;
-        _useSymbols = false;
-        _useNintendo = false;
-        _errorMessage = false;
-        _askForExit = false;
-        _isHex = false;
-        _offset = 0.f;
-        _max = 0;
-        _layout = HEXADECIMAL_FULL;
-        _cursorPositionInString = 0;
-        _cursorPositionOnScreen = 0;
-        _showCursor = true;
-        _keys = nullptr;
-        _convert = nullptr;
-        _compare = nullptr;
-        _onKeyboardEvent = nullptr;
-
-        _customKeyboard = false;
-        _displayScrollbar = false;
-        _currentPosition = 0;
-        _scrollbarSize = 0;
         _scrollCursorSize = 10;
-        _scrollPadding = 0.f;
-        _scrollJump = 0.f;
-        _scrollSize = 0.f;
-        _scrollPosition = 0.f;
-        _inertialVelocity = 0.f;
-        _scrollStart = 0.f;
-        _scrollEnd = 0.f;
-
-        _symbolsPage = 0;
-        _nintendoPage = 0;
-
-
         DisplayTopScreen = true;
+
+        // submitBtn.SetAcceptSoundEvent(SoundEngine::Event::ACCEPT);
     }
 
     KeyboardImpl::KeyboardImpl(const std::string &title, const std::string &text) : submitBtn(Button(Button::GameFont, "Submit", IntRect(190, 200, 120, 32), Icon::DrawMenuButton))
     {
-        _owner = nullptr;
-
         _title = title;
         _text = text;
         _error = "";
         _userInput = "";
-        _canChangeLayout = false;
-        _canAbort = true;
-        _isOpen = false;
-        _userAbort = false;
-        _mustRelease = false;
-        _useCaps = false;
-        _useSymbols = false;
-        _useNintendo = false;
-        _errorMessage = false;
-        _askForExit = false;
-        _isHex = false;
-        _offset = 0.f;
-        _max = 0;
-        _layout = HEXADECIMAL_FULL;
-        _cursorPositionInString = 0;
-        _cursorPositionOnScreen = 0;
-        _showCursor = true;
-        _keys = nullptr;
-        _convert = nullptr;
-        _compare = nullptr;
-        _onKeyboardEvent = nullptr;
-
-        _customKeyboard = false;
-        _displayScrollbar = false;
-        _currentPosition = 0;
-        _scrollbarSize = 0;
         _scrollCursorSize = 10;
-        _scrollPadding = 0.f;
-        _scrollJump = 0.f;
-        _scrollSize = 0.f;
-        _scrollPosition = 0.f;
-        _inertialVelocity = 0.f;
-        _scrollStart = 0.f;
-        _scrollEnd = 0.f;
-
-        _symbolsPage = 0;
-        _nintendoPage = 0;
-
         DisplayTopScreen = true;
+
+        // submitBtn.SetAcceptSoundEvent(SoundEngine::Event::ACCEPT);
     }
 
     KeyboardImpl::KeyboardImpl(Keyboard *kb, const std::string &title, const std::string &text) : submitBtn(Button(Button::GameFont, "Submit", IntRect(190, 200, 120, 32), Icon::DrawMenuButton))
     {
         _owner = kb;
-
         _title = title;
         _text = text;
         _error = "";
         _userInput = "";
-        _canChangeLayout = false;
-        _canAbort = true;
-        _isOpen = false;
-        _userAbort = false;
-        _mustRelease = false;
-        _useCaps = false;
-        _useSymbols = false;
-        _useNintendo = false;
-        _errorMessage = false;
-        _askForExit = false;
-        _isHex = false;
-        _offset = 0.f;
-        _max = 0;
-        _layout = HEXADECIMAL_FULL;
-        _cursorPositionInString = 0;
-        _cursorPositionOnScreen = 0;
-        _showCursor = true;
-
-        _convert = nullptr;
-        _compare = nullptr;
-        _onKeyboardEvent = nullptr;
-        _keys = nullptr;
-
-        _customKeyboard = false;
-        _displayScrollbar = false;
-        _currentPosition = 0;
-        _scrollbarSize = 0;
         _scrollCursorSize = 10;
-        _scrollPadding = 0.f;
-        _scrollJump = 0.f;
-        _scrollSize = 0.f;
-        _scrollPosition = 0.f;
-        _inertialVelocity = 0.f;
-        _scrollStart = 0.f;
-        _scrollEnd = 0.f;
-
-        _symbolsPage = 0;
-        _nintendoPage = 0;
-
         DisplayTopScreen = true;
+
+        // submitBtn.SetAcceptSoundEvent(SoundEngine::Event::ACCEPT);
     }
 
     KeyboardImpl::~KeyboardImpl(void)
@@ -187,12 +82,15 @@ namespace CTRPluginFramework
 
     void KeyboardImpl::InitKeyboards(void)
     {
+        _InitQwertySequence();
         _InitDecimalKeyboard();
         _InitHexFullKeyboard();
         _InitHexLiteKeyboard();
     };
+
+    void    KeyboardImpl::SetLayout(Layout layout)
     {
-        _canChangeLayout = false; ///< Reset state
+        _canChangeLayout = false;
         _layout = layout;
         _isHex = false;
         _userInput.clear();
@@ -200,7 +98,7 @@ namespace CTRPluginFramework
         switch (_layout)
         {
             case QWERTY:
-                _Qwerty();
+                _keys = &_QwertyKeys;
                 break;
             case DECIMAL:
                 _keys = &_DecimalKeys;
@@ -282,32 +180,6 @@ namespace CTRPluginFramework
     void    KeyboardImpl::OnKeyboardEvent(OnEventCallback callback)
     {
         _onKeyboardEvent = callback;
-    }
-
-    void	KeyboardImpl::ChangeSelectedEntry(int entry) {
-        if (!_customKeyboard)
-            return;
-        if (!_strKeys.size() || entry >= static_cast<int>(_strKeys.size()) || !_strKeys[entry]->CanUse())
-            entry = -1;
-        _ChangeManualKey(entry, false);
-        // Update the position
-        if (entry != -1 && _displayScrollbar) {
-            int keyRow = _manualKey / (_isIconKeyboard ? 4 : 1);
-            int positionRow = _currentPosition / (_isIconKeyboard ? 4 : 1);
-
-            if (keyRow > positionRow + 6 - 2) {
-                positionRow = keyRow - 4;
-                _scrollSize = ((positionRow * 36.01f) + 15) / _scrollJump - _scrollPosition;
-                _manualScrollUpdate = true;
-                _UpdateScroll(0.f, true);
-            }
-            else if (keyRow < positionRow + 1) {
-                positionRow = std::max(keyRow, 0);
-                _scrollSize = ((positionRow * 36.01f) - 15) / _scrollJump - _scrollPosition;
-                _manualScrollUpdate = true;
-                _UpdateScroll(0.f, true);
-            }
-        }
     }
 
     void    KeyboardImpl::ChangeEntrySound(int entry, SoundEngine::Event soundEvent)
@@ -437,17 +309,14 @@ namespace CTRPluginFramework
         // Construct keyboard
         if (!_customKeyboard)
         {
-            if (_layout == QWERTY) _Qwerty();
-            else if (_layout == DECIMAL) _Decimal();
-            else if (_layout == HEXADECIMAL) _Hexadecimal();
-
-            // unlock enter and clear button if hex editor blocked them
-            if((!_keys->at(15).IsEnabled() || !_keys->at(16).IsEnabled()) && _mustRelease && (_layout == DECIMAL || _layout == HEXADECIMAL))
-            {
-                _keys->at(15).Enable(true);
-                _keys->at(16).Enable(true);
-                wasKeysLocked = true;
-            }
+            if (_layout == QWERTY)
+                _keys = &_QwertyKeys;
+            else if (_layout == DECIMAL)
+                _keys = &_DecimalKeys;
+            else if (_layout == HEXADECIMAL_FULL)
+                _keys = &_HexadecimalFullKeys;
+            else if (_layout == HEXADECIMAL_LITE)
+                _keys = &_HexadecimalLiteKeys;
         }
 
         // Check start input
@@ -473,14 +342,13 @@ namespace CTRPluginFramework
                 }
             }
 
-            // Update current keys
             _Update(clock.Restart().AsSeconds());
 
-            // Render Top Screen
             if (DisplayTopScreen)
                 _RenderTop();
-            // Render Bottom Screen
+
             _RenderBottom();
+
             Renderer::EndFrame();
 
             if (submitBtn())
@@ -631,78 +499,15 @@ namespace CTRPluginFramework
                     key.Draw();
                 }
 
-                if (_layout == Layout::HEXADECIMAL_FULL)
-                    Renderer::DrawLine(182, 45, 1, Color::DeepGold, 140);
-                else
-                    Renderer::DrawLine(182, 40, 1, Color::DeepGold, 138);
+                Renderer::DrawLine(182, 45, 1, Color::DeepGold, 140);
             }
             else
             {
-                // Symbols
-                if (_useSymbols)
+                _UpdateActiveKeyIndexes();
+
+                for (int i = activeKeySetStartIndex; i <= activeKeySetEndIndex; i++)
                 {
-                    int start;
-                    int end;
-
-                    if (!_symbolsPage)
-                    {
-                        start = 72;
-                        end = 109;
-                    }
-                    else
-                    {
-                        start = 109;
-                        end = 147;
-                    }
-
-                    for (; start < end; start++)
-                    {
-                        (*_keys)[start].Draw();
-                    }
-                }
-                // Nintendo
-                else if (_useNintendo)
-                {
-                    int start;
-                    int end;
-
-                    if (!_nintendoPage)
-                    {
-                        start = 147;
-                        end = 182;
-                    }
-                    else
-                    {
-                        start = 182;
-                        end = 217;
-                    }
-
-                    for (; start < end; start++)
-                    {
-                        (*_keys)[start].Draw();
-                    }
-                }
-                // Letters
-                else
-                {
-                    // Upper Case
-                    if (_useCaps)
-                    {
-                        /*36 - 71*/
-                        for (int i = 36; i < 72; i++)
-                        {
-                            (*_keys)[i].Draw();
-                        }
-                    }
-                    // Lower Case
-                    else
-                    {
-                        /* 0 - 35*/
-                        for (int i = 0; i < 36; i++)
-                        {
-                            (*_keys)[i].Draw();
-                        }
-                    }
+                    (*_keys)[i].Draw();
                 }
             }
         }
@@ -910,11 +715,8 @@ namespace CTRPluginFramework
                 _inertialVelocity = 0.f;
             }
 
-
             _inertialVelocity += (0.98f) * delta;
-
             _inertialVelocity *= INERTIA_ACCELERATION;
-
             _currentPosition = (_scrollPosition * _scrollJump) / 36; //(_scrollPosition / 36);
 
             if (std::abs(_inertialVelocity) < INERTIA_THRESHOLD)
@@ -936,66 +738,134 @@ namespace CTRPluginFramework
         }
     }
 
-    void    KeyboardImpl::_Update(float delta)
+    void KeyboardImpl::_UpdateActiveKeyIndexes(void)
     {
-		bool			isTouchDown = Touch::IsDown();
-		IntVector		touchPos(Touch::GetPosition());
+        // Numbers: [76 - 93]
+        if (_useNumRow)
+        {
+            activeKeySetStartIndex = 76;
+            activeKeySetEndIndex = 93;
+        }
+        // JPN: [209 - 248] [249 - 284] [285 - 321] [322 - 361] [362 - 386] [387 - 411] | [412 - 451] [452 - 489] [490 - 527]
+        else if (_useJPN)
+        {
+            switch (_pageIndex)
+            {
+                case 0:
+                    if (_useCaps)
+                    {
+                        activeKeySetStartIndex = 412;
+                        activeKeySetEndIndex = 451;
+                    }
+                    else
+                    {
+                        activeKeySetStartIndex = 209;
+                        activeKeySetEndIndex = 248;
+                    }
+                    break;
+                case 1:
+                    if (_useCaps)
+                    {
+                        activeKeySetStartIndex = 452;
+                        activeKeySetEndIndex = 489;
+                    }
+                    else
+                    {
+                        activeKeySetStartIndex = 249;
+                        activeKeySetEndIndex = 284;
+                    }
+                    break;
+                case 2:
+                    if (_useCaps)
+                    {
+                        activeKeySetStartIndex = 490;
+                        activeKeySetEndIndex = 527;
+                    }
+                    else
+                    {
+                        activeKeySetStartIndex = 285;
+                        activeKeySetEndIndex = 321;
+                    }
+                    break;
+                case 3:
+                    activeKeySetStartIndex = 322;
+                    activeKeySetEndIndex = 361;
+                    break;
+                case 4:
+                    activeKeySetStartIndex = 362;
+                    activeKeySetEndIndex = 386;
+                    break;
+                case 5:
+                    activeKeySetStartIndex = 387;
+                    activeKeySetEndIndex = 411;
+                    break;
+                default:
+                    _pageIndex = 0;
+                    activeKeySetStartIndex = 209;
+                    activeKeySetEndIndex = 248;
+                    break;
+            }
+        }
+        // Symbols: [94 - 133] [134 - 173] [174 - 208]
+        else if (_useSymbols)
+        {
+            switch (_pageIndex)
+            {
+                case 0:
+                    activeKeySetStartIndex = 94;
+                    activeKeySetEndIndex = 133;
+                    break;
+                case 1:
+                    activeKeySetStartIndex = 134;
+                    activeKeySetEndIndex = 173;
+                    break;
+                case 2:
+                    activeKeySetStartIndex = 174;
+                    activeKeySetEndIndex = 208;
+                    break;
+                default:
+                    _pageIndex = 0;
+                    activeKeySetStartIndex = 94;
+                    activeKeySetEndIndex = 133;
+                    break;
+            }
+        }
+        // Letters: [0 - 75]
+        else
+        {
+            // Uppercase: [38 - 75]
+            if (_useCaps)
+            {
+                activeKeySetStartIndex = 38;
+                activeKeySetEndIndex = 75;
+            }
+            // Lowercase: [0 - 37]
+            else
+            {
+                activeKeySetStartIndex = 0;
+                activeKeySetEndIndex = 37;
+            }
+        }
+    }
+
+    void KeyboardImpl::_Update(float delta)
+    {
+		bool isTouchDown = Touch::IsDown();
+		IntVector touchPos(Touch::GetPosition());
 
         submitBtn.Update(isTouchDown, touchPos);
 
         if (!_customKeyboard)
         {
-            int start = 0;
-            int end = _keys->size();
+            activeKeySetStartIndex = 0;
+            activeKeySetEndIndex = _keys->size() - 1;
 
             if (_layout == Layout::QWERTY)
             {
-                // Symbols
-                if (_useSymbols)
-                {
-                    if (!_symbolsPage)
-                    {
-                        start = 72;
-                        end = 109;
-                    }
-                    else
-                    {
-                        start = 109;
-                        end = 147;
-                    }
-                }
-                // Nintendo
-                else if (_useNintendo)
-                {
-                    if (!_nintendoPage)
-                    {
-                        start = 147;
-                        end = 182;
-                    }
-                    else
-                    {
-                        start = 182;
-                        end = 217;
-                    }
-                }
-                else
-                {
-                    // Upper Case
-                    if (_useCaps)
-                    {
-                        start = 36;
-                        end = 72;
-                    }
-                    // Lower Case
-                    else
-                    {
-                        start = 0;
-                        end = 36;
-                    }
-                }
+                _UpdateActiveKeyIndexes();
             }
 
-            for (int i = start; i < end; i++)
+            for (int i = activeKeySetStartIndex; i <= activeKeySetEndIndex; i++)
             {
                 (*_keys)[i].Update(isTouchDown, touchPos);
             }
@@ -1013,429 +883,315 @@ namespace CTRPluginFramework
         Window::BottomWindow.Update(isTouchDown, touchPos);
     }
 
-    /*
-    ** _keys:
-    **
-    ** [0] = 'Q'
-    ** [1] = 'W'
-    ** [2] = 'E'
-    ** [3] = 'R'
-    ** [4] = 'T'
-    ** [5] = 'Y'
-    ** [6] = 'U'
-    ** [7] = 'I'
-    ** [8] = 'O'
-    ** [9] = 'P'
-    ** [10] = 'KEY_BACKSPACE'
-
-    ** First Line : 11 keys **
-
-    ** [11] = 'A'
-    ** [12] = 'S'
-    ** [13] = 'D'
-    ** [14] = 'F'
-    ** [15] = 'G'
-    ** [16] = 'H'
-    ** [17] = 'J'
-    ** [18] = 'K'
-    ** [19] = 'L'
-    ** [20] = '''
-    ** [21] = 'KEY_ENTER'
-
-    ** Second Line : 11 keys **
-
-     ** [22] = 'CAPS'
-     ** [23] = 'Z'
-     ** [24] = 'X'
-     ** [25] = 'C'
-     ** [26] = 'V'
-     ** [27] = 'B'
-     ** [28] = 'N'
-     ** [29] = 'M'
-     ** [30] = ','
-     ** [31] = '.'
-     ** [32] = '?'
-     *
-     ** Third Line : 11 keys **
-
-     ** [33] = 'KEY_SYMBOL'
-     ** [34] = 'SMILEY'
-     ** [35] = 'SPACE'
-     *
-     ** Fourth Line : 3 keys **
-    *************************/
-
-    void    KeyboardImpl::_QwertyLowCase(void)
+    void AddToKeySet(const std::string &value, IntRect &pos, std::vector<TouchKey> &keys)
     {
-        // Key rectangle
-        IntRect pos(20, 36, 25, 40);
-
-        /*low case*/
-        _QwertyKeys.emplace_back('q', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('w', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('e', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('r', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('t', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('y', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('u', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('i', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('o', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('p', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, pos);
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 76;
-
-        _QwertyKeys.emplace_back('a', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('s', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('d', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('f', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('g', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('h', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('j', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('k', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('l', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('\'', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(KEY_ENTER, Icon::DrawEnterKey, pos);
-        _QwertyKeys.back().SetAcceptSoundEvent(SoundEngine::Event::ACCEPT);
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 116;
-
-        _QwertyKeys.emplace_back(KEY_CAPS, Icon::DrawCapsLockOn, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('z', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('x', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('c', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('v', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('b', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('n', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('m', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(',', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('.', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('?', pos);
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 156;
-
-        pos.size.x = 40;
-        _QwertyKeys.emplace_back("+=@", pos, KEY_SYMBOLS); pos.leftTop.x += 40;
-        _QwertyKeys.emplace_back("\uE008", pos, KEY_SMILEY); pos.leftTop.x += 40;
-        pos.size.x = 120;
-        _QwertyKeys.emplace_back("\uE057", pos, KEY_SPACE);
+        keys.emplace_back(value, pos);
+        pos.leftTop.x += charKeyWidth;
     }
 
-    void    KeyboardImpl::_QwertyUpCase(void)
+    void BuildShortcutRow(IntRect &pos, std::vector<TouchKey> &keys, bool addPageBtns)
     {
-        // Key rectangle
-        IntRect pos(20, 36, 25, 40);
+        int shortcutKeyWidth = 67;
+        int spaceWidth = addPageBtns ? 125 : 200;
 
-        /*low case*/
-        _QwertyKeys.emplace_back('Q', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('W', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('E', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('R', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('T', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('Y', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('U', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('I', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('O', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('P', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, pos);
+        pos.leftTop.x = charKeyboardStartX;
 
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 76;
+        keys.emplace_back(KEY_CAPS, Icon::DrawCapsLockOn, pos);
 
-        _QwertyKeys.emplace_back('A', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('S', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('D', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('F', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('G', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('H', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('J', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('K', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('L', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('"', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(KEY_ENTER, Icon::DrawEnterKey, pos);
-        _QwertyKeys.back().SetAcceptSoundEvent(SoundEngine::Event::ACCEPT);
+        pos.leftTop.x += charKeyWidth;
+        pos.size.x = spaceWidth;
 
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 116;
+        keys.emplace_back("____", pos, KEY_SPACE);
 
-        _QwertyKeys.emplace_back(KEY_CAPS, Icon::DrawCapsLockOn, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('Z', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('X', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('C', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('V', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('B', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('N', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('M', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(';', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(':', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('!', pos);
+        pos.leftTop.x += spaceWidth;
 
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 156;
+        if (addPageBtns)
+        {
+            pos.size.x = 48;
 
-        pos.size.x = 40;
-        _QwertyKeys.emplace_back("+=@", pos, KEY_SYMBOLS); pos.leftTop.x += 40;
-        _QwertyKeys.emplace_back("\uE008", pos, KEY_SMILEY); pos.leftTop.x += 40;
-        pos.size.x = 120;
-        _QwertyKeys.emplace_back("\uE057", pos, KEY_SPACE);
+            keys.emplace_back("Prev", pos, KEY_PREV_PAGE);
+            pos.leftTop.x += shortcutKeyWidth;
+            keys.emplace_back("Next", pos, KEY_NEXT_PAGE);
+            pos.leftTop.x += shortcutKeyWidth;
+        }
+
+        pos.leftTop.x = 23;
+        pos.leftTop.y += charKeyHeight;
+
+        pos.size.x = shortcutKeyWidth;
+        pos.size.y = charKeyHeight - 5;
+
+        keys.emplace_back("Aa", pos, KEY_ASCII_TOGGLE);
+        pos.leftTop.x += shortcutKeyWidth;
+        keys.emplace_back("0-9", pos, KEY_NUM_TOGGLE);
+        pos.leftTop.x += shortcutKeyWidth;
+        keys.emplace_back("\uE073", pos, KEY_SYMBOLS_TOGGLE);
+        pos.leftTop.x += shortcutKeyWidth;
+        keys.emplace_back("JPN", pos, KEY_JPN_TOGGLE);
+        pos.leftTop.x += shortcutKeyWidth;
+
+        pos.size.x = 0;
+        pos.size.y = 0;
+
+        keys.emplace_back("", pos, KEY_JPN_TOGGLE); // Placeholder in case KEY_OTHER_TOGGLE is impl'd
     }
 
-    void KeyboardImpl::_QwertySymbols(void)
+    void UpdateCharRowPos(IntRect &pos)
     {
-        // Key rectangle
-        IntRect pos(20, 36, 25, 40);
-
-        /*page 1*/
-        _QwertyKeys.emplace_back('?', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('!', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('@', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('#', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('$', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('%', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('&', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('1', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('2', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('3', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, pos);
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 76;
-
-        _QwertyKeys.emplace_back('(', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(')', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('-', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('_', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('=', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\u00F7", pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('+', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('4', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('5', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('6', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(KEY_ENTER, Icon::DrawEnterKey, pos);
-        _QwertyKeys.back().SetAcceptSoundEvent(SoundEngine::Event::ACCEPT);
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 116;
-
-        _QwertyKeys.emplace_back("\u2192", pos, KEY_SYMBOLS_PAGE); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('\\', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(';', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(':', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('"', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('*', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('/', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('7', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('8', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('9', pos);
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 156;
-
-        pos.size.x = 40;
-        _QwertyKeys.emplace_back("+=@", pos, KEY_SYMBOLS); pos.leftTop.x += 40;
-        _QwertyKeys.emplace_back("\uE008", pos, KEY_SMILEY); pos.leftTop.x += 40;
-        pos.size.x = 120;
-        _QwertyKeys.emplace_back("\uE057", pos, KEY_SPACE); pos.leftTop.x += 120;
-        pos.size.x = 25;
-        _QwertyKeys.emplace_back('0', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('.', pos);
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 36;
-
-        /*page 2*/
-        _QwertyKeys.emplace_back("\u2022", pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\u00A9", pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\u20AC", pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\u00A3", pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\u00A5", pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\u00B5", pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\u00A7", pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('1', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('2', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('3', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, pos);
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 76;
-
-        _QwertyKeys.emplace_back("\u2122", pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('<', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('>', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('[', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(']', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('{', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('}', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('4', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('5', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('6', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(KEY_ENTER, Icon::DrawEnterKey, pos);
-        _QwertyKeys.back().SetAcceptSoundEvent(SoundEngine::Event::ACCEPT);
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 116;
-
-        _QwertyKeys.emplace_back("\u2190", pos, KEY_SYMBOLS_PAGE); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('|', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\u00B2", pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('`', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\u00B0", pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('~', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('^', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('7', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('8', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('9', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\u00B1", pos);
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 156;
-
-        pos.size.x = 40;
-        _QwertyKeys.emplace_back("+=@", pos, KEY_SYMBOLS); pos.leftTop.x += 40;
-        _QwertyKeys.emplace_back("\uE008", pos, KEY_SMILEY); pos.leftTop.x += 40;
-        pos.size.x = 120;
-        _QwertyKeys.emplace_back("\uE057", pos, KEY_SPACE); pos.leftTop.x += 120;
-        pos.size.x = 25;
-        _QwertyKeys.emplace_back('0', pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back('.', pos);
+        pos.leftTop.x = charKeyboardStartX;
+        pos.leftTop.y += charKeyHeight;
     }
 
-    void KeyboardImpl::_QwertyNintendo()
+    void KeyboardImpl::_InitQwertyLowercase(void)
     {
-        // Key rectangle
-        IntRect pos(20, 36, 25, 40);
+        IntRect pos(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
 
-        /*page 1*/
-        _QwertyKeys.emplace_back("\uE000" /* A */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE001" /* B */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE002" /* X */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE003" /* Y */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE004" /* L */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE005" /* R */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE054" /* ZL */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE055" /* ZR */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE006" /* DPAD */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE041" /* DPAD Wii*/, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, pos);
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [0]
 
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 76;
+        AddToKeySet("q", pos, _QwertyKeys); // [1]
+        AddToKeySet("w", pos, _QwertyKeys); // [2]
+        AddToKeySet("e", pos, _QwertyKeys); // [3]
+        AddToKeySet("r", pos, _QwertyKeys); // [4]
+        AddToKeySet("t", pos, _QwertyKeys); // [5]
+        AddToKeySet("y", pos, _QwertyKeys); // [6]
+        AddToKeySet("u", pos, _QwertyKeys); // [7]
+        AddToKeySet("i", pos, _QwertyKeys); // [8]
+        AddToKeySet("o", pos, _QwertyKeys); // [9]
+        AddToKeySet("p", pos, _QwertyKeys); // [10]
+        UpdateCharRowPos(pos);
 
-        _QwertyKeys.emplace_back("\uE04C" /* a */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE04D" /* b */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE04E" /* x */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE04F" /* y */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE052" /* l */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE053" /* r */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE050" /* L Stick */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE051" /* R Stick */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE042" /* A Wii */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE043" /* B Wii */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(KEY_ENTER, Icon::DrawEnterKey, pos);
-        _QwertyKeys.back().SetAcceptSoundEvent(SoundEngine::Event::ACCEPT);
+        AddToKeySet("a", pos, _QwertyKeys);  // [11]
+        AddToKeySet("s", pos, _QwertyKeys);  // [12]
+        AddToKeySet("d", pos, _QwertyKeys);  // [13]
+        AddToKeySet("f", pos, _QwertyKeys);  // [14]
+        AddToKeySet("g", pos, _QwertyKeys);  // [15]
+        AddToKeySet("h", pos, _QwertyKeys);  // [16]
+        AddToKeySet("j", pos, _QwertyKeys);  // [17]
+        AddToKeySet("k", pos, _QwertyKeys);  // [18]
+        AddToKeySet("l", pos, _QwertyKeys);  // [19]
+        AddToKeySet("\"", pos, _QwertyKeys); // [20]
+        UpdateCharRowPos(pos);
 
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 116;
+        AddToKeySet("z", pos, _QwertyKeys); // [21]
+        AddToKeySet("x", pos, _QwertyKeys); // [22]
+        AddToKeySet("c", pos, _QwertyKeys); // [23]
+        AddToKeySet("v", pos, _QwertyKeys); // [24]
+        AddToKeySet("b", pos, _QwertyKeys); // [25]
+        AddToKeySet("n", pos, _QwertyKeys); // [26]
+        AddToKeySet("m", pos, _QwertyKeys); // [27]
+        AddToKeySet(",", pos, _QwertyKeys); // [28]
+        AddToKeySet(".", pos, _QwertyKeys); // [29]
+        AddToKeySet("?", pos, _QwertyKeys); // [30]
+        UpdateCharRowPos(pos);
 
-        _QwertyKeys.emplace_back("\u2192", pos, KEY_NINTENDO_PAGE); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE040" /* Power */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE044" /* Home */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE045" /* + */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE046" /* - */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE047" /* 1 */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE048" /* 2 */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE049" /* Stick */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE04A" /* C */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE04B" /* Z */, pos); pos.leftTop.x += 25;
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 156;
-
-        pos.size.x = 40;
-        _QwertyKeys.emplace_back("+=@", pos, KEY_SYMBOLS); pos.leftTop.x += 40;
-        _QwertyKeys.emplace_back("\uE008", pos, KEY_SMILEY); pos.leftTop.x += 40;
-
-        pos.size.x = 120;
-        _QwertyKeys.emplace_back("\uE057", pos, KEY_SPACE);
-        pos.size.x = 25;
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 36;
-
-        /*page 2*/
-        _QwertyKeys.emplace_back("\uE079" /* DPAD UP */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE07B" /* DPAD DOWN */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE07C" /* DPAD LEFT */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE07D" /* DPAD RIGHT */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE07E" /* DPAD UP&DOWN */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE07F" /* DPAD LEFT&RIGHT */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE077" /* Wii Stick */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE078" /* Wii Power */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE056" /* Enter */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE057" /* Space*/, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, pos);
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 76;
-
-        _QwertyKeys.emplace_back("\uE007" /* Clock */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE008" /* Happy */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE009" /* Angry */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE00A" /* Sad */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE00B" /* ExpressionLess */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE00C" /* Sun */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE00D" /* Cloud */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE00E" /* Umbrella */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE00F" /* Snowman */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE06B" /* ? */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back(KEY_ENTER, Icon::DrawEnterKey, pos);
-        _QwertyKeys.back().SetAcceptSoundEvent(SoundEngine::Event::ACCEPT);
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 116;
-
-        _QwertyKeys.emplace_back("\u2190", pos, KEY_NINTENDO_PAGE); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE015" /*  */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE016" /*  */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE017" /*  */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE018" /*  */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE019" /* Arrow Right */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE01A" /* Arrow Left */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE01B" /* Arrow Up */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE01C" /* Arow Down */, pos); pos.leftTop.x += 25;
-        _QwertyKeys.emplace_back("\uE01E" /* Camera */, pos); pos.leftTop.x += 25;
-
-        pos.leftTop.x = 20;
-        pos.leftTop.y = 156;
-
-        pos.size.x = 40;
-        _QwertyKeys.emplace_back("+=@", pos, KEY_SYMBOLS); pos.leftTop.x += 40;
-        _QwertyKeys.emplace_back("\uE008", pos, KEY_SMILEY); pos.leftTop.x += 40;
-        pos.size.x = 120;
-        _QwertyKeys.emplace_back("\uE057", pos, KEY_SPACE);
+        BuildShortcutRow(pos, _QwertyKeys, false); // [31 - 37]
     }
 
-
-    void    KeyboardImpl::_Qwerty(void)
+    void KeyboardImpl::_InitQwertyUppercase(void)
     {
-        _keys = &_QwertyKeys;
+        IntRect pos(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
 
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [38]
+
+        AddToKeySet("Q", pos, _QwertyKeys); // [39]
+        AddToKeySet("W", pos, _QwertyKeys); // [40]
+        AddToKeySet("E", pos, _QwertyKeys); // [41]
+        AddToKeySet("R", pos, _QwertyKeys); // [42]
+        AddToKeySet("T", pos, _QwertyKeys); // [43]
+        AddToKeySet("Y", pos, _QwertyKeys); // [44]
+        AddToKeySet("U", pos, _QwertyKeys); // [45]
+        AddToKeySet("I", pos, _QwertyKeys); // [46]
+        AddToKeySet("O", pos, _QwertyKeys); // [47]
+        AddToKeySet("P", pos, _QwertyKeys); // [48]
+
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("A", pos, _QwertyKeys);  // [49]
+        AddToKeySet("S", pos, _QwertyKeys);  // [50]
+        AddToKeySet("D", pos, _QwertyKeys);  // [51]
+        AddToKeySet("F", pos, _QwertyKeys);  // [52]
+        AddToKeySet("G", pos, _QwertyKeys);  // [53]
+        AddToKeySet("H", pos, _QwertyKeys);  // [54]
+        AddToKeySet("J", pos, _QwertyKeys);  // [55]
+        AddToKeySet("K", pos, _QwertyKeys);  // [56]
+        AddToKeySet("L", pos, _QwertyKeys);  // [57]
+        AddToKeySet("\"", pos, _QwertyKeys); // [58]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("Z", pos, _QwertyKeys); // [59]
+        AddToKeySet("X", pos, _QwertyKeys); // [60]
+        AddToKeySet("C", pos, _QwertyKeys); // [61]
+        AddToKeySet("V", pos, _QwertyKeys); // [62]
+        AddToKeySet("B", pos, _QwertyKeys); // [63]
+        AddToKeySet("N", pos, _QwertyKeys); // [64]
+        AddToKeySet("M", pos, _QwertyKeys); // [65]
+        AddToKeySet(";", pos, _QwertyKeys); // [66]
+        AddToKeySet(":", pos, _QwertyKeys); // [67]
+        AddToKeySet("!", pos, _QwertyKeys); // [68]
+        UpdateCharRowPos(pos);
+
+        BuildShortcutRow(pos, _QwertyKeys, false); // [69 - 75]
+    }
+
+    void KeyboardImpl::_InitQwertyNumRow(void)
+    {
+        IntRect pos(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
+
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [76]
+
+        AddToKeySet("0", pos, _QwertyKeys); // [77]
+        AddToKeySet("1", pos, _QwertyKeys); // [78]
+        AddToKeySet("2", pos, _QwertyKeys); // [79]
+        AddToKeySet("3", pos, _QwertyKeys); // [80]
+        AddToKeySet("4", pos, _QwertyKeys); // [81]
+        AddToKeySet("5", pos, _QwertyKeys); // [82]
+        AddToKeySet("6", pos, _QwertyKeys); // [83]
+        AddToKeySet("7", pos, _QwertyKeys); // [84]
+        AddToKeySet("8", pos, _QwertyKeys); // [85]
+        AddToKeySet("9", pos, _QwertyKeys); // [86]
+
+        pos.leftTop.x = charKeyboardStartX;
+        pos.leftTop.y += charKeyHeight * 3;
+
+        BuildShortcutRow(pos, _QwertyKeys, false); // [87 - 93]
+    }
+
+    void KeyboardImpl::_InitQwertySymbols()
+    {
+        IntRect pos(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
+
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [94]
+
+        // page 1: 94 - 133
+        AddToKeySet("", pos, _QwertyKeys); // [95] Nintendo A
+        AddToKeySet("", pos, _QwertyKeys); // [96] Nintendo B
+        AddToKeySet("", pos, _QwertyKeys); // [97] Nintendo X
+        AddToKeySet("", pos, _QwertyKeys); // [98] Nintendo Y
+        AddToKeySet("", pos, _QwertyKeys); // [99] Nintendo L
+        AddToKeySet("", pos, _QwertyKeys); // [100] Nintendo R
+        AddToKeySet("", pos, _QwertyKeys); // [101] Diamond
+        AddToKeySet("", pos, _QwertyKeys); // [102] Heart
+        AddToKeySet("", pos, _QwertyKeys); // [103] Club
+        AddToKeySet("", pos, _QwertyKeys); // [104] Down Arrow
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("", pos, _QwertyKeys); // [105] Upper Left Corner
+        AddToKeySet("", pos, _QwertyKeys); // [106] Upper Platform
+        AddToKeySet("", pos, _QwertyKeys); // [107] Upper Right Corner
+        AddToKeySet("", pos, _QwertyKeys); // [108] Left Platform
+        AddToKeySet("", pos, _QwertyKeys); // [109] Lower Right Corner
+        AddToKeySet("", pos, _QwertyKeys); // [110] Bottom Platform
+        AddToKeySet("", pos, _QwertyKeys); // [111] Lower Left Corner
+        AddToKeySet("", pos, _QwertyKeys); // [112] Center Pillar
+        AddToKeySet("", pos, _QwertyKeys); // [113] Nintendo C
+        AddToKeySet("", pos, _QwertyKeys); // [114] Nintendo Home
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("■", pos, _QwertyKeys); // [115]
+        AddToKeySet("□", pos, _QwertyKeys); // [116]
+        AddToKeySet("▲", pos, _QwertyKeys); // [117]
+        AddToKeySet("△", pos, _QwertyKeys); // [118]
+        AddToKeySet("▼", pos, _QwertyKeys); // [119]
+        AddToKeySet("▽", pos, _QwertyKeys); // [120]
+        AddToKeySet("◆", pos, _QwertyKeys); // [121]
+        AddToKeySet("◇", pos, _QwertyKeys); // [122]
+        AddToKeySet("○", pos, _QwertyKeys); // [123]
+        AddToKeySet("◎", pos, _QwertyKeys); // [124]
+        UpdateCharRowPos(pos);
+
+        BuildShortcutRow(pos, _QwertyKeys, true); // [125 - 133]
+
+        pos = IntRect(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [134]
+
+        // page 2: 134 - 173
+        AddToKeySet("←", pos, _QwertyKeys); // [135]
+        AddToKeySet("↑", pos, _QwertyKeys); // [136]
+        AddToKeySet("→", pos, _QwertyKeys); // [137]
+        AddToKeySet("↓", pos, _QwertyKeys); // [138]
+        AddToKeySet("⇔", pos, _QwertyKeys); // [139]
+        AddToKeySet("●", pos, _QwertyKeys); // [140]
+        AddToKeySet("★", pos, _QwertyKeys); // [141]
+        AddToKeySet("☆", pos, _QwertyKeys); // [142]
+        AddToKeySet("♀", pos, _QwertyKeys); // [143]
+        AddToKeySet("♂", pos, _QwertyKeys); // [144]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("∴", pos, _QwertyKeys); // [145]
+        AddToKeySet("∵", pos, _QwertyKeys); // [146]
+        AddToKeySet("⊂", pos, _QwertyKeys); // [147]
+        AddToKeySet("⊃", pos, _QwertyKeys); // [148]
+        AddToKeySet("⌒", pos, _QwertyKeys); // [149]
+        AddToKeySet("♪", pos, _QwertyKeys); // [150]
+        AddToKeySet("♭", pos, _QwertyKeys); // [151]
+        AddToKeySet("¼", pos, _QwertyKeys); // [152]
+        AddToKeySet("½", pos, _QwertyKeys); // [153]
+        AddToKeySet("¾", pos, _QwertyKeys); // [154]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("«", pos, _QwertyKeys); // [155]
+        AddToKeySet("»", pos, _QwertyKeys); // [156]
+        AddToKeySet("¦", pos, _QwertyKeys); // [157]
+        AddToKeySet("∞", pos, _QwertyKeys); // [158]
+        AddToKeySet("※", pos, _QwertyKeys); // [159]
+        AddToKeySet("№", pos, _QwertyKeys); // [160]
+        AddToKeySet("(", pos, _QwertyKeys); // [161]
+        AddToKeySet(")", pos, _QwertyKeys); // [162]
+        AddToKeySet("[", pos, _QwertyKeys); // [163]
+        AddToKeySet("]", pos, _QwertyKeys); // [164]
+        UpdateCharRowPos(pos);
+
+        BuildShortcutRow(pos, _QwertyKeys, true); // [165 - 173]
+
+        pos = IntRect(charKeyboardStartX, 36, charKeyWidth, charKeyHeight);
+        _QwertyKeys.emplace_back(KEY_BACKSPACE, Icon::DrawClearSymbol, backspaceKeyPos); // [174]
+
+        // page 3: 174 - 208
+        AddToKeySet("™", pos, _QwertyKeys); // [175]
+        AddToKeySet("#", pos, _QwertyKeys); // [176]
+        AddToKeySet("|", pos, _QwertyKeys); // [177]
+        AddToKeySet("_", pos, _QwertyKeys); // [178]
+        AddToKeySet("{", pos, _QwertyKeys); // [179]
+        AddToKeySet("}", pos, _QwertyKeys); // [180]
+        AddToKeySet("&", pos, _QwertyKeys); // [181]
+        AddToKeySet("~", pos, _QwertyKeys); // [182]
+        AddToKeySet("†", pos, _QwertyKeys); // [183]
+        AddToKeySet("‡", pos, _QwertyKeys); // [184]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("+", pos, _QwertyKeys); // [185]
+        AddToKeySet("-", pos, _QwertyKeys); // [186]
+        AddToKeySet("*", pos, _QwertyKeys); // [187]
+        AddToKeySet("/", pos, _QwertyKeys); // [188]
+        AddToKeySet("<", pos, _QwertyKeys); // [189]
+        AddToKeySet(">", pos, _QwertyKeys); // [190]
+        AddToKeySet("=", pos, _QwertyKeys); // [191]
+        AddToKeySet("^", pos, _QwertyKeys); // [192]
+        AddToKeySet("±", pos, _QwertyKeys); // [193]
+        AddToKeySet("%", pos, _QwertyKeys); // [194]
+        UpdateCharRowPos(pos);
+
+        AddToKeySet("£", pos, _QwertyKeys); // [195]
+        AddToKeySet("¤", pos, _QwertyKeys); // [196]
+        AddToKeySet("¥", pos, _QwertyKeys); // [197]
+        AddToKeySet("′", pos, _QwertyKeys); // [198]
+        AddToKeySet("€", pos, _QwertyKeys); // [199]
+        UpdateCharRowPos(pos);
+
+        BuildShortcutRow(pos, _QwertyKeys, true); // [200 - 208]
+    }
+
+    void KeyboardImpl::_InitQwertySequence(void)
+    {
+    void KeyboardImpl::_InitQwertySequence(void)
+    {
         if (!_QwertyKeys.empty())
             return;
 
-        /* 0 - 35*/
-        _QwertyLowCase();
-        /*36 - 71*/
-        _QwertyUpCase();
-        /* 72 - 108 Page 1*/
-        /* 109 - 146 Page 2*/
-        _QwertySymbols();
-        /* 147 - 181 Page 1*/
-        /* 182 - 216 Page 2*/
-        _QwertyNintendo();
+        _InitQwertyLowercase(); // [0 - 37]
+        _InitQwertyUppercase(); // [38 - 75]
+        _InitQwertyNumRow(); // [76 - 93]
+        _InitQwertySymbols(); // [94 - 133] [134 - 173] [174 - 208]
     }
 
     /*
@@ -1811,61 +1567,19 @@ namespace CTRPluginFramework
         static Time     FastModeWaitTime = Seconds(0.5f);
         static Time     FastClearingFrame = Seconds(0.1f);
 
-        int start = 0;
-        int end = _keys->size();
+        activeKeySetStartIndex = 0;
+        activeKeySetEndIndex = _keys->size() - 1;
 
         if (_layout == Layout::QWERTY)
         {
-            // Symbols
-            if (_useSymbols)
-            {
-                if (!_symbolsPage)
-                {
-                    start = 72;
-                    end = 109;
-                }
-                else
-                {
-                    start = 109;
-                    end = 147;
-                }
-            }
-            // Nintendo
-            else if (_useNintendo)
-            {
-                if (!_nintendoPage)
-                {
-                    start = 147;
-                    end = 182;
-                }
-                else
-                {
-                    start = 182;
-                    end = 217;
-                }
-            }
-            else
-            {
-                // Upper Case
-                if (_useCaps)
-                {
-                    start = 36;
-                    end = 72;
-                }
-                // Lower Case
-                else
-                {
-                    start = 0;
-                    end = 36;
-                }
-            }
+            _UpdateActiveKeyIndexes();
         }
 
         // Check cursor position, just in case
         if (_cursorPositionInString > static_cast<int>(_userInput.size()))
             _ScrollUp();
 
-        for (int i = start; i < end; i++)
+        for (int i = activeKeySetStartIndex; i <= activeKeySetEndIndex; i++)
         {
             std::string  temp;
 
@@ -1947,31 +1661,45 @@ namespace CTRPluginFramework
                 {
                     _useCaps = !_useCaps;
                 }
-                else if (ret == KEY_SMILEY)
+                else if (ret == KEY_ASCII_TOGGLE)
                 {
-                    _useNintendo = !_useNintendo;
+                    _useNumRow = false;
+                    _useJPN = false;
                     _useSymbols = false;
                     _useCaps = false;
-                    if (!_useNintendo)
-                        _nintendoPage = 0;
-                    _symbolsPage = 0;
                 }
-                else if (ret == KEY_SYMBOLS)
+                else if (ret == KEY_NUM_TOGGLE)
+                {
+                    _useNumRow = !_useNumRow;
+                    _useJPN = false;
+                    _useSymbols = false;
+                    _useCaps = false;
+                }
+                else if (ret == KEY_SYMBOLS_TOGGLE)
                 {
                     _useSymbols = !_useSymbols;
-                    _useNintendo = false;
+                    _useNumRow = false;
+                    _useJPN = false;
                     _useCaps = false;
-                    if (!_useSymbols)
-                        _symbolsPage = 0;
-                    _nintendoPage = 0;
+
+                    _pageIndex = 0;
                 }
-                else if (ret == KEY_SYMBOLS_PAGE)
+                else if (ret == KEY_PREV_PAGE)
                 {
-                    _symbolsPage = !_symbolsPage;
+                    _pageIndex--;
+
+                    if (_pageIndex < 0)
+                        _pageIndex = 0;
                 }
-                else if (ret == KEY_NINTENDO_PAGE)
+                else if (ret == KEY_NEXT_PAGE)
                 {
-                    _nintendoPage = !_nintendoPage;
+                    _pageIndex++;
+
+                    if (_useJPN && _pageIndex > 5)
+                        _pageIndex = 5;
+
+                    if (_useSymbols && _pageIndex > 2)
+                        _pageIndex = 2;
                 }
                 else
                 {
@@ -2195,6 +1923,4 @@ namespace CTRPluginFramework
     {
         _canChangeLayout = canChange;
     }
-
-
 }

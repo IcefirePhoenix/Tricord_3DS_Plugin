@@ -73,15 +73,15 @@ namespace CTRPluginFramework
         void _RenderBottom(void);
         void _ProcessEvent(Event &event);
         void _UpdateScroll(float delta, bool ignoreTouch);
+        void _UpdateActiveKeyIndexes(void);
         void _Update(float delta);
 
-        // Keyboard layout constructor
-        void _Qwerty(void);
-        void _QwertyLowCase(void);
-        void _QwertyUpCase(void);
-        void _QwertySymbols(void);
-        void _QwertyNintendo(void);
-
+        static void _InitQwertySequence(void);
+        static void _InitQwertyLowercase(void);
+        static void _InitQwertyUppercase(void);
+        static void _InitQwertyNumRow(void);
+        static void _InitQwertySymbols(void);
+        static void _InitQwertyOther(void);
         static void _InitDigitKeys(IntRect &keyPosition, std::vector<TouchKey> &keys, int xStartCoord);
         static void _InitHexKeys(IntRect &keyPosition, std::vector<TouchKey> &keys, int yStart);
         static void _CreateHexLayout(int yStart, std::vector<TouchKey> &keys);
@@ -117,11 +117,10 @@ namespace CTRPluginFramework
         bool _mustRelease{false};
         bool _useCaps{false};
         bool _useSymbols{false};
-        bool _useNintendo{false};
+        bool _useNumRow{false};
+        int _pageIndex{0};
         float _offset{0.f};
         u32 _max{0};
-        u8 _symbolsPage{0};
-        u8 _nintendoPage{0};
         Layout _layout{HEXADECIMAL_FULL};
         Clock _blinkingClock;
         int _cursorPositionInString{0};

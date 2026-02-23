@@ -168,12 +168,14 @@ namespace CTRPluginFramework
 
         // Set _runningInstance to this menu
         _runningInstance = this;
+
+        KeyboardImpl::InitKeyboards();
+
         FwkSettings::SetBottomScreenBackground(BottomBG_bin);
 
         Preferences::LoadSettings();
         _tools->UpdateSettings();
 
-        KeyboardImpl::InitKeyboards();
 
         Preferences::LoadEntryPreferences(Preferences::IsEnabled(Preferences::AutoEnableSavedCheats), Preferences::IsEnabled(Preferences::AutoEnableFavorites));
 
