@@ -104,7 +104,8 @@ namespace CTRPluginFramework
         return (GetGlyph(s));
     }
 
-    inline u8    GetAlphaValueFromData(u8* data, int dataPos, u16 format) {
+    inline u8 GetAlphaValueFromData(u8 *data, int dataPos, u16 format)
+    {
         u8 res, byte;
         switch (format)
         {
@@ -204,75 +205,37 @@ namespace CTRPluginFramework
                 }
             }
         }
-        return (glyph);
+    u8 BilinearInterpolate(const u8 *bitmap, int srcWidth, int srcHeight, float x, float y)
+    {
+        int x1 = static_cast<int>(std::floor(x));
+        int y1 = static_cast<int>(std::floor(y));
+        int x2 = std::min(x1 + 1, srcWidth - 1);
+        int y2 = std::min(y1 + 1, srcHeight - 1);
+
+        float dx = x - x1;
+        float dy = y - y1;
+
+        u8 p11 = bitmap[y1 * srcWidth + x1];
+        u8 p12 = bitmap[y2 * srcWidth + x1];
+        u8 p21 = bitmap[y1 * srcWidth + x2];
+        u8 p22 = bitmap[y2 * srcWidth + x2];
+
+        return static_cast<u8>((1 - dx) * (1 - dy) * p11 + dx * (1 - dy) * p21 + (1 - dx) * dy * p12 + dx * dy * p22);
     }
 
-#define GLYPH_HEIGHT    25
-#define GLYPH_WIDTH     19
-#define SHRINK_GLYPH_HEIGHT 18 // (width would be 14)
-
-    void    ShrinkGlyph(u8 *dest, u8 *src)
+    void ShrinkGlyph(u8 *dest, const u8 *src, int srcWidth, int srcHeight, int destWidth, int destHeight)
     {
-        constexpr const int  outWidth = std::round(static_cast<float>(GLYPH_WIDTH)
-            * (static_cast<float>(SHRINK_GLYPH_HEIGHT) / static_cast<float>(GLYPH_HEIGHT)));
-        constexpr const float dx = (static_cast<float>(GLYPH_WIDTH) / outWidth);
-        constexpr const float dy = (static_cast<float>(GLYPH_HEIGHT) / static_cast<float>(SHRINK_GLYPH_HEIGHT));
+        float scaleX = static_cast<float>(srcWidth) / destWidth;
+        float scaleY = static_cast<float>(srcHeight) / destHeight;
 
-        int i, ii = 0;
-
-        for (float yt = 0.f, y = 0.f; y < SHRINK_GLYPH_HEIGHT; y++, yt += dy)
+        for (int y = 0; y < destHeight; ++y)
         {
-            float yfrag = ceil(yt) - yt;
-
-            if (yfrag == 0.f)
-                yfrag = 1.f;
-            float yfrag2 = yt+dy - floor(yt + dy);
-
-            if(yfrag2 == 0.f && dy != 1.0f)
-                yfrag2 = 1.f;
-
-            for (float xt = 0.f, x = 0.f; x < outWidth; x++, xt += dx)
+            for (int x = 0; x < destWidth; ++x)
             {
-                int xi = static_cast<int>(xt);
-                int yi = static_cast<int>(yt);
-                float xfrag = ceil(xt) - xt;
-                if(xfrag == 0.f)
-                    xfrag = 1.f;
-                float xfrag2 = xt + dx - floor(xt+dx);
-                if(xfrag2 == 0.f && dx != 1.0f)
-                    xfrag2 = 1.f;
-                float alpha = xfrag * yfrag * src[(yi * GLYPH_WIDTH + xi)];
+                float srcX = x * scaleX;
+                float srcY = y * scaleY;
 
-                for(i=0; xi + i + 1 < xt+dx-1; i++)
-                    alpha += yfrag * src[(yi * GLYPH_WIDTH + xi + i + 1)];
-
-                alpha += xfrag2 * yfrag * src[(yi*GLYPH_WIDTH +xi+i+1)];
-
-                for(i = 0; yi + i + 1 < yt + dy - 1 && yi + i + 1 < GLYPH_HEIGHT; i++)
-                {
-                    alpha += xfrag * src[((yi + i + 1) * GLYPH_WIDTH + xi)];
-
-                    for (ii = 0; xi + ii + 1 < xt + dx - 1 && xi + ii + 1 < GLYPH_WIDTH; ii++)
-                        alpha += src[((yi + i + 1) * GLYPH_WIDTH + xi + ii + 1)];
-
-                    if (yi + i + 1 < GLYPH_WIDTH && xi + ii + 1 < GLYPH_WIDTH)
-                        alpha += xfrag2 * src[((yi + i + 1) * GLYPH_WIDTH + xi + ii + 1)];
-                }
-
-                if (yi + i + 1 < GLYPH_HEIGHT)
-                {
-                    alpha += xfrag * yfrag2 * src[((yi + i + 1) * GLYPH_WIDTH + xi)];
-
-                    for (ii = 0; xi + ii + 1 < xt + dx - 1 && xi + ii + 1 < GLYPH_WIDTH; ii++)
-                        alpha += yfrag2 * src[((yi + i + 1) * GLYPH_WIDTH + xi + ii + 1)];
-                }
-
-                if (yi + i + 1 < GLYPH_HEIGHT && xi + ii + 1 < GLYPH_WIDTH)
-                    alpha += xfrag2 * yfrag2 * src[((yi + i + 1) * GLYPH_WIDTH + xi + ii + 1)];
-
-                alpha /= dx * dy;
-                alpha = alpha <= 0.f ? 0.f : (alpha >= 255.f ? 255.f : alpha);
-                dest[(static_cast<u32>(y) * outWidth + static_cast<u32>(x))] = static_cast<u8>(alpha);
+                dest[y * destWidth + x] = BilinearInterpolate(src, srcWidth, srcHeight, srcX, srcY);
             }
         }
     }

@@ -19,7 +19,7 @@ namespace CTRPluginFramework
         return ((rowsize - 1 - posY + posX * rowsize) * bpp);
     }
 
-    void Renderer::FontCalcGlyphPos(fontGlyphPos_s *out,  charWidthInfo_s **cwout, int glyphIndex, float scaleX, float scaleY)
+    void Renderer::FontCalcGlyphPos(fontGlyphPos_s *out,  charWidthInfo_s **cwout, int glyphIndex, float scaleX)
     {
         g_charPerSheet = TFH_Font->finf.tglp->nRows * TFH_Font->finf.tglp->nLines;
         FINF_TFH *finf = &TFH_Font->finf;

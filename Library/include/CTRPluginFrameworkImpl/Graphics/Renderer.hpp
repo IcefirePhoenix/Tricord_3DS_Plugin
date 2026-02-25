@@ -100,7 +100,7 @@ namespace CTRPluginFramework
         //#############################################################################################
 
         // Calulate GameFont glyph
-        static void     FontCalcGlyphPos(fontGlyphPos_s *out, charWidthInfo_s **cwout, int glyphIndex, float scaleX, float scaleY);
+        static void     FontCalcGlyphPos(fontGlyphPos_s *out, charWidthInfo_s **cwout, int glyphIndex, float scaleX);
 
         static inline   RendererContext *GetContext(void)
         {
@@ -113,8 +113,6 @@ namespace CTRPluginFramework
             return Render::Interface();
         }
     };
-
-        // Can't find a good name...
     struct ProcessingLogo
     {
         Clock   timer{};
