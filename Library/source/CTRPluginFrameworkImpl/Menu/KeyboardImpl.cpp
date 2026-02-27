@@ -1572,35 +1572,13 @@ namespace CTRPluginFramework
         if (!_QwertyKeys.empty())
             return;
 
+        _QwertyKeys.reserve(530);
+
         _InitQwertyLowercase(); // [0 - 37]
         _InitQwertyUppercase(); // [38 - 75]
         _InitQwertyNumRow(); // [76 - 93]
         _InitQwertySymbols(); // [94 - 133] [134 - 173] [174 - 208]
     }
-
-    /*
-    ** _keys:
-    **
-    ** [0] = 'A'
-    ** [1] = 'B'
-    ** [2] = 'C'
-    ** [3] = 'D'
-    ** [4] = 'E'
-    ** [5] = 'F'
-    ** [6] = '1'
-    ** [7] = '2'
-    ** [8] = '3'
-    ** [9] = '4'
-    ** [10] = '5'
-    ** [11] = '6'
-    ** [12] = '7'
-    ** [13] = '8'
-    ** [14] = '9'
-    ** [15] = KEY_BACKSPACE
-    ** [16] = KEY_ENTER
-    ** [17] = '.'
-    ** [18] = '0'
-    *************************/
 
     void KeyboardImpl::_InitDigitKeys(IntRect &keyPosition, std::vector<TouchKey> &keys, int xStartCoord)
     {

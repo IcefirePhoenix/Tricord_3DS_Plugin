@@ -498,6 +498,8 @@ namespace CTRPluginFramework
     // Main thread's start
     void MainThreadInit(void *arg)
     {
+        bool doubleWidth = false;
+
         Initialize();
 
         // Wake up init thread
@@ -519,6 +521,7 @@ namespace CTRPluginFramework
                 fontDataStartAddr = 0x30950480;
                 break;
             case TID_JPN:
+                doubleWidth = true;
                 fontDataStartAddr = 0x3029E100;
                 break;
         }
@@ -527,7 +530,7 @@ namespace CTRPluginFramework
         if (!Process::CheckAddress(fontDataStartAddr, MEMPERM_READ))
             fontDataStartAddr -= 0x1C000000;
 
-        Font::Initialize(fontDataStartAddr);
+        Font::Initialize(fontDataStartAddr, doubleWidth);
 
         // Start plugin
         main();
