@@ -38,8 +38,6 @@ namespace CTRPluginFramework
     std::vector<TouchKey> KeyboardImpl::_HexadecimalLiteKeys;
     std::vector<TouchKey> KeyboardImpl::_QwertyKeys;
 
-    bool isLoadingChars = false;
-
     KeyboardImpl::KeyboardImpl(const std::string &text) : submitBtn(Button(Button::GameFont, "Submit", IntRect(190, 200, 120, 32), Icon::DrawMenuButton))
     {
         _title = "";
@@ -560,30 +558,6 @@ namespace CTRPluginFramework
             _onKeyboardEvent(*_owner, _KeyboardEvent);
         }
     }
-
-    s32 KeyboardImpl::_ShowLoadProgress(void *arg)
-    {
-        IntRect background(55, 86, 210, 35);
-        ProcessingLogo waitLogo;
-        int posY = 95;
-
-        while (isLoadingChars)
-        {
-            Renderer::SetTarget(BOTTOM);
-
-            Renderer::DrawRect2(background, Color::Maroon, Color::Maroon);
-            Renderer::DrawRect(background, Color::Gainsboro, false);
-            Renderer::DrawGameFontString("Preparing JPN keyboard...", 87, posY, 320, Color::Gainsboro);
-
-            waitLogo.Draw(65, 95);
-            posY = 95;
-
-            Renderer::EndFrame();
-        }
-
-        return 0;
-    }
-
 
     void    KeyboardImpl::_ProcessEvent(Event &event)
     {
@@ -1558,8 +1532,6 @@ namespace CTRPluginFramework
         UpdateCharRowPos(pos);
 
         BuildShortcutRow(pos, _QwertyKeys, true); // [519 - 527]
-
-        isLoadingChars = false;
     }
 
     void KeyboardImpl::_InitQwertyOther(void)
@@ -2041,9 +2013,6 @@ namespace CTRPluginFramework
                 {
                     if (_QwertyKeys.size() < 298)
                     {
-                        isLoadingChars = true;
-                        _DisplayLoadStatus.Start();
-
                         _InitQwertyJPN(); // [209 - 248] [249 - 284] [285 - 321] [322 - 361] [362 - 386] [387 - 411]
                         _InitQwertyJPNAlt(); // [412 - 451] [452 - 489] [490 - 527]
                      }
