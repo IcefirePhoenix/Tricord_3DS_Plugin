@@ -112,8 +112,6 @@ namespace CTRPluginFramework
             while (--h >= 0)
             {
                 Color &&c = PrivColor::FromFramebuffer(dst);
-
-                c.Fade(fade);
                 PrivColor::ToFramebuffer(dst, c);
                 dst -= bpp;
             }

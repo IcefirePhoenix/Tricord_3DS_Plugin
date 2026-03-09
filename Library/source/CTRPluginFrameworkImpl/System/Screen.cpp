@@ -112,20 +112,7 @@ namespace CTRPluginFramework
             GSP::SetFrameBufferInfo(Bottom->_frameBufferInfo, 1, true);
     }
 
-    void    ScreenImpl::Fade(const float fade)
-    {
-        const u32   size = GetFrameBufferSize() / _bytesPerPixel;
-        u8         *frameBuf = GetLeftFrameBuffer();
-
-        PrivColor::SetFormat(_format);
-
-        for (int i = size; i > 0; --i)
-        {
-            frameBuf = PrivColor::ToFramebuffer(frameBuf, PrivColor::FromFramebuffer(frameBuf).Fade(fade));
-        }
-    }
-
-    u32     ScreenImpl::Acquire(bool fade)
+    u32     ScreenImpl::Acquire(void)
     {
         // Fetch game frame buffers & check validity
         if (ImportFromGsp())
@@ -148,10 +135,6 @@ namespace CTRPluginFramework
 
         // Set fb1 as current
         _currentBuffer = _frameBufferInfo.header.screen = 1;
-
-        // Apply fade to fb0
-        if (fade)
-            Fade(0.3f);
 
         // Copy to fb1
         _currentBuffer = 0;
@@ -237,8 +220,6 @@ namespace CTRPluginFramework
 
         _frameBufferInfo.fbInfo[!_currentBuffer].FillFrameBufferFrom(_gameFrameBufferInfo.fbInfo[displayed]);
 
-        Fade(0.3f);
-
         if (!applyFlagForCurrent)
             return;
 
@@ -255,27 +236,6 @@ namespace CTRPluginFramework
         u8 *src = GetLeftFrameBuffer(true);
 
         std::copy(src, src + size, dst);
-    }
-
-    void    ScreenImpl::Debug(void)
-    {
-        /*
-        int posY = 10;
-        if (_isTopScreen)
-        {
-            Renderer::SetTarget(TOP);
-            Renderer::DrawString(Utils::Format("FB0: %08X", _leftFramebuffers[0]).c_str(), 10, posY, Color::Blank, Color::Black);
-            Renderer::DrawString(Utils::Format("FB1: %08X", _leftFramebuffers[1]).c_str(), 10, posY, Color::Blank, Color::Black);
-            Renderer::DrawString(Utils::Format("Sel: %d", _originalBuffer).c_str(), 10, posY, Color::Blank, Color::Black);
-        }
-        else
-        {
-            Renderer::SetTarget(BOTTOM);
-            Renderer::DrawString(Utils::Format("FB0: %08X", _leftFramebuffers[0]).c_str(), 10, posY, Color::Blank, Color::Black);
-            Renderer::DrawString(Utils::Format("FB1: %08X", _leftFramebuffers[1]).c_str(), 10, posY, Color::Blank, Color::Black);
-            Renderer::DrawString(Utils::Format("Sel: %d", _originalBuffer).c_str(), 10, posY, Color::Blank, Color::Black);
-        }
-        */
     }
 
     bool    ScreenImpl::IsTopScreen(void)
@@ -336,30 +296,16 @@ namespace CTRPluginFramework
         }
     }
 
-    void    ScreenImpl::ApplyFading(void)
-    {
-        Top->Fade(0.5f);
-        Bottom->Fade(0.5f);
-
-        Top->SwapBuffer();
-        Bottom->SwapBuffer();
-
-        GSP::WaitBufferSwapped(3);
-
-        Top->Copy();
-        Bottom->Copy();
-    }
-
 #define GPU_PSC0_CNT                REG32(0x1040001C)
 #define GPU_PSC1_CNT                REG32(0x1040002C)
 #define GPU_TRANSFER_CNT            REG32(0x10400C18)
 #define GPU_CMDLIST_CNT             REG32(0x104018F0)
 
-    u32     ScreenImpl::AcquireFromGsp(bool fade)
+    u32     ScreenImpl::AcquireFromGsp(void)
     {
         // Wait for gpu to finish all stuff
         while ((GPU_PSC0_CNT | GPU_PSC1_CNT | GPU_TRANSFER_CNT | GPU_CMDLIST_CNT) & 1);
-        u32 err = Top->Acquire(fade) | Bottom->Acquire(fade);
+        u32 err = Top->Acquire() | Bottom->Acquire();
 
         //if (!err)
         //    GSP::WaitBufferSwapped(3);

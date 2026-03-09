@@ -77,11 +77,6 @@ namespace CTRPluginFramework
          */
         void    ReadPixel(u32 posX, u32 posY, Color &pixel, bool fromRightFb = false) const;
 
-        /**
-         * \brief Fades the screen to white the specified amount.
-         * \param fadeAmount Amount to fade, range [0, 1]
-         */
-        void    Fade(const float fadeAmount);
 
     private:
         friend class OSDImpl;
