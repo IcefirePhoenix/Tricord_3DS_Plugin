@@ -149,6 +149,11 @@ namespace CTRPluginFramework
         _menu->SyncOnFrame = useSync;
     }
 
+    void PluginMenu::UpdateEveryOtherFrame(const bool enable)
+    {
+        _menu->UpdateEveryOtherFrame = enable;
+    }
+
     void PluginMenu::SpecifyDevBuild(void)
     {
         _menu->AddPluginVersion(true);

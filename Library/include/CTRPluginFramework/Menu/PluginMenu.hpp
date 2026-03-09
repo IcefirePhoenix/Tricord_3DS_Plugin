@@ -125,6 +125,13 @@ namespace CTRPluginFramework
         void SynchronizeWithFrame(const bool useSync);
 
         /**
+         * \brief If set to true and synchronize with frame is enabled, the plugin's loop will be executed every other frame
+         * \param enable Wheter to enable or disable the feature
+         */
+
+        void UpdateEveryOtherFrame(const bool enable);
+
+        /**
          * \brief Gets amount of time elasped since plugin boot
          */
         Time GetUptime(void);

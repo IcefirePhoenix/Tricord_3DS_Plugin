@@ -82,6 +82,8 @@ namespace CTRPluginFramework
         OnClosingCallback OnClosing;
         FramePointer OnFrame;
         bool SyncOnFrame;
+        bool UpdateEveryOtherFrame;
+
     private:
         friend std::string &PluginMenu::Title(void);
         static PluginMenuImpl *_runningInstance;
@@ -104,6 +106,7 @@ namespace CTRPluginFramework
         std::vector<CallbackPointer> _callbacks;
         std::vector<CallbackPointer> _callbacksTrashBin;
         bool _forceOpen;
+        u32 _frameCounter{0};
     };
 }
 

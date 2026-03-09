@@ -37,6 +37,7 @@ namespace CTRPluginFramework
         _forceOpen(false)
     {
         SyncOnFrame = false;
+        UpdateEveryOtherFrame = false;
         _isOpen = false;
         _aboutToOpen = false;
         _wasOpened = false;
@@ -147,7 +148,6 @@ namespace CTRPluginFramework
     int    PluginMenuImpl::Run(void)
     {
         Event                   event;
-        EventManager            closedManager(EventManager::EventGroups::GROUP_KEYS);
         EventManager            openManager(EventManager::EventGroups::GROUP_KEYS | EventManager::EventGroups::GROUP_TOUCH_AND_SWIPE);
         Clock                   clock;
         Clock                   inputClock;
@@ -218,6 +218,19 @@ namespace CTRPluginFramework
             OnReady();
         }
 
+        auto checkOpenEvent = [](Event &ev) -> bool
+        {
+            Controller::Update();
+            if (Controller::IsKeysPressed(Preferences::MenuHotkeys))
+            {
+
+                ev.type = Event::KeyPressed;
+                ev.key.code = (Key)Preferences::MenuHotkeys;
+                return true;
+            }
+            return false;
+        };
+
         // Refresh hid
         Controller::Update();
 
@@ -226,7 +239,7 @@ namespace CTRPluginFramework
         {
             // Check Event
             eventList.clear();
-            while ((_isOpen && openManager.PollEvent(event)) || (!_isOpen && closedManager.PollEvent(event)) || _forceOpen)
+            while ((_isOpen && openManager.PollEvent(event)) || (!_isOpen && checkOpenEvent(event)) || _forceOpen)
             {
                 bool isHotkeysDown = false;
 
@@ -268,7 +281,6 @@ namespace CTRPluginFramework
                             ProcessImpl::Pause(true);
 
                             _aboutToOpen = _isOpen = true;
-                            closedManager.Clear();
                             _wasOpened = true;
 
                             // Refresh HexEditor data
@@ -366,7 +378,17 @@ namespace CTRPluginFramework
             else // menu is closed
             {
                 if (SyncOnFrame && !ProcessImpl::IsPaused)
-                    LightEvent_Wait(&OSDImpl::OnNewFrameEvent);
+                {
+                    while (true)
+                    {
+                        LightEvent_Wait(&OSDImpl::OnNewFrameEvent);
+
+                        if (UpdateEveryOtherFrame && (((_frameCounter++) % 2) == 0))
+                            continue;
+
+                        break;
+                    }
+                }
 
                 if (SystemImpl::Status())
                 {
@@ -800,7 +822,11 @@ namespace CTRPluginFramework
         {
             _runningInstance->_pluginRun = false;
             if (_runningInstance->SyncOnFrame && !ProcessImpl::IsPaused)
+            {
                 LightEvent_Signal(&OSDImpl::OnNewFrameEvent);
+                if (_runningInstance->UpdateEveryOtherFrame && (_runningInstance->_frameCounter % 2) == 0)
+                    _runningInstance->_frameCounter++;
+            }
         }
     }
 
