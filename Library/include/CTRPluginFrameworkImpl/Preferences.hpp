@@ -9,7 +9,7 @@
 
 // This must be changed every time CTRPFData.bin's structure is updated!
 // Ref: devkitPro/libctru/include/3ds/os.h
-#define SETTINGS_VERSION SYSTEM_VERSION(1, 1, 1)
+#define SETTINGS_VERSION SYSTEM_VERSION(1, 1, 2)
 namespace CTRPluginFramework
 {
     class Preferences
@@ -94,14 +94,14 @@ namespace CTRPluginFramework
             u64 nameColorOffset;
             WarpDestination warpDestinationData[3];
             u64 warpDestOffset;
+            FaceExprFrameVal customFaceExprVals[6];
+            u64 customFaceExprOffset;
             u32 screenshotScreenCapture;
             u32 screenshotHotkeys;
             u32 screenshotTimer;
             char screenshotCustomName[64];
             char screenshotCustomDir[64];
             u64 screenshotOffset;
-            FaceExprFrameVal customFaceExprVals[6];
-            u64 customFaceExprOffset;
             u32 reserved[100];
         } PACKED;
 
@@ -144,7 +144,6 @@ namespace CTRPluginFramework
         static int          OpenConfigFile(File &file, Header &header);
         static void         LoadSettings(void);
         static void         LoadEntryPreferences(bool autoEnableSavedCheats, bool autoEnableFavorites);
-        static void         LoadBackgrounds(void);
         static void         WriteSettings(void);
 
     private:

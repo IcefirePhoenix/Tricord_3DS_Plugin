@@ -173,9 +173,8 @@ namespace CTRPluginFramework
 
         FwkSettings::SetBottomScreenBackground(BottomBG_bin);
 
-        Preferences::LoadSettings();
-        _tools->UpdateSettings();
 
+        _tools->UpdateSettings();
 
         Preferences::LoadEntryPreferences(Preferences::IsEnabled(Preferences::AutoEnableSavedCheats), Preferences::IsEnabled(Preferences::AutoEnableFavorites));
 
@@ -621,6 +620,7 @@ namespace CTRPluginFramework
             return;
 
         u64 offset = settings.Tell();
+
         header.screenshotScreenCapture = Screenshot::Screens;
         header.screenshotHotkeys = Screenshot::Hotkeys;
         header.screenshotTimer = static_cast<u32>(Screenshot::Timer.AsSeconds());
@@ -631,37 +631,27 @@ namespace CTRPluginFramework
         std::strncpy(header.screenshotCustomDir, Screenshot::Path.c_str(), sizeof(header.screenshotCustomDir) - 1);
         header.screenshotCustomDir[sizeof(header.screenshotCustomDir) - 1] = '\0';
 
-        header.screenshotOffset = offset;
-    }
-
-    void PluginMenuImpl::WriteEnabledCheatsToFile(Preferences::Header &header, File &settings)
-    {
-        if (_runningInstance == nullptr)
+        if (settings.Write(&Screenshot::Screens, sizeof(Screenshot::Screens)) != 0)
             return;
 
-        std::vector<u32> uids;
-        MenuFolderImpl *folder = _runningInstance->_home->_folder;
+        if (settings.Write(&Screenshot::Hotkeys, sizeof(Screenshot::Hotkeys)) != 0)
+            return;
 
-        for (MenuItem *item : folder->_items)
-        {
-            if (item->IsEntry())
-            {
-                MenuEntryImpl* enabledEntry = reinterpret_cast<MenuEntryImpl *>(item);
-                if (enabledEntry->IsActivated() && !enabledEntry->IsRestricted())
-                    uids.push_back(item->Uid);
-            }
-        }
+        u32 timerValue = static_cast<u32>(Screenshot::Timer.AsSeconds());
+        if (settings.Write(&timerValue, sizeof(timerValue)) != 0)
+            return;
 
-        if (uids.size())
-        {
-            u64 offset = settings.Tell();
+        char buffer[sizeof(header.screenshotCustomName)] = {};
+        std::strncpy(buffer, Screenshot::Prefix.c_str(), sizeof(buffer) - 1);
+        if (settings.Write(buffer, sizeof(buffer)) != 0)
+            return;
 
-            if (settings.Write(uids.data(), sizeof(u32) * uids.size()) == 0)
-            {
-                header.enabledCheatsCount = uids.size();
-                header.enabledCheatsOffset = offset;
-            }
-        }
+        char dirBuffer[sizeof(header.screenshotCustomDir)] = {};
+        std::strncpy(dirBuffer, Screenshot::Path.c_str(), sizeof(dirBuffer) - 1);
+        if (settings.Write(dirBuffer, sizeof(dirBuffer)) != 0)
+            return;
+
+        header.screenshotOffset = offset;
     }
 
     void PluginMenuImpl::WriteFavoritesToFile(Preferences::Header &header, File &settings)
@@ -710,7 +700,7 @@ namespace CTRPluginFramework
             return;
 
         u64 listOffset = settings.Tell();
-        if (!settings.Write(Preferences::SavedWarps, sizeof(Preferences::WarpDestination) * 3) == 0)
+        if (settings.Write(Preferences::SavedWarps, sizeof(Preferences::WarpDestination) * 3) != 0)
             return;
 
         header.warpDestOffset = listOffset;
@@ -722,7 +712,7 @@ namespace CTRPluginFramework
             return;
 
         u64 listOffset = settings.Tell();
-        if (!settings.Write(Preferences::SavedFaceExprs.data(), sizeof(Preferences::FaceExprFrameVal) * 6) == 0)
+        if (settings.Write(Preferences::SavedFaceExprs.data(), sizeof(Preferences::FaceExprFrameVal) * 6) != 0)
             return;
 
         header.customFaceExprOffset = listOffset;
