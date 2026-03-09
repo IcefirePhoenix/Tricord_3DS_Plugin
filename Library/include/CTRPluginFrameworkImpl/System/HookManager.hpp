@@ -21,7 +21,7 @@ namespace CTRPluginFramework
     struct  AsmWrapper
     {
         HookContext *   ctx{nullptr};
-        u32             code[15]{0};
+        u32             code[16]{0};
     };
 
     /*struct HookWrapper
