@@ -24,8 +24,8 @@ namespace CTRPluginFramework
     u32         Screenshot::Hotkeys = Key::Start;
     u32         Screenshot::Screens = SCREENSHOT_BOTH;
     Time        Screenshot::Timer;
-    std::string Screenshot::Path;
-    std::string Screenshot::Prefix;
+    std::string Screenshot::Path = "";
+    std::string Screenshot::Prefix = "Screenshot";
     Screenshot::ImageBuffer* Screenshot::ImgBuffer = nullptr;
     Screenshot::OnScreenshotCallback Screenshot::ScreenshotCallback = nullptr;
 
@@ -294,11 +294,11 @@ namespace CTRPluginFramework
         if (format == GSP_RGBA4_OES) return ScreenToBMP_RGBA4(bmp, padding, src, width, stride);
     }
 
-    s32     Screenshot::TaskCallback(void *arg UNUSED)
+    s32 Screenshot::TaskCallback(void *arg UNUSED)
     {
-        u32             res = 0;
-        std::string     name;
-        ImageBuffer*    imgBuf = ImgBuffer;
+        u32 res = 0;
+        std::string name;
+        ImageBuffer *imgBuf = ImgBuffer;
         u32 width = 0, height = 0;
         u32 screens = Screens & SCREENSHOT_BOTH;
 
@@ -318,25 +318,33 @@ namespace CTRPluginFramework
         BMPImage image(width, height);
         _timer.Restart();
 
+        if (!image.IsLoaded())
+        {
+            OSD::Notify("Error: Cannot allocate memory for screenshot buffer", Color::Red);
+            OSDImpl::WaitingForScreenshot = false;
+
+            _mode = 0;
+            return 0;
+        }
+
         do
         {
-            // Wait for preparations to be complete
-            //LightEvent_Wait(&_readyEvent);
-            //LightEvent_Clear(&_readyEvent);
-
-            while(!__ldrex__(&isReady))
+            while (!__ldrex__(&isReady))
             {
-                ((void)0); ((void)0); ((void)0); ((void)0); ///< 4 NOP
+                ((void)0);
+                ((void)0);
+                ((void)0);
+                ((void)0); ///< 4 NOP
             }
             __strex__(&isReady, 0);
 
-            Pixel*   bmp = reinterpret_cast<Pixel *>(image.data());
+            Pixel *bmp = reinterpret_cast<Pixel *>(image.data());
 
             // Convert screens to bmp
             {
                 if (screens & SCREENSHOT_BOTTOM)
                 {
-                    u32    padding = 0;
+                    u32 padding = 0;
                     Pixel *dst = bmp;
 
                     if (screens & SCREENSHOT_TOP)
@@ -374,7 +382,7 @@ namespace CTRPluginFramework
             }
 
         } while (_mode & TIMED && !_timer.HasTimePassed(Timer));
-    // exit:
+
         _mode = 0;
         OSDImpl::WaitingForScreenshot = false;
         return 0;
