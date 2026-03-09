@@ -39,7 +39,7 @@ namespace CTRPluginFramework
             {
                 MenuEntryImpl *e = items[index];
 
-                if (e != nullptr && e->IsEntry() && e->IsActivated())
+                if (e != nullptr && e->IsEntry() && e->IsActivated() && !e->IsRestricted())
                     uids.push_back(e->Uid);
             }
 
