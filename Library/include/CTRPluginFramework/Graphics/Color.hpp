@@ -25,7 +25,8 @@ namespace CTRPluginFramework
         constexpr Color(u8 red, u8 green, u8 blue, u8 alpha = 255) : a(alpha), b(blue), g(green), r(red) {}
 
         inline u32 ToU32(void) const { return raw; };
-        Color   Blend(const Color &color, BlendMode mode) const;
+        Color &Fade(float fading);
+        Color Blend(const Color &color, BlendMode mode) const;
 
         inline bool    operator == (const Color &right) const {return raw == right.raw;}
         inline bool    operator != (const Color &right) const {return raw != right.raw;}

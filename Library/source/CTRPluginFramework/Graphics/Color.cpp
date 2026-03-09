@@ -27,6 +27,29 @@ namespace CTRPluginFramework
     const Color     Color::SkyBlue = Color(135, 206, 235);
     const Color     Color::DeepGold = Color(195, 143, 51);
 
+    Color &Color::Fade(float fading)
+    {
+        if (fading > 1.0f || fading < -1.0f)
+            return *this;
+
+        if (fading > 0.0f)
+        {
+            float tint = 1.f - fading;
+            r = std::min((int)(255 - (255 - r) * tint), 255);
+            g = std::min((int)(255 - (255 - g) * tint), 255);
+            b = std::min((int)(255 - (255 - b) * tint), 255);
+        }
+        else
+        {
+            float shade = 1.f + fading;
+
+            r *= shade;
+            g *= shade;
+            b *= shade;
+        }
+        return *this;
+    }
+
     Color Color::Blend(const Color &color, BlendMode mode) const
     {
         // This is background, color is foreground

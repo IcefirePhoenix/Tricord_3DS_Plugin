@@ -266,15 +266,6 @@ namespace CTRPluginFramework
         REG(_FillColor) = 0;
     }
 
-    void    ScreenImpl::Clean(void)
-    {
-        if (!System::IsNew3DS())
-            return;
-
-        Top->Clear(true);
-        Bottom->Clear(true);
-    }
-
     void    ScreenImpl::SwitchFrameBuffers(bool game)
     {
         if (game)

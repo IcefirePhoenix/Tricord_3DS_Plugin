@@ -410,7 +410,13 @@ namespace CTRPluginFramework
     exit:
         PluginMenu *menu = PluginMenu::GetRunningInstance();
         if (menu && !menu->IsOpen() && ret != SLEEP_ABORT)
-            ScreenImpl::Clean();
+        {
+            if (System::IsNew3DS())
+            {
+                ScreenImpl::Top->Clear(true);
+                ScreenImpl::Bottom->Clear(true);
+            }
+        }
         if (_mustRelease)
             ProcessImpl::Play(false);
         return (ret);

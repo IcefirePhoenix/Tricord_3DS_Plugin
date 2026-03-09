@@ -43,8 +43,6 @@ namespace CTRPluginFramework
 
         void                        Flash(Color &color);
 
-        // TODO: remove ?
-        static void                 Clean(void);
         // Switch displayed fb game <=> ctrpf
         static void                 SwitchFrameBuffers(bool game);
 
