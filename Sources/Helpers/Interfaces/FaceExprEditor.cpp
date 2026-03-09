@@ -663,7 +663,7 @@ namespace CTRPluginFramework
 
         intro = "Currently editing: " << _frameLabel;
         preview = "Preview:";
-        outro = "Press " + std::string(FONT_B) + " to save and exit this\nmenu. Edits will persist between\nreboots.";
+        outro = "Press " + std::string(FONT_B) + " to save and exit this\nmenu. Edits will persist\nbetween reboots.";
         reload = "Be sure to reload the current\narea for changes to take effect.";
 
         Renderer::DrawGameFontStringReturn(intro.c_str(), 52, posY1, 360, Preferences::Settings.MainTextColor);

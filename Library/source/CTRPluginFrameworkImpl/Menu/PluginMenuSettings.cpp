@@ -46,8 +46,11 @@ namespace CTRPluginFramework
     static void MenuHotkeyModifier(void)
     {
         u32 keys = Preferences::MenuHotkeys;
+        FwkSettings &settings = FwkSettings::Get();
 
-        (HotkeysModifier(keys, "Select the hotkeys you'd like to use to open the Tricord menu."))();
+        std::string lockKeys = (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable) ? "\n\n\nNote: o2/3DS detected; checkboxes for\nn2/3DS buttons have been disabled and\ncannot be selected in this menu." : "";
+
+        (HotkeysModifier(keys, "Select the hotkeys you'd like to use to open the\nTricord menu." + lockKeys))();
 
         if (keys != 0)
             Preferences::MenuHotkeys = keys;

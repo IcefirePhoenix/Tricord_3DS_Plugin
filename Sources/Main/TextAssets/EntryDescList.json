@@ -156,7 +156,7 @@
         {
             "name": "physics_note",
             "content": {
-                "intro": "Sets custom physics types that alter player movement + interactions with the environment.\n\nAvailable types include:\n- Water\n- Lava\n- Ice\n-Quicksand",
+                "intro": "Sets custom physics types that alter player movement + interactions with the environment.\n\nAvailable types include:\n- Water\n- Lava\n- Ice\n- Quicksand",
                 "note": "",
                 "modeCompatibility": 3,
                 "clientOnly": false
@@ -228,7 +228,7 @@
         {
             "name": "inf_time_note",
             "content": {
-                "intro": "Prevents the timer from decreasing during Drablands timed challenges",
+                "intro": "Prevents the timer from decreasing during Drablands timed challenges.",
                 "note": "",
                 "modeCompatibility": 2,
                 "clientOnly": false
