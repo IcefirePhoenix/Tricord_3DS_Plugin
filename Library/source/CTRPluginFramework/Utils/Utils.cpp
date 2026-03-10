@@ -228,12 +228,12 @@ namespace CTRPluginFramework
         Menu            menu("/", "", Icon::DrawFile);
         MenuFolderImpl  &root = *menu.GetRootFolder();
         std::string     footer(opendir);
-        u8  *           footer_cstr;
+        const char*     footer_cstr;
 
         footer += selDirectory ? selDir : selFile;
         footer += commands;
         footer += forBackup.empty() ? "" : backupStatus;
-        footer_cstr = (u8 *)footer.c_str();
+        footer_cstr = footer.c_str();
 
         // Allow time to init FS Explorer -> required when accessing from boot
         Sleep(Milliseconds(100));

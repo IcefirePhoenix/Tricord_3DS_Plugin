@@ -11,12 +11,6 @@ namespace CTRPluginFramework
 
     /* ------------------ */
 
-    // Driver code for costume randomizers
-    void Costume::costumeRandomizer(MenuEntry* entry)
-    {
-        openRandomizerToggles(selCostumeType());
-    }
-
     // Helper method to select the costume type
     int selCostumeType(void)
     {
@@ -77,6 +71,12 @@ namespace CTRPluginFramework
             costumeRandomizerAuto->Enable();
         else
             costumeRandomizerAuto->Disable();
+    }
+
+    // Driver code for costume randomizers
+    void Costume::costumeRandomizer(MenuEntry *entry)
+    {
+        openRandomizerToggles(selCostumeType());
     }
 
     // Sets the current cosmetic/effective costume ID

@@ -8,8 +8,7 @@ namespace CTRPluginFramework
 	class GameData
 	{
 	public:
-		static const StringVector universalCostumeList;
-		static const StringVector customCostumeList;
+		static StringVector universalCostumeList;
 
 		static const StringVector swordList;
 		static const StringVector voiceList;
@@ -18,11 +17,12 @@ namespace CTRPluginFramework
 		static const StringVector lobbyBallSongs;
 
 		static const int generalPlayerIDs[];
-		static const int maxCostumeCount;
 		static const std::vector<u8> emoteIDs;
 
 		static const std::unordered_map<std::string, std::string> actorNames;
 		static const std::unordered_map<u8, std::string> challengeList;
+
+		static int maxCostumeCount;
 
 		static int getPlayerIDFromColor(std::string color);
 		static int getCostumeIDFromName(std::string costumeName);

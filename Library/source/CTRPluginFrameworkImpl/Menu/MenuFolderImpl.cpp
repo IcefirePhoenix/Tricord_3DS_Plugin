@@ -88,7 +88,7 @@ namespace CTRPluginFramework
     {
         for (MenuItem *item : _items)
         {
-            if (item->IsEntry() || item->IsFreeCheat())
+            if (item->IsEntry())
                 reinterpret_cast<MenuEntryImpl *>(item)->Disable();
             if (item->IsFolder())
                 reinterpret_cast<MenuFolderImpl *>(item)->DisableAll();

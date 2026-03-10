@@ -1,14 +1,14 @@
 #include "CTRPluginFrameworkImpl/System/HookManager.hpp"
-#include "CTRPluginFramework/System/Process.hpp"
 #include "3ds.h"
-#include "csvc.h"
 #include "CTRPluginFramework/Menu/MessageBox.hpp"
-#include "CTRPluginFrameworkImpl/System/Screen.hpp"
 #include "CTRPluginFramework/System/Lock.hpp"
+#include "CTRPluginFramework/System/Process.hpp"
+#include "CTRPluginFrameworkImpl/System/Screen.hpp"
+#include "csvc.h"
 
 using namespace CTRPluginFramework;
 
-HookManager  HookManager::_singleton;
+HookManager HookManager::_singleton;
 
 HookManager::HookManager(void)
 {
@@ -16,10 +16,10 @@ HookManager::HookManager(void)
     std::fill(_hookWrappers, _hookWrappers + MAX_HOOKS, zero);
     _asmWrappers.reserve(MAX_HOOKS);
 }
-#define PA_PTR(addr)            (void *)((u32)(addr) | 1 << 31)
-#define REG32(addr)             (*(vu32 *)(PA_PTR(addr)))
+#define PA_PTR(addr) (void *)((u32)(addr) | 1 << 31)
+#define REG32(addr) (*(vu32 *)(PA_PTR(addr)))
 
-extern "C" __attribute__((__used__))  void    __hook__CheckTlsValue(u32 value)
+extern "C" __attribute__((__used__)) void __hook__CheckTlsValue(u32 value)
 {
     if (value && (value < 0x06000000 || value > 0x07000000))
     {
@@ -31,45 +31,69 @@ extern "C" __attribute__((__used__))  void    __hook__CheckTlsValue(u32 value)
         }
         REG32(0x10202204) = 0;
 
-        const char * str = "Hi there! You found a game which do not match tls expected value.\n" \
-                         "Contact Nanquitas on discord.gg/z4ZMh27 to fix this asap.\n" \
-                         "Thanks a lot and sorry for the crash.";
-        MessageBox("Error",  str)();
+        const char *str = "Hi there! You found a game which do not match tls expected value.\n"
+                          "Contact Nanquitas on discord.gg/z4ZMh27 to fix this asap.\n"
+                          "Thanks a lot and sorry for the crash.";
+        MessageBox("Error", str)();
         svcBreak(USERBREAK_ASSERT);
-
     }
     return;
 }
 
-static NAKED void   SetHookContextInTLS(HookContext *ctx)
+static NAKED void SetHookContextInTLS(HookContext *ctx)
 {
 #ifndef _MSC_VER ///< Intellisense fix
-    __asm__ __volatile__
-    (
-        "stmfd  sp!, {r4-r5, lr}        \n"
+    __asm__ __volatile__(
+        "stmfd  sp!, {r4-r6, lr}        \n"
         "mov    r4, r0                  \n"
         "mrc    p15, 0, r5, c13, c0, 3  @ get tls \n"
-        "add    r5, r5, #0x3C           @ r5 = &tls[15] \n"
-        "ldr    r0, [r5]                \n"
+        "add    r6, r5, #0x3C           @ r6 = &tls[15] \n"
+        "ldr    r0, [r6]                \n"
         "bl     __hook__CheckTlsValue   @ Check tls value is expected \n"
-        "str    r4, [r5]                @ tls[15] = ctx \n"
-        "ldmfd  sp!, {r4-r5, pc}        \n"
-    );
+        "ldr    r0, [r5, #0x34]         @ tls[13] \n"
+        "str    r0, [r5, #0x30]         @ tls[12] = tls[13] \n"
+        "ldr    r0, [r5, #0x38]         @ tls[14] \n"
+        "str    r0, [r5, #0x34]         @ tls[13] = tls[14] \n"
+        "ldr    r0, [r6]                @ tls[15] \n"
+        "str    r0, [r5, #0x38]         @ tls[14] = tls[15] \n"
+        "str    r4, [r6]                @ tls[15] = ctx \n"
+        "ldmfd  sp!, {r4-r6, pc}        \n");
+#endif
+}
+
+static NAKED void RestoreHookContextInTLS(void)
+{
+#ifndef _MSC_VER ///< Intellisense fix
+    __asm__ __volatile__(
+        "stmfd  sp!, {r0-r4, lr}        \n"
+        "mrc    p15, 0, r4, c13, c0, 3  @ get tls \n"
+        "ldr    r0, [r4, #0x38]         @ tls[14] \n"
+        "str    r0, [r4, #0x3C]         @ tls[15] = tls[14] \n"
+        "ldr    r0, [r4, #0x34]         @ tls[13] \n"
+        "str    r0, [r4, #0x38]         @ tls[14] = tls[13] \n"
+        "ldr    r0, [r4, #0x30]         @ tls[12] \n"
+        "str    r0, [r4, #0x34]         @ tls[13] = tls[12] \n"
+        "mov    r0, #0                  \n"
+        "str    r0, [r4, #0x30]         @ tls[12] = 0 \n"
+        "ldmfd  sp!, {r0-r4, pc}        \n");
 #endif
 }
 
 static inline u32 ARMBranchLink(const void *src, const void *dst)
 {
     u32 instrBase = 0xEB000000;
-    u32 off = (u32)((const u8 *)dst - ((const u8 *)src + 8));
-
+    /* off is actually a signed 26 bits integer, stored as a signed 24 bits integer (off a>> 2). Therefore, we need to sign extend it*/
+    s32 off = (s32)((const u8 *)dst - ((const u8 *)src + 8));
+    off = (off << 6) >> 6;
     return instrBase | ((off >> 2) & 0xFFFFFF);
 }
 
 static inline u32 ARMBranch(const void *src, const void *dst)
 {
     u32 instrBase = 0xEA000000;
-    u32 off = (u32)((const u8 *)dst - ((const u8 *)src + 8));
+    /* off is actually a signed 26 bits integer, stored as a signed 24 bits integer (off a>> 2). Therefore, we need to sign extend it */
+    s32 off = (s32)((const u8 *)dst - ((const u8 *)src + 8));
+    off = (off << 6) >> 6;
 
     return instrBase | ((off >> 2) & 0xFFFFFF);
 }
@@ -92,19 +116,19 @@ static inline u32 ARM__STR_LR_PC(u32 offset)
     return 0xE58FE000 | offset;
 }
 
-static __attribute__((noinline)) void     GenerateAsm(AsmWrapper& asmWrapper, HookContext& ctx)
+static __attribute__((noinline)) void GenerateAsm(AsmWrapper &asmWrapper, HookContext &ctx)
 {
-    u32     flags = ctx.flags;
-    vu32 *  code = &asmWrapper.code[0];
-    vu32 *  ldrLrCb = nullptr;
-    vu32 *  ldrLr;
-    vu32 *  strLr;
+    u32 flags = ctx.flags;
+    vu32 *code = asmWrapper.code;
+    vu32 *ldrLrCb = nullptr;
+    vu32 *ldrLr;
+    vu32 *strLr;
 
     // Set common code
-    *code++ = 0xE92D400F; ///< stmfd sp!, {r0-r3, lr}
-    *code++ = 0xE51F0010; ///< ldr r0, [pc, #-16]
+    *code++ = 0xE92D400F;                                                      ///< stmfd sp!, {r0-r3, lr}
+    *code++ = 0xE51F0010;                                                      ///< ldr r0, [pc, #-16]
     *code++ = ARMBranchLink(&asmWrapper.code[2], (void *)SetHookContextInTLS); ///< bl SetHookContextInTLS
-    *code++ = 0xE8BD400F; ///< ldmfd sp!, {r0-r3, lr}
+    *code++ = 0xE8BD400F;                                                      ///< ldmfd sp!, {r0-r3, lr}
 
     if (flags & MITM_MODE)
     {
@@ -123,8 +147,11 @@ static __attribute__((noinline)) void     GenerateAsm(AsmWrapper& asmWrapper, Ho
 
         ++code;
 
+        *code = ARMBranchLink((void *)code, (void *)RestoreHookContextInTLS); ///< bl RestoreHookContextInTLS
+        ++code;
+
         // Jump back to original function - code[7]
-        *code++ = 0xE51FF004;///< ldr pc, [pc, #-4]
+        *code++ = 0xE51FF004; ///< ldr pc, [pc, #-4]
         *code = ctx.returnAddress;
 
         return;
@@ -146,8 +173,8 @@ static __attribute__((noinline)) void     GenerateAsm(AsmWrapper& asmWrapper, Ho
          * @afterCallback
          */
 
-        vu32 *  ldrLrCb2 = nullptr;
-        vu32 *  ldrLrSub;
+        vu32 *ldrLrCb2 = nullptr;
+        vu32 *ldrLrSub;
 
         // If there's a before callback
         if (ctx.callbackAddress)
@@ -167,6 +194,9 @@ static __attribute__((noinline)) void     GenerateAsm(AsmWrapper& asmWrapper, Ho
             *code++ = 0xE12FFF3E; ///< blx lr
         }
 
+        *code = ARMBranchLink((void *)code, (void *)RestoreHookContextInTLS); ///< bl RestoreHookContextInTLS
+        ++code;
+
         // Jump back to original function
         *code++ = 0xE51FF004; ///< ldr pc, [pc -4]
         *code++ = ctx.returnAddress;
@@ -176,9 +206,13 @@ static __attribute__((noinline)) void     GenerateAsm(AsmWrapper& asmWrapper, Ho
         *code++ = DecodeARMBranch((vu32 *)ctx.targetAddress);
         *code = ctx.callbackAddress2;
 
-        *ldrLrCb = ARM__LDR_LR_PC(u32(code) - u32(ldrLrCb) - 16);
-        *ldrLrSub = ARM__LDR_LR_PC(u32(code) - u32(ldrLrSub) - 12);
-        *ldrLrCb2 = ARM__LDR_LR_PC(u32(code) - u32(ldrLrCb2) - 8);
+        if (ldrLrCb)
+            *ldrLrCb = ARM__LDR_LR_PC(u32(code) - u32(ldrLrCb) - 16); // (code - 8) - (ldrLrCb - 8)
+
+        *ldrLrSub = ARM__LDR_LR_PC(u32(code) - u32(ldrLrSub) - 12); // (code - 4) - (ldrLrCb - 8)
+
+        if (ldrLrCb2)
+            *ldrLrCb2 = ARM__LDR_LR_PC(u32(code) - u32(ldrLrCb2) - 8); // (code - 0) - (ldrLrCb - 8)
 
         return;
     }
@@ -206,6 +240,9 @@ static __attribute__((noinline)) void     GenerateAsm(AsmWrapper& asmWrapper, Ho
     if (flags & EXECUTE_OI_AFTER_CB)
         *code++ = ctx.overwrittenInstr;
 
+    *code = ARMBranchLink((void *)code, (void *)RestoreHookContextInTLS); ///< bl RestoreHookContextInTLS
+    ++code;
+
     *code++ = 0xE51FF004; ///< ldr pc, [pc -4]
     *code++ = ctx.returnAddress;
     *code++ = ctx.callbackAddress;
@@ -215,10 +252,10 @@ static __attribute__((noinline)) void     GenerateAsm(AsmWrapper& asmWrapper, Ho
     *ldrLr = ARM__LDR_LR_PC(u32(code) - u32(ldrLr) - 8);
 }
 
-HookResult  HookManager::ApplyHook(HookContext &ctx)
+HookResult HookManager::ApplyHook(HookContext &ctx)
 {
-    HookManager&    manager = _singleton;
-    CTRPluginFramework::Lock            lock(manager._mutex);
+    HookManager &manager = _singleton;
+    CTRPluginFramework::Lock lock(manager._mutex);
 
     // Check if we have enough hooks unused
     if (manager._asmWrappers.size() >= MAX_HOOKS)
@@ -233,14 +270,14 @@ HookResult  HookManager::ApplyHook(HookContext &ctx)
     }
 
     // Check if the target is already hooked
-    for (const AsmWrapper& asmWrapper : manager._asmWrappers)
+    for (const AsmWrapper &asmWrapper : manager._asmWrappers)
         if (asmWrapper.ctx && asmWrapper.ctx->targetAddress == ctx.targetAddress)
             return HookResult::AddressAlreadyHooked;
 
     // Everything is set, apply the hook
-    s32             index;
-    AsmWrapper&     asmWrapper =  manager.GetFreeAsmWrapper();
-    HookWrapper&    hookWrapper = manager.GetFreeHookWrapper(index);
+    s32 index;
+    AsmWrapper &asmWrapper = manager.GetFreeAsmWrapper();
+    HookWrapper &hookWrapper = manager.GetFreeHookWrapper(index);
 
     // Generate asm based on hook params
     GenerateAsm(asmWrapper, ctx);
@@ -252,39 +289,39 @@ HookResult  HookManager::ApplyHook(HookContext &ctx)
     // Update AsmWrapper
     asmWrapper.ctx = &ctx;
     svcFlushProcessDataCache(Process::GetHandle(), (u32)&asmWrapper, sizeof(AsmWrapper));
-    //svcFlushDataCacheRange(&asmWrapper, sizeof(AsmWrapper));
+    // svcFlushDataCacheRange(&asmWrapper, sizeof(AsmWrapper));
 
     // Update HookWrapper
     hookWrapper.jumpCode = 0xE51FF004; ///< ldr pc, [pc, #-4]
     hookWrapper.callback = (u32)&asmWrapper.code[0];
     hookWrapper.ctx = &ctx;
     svcFlushProcessDataCache(Process::GetHandle(), (u32)&hookWrapper, sizeof(HookWrapper));
-    //svcFlushDataCacheRange(&hookWrapper, sizeof(HookWrapper));
+    // svcFlushDataCacheRange(&hookWrapper, sizeof(HookWrapper));
 
     // Apply hook
     svcInvalidateEntireInstructionCache();
     *(vu32 *)ctx.targetAddress = ARMBranch((void *)ctx.targetAddress, &hookWrapper.jumpCode);
     svcFlushProcessDataCache(Process::GetHandle(), ctx.targetAddress, 4);
-    //svcFlushDataCacheRange((void *)ctx.targetAddress, 4);
+    // svcFlushDataCacheRange((void *)ctx.targetAddress, 4);
 
     return HookResult::Success;
 }
 
-HookResult    HookManager::DisableHook(HookContext &ctx)
+HookResult HookManager::DisableHook(HookContext &ctx)
 {
-    HookManager&    manager = _singleton;
-    CTRPluginFramework::Lock            lock(manager._mutex);
+    HookManager &manager = _singleton;
+    CTRPluginFramework::Lock lock(manager._mutex);
 
     if (ctx.index > MAX_HOOKS)
         return HookResult::Success;
 
-    HookWrapper&    hookWrapper = manager._hookWrappers[ctx.index];
-    AsmWrapper&     asmWrapper = manager.GetAsmWrapper(hookWrapper.ctx);
+    HookWrapper &hookWrapper = manager._hookWrappers[ctx.index];
+    AsmWrapper &asmWrapper = manager.GetAsmWrapper(hookWrapper.ctx);
 
     // First disable hook
     svcInvalidateEntireInstructionCache();
     *(vu32 *)ctx.targetAddress = ctx.overwrittenInstr;
-    //svcFlushDataCacheRange((void *)ctx.targetAddress, 4);
+    // svcFlushDataCacheRange((void *)ctx.targetAddress, 4);
     svcFlushProcessDataCache(Process::GetHandle(), ctx.targetAddress, 4);
 
     // Free HookWrapper
@@ -303,11 +340,11 @@ HookResult    HookManager::DisableHook(HookContext &ctx)
     return HookResult::Success;
 }
 
-AsmWrapper&    HookManager::GetFreeAsmWrapper(void)
+AsmWrapper &HookManager::GetFreeAsmWrapper(void)
 {
-    CTRPluginFramework::Lock    lock(_mutex);
+    CTRPluginFramework::Lock lock(_mutex);
 
-    for (AsmWrapper& asmWrapper : _asmWrappers)
+    for (AsmWrapper &asmWrapper : _asmWrappers)
         if (asmWrapper.ctx == nullptr)
             return asmWrapper;
 
@@ -315,9 +352,9 @@ AsmWrapper&    HookManager::GetFreeAsmWrapper(void)
     return _asmWrappers.back();
 }
 
-HookWrapper&    HookManager::GetFreeHookWrapper(s32& index)
+HookWrapper &HookManager::GetFreeHookWrapper(s32 &index)
 {
-    CTRPluginFramework::Lock    lock(_mutex);
+    CTRPluginFramework::Lock lock(_mutex);
 
     HookWrapper *begin = _hookWrappers;
     HookWrapper *end = begin + MAX_HOOKS;
@@ -332,11 +369,11 @@ HookWrapper&    HookManager::GetFreeHookWrapper(s32& index)
     return *begin;
 }
 
-AsmWrapper&     HookManager::GetAsmWrapper(HookContext *ctx)
+AsmWrapper &HookManager::GetAsmWrapper(HookContext *ctx)
 {
-    CTRPluginFramework::Lock    lock(_mutex);
+    CTRPluginFramework::Lock lock(_mutex);
 
-    for (AsmWrapper& asmWrapper : _asmWrappers)
+    for (AsmWrapper &asmWrapper : _asmWrappers)
         if (asmWrapper.ctx == ctx)
             return asmWrapper;
 
@@ -359,15 +396,17 @@ void HookManager::PrepareToUnmapMemory()
 {
     CTRPluginFramework::Lock lock(_singleton._mutex);
 
-    HookWrapper* begin = _singleton._hookWrappers;
-    HookWrapper* end = begin + MAX_HOOKS;
+    HookWrapper *begin = _singleton._hookWrappers;
+    HookWrapper *end = begin + MAX_HOOKS;
 
     svcInvalidateEntireInstructionCache();
 
-    for (; begin != end; ++begin) {
-        if (!begin->ctx) continue;
-        HookContext& ctx = *begin->ctx;
-        *(vu32*)ctx.targetAddress = ctx.overwrittenInstr;
+    for (; begin != end; ++begin)
+    {
+        if (!begin->ctx)
+            continue;
+        HookContext &ctx = *begin->ctx;
+        *(vu32 *)ctx.targetAddress = ctx.overwrittenInstr;
         svcFlushProcessDataCache(Process::GetHandle(), ctx.targetAddress, 4);
     }
 }
@@ -376,15 +415,17 @@ void HookManager::RecoverFromUnmapMemory()
 {
     CTRPluginFramework::Lock lock(_singleton._mutex);
 
-    HookWrapper* begin = _singleton._hookWrappers;
-    HookWrapper* end = begin + MAX_HOOKS;
+    HookWrapper *begin = _singleton._hookWrappers;
+    HookWrapper *end = begin + MAX_HOOKS;
 
     svcInvalidateEntireInstructionCache();
 
-    for (; begin != end; ++begin) {
-        if (!begin->ctx) continue;
-        HookContext& ctx = *begin->ctx;
-        *(vu32*)ctx.targetAddress = ARMBranch((void*)ctx.targetAddress, &begin->jumpCode);
+    for (; begin != end; ++begin)
+    {
+        if (!begin->ctx)
+            continue;
+        HookContext &ctx = *begin->ctx;
+        *(vu32 *)ctx.targetAddress = ARMBranch((void *)ctx.targetAddress, &begin->jumpCode);
         svcFlushProcessDataCache(Process::GetHandle(), ctx.targetAddress, 4);
     }
 }

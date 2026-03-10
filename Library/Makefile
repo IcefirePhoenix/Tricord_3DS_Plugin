@@ -9,7 +9,7 @@ endif
 include $(DEVKITARM)/3ds_rules
 
 # GitHub commit hash (short) = 7 chars | GitLab commit hash (short) = 8 chars
-TRICORD_VERSION_TAG 			:= $(shell git describe --always --tags | cut -f1 -d-)
+TRICORD_VERSION_TAG 			:= $(shell git describe --tags --abbrev=0 || echo 0.0.0)
 TRICORD_VERSION_COMMIT_SHORT	:= $(shell git rev-parse --short=7 HEAD)
 CTRPF_VERSION_TAG 				:= $(shell curl -s https://gitlab.com/api/v4/projects/thepixellizeross%2Fctrpluginframework/repository/tags | grep -oP '"name":\s*"\K[^"]+' | head -n 1)
 CTRPF_VERSION_COMMIT_SHORT 		:= $(shell curl -s "https://gitlab.com/api/v4/projects/thepixellizeross%2Fctrpluginframework/repository/commits" | grep -oP '"id":"\K[^"]+' | head -n 1 | cut -c1-8)
@@ -21,7 +21,7 @@ TRICORD_VERSION_REV   := $(shell echo $(TRICORD_VERSION_TAG) | cut -d. -f3)
 export CTRPF_REVISION			:= $(shell printf "%s.r%s" "$$(git describe --abbrev=0 --tags)" "$$(git rev-list --count HEAD)")
 export CTRPF_BUILD_METADATA 	:= $(shell printf "%s [%s]" "$(CTRPF_VERSION_TAG)" "$(CTRPF_VERSION_COMMIT_SHORT)")
 export TRICORD_BUILD_METADATA 	:= $(shell printf "%s [%s]" "$(TRICORD_VERSION_TAG)" "$(TRICORD_VERSION_COMMIT_SHORT)")
-export COMPILE_DATE 			:= $(shell date -u +"%Y-%m-%d at %H:%M:%S%Z")
+export LIB_COMPILE_DATE 		:= $(shell date -u +"%Y-%m-%d at %H:%M:%S%Z")
 export MODDING_INVITE 					:= P6csr4jc5U
 export MATCHMAKING_INVITE 				:= 87SaWke
 
@@ -73,7 +73,7 @@ ARCH	:=	-march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 
 DEFINES	:=	-DTRICORD_BUILD_METADATA="\"$(TRICORD_BUILD_METADATA)\"" \
 			-DCTRPF_BUILD_METADATA="\"$(CTRPF_BUILD_METADATA)\"" \
-			-DCOMPILE_DATE="\"$(COMPILE_DATE)\"" \
+			-DLIB_COMPILE_DATE="\"$(LIB_COMPILE_DATE)\"" \
 			-DMODDING_INVITE="\"$(MODDING_INVITE)\"" \
 			-DMATCHMAKING_INVITE="\"$(MATCHMAKING_INVITE)\"" \
 			-DTRICORD_VERSION_MAJOR="\"$(TRICORD_VERSION_MAJOR)"\" \
@@ -219,7 +219,7 @@ clean:
 version:
 	@echo "Latest Lib: $(CTRPF_BUILD_METADATA)"
 	@echo "Latest Tricord: $(TRICORD_BUILD_METADATA)"
-	@echo "Compile Date: $(COMPILE_DATE)"
+	@echo "Lib Compile Date: $(LIB_COMPILE_DATE)"
 
 #---------------------------------------------------------------------------------
 else

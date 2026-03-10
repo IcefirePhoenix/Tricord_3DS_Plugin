@@ -1,0 +1,778 @@
+#include "Helpers.hpp"
+
+#define MAX_FRAMES 6
+
+namespace CTRPluginFramework
+{
+    MenuEntry *faceExprManager;
+
+    MenuEntryLabel *faceExprLabel1;
+    MenuEntryLabel *faceExprLabel2;
+    MenuEntryLabel *faceExprLabel3;
+    MenuEntryLabel *faceExprLabel4;
+    MenuEntryLabel *faceExprLabel5;
+    MenuEntryLabel *faceExprLabel6;
+
+    constexpr int frameCount = 12,
+        originalTexCount = 16,
+        newTexCount = 20;
+    constexpr u8 increasedTexListSize = 0x14,
+        animMetadataSize = 0x24;
+    constexpr u16 eyeLabelOffset = 0xE95,
+        mayuLabelOffset = 0xF15,
+        mouthLabelOffset = 0xF44;
+
+    StringVector FaceExprEditor::frameList =
+    {
+        "Idle",
+        "Shocked",
+        "Death / DMG",
+        "Triforce Warp",
+        "Low HP / Failed Challenge",
+        "Fall / Drown / Capture"
+    };
+
+    const std::vector<IconLabel> eyeInfo =
+    {
+        {0.0, Icon::DrawEye0, "Idle"},
+        {16.0, Icon::DrawEye1, "Looking left"},
+        {17.0, Icon::DrawEye2, "Looking right"},
+        {1.0, Icon::DrawEye3, "Happily shut"},
+        {2.0, Icon::DrawEye4, "Squinting"},
+        {18.0, Icon::DrawEye5, "Peacefully shut"},
+        {3.0, Icon::DrawEye6, "Hurt"},
+        {4.0, Icon::DrawEye7, "Half-open"},
+        {5.0, Icon::DrawEye8, "Shocked"}
+    };
+
+    const std::vector<IconLabel> mayuInfo =
+    {
+        {6.0, Icon::DrawMayu0, "Idle"},
+        {7.0, Icon::DrawMayu1, "Scrunched"},
+        {8.0, Icon::DrawMayu2, "Curved upward"},
+        {9.0, Icon::DrawMayu3, "Inquisitive"},
+        {10.0, Icon::DrawMayu4, "Pitiful"}
+    };
+
+    const std::vector<IconLabel> mouthInfo =
+    {
+        {11.0, Icon::DrawMouth0, "Idle"},
+        {12.0, Icon::DrawMouth1, "Wide open"},
+        {13.0, Icon::DrawMouth2, "Teeth clenched"},
+        {14.0, Icon::DrawMouth3, "Partly open"},
+        {15.0, Icon::DrawMouth4, "Smiling"},
+        {19.0, Icon::DrawMouth5, "Sad"}
+    };
+
+    StringVector currLabels =
+    {
+        eyeInfo[0].label,
+        mayuInfo[0].label,
+        mouthInfo[0].label
+    };
+
+    const std::vector<IconLabel> infoArrays[] = {eyeInfo, mayuInfo, mouthInfo};
+
+    int currExprIndexes[3] = {0, 0, 0};
+    int dataSizes[3] = {9, 5, 6};
+
+    std::array<Preferences::FaceExprFrameVal, MAX_FRAMES> defaultExprs =
+    {{
+        {0, 0, 0},
+        {8, 2, 1},
+        {6, 1, 2},
+        {0, 1, 1},
+        {6, 3, 1},
+        {4, 1, 1}
+    }};
+
+    FaceExprEditor::FaceExprEditor(int frameIndex, std::string &frameLabel) : _frameIndex(frameIndex), _frameLabel(frameLabel)
+    {
+        for (int column1 = 0, posY = 90; column1 < 3; column1++, posY += 44)
+        {
+            Button newLButton(Button::Icon, IntRect(100, posY, 25, 25), Icon::DrawLeft);
+            Button newRButton(Button::Icon, IntRect(260, posY, 25, 25), Icon::DrawRight);
+
+            _leftArrs.push_back(newLButton);
+            _rightArrs.push_back(newRButton);
+        }
+    }
+
+    FaceExprEditor::~FaceExprEditor()
+    {
+        updateAnimData();
+
+        // attempt to enable edits if not already active
+        faceExprManager->Enable();
+    }
+
+    void FaceExprEditor::operator()(void)
+    {
+        bool mustclose = false;
+        bool sleepClose = false;
+
+        // set menu graphics
+        currExprIndexes[0] = Preferences::SavedFaceExprs[_frameIndex].eyeVal;
+        currExprIndexes[1] = Preferences::SavedFaceExprs[_frameIndex].mayuVal;
+        currExprIndexes[2] = Preferences::SavedFaceExprs[_frameIndex].mouthVal;
+
+        // set labels
+        for (int processed = 0; processed < 3; processed++)
+        {
+            currLabels[processed] = infoArrays[processed][currExprIndexes[processed]].label;
+        }
+
+        while (((!Window::BottomWindow.MustClose() && !mustclose)) && !sleepClose)
+        {
+            Controller::Update();
+            mustclose = Controller::IsKeyPressed(Key::B);
+            sleepClose = SystemImpl::IsSleeping();
+
+            _drawTop();
+            _drawBottom();
+
+            Renderer::EndFrame();
+            _updateMenuGraphics();
+        }
+    }
+
+    /* -------------- EXECUTED ONCE DURING INIT -------------- */
+
+    void FaceExprEditor::initSeq(void)
+    {
+        if (!buildCustomData())
+        {
+            OSD::Notify("Facial Expression Editor: An error occurred during init.", Color::Yellow);
+            OSD::Notify("Edits have not been saved. Please try again.", Color::Yellow);
+            faceExprManager->Disable();
+        }
+        else
+        {
+            if (!loadSavedSelectionsFromFile())
+            {
+                resetExprs();
+
+                OSD::Notify("Facial Expression Editor: Cannot load previously saved selections.", Color::Yellow);
+                OSD::Notify("Reverting back to default facial expression data.", Color::Yellow);
+            }
+        }
+    }
+
+    // Writes necessary custom data in padding, see individual functions for details
+    bool FaceExprEditor::buildCustomData(void)
+    {
+        u32 LFC_MA_masterStartAddr = AddressList::getAddress("LFC_MA_MasterStart");
+
+        if (!FaceExprEditor::restoreEyeTexMasterList(LFC_MA_masterStartAddr))
+            return false;
+        if (!FaceExprEditor::copyEyeAnimData(LFC_MA_masterStartAddr))
+            return false;
+        if (!FaceExprEditor::copyMayuAnimData(LFC_MA_masterStartAddr))
+            return false;
+        if (!FaceExprEditor::copyMouthAnimData(LFC_MA_masterStartAddr))
+            return false;
+        if (!FaceExprEditor::initCustomCH(LFC_MA_masterStartAddr))
+            return false;
+        if (!FaceExprEditor::buildTexRefPtrBlock())
+            return false;
+
+        // if nothing failed...
+        return true;
+    }
+
+    // Retrieves saved expression data from file, allowing edits to be preserved between reboots
+    bool FaceExprEditor::loadSavedSelectionsFromFile(void)
+    {
+        u8 faceSectionSize = 0x60 + animMetadataSize;
+        u32 animStartAddr = AddressList::getAddress("CustomAnimData") + animMetadataSize;
+
+        if (Preferences::SavedFaceExprs == defaultExprs)
+        {
+            faceExprManager->Disable();
+        }
+        else
+        {
+            // read previously saved frame edits
+            for (int framesRead = 0; framesRead < MAX_FRAMES; framesRead++)
+            {
+                u32 entryOffset = framesRead * sizeof(u64); // each entry contains two floats: frameNum and frameVal
+                u32 sectionOffset = animStartAddr + entryOffset + sizeof(u32);
+
+                Process::WriteFloat(sectionOffset + (faceSectionSize * 0), infoArrays[0][Preferences::SavedFaceExprs[framesRead].eyeVal].floatVal);
+                Process::WriteFloat(sectionOffset + (faceSectionSize * 1), infoArrays[1][Preferences::SavedFaceExprs[framesRead].mayuVal].floatVal);
+                Process::WriteFloat(sectionOffset + (faceSectionSize * 2), infoArrays[2][Preferences::SavedFaceExprs[framesRead].mouthVal].floatVal);
+            }
+            faceExprManager->Enable();
+        }
+
+        updateLabels(true);
+        return true;
+    }
+
+    // Restores reference to unused texture "eye.1" to the Master Link_anm_mat.bch texture filename list using an extra, unused string
+    // Note: this edit propagates to all child LFC_MA blocks
+    bool FaceExprEditor::restoreEyeTexMasterList(u32 LFC_MA_masterStartAddr)
+    {
+        // Link_anm_mat.bch does not contain any animations using the texture "eye.1" hence this string needs to be placed in memory... simply replace extra/unused string "eye.9" with "eye.1"
+        std::string customStr = "eye.1";
+        u16 eye9_TexOffset = 0xEC9;
+
+        if (!Process::WriteString(LFC_MA_masterStartAddr + eye9_TexOffset, customStr, StringFormat::Utf8))
+        {
+            OSD::Notify("[ERROR] Restoring eye.1 texture filename failed.", Color::Red);
+            return false;
+        }
+        return true;
+    }
+
+    // Recreates Category Header data; will be used universally across all LFC_MA child blocks
+    bool FaceExprEditor::initCustomCH(u32 LFC_MA_masterStartAddr)
+    {
+        u8 CH_entrySize = 0x10;
+        u32 CH_start = AddressList::getAddress("CustomCategoryHeaders");
+        u32 writerStartAddr = CH_start;
+        u32 labelAddrs[3] =
+        {
+            LFC_MA_masterStartAddr + eyeLabelOffset,
+            LFC_MA_masterStartAddr + mayuLabelOffset,
+            LFC_MA_masterStartAddr + mouthLabelOffset
+        };
+
+        // CH struct:
+        // u32 pointer to category label string (set to LFC_MA master labels)
+        // u16 TargetType (always 0x000D)
+        // u16 PrimitiveType (always 0x0006)
+        // u16 unknown (always 0x0000)
+        // u16 unknownID (always 0x0E00)
+        // u32 pointer to category's animation metadata (set to secondary/custom animation blocks)
+
+        u16 targetType = 0xD, primitiveType = 0x6;
+        u32 unknown = 0xE00;
+
+        if (!Process::CheckAddress(CH_start))
+        {
+            OSD::Notify("[ERROR] Custom CH start address is not accessible.", Color::Red);
+            return false;
+        }
+
+        for (int category = 0; category < 3; category++)
+        {
+            Process::Write32(writerStartAddr, labelAddrs[category]);
+            Process::Write16(writerStartAddr + sizeof(u32), targetType);
+            Process::Write16(writerStartAddr + sizeof(u32) + sizeof(u16), primitiveType);
+            Process::Write32(writerStartAddr + sizeof(u64), unknown);
+            Process::Write32(writerStartAddr + sizeof(u64) + sizeof(u32), AddressList::getAddress("CustomAnimData") + (sizeof(u64) * frameCount * category) + (animMetadataSize * category));
+
+            writerStartAddr += CH_entrySize;
+        }
+
+        // set up CH pointers
+        u32 CH_ptrs = AddressList::getAddress("RedirCategoryHeaderPtrs");
+        Process::Write32(CH_ptrs, CH_start);
+        Process::Write32(CH_ptrs + sizeof(u32), CH_start + CH_entrySize);
+        Process::Write32(CH_ptrs + sizeof(u32) * 2, CH_start + CH_entrySize * 2);
+
+        return true;
+    }
+
+    // Copies LFC_MA eye, eyebrow (mayu), and mouth data to padding; this will serve as a secondary copy where custom animation edits are applied, allowing the original data to remain untouched for easy reverts by simply cancelling redirects
+    bool FaceExprEditor::copyEyeAnimData(u32 LFC_MA_masterStartAddr)
+    {
+        /**
+         * Eye data needs to be converted to StepLinear64 instead of StepLinear32
+         * StepLinear32 parsing reference: https://github.com/gdkchan/SPICA/blob/master/SPICA/Formats/Common/KeyFrameQuantizationHelper.cs
+         *
+         * Algorithm to convert between texture ID to float:
+         *
+         * 1) obtain upper 20 bits of texture ID -> this is frameVal
+         * 2) mask frameVal to isolate single digit (note that all digits are the same)
+         * 3) divide isolated digit by max single digit val (4-bit limit, 0xF)
+         * 4) convert result into float
+         * 5) multiply by max eye texture index (5, see data spreadsheet)
+         */
+
+        float eyeFrameValBuffer;
+        u8 eyeOffset = 0xA8;
+        u32 writerCurrAddress = AddressList::getAddress("CustomAnimData");
+        u32 currentEyeAnimAddress = LFC_MA_masterStartAddr + eyeOffset;
+        u32 tmpFrameDataBuffer;
+
+        if (!Process::CheckAddress(currentEyeAnimAddress))
+        {
+            OSD::Notify("[ERROR] Anim frame start address is not accessible.", Color::Red);
+            return false;
+        }
+
+        writeCategoryAnimMetadata(writerCurrAddress, 0);
+        writerCurrAddress += animMetadataSize;
+
+        for (int iter = 0; iter < frameCount; iter++)
+        {
+            Process::Read32(currentEyeAnimAddress, tmpFrameDataBuffer);
+
+            int frameNum = (tmpFrameDataBuffer >> 0) & 0xFFF;
+            int frameVal = (tmpFrameDataBuffer >> 12) & 0xF; // instead of masking by 0xFFFFF... see step 2
+
+            eyeFrameValBuffer = static_cast<float>(frameVal) / 0xF;
+            eyeFrameValBuffer *= 5.0;
+
+            Process::WriteFloat(writerCurrAddress, static_cast<float>(frameNum));
+            Process::WriteFloat(writerCurrAddress + sizeof(u32), eyeFrameValBuffer);
+
+            currentEyeAnimAddress += sizeof(u32);
+            writerCurrAddress += sizeof(u64);
+        }
+
+        return true;
+    }
+
+    bool FaceExprEditor::copyMayuAnimData(u32 LFC_MA_masterStartAddr)
+    {
+        u16 mayuOffset = 0xFC;
+        u32 writerCurrAddress = AddressList::getAddress("CustomAnimData") + (sizeof(u64) * frameCount) + animMetadataSize;
+        u32 mayuCurrAddress = LFC_MA_masterStartAddr + mayuOffset;
+
+        writeCategoryAnimMetadata(writerCurrAddress, 1);
+        writerCurrAddress += animMetadataSize;
+
+        if (!Process::CopyMemory((void *)writerCurrAddress, (void *)mayuCurrAddress, sizeof(u64) * 3))
+        {
+            OSD::Notify("[ERROR] Copying Mayu frame data (1st) failed.", Color::Red);
+            return false;
+        }
+
+        mayuCurrAddress += sizeof(u64) * 3;
+        writerCurrAddress += sizeof(u64) * 3;
+
+        // no data exists for Frame 3; fill in missing data manually
+        Process::WriteFloat(writerCurrAddress, 3.0);
+        Process::WriteFloat(writerCurrAddress + sizeof(u32), 7.0);
+        writerCurrAddress += sizeof(u64); // StepLinear64 single frame data = two u32
+
+        if (!Process::CopyMemory((void *)writerCurrAddress, (void *)mayuCurrAddress, sizeof(u64) * 8))
+        {
+            OSD::Notify("[ERROR] Copying Mayu frame data (2nd) failed.", Color::Red);
+            return false;
+        }
+
+        return true;
+    }
+
+    bool FaceExprEditor::copyMouthAnimData(u32 LFC_MA_masterStartAddr)
+    {
+        u16 mouthOffset = 0x178;
+        u32 writerCurrAddress = AddressList::getAddress("CustomAnimData") + (sizeof(u64) * frameCount * 2) + (animMetadataSize * 2);
+        u32 mouthStartAddress = LFC_MA_masterStartAddr + mouthOffset;
+
+        writeCategoryAnimMetadata(writerCurrAddress, 2);
+        writerCurrAddress += animMetadataSize;
+
+        if (!Process::CopyMemory((void *)writerCurrAddress, (void *)mouthStartAddress, sizeof(u64) * 4))
+        {
+            OSD::Notify("[ERROR] Copying Mouth frame data (1st) failed.", Color::Red);
+            return false;
+        }
+
+        mouthStartAddress += sizeof(u64) * 4;
+        writerCurrAddress += sizeof(u64) * 4;
+
+        // no data exists for Frames 4-5; fill in missing data manually
+        Process::WriteFloat(writerCurrAddress, 4.0);
+        Process::WriteFloat(writerCurrAddress + sizeof(u32), 12.0);
+        Process::WriteFloat(writerCurrAddress + sizeof(u32) * 2, 5.0);
+        Process::WriteFloat(writerCurrAddress + sizeof(u32) * 3, 12.0);
+        writerCurrAddress += sizeof(u64) * 2;
+
+        if (!Process::CopyMemory((void *)writerCurrAddress, (void *)mouthStartAddress, sizeof(u64) * 6))
+        {
+            OSD::Notify("[ERROR] Copying Mouth frame data (2nd) failed.", Color::Red);
+            return false;
+        }
+
+        return true;
+    }
+
+    // Reference: https://github.com/gdkchan/SPICA/blob/master/SPICA/Formats/CtrH3D/Animation/H3DFloatKeyFrameGroup.cs
+    void FaceExprEditor::writeCategoryAnimMetadata(u32 writerStartAddr, int curveIndex)
+    {
+        float startFrame = 0.0,
+            endFrame = 11.0,
+            valueScale = 1.0,
+            valueOffset = 0.0,
+            frameScale = 1.0,
+            invDuration = 0.0909;
+
+        u8 stepLinear64 = 0x6,
+           interpolation = 0x0,
+           prePostRepeat = 0x0;
+
+        u32 writerAddr = writerStartAddr;
+
+        Process::WriteFloat(writerAddr, startFrame);
+        Process::WriteFloat(writerAddr + sizeof(u32), endFrame);
+        writerAddr += sizeof(u32) * 2;
+
+        Process::Write8(writerAddr, prePostRepeat);
+        Process::Write8(writerAddr + sizeof(u8), prePostRepeat);
+        Process::Write16(writerAddr + sizeof(u16), static_cast<u16>(curveIndex));
+        writerAddr += sizeof(u32);
+
+        Process::Write8(writerAddr, interpolation);
+        Process::Write8(writerAddr + sizeof(u8), stepLinear64);
+        Process::Write16(writerAddr + sizeof(u16), static_cast<u16>(frameCount));
+        writerAddr += sizeof(u32);
+
+        Process::WriteFloat(writerAddr, valueScale);
+        Process::WriteFloat(writerAddr + sizeof(u32), valueOffset);
+        Process::WriteFloat(writerAddr + sizeof(u32) * 2, frameScale);
+        Process::WriteFloat(writerAddr + sizeof(u32) * 3, invDuration);
+        writerAddr += sizeof(u32) * 4;
+
+        Process::Write32(writerAddr, writerStartAddr + animMetadataSize); // ptr to frame data
+    }
+
+    bool FaceExprEditor::buildTexRefPtrBlock(void)
+    {
+        // TODO: could grab these values from master block instead of hardcoding...
+        std::array<u16, newTexCount> masterListRelativeOffsets = { 0x27D, 0x289, 0x28F, 0x29B, 0x2A1, 0x2A7, 0x2FE, 0x305, 0x30C, 0x313, 0x31A, 0x32E, 0x336, 0x33E, 0x346, 0x34E, 0x2AD, 0x283, 0x295, 0x356 };
+
+        u32 writerCurrAddress = AddressList::getAddress("CustomFilenamePtrList");
+        u32 baseAddr = AddressList::getAddress("Link_anm_mat_MasterAssetListStart");
+
+        for (u16 offset : masterListRelativeOffsets)
+        {
+            if (!Process::Write32(writerCurrAddress, baseAddr + offset))
+            {
+                OSD::Notify("[ERROR] Building texture reference pointer block failed.", Color::Red);
+                return false;
+            }
+
+            writerCurrAddress += sizeof(u32);
+        }
+        return true;
+    }
+
+    /* -------------- EXECUTED DURING LOADING SEQUENCES -------------- */
+
+    // Retrieves the dynamic starting addresses for each LFC_MA child block (4 total: Hytopia, G, B, R) by traversing known pointer chains
+    void FaceExprEditor::editChild_FC_MA_Blocks(void)
+    {
+        // LFC_MA = Link_FaceChange Material Animation
+        u8 finalLFC_MA_offset = 0x18;
+        u8 LFC_MA_offsets[4] = {0x18, 0xB4, 0x6C, 0x4C};
+        u32 LFC_MA_start = AddressList::getAddress("IndivLFC_MA_Start");
+        u32 tmpPointerBuffer = 0x0;
+
+        std::vector<u32> addresses;
+
+        // NOTE: pointer chain detailed in spreadsheet
+        for (int iter = 0; iter < 4; iter++)
+        {
+            // last iteration -> hytopia
+            if (iter == 3)
+                LFC_MA_start = AddressList::getAddress("HytopiaLFC_MA_Start");
+
+            Process::Read32(LFC_MA_start, tmpPointerBuffer);
+            if (GeneralHelpers::isNullPointer(tmpPointerBuffer))
+            {
+                OSD::Notify("[ERROR] LFC_MA start address is null.", Color::Red);
+                break;
+            }
+
+            for (int jump = 0; jump < 4; jump++)
+            {
+                // update buffer with current pointer address
+                Process::Read32(tmpPointerBuffer + LFC_MA_offsets[jump], tmpPointerBuffer);
+
+                if (GeneralHelpers::isNullPointer(tmpPointerBuffer))
+                    return;
+            }
+
+            u32 childAddr = tmpPointerBuffer + finalLFC_MA_offset;
+
+            alterTexBlockSize(childAddr, true);
+
+            bool IH_redirClear = copyRedirIH_PtrBlock(childAddr);
+            bool CH_redirClear = redirCH(childAddr);
+            bool texRedirClear = redirTexRefPtr(childAddr);
+
+            if (IH_redirClear && CH_redirClear && texRedirClear)
+            {
+                alterTexBlockSize(childAddr, false);
+            }
+
+            addresses.push_back(childAddr);
+            LFC_MA_start += 4; // to retrieve adjacent address for B/R
+        }
+    }
+
+    // Expands the child LFC_MA texture filename reference pointer block
+    bool FaceExprEditor::alterTexBlockSize(u32 LFC_MA_startAddr, bool restore)
+    {
+        u8 blockSizeOffset = 0x4;
+        u8 editedSize = restore ? originalTexCount : increasedTexListSize;
+
+        return (Process::Write8(LFC_MA_startAddr + blockSizeOffset, editedSize));
+    }
+
+    bool FaceExprEditor::copyRedirIH_PtrBlock(u32 LFC_MA_startAddr)
+    {
+        u8 IH_entrySize = 0x20;
+        u16 IH_Offset = 0x3D3C, IH_SizeOffset = 0x4;
+        u32 readerCurrAddress = LFC_MA_startAddr + IH_Offset;
+        u32 writerCurrAddress = AddressList::getAddress("CustomInfoHeaderPtrs");
+        u32 pointerBase = 0x0;
+
+        Process::Read32(readerCurrAddress, readerCurrAddress);
+        if (GeneralHelpers::isNullPointer(readerCurrAddress))
+        {
+            OSD::Notify("[ERROR] IH block pointer is null.", Color::Red);
+            return false;
+        }
+
+        if (!Process::CopyMemory((void *)writerCurrAddress, (void *)readerCurrAddress, sizeof(u32) * originalTexCount))
+        {
+            return false;
+        }
+
+        // derive missing pointers manually
+        if (!Process::Read32(readerCurrAddress, pointerBase)) // this is eye.0 = tex index 0
+        {
+            OSD::Notify("[ERROR] Missing IH pointers cannot be calculated.", Color::Red);
+            return false;
+        }
+
+        writerCurrAddress += sizeof(u32) * originalTexCount;
+
+        Process::Write32(writerCurrAddress, pointerBase + IH_entrySize);                        // this is eye.1 = tex index 1
+        Process::Write32(writerCurrAddress + sizeof(u32), pointerBase + IH_entrySize * 2);      // this is eye.2 = tex index 2
+        Process::Write32(writerCurrAddress + sizeof(u32) * 2, pointerBase + IH_entrySize * 5);  // this is eye.5 = tex index 5
+        Process::Write32(writerCurrAddress + sizeof(u32) * 3, pointerBase + IH_entrySize * 23); // this is mouth.5 = tex index 24 (not 19 due to main.0 - main.3)
+
+        // update IH location + size references
+        Process::Write32(LFC_MA_startAddr + IH_Offset, AddressList::getAddress("CustomInfoHeaderPtrs"));
+        Process::Write32(LFC_MA_startAddr + IH_Offset + IH_SizeOffset, newTexCount);
+
+        return true;
+    }
+
+    // Redirects Category Header reference pointers in the LFC_MA child blocks to the custom copy previously created in padding
+    bool FaceExprEditor::redirCH(u32 LFC_MA_startAddr)
+    {
+        u8 CH_ptrOffset = 0xC;
+        return (Process::Write32(LFC_MA_startAddr - CH_ptrOffset, AddressList::getAddress("RedirCategoryHeaderPtrs")));
+    }
+
+    // Redirects texture filename reference pointer list in the LFC_MA child blocks to the custom copy previously created in padding
+    bool FaceExprEditor::redirTexRefPtr(u32 LFC_MA_startAddr)
+    {
+        u8 texPtrBlockSizeOffset = 0x4;
+
+        Process::Write32(LFC_MA_startAddr + texPtrBlockSizeOffset, newTexCount);
+        return (Process::Write32(LFC_MA_startAddr, AddressList::getAddress("CustomFilenamePtrList")));
+    }
+
+    /* -------------- EXECUTED ONCE PER EDIT TRIGGER -------------- */
+
+    // Updates frame data for eye, eyebrow (mayu), and mouth
+    void FaceExprEditor::updateAnimData(void)
+    {
+        u8 faceSectionSize = 0x60 + animMetadataSize;
+        u32 startAddr = AddressList::getAddress("CustomAnimData") + animMetadataSize;
+        u32 entryOffset = _frameIndex * sizeof(u64); // each entry contains two floats: frameNum and frameVal
+
+        for (int iter = 0; iter < 3; iter++)
+        {
+            // frameNum already exists in the duplicated data block -> only frameVal edited here
+            Process::WriteFloat(startAddr + (faceSectionSize * iter) + entryOffset + sizeof(u32), infoArrays[iter][currExprIndexes[iter]].floatVal);
+        }
+
+        // prepare edits to be saved to file
+        Preferences::SavedFaceExprs[_frameIndex].eyeVal = currExprIndexes[0];
+        Preferences::SavedFaceExprs[_frameIndex].mayuVal = currExprIndexes[1];
+        Preferences::SavedFaceExprs[_frameIndex].mouthVal = currExprIndexes[2];
+
+        updateLabels(false, _frameIndex);
+    }
+
+    /* -------------- MAIN DRIVER AND HELPERS -------------- */
+
+    // Edits are maintained by redirecting child LFC_MA block pointers (for CH, IH, and texture filename reference blocks) to custom data placed in padding
+    // Reverting back to original data is done simply by stopping the redirection process and letting the game use its default pointers instead
+    void FaceExprEditor::editMngr(MenuEntry* entry)
+    {
+        u32 noInterruptEdit, noIntrEditOffset = 0x60;
+
+        if (entry->WasJustActivated())
+        {
+            initSeq();
+        }
+
+        // redundant check since edits are not applied during loading screens:
+        // if noInterruptEdit is null, the game is currently rearranging dynamic memory... interrupting this edit sequence will lead to a crash
+        if (Level::hasStageBegan() && !Level::hasCertainTimeElapsed(5))
+        {
+            Process::Read32(AddressList::getAddress("IndivLFC_MA_Start") + noIntrEditOffset, noInterruptEdit);
+            if (!GeneralHelpers::isNullPointer(noInterruptEdit))
+            {
+                FaceExprEditor::editChild_FC_MA_Blocks();
+            }
+        }
+    }
+
+    void FaceExprEditor::resetExprs(void)
+    {
+        Preferences::SavedFaceExprs = defaultExprs;
+        initSeq();
+    }
+
+    void FaceExprEditor::updateLabels(bool updateAll, int workingIndex)
+    {
+        std::array<MenuEntryLabel*, MAX_FRAMES> labels =
+        {
+            faceExprLabel1,
+            faceExprLabel2,
+            faceExprLabel3,
+            faceExprLabel4,
+            faceExprLabel5,
+            faceExprLabel6
+        };
+
+        int frameIndexesToProcess = updateAll ? MAX_FRAMES : workingIndex + 1;
+        int framesDone = updateAll ? 0 : workingIndex;
+
+        for (; framesDone < frameIndexesToProcess; framesDone++)
+        {
+            std::string newLabel = FaceExprEditor::frameList[framesDone];
+            std::string editedStatus = Preferences::SavedFaceExprs[framesDone] == defaultExprs[framesDone] ? ": Default" : ": Edited";
+
+            labels[framesDone]->SetName(newLabel.append(editedStatus));
+        }
+    }
+
+    /* -------------- UI -------------- */
+
+    void FaceExprEditor::_drawTop(void)
+    {
+        int posY1 = 55, posY2 = 110;
+        std::string intro, outro, reload, preview;
+        IconLabel expression[3];
+
+        Renderer::SetTarget(TOP);
+        Window::TopWindow.Draw("Facial Expression Editor");
+
+        intro = "Currently editing: " << _frameLabel;
+        preview = "Preview:";
+        outro = "Press " + std::string(FONT_B) + " to save and exit this\nmenu. Edits will persist\nbetween reboots.";
+        reload = "Be sure to reload the current\narea for changes to take effect.";
+
+        Renderer::DrawGameFontStringReturn(intro.c_str(), 52, posY1, 360, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontStringReturn(outro.c_str(), 160, posY2, 360, Preferences::Settings.MainTextColor);
+
+        posY1 = 85;
+        posY2 = 170;
+
+        Renderer::DrawGameFontStringReturn(preview.c_str(), 52, posY1, 360, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontStringReturn(reload.c_str(), 160, posY2, 360, Preferences::Settings.MainTextColor);
+
+        Renderer::DrawRect(52, 108, 90, 102, Color::Maroon);
+
+        Icon::DrawFace(60, 112);
+
+        int faceTexPosX[3] = {77, 78, 88};
+        int faceTexPosY[3] = {141, 133, 159};
+        for (int faceSection = 0; faceSection < 3; faceSection++) // 0 = eye, 1 = mayu, 2 = mouth
+        {
+            int currTextureIndex = currExprIndexes[faceSection];
+            expression[faceSection] = infoArrays[faceSection][currTextureIndex]; // duplicate iconLabel content
+            expression[faceSection].icon(faceTexPosX[faceSection], faceTexPosY[faceSection]); // draw icon
+        }
+    }
+
+    void FaceExprEditor::_drawBottom(void)
+    {
+        const StringVector mainLabels =
+        {
+            "Eye",
+            "Brow",
+            "Mouth"
+        };
+
+        Renderer::SetTarget(BOTTOM);
+        Window::BottomWindow.Draw();
+
+        for (int faceSection = 0; faceSection < 3; faceSection++)
+        {
+            _leftArrs[faceSection].Draw();
+            _rightArrs[faceSection].Draw();
+
+            // if button(s) are pressed...
+            if (_leftArrs[faceSection]())
+                _updateIcon(faceSection, true);
+
+            if (_rightArrs[faceSection]())
+                _updateIcon(faceSection, false);
+        }
+
+        int yPositions[2] = {95, 95};
+        for (int drawMain = 0; drawMain < 3; drawMain++)
+        {
+            Renderer::DrawRect(127, yPositions[0] - 1, 130, 23, Color::Magenta);
+            Renderer::DrawGameFontString(mainLabels[drawMain].c_str(), 35, yPositions[0], 290, Preferences::Settings.MainTextColor);  // title
+            Renderer::DrawGameFontString(currLabels[drawMain].c_str(), 145, yPositions[1], 290, Preferences::Settings.MainTextColor); // content
+
+            // adjust y-coords for next iter
+            yPositions[0] += 27;
+            yPositions[1] += 27;
+        }
+    }
+
+    bool FaceExprEditor::_updateIcon(int faceSection, bool goingLeft)
+    {
+        int adjustment = goingLeft ? -1 : 1;
+        currExprIndexes[faceSection] = currExprIndexes[faceSection] + adjustment;
+
+        // loop around if necessary
+        for (int iter = 0; iter < 3; iter++)
+        {
+            if (currExprIndexes[iter] >= dataSizes[iter])
+                currExprIndexes[iter] = 0;
+            else if (currExprIndexes[iter] < 0)
+                currExprIndexes[iter] = dataSizes[iter] - 1;
+        }
+
+        IconLabel newLabel = eyeInfo[0]; // default
+        switch (faceSection)
+        {
+            case 0:
+                newLabel = eyeInfo[currExprIndexes[faceSection]];
+                break;
+            case 1:
+                newLabel = mayuInfo[currExprIndexes[faceSection]];
+                break;
+            case 2:
+                newLabel = mouthInfo[currExprIndexes[faceSection]];
+                break;
+            default:
+                return false;
+        }
+
+        currLabels[faceSection] = newLabel.label;
+        return true;
+    }
+
+
+    void FaceExprEditor::_updateMenuGraphics(void)
+    {
+        bool isTouched = Touch::IsDown();
+        IntVector touchPos(Touch::GetPosition());
+
+        for (int arrIndex = 0; arrIndex < 3; arrIndex++)
+        {
+            _leftArrs[arrIndex].Update(isTouched, touchPos);
+            _rightArrs[arrIndex].Update(isTouched, touchPos);
+        }
+
+        Window::BottomWindow.Update(isTouched, touchPos);
+    }
+}

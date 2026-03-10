@@ -26,7 +26,7 @@ namespace CTRPluginFramework
             }
             else if (entry->Hotkeys[2].IsPressed())
             {
-                Process::Write32(Emotes::graphicsAddresses[5], blankEmotePointer);
+                Process::Write32(Emotes::graphicsAddresses[5], Emotes::blankEmotePtr);
                 Process::Write8(AddressList::getAddress("GameplayEmotes") + 0x5, 0xC);
                 Process::Write8(AddressList::getAddress("LobbyEmotes") + 0x5, 0xC);
                 toggleDefaultEmotes(true);

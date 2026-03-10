@@ -8,7 +8,7 @@ namespace CTRPluginFramework
     static PluginMenu   *g_runningInstance = nullptr;
 
     PluginMenu::PluginMenu(std::string name, std::string about, u32 menuType) :
-        OnFirstOpening{ nullptr }, OnOpening{ nullptr }, OnClosing{ nullptr }, OnNewFrame{ nullptr }, _menu(new PluginMenuImpl(name, about, menuType))
+        OnReady(nullptr), OnFirstOpening{ nullptr }, OnOpening{ nullptr }, OnClosing{ nullptr }, OnNewFrame{ nullptr }, _menu(new PluginMenuImpl(name, about, menuType))
     {
         FreecamToggle = false;
         GameplayToggle = false;
@@ -96,6 +96,7 @@ namespace CTRPluginFramework
     {
         g_runningInstance = (PluginMenu *)this;
 
+        _menu->OnReady = OnReady;
         _menu->OnFirstOpening = OnFirstOpening;
         _menu->OnOpening = OnOpening;
         _menu->OnClosing = OnClosing;
@@ -143,14 +144,24 @@ namespace CTRPluginFramework
 		PluginMenuImpl::ForceOpen();
 	}
 
-    void    PluginMenu::SynchronizeWithFrame(const bool useSync)
+    void PluginMenu::SynchronizeWithFrame(const bool useSync)
     {
         _menu->SyncOnFrame = useSync;
     }
 
-    void    PluginMenu::SpecifyDevBuild(void)
+    void PluginMenu::UpdateEveryOtherFrame(const bool enable)
+    {
+        _menu->UpdateEveryOtherFrame = enable;
+    }
+
+    void PluginMenu::SpecifyDevBuild(void)
     {
         _menu->AddPluginVersion(true);
+    }
+
+    Time PluginMenu::GetUptime(void)
+    {
+        return _menu->Uptime->GetElapsedTime();
     }
 
     std::string &   PluginMenu::Title(void)

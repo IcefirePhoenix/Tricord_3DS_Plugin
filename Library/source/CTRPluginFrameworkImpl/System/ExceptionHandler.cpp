@@ -1,3 +1,4 @@
+#include "CTRPluginFrameworkImpl/Menu/MenuEntryImpl.hpp"
 #include "CTRPluginFrameworkImpl/System/ExceptionHandler.hpp"
 #include "CTRPluginFramework/Graphics/Color.hpp"
 #include "CTRPluginFramework/Menu/MessageBox.hpp"
@@ -101,17 +102,17 @@ namespace CTRPluginFramework
         const Screen &bottomScreen = OSD::GetBottomScreen();
 
         // implicit concat works here...
-        const unsigned char intro[] = "Oh no! An exception\nhas occurred :(";
-        const unsigned char QR_caption[] = "TFH Modding Discord";
-        const unsigned char optionA[] = FONT_A ": Reboot";
-        const unsigned char optionB[] = FONT_B ": Display register\ndetails below";
-        const unsigned char optionBAlt[] = FONT_B ": Hide register\ndetails";
-        const unsigned char optionX[] = FONT_X ": Save crash log to\nSD card";
-        const unsigned char optionXAlt[] = FONT_X ": Crash log has been\nsaved to SD card";
-        const unsigned char optionY[] = FONT_Y ": Show TFH Modding\nDiscord Server invite\nlink";
-        const unsigned char optionYAlt[] = FONT_Y ": Display log help\ninfo";
-        const unsigned char captionA[] = "Need support assistance? Save the crash\nlog to your SD card and post it as an\nattachment under the #bug-reports\nchannel in the TFH Modding Server.\n\nDon’t forget to describe what happened\nand tag Tricord Team for help! The log\nfile can be found under:\n\nTricord/Crash Logs/[NA/EU/JP]";
-        const unsigned char captionB[] = "Need to join the server? The QR invite\nlink is above!\n\nIf you'd prefer to type out the invite link\nyourself, here it is:\n";
+        const char intro[] = "Oh no! An exception\nhas occurred :(";
+        const char QR_caption[] = "TFH Modding Discord";
+        const char optionA[] = FONT_A ": Reboot";
+        const char optionB[] = FONT_B ": Display register\ndetails below";
+        const char optionBAlt[] = FONT_B ": Hide register\ndetails";
+        const char optionX[] = FONT_X ": Save crash log to\nSD card";
+        const char optionXAlt[] = FONT_X ": Crash log has been\nsaved to SD card";
+        const char optionY[] = FONT_Y ": Show TFH Modding\nDiscord Server invite\nlink";
+        const char optionYAlt[] = FONT_Y ": Display log help\ninfo";
+        const char captionA[] = "Need support assistance? Save the crash\nlog to your SD card and post it as an\nattachment under the #bug-reports\nchannel in the TFH Modding Server.\n\nDon’t forget to describe what happened\nand tag Tricord Team for help! The log\nfile can be found under:\n\nTricord/Crash Logs/[NA/EU/JP]";
+        const char captionB[] = "Need to join the server? The QR invite\nlink is above!\n\nIf you'd prefer to type out the invite link\nyourself, here it is:\n";
 
         exceptionData = generalInfo + registerInfo + getEnabledEntries();
 
@@ -133,7 +134,7 @@ namespace CTRPluginFramework
         {
             Renderer::DrawGameFontStringReturn(optionBAlt, 220, posYOptions, 380, Color::Gainsboro);
             Renderer::SetTarget(BOTTOM);
-            Renderer::DrawGameFontStringReturn((const u8 *)registerInfo.c_str(), 35, posYCaption, 400, Color::Gainsboro);
+            Renderer::DrawGameFontStringReturn(registerInfo.c_str(), 35, posYCaption, 400, Color::Gainsboro);
         }
         else
         {
@@ -147,7 +148,7 @@ namespace CTRPluginFramework
             {
                 Renderer::SetTarget(BOTTOM);
                 Renderer::DrawGameFontStringReturn(captionB, 25, posYCaption, 400, Color::Gainsboro);
-                Renderer::DrawGameFontStringReturn((const u8 *)inviteURL.c_str(), 25, posYCaption, 400, Color::Gainsboro);
+                Renderer::DrawGameFontStringReturn(inviteURL.c_str(), 25, posYCaption, 400, Color::Gainsboro);
             }
         }
 
@@ -172,10 +173,22 @@ namespace CTRPluginFramework
     std::string ExceptionHandler::getErrorInfo(ERRF_ExceptionInfo *excep)
     {
         std::string infoStr = "";
+        Time uptime = PluginMenu::GetRunningInstance()->GetUptime();
 
         infoStr += Utils::Format("Tricord version: %s\n", TRICORD_BUILD_METADATA);
         infoStr += Utils::Format("CTRPF version: %s\n", CTRPF_BUILD_METADATA);
-        infoStr += Utils::Format("Timestamp: %s%s\n\n", Time::GetDate().c_str(), Time::GetTime().c_str());
+        infoStr += Utils::Format("Library compiled: %s\n", LIB_COMPILE_DATE);
+        infoStr += Utils::Format("Plugin compiled: %s\n\n", Process::GetCompileDate().c_str());
+
+        infoStr += Utils::Format("System timestamp: %s%s\n", Time::GetDate().c_str(), Time::GetTime().c_str());
+        infoStr += Utils::Format("Plugin uptime: %s\n\n", uptime.ToHMS().c_str());
+
+        if (SystemImpl::IsCitra)
+            infoStr += "System model: Citra / Azahar Emulator\n\n";
+        else if (SystemImpl::IsNew3DS)
+            infoStr += "System model: New 2/3DS\n\n";
+        else
+            infoStr += "System model: Old 2/3DS\n\n";
 
         switch (excep->type)
         {

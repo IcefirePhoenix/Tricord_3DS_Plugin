@@ -138,6 +138,12 @@ namespace CTRPluginFramework
         static int DrawInfoNew(int posX, int posY, bool filled);
 
         /*
+        ** InfoNewDark
+        ** 25px * 25px
+        ***********/
+        static int DrawInfoNewDark(int posX, int posY);
+
+        /*
         ** Discord
         ** 25px * 25px
         **************/
@@ -258,6 +264,38 @@ namespace CTRPluginFramework
          ** 30px * 30 px
          **************/
         static int DrawLinkFace(int posX, int posY, int player);
+
+
+        /*
+         ** Facial Expression Editor Icons
+         **************/
+        static int DrawEye0(int posX, int posY);
+        static int DrawEye1(int posX, int posY);
+        static int DrawEye2(int posX, int posY);
+        static int DrawEye3(int posX, int posY);
+        static int DrawEye4(int posX, int posY);
+        static int DrawEye5(int posX, int posY);
+        static int DrawEye6(int posX, int posY);
+        static int DrawEye7(int posX, int posY);
+        static int DrawEye8(int posX, int posY);
+
+        static int DrawMayu0(int posX, int posY);
+        static int DrawMayu1(int posX, int posY);
+        static int DrawMayu2(int posX, int posY);
+        static int DrawMayu3(int posX, int posY);
+        static int DrawMayu4(int posX, int posY);
+
+        static int DrawMouth0(int posX, int posY);
+        static int DrawMouth1(int posX, int posY);
+        static int DrawMouth2(int posX, int posY);
+        static int DrawMouth3(int posX, int posY);
+        static int DrawMouth4(int posX, int posY);
+        static int DrawMouth5(int posX, int posY);
+
+        static int DrawFace(int posX, int posY);
+
+        static int DrawLeft(int posX, int posY);
+        static int DrawRight(int posX, int posY);
 
     private:
         static int DrawImg(u8 *img, int posX, int posY, int sizeX, int sizeY);

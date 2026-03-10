@@ -7,7 +7,6 @@
 namespace CTRPluginFramework
 {
     extern MenuEntry* instantTextDisplay;
-    extern MenuEntry* autoWriteCameraStatus;
     extern MenuEntry* autoDisableCamShutter;
     extern MenuEntry *pretendoOnlinePatchManager;
 
@@ -45,10 +44,9 @@ namespace CTRPluginFramework
         static void managePhotoDisp(MenuEntry *entry);
         static void manageInstantText(MenuEntry* entry);
         static void toggleCameraButton(MenuEntry* entry);
-        static void keepCameraEdits(MenuEntry *entry);
-        static void writeCameraEdits(bool allowCamUsage);
+        static void writeCameraEdits(bool isCamDisabled);
         static bool getCameraStatus(void);
-        static void toggleCameraShutter (MenuEntry* entry);
+        static void toggleCameraShutter(MenuEntry* entry);
         static void writeShutterDisable(MenuEntry* entry);
         static void applyPretendoPatch(MenuEntry *entry);
         static void speedrunTimer(MenuEntry* entry);

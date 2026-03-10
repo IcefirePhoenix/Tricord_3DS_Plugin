@@ -5,6 +5,7 @@
 #include "CTRPF.hpp"
 
 constexpr std::array<u32, 3> starTagAddrs = STAR_TAG_ADDRS;
+constexpr std::array<u32, 3> pluginCheckAddrs = PLUGIN_CHECK;
 constexpr std::array<u32, 3> multiplayerInfo = MULTIPLAYER_INFO;
 
 namespace CTRPluginFramework
@@ -58,7 +59,6 @@ namespace CTRPluginFramework
 
     void PatchProcess()
     {
-
     }
 
     void ManageTFH_Settings(void)
@@ -83,12 +83,16 @@ namespace CTRPluginFramework
 
         if (AddressList::registerNewAddress("StarTag", starTagAddrs))
             Process::Write32(AddressList::getAddress("StarTag"), STAR_TAG);
+
+        if (AddressList::registerNewAddress("PluginCheck", pluginCheckAddrs))
+            Process::Write32(AddressList::getAddress("PluginCheck"), CHECKSET);
     }
 
-    void LoadSavedEntryData(void)
+    void LoadSavedAndCustomEntryData(void)
     {
         Rendering::loadCustomNameColors();
         Gameplay::restoreBookmarks();
+        FaceExprEditor::initSeq();
     }
 
     void RetrieveAddressArrays(void)
@@ -100,6 +104,8 @@ namespace CTRPluginFramework
 
     void InitSequence(FwkSettings &settings)
     {
+        Process::SetCompileDate(COMPILE_DATE);
+
         AddressList::InitMemoryRange();
         AddressList::InitAddresses();
         DescUtils::InitDescriptions();
@@ -123,7 +129,7 @@ namespace CTRPluginFramework
         CreateMenu(*menu);
 
         menu->SynchronizeWithFrame(true);
-        menu->OnFirstOpening = LoadSavedEntryData;
+        menu->OnReady = LoadSavedAndCustomEntryData;
         menu->OnNewFrame = ToggleMenuChange;
         menu->OnClosing = ManageTFH_Settings;
 

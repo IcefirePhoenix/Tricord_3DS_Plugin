@@ -11,6 +11,17 @@ namespace CTRPluginFramework
 {
     Process::OnPauseResumeCallback Process::OnPauseResume = nullptr;
     bool Process::ThrowOldExceptionOnCallbackException = false;
+    std::string pluginCompileDate = "";
+
+    void Process::SetCompileDate(std::string date)
+    {
+        pluginCompileDate = date;
+    }
+
+    std::string Process::GetCompileDate(void)
+    {
+        return pluginCompileDate;
+    }
 
     Handle Process::GetHandle(void)
     {

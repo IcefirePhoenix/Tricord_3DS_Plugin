@@ -7,6 +7,7 @@ namespace CTRPluginFramework
 {
     void Render::DisplayPluginInfo(void)
     {
+        static const std::string compileDateStr = Utils::Format("Plugin Built: %s", Process::GetCompileDate().c_str());
         const char g_ctrpfText[] = "Tricord is powered by CTRPluginFramework.";
         const char g_copyrightText[] = "Copyright © The Pixellizer Group";
         static u32 g_textXpos[2] = { 0 };
@@ -17,16 +18,17 @@ namespace CTRPluginFramework
         Renderer::SetTarget(BOTTOM);
         Window::BottomWindow.Draw();
 
-        int posY = 85;
-        Renderer::DrawGameFontString("Tricord Build Information:", 40, posY, 300, Color::Gainsboro);
-        Renderer::DrawLine(40, posY, 25 * 6, Color::Gainsboro);
+        int posY = 82;
+        Renderer::DrawGameFontString("Build Information:", 30, posY, 300, Color::Gainsboro);
+        Renderer::DrawLine(30, posY, 25 * 5, Color::Gainsboro);
 
-        posY += 10;
-        Renderer::DrawGameFontString(Utils::Format("Tricord Version: %s", TRICORD_BUILD_METADATA).c_str(), 40, posY, 300, Color::Gainsboro);
-        Renderer::DrawGameFontString(Utils::Format("CTRPF Version: %s", CTRPF_BUILD_METADATA).c_str(), 40, posY, 300, Color::Gainsboro);
-        Renderer::DrawGameFontString(Utils::Format("Compiled: %s", COMPILE_DATE).c_str(), 40, posY, 300, Color::Gainsboro);
+        posY += 8;
+        Renderer::DrawGameFontString(Utils::Format("Tricord Version: %s", TRICORD_BUILD_METADATA).c_str(), 30, posY, 300, Color::Gainsboro);
+        Renderer::DrawGameFontString(Utils::Format("CTRPF Version: %s", CTRPF_BUILD_METADATA).c_str(), 30, posY, 300, Color::Gainsboro);
+        Renderer::DrawGameFontString(Utils::Format("Lib Compiled: %s", LIB_COMPILE_DATE).c_str(), 30, posY, 300, Color::Gainsboro);
+        Renderer::DrawGameFontString(compileDateStr.c_str(), 30, posY, 300, Color::Gainsboro);
 
-        posY = 165;
+        posY = 180;
         Renderer::DrawGameFontString(g_ctrpfText, g_textXpos[0], posY, 300, Color::Gainsboro);
         Renderer::DrawGameFontString(g_copyrightText, g_textXpos[1], posY, 300, Color::Gainsboro);
     }
@@ -68,7 +70,7 @@ namespace CTRPluginFramework
 
     void Render::Interface::DrawGameFontString(const std::string& str, int posX, int posY, Color color, int xLimit, int yLimit, bool autoWrap) {
         if (autoWrap)
-            Renderer::DrawGameFontStringReturn(reinterpret_cast<const unsigned char*>(str.c_str()), posX, posY, xLimit, color, yLimit);
+            Renderer::DrawGameFontStringReturn(str.c_str(), posX, posY, xLimit, color, yLimit);
         else
             Renderer::DrawGameFontString(str.c_str(), posX, posY, xLimit, color);
     }

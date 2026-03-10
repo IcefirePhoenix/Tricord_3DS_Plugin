@@ -4,14 +4,10 @@
 namespace CTRPluginFramework
 {
     Button photoBtn(Button::Icon | Button::Toggle, IntRect(120, 47, 20, 20), Icon::DrawTFHCamera);
-
-    MenuEntry *autoWriteCameraStatus;
     MenuEntry *autoDisableCamShutter;
 
-    Clock SS_Timer;
-
     u8 shutterNotVisible = 0x0, shutterVisible = 0x1;
-    bool cameraToggle, showPhoto;
+    bool isCamDisabled, showPhoto;
 
     /* ------------------ */
 
@@ -76,65 +72,29 @@ namespace CTRPluginFramework
     // Force-changes the screenshot behavior of the X button, regardless of whether the camera is in player inventory
     void Miscellaneous::toggleCameraButton(MenuEntry *entry)
     {
-        StringVector camOpts =
-        {
-            "Disable camera on X",
-            "Enable camera on X",
-            "Reset changes"
-        };
-
-        Keyboard selCamOpt("Camera Button Behavior", "Select the X button's camera function.");
-        selCamOpt.Populate(camOpts);
-
-        int choice = selCamOpt.Open();
-        switch (choice)
-        {
-            case 0:
-                cameraToggle = false;
-                autoWriteCameraStatus->Enable();
-                entry->SetName("Toggle camera on X button: Disabled");
-                break;
-            case 1:
-                cameraToggle = true;
-                autoWriteCameraStatus->Enable();
-                entry->SetName("Toggle camera on X button: Enabled");
-                break;
-            case 2:
-                autoWriteCameraStatus->Disable();
-                entry->SetName("Toggle camera on X button: No edits");
-                break;
-            default:
-                break;
-        }
-    }
-
-    // Maintains X button edits
-    void Miscellaneous::keepCameraEdits(MenuEntry *entry)
-    {
         if (entry->WasJustActivated())
-            writeCameraEdits(cameraToggle);
-        else
         {
-            // one-time possible write per loading screen
-            if (GeneralHelpers::isLoadingScreen(false) && SS_Timer.HasTimePassed(Seconds(5)))
-            {
-                writeCameraEdits(cameraToggle);
-                SS_Timer.Restart();
-            }
+            isCamDisabled = true;
+            writeCameraEdits(isCamDisabled);
+        }
+        else if (!entry->IsActivated())
+        {
+            isCamDisabled = false;
+            writeCameraEdits(isCamDisabled);
         }
     }
 
     // Helper function to write X button edits to memory
-    void Miscellaneous::writeCameraEdits(bool allowCamUsage)
+    void Miscellaneous::writeCameraEdits(bool isCamDisabled)
     {
-        if (Level::isInDrablands)
-            Process::Write8(AddressList::getAddress("CameraXButtonToggle"), allowCamUsage);
+        u32 patchValue = isCamDisabled ? 0xEA000028 : 0x0A000028;
+        Process::Write32(AddressList::getAddress("CameraXButtonDisable"), patchValue);
     }
 
     // For external functions that need to check X button toggle status
     bool Miscellaneous::getCameraStatus(void)
     {
-        return cameraToggle;
+        return isCamDisabled;
     }
 
     // Force-toggles the top-screen camera shutter animation

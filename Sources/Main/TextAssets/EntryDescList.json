@@ -156,7 +156,7 @@
         {
             "name": "physics_note",
             "content": {
-                "intro": "Sets custom physics types that alter player movement + interactions with the environment.\n\nAvailable types include:\n- Water\n- Lava\n- Ice\n-Quicksand",
+                "intro": "Sets custom physics types that alter player movement + interactions with the environment.\n\nAvailable types include:\n- Water\n- Lava\n- Ice\n- Quicksand",
                 "note": "",
                 "modeCompatibility": 3,
                 "clientOnly": false
@@ -228,7 +228,7 @@
         {
             "name": "inf_time_note",
             "content": {
-                "intro": "Prevents the timer from decreasing during Drablands timed challenges",
+                "intro": "Prevents the timer from decreasing during Drablands timed challenges.",
                 "note": "",
                 "modeCompatibility": 2,
                 "clientOnly": false
@@ -319,16 +319,34 @@
             "name": "restore_fairy_note",
             "content": {
                 "intro": "Restores the Great Fairy Costume, an unused costume accidentally left during pre-release development. An additional slot will be added to the TFH costume selection menu to accommodate this extra costume.",
-                "note": "If used in multiplayer, other players will see the Hero's Tunic as a placeholder.",
+                "note": "If used in multiplayer, other players will see the Hero's Tunic as a placeholder.\n\nNote: If you choose to import a custom costume using the method described in the Wiki, this entry will be replaced with \"Enable Custom Costume Slot\".",
                 "modeCompatibility": 1,
                 "clientOnly": false
             }
         },
         {
-            "name": "slot_A_note",
+            "name": "custom_costume_note",
             "content": {
-                "intro": "TODO",
-                "note": "This setting is not accessible if Restore Great Fairy Costume is enabled.",
+                "intro": "Tricord has detected a custom costume imported through LayeredFS. Enabling this entry will add it to the TFH costume selection menu.",
+                "note": "If used in multiplayer, other players will see the Hero's Tunic as a placeholder.\n\nNote: If this costume file is removed in the future, this entry will be replaced with \"Restore Great Fairy Costume\" instead.",
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "allow_Tricord_fairy_note",
+            "content": {
+                "intro": "Allows features such as Change Player Costume, Cosmetic Costumes, and Costume Randomizers to use the Great Fairy Costume. Must have \"Restore Great Fairy Costume\" enabled.",
+                "note": "Note: If a custom costume is imported via LayeredFS in the future, this entry will be replaced with \"Let Tricord use the Custom Costume\" instead.",
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "allow_Tricord_custom_note",
+            "content": {
+                "intro": "Allows features such as Change Player Costume, Cosmetic Costumes, and Costume Randomizers to use the Custom Costume imported via LayeredFS. Must have \"Enable Custom Costume Slot\" enabled.",
+                "note": "Note: If this costume file is removed in the future, this entry will be replaced with \"Let Tricord use the Great Fairy Costume\" instead.",
                 "modeCompatibility": 1,
                 "clientOnly": false
             }
@@ -1029,17 +1047,8 @@
         {
             "name": "face_expr_sel_note",
             "content": {
-                "intro": "Allows you to edit Link's default idle facial expression.\n\nThere are 20 available textures:\n- 9 eye textures\n- 5 eyebrow texture\n- 6 mouth textures\n\nThis includes several unused textures (three eye textures and one mouth texture) that have been restored.",
-                "note": "Changes will be preserved between reboots.",
-                "modeCompatibility": 1,
-                "clientOnly": true
-            }
-        },
-        {
-            "name": "face_expr_enable_note",
-            "content": {
-                "intro": "Determines whether the selection made under \"Edit idle facial expression\" gets applied in-game.",
-                "note": "",
+                "intro": "Allows you to edit six of Link's facial expressions.\n\nThere are 20 available textures:\n- 9 eye textures\n- 5 eyebrow texture\n- 6 mouth textures\n\nThis includes several unused textures (three eye textures and one mouth texture) that have been restored.",
+                "note": "Note: Timeless Tunic and Fierce Deity Armor both use flipped eye textures, which causes certain textures (such as Looking Left or Looking Right) to be mirrored! It is unclear why these specific costumes are modeled in this way.\n\nChanges will be preserved between reboots.",
                 "modeCompatibility": 1,
                 "clientOnly": true
             }

@@ -154,7 +154,7 @@ namespace CTRPluginFramework
         Window::TopWindow.Draw("Hotkey Modifier");
 
         int posY = 55;
-        Renderer::DrawGameFontStringReturn((const u8*)_message.c_str(), 40, posY, 345, Preferences::Settings.MainTextColor);
+        Renderer::DrawGameFontStringReturn(_message.c_str(), 40, posY, 345, Preferences::Settings.MainTextColor);
     }
 
     void HotkeysModifier::_DrawBottom(void)

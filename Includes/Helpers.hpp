@@ -22,7 +22,7 @@
 #include "Helpers/BuiltIn/Strings.hpp"
 #include "Helpers/BuiltIn/Wrappers.hpp"
 
-// #include "Helpers/Interfaces/FaceSelMenu.hpp"
+#include "Helpers/Interfaces/FaceExprEditor.hpp"
 #include "Helpers/Interfaces/LevelStatusEditor.hpp"
 #include "Helpers/Interfaces/PlayerSelector.hpp"
 

@@ -13,40 +13,32 @@
 #include <cmath>
 #include <vector>
 
+#define OG_GLYPH_WIDTH 19
+#define OG_GLYPH_HEIGHT 25
+#define NEW_GLYPH_WIDTH 14
+#define NEW_GLYPH_HEIGHT 18
+#define SHEET_HEIGHT 1024
+
 namespace CTRPluginFramework
 {
     extern "C" CFNT_TFH* TFH_Font;
     extern "C" int g_charPerSheet;
 
-    u32     g_fontAllocated = 0;
-    u32     g_glyphAllocated = 0;
-    Mutex  Font::_mutex;
+    int maxGlyphs = 739;
+    int sheetWidth = 512;
+
+    Mutex Font::_mutex;
 
     namespace
     {
-        u8 *glyph = nullptr;
+        u8 *glyphBuffer = nullptr;
+        u8 *rowBuffer = nullptr;
         Glyph *defaultGlyph = nullptr;
 
-        constexpr size_t MAX_GLYPHS = 0x800;
-
-        static Glyph g_glyphPool[MAX_GLYPHS];
-        static bool g_glyphUsed[MAX_GLYPHS] = {false};
-        static u8 g_bitmapPool[MAX_GLYPHS][252];
+        std::vector<Glyph> g_glyphPool;
+        std::vector<u8> g_bitmapPool;
 
         static std::vector<Glyph*> glyphCache;
-
-        static Glyph* AllocateGlyph(u32 glyphIndex)
-        {
-            if (glyphIndex >= MAX_GLYPHS)
-                return nullptr;
-
-            if (!g_glyphUsed[glyphIndex])
-            {
-                g_glyphUsed[glyphIndex] = true;
-                return &g_glyphPool[glyphIndex];
-            }
-            return nullptr;
-        }
     }
 
     float Glyph::Width(void) const
@@ -58,53 +50,11 @@ namespace CTRPluginFramework
     {
         TFH_Font = reinterpret_cast<CFNT_TFH*>(fontDataStart);
         fontFixTFHPointers(TFH_Font);
-        g_charPerSheet = TFH_Font->finf.tglp->nRows * TFH_Font->finf.tglp->nLines;
+        g_charPerSheet = TFH_Font->finf.tglp->nRows * TFH_Font->finf.tglp->nLines; // TFH font only has one sheet, so this is effectively the total glyph count
     }
 
-    void    Font::Initialize(u32 fontDataStart)
+    inline u8 GetAlphaValueFromData(u8 *data, int dataPos, u16 format)
     {
-        LocateTFH_MessageFontBFFNT(fontDataStart);
-        glyph = (u8 *)new u8[1000];
-
-        glyphCache.clear();
-        glyphCache.resize(MAX_GLYPHS, nullptr);
-    }
-
-    Glyph   *Font::GetGlyph(u8* &c)
-    {
-        u32     code;
-        u32     glyphIndex;
-        ssize_t units;
-
-        units = decode_utf8(&code, c);
-        if (units == -1)
-            return (nullptr);
-
-        c += units;
-        if (code > 0)
-        {
-            glyphIndex = fontTFHGlyphIndexFromCodePoint(TFH_Font, code);
-            if (glyphIndex == 0xFFFF) // Glyph not found, return "?" instead
-            {
-                if (defaultGlyph == nullptr)
-                    defaultGlyph = CacheGlyph(fontTFHGlyphIndexFromCodePoint(TFH_Font, (u32)'?'));
-
-                return defaultGlyph;
-            }
-
-            return CacheGlyph(glyphIndex);
-        }
-        return (nullptr);
-    }
-
-    Glyph   *Font::GetGlyph(char c)
-    {
-        u8 *s = (u8 *)&c;
-
-        return (GetGlyph(s));
-    }
-
-    inline u8    GetAlphaValueFromData(u8* data, int dataPos, u16 format) {
         u8 res, byte;
         switch (format)
         {
@@ -122,80 +72,67 @@ namespace CTRPluginFramework
         return res;
     }
 
-    // Original code by ObsidianX
+    // Modeled after parser code by ObsidianX
     // https://github.com/ObsidianX/3dstools/blob/master/bffnt.py
-    u8    *GetOriginalGlyph(u32 glyphIndex)
+    void DeswizzleSheets(void)
     {
+        const char *dirpath = "/Tricord/linearSheet.tmp";
+
         TGLP_TFH *tglp = fontGetGlyphInfo(TFH_Font);
-        u8 *data = (u8 *)fontGetGlyphSheetTex(TFH_Font, glyphIndex / g_charPerSheet);
+        u8 *data = (u8 *)fontGetGlyphSheetTex(TFH_Font, 0);
 
-        int     width = tglp->sheetWidth; // 512
-        int     height = tglp->sheetHeight; // 1024
+        if (!File::Exists(dirpath))
+            File::Create(dirpath);
 
-        int     dataWidth = width;
-        int     dataHeight = height;
+        File fontFile;
+        File::Open(fontFile, dirpath, File::WRITE | File::CREATE | File::TRUNCATE);
 
-        int     index = glyphIndex % g_charPerSheet;
+        int tileWidth = sheetWidth / 8;
+        int tileHeight = SHEET_HEIGHT / 8;
 
-        int tileWidth = width / 8; // 64
-        int tileHeight = height / 8; // 128
+        int batchHeight = 256;
+        int tileRowsPerBatch = batchHeight / 8;
 
-        std::memset(glyph, 0, 1000);
+        int totalBatches = (tileHeight + tileRowsPerBatch - 1) / tileRowsPerBatch;
 
-        // Get the part we're interested in
-        int glyphsPerRow = tglp->nRows; // 26
-        int indexX = index % glyphsPerRow;
-        int indexY = index / glyphsPerRow;
+        u8 *tmpBuffer = new u8[sheetWidth * batchHeight];
 
-        int singleWx = 19;
-        int singleHy = 25;
-        int startPx = std::round(indexX * singleWx) - 1;
-        int endPx = startPx + singleWx;
-        int startPy = std::round(indexY * singleHy);
-        int endPy = startPy + singleHy;
-
-        // Sheet is composed of 8x8 pixel tiles
-        for (int tileY = 0; tileY < tileHeight; tileY++)
+        for (int batch = 0; batch < totalBatches; batch++)
         {
-            for (int tileX = 0; tileX < tileWidth; tileX++)
+            int batchStartTileY = batch * tileRowsPerBatch;
+            int batchEndTileY = std::min(batchStartTileY + tileRowsPerBatch, tileHeight);
+
+            std::memset(tmpBuffer, 0, sheetWidth * batchHeight);
+
+            for (int tileY = batchStartTileY; tileY < batchEndTileY; tileY++)
             {
-                // Tile is composed of 2x2 sub-tiles
-                for (int y = 0; y < 2; y++)
+                for (int tileX = 0; tileX < tileWidth; tileX++)
                 {
-                    for (int x = 0; x < 2; x++)
+                    for (int y = 0; y < 2; y++)
                     {
-                        // Subtile is composed of 2x2 pixel groups
-                        for (int yy = 0; yy < 2; yy++)
+                        for (int x = 0; x < 2; x++)
                         {
-                            for (int xx = 0; xx < 2; xx++)
+                            for (int yy = 0; yy < 2; yy++)
                             {
-                                // Pixel group is composed of 2x2 pixels
-                                for (int yyy = 0; yyy < 2; yyy++)
+                                for (int xx = 0; xx < 2; xx++)
                                 {
-                                    for (int xxx = 0; xxx < 2; xxx++)
+                                    for (int yyy = 0; yyy < 2; yyy++)
                                     {
-                                        // If the final y value is beyond the input data's height then don't read it
-                                        if (tileY + y + yy + yyy >= dataHeight)
-                                            continue;
-                                        // Same for the x and the input data width
-                                        if (tileX + x + xx + xxx >= dataWidth)
-                                            continue;
+                                        for (int xxx = 0; xxx < 2; xxx++)
+                                        {
+                                            int pixelX = (xxx + (xx * 2) + (x * 4) + (tileX * 8));
+                                            int pixelY = (yyy + (yy * 2) + (y * 4) + (tileY * 8));
 
-                                        int pixelX = (xxx + (xx * 2) + (x * 4) + ((tileX) * 8));
-                                        int pixelY = (yyy + (yy * 2) + (y * 4) + (tileY * 8));
+                                            if (pixelX >= sheetWidth || pixelY >= SHEET_HEIGHT)
+                                                continue;
 
-                                        int dataX = (xxx + (xx * 4) + (x * 16) + (tileX * 64));
-                                        int dataY = ((yyy * 2) + (yy * 8) + (y * 32) + (tileY * width * 8));
+                                            int dataX = (xxx + (xx * 4) + (x * 16) + (tileX * 64));
+                                            int dataY = ((yyy * 2) + (yy * 8) + (y * 32) + (tileY * sheetWidth * 8));
+                                            int dataPos = dataX + dataY;
 
-                                        int dataPos = dataX + dataY;
-
-                                        if (pixelY >= startPy && pixelY < endPy)
-                                            if (pixelX >= startPx && pixelX < endPx)
-                                            {
-                                                u32 offset = ((pixelX - startPx) + (pixelY - startPy) * (endPx - startPx));
-                                                if (offset < 1000)
-                                                    *(glyph + offset) = GetAlphaValueFromData(data, dataPos, tglp->sheetFmt);
-                                            }
+                                            int localPixelY = pixelY - (batchStartTileY * 8);
+                                            tmpBuffer[pixelX + localPixelY * sheetWidth] = GetAlphaValueFromData(data, dataPos, tglp->sheetFmt);
+                                        }
                                     }
                                 }
                             }
@@ -203,118 +140,189 @@ namespace CTRPluginFramework
                     }
                 }
             }
+
+            int batchStartPixelY = batchStartTileY * 8;
+
+            fontFile.Seek(batchStartPixelY * sheetWidth, File::SET);
+            fontFile.Write(tmpBuffer, sheetWidth * batchHeight);
         }
-        return (glyph);
+
+        fontFile.Close();
+        delete[] tmpBuffer;
     }
 
-#define GLYPH_HEIGHT    25
-#define GLYPH_WIDTH     19
-#define SHRINK_GLYPH_HEIGHT 18 // (width would be 14)
-
-    void    ShrinkGlyph(u8 *dest, u8 *src)
+    void Font::Initialize(u32 fontDataStart, bool useDoubleWidth)
     {
-        constexpr const int  outWidth = std::round(static_cast<float>(GLYPH_WIDTH)
-            * (static_cast<float>(SHRINK_GLYPH_HEIGHT) / static_cast<float>(GLYPH_HEIGHT)));
-        constexpr const float dx = (static_cast<float>(GLYPH_WIDTH) / outWidth);
-        constexpr const float dy = (static_cast<float>(GLYPH_HEIGHT) / static_cast<float>(SHRINK_GLYPH_HEIGHT));
+        File fontFile;
+        bool done = false;
 
-        int i, ii = 0;
-
-        for (float yt = 0.f, y = 0.f; y < SHRINK_GLYPH_HEIGHT; y++, yt += dy)
+        if (useDoubleWidth)
         {
-            float yfrag = ceil(yt) - yt;
+            sheetWidth *= 2;
+            maxGlyphs = 1815;
+        }
 
-            if (yfrag == 0.f)
-                yfrag = 1.f;
-            float yfrag2 = yt+dy - floor(yt + dy);
+        LocateTFH_MessageFontBFFNT(fontDataStart);
 
-            if(yfrag2 == 0.f && dy != 1.0f)
-                yfrag2 = 1.f;
+        TGLP_TFH *tglp = fontGetGlyphInfo(TFH_Font); // relies on line above!
+        int glyphsPerRow = tglp->nRows;
 
-            for (float xt = 0.f, x = 0.f; x < outWidth; x++, xt += dx)
+        glyphBuffer = (u8 *)new u8[OG_GLYPH_WIDTH * OG_GLYPH_HEIGHT]; // holds pixel data belonging to a glyph
+        rowBuffer = (u8 *)new u8[sheetWidth * OG_GLYPH_HEIGHT];
+
+        g_glyphPool.resize(maxGlyphs);
+        g_bitmapPool.resize(maxGlyphs * NEW_GLYPH_WIDTH * NEW_GLYPH_HEIGHT);
+
+        glyphCache.clear();
+        glyphCache.resize(maxGlyphs, nullptr);
+
+        DeswizzleSheets();
+
+        File::Open(fontFile, "/Tricord/linearSheet.tmp", File::READ);
+
+        for (int processedRows = 0; processedRows < (int)tglp->nLines && !done; processedRows++)
+        {
+            std::memset(rowBuffer, 0, sheetWidth * OG_GLYPH_HEIGHT);
+
+            fontFile.Seek(processedRows * (sheetWidth * OG_GLYPH_HEIGHT), File::SET);
+            fontFile.Read(rowBuffer, sheetWidth * OG_GLYPH_HEIGHT);
+
+            for (int glyphIndex = 0; glyphIndex < glyphsPerRow; glyphIndex++)
             {
-                int xi = static_cast<int>(xt);
-                int yi = static_cast<int>(yt);
-                float xfrag = ceil(xt) - xt;
-                if(xfrag == 0.f)
-                    xfrag = 1.f;
-                float xfrag2 = xt + dx - floor(xt+dx);
-                if(xfrag2 == 0.f && dx != 1.0f)
-                    xfrag2 = 1.f;
-                float alpha = xfrag * yfrag * src[(yi * GLYPH_WIDTH + xi)];
-
-                for(i=0; xi + i + 1 < xt+dx-1; i++)
-                    alpha += yfrag * src[(yi * GLYPH_WIDTH + xi + i + 1)];
-
-                alpha += xfrag2 * yfrag * src[(yi*GLYPH_WIDTH +xi+i+1)];
-
-                for(i = 0; yi + i + 1 < yt + dy - 1 && yi + i + 1 < GLYPH_HEIGHT; i++)
+                if (glyphIndex + (glyphsPerRow * processedRows) >= maxGlyphs)
                 {
-                    alpha += xfrag * src[((yi + i + 1) * GLYPH_WIDTH + xi)];
-
-                    for (ii = 0; xi + ii + 1 < xt + dx - 1 && xi + ii + 1 < GLYPH_WIDTH; ii++)
-                        alpha += src[((yi + i + 1) * GLYPH_WIDTH + xi + ii + 1)];
-
-                    if (yi + i + 1 < GLYPH_WIDTH && xi + ii + 1 < GLYPH_WIDTH)
-                        alpha += xfrag2 * src[((yi + i + 1) * GLYPH_WIDTH + xi + ii + 1)];
+                    done = true;
+                    break;
                 }
 
-                if (yi + i + 1 < GLYPH_HEIGHT)
-                {
-                    alpha += xfrag * yfrag2 * src[((yi + i + 1) * GLYPH_WIDTH + xi)];
+                CacheGlyph(glyphIndex + (glyphsPerRow * processedRows)); // Will create glyphCache entry
+            }
+        }
 
-                    for (ii = 0; xi + ii + 1 < xt + dx - 1 && xi + ii + 1 < GLYPH_WIDTH; ii++)
-                        alpha += yfrag2 * src[((yi + i + 1) * GLYPH_WIDTH + xi + ii + 1)];
-                }
+        fontFile.Close();
+        defaultGlyph = CacheGlyph(fontTFHGlyphIndexFromCodePoint(TFH_Font, (u32)'?'));
+        delete[] rowBuffer;
+    }
 
-                if (yi + i + 1 < GLYPH_HEIGHT && xi + ii + 1 < GLYPH_WIDTH)
-                    alpha += xfrag2 * yfrag2 * src[((yi + i + 1) * GLYPH_WIDTH + xi + ii + 1)];
+    Glyph *Font::GetGlyph(u8* &c)
+    {
+        u32 code;
+        u32 glyphIndex;
+        ssize_t units;
 
-                alpha /= dx * dy;
-                alpha = alpha <= 0.f ? 0.f : (alpha >= 255.f ? 255.f : alpha);
-                dest[(static_cast<u32>(y) * outWidth + static_cast<u32>(x))] = static_cast<u8>(alpha);
+        units = decode_utf8(&code, c);
+        if (units == -1)
+            return (nullptr);
+
+        c += units;
+        if (code > 0)
+        {
+            glyphIndex = fontTFHGlyphIndexFromCodePoint(TFH_Font, code);
+            if (glyphIndex == 0xFFFF) // Glyph not found, return "?" instead
+            {
+                return defaultGlyph;
+            }
+
+            // Retrieve from cache
+            if (glyphIndex < glyphCache.size() && glyphCache[glyphIndex] != nullptr)
+                return glyphCache[glyphIndex];
+        }
+        return nullptr;
+    }
+
+    Glyph *Font::GetGlyph(char c)
+    {
+        u8 *s = (u8 *)&c;
+        return GetGlyph(s);
+    }
+
+    u8 *GetOriginalGlyph(u32 glyphIndex)
+    {
+        TGLP_TFH *tglp = fontGetGlyphInfo(TFH_Font);
+
+        int glyphsPerRow = tglp->nRows;
+        int indexX = glyphIndex % glyphsPerRow;
+        int startPosX = indexX * OG_GLYPH_WIDTH;
+
+        std::memset(glyphBuffer, 0, OG_GLYPH_WIDTH * OG_GLYPH_HEIGHT);
+
+        for (int y = 0; y < OG_GLYPH_HEIGHT; y++)
+        {
+            for (int x = 0; x < OG_GLYPH_WIDTH; x++)
+            {
+                glyphBuffer[x + y * OG_GLYPH_WIDTH] = rowBuffer[(startPosX + x) + y * sheetWidth];
+            }
+        }
+
+        return glyphBuffer;
+    }
+
+    u8 BilinearInterpolate(const u8 *bitmap, int srcWidth, int srcHeight, float x, float y)
+    {
+        int x1 = static_cast<int>(std::floor(x));
+        int y1 = static_cast<int>(std::floor(y));
+        int x2 = std::min(x1 + 1, srcWidth - 1);
+        int y2 = std::min(y1 + 1, srcHeight - 1);
+
+        float dx = x - x1;
+        float dy = y - y1;
+
+        u8 p11 = bitmap[y1 * srcWidth + x1];
+        u8 p12 = bitmap[y2 * srcWidth + x1];
+        u8 p21 = bitmap[y1 * srcWidth + x2];
+        u8 p22 = bitmap[y2 * srcWidth + x2];
+
+        return static_cast<u8>((1 - dx) * (1 - dy) * p11 + dx * (1 - dy) * p21 + (1 - dx) * dy * p12 + dx * dy * p22);
+    }
+
+    void ShrinkGlyph(u8 *dest, const u8 *src, int srcWidth, int srcHeight, int destWidth, int destHeight)
+    {
+        float scaleX = static_cast<float>(srcWidth) / destWidth;
+        float scaleY = static_cast<float>(srcHeight) / destHeight;
+
+        for (int y = 0; y < destHeight; ++y)
+        {
+            for (int x = 0; x < destWidth; ++x)
+            {
+                float srcX = x * scaleX;
+                float srcY = y * scaleY;
+
+                dest[y * destWidth + x] = BilinearInterpolate(src, srcWidth, srcHeight, srcX, srcY);
             }
         }
     }
 
-    Glyph   *Font::CacheGlyph(u32 glyphIndex)
+    Glyph* Font::CacheGlyph(u32 glyphIndex)
     {
-        // Check cache first
-        if (glyphIndex < glyphCache.size() && glyphCache[glyphIndex] != nullptr)
+        if (glyphCache[glyphIndex] != nullptr) // if Glyph was already cached, return it
             return glyphCache[glyphIndex];
 
         Lock lock(_mutex);
 
         u8 *originalGlyph = GetOriginalGlyph(glyphIndex);
+        u8 *newResizedGlyph = g_bitmapPool.data() + (glyphIndex * NEW_GLYPH_WIDTH * NEW_GLYPH_HEIGHT);
 
-        u8 *newGlyph = g_bitmapPool[glyphIndex];
-        g_fontAllocated += 252; // 14x18 wxh = 252 pixels (A4 image format)
-        std::memset(newGlyph, 0, 252);
+        std::memset(newResizedGlyph, 0, NEW_GLYPH_WIDTH * NEW_GLYPH_HEIGHT);
 
-        ShrinkGlyph(newGlyph, originalGlyph);
+        ShrinkGlyph(newResizedGlyph, originalGlyph, OG_GLYPH_WIDTH, OG_GLYPH_HEIGHT, NEW_GLYPH_WIDTH, NEW_GLYPH_HEIGHT);
 
-        // Allocate Glyph from pool
-        Glyph *glyph = AllocateGlyph(glyphIndex);
-        if (glyph == nullptr)
-            return nullptr;
+        Glyph *glyph = &g_glyphPool[glyphIndex];
 
-        g_fontAllocated += sizeof(Glyph);
-        g_glyphAllocated++;
         std::memset(glyph, 0, sizeof(Glyph));
 
         // Get Glyph data
-        charWidthInfo_s     *cwi;
-        fontGlyphPos_s      glyphPos;
-        Renderer::FontCalcGlyphPos(&glyphPos, &cwi, glyphIndex, 0.75f, 0.75f);
+        charWidthInfo_s *cwi;
+        fontGlyphPos_s glyphPos;
+        Renderer::FontCalcGlyphPos(&glyphPos, &cwi, glyphIndex, 14.0f / 19.0f);
 
-        glyph->xOffset =  std::round((glyphIndex == 0) ? 0 : glyphPos.xOffset);
-        glyph->xAdvance = std::floor((glyphIndex == 0) ? glyphPos.xAdvance : (glyphPos.xAdvance - glyphPos.xOffset));
-        glyph->glyph = newGlyph;
+        glyph->xOffset = std::floor((glyphIndex == 0) ? 0 : glyphPos.xOffset);
+        glyph->xAdvance = std::round((glyphIndex == 0) ? glyphPos.xAdvance : (glyphPos.xAdvance - glyphPos.xOffset));
+        glyph->glyph = newResizedGlyph;
 
         // Add to cache
         if (glyphIndex < glyphCache.size())
             glyphCache[glyphIndex] = glyph;
 
-        return (glyph);
+        return glyph;
     }
 }

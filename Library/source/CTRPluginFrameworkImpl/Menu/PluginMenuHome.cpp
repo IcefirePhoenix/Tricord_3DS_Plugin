@@ -100,6 +100,7 @@ namespace CTRPluginFramework
                 home->_AddFavoriteBtn.Unlock();
                 home->_controllerBtn.Unlock();
                 home->_discordBtn.Unlock();
+                home->_InfoBtn.Enable();
                 home->_InfoBtn.Unlock();
                 home->_RenderTop();
             }
@@ -451,7 +452,7 @@ namespace CTRPluginFramework
             _AddFavoriteBtn.SetState(false);
             _AddFavoriteBtn.Lock();
             _InfoBtn.SetState(false);
-            _InfoBtn.Lock();
+            _InfoBtn.Disable();
             _controllerBtn.SetState(false);
             _controllerBtn.Lock();
         }
@@ -474,10 +475,11 @@ namespace CTRPluginFramework
                 if (item->GetNote().size() > 0)
                 {
                     _noteTB.Update(item->name, item->GetNote());
+                    _InfoBtn.Enable();
                     _InfoBtn.Unlock();
                 }
                 else
-                    _InfoBtn.Lock();
+                    _InfoBtn.Disable();
             }
         }
     }
@@ -596,6 +598,7 @@ namespace CTRPluginFramework
         Renderer::DrawGameFontString(("Tricord Plugin v" + _versionStr).c_str(), 95, posY, 360, Color::Gainsboro);
 
         Icon::DrawBG_Underline(8, 10);
+        Icon::DrawInfoNewDark(116, 41);
 
         _showStarredBtn.Draw();
         _freecamBtn.Draw();
@@ -653,7 +656,7 @@ namespace CTRPluginFramework
             if (folder->ItemsCount() == 0)
             {
                 _AddFavoriteBtn.Lock();
-                _InfoBtn.Lock();
+                _InfoBtn.Disable();
                 _controllerBtn.Lock();
             }
             // If selected object is a folder
@@ -662,9 +665,12 @@ namespace CTRPluginFramework
                 MenuFolderImpl *e = reinterpret_cast<MenuFolderImpl *>((*folder)[_selector]);
 
                 if (e->note.size())
+                {
+                    _InfoBtn.Enable();
                     _InfoBtn.Unlock();
+                }
                 else
-                    _InfoBtn.Lock();
+                    _InfoBtn.Disable();
 
                 _AddFavoriteBtn.SetState(e->_IsStarred());
                 _controllerBtn.SetState(false);
@@ -683,11 +689,13 @@ namespace CTRPluginFramework
                 MenuEntryImpl   *e = reinterpret_cast<MenuEntryImpl *>((*folder)[_selector]);
                 std::string &note = e->GetNote();
 
-
                 if (e->note.size())
+                {
+                    _InfoBtn.Enable();
                     _InfoBtn.Unlock();
+                }
                 else
-                    _InfoBtn.Lock();
+                    _InfoBtn.Disable();
 
                 if (e->_owner != nullptr && e->_owner->Hotkeys.Count() > 0)
                 {
@@ -834,7 +842,7 @@ namespace CTRPluginFramework
         MenuFolderImpl* f = _starMode ? _starred : _folder;
         if (f->ItemsCount() == 0)
         {
-            _InfoBtn.Lock();
+            _InfoBtn.Disable();
             _AddFavoriteBtn.Lock();
             _controllerBtn.Lock();
 
@@ -845,9 +853,12 @@ namespace CTRPluginFramework
             MenuEntryImpl* e = reinterpret_cast<MenuEntryImpl *>(f->_items[_selector]);
 
             if (e->note.size())
+            {
+                _InfoBtn.Enable();
                 _InfoBtn.Unlock();
+            }
             else
-                _InfoBtn.Lock();
+                _InfoBtn.Disable();
 
             _AddFavoriteBtn.Unlock();
             _AddFavoriteBtn.SetState(e->_IsStarred());
@@ -1070,7 +1081,7 @@ namespace CTRPluginFramework
             _AddFavoriteBtn.Unlock();
 
         if (item != nullptr && !item->GetNote().empty())
-            _InfoBtn.Unlock();
+            _InfoBtn.Enable();
     }
 
     void PluginMenuHome::AddPluginVersion(bool isDev)

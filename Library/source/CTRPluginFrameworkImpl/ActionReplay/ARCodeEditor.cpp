@@ -901,8 +901,7 @@ namespace CTRPluginFramework
     {
         _exit = false;
         _index =  _line = 0;
-        _keyboard.SetLayout(Layout::HEXADECIMAL);
-        _keyboard._Hexadecimal();
+        _keyboard.SetLayout(Layout::HEXADECIMAL_LITE);
         _keyboard._showCursor = false;
         __arCodeEditor = this;
         _clipboard = nullptr;

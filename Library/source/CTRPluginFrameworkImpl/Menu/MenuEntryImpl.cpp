@@ -167,17 +167,22 @@ namespace CTRPluginFramework
 
     bool    MenuEntryImpl::_TriggerState(void)
     {
+        if (MenuFunc != nullptr) // this allows checkboxes to optionally behave like gearboxes
+            MenuFunc(_owner);
+
         // Disable if currently enabled
         if (_flags.state)
         {
             _flags.state = false;
             _flags.justChanged = false;
-            return (false);
+
+            return false;
         }
         // Else enable
         _flags.state = true;
         _flags.justChanged = true;
-        return (true);
+
+        return true;
     }
 
     bool    MenuEntryImpl::_MustBeRemoved(void) const

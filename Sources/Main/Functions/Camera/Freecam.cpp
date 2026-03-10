@@ -58,7 +58,7 @@ namespace CTRPluginFramework
 
 			// prevent overlap with X-button screenshot ability...
 			if (isFreecamInUse)
-				Miscellaneous::writeCameraEdits(false);
+				Miscellaneous::writeCameraEdits(true);
 			else
 				Miscellaneous::writeCameraEdits(Miscellaneous::getCameraStatus());
 

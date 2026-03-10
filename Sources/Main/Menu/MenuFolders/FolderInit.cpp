@@ -403,40 +403,19 @@ namespace CTRPluginFramework
 
         *costume += new MenuEntry("Force Bear Minimum / Maximum", nullptr, Costume::forceBearMinMax, true, DescUtils::getDesc("bear_minMax_note"));
 
-        // Custom costumes
+        DLC_SlotWriterA = new MenuEntry("", Costume::overrideDLC_CostumeSlotA, Costume::toggleVisibilityTricordUsageEntry, false, "");
+        TricordUseDLC_SlotA = new MenuEntry("", nullptr,Costume::toggleTricordCustomCostumeUsage, false, "", true);
 
-        // TODO: restore after custom costume model loaders are ready...
-        triggerCostumeSlots = new MenuEntry("Open Custom Costume Slots", nullptr, Costume::openCustomCostumeSlots, true);
-        menuCostumeSlotA = new MenuEntry("   Set custom costume slot A", nullptr, Costume::selectCostumeID, true, DescUtils::getDesc("slot_A_note"));
-        menuCostumeSlotB = new MenuEntry("   Set custom costume slot B", nullptr, Costume::selectCostumeID, true);
-        menuCostumeSlotC = new MenuEntry("   Set custom costume slot C", nullptr, Costume::selectCostumeID, true);
-        menuCostumeSlotD = new MenuEntry("   Set custom costume slot D", nullptr, Costume::selectCostumeID, true);
-        restoreGreatFairy = new MenuEntry("Restore Great Fairy Costume", Costume::greatFairyEnable, DescUtils::getDesc("restore_fairy_note"));
+        Costume::setDLCEntryTitles();
 
-        // add to costume folder + hide by default
-        // *costume += triggerCostumeSlots;
-        // *costume += menuCostumeSlotA;
-        // *costume += menuCostumeSlotB;
-        // *costume += menuCostumeSlotC;
-        // *costume += menuCostumeSlotD;
-        *costume += restoreGreatFairy;
+        *costume += DLC_SlotWriterA;
+        *costume += TricordUseDLC_SlotA;
 
-        menuCostumeSlotA->Hide();
-        menuCostumeSlotB->Hide();
-        menuCostumeSlotC->Hide();
-        menuCostumeSlotD->Hide();
-
-        menuCostumeSlotA->SetAltIcon(true);
-        menuCostumeSlotB->SetAltIcon(true);
-        menuCostumeSlotC->SetAltIcon(true);
-        menuCostumeSlotD->SetAltIcon(true);
+        TricordUseDLC_SlotA->Hide();
 
         // auto-managed by plugin; hidden from users...
         swordEditAuto = new MenuEntry("Write Sword edits (auto)", Costume::writeSwordChanges, "", true);
         cosmeticCostumeAuto = new MenuEntry("Write cosmetic costumes (auto)", Costume::writeCosmeticCostume, "", true);
-        manageCatalogSize = new MenuEntry("Manage Catalog Size (auto)", Costume::manageCatalogSizeAuto, "", true);
-        initCustomCostumes = new MenuEntry("Init Custom Costume list (auto)", Costume::initCustomCostumesAuto, "", true);
-        writeCostumeIDToSlot = new MenuEntry("Write to costume slots (auto)", Costume::writeToCostumeSlot, "", true);
         costumeRandomizerAuto = new MenuEntry("Costume Randomizers (auto)", Costume::writeRandomCostume, "", true);
         beamCooldownAuto = new MenuEntry("Write beam cooldown (auto)", Costume::writeBeamCooldown, "", true);
         infBalloonsAuto = new MenuEntry("Infinite tingle balloons (auto)", Costume::writeBalloons, "", true);
@@ -444,9 +423,6 @@ namespace CTRPluginFramework
 
         *autoFolder += swordEditAuto;
         *autoFolder += cosmeticCostumeAuto;
-        *autoFolder += manageCatalogSize;
-        *autoFolder += initCustomCostumes;
-        *autoFolder += writeCostumeIDToSlot;
         *autoFolder += costumeRandomizerAuto;
         *autoFolder += beamCooldownAuto;
         *autoFolder += infBalloonsAuto;
@@ -465,8 +441,8 @@ namespace CTRPluginFramework
         *buttonSpam += new MenuEntry("Set custom timer interval: 10 ms", nullptr, Miscellaneous::selSpamInterval, true, DescUtils::getDesc("set_spam_interval_note"));
         *buttonSpam += new MenuEntry("Set button spammer keys", nullptr, Miscellaneous::selectSpamKeys, true, DescUtils::getDesc("set_spam_button_note"));
 
-        *camera += new MenuEntry("Toggle camera on X button: No edits", nullptr, Miscellaneous::toggleCameraButton, true, DescUtils::getDesc("toggle_X_cam_note"));
-        *camera += new MenuEntry("Disable camera shutter", nullptr, Miscellaneous::toggleCameraShutter, false, DescUtils::getDesc("shutter_note"));
+        *camera += new MenuEntry("Disable screenshot shutter", nullptr, Miscellaneous::toggleCameraShutter, false, DescUtils::getDesc("shutter_note"));
+        *camera += new MenuEntry("Disable camera on X button", Miscellaneous::toggleCameraButton, DescUtils::getDesc("toggle_X_cam_note"));
         *camera += new MenuEntry("Use photo viewer touchscreen toggle", Miscellaneous::managePhotoDisp, DescUtils::getDesc("viewer_toggle_note"));
 
         *speedrun += (EntryWithHotkey(new MenuEntry("Enable On-screen Speedrun Timer", Miscellaneous::speedrunTimer, DescUtils::getDesc("speedrun_note")),
@@ -505,10 +481,7 @@ namespace CTRPluginFramework
         *miscellaneous += new MenuEntry("Force instant text boxes", nullptr, Miscellaneous::manageInstantText, false, DescUtils::getDesc("instant_text_note"));
 
         // auto-managed by plugin; hidden from users...
-        autoWriteCameraStatus = new MenuEntry("Toggle camera status (auto)", Miscellaneous::keepCameraEdits, "", true);
         autoDisableCamShutter = new MenuEntry("Disable camera shutter (auto)", Miscellaneous::writeShutterDisable, "", true);
-
-        *autoFolder += autoWriteCameraStatus;
         *autoFolder += autoDisableCamShutter;
     }
 
@@ -603,9 +576,23 @@ namespace CTRPluginFramework
         *overlay += new MenuEntry("Force visibility of Treasure Chest contents", nullptr, Rendering::seeChestContents, false, DescUtils::getDesc("chest_visible_note"));
         *overlay += new MenuEntry("Swap single player loading screen", nullptr, Rendering::swapSPLoadingScreen, true, DescUtils::getDesc("load_sp_screen_note"));
 
-        // *face += new MenuEntry("Enable custom facial expressions", FaceSelMenu::maintainEdits, DescUtils::getDesc("face_expr_enable_note"));
-        // *face += new MenuEntry("Edit idle facial expression", nullptr, Rendering::editFaceExpr, true, DescUtils::getDesc("face_expr_sel_note"));
-        //*texture += face;
+        faceExprLabel1 = new MenuEntryLabel("Idle: Default");
+        faceExprLabel2 = new MenuEntryLabel("Shocked: Default");
+        faceExprLabel3 = new MenuEntryLabel("Death / DMG: Default");
+        faceExprLabel4 = new MenuEntryLabel("Triforce Warp: Default");
+        faceExprLabel5 = new MenuEntryLabel("Low HP / Failed Challenge: Default");
+        faceExprLabel6 = new MenuEntryLabel("Fall / Drown / Capture: Default");
+
+        *face += new MenuEntry("Edit facial expressions", nullptr, Rendering::editFaceExpr, true, DescUtils::getDesc("face_expr_sel_note"));
+
+        *face += new MenuEntryLabel();
+        *face += faceExprLabel1;
+        *face += faceExprLabel2;
+        *face += faceExprLabel3;
+        *face += faceExprLabel4;
+        *face += faceExprLabel5;
+        *face += faceExprLabel6;
+        *texture += face;
 
         *texture += new MenuEntry("Swap Link textures", nullptr, Rendering::swapLinkTexture, true, DescUtils::getDesc("swap_link_tex_note"));
         *texture += new MenuEntry("Force visibility of Cheer Outfit pom poms", nullptr, Rendering::forcePomPom, false, DescUtils::getDesc("cheer_pom_note"));
@@ -619,6 +606,9 @@ namespace CTRPluginFramework
         *render += overlay;
         *render += texture;
         *render += env;
+
+        faceExprManager = new MenuEntry("Maintain custom facial expressions (auto)", FaceExprEditor::editMngr, "", true);
+        *autoFolder += faceExprManager;
     }
 
     void InitSaveFolder(PluginMenu &menu)

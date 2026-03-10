@@ -152,7 +152,7 @@ namespace CTRPluginFramework
                     Renderer::MenuSelector(posX - 5, posY - 3, 330, 20);
                 }
 
-                // Draw Entry / EntryTools / FreeCheat
+                // Draw Entry / EntryTools
                 if (item->_type != MenuType::Folder)
                 {
                     _iconCallback(posX, posY);
@@ -226,7 +226,7 @@ namespace CTRPluginFramework
             if (!_folder->GetNote().empty())
             {
                 int posY = 40;
-                Renderer::DrawGameFontStringReturn((u8 *)_folder->GetNote().c_str(), 35, posY, 295, Preferences::Settings.MainTextColor, 190);
+                Renderer::DrawGameFontStringReturn(_folder->GetNote().c_str(), 35, posY, 295, Preferences::Settings.MainTextColor, 190);
             }
         }
     }
@@ -335,20 +335,6 @@ namespace CTRPluginFramework
 
                         return (MenuEvent::EntrySelected);
                     }
-                    // MenuEntryFreeCheat
-                    /*else if (item->_type == MenuType::FreeCheat)
-                    {
-                        MenuEntryFreeCheat *e = reinterpret_cast<MenuEntryFreeCheat *>(item);
-
-                        bool state = e->TriggerState();
-
-                        if (state)
-                            PluginMenuExecuteLoop::Add(e);
-                        else
-                            PluginMenuExecuteLoop::Remove(e);
-
-                        return (MenuEvent::EntrySelected);
-                    } */
                     // MenuEntryActionReplay
                     else if (item->_type == MenuType::ActionReplay)
                     {

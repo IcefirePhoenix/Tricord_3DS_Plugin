@@ -17,10 +17,11 @@ namespace CTRPluginFramework
 {
     bool openSearch, signalQuit;
 
-    PluginMenuImpl  *PluginMenuImpl::_runningInstance = nullptr;
-    Mutex           PluginMenuImpl::_trashBinMutex;
+    PluginMenuImpl *PluginMenuImpl::_runningInstance = nullptr;
+    Mutex PluginMenuImpl::_trashBinMutex;
 
     PluginMenuImpl::PluginMenuImpl(std::string &name, std::string &about, u32 menuType) :
+        Uptime(new Clock()),
         OnFirstOpening(nullptr),
         OnOpening(nullptr),
         OnClosing(nullptr),
@@ -36,6 +37,7 @@ namespace CTRPluginFramework
         _forceOpen(false)
     {
         SyncOnFrame = false;
+        UpdateEveryOtherFrame = false;
         _isOpen = false;
         _aboutToOpen = false;
         _wasOpened = false;
@@ -146,7 +148,6 @@ namespace CTRPluginFramework
     int    PluginMenuImpl::Run(void)
     {
         Event                   event;
-        EventManager            closedManager(EventManager::EventGroups::GROUP_KEYS);
         EventManager            openManager(EventManager::EventGroups::GROUP_KEYS | EventManager::EventGroups::GROUP_TOUCH_AND_SWIPE);
         Clock                   clock;
         Clock                   inputClock;
@@ -167,11 +168,13 @@ namespace CTRPluginFramework
 
         // Set _runningInstance to this menu
         _runningInstance = this;
+
+        KeyboardImpl::InitKeyboards();
+
         FwkSettings::SetBottomScreenBackground(BottomBG_bin);
 
-        Preferences::LoadSettings();
-        _tools->UpdateSettings();
 
+        _tools->UpdateSettings();
 
         Preferences::LoadEntryPreferences(Preferences::IsEnabled(Preferences::AutoEnableSavedCheats), Preferences::IsEnabled(Preferences::AutoEnableFavorites));
 
@@ -201,11 +204,31 @@ namespace CTRPluginFramework
         if (!Directory::IsExists("/Tricord/AR_Backups/"))
             Directory::Create("/Tricord/AR_Backups/");
 
+        Uptime->Restart();
         ar.Initialize();
+
         PluginMenuActionReplay::BackupCodes(false);
 
         OSD::Notify("Plugin ready!", Color::White, Color());
         OSD::Notify("Tricord can now be started.", Color::White, Color());
+
+        if (OnReady != nullptr)
+        {
+            OnReady();
+        }
+
+        auto checkOpenEvent = [](Event &ev) -> bool
+        {
+            Controller::Update();
+            if (Controller::IsKeysPressed(Preferences::MenuHotkeys))
+            {
+
+                ev.type = Event::KeyPressed;
+                ev.key.code = (Key)Preferences::MenuHotkeys;
+                return true;
+            }
+            return false;
+        };
 
         // Refresh hid
         Controller::Update();
@@ -215,7 +238,7 @@ namespace CTRPluginFramework
         {
             // Check Event
             eventList.clear();
-            while ((_isOpen && openManager.PollEvent(event)) || (!_isOpen && closedManager.PollEvent(event)) || _forceOpen)
+            while ((_isOpen && openManager.PollEvent(event)) || (!_isOpen && checkOpenEvent(event)) || _forceOpen)
             {
                 bool isHotkeysDown = false;
 
@@ -257,7 +280,6 @@ namespace CTRPluginFramework
                             ProcessImpl::Pause(true);
 
                             _aboutToOpen = _isOpen = true;
-                            closedManager.Clear();
                             _wasOpened = true;
 
                             // Refresh HexEditor data
@@ -355,7 +377,17 @@ namespace CTRPluginFramework
             else // menu is closed
             {
                 if (SyncOnFrame && !ProcessImpl::IsPaused)
-                    LightEvent_Wait(&OSDImpl::OnNewFrameEvent);
+                {
+                    while (true)
+                    {
+                        LightEvent_Wait(&OSDImpl::OnNewFrameEvent);
+
+                        if (UpdateEveryOtherFrame && (((_frameCounter++) % 2) == 0))
+                            continue;
+
+                        break;
+                    }
+                }
 
                 if (SystemImpl::Status())
                 {
@@ -565,12 +597,30 @@ namespace CTRPluginFramework
         }
     }
 
+    void PluginMenuImpl::LoadFaceExprFromFile(const Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        Preferences::FaceExprFrameVal exprs[6];
+
+        settings.Seek(header.customFaceExprOffset, File::SET);
+        if (settings.Read(exprs, sizeof(Preferences::FaceExprFrameVal) * 6) == 0)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                Preferences::SavedFaceExprs[i] = exprs[i];
+            }
+        }
+    }
+
     void PluginMenuImpl::WriteScreenshotConfigToFile(Preferences::Header &header, File &settings)
     {
         if (_runningInstance == nullptr)
             return;
 
         u64 offset = settings.Tell();
+
         header.screenshotScreenCapture = Screenshot::Screens;
         header.screenshotHotkeys = Screenshot::Hotkeys;
         header.screenshotTimer = static_cast<u32>(Screenshot::Timer.AsSeconds());
@@ -581,37 +631,27 @@ namespace CTRPluginFramework
         std::strncpy(header.screenshotCustomDir, Screenshot::Path.c_str(), sizeof(header.screenshotCustomDir) - 1);
         header.screenshotCustomDir[sizeof(header.screenshotCustomDir) - 1] = '\0';
 
-        header.screenshotOffset = offset;
-    }
-
-    void PluginMenuImpl::WriteEnabledCheatsToFile(Preferences::Header &header, File &settings)
-    {
-        if (_runningInstance == nullptr)
+        if (settings.Write(&Screenshot::Screens, sizeof(Screenshot::Screens)) != 0)
             return;
 
-        std::vector<u32> uids;
-        MenuFolderImpl *folder = _runningInstance->_home->_folder;
+        if (settings.Write(&Screenshot::Hotkeys, sizeof(Screenshot::Hotkeys)) != 0)
+            return;
 
-        for (MenuItem *item : folder->_items)
-        {
-            if (item->IsEntry())
-            {
-                MenuEntryImpl* enabledEntry = reinterpret_cast<MenuEntryImpl *>(item);
-                if (enabledEntry->IsActivated() && !enabledEntry->IsRestricted())
-                    uids.push_back(item->Uid);
-            }
-        }
+        u32 timerValue = static_cast<u32>(Screenshot::Timer.AsSeconds());
+        if (settings.Write(&timerValue, sizeof(timerValue)) != 0)
+            return;
 
-        if (uids.size())
-        {
-            u64 offset = settings.Tell();
+        char buffer[sizeof(header.screenshotCustomName)] = {};
+        std::strncpy(buffer, Screenshot::Prefix.c_str(), sizeof(buffer) - 1);
+        if (settings.Write(buffer, sizeof(buffer)) != 0)
+            return;
 
-            if (settings.Write(uids.data(), sizeof(u32) * uids.size()) == 0)
-            {
-                header.enabledCheatsCount = uids.size();
-                header.enabledCheatsOffset = offset;
-            }
-        }
+        char dirBuffer[sizeof(header.screenshotCustomDir)] = {};
+        std::strncpy(dirBuffer, Screenshot::Path.c_str(), sizeof(dirBuffer) - 1);
+        if (settings.Write(dirBuffer, sizeof(dirBuffer)) != 0)
+            return;
+
+        header.screenshotOffset = offset;
     }
 
     void PluginMenuImpl::WriteFavoritesToFile(Preferences::Header &header, File &settings)
@@ -660,10 +700,22 @@ namespace CTRPluginFramework
             return;
 
         u64 listOffset = settings.Tell();
-        if (!settings.Write(Preferences::SavedWarps, sizeof(Preferences::WarpDestination) * 3) == 0)
+        if (settings.Write(Preferences::SavedWarps, sizeof(Preferences::WarpDestination) * 3) != 0)
             return;
 
         header.warpDestOffset = listOffset;
+    }
+
+    void PluginMenuImpl::WriteFaceExprsToFile(Preferences::Header &header, File &settings)
+    {
+        if (_runningInstance == nullptr)
+            return;
+
+        u64 listOffset = settings.Tell();
+        if (settings.Write(Preferences::SavedFaceExprs.data(), sizeof(Preferences::FaceExprFrameVal) * 6) != 0)
+            return;
+
+        header.customFaceExprOffset = listOffset;
     }
 
     void    PluginMenuImpl::ExtractHotkeys(HotkeysVector &hotkeys, MenuFolderImpl *folder, u32 &size)
@@ -760,7 +812,11 @@ namespace CTRPluginFramework
         {
             _runningInstance->_pluginRun = false;
             if (_runningInstance->SyncOnFrame && !ProcessImpl::IsPaused)
+            {
                 LightEvent_Signal(&OSDImpl::OnNewFrameEvent);
+                if (_runningInstance->UpdateEveryOtherFrame && (_runningInstance->_frameCounter % 2) == 0)
+                    _runningInstance->_frameCounter++;
+            }
         }
     }
 

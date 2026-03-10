@@ -121,21 +121,24 @@ namespace CTRPluginFramework
         if (entry->WasJustActivated())
             execCooldownTimer.Restart();
 
-        if (execCooldownTimer.HasTimePassed(Milliseconds(500)) && entry->Hotkeys[0].IsPressed())
+        if (Level::isInDrablands())
         {
-            if (GeneralHelpers::isSoloActiveGameplay())
+            if (execCooldownTimer.HasTimePassed(Milliseconds(500)) && entry->Hotkeys[0].IsPressed())
             {
-                manageEnemy(false);
+                if (GeneralHelpers::isSoloActiveGameplay())
+                {
+                    manageEnemy(false);
 
-                if (Level::isInBossLevel() && Level::getCurrStage() == 0x4)
-                    tryKillBosses();
+                    if (Level::isInBossLevel() && Level::getCurrStage() == 0x4)
+                        tryKillBosses();
+                }
+                execCooldownTimer.Restart();
+                bossCooldownTimer.Restart();
             }
-            execCooldownTimer.Restart();
-            bossCooldownTimer.Restart();
-        }
 
-        if ((bossCooldownTimer.HasTimePassed(Milliseconds(100)) && !pauseReset) || GeneralHelpers::isLoadingScreen(true))
-            setBossDefeatFlag(false);
+            if ((bossCooldownTimer.HasTimePassed(Milliseconds(100)) && !pauseReset) || GeneralHelpers::isLoadingScreen(true))
+                setBossDefeatFlag(false);
+        }
     }
 
     // Forces all enemies in the current area to have the maximum amount of possible HP
@@ -144,12 +147,15 @@ namespace CTRPluginFramework
         if (entry->WasJustActivated())
             execCooldownTimer.Restart();
 
-        if (execCooldownTimer.HasTimePassed(Milliseconds(500)) && entry->Hotkeys[0].IsPressed())
+        if (Level::isInDrablands())
         {
-            if (GeneralHelpers::isSoloActiveGameplay())
-                manageEnemy(true);
+            if (execCooldownTimer.HasTimePassed(Milliseconds(500)) && entry->Hotkeys[0].IsPressed())
+            {
+                if (GeneralHelpers::isSoloActiveGameplay())
+                    manageEnemy(true);
 
-            execCooldownTimer.Restart();
+                execCooldownTimer.Restart();
+            }
         }
     }
 

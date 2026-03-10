@@ -27,7 +27,7 @@ namespace CTRPluginFramework
     const Color     Color::SkyBlue = Color(135, 206, 235);
     const Color     Color::DeepGold = Color(195, 143, 51);
 
-    Color&   Color::Fade(float fading)
+    Color &Color::Fade(float fading)
     {
         if (fading > 1.0f || fading < -1.0f)
             return *this;

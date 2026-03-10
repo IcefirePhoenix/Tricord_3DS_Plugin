@@ -2,7 +2,7 @@
 
 namespace CTRPluginFramework
 {
-    const StringVector GameData::universalCostumeList =
+    StringVector GameData::universalCostumeList =
     {
         "Bear Minimum/Maximum",
         "Sword Suit",
@@ -42,14 +42,6 @@ namespace CTRPluginFramework
         "Cacto Clothes",
         "Linebeck's Uniform",
         "Fierce Deity Armor"
-    };
-
-    const StringVector GameData::customCostumeList =
-    {
-        "Custom Costume 1",
-        "Custom Costume 2",
-        "Custom Costume 3",
-        "Custom Costume 4"
     };
 
     const StringVector GameData::swordList =
@@ -171,7 +163,7 @@ namespace CTRPluginFramework
     };
 
     const int GameData::generalPlayerIDs[3] = { 0, 1, 2 };
-    const int GameData::maxCostumeCount = 38;
+    int GameData::maxCostumeCount = 38;
 
     int GameData::getPlayerIDFromColor(std::string color)
     {
@@ -205,12 +197,8 @@ namespace CTRPluginFramework
 
     std::string GameData::getCostumeNameFromID(int ID)
     {
-        u8 unusedDLC_SlotCount = 0x4;
-
         if (ID < maxCostumeCount)
             return GameData::universalCostumeList[ID];
-        else if (ID < maxCostumeCount + unusedDLC_SlotCount)
-            return GameData::customCostumeList[ID - maxCostumeCount];
         else
             return "N/A";
     }

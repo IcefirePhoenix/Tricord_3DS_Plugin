@@ -84,7 +84,7 @@ namespace CTRPluginFramework
         // System Font
         //#############################################################################################
         static int      DrawGameFontString(const char *str, int posX, int &posY, int max, Color color, float offset = 0.f, const char *end = nullptr, u32 flags = 0);
-        static int      DrawGameFontStringReturn(const unsigned char* stri, int posX, int& posY, int xLimits, Color color, int maxY = 200, u32 flags = 0);
+        static int      DrawGameFontStringReturn(const char* stri, int posX, int& posY, int xLimits, Color color, int maxY = 200, u32 flags = 0);
 
         static float    GetTextSize(const char *text);
         static int      GetLineCount(const char *text, float maxWidth);
@@ -100,7 +100,7 @@ namespace CTRPluginFramework
         //#############################################################################################
 
         // Calulate GameFont glyph
-        static void     FontCalcGlyphPos(fontGlyphPos_s *out, charWidthInfo_s **cwout, int glyphIndex, float scaleX, float scaleY);
+        static void     FontCalcGlyphPos(fontGlyphPos_s *out, charWidthInfo_s **cwout, int glyphIndex, float scaleX);
 
         static inline   RendererContext *GetContext(void)
         {
@@ -113,8 +113,6 @@ namespace CTRPluginFramework
             return Render::Interface();
         }
     };
-
-        // Can't find a good name...
     struct ProcessingLogo
     {
         Clock   timer{};

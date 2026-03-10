@@ -7,19 +7,14 @@ namespace CTRPluginFramework
 
     /* ------------------ */
 
-    // TODO: edit plugin menu layout to have current costumes as separate menu entries with dynamic titles
-
-    // Driver code for changing the current costume for a specific player | TODO: add support for custom costumes IF they are enabled...
+    // Driver code for changing the current costume for a specific player
     void Costume::changeLinkCostume(MenuEntry *entry)
     {
         int linkChoice = GeneralHelpers::chooseLink();
 
         if (linkChoice >= 0)
         {
-            Keyboard costumeList("Costume Selection Menu", "Choose a costume:\n\nBe sure to load into a new area for changes to fully\ntake effect.");
-            costumeList.Populate(GameData::universalCostumeList);
-
-            Costume::setPlayerCostume(linkChoice, costumeList.Open());
+            Costume::setPlayerCostume(linkChoice, selectCostumeID());
         }
     }
 
@@ -36,35 +31,13 @@ namespace CTRPluginFramework
         }
     }
 
-    // TODO: Refactor to add support for custom costumes:
-    void Costume::selectCostumeID(MenuEntry *entry)
+    // Helper function to select a costume ID
+    int Costume::selectCostumeID(void)
     {
-        const StringVector type =
-        {
-            "Original Costumes",
-            "Custom Costumes"
-        };
+        Keyboard costumeList("Costume Selection Menu", "Choose a costume:\n\nBe sure to load into a new area for changes to fully\ntake effect.");
 
-        u8 result;
-        Keyboard costumeType("Costume Type Selection", "Choose the desired costume type.");
-        Keyboard costumeList("Costume Selection Menu", "Choose a costume.");
-
-        costumeType.Populate(type);
-        int choice = costumeType.Open();
-
-        switch (choice)
-        {
-            case 0:
-                costumeList.Populate(GameData::universalCostumeList);
-                result = costumeList.Open();
-                break;
-            case 1:
-                costumeList.Populate(GameData::customCostumeList);
-                result = costumeList.Open() + GameData::maxCostumeCount; // get 0x26-0x29 range
-                break;
-            default:
-                break;
-        }
+        costumeList.Populate(GameData::universalCostumeList);
+        return costumeList.Open();
     }
 
     // Forces Bear Minimum/Maximum upgrade status regardless of hero point count

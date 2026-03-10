@@ -18,16 +18,15 @@ namespace CTRPluginFramework
     class Font
     {
     public:
-        static Glyph    *GetGlyph(u8* &c);
-        static Glyph    *GetGlyph(char c);
-        static void     Initialize(u32 fontDataStartAddr);
+        static Glyph *GetGlyph(u8* &c);
+        static Glyph *GetGlyph(char c);
+        static void Initialize(u32 fontDataStartAddr, bool useDoubleWidth);
 
     private:
-    static void     Initialize(void);
-
-        friend void     Initialize(void);
-        static Glyph    *CacheGlyph(u32 glyphIndex);
-        static Mutex    _mutex;
+        static void Initialize(void);
+        friend void Initialize(void);
+        static Glyph *CacheGlyph(u32 glyphIndex);
+        static Mutex _mutex;
     };
 }
 

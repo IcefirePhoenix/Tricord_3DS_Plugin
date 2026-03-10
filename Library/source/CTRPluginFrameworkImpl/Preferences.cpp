@@ -19,6 +19,16 @@ namespace CTRPluginFramework
     std::string Preferences::ScreenshotPath;
     std::string Preferences::ScreenshotPrefix;
 
+    std::array<Preferences::FaceExprFrameVal, 6> Preferences::SavedFaceExprs = // default before loading any saved values from file
+    {{
+        {0, 0, 0},
+        {8, 2, 1},
+        {6, 1, 2},
+        {0, 1, 1},
+        {6, 3, 1},
+        {4, 1, 1}
+    }};
+
     bool Preferences::_favoritesAlreadyLoaded = false;
 
     Preferences::WarpDestination Preferences::SavedWarps[3];
@@ -138,22 +148,23 @@ namespace CTRPluginFramework
         File    settings;
         Header  header = { 0 };
 
+        std::string dirPath = "/Tricord/Screenshots/";
+        if (!Directory::IsExists(dirPath))
+            Directory::Create(dirPath);
+
+        dirPath.append(Process::GetRegionCode() + "/");
+
+        if (!Directory::IsExists(dirPath))
+            Directory::Create(dirPath);
+
+        Screenshot::Path = dirPath;
+        Screenshot::Prefix = "Screenshot";
+
         if (OpenConfigFile(settings, header) == 0)
         {
             MenuHotkeys = header.hotkeys & ((System::IsNew3DS() && Settings.AreN3DSButtonsAvailable) ? ~0x0 : ~(Key::CStick | Key::ZL | Key::ZR));
             Flags = header.flags;
 
-            // set last saved screenshot preferences
-            std::string dirPath = "/Tricord/Screenshots/";
-            if (!Directory::IsExists(dirPath))
-                Directory::Create(dirPath);
-
-            dirPath.append(Process::GetRegionCode() + "/");
-
-            if (!Directory::IsExists(dirPath))
-                Directory::Create(dirPath);
-
-            Screenshot::Path = dirPath;
             Screenshot::Prefix = std::strlen(header.screenshotCustomName) == 0 ? "Screenshot" : header.screenshotCustomName;
 
             // these have already been given default values under Screenshot.cpp, so only update if necessary
@@ -165,9 +176,9 @@ namespace CTRPluginFramework
 
             if (header.screenshotTimer != 0)
                 Screenshot::Timer = Seconds(static_cast<float>(header.screenshotTimer));
-
-            Screenshot::Initialize();
         }
+
+        Screenshot::Initialize();
 
         // Check for hotkeys to be valid
         if (MenuHotkeys == 0)
@@ -198,6 +209,7 @@ namespace CTRPluginFramework
 
             PluginMenuImpl::LoadNameColorsFromFile(header, settings);
             PluginMenuImpl::LoadBookmarkWarpsFromFile(header, settings);
+            PluginMenuImpl::LoadFaceExprFromFile(header, settings);
         }
     }
 
@@ -227,6 +239,7 @@ namespace CTRPluginFramework
             // save name colors and warp locations...
             PluginMenuImpl::WriteCustomNameColorToFile(header, settings);
             PluginMenuImpl::WriteBookmarkWarpsToFile(header, settings);
+            PluginMenuImpl::WriteFaceExprsToFile(header, settings);
             PluginMenuImpl::WriteScreenshotConfigToFile(header, settings);
 
             header.size = settings.Tell();
