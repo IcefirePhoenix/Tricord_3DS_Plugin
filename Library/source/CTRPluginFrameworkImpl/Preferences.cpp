@@ -115,31 +115,26 @@ namespace CTRPluginFramework
     {
         if (File::Open(settings, "CTRPFData.bin") == 0 && settings.GetSize() > 0)
         {
-             // Check version
-            int     res = 0;
+            if (settings.Read(&header, sizeof(u32) * 6))
+                goto fail;
 
-            if (settings.Read(&header, sizeof(u32) * 6)) return (-2);
-
-            // Check file
-            if (header.size != settings.GetSize()
-               || !std::equal(g_signature, g_signature + 8, header.sig))
-                return -1;
+            if (header.size != settings.GetSize() || !std::equal(g_signature, g_signature + 8, header.sig))
+                goto fail;
 
             if (header.version != SETTINGS_VERSION)
             {
                 OSD::Notify(Color::Orange << "Config file version mismatch!");
                 OSD::Notify("Default settings applied");
-                return -1;
+                goto fail;
             }
 
             // Rewind file
             settings.Rewind();
-
-            res = settings.Read(&header, sizeof(Header));
-
-            return res;
+            return settings.Read(&header, sizeof(Header));
         }
 
+    fail:
+        Preferences::Set(Preferences::QoL_Patch);
         return -1;
     }
 
