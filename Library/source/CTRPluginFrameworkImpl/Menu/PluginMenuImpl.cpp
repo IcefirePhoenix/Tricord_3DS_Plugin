@@ -469,8 +469,13 @@ namespace CTRPluginFramework
             {
                 MenuItem *item = folder->GetItem(uid);
 
-                if (item != nullptr && item->IsEntry())
-                    reinterpret_cast<MenuEntryImpl *>(item)->Enable();
+                if (item->IsEntry())
+                {
+                    MenuEntryImpl *entry = reinterpret_cast<MenuEntryImpl *>(item);
+
+                    if (entry != nullptr && !entry->NeedsUserInput())
+                        entry->Enable();
+                }
             }
         }
     }
@@ -493,8 +498,13 @@ namespace CTRPluginFramework
             {
                 MenuItem *item = folder->GetItem(uid);
 
-                if (item != nullptr && item->IsEntry())
-                    reinterpret_cast<MenuEntryImpl *>(item)->Enable();
+                if (item->IsEntry())
+                {
+                    MenuEntryImpl *entry = reinterpret_cast<MenuEntryImpl *>(item);
+
+                    if (entry != nullptr && !entry->NeedsUserInput())
+                        entry->Enable();
+                }
             }
         }
     }
