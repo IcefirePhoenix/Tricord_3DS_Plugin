@@ -211,10 +211,24 @@ namespace CTRPluginFramework
     {
         static float temp = 0;
 
-        if (input.length() > 0 && !(input.length() == 1 && input[0] == '-'))
-            temp = static_cast<float>(std::stof(input, nullptr));
-        else
-            temp = 0.f;
+        if (input.length() > 0)
+        {
+            if (isHex)
+            {
+                unsigned long val = std::stoul(input, nullptr, 16);
+                temp = static_cast<float>(val);
+            }
+            else
+            {
+                bool hasDigit = std::any_of(input.begin(), input.end(), ::isdigit);
+
+                if (!hasDigit)
+                    temp = 0.f;
+                else
+                    temp = static_cast<float>(std::stof(input, nullptr));
+            }
+        }
+
         return ((void *)&temp);
     }
 
@@ -222,10 +236,24 @@ namespace CTRPluginFramework
     {
         static double temp = 0;
 
-        if (input.length() > 0 && !(input.length() == 1 && input[0] == '-'))
-            temp = static_cast<double>(std::stod(input, nullptr));
-        else
-            temp = 0;
+        if (input.length() > 0)
+        {
+            if (isHex)
+            {
+                unsigned long val = std::stoul(input, nullptr, 16);
+                temp = static_cast<double>(val);
+            }
+            else
+            {
+                bool hasDigit = std::any_of(input.begin(), input.end(), ::isdigit);
+
+                if (!hasDigit)
+                    temp = 0.f;
+                else
+                    temp = static_cast<double>(std::stof(input, nullptr));
+            }
+        }
+
         return ((void *)&temp);
     }
 

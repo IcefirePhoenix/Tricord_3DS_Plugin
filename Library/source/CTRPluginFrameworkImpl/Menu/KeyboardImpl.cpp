@@ -1894,6 +1894,11 @@ namespace CTRPluginFramework
         }
     }
 
+    bool KeyboardImpl::_HasDecimal()
+    {
+        return _userInput.find('.') != std::string::npos;
+    }
+
     enum
     {
         CLEAR_NOT_PRESSED = 0,
@@ -1983,10 +1988,22 @@ namespace CTRPluginFramework
                     }
                     else
                     {
+                        if (_KeyboardEvent.codepoint == 0x002E)
+                        {
+                            if (_HasDecimal())
+                                return false;
+
+                            if (_layout != Layout::QWERTY && _cursorPositionInString == 0)
+                            {
+                                _userInput.insert(0, "0");
+                                _ScrollUp();
+                            }
+                        }
+
                         _userInput.insert(_cursorPositionInString, temp);
                         _ScrollUp();
                     }
-                    return (true);
+                    return true;
                 }
                 if (ret == KEY_SPACE && (!_max || Utils::GetSize(_userInput) < _max))
                 {
@@ -2059,31 +2076,32 @@ namespace CTRPluginFramework
                 else
                 {
                     if (_layout == DECIMAL && _userInput.length() >= 18)
-                        return (false);
+                        return false;
 
-                    if (_layout != Layout::QWERTY &&_cursorPositionInString == 0 && ret == '.')
-                    {
-                        _userInput.insert(0, "0.");
-                        _ScrollUp();
-                        _ScrollUp(); ///< Yeah I know, I'm f*cking lazy
-                    }
-                    else if (_max == 0 || Utils::GetSize(_userInput) < _max)
+                    if (_max == 0 || Utils::GetSize(_userInput) < _max)
                     {
                         temp.clear();
                         temp += ret;
+
+                        if (ret == '.')
+                        {
+                            if (_HasDecimal())
+                                return false;
+                        }
+
                         _userInput.insert(_cursorPositionInString, temp);
                         _ClearKeyboardEvent();
                         _KeyboardEvent.type = KeyboardEvent::CharacterAdded;
                         _KeyboardEvent.codepoint = ret;
                         _ScrollUp();
                     }
-                    return (true);
+                    return true;
                 }
             }
         }
 
         backspaceFastMode = CLEAR_NOT_PRESSED;
-        return (false);
+        return false;
 
     _backspacePressed:
         std::string &&right = _userInput.substr(_cursorPositionInString);
@@ -2096,9 +2114,9 @@ namespace CTRPluginFramework
         if (_KeyboardEvent.codepoint != 0)
         {
             _KeyboardEvent.type = KeyboardEvent::CharacterRemoved;
-            return (true);
+            return true;
         }
-        return (false);
+        return false;
     }
 
     bool    KeyboardImpl::_CheckInput(void)

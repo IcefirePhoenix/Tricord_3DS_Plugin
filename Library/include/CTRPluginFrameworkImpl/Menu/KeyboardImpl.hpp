@@ -94,6 +94,7 @@ namespace CTRPluginFramework
         void _ScrollUp(void);
         void _ScrollDown(void);
         void _UpdateScrollInfos(void);
+        bool _HasDecimal(void);
         bool _CheckKeys(void);  //<- Return if input have changed
         bool _CheckInput(void); //<- Call compare callback, return true if the input is valid
 
