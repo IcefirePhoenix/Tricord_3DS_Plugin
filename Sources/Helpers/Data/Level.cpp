@@ -120,7 +120,7 @@ namespace CTRPluginFramework
     }
 
     // Returns level names from a specified region/world
-    StringVector Level::getLevelNamesFromWorld(int worldID) // TODO: check eberything that calls this for new index
+    StringVector Level::getLevelNamesFromWorld(int worldID)
     {
         switch (worldID)
         {
@@ -316,15 +316,15 @@ namespace CTRPluginFramework
     }
 
     // Gets all Level data via search by levelID
-    const std::pair<const std::string, Level> *Level::getLevelByID(u8 levelID)
+    std::pair<const std::string, Level> Level::getLevelByID(u8 levelID)
     {
         const std::map<std::string, Level> &levels = getAllLevels();
         for (auto &entry : levels)
         {
             if (entry.second.getLevelID() == levelID)
-                return &entry;
+                return entry;
         }
-        return nullptr;
+        return {"", Level()};
     }
 
     // Retrieves the level ID of the target location

@@ -37,7 +37,7 @@ namespace CTRPluginFramework
 
             if (levelID != 0 && stageID != 0)
             {
-                bookmarkEntries[i]->SetName("Go to: " + retrieveNonStageName(levelID, stageID, Level::getLevelByID(levelID)->first));
+                bookmarkEntries[i]->SetName(std::string("Go to: ") + retrieveNonStageName(levelID, stageID, Level::getLevelByID(levelID).first));
                 bookmarkEntries[i]->CanBeSelected(true);
             }
             else
@@ -81,8 +81,8 @@ namespace CTRPluginFramework
             bookmarkedWarps[selection].stageID = Level::getCurrStage();
             std::copy(std::begin(bookmarkedWarps), std::end(bookmarkedWarps), std::begin(Preferences::SavedWarps));
 
-            std::string levelName = Level::getLevelByID(Level::getCurrLevel())->first;
-            bookmarkEntries[selection]->SetName("Go to: " + retrieveNonStageName(bookmarkedWarps[selection].levelID, bookmarkedWarps[selection].stageID, levelName));
+            std::string levelName = Level::getLevelByID(Level::getCurrLevel()).first;
+            bookmarkEntries[selection]->SetName(std::string("Go to: ") + retrieveNonStageName(bookmarkedWarps[selection].levelID, bookmarkedWarps[selection].stageID, levelName));
             bookmarkEntries[selection]->CanBeSelected(true);
         }
     }
@@ -207,7 +207,7 @@ namespace CTRPluginFramework
 
             if (Level::isInDrablands(warpData[0]) && !Level::isInDoT(true, warpData[0]))
             {
-                const Level level = Level::getLevelByID(warpData[0])->second;
+                const Level level = Level::getLevelByID(warpData[0]).second;
                 if (warpData[0] != Level::levelIDFromName("DoT Warp Room"))
                     challenge = level.selChallenge(level.getChallenges());
 
@@ -239,7 +239,7 @@ namespace CTRPluginFramework
 
             if (Level::isInDrablands(levelID) && !Level::isInDoT(true, levelID))
             {
-                const Level level = Level::getLevelByID(levelID)->second;
+                const Level level = Level::getLevelByID(levelID).second;
                 if (levelID != Level::levelIDFromName("DoT Warp Room"))
                     challenge = level.selChallenge(level.getChallenges());
 

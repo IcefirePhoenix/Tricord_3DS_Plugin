@@ -45,8 +45,9 @@ namespace CTRPluginFramework
 
                 initShadowItemList();
 
-                std::string msg = "Select an item.\nCurrently editing Shadow Link " + ('A' + shadowLinkChoice);
-                msg.append("\n\nBe sure to re-load the stage for changes to take effect.");
+                std::string msg = "Select an item.\nCurrently editing Shadow Link ";
+                msg += static_cast<char>('A' + shadowLinkChoice);
+                msg += ".\n\nBe sure to re-load the stage for changes to take effect.";
 
                 Keyboard item("Shadow Item Selection Menu", msg);
                 item.Populate(Item::shadowItemList);

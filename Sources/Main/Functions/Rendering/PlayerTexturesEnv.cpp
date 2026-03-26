@@ -219,7 +219,7 @@ namespace CTRPluginFramework
                         msg.append("Low HP / Failed Challenge: This is Link's expression when running low on HP or when failing a challenge.");
                         break;
                     case 6:
-                        msg.append("Fall / Drown / Capture: Link makes this expression when captured by a Life-Like or when entering a fall plane. This includes waterfalls, lava, and quicksand.");
+                        msg.append("Fall / Drown / Capture: Link makes this expression when captured by a Life Like or when entering a fall plane. This includes waterfalls, lava, and quicksand.");
                         break;
                 }
             }
