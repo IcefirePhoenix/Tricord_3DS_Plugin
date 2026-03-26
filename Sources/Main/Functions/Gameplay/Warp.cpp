@@ -98,11 +98,24 @@ namespace CTRPluginFramework
             entry->Disable();
     }
 
+    // Allows user to bypass default Doppel costume assignment to Bear Minimum upon first warp
+    void tunicPrompt(void)
+    {
+        std::string firstWarpIntro = "This is your first warp. Make sure Doppels are wearing Hero's Tunics?";
+
+        if (GeneralHelpers::showMsgKbd("Doppel Costume Confirmation", firstWarpIntro, DialogType::DialogYesNo))
+        {
+            // set default Doppel costumes from Bear Minimum -> Hero's Tunic
+            Costume::setPlayerCostume(GameData::getPlayerIDFromColor("Blue"), GameData::getCostumeIDFromName("Hero's Tunic"));
+            Costume::setPlayerCostume(GameData::getPlayerIDFromColor("Red"), GameData::getCostumeIDFromName("Hero's Tunic"));
+        }
+        firstWarp = false;
+    }
+
     // Driver code for warping to a desired area
     void Gameplay::instantWarp(MenuEntry *entry)
     {
         int targetCategory = -3, targetLevelID = -3, targetWorld = -3, targetStage = -3, targetChallenge = 0;
-        std::string firstWarpIntro = "This is your first warp. Make sure Doppels are wearing Hero's Tunics?";
         std::string levelName = "";
         std::pair<std::string, Level> targetLevelData = {};
 
@@ -185,15 +198,7 @@ namespace CTRPluginFramework
 
         // optional: change default Doppel costumes...
         if (firstWarp)
-        {
-            if (GeneralHelpers::showMsgKbd("Doppel Costume Confirmation", firstWarpIntro, DialogType::DialogYesNo))
-            {
-                // set default Doppel costumes from Bear Minimum -> Hero's Tunic
-                Costume::setPlayerCostume(GameData::getPlayerIDFromColor("Blue"), GameData::getCostumeIDFromName("Hero's Tunic"));
-                Costume::setPlayerCostume(GameData::getPlayerIDFromColor("Red"), GameData::getCostumeIDFromName("Hero's Tunic"));
-            }
-            firstWarp = false;
-        }
+            tunicPrompt();
     }
 
     // Warps to the last area visited via warping
@@ -254,6 +259,10 @@ namespace CTRPluginFramework
             // save this warp's data for future re-warps...
             warpData[0] = levelID;
             warpData[1] = stageID;
+
+            // optional: change default Doppel costumes...
+            if (firstWarp)
+                tunicPrompt();
 
             // update rewarp; isolate location name from this entry...
             int pos = entry->Name().find(':');
