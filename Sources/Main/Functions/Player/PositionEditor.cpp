@@ -9,6 +9,8 @@ namespace CTRPluginFramework
     bool isPositionSaved[3] = {false, false, false};
     float positions[3][3];
 
+    Clock writeTimer;
+
     /* ------------------ */
 
     // Driver code for managing player coordinates
@@ -39,7 +41,9 @@ namespace CTRPluginFramework
         {
             if (isPositionSaved[currLink])
             {
+                writeTimer.Restart();
                 loadPlayerPos(currLink);
+
                 OSD::Notify("[POSITION LOAD/SAVE] Loaded " + color + "'s last saved position.");
             }
             else
@@ -58,9 +62,12 @@ namespace CTRPluginFramework
     {
         u32 offset = playerID * PLAYER_OFFSET;
 
-        Process::WriteFloat(AddressList::getAddress("PositionX") + offset, positions[playerID][0]);
-        Process::WriteFloat(AddressList::getAddress("PositionY") + offset, positions[playerID][1]);
-        Process::WriteFloat(AddressList::getAddress("PositionZ") + offset, positions[playerID][2]);
+        while (!writeTimer.HasTimePassed(Milliseconds(20)))
+        {
+            Process::WriteFloat(AddressList::getAddress("PositionX") + offset, positions[playerID][0]);
+            Process::WriteFloat(AddressList::getAddress("PositionY") + offset, positions[playerID][1]);
+            Process::WriteFloat(AddressList::getAddress("PositionZ") + offset, positions[playerID][2]);
+        }
     }
 
     // Helper function to back up current player coordinates
