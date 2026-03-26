@@ -14,7 +14,7 @@ namespace CTRPluginFramework
     MenuEntry *ascentSpeedSet;
     MenuEntry *descentSpeedSet;
 
-    float ascentSpeed = 0.5, descentSpeed = -0.5, lateralSpeed = 0.1, speedToMaintainHover = 0.025;
+    float ascentSpeed = 0.5f, descentSpeed = -0.5f, lateralSpeed = 0.1f, speedToMaintainHover = 0.025f;
     u16 physicsStatus[3];
 
     const StringVector speedOptions =
@@ -178,7 +178,7 @@ namespace CTRPluginFramework
                 Process::ReadFloat(AddressList::getAddress("CPadXCoord"), CirclePadXCoord);
                 Process::ReadFloat(AddressList::getAddress("CPadYCoord"), CirclePadYCoord);
                 Process::WriteFloat(addrX, lateralSpeed * CirclePadXCoord);
-                Process::WriteFloat(addrZ, lateralSpeed * CirclePadYCoord * -1.0); //Circle Pad Y is reverse to Z-axis
+                Process::WriteFloat(addrZ, lateralSpeed * CirclePadYCoord * -1.0f); //Circle Pad Y is reverse to Z-axis
             }
 
             // Ascent / moon jump
@@ -232,23 +232,23 @@ namespace CTRPluginFramework
         newSpeed = (entryID == 1) ? setHeightAdjustmentSpeed(ascentSpeed) : setHeightAdjustmentSpeed(descentSpeed);
         newEntryName = (entryID == 1) ? "Adjust ascent speed: " : "Adjust descent speed: ";
 
-        // complete entry title string... absolute value used in case original descentSpeed is returned...
-        if (newSpeed == fabs((float)0.2))
+        // absolute value used in case original descentSpeed is returned...
+        newSpeed = fabsf(newSpeed);
+
+        if (newSpeed == 0.2f)
             newEntryName += "Weak";
-        else if (newSpeed == fabs((float)0.5))
+        else if (newSpeed == 0.5f)
             newEntryName += "Medium";
-        else if (newSpeed == fabs((float)0.7))
+        else if (newSpeed == 0.7f)
             newEntryName += "Strong";
         else
             newEntryName += "?";
 
-        // update height adjustment values...
         if (entryID == 1)
             ascentSpeed = newSpeed;
         else
-            descentSpeed = (newSpeed * -1.0);
+            descentSpeed = (newSpeed * -1.0f);
 
-        // update entry title with edits...
         entry->SetName(newEntryName);
     }
 
@@ -263,13 +263,13 @@ namespace CTRPluginFramework
         switch (speed.Open())
         {
             case 0:
-                chosenSpeed = (float)0.2;
+                chosenSpeed = 0.2f;
                 break;
             case 1:
-                chosenSpeed = (float)0.5;
+                chosenSpeed = 0.5f;
                 break;
             case 2:
-                chosenSpeed = (float)0.7;
+                chosenSpeed = 0.7f;
                 break;
         }
 
@@ -286,15 +286,15 @@ namespace CTRPluginFramework
         switch (speed.Open())
         {
             case 0:
-                lateralSpeed = 0.05;
+                lateralSpeed = 0.05f;
                 entry->SetName("Adjust lateral speed: Weak");
                 break;
             case 1:
-                lateralSpeed = 0.1;
+                lateralSpeed = 0.1f;
                 entry->SetName("Adjust lateral speed: Medium");
                 break;
             case 2:
-                lateralSpeed = 0.2;
+                lateralSpeed = 0.2f;
                 entry->SetName("Adjust lateral speed: Strong");
                 break;
         }
