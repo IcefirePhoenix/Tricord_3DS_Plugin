@@ -44,23 +44,36 @@ namespace CTRPluginFramework
 		{
 			Process::Read8(address + (indivOffset * checkItems), currItems[checkItems]);
 
-			// Menu interface -> players are labeled via suffixes A, B, or C...
-			char letter = 'A' + checkItems;
-			std::string prefix = useShadow ? "\nShadow Link " + letter : "\nPlayer " + std::to_string(checkItems + 1);
-
-			// Append the current item name to the player labels...
+			// Players are labeled via suffixes A-C or 1-3...
 			if (useShadow)
 			{
-				/**
-				 * The custom Shadow Link item list includes a special entry for randomizing the current item.
-				 * This entry is located at the beginning of the list defined in the plugin, but actually uses
-				 * the last data ID (0x9) in-game...
-				 */
-				std::string itemIndex = (currItems[checkItems] == 0x9) ? itemList[0] : itemList[currItems[checkItems]];
-				str.append(prefix + ": " + itemIndex);
+				str += "\nShadow Link ";
+				str += static_cast<char>('A' + checkItems);
 			}
 			else
-				str.append(prefix + ": " + itemList[currItems[checkItems] - 1]);
+			{
+				str += "\nPlayer ";
+				str += std::to_string(checkItems + 1);
+			}
+
+			str += ": ";
+
+			/**
+			 * The custom Shadow Link item list includes a special entry for randomizing the current item.
+			 * This entry is located at the beginning of the list defined in the plugin, but actually uses
+			 * the last data ID (0x9) in-game...
+			 */
+
+			u8 rawItemVal = currItems[checkItems];
+			u8 adjustedItemIndex = useShadow ? ((rawItemVal == 0x9) ? 0 : rawItemVal) : (rawItemVal - 1);
+
+			if (adjustedItemIndex < itemList.size())
+				str += itemList[adjustedItemIndex];
+			else
+			{
+				MessageBox("Error", "Item indexes could not be parsed correctly.")();
+				str += "Unknown";
+			}
 		}
 		return str;
 	}
