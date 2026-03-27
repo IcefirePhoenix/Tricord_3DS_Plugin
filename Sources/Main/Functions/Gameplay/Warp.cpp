@@ -219,11 +219,11 @@ namespace CTRPluginFramework
                 if (challenge < 0)
                     return;
 
-                startWarp();
-
                 Level::setCurrChal(challenge);
                 challengeEditAuto->Enable();
             }
+
+            startWarp();
         }
         else
             MessageBox("Error", "Previous warp data not set!")();
