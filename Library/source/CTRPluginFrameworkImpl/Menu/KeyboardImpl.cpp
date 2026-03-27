@@ -183,6 +183,14 @@ namespace CTRPluginFramework
         _onKeyboardEvent = callback;
     }
 
+    void    KeyboardImpl::ToggleDecimalKey(bool enable)
+    {
+        if (_layout == DECIMAL)
+        {
+            _keys->at(12).Enable(enable);
+        }
+    }
+
     void    KeyboardImpl::ChangeEntrySound(int entry, SoundEngine::Event soundEvent)
     {
         if (_customKeyboard && entry >= 0 && entry < static_cast<int>(_strKeys.size()) && _strKeys[entry]->CanUse())

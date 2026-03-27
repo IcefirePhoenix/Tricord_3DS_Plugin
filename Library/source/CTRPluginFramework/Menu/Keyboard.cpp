@@ -382,6 +382,7 @@ namespace CTRPluginFramework
         _keyboard->CanChangeLayout(true);
         _keyboard->SetConvertCallback(ConvertToU8);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
+        _keyboard->ToggleDecimalKey(false);
 
         int ret = _keyboard->Run();
 
@@ -449,6 +450,7 @@ namespace CTRPluginFramework
         _keyboard->CanChangeLayout(true);
         _keyboard->SetConvertCallback(ConvertToU16);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
+        _keyboard->ToggleDecimalKey(false);
 
         int ret = _keyboard->Run();
 
@@ -516,6 +518,7 @@ namespace CTRPluginFramework
         _keyboard->CanChangeLayout(true);
         _keyboard->SetConvertCallback(ConvertToU32);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
+        _keyboard->ToggleDecimalKey(false);
 
         int ret = _keyboard->Run();
 
@@ -583,6 +586,7 @@ namespace CTRPluginFramework
         _keyboard->CanChangeLayout(true);
         _keyboard->SetConvertCallback(ConvertToU64);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
+        _keyboard->ToggleDecimalKey(false);
 
         int ret = _keyboard->Run();
 
@@ -636,6 +640,7 @@ namespace CTRPluginFramework
         _keyboard->SetLayout(DECIMAL);
         _keyboard->SetConvertCallback(ConvertToFloat);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
+        _keyboard->ToggleDecimalKey(true);
 
         std::string &input = _keyboard->GetInput();
         input = Utils::ToString(start, 2);
@@ -691,6 +696,7 @@ namespace CTRPluginFramework
         _keyboard->SetLayout(DECIMAL);
         _keyboard->SetConvertCallback(ConvertToDouble);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
+        _keyboard->ToggleDecimalKey(true);
 
         std::string &input = _keyboard->GetInput();
         input = Utils::Format("%.4lf", start);
