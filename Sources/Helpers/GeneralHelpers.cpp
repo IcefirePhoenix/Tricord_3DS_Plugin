@@ -48,7 +48,17 @@ namespace CTRPluginFramework
         return kbd.Open() == 0;
     }
 
+    void GeneralHelpers::clampIntInput(std::string &input, int min, int max)
+    {
+        int value = std::stoi(input);
 
+        if (value < min)
+            value = min;
+        else if (value > max)
+            value = max;
+
+        input = std::to_string(value);
+    }
 
     bool GeneralHelpers::isNullPointer(u32 address)
     {

@@ -31,6 +31,7 @@ namespace CTRPluginFramework
 		static bool showMsgKbd(std::string title, std::string text, DialogType digtype);
 		static bool isNullPointer(u32 address);
 
+		static void clampIntInput(std::string & input, int min, int max);
 		static void managePlayerLock(bool isLocked);
 		static void forceDoppelStatus(bool enable);
 		static void setCurrLink(int playerID);
