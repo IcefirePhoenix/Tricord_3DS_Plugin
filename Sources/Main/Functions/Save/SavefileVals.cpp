@@ -15,13 +15,7 @@ namespace CTRPluginFramework
         {
             if (event.type == KeyboardEvent::CharacterAdded)
             {
-                std::string &input = kb.GetInput();
-                int value = std::stoi(input);
-
-                if (value > 999)
-                    input = "999";
-                else if (value < 0)
-                    input = "0";
+                GeneralHelpers::clampIntInput(kb.GetInput(), 0, 999);
             }
         });
 
@@ -44,13 +38,7 @@ namespace CTRPluginFramework
         {
             if (event.type == KeyboardEvent::CharacterAdded)
             {
-                std::string &input = kb.GetInput();
-                int value = std::stoi(input);
-
-                if (value > 999)
-                    input = "999";
-                else if (value < 0)
-                    input = "0";
+                GeneralHelpers::clampIntInput(kb.GetInput(), 0, 999);
             }
         });
 

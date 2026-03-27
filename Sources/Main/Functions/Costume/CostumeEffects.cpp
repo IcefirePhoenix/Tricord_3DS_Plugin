@@ -528,12 +528,13 @@ namespace CTRPluginFramework
     void Costume::tingle(MenuEntry* entry)
     {
         int linkChoice = GeneralHelpers::chooseLink();
-        u8 result;
+        u16 result;
 
         if (linkChoice >= 0)
         {
             std::string selectedPlayer = GeneralHelpers::getPlayerAsStr(linkChoice);
             std::string currentBalloons;
+
             if (infTingleBalloons[linkChoice])
             {
                 currentBalloons = "Infinite";
@@ -541,7 +542,7 @@ namespace CTRPluginFramework
             else
             {
                 u8 balloons;
-                Process::Read8(AddressList::getAddress("TingleBalloons") + linkChoice*PLAYER_OFFSET, balloons);
+                Process::Read8(AddressList::getAddress("TingleBalloons") + linkChoice * PLAYER_OFFSET, balloons);
                 currentBalloons = std::to_string(balloons);
             }
 
@@ -551,23 +552,33 @@ namespace CTRPluginFramework
 
             Keyboard balloons("Balloon Count Selection", topscreenMessage);
             balloons.IsHexadecimal(false);
-            balloons.Open(result, 3);
 
-            if (result >= 256)
+            balloons.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
             {
-                infTingleBalloons[linkChoice] = true;
-                infBalloonsAuto->Enable();
-            }
-            else if (result == 0)
+                if (event.type == KeyboardEvent::CharacterAdded)
+                {
+                    GeneralHelpers::clampIntInput(kb.GetInput(), 0, 999);
+                }
+            });
+
+            if (balloons.Open(result, 3) == 0)
             {
-                infTingleBalloons[linkChoice] = false;
-                Process::Write8(AddressList::getAddress("TingleBalloons") + linkChoice * PLAYER_OFFSET, 0);
-                if (!infTingleBalloons[0] && !infTingleBalloons[1] && !infTingleBalloons[2])
-                    infBalloonsAuto->Disable();
-            }
-            else if (result > 0)
-            {
-                Process::Write8(AddressList::getAddress("TingleBalloons") + linkChoice * PLAYER_OFFSET, result);
+                if (result >= 256)
+                {
+                    infTingleBalloons[linkChoice] = true;
+                    infBalloonsAuto->Enable();
+                }
+                else if (result == 0)
+                {
+                    infTingleBalloons[linkChoice] = false;
+                    Process::Write8(AddressList::getAddress("TingleBalloons") + linkChoice * PLAYER_OFFSET, 0);
+                    if (!infTingleBalloons[0] && !infTingleBalloons[1] && !infTingleBalloons[2])
+                        infBalloonsAuto->Disable();
+                }
+                else if (result > 0)
+                {
+                    Process::Write8(AddressList::getAddress("TingleBalloons") + linkChoice * PLAYER_OFFSET, result);
+                }
             }
         }
     }
@@ -710,20 +721,21 @@ namespace CTRPluginFramework
     void Costume::setCactoDmg(MenuEntry* entry)
     {
         u8 newDmg = 2;
-        Keyboard editDmg("Custom Cacto DMG", "Enter a custom damage amount as a positive integer\nrepresenting the number of hearts of damage.\n\nThe default value is 2 hearts. The minimum possible value is 1 heart.");
+        Keyboard editDmg("Custom Cacto DMG", "Enter a custom damage amount as a positive integer representing the number of hearts of damage.\n\nThe default value is 2 hearts. The minimum possible amount is 1 heart; the maximum is 63 hearts.");
         editDmg.IsHexadecimal(false);
+
+        editDmg.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
+        {
+            if (event.type == KeyboardEvent::CharacterAdded)
+            {
+                GeneralHelpers::clampIntInput(kb.GetInput(), 0, 63);
+            }
+        });
+
         if (editDmg.Open(newDmg, 2) == 0)
         {
-            // Minimum 1 heart damage
-            if (newDmg < 1)
-                newDmg = 1;
-
-            // Integer value as # hearts to write in entry name
-            u8 dmgToWrite = newDmg;
-
-            entry->SetName("Cacto Clothes - Set damage: "+ std::to_string(dmgToWrite) + ((dmgToWrite == 1) ? "heart" : "hearts"));
-            // Write to address in terms of quarter hearts
-            Process::Write8(AddressList::getAddress("CactoDamageDrablands"), dmgToWrite*4);
+            Process::Write8(AddressList::getAddress("CactoDamageDrablands"), newDmg * 4); // convert to quarter hearts
+            entry->SetName("Cacto Clothes - Set damage: " + std::to_string(newDmg) + ((newDmg == 1) ? " heart" : " hearts"));
         }
     }
 
