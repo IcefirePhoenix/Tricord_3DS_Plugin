@@ -324,41 +324,6 @@ namespace CTRPluginFramework
         return (_keyboard->Run());
     }
 
-    /*
-    ** U8
-    ******/
-
-    int Keyboard::Open(u8 &output) const
-    {
-        if (SystemImpl::IsSleeping())
-            return (-2);
-
-        if (_isPopulated)
-        {
-            _keyboard->Clear();
-            _isPopulated = false;
-        }
-
-        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
-
-        if (_hexadecimal && _keyboard->GetMax() == 0)
-        {
-            _keyboard->SetMaxInput(2);
-        }
-        _keyboard->CanChangeLayout(true);
-        _keyboard->SetConvertCallback(ConvertToU8);
-        _keyboard->DisplayTopScreen = DisplayTopScreen;
-
-        int ret = _keyboard->Run();
-
-        if (ret >= 0)
-        {
-            std::string &input = _keyboard->GetInput();
-            output = *(static_cast<u8 *>(ConvertToU8(input, _keyboard->IsHexadecimal())));
-        }
-        return (ret);
-    }
-
     int Keyboard::Open(u8 &output, u8 start) const
     {
         if (SystemImpl::IsSleeping())
@@ -371,7 +336,9 @@ namespace CTRPluginFramework
         }
 
         _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
+
         std::string &input = _keyboard->GetInput();
+
         if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(2);
@@ -379,6 +346,7 @@ namespace CTRPluginFramework
         }
         else
             input = Utils::Format("%d", start);
+
         _keyboard->CanChangeLayout(true);
         _keyboard->SetConvertCallback(ConvertToU8);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
@@ -389,40 +357,6 @@ namespace CTRPluginFramework
         if (ret >= 0)
         {
             output = *(static_cast<u8 *>(ConvertToU8(input, _keyboard->IsHexadecimal())));
-        }
-        return (ret);
-    }
-
-    /*
-    ** U16
-    ******/
-
-    int Keyboard::Open(u16 &output) const
-    {
-        if (SystemImpl::IsSleeping())
-            return (-2);
-
-        if (_isPopulated)
-        {
-            _keyboard->Clear();
-            _isPopulated = false;
-        }
-
-        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
-        if (_hexadecimal && _keyboard->GetMax() == 0)
-        {
-            _keyboard->SetMaxInput(4);
-        }
-        _keyboard->CanChangeLayout(true);
-        _keyboard->SetConvertCallback(ConvertToU16);
-        _keyboard->DisplayTopScreen = DisplayTopScreen;
-
-        int ret = _keyboard->Run();
-
-        if (ret >= 0)
-        {
-            std::string &input = _keyboard->GetInput();
-            output = *(static_cast<u16 *>(ConvertToU16(input, _keyboard->IsHexadecimal())));
         }
         return (ret);
     }
@@ -439,7 +373,9 @@ namespace CTRPluginFramework
         }
 
         _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
+
         std::string &input = _keyboard->GetInput();
+
         if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(4);
@@ -447,6 +383,7 @@ namespace CTRPluginFramework
         }
         else
             input = Utils::Format("%d", start);
+
         _keyboard->CanChangeLayout(true);
         _keyboard->SetConvertCallback(ConvertToU16);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
@@ -457,40 +394,6 @@ namespace CTRPluginFramework
         if (ret >= 0)
         {
             output = *(static_cast<u16 *>(ConvertToU16(input, _keyboard->IsHexadecimal())));
-        }
-        return (ret);
-    }
-
-    /*
-    ** U32
-    ******/
-
-    int Keyboard::Open(u32 &output) const
-    {
-        if (SystemImpl::IsSleeping())
-            return (-2);
-
-        if (_isPopulated)
-        {
-            _keyboard->Clear();
-            _isPopulated = false;
-        }
-
-        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
-        if (_hexadecimal && _keyboard->GetMax() == 0)
-        {
-            _keyboard->SetMaxInput(8);
-        }
-        _keyboard->CanChangeLayout(true);
-        _keyboard->SetConvertCallback(ConvertToU32);
-        _keyboard->DisplayTopScreen = DisplayTopScreen;
-
-        int ret = _keyboard->Run();
-
-        if (ret >= 0)
-        {
-            std::string &input = _keyboard->GetInput();
-            output = *(static_cast<u32 *>(ConvertToU32(input, _keyboard->IsHexadecimal())));
         }
         return (ret);
     }
@@ -507,7 +410,9 @@ namespace CTRPluginFramework
         }
 
         _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
+
         std::string &input = _keyboard->GetInput();
+
         if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(8);
@@ -515,6 +420,7 @@ namespace CTRPluginFramework
         }
         else
             input = Utils::Format("%d", start);
+
         _keyboard->CanChangeLayout(true);
         _keyboard->SetConvertCallback(ConvertToU32);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
@@ -525,40 +431,6 @@ namespace CTRPluginFramework
         if (ret >= 0)
         {
             output = *(static_cast<u32 *>(ConvertToU32(input, _keyboard->IsHexadecimal())));
-        }
-        return (ret);
-    }
-
-    /*
-    ** U64
-    ******/
-
-    int Keyboard::Open(u64 &output) const
-    {
-        if (SystemImpl::IsSleeping())
-            return (-2);
-
-        if (_isPopulated)
-        {
-            _keyboard->Clear();
-            _isPopulated = false;
-        }
-
-        _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
-        if (_hexadecimal && _keyboard->GetMax() == 0)
-        {
-            _keyboard->SetMaxInput(16);
-        }
-        _keyboard->CanChangeLayout(true);
-        _keyboard->SetConvertCallback(ConvertToU64);
-        _keyboard->DisplayTopScreen = DisplayTopScreen;
-
-        int ret = _keyboard->Run();
-
-        if (ret >= 0)
-        {
-            std::string &input = _keyboard->GetInput();
-            output = *(static_cast<u64 *>(ConvertToU64(input, _keyboard->IsHexadecimal())));
         }
         return (ret);
     }
@@ -575,7 +447,9 @@ namespace CTRPluginFramework
         }
 
         _keyboard->SetLayout(_hexadecimal ? Layout::HEXADECIMAL_FULL : Layout::DECIMAL);
+
         std::string &input = _keyboard->GetInput();
+
         if (_hexadecimal && _keyboard->GetMax() == 0)
         {
             _keyboard->SetMaxInput(16);
@@ -583,6 +457,7 @@ namespace CTRPluginFramework
         }
         else
             input = Utils::Format("%d", start);
+
         _keyboard->CanChangeLayout(true);
         _keyboard->SetConvertCallback(ConvertToU64);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
@@ -593,35 +468,6 @@ namespace CTRPluginFramework
         if (ret >= 0)
         {
             output = *(static_cast<u64 *>(ConvertToU64(input, _keyboard->IsHexadecimal())));
-        }
-        return (ret);
-    }
-
-    /*
-    ** float
-    ******/
-
-    int Keyboard::Open(float &output) const
-    {
-        if (SystemImpl::IsSleeping())
-            return (-2);
-
-        if (_isPopulated)
-        {
-            _keyboard->Clear();
-            _isPopulated = false;
-        }
-
-        _keyboard->SetLayout(DECIMAL);
-        _keyboard->SetConvertCallback(ConvertToFloat);
-        _keyboard->DisplayTopScreen = DisplayTopScreen;
-
-        int ret = _keyboard->Run();
-
-        if (ret >= 0)
-        {
-            std::string &input = _keyboard->GetInput();
-            output = *(static_cast<float *>(ConvertToFloat(input, _keyboard->IsHexadecimal())));
         }
         return (ret);
     }
@@ -654,34 +500,6 @@ namespace CTRPluginFramework
         return (ret);
     }
 
-    /*
-    ** double
-    ******/
-
-    int Keyboard::Open(double &output) const
-    {
-        if (SystemImpl::IsSleeping())
-            return (-2);
-
-        if (_isPopulated)
-        {
-            _keyboard->Clear();
-            _isPopulated = false;
-        }
-        _keyboard->SetLayout(DECIMAL);
-        _keyboard->SetConvertCallback(ConvertToDouble);
-        _keyboard->DisplayTopScreen = DisplayTopScreen;
-
-        int ret = _keyboard->Run();
-
-        if (ret >= 0)
-        {
-            std::string &input = _keyboard->GetInput();
-            output = *(static_cast<double *>(ConvertToDouble(input, _keyboard->IsHexadecimal())));
-        }
-        return (ret);
-    }
-
     int Keyboard::Open(double &output, double start) const
     {
         if (SystemImpl::IsSleeping())
@@ -706,33 +524,6 @@ namespace CTRPluginFramework
         if (ret >= 0)
         {
             output = *(static_cast<double *>(ConvertToDouble(input, _keyboard->IsHexadecimal())));
-        }
-        return (ret);
-    }
-
-    /*
-    ** string
-    **********/
-
-    int Keyboard::Open(std::string &output) const
-    {
-        if (SystemImpl::IsSleeping())
-            return (-2);
-
-        if (_isPopulated)
-        {
-            _keyboard->Clear();
-            _isPopulated = false;
-        }
-
-        _keyboard->SetLayout(QWERTY);
-        _keyboard->DisplayTopScreen = DisplayTopScreen;
-
-        int ret = _keyboard->Run();
-
-        if (ret >= 0)
-        {
-            output = _keyboard->GetInput();
         }
         return (ret);
     }

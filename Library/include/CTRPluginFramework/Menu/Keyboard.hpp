@@ -136,30 +136,12 @@ namespace CTRPluginFramework
         /**
          * \brief Open the keyboard and wait for user input
          * \param output Where to place the user's input
-         * \return -1 : user abort / error \n
-         * -2 : closed by sleep event \n
-         * 0 : Success
-         */
-        int     Open(u8 &output) const;
-
-        /**
-         * \brief Open the keyboard and wait for user input
-         * \param output Where to place the user's input
          * \param start The keyboard will start with this value as input
          * \return -1 : user abort / error \n
          * -2 : closed by sleep event \n
          * 0 : Success
          */
-        int     Open(u8 &output, u8 start) const;
-
-        /**
-        * \brief Open the keyboard and wait for user input
-        * \param output Where to place the user's input
-        * \return -1 : user abort / error \n
-        * -2 : closed by sleep event \n
-        * 0 : Success
-        */
-        int     Open(u16 &output) const;
+        int Open(u8 &output, u8 start = 0) const;
 
         /**
         * \brief Open the keyboard and wait for user input
@@ -169,16 +151,7 @@ namespace CTRPluginFramework
         * -2 : closed by sleep event \n
         * 0 : Success
         */
-        int     Open(u16 &output, u16 start) const;
-
-        /**
-        * \brief Open the keyboard and wait for user input
-        * \param output Where to place the user's input
-        * \return -1 : user abort / error \n
-        * -2 : closed by sleep event \n
-        * 0 : Success
-        */
-        int     Open(u32 &output) const;
+        int Open(u16 &output, u16 start = 0) const;
 
         /**
         * \brief Open the keyboard and wait for user input
@@ -188,16 +161,7 @@ namespace CTRPluginFramework
         * -2 : closed by sleep event \n
         * 0 : Success
         */
-        int     Open(u32 &output, u32 start) const;
-
-        /**
-        * \brief Open the keyboard and wait for user input
-        * \param output Where to place the user's input
-        * \return -1 : user abort / error \n
-        * -2 : closed by sleep event \n
-        * 0 : Success
-        */
-        int     Open(u64 &output) const;
+        int Open(u32 &output, u32 start = 0) const;
 
         /**
         * \brief Open the keyboard and wait for user input
@@ -207,16 +171,7 @@ namespace CTRPluginFramework
         * -2 : closed by sleep event \n
         * 0 : Success
         */
-        int     Open(u64 &output, u64 start) const;
-
-        /**
-        * \brief Open the keyboard and wait for user input
-        * \param output Where to place the user's input
-        * \return -1 : user abort / error \n
-        * -2 : closed by sleep event \n
-        * 0 : Success
-        */
-        int     Open(float &output) const;
+        int Open(u64 &output, u64 start = 0) const;
 
         /**
         * \brief Open the keyboard and wait for user input
@@ -226,16 +181,7 @@ namespace CTRPluginFramework
         * -2 : closed by sleep event \n
         * 0 : Success
         */
-        int     Open(float &output, float start) const;
-
-        /**
-        * \brief Open the keyboard and wait for user input
-        * \param output Where to place the user's input
-        * \return -1 : user abort / error \n
-        * -2 : closed by sleep event \n
-        * 0 : Success
-        */
-        int     Open(double &output) const;
+        int Open(float &output, float start = 0.0f) const;
 
         /**
         * \brief Open the keyboard and wait for user input
@@ -245,16 +191,7 @@ namespace CTRPluginFramework
         * -2 : closed by sleep event \n
         * 0 : Success
         */
-        int     Open(double &output, double start) const;
-
-        /**
-        * \brief Open the keyboard and wait for user input
-        * \param output Where to place the user's input
-        * \return -1 : user abort / error \n
-        * -2 : closed by sleep event \n
-        * 0 : Success
-        */
-        int     Open(std::string &output) const;
+        int Open(double &output, double start = 0.0) const;
 
         /**
         * \brief Open the keyboard and wait for user input
@@ -264,13 +201,13 @@ namespace CTRPluginFramework
         * -2 : closed by sleep event \n
         * 0 : Success
         */
-        int     Open(std::string &output, const std::string &start) const;
+        int Open(std::string &output, const std::string &start = "") const;
 
         /**
          * \brief Forcefully close the keyboard without any regard to the error flag \n
          * (This can only be called from an OnKeyboardEvent callback)
          */
-        void    Close(void) const;
+        void Close(void) const;
 
         /**
          * \brief Get a reference to the Keyboard's input string
