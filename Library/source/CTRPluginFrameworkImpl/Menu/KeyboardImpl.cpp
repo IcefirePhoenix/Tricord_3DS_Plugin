@@ -1996,14 +1996,19 @@ namespace CTRPluginFramework
                     }
                     else
                     {
-                        if (_KeyboardEvent.codepoint == 0x002E)
+                        if (_KeyboardEvent.codepoint == 0x002E && _layout != Layout::QWERTY)
                         {
                             if (_HasDecimal())
                                 return false;
 
-                            if (_layout != Layout::QWERTY && _cursorPositionInString == 0)
+                            if (_cursorPositionInString == 0)
                             {
                                 _userInput.insert(0, "0");
+                                _ScrollUp();
+                            }
+                            else if (_cursorPositionInString == 1 && _userInput == "-")
+                            {
+                                _userInput.insert(1, "0");
                                 _ScrollUp();
                             }
                         }
@@ -2093,7 +2098,7 @@ namespace CTRPluginFramework
 
                         if (ret == '.')
                         {
-                            if (_HasDecimal())
+                            if (_HasDecimal() && _layout != QWERTY)
                                 return false;
                         }
 
