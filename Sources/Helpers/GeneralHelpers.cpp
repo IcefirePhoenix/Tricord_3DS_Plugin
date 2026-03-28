@@ -50,6 +50,9 @@ namespace CTRPluginFramework
 
     void GeneralHelpers::clampIntInput(std::string &input, int min, int max)
     {
+        if (input.empty() || input == "-")
+            return;
+
         int value = std::stoi(input);
 
         if (value < min)
