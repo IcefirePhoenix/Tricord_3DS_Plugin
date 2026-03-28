@@ -21,14 +21,16 @@ namespace CTRPluginFramework
             Keyboard editMaxHealth("Maximum heart containers", maxHealthIntro);
             editMaxHealth.IsHexadecimal(false);
 
+            editMaxHealth.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
+            {
+                if (event.type == KeyboardEvent::CharacterAdded)
+                {
+                    GeneralHelpers::clampIntInput(kb.GetInput(), 1, 63);
+                }
+            });
+
             if (editMaxHealth.Open(newMaxHealth, 9) == 0)
             {
-                // bounds limiting...
-                if (newMaxHealth > 63)
-                    newMaxHealth = 63;
-                else if (newMaxHealth <= 0)
-                    newMaxHealth = 1;
-
                 // convert from full hearts to quarter hearts...
                 customMaxHealth = (newMaxHealth) * 4;
 
