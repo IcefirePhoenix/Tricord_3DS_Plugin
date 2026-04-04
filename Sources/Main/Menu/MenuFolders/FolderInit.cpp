@@ -57,6 +57,7 @@ namespace CTRPluginFramework
         *stage += (EntryWithHotkey(new MenuEntry("Set all progression flags in the current stage", Gameplay::setAllProgressionFlags, DescUtils::getDesc("set_progress_flags_note")),
             { Hotkey(Key::DPadUp | Key::X, "Set progression flags") }));
 
+        *stage += new MenuEntry("Auto-skip boss introduction cutscenes", Gameplay::skipBossIntro, DescUtils::getDesc("skip_boss_intro_note"));
         *stage += new MenuEntry("Infinite time", Gameplay::infTime, DescUtils::getDesc("inf_time_note"));
     }
 

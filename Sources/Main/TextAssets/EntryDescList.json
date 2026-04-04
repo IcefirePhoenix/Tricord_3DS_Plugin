@@ -244,6 +244,15 @@
             }
         },
         {
+            "name": "skip_boss_intro_note",
+            "content": {
+                "intro": "Allows you to skip boss introduction cutscenes at the beginning of each world's boss and miniboss fight.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "move_speed_note",
             "content": {
                 "intro": "Allows you to set a custom movement speed.",

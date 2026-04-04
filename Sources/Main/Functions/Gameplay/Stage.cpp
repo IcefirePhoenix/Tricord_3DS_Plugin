@@ -24,4 +24,31 @@ namespace CTRPluginFramework
     {
         Process::Write64(AddressList::getAddress("StageProgressionFlags"), flags);
     }
+
+    // Allows boss introduction cutscenes to be skipped
+    void Gameplay::skipBossIntro(MenuEntry *entry)
+    {
+        // TODO: lady's pets?
+        if (entry->WasJustActivated())
+        {
+            Process::Patch(AddressList::getAddress("BossIntroInit"), 0xE1A00000); // NOP
+            Process::Patch(AddressList::getAddress("BossCamCutsceneInit"), 0xE1A00000); // NOP
+            Process::Patch(AddressList::getAddress("BossBGMCutsceneInit"), 0xE1A00000); // NOP
+
+            Process::Patch(AddressList::getAddress("BossIntroInit") + 0x4, 0xEA000000); // B, no offset
+            Process::Patch(AddressList::getAddress("BossCamCutsceneInit") + 0x4, 0xEA000000); // B, no offset
+            Process::Patch(AddressList::getAddress("BossBGMCutsceneInit") + 0x4, 0xEA000007); // B
+        }
+        else if (!entry->IsActivated())
+        {
+            Process::Patch(AddressList::getAddress("BossIntroInit"), 0xE3500000); // CMP R0, 0x0
+            Process::Patch(AddressList::getAddress("BossCamCutsceneInit"), 0xE3500000); // CMP R0, 0x0
+            Process::Patch(AddressList::getAddress("BossBGMCutsceneInit"), 0xE3500000); // CMP R0, 0x0
+
+            Process::Patch(AddressList::getAddress("BossIntroInit") + 0x4, 0x0A000056); // BEQ
+            Process::Patch(AddressList::getAddress("BossCamCutsceneInit") + 0x4, 0x0A000053); // BEQ
+            Process::Patch(AddressList::getAddress("BossBGMCutsceneInit") + 0x4, 0x0A000007); // BEQ
+        }
+    }
+
 }

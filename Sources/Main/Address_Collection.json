@@ -1465,6 +1465,30 @@
             }
         },
         {
+            "name": "BossIntroInit",
+            "regionAddrs": {
+                "usaAddress": "0x001CAD98",
+                "eurAddress": "0x001CAE28",
+                "jpnAddress": "0x001CB31C"
+            }
+        },
+        {
+            "name": "BossCamCutsceneInit",
+            "regionAddrs": {
+                "usaAddress": "0x001CADA4",
+                "eurAddress": "0x001CAE34",
+                "jpnAddress": "0x001CB328"
+            }
+        },
+        {
+            "name": "BossBGMCutsceneInit",
+            "regionAddrs": {
+                "usaAddress": "0x0058724C",
+                "eurAddress": "0x0058767C",
+                "jpnAddress": "0x0058811C"
+            }
+        },
+        {
             "name": "CollisionCurrent",
             "regionAddrs": {
                 "usaAddress": "0x328416A4",
