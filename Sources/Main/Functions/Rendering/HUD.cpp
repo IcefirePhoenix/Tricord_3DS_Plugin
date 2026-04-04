@@ -13,32 +13,19 @@ namespace CTRPluginFramework
 
     /* ------------------ */
 
-    // TODO: check -- is this impl necessary?
     // Wrapper for MenuEntry compatiblity; toggles HUD status
     void Rendering::triggerHideHUD(MenuEntry *entry)
     {
-        hideHUD();
+        Rendering::toggleHUD(true);
+
+        if (!entry->IsActivated())
+            Rendering::toggleHUD(false);
     }
 
     // Forces HUD to remain in its dormant animation frame, forcing it off-screen
-    void hideHUD(void)
+    void Rendering::toggleHUD(bool hideHUD)
     {
-        u8 disableOffScrArrow = 0x10;
-        u32 mainHUDoffset = 0x18;
-        u32 ActionButtonBGOffset = 0x75D0;
-        u32 ActionButtonTextOffset = 0x78B0;
-        u32 HUDPointerCheck;
-
-        Process::Read32(AddressList::getAddress("HUDPointer"), HUDPointerCheck);
-
-        if (!GeneralHelpers::isNullPointer(HUDPointerCheck))
-        {
-            Process::Write32((HUDPointerCheck + mainHUDoffset), 0x7F000004);
-            Process::Write32((HUDPointerCheck + ActionButtonBGOffset), 0x00000010);
-            Process::Write32((HUDPointerCheck + ActionButtonTextOffset), 0x00FFFF00);
-        }
-
-        Process::Write8(AddressList::getAddress("OffScreenLocation"), disableOffScrArrow);
+        Process::Write8(AddressList::getAddress("HUDFlag"), hideHUD);
     }
 
     // Forces status message text to be transparent

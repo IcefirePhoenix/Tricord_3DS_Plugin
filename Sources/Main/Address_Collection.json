@@ -2033,11 +2033,11 @@
             }
         },
         {
-            "name": "HUDPointer",
+            "name": "HUDFlag",
             "regionAddrs": {
-                "usaAddress": "0x32C8289C",
-                "eurAddress": "0x32C8291C",
-                "jpnAddress": "0x32CCD2DC"
+                "usaAddress": "0x32C8293C",
+                "eurAddress": "0x32C829BC",
+                "jpnAddress": "0x32CCD37C"
             }
         },
         {
@@ -2070,14 +2070,6 @@
                 "usaAddress": "0x00151C40",
                 "eurAddress": "0x00151C5C",
                 "jpnAddress": "0x00152050"
-            }
-        },
-        {
-            "name": "OffScreenLocation",
-            "regionAddrs": {
-                "usaAddress": "0x32D83094",
-                "eurAddress": "0x32D83114",
-                "jpnAddress": "0x32DD58B8"
             }
         },
         {

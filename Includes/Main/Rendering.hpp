@@ -23,8 +23,6 @@ namespace CTRPluginFramework
     extern MenuEntryLabel *faceExprLabel5;
     extern MenuEntryLabel *faceExprLabel6;
 
-    void hideHUD(void);
-
     class Rendering
     {
     public:
@@ -48,6 +46,7 @@ namespace CTRPluginFramework
         static void setDevID_onConnection(MenuEntry *entry);
         static void checkDevID(MenuEntry *entry);
         static void initHeroPanelBasePtrs(void);
+        static void toggleHUD(bool hideHUD);
     };
 }
 #endif

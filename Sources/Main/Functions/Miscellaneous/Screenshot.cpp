@@ -62,7 +62,7 @@ namespace CTRPluginFramework
         if (photoCheck)
         {
             Process::Write8(AddressList::getAddress("DisplayTopPhoto"), forceDisplayPhoto);
-            hideHUD();
+            Rendering::toggleHUD(true);
 
             // top screen is occupied by photo so real-time gameplay can't be seen; prevent player from moving
             GeneralHelpers::managePlayerLock(true);
