@@ -105,6 +105,11 @@ namespace CTRPluginFramework
         void    SetError(std::string error) const;
 
         /**
+         * \brief Prevents the plus/minus key from being used in decimal keyboards
+         */
+        void    DisableSignKey(void) const;
+
+        /**
          * @brief Gets the last selected entry before the keyboard was closed
          *
          * @return Last selected entry, or -1 if none was selected.

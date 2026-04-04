@@ -578,9 +578,9 @@ namespace CTRPluginFramework
         _keyboard->CanAbort(canAbort);
     }
 
-    void Keyboard::Close(void) const
+    void Keyboard::DisableSignKey(void) const
     {
-        _keyboard->Close();
+        _keyboard->ToggleSignKey(false);
     }
 
     void Keyboard::OnKeyboardEvent(OnEventCallback callback) const

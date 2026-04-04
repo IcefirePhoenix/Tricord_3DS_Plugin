@@ -191,6 +191,14 @@ namespace CTRPluginFramework
         }
     }
 
+    void    KeyboardImpl::ToggleSignKey(bool enable)
+    {
+        if (_layout == DECIMAL)
+        {
+            _keys->at(11).Enable(enable);
+        }
+    }
+
     void    KeyboardImpl::ChangeEntrySound(int entry, SoundEngine::Event soundEvent)
     {
         if (_customKeyboard && entry >= 0 && entry < static_cast<int>(_strKeys.size()) && _strKeys[entry]->CanUse())
