@@ -3,6 +3,8 @@
 
 namespace CTRPluginFramework
 {
+    u8 cutsceneComplete = 0x40;
+
     // Prevents the timer from decreasing in timed challenges
     void Gameplay::infTime(MenuEntry *entry)
     {
@@ -51,4 +53,21 @@ namespace CTRPluginFramework
         }
     }
 
+    // Allows Lady Maud dialogue cutscenes to be skipped
+    void Gameplay::skipLadyDialogue(MenuEntry *entry)
+    {
+        if (GeneralHelpers::isLoadingScreen(true))
+        {
+            bool isMidgame = Level::getCurrLevel() == Level::levelIDFromName("The Lady's Lair");
+            bool isEndgame = Level::getCurrLevel() == Level::levelIDFromName("Sky Temple");
+
+            if ((isMidgame || isEndgame) && Level::getCurrStage() == 4)
+            {
+                Process::Write8(AddressList::getAddress("LadyMidgameCutsceneStatus"), cutsceneComplete);
+                Process::Write8(AddressList::getAddress("LadyEndgameCutsceneStatus"), cutsceneComplete);
+
+                Rendering::toggleHUD(false); // note: one-time write; will not conflict with HideHUD if enabled
+            }
+        }
+    }
 }

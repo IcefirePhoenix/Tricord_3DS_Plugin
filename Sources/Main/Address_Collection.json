@@ -1297,6 +1297,22 @@
             }
         },
         {
+            "name": "LadyMidgameCutsceneStatus",
+            "regionAddrs": {
+                "usaAddress": "0x32D7638A",
+                "eurAddress": "0x32D7640A",
+                "jpnAddress": "0x32DC8BAE"
+            }
+        },
+        {
+            "name": "LadyEndgameCutsceneStatus",
+            "regionAddrs": {
+                "usaAddress": "0x32D77F32",
+                "eurAddress": "0x32D77FB2",
+                "jpnAddress": "0x32DCA756"
+            }
+        },
+        {
             "name": "StageProgressionFlags",
             "regionAddrs": {
                 "usaAddress": "0x32D73214",

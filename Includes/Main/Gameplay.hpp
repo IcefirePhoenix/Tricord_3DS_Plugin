@@ -76,6 +76,7 @@ namespace CTRPluginFramework
         static void infTime(MenuEntry* entry);
         static void setAllProgressionFlags(MenuEntry *entry);
         static void skipBossIntro(MenuEntry *entry);
+        static void skipLadyDialogue(MenuEntry *entry);
 
         static std::string retrieveNonStageName(int targetLevelID, int targetStage, std::string levelName);
         static void restoreBookmarks(void);

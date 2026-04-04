@@ -253,6 +253,15 @@
             }
         },
         {
+            "name": "skip_lady_intro_note",
+            "content": {
+                "intro": "Allows you to skip Lady Maud's dialogue cutscene at the beginning of The Lady's Lair - 4 and Sky Temple - 4.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "move_speed_note",
             "content": {
                 "intro": "Allows you to set a custom movement speed.",

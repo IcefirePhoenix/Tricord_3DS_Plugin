@@ -58,6 +58,7 @@ namespace CTRPluginFramework
             { Hotkey(Key::DPadUp | Key::X, "Set progression flags") }));
 
         *stage += new MenuEntry("Auto-skip boss introduction cutscenes", Gameplay::skipBossIntro, DescUtils::getDesc("skip_boss_intro_note"));
+        *stage += new MenuEntry("Auto-skip Lady Maud dialogue cutscenes", Gameplay::skipLadyDialogue, DescUtils::getDesc("skip_lady_intro_note"));
         *stage += new MenuEntry("Infinite time", Gameplay::infTime, DescUtils::getDesc("inf_time_note"));
     }
 
@@ -184,7 +185,7 @@ namespace CTRPluginFramework
         *gameplay += energy;
         *gameplay += move;
         *gameplay += enemies;
-        *gameplay += challenges;
+        *gameplay += stage;
 
         // auto-managed by plugin; hidden from users...
         controlAllAuto = new MenuEntry("Control all players (auto)", Gameplay::writePlayerControl, "", true);
