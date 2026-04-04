@@ -16,7 +16,7 @@ namespace CTRPluginFramework
     MenuFolder *enemies = nullptr;
     MenuFolder *physics = nullptr;
     MenuFolder *moonJumpFlight = nullptr;
-    MenuFolder *challenges = nullptr;
+    MenuFolder *stage = nullptr;
     MenuFolder *costume = nullptr;
     MenuFolder *miscellaneous = nullptr;
     MenuFolder *player = nullptr;

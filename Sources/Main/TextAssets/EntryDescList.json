@@ -235,6 +235,15 @@
             }
         },
         {
+            "name": "set_progress_flags_note",
+            "content": {
+                "intro": "Sets all stage progression flags, allowing you to bypass puzzles and/or enemy waves to clear a stage early.",
+                "note": "May cause glitches with Totem Armos, if instances of this enemy have not already spawned when this entry is triggered.",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "move_speed_note",
             "content": {
                 "intro": "Allows you to set a custom movement speed.",

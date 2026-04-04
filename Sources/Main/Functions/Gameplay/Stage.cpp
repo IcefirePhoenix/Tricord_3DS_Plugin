@@ -13,12 +13,13 @@ namespace CTRPluginFramework
     }
 
     // Sets the status of all progression flags in the current area
-    void setAllProgressionFlags(void)
+    void Gameplay::setAllProgressionFlags(MenuEntry *entry)
     {
-        Process::Write64(AddressList::getAddress("StageProgressionFlags"), UINT64_MAX);
+        if (entry->Hotkeys[0].IsPressed())
+            Process::Write64(AddressList::getAddress("StageProgressionFlags"), UINT64_MAX);
     }
 
-    // Sets the status of certain progression flags in the current area
+    // Sets the status of specified progression flags in the current area
     void setSpecificProgressionFlags(u64 flags)
     {
         Process::Write64(AddressList::getAddress("StageProgressionFlags"), flags);

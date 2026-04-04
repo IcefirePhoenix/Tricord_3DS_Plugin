@@ -52,9 +52,12 @@ namespace CTRPluginFramework
             { Hotkey(Key::L | Key::R, "Reset current area") }));
     }
 
-    void InitChallengeCodes(PluginMenu &menu)
+    void InitStageCodes(PluginMenu &menu)
     {
-        *challenges += new MenuEntry("Infinite time", Gameplay::infTime, DescUtils::getDesc("inf_time_note"));
+        *stage += (EntryWithHotkey(new MenuEntry("Set all progression flags in the current stage", Gameplay::setAllProgressionFlags, DescUtils::getDesc("set_progress_flags_note")),
+            { Hotkey(Key::DPadUp | Key::X, "Set progression flags") }));
+
+        *stage += new MenuEntry("Infinite time", Gameplay::infTime, DescUtils::getDesc("inf_time_note"));
     }
 
     void InitHealthFairyCodes(PluginMenu &menu)
@@ -159,7 +162,7 @@ namespace CTRPluginFramework
         enemies = new MenuFolder("Enemies");
         physics = new MenuFolder("Ground Physics");
         moonJumpFlight = new MenuFolder("Moon Jump & Flight");
-        challenges = new MenuFolder("Challenges");
+        stage = new MenuFolder("Stage");
 
         InitWarpCodes(menu);
         InitHealthFairyCodes(menu);
@@ -167,7 +170,7 @@ namespace CTRPluginFramework
         InitEnemyCodes(menu);
         InitPhysicsCodes(menu);
         InitMoonJumpCodes(menu);
-        InitChallengeCodes(menu);
+        InitStageCodes(menu);
 
         MenuFolder *move = new MenuFolder("Movement");
         *move += physics;
