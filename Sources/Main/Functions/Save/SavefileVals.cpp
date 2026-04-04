@@ -3,15 +3,14 @@
 
 namespace CTRPluginFramework
 {
-    // TODO: duplicate code... combine both to use common logic...
-    // Force-sets Coliseum Win Count to custom amount
-    void Save::heroPointCountSet(MenuEntry *entry)
+    bool promptSaveFileCommonVal(std::string title, std::string desc, u32& result)
     {
-        u32 result;
-        Keyboard heroPointInput("Hero Point Modifier", "Input a new Hero Point count.");
-        heroPointInput.IsHexadecimal(false);
+        Keyboard prompt(title, desc);
 
-        heroPointInput.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
+        prompt.IsHexadecimal(false);
+        prompt.DisableSignKey();
+
+        prompt.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
         {
             if (event.type == KeyboardEvent::CharacterAdded)
             {
@@ -19,8 +18,18 @@ namespace CTRPluginFramework
             }
         });
 
-        // display edits in menu
-        if (heroPointInput.Open(result, 30) == 0)
+        if (prompt.Open(result, 30) == 0)
+            return true;
+        else
+            return false;
+    }
+
+    // Force-sets Coliseum Win Count to custom amount
+    void Save::heroPointCountSet(MenuEntry *entry)
+    {
+        u32 result;
+
+        if (promptSaveFileCommonVal("Hero Point Modifier", "Input a new Hero Point count.", result))
         {
             Process::Write32(AddressList::getAddress("HeroPointCount"), result);
             entry->SetName("Edit Hero Point count: " + std::to_string(result));
@@ -31,19 +40,8 @@ namespace CTRPluginFramework
     void Save::coliseumWinCountSet(MenuEntry *entry)
     {
         u32 result;
-        Keyboard coliseumWinInput("Coliseum Win Count Modifier", "Input a new Coliseum Win count.");
-        coliseumWinInput.IsHexadecimal(false);
 
-        coliseumWinInput.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
-        {
-            if (event.type == KeyboardEvent::CharacterAdded)
-            {
-                GeneralHelpers::clampIntInput(kb.GetInput(), 0, 999);
-            }
-        });
-
-        // display edits in menu...
-        if (coliseumWinInput.Open(result, 100) == 0)
+        if (promptSaveFileCommonVal("Coliseum Win Count Modifier", "Input a new Coliseum Win count.", result))
         {
             Process::Write32(AddressList::getAddress("ColiseumWinCount"), result);
             entry->SetName("Edit Coliseum Win count: " + std::to_string(result));
