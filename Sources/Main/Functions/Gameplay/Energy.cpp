@@ -33,6 +33,7 @@ namespace CTRPluginFramework
         {
             Keyboard editMaxEnergy("Maximum Energy Setter", maxEnergyIntro);
             editMaxEnergy.IsHexadecimal(false);
+            editMaxEnergy.DisableSignKey();
 
             if (editMaxEnergy.Open(newMaxEnergy, normalGaugeMax) == 0)
             {

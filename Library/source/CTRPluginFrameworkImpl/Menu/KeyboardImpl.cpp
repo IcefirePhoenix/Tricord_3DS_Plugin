@@ -162,6 +162,11 @@ namespace CTRPluginFramework
         return _max;
     }
 
+    void    KeyboardImpl::SetSignKeyState(bool usePlusMinus)
+    {
+        _usePlusMinus = usePlusMinus;
+    }
+
     void    KeyboardImpl::SetError(std::string &error)
     {
         _errorMessage = true;
@@ -191,11 +196,11 @@ namespace CTRPluginFramework
         }
     }
 
-    void    KeyboardImpl::ToggleSignKey(bool enable)
+    void    KeyboardImpl::ToggleSignKey()
     {
         if (_layout == DECIMAL)
         {
-            _keys->at(11).Enable(enable);
+            _keys->at(11).Enable(_usePlusMinus);
         }
     }
 

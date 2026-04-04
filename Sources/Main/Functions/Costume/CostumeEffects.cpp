@@ -551,7 +551,9 @@ namespace CTRPluginFramework
             topscreenMessage += "Selected: " + selectedPlayer + "\nCurrent balloon count: " + currentBalloons;
 
             Keyboard balloons("Balloon Count Selection", topscreenMessage);
+
             balloons.IsHexadecimal(false);
+            balloons.DisableSignKey();
 
             balloons.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
             {
@@ -722,7 +724,9 @@ namespace CTRPluginFramework
     {
         u8 newDmg = 2;
         Keyboard editDmg("Custom Cacto DMG", "Enter a custom damage amount as a positive integer representing the number of hearts of damage.\n\nThe default value is 2 hearts. The minimum possible amount is 1 heart; the maximum is 63 hearts.");
+
         editDmg.IsHexadecimal(false);
+        editDmg.DisableSignKey();
 
         editDmg.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
         {

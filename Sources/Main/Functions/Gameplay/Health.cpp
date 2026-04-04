@@ -19,7 +19,9 @@ namespace CTRPluginFramework
         if (entry->Name() == "Set maximum heart containers")
         {
             Keyboard editMaxHealth("Maximum heart containers", maxHealthIntro);
+
             editMaxHealth.IsHexadecimal(false);
+            editMaxHealth.DisableSignKey();
 
             editMaxHealth.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
             {

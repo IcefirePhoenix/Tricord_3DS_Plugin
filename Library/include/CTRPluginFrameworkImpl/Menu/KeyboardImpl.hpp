@@ -49,12 +49,13 @@ namespace CTRPluginFramework
         std::string &GetTitle(void);
         u32 &GetMax(void);
         void SetError(std::string &error);
+        void SetSignKeyState(bool usePlusMinus);
 
         void SetConvertCallback(ConvertCallback callback);
         void SetCompareCallback(CompareCallback callback);
         void OnKeyboardEvent(OnEventCallback callback);
         void ToggleDecimalKey(bool enable);
-        void ToggleSignKey(bool enable);
+        void ToggleSignKey();
         int GetSelectedEntry(void);
         void ChangeEntrySound(int entry, SoundEngine::Event soundEvent);
         void Populate(const std::vector<std::string> &input, bool resetScroll);
@@ -124,6 +125,7 @@ namespace CTRPluginFramework
         bool _useJPN{false};
         bool _useSymbols{false};
         bool _useNumRow{false};
+        bool _usePlusMinus{true};
         int _pageIndex{0};
         float _offset{0.f};
         u32 _max{0};

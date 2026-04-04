@@ -351,6 +351,7 @@ namespace CTRPluginFramework
         _keyboard->SetConvertCallback(ConvertToU8);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
         _keyboard->ToggleDecimalKey(false);
+        _keyboard->ToggleSignKey();
 
         int ret = _keyboard->Run();
 
@@ -388,6 +389,7 @@ namespace CTRPluginFramework
         _keyboard->SetConvertCallback(ConvertToU16);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
         _keyboard->ToggleDecimalKey(false);
+        _keyboard->ToggleSignKey();
 
         int ret = _keyboard->Run();
 
@@ -425,6 +427,7 @@ namespace CTRPluginFramework
         _keyboard->SetConvertCallback(ConvertToU32);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
         _keyboard->ToggleDecimalKey(false);
+        _keyboard->ToggleSignKey();
 
         int ret = _keyboard->Run();
 
@@ -462,6 +465,7 @@ namespace CTRPluginFramework
         _keyboard->SetConvertCallback(ConvertToU64);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
         _keyboard->ToggleDecimalKey(false);
+        _keyboard->ToggleSignKey();
 
         int ret = _keyboard->Run();
 
@@ -487,6 +491,7 @@ namespace CTRPluginFramework
         _keyboard->SetConvertCallback(ConvertToFloat);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
         _keyboard->ToggleDecimalKey(true);
+        _keyboard->ToggleSignKey();
 
         std::string &input = _keyboard->GetInput();
         input = Utils::ToString(start, 2);
@@ -515,6 +520,7 @@ namespace CTRPluginFramework
         _keyboard->SetConvertCallback(ConvertToDouble);
         _keyboard->DisplayTopScreen = DisplayTopScreen;
         _keyboard->ToggleDecimalKey(true);
+        _keyboard->ToggleSignKey();
 
         std::string &input = _keyboard->GetInput();
         input = Utils::Format("%.4lf", start);
@@ -580,7 +586,7 @@ namespace CTRPluginFramework
 
     void Keyboard::DisableSignKey(void) const
     {
-        _keyboard->ToggleSignKey(false);
+        _keyboard->SetSignKeyState(false);
     }
 
     void Keyboard::OnKeyboardEvent(OnEventCallback callback) const
