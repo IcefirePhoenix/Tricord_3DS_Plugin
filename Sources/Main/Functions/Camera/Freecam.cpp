@@ -398,15 +398,13 @@ namespace CTRPluginFramework
 	float setSensitivity(std::string title, std::string message)
 	{
 		float result;
-
 		Keyboard sizeKB(title, message);
+
 		sizeKB.SetMaxLength(4);
 		sizeKB.CanAbort(true);
 		sizeKB.IsHexadecimal(false);
+		sizeKB.DisableSignKey();
 		sizeKB.Open(result);
-
-		if (result < 0.0)
-			MessageBox("Error", "Sensitivity cannot be negative.")();
 
 		return result;
 	}

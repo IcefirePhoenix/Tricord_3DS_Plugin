@@ -66,23 +66,20 @@ namespace CTRPluginFramework
         if (entry->Name() == "Set energy consumption multiplier")
         {
             Keyboard editEnergyConsumeMultiplier("Energy Consumption Multiplier Setter", "Input a new multiplier value. Using 1.0 will result in no changes.\n\nNote: The multiplier cannot be negative.");
+
             editEnergyConsumeMultiplier.IsHexadecimal(false);
+            editEnergyConsumeMultiplier.DisableSignKey();
 
             if (editEnergyConsumeMultiplier.Open(newMultiplier, 1.0) == 0)
             {
-                if (newMultiplier > 0.0)
-                {
-                    entry->SetName("Disable custom energy consumption edits");
-                    Process::WriteFloat(AddressList::getAddress("EnergyMaxMultiplicand"), normalGaugeMax * newMultiplier);
-                }
-                else
-                    MessageBox("Error", "Energy multiplier cannot be negative.")();
+                Process::WriteFloat(AddressList::getAddress("EnergyMaxMultiplicand"), normalGaugeMax * newMultiplier);
+                entry->SetName("Disable custom energy consumption edits");
             }
         }
         else
         {
-            entry->SetName("Set energy consumption multiplier");
             Process::WriteFloat(AddressList::getAddress("EnergyMaxMultiplicand"), normalGaugeMax);
+            entry->SetName("Set energy consumption multiplier");
         }
     }
 

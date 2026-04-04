@@ -69,15 +69,13 @@ namespace CTRPluginFramework
         float result;
 
         Keyboard speedKB("Item Strafing Speed", "Input a new strafing speed value.");
+
         speedKB.IsHexadecimal(false);
+        speedKB.DisableSignKey();
 
         if (speedKB.Open(result, 1.0) == 0)
-        {
-            if (result < 0.0)
-                MessageBox("Error", "Strafing speed cannot be negative.")();
-            else
-                return result;
-        }
-        return 1.0;
+            return result;
+        else
+            return 1.0;
     }
 }

@@ -159,13 +159,11 @@ namespace CTRPluginFramework
     float setPlayerSize(void)
     {
         float result = 1.0;
-
         Keyboard sizeKB("Player Size", "Input a player size. The default value is 1.0. This value gets applied to all players.\n\nNote: Size values cannot be negative.");
-        sizeKB.IsHexadecimal(false);
-        sizeKB.Open(result, 1.0);
 
-        if (result < 0.0)
-            MessageBox("Error", "Player size cannot be negative.")();
+        sizeKB.IsHexadecimal(false);
+        sizeKB.DisableSignKey();
+        sizeKB.Open(result, 1.0);
 
         return result;
     }
