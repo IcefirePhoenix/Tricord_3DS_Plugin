@@ -1236,8 +1236,8 @@
         {
             "name": "DR_prize_note",
             "content": {
-                "intro": "Allows you to set a certain material as the Daily Riches prize. The prize description located on the bottom screen will also be updated.",
-                "note": "Be sure to reload the area for changes to take effect.",
+                "intro": "Allows you to set a certain material as the Daily Riches prize. The prize description located on the bottom screen will also be updated. Be sure to reload the area for changes to take effect.",
+                "note": "If normal RNG behavior is restored, the current prize round MUST be completed before the game can assign a new prize.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }

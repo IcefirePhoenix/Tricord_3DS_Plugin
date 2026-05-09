@@ -29,6 +29,8 @@ namespace CTRPluginFramework
     {
         Process::Write32(AddressList::getAddress("DailyRichesPrizeSetCheck"), 0xE3500000); // restore to CMP
         Process::Write32(AddressList::getAddress("DefaultDR_PrizeSet"), 0x03A00014);       // restore to MOVEQ, with imm set to Lady's Glasses
+
+        MessageBox("Success", "Note: The current prize round must be completed before the game can assign a new prize.")();
     }
 
     // Allows current Daily Riches prize item to be overwritten
