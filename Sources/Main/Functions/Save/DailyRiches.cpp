@@ -62,7 +62,7 @@ namespace CTRPluginFramework
     // Forces the Daily Riches prize to spawn in the leftmost treasure chest
     void Save::forcePrizeLocation(MenuEntry *entry)
     {
-        if (entry->WasJustActivated() || entry->IsActivated())
+        if (entry->WasJustActivated() || !entry->IsActivated())
         {
             Process::Write8(AddressList::getAddress("DailyRichesFirstChestSet"), entry->IsActivated() ? 0 : 1); // overwrite ADD instruction immediate
         }
