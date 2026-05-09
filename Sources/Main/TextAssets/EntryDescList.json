@@ -1216,6 +1216,15 @@
             }
         },
         {
+            "name": "DR_prize_note",
+            "content": {
+                "intro": "Allows you to set a certain material as the Daily Riches prize. The prize description located on the bottom screen will also be updated.",
+                "note": "Be sure to reload the area for changes to take effect.",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "master_vol_note",
             "content": {
                 "intro": "Overrides the current position of the system's volume slider.",

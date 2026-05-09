@@ -2353,6 +2353,22 @@
             }
         },
         {
+            "name": "DailyRichesPrizeSetCheck",
+            "regionAddrs": {
+                "usaAddress": "0x002A6990",
+                "eurAddress": "0x002A6D34",
+                "jpnAddress": "0x002A786C"
+            }
+        },
+        {
+            "name": "DefaultDR_PrizeSet",
+            "regionAddrs": {
+                "usaAddress": "0x002A6994",
+                "eurAddress": "0x002A6D38",
+                "jpnAddress": "0x002A7870"
+            }
+        },
+        {
             "name": "BGMType",
             "regionAddrs": {
                 "usaAddress": "0x005FD3C0",

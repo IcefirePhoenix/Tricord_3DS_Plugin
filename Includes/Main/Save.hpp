@@ -30,6 +30,7 @@ namespace CTRPluginFramework
         static void restockMerchant(MenuEntry* entry);
         static void resetMerchant(MenuEntry* entry);
         static void selLevelCompletion(MenuEntry* entry);
+        static void selPrizeSetAction(MenuEntry *entry);
     };
 }
 #endif

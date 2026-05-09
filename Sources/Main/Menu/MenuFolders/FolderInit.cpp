@@ -654,9 +654,13 @@ namespace CTRPluginFramework
             *merchant += slots[iterator];
         }
 
+        MenuFolder *dailyRiches = new MenuFolder("Daily Riches");
+        *dailyRiches += new MenuEntry("Edit prize item", nullptr, Save::selPrizeSetAction, true, DescUtils::getDesc("DR_prize_note"));
+
         *save += voice;
         *save += progression;
         *save += merchant;
+        *save += dailyRiches;
 
         *save += new MenuEntry("Set Hero Point count", nullptr, Save::heroPointCountSet, true, DescUtils::getDesc("hero_point_note"));
         *save += new MenuEntry("Set Coliseum Win count", nullptr, Save::coliseumWinCountSet, true, DescUtils::getDesc("coliseum_win_note"));
