@@ -1225,6 +1225,15 @@
             }
         },
         {
+            "name": "DR_prize_location_note",
+            "content": {
+                "intro": "Forces the Daily Riches prize item to spawn in the first treasure chest, located to the far left. All remaining chests will contain Freebies.",
+                "note": "",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "DR_prize_note",
             "content": {
                 "intro": "Allows you to set a certain material as the Daily Riches prize. The prize description located on the bottom screen will also be updated.",

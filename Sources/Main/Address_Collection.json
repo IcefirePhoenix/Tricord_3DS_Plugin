@@ -2353,6 +2353,14 @@
             }
         },
         {
+            "name": "DailyRichesFirstChestSet",
+            "regionAddrs": {
+                "usaAddress": "0x002A6864",
+                "eurAddress": "0x002A6C08",
+                "jpnAddress": "0x002A7740"
+            }
+        },
+        {
             "name": "DailyRichesPrizeSetCheck",
             "regionAddrs": {
                 "usaAddress": "0x002A6990",
