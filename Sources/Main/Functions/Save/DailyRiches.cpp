@@ -56,4 +56,12 @@ namespace CTRPluginFramework
                 return;
         }
     }
+
+    // Bypasses the daily timestamp check, allowing the Daily Riches minigame to reset prematurely
+    void Save::disableDailyRichesTimeCheck(MenuEntry* entry)
+    {
+        // Overwrite "last refresh" timestamp with something earlier than the earliest possible system date (Jan 1, 2011)
+        Process::Write32(AddressList::getAddress("ResetDailyRiches"), JAN1_1970);
+        Process::Write8(AddressList::getAddress("DailyRichesChestOpenFlag"), false);
+    }
 }

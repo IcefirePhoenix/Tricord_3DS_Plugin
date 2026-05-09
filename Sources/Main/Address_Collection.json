@@ -2369,6 +2369,22 @@
             }
         },
         {
+            "name": "ResetDailyRiches",
+            "regionAddrs": {
+                "usaAddress": "0x31A077BC",
+                "eurAddress": "0x31A07814",
+                "jpnAddress": "0x31A07508"
+            }
+        },
+        {
+            "name": "DailyRichesChestOpenFlag",
+            "regionAddrs": {
+                "usaAddress": "0x31A077D5",
+                "eurAddress": "0x31A0782D",
+                "jpnAddress": "0x31A07521"
+            }
+        },
+        {
             "name": "BGMType",
             "regionAddrs": {
                 "usaAddress": "0x005FD3C0",

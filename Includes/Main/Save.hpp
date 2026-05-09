@@ -31,6 +31,7 @@ namespace CTRPluginFramework
         static void resetMerchant(MenuEntry* entry);
         static void selLevelCompletion(MenuEntry* entry);
         static void selPrizeSetAction(MenuEntry *entry);
+        static void disableDailyRichesTimeCheck(MenuEntry* entry);
     };
 }
 #endif

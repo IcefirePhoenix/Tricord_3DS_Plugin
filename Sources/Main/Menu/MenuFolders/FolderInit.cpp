@@ -655,6 +655,7 @@ namespace CTRPluginFramework
         }
 
         MenuFolder *dailyRiches = new MenuFolder("Daily Riches");
+        *dailyRiches += new MenuEntry("Allow all treasure chests to be opened", Save::disableDailyRichesTimeCheck, DescUtils::getDesc("DR_time_reset_note"));
         *dailyRiches += new MenuEntry("Edit prize item", nullptr, Save::selPrizeSetAction, true, DescUtils::getDesc("DR_prize_note"));
 
         *save += voice;

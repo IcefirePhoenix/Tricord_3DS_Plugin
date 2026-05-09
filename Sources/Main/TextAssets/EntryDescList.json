@@ -1216,6 +1216,15 @@
             }
         },
         {
+            "name": "DR_time_reset_note",
+            "content": {
+                "intro": "Allows Daily Riches treasure chests to be opened at any time, disabling the daily restriction. Additionally, all treasure chests can be opened without reloading the area.",
+                "note": "",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "DR_prize_note",
             "content": {
                 "intro": "Allows you to set a certain material as the Daily Riches prize. The prize description located on the bottom screen will also be updated.",
