@@ -628,9 +628,11 @@ namespace CTRPluginFramework
         *progression += new MenuEntry("Edit Level Completion", nullptr, Save::selLevelCompletion, true, DescUtils::getDesc("level_completion_note"));
 
         MenuFolder *merchant = new MenuFolder("Street Merchant");
-        *merchant += new MenuEntry("Restock Street Merchant stall", nullptr, Save::restockMerchant, false, DescUtils::getDesc("merchant_restock_note"));
-        *merchant += new MenuEntry("Reset Street Merchant materials", nullptr, Save::resetMerchant, false, DescUtils::getDesc("merchant_reset_note"));
-        *merchant += new MenuEntryLabel();
+        MenuFolder *merchantGoods = new MenuFolder("Current Inventory");
+
+        *merchantGoods += new MenuEntry("Restock Street Merchant stall", nullptr, Save::restockMerchant, false, DescUtils::getDesc("merchant_restock_note"));
+        *merchantGoods += new MenuEntry("Reset Street Merchant materials", nullptr, Save::resetMerchant, false, DescUtils::getDesc("merchant_reset_note"));
+        *merchantGoods += new MenuEntryLabel();
 
         merchantA = new MenuEntry("Set 1st material slot", nullptr, Save::selMerchantSlot, true, DescUtils::getDesc("merchant_mat_note"));
         merchantB = new MenuEntry("Set 2nd material slot", nullptr, Save::selMerchantSlot, true, DescUtils::getDesc("merchant_mat_note"));
@@ -651,8 +653,11 @@ namespace CTRPluginFramework
         {
             slots[iterator]->SetAltIcon(true);                               // remove icon
             slots[iterator]->SetArg(reinterpret_cast<void *>(iterator * 2)); // slot IDs are even numbers
-            *merchant += slots[iterator];
+            *merchantGoods += slots[iterator];
         }
+
+        *merchant += merchantGoods;
+
 
         MenuFolder *dailyRiches = new MenuFolder("Daily Riches");
         *dailyRiches += new MenuEntry("Allow all treasure chests to be opened", Save::disableDailyRichesTimeCheck, DescUtils::getDesc("DR_time_reset_note"));
