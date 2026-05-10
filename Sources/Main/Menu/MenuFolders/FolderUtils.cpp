@@ -46,8 +46,6 @@ namespace CTRPluginFramework
 
     void AddAllFolders(PluginMenu &menu)
     {
-        //menu += chaos;
-        menu += turbo;
         menu += costume;
         menu += emotes;
         menu += player;
@@ -58,71 +56,12 @@ namespace CTRPluginFramework
         menu += sound;
         menu += miscellaneous;
 
+        // menu.Append(chaos, 2);
+        menu.Append(turbo, 2);
+
         // auto entries added to menu for logging purposes but hidden from users
         menu += autoFolder;
         autoFolder->HideWithoutDisable();
         menu.AddToHidden(autoFolder);
-    }
-
-    void ToggleMenuChange(Time time)
-    {
-        // freecam menu
-        if (PluginMenu::GetRunningInstance()->FreecamToggle)
-        {
-            menuFreecam->Show();
-            editFreecamSen->Show();
-            swapZoom->Show();
-
-            //chaos->HideWithoutDisable();
-            turbo->HideWithoutDisable();
-            costume->HideWithoutDisable();
-            emotes->HideWithoutDisable();
-            player->HideWithoutDisable();
-            gameplay->HideWithoutDisable();
-            items->HideWithoutDisable();
-            render->HideWithoutDisable();
-            save->HideWithoutDisable();
-            sound->HideWithoutDisable();
-            miscellaneous->HideWithoutDisable();
-        }
-        else // gameplay OR normal menu
-        {
-            menuFreecam->HideWithoutDisable();
-            editFreecamSen->HideWithoutDisable();
-            swapZoom->HideWithoutDisable();
-
-            if (!PluginMenu::GetRunningInstance()->GameplayToggle)
-            {
-                //chaos->Hide();
-                turbo->Hide();
-                costume->Show();
-                emotes->Show();
-                player->Show();
-                gameplay->Show();
-                items->Show();
-                render->Show();
-                save->Show();
-                sound->Show();
-                miscellaneous->Show();
-            }
-            else
-            {
-                menuFreecam->HideWithoutDisable();
-                editFreecamSen->HideWithoutDisable();
-                swapZoom->HideWithoutDisable();
-
-                //chaos->Show();
-                turbo->Show();
-                costume->HideWithoutDisable();
-                emotes->HideWithoutDisable();
-                player->HideWithoutDisable();
-                gameplay->HideWithoutDisable();
-                items->HideWithoutDisable();
-                render->HideWithoutDisable();
-                save->HideWithoutDisable();
-                sound->HideWithoutDisable();
-                miscellaneous->HideWithoutDisable();
-            }
-        }
     }
 }

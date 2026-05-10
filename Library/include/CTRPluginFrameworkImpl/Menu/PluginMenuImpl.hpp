@@ -31,7 +31,7 @@ namespace CTRPluginFramework
         PluginMenuImpl(std::string &name, std::string &note, u32 menuType);
         ~PluginMenuImpl(void);
 
-        void Append(MenuItem *item) const;
+        void Append(MenuItem *item, int folderIndex = 0) const;
         void AddToHidden(MenuItem *item) const;
         void Callback(CallbackPointer callback);
         void RemoveCallback(CallbackPointer callback);

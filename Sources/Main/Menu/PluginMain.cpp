@@ -130,7 +130,6 @@ namespace CTRPluginFramework
 
         menu->SynchronizeWithFrame(true);
         menu->OnReady = LoadSavedAndCustomEntryData;
-        menu->OnNewFrame = ToggleMenuChange;
         menu->OnClosing = ManageTFH_Settings;
 
 #ifdef DEV_BUILD

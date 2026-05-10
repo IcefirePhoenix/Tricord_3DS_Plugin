@@ -61,9 +61,22 @@ namespace CTRPluginFramework
         signalQuit = true;
     }
 
-    void    PluginMenuImpl::Append(MenuItem *item) const
+    void    PluginMenuImpl::Append(MenuItem *item, int folderIndex) const
     {
-        _home->Append(item);
+        switch (folderIndex)
+        {
+            case 0:
+                _home->Append(item);
+                break;
+            case 1:
+                _home->AddToFreecamMenu(item);
+                break;
+            case 2:
+                _home->AddToGameModesMenu(item);
+                break;
+            default:
+                break;
+        }
     }
 
     void    PluginMenuImpl::AddToHidden(MenuItem *item) const

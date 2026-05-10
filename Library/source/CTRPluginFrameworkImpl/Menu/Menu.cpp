@@ -51,7 +51,7 @@ namespace CTRPluginFramework
 
         while (_root != _folder)
         {
-            MenuFolderImpl *f = _folder->_Close(_selector);
+            MenuFolderImpl *f = _folder->_Close(_selector, 0);
 
             if (f == nullptr)
             {
@@ -245,7 +245,7 @@ namespace CTRPluginFramework
         {
             if (event.type == Event::KeyPressed && event.key.code == Key::B)
             {
-                MenuFolderImpl *p = _folder->_Close(_selector);
+                MenuFolderImpl *p = _folder->_Close(_selector, 0);
                 if (p != nullptr)
                 {
                     _folder = p;
@@ -358,7 +358,7 @@ namespace CTRPluginFramework
 
                     // if it's a folder
                     MenuFolderImpl *folder = reinterpret_cast<MenuFolderImpl *>(item);
-                    folder->_Open(_folder, _selector);
+                    folder->_Open(_folder, _selector, 0);
                     _folder = folder;
                     _selector = 0;
                     return (MenuEvent::FolderChanged);
@@ -366,7 +366,7 @@ namespace CTRPluginFramework
                 case B:
                 {
                     SoundEngine::PlayMenuSound(SoundEngine::Event::CANCEL);
-                    MenuFolderImpl *p = _folder->_Close(_selector);
+                    MenuFolderImpl *p = _folder->_Close(_selector, 0);
                     if (p != nullptr)
                     {
                         _folder = p;

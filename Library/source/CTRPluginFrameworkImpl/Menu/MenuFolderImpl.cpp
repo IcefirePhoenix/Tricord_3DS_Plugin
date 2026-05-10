@@ -11,10 +11,12 @@ namespace CTRPluginFramework
         this->firstName = name;
         this->note = note;
         this->_restricted = false;
-        this->_position[0] = -1;
-        this->_position[1] = -1;
-        this->_parent[0] = nullptr;
-        this->_parent[1] = nullptr;
+
+        for (int i = 0; i < 4; i++)
+        {
+            this->_position[i] = -1;
+            this->_parent[i] = nullptr;
+        }
     }
 
     MenuFolderImpl::MenuFolderImpl(MenuFolder* owner, const std::string& name, const std::string& note) :
@@ -24,10 +26,12 @@ namespace CTRPluginFramework
         this->firstName = name;
         this->note = note;
         this->_restricted = false;
-        this->_position[0] = -1;
-        this->_position[1] = -1;
-        this->_parent[0] = nullptr;
-        this->_parent[1] = nullptr;
+
+        for (int i = 0; i < 4; i++)
+        {
+            this->_position[i] = -1;
+            this->_parent[i] = nullptr;
+        }
     }
 
     MenuFolderImpl::~MenuFolderImpl()
@@ -49,15 +53,14 @@ namespace CTRPluginFramework
         _items.clear();
     }
 
-    void MenuFolderImpl::Append(MenuItem *item, bool isStar)
+    void MenuFolderImpl::Append(MenuItem *item, bool isAltFolder)
     {
-        if (!isStar)
+        if (!isAltFolder)
         {
             item->_container = this;
             item->_index = _items.size();
         }
         _items.push_back(item);
-
     }
 
     u32 MenuFolderImpl::ItemsCount(void) const
@@ -140,7 +143,12 @@ namespace CTRPluginFramework
 
     bool MenuFolderImpl::HasParent()
     {
-        return (_parent[0] != nullptr || _parent[1] != nullptr);
+        for (int i = 0; i < 4; i++)
+        {
+            if (_parent[i] != nullptr)
+                return true;
+        }
+        return false;
     }
 
     void     MenuFolderImpl::Remove(MenuItem *item)
@@ -194,18 +202,16 @@ namespace CTRPluginFramework
 
     //#######################################################################
 
-    void MenuFolderImpl::_Open(MenuFolderImpl *parent, int position, bool starMode)
+    void MenuFolderImpl::_Open(MenuFolderImpl *parent, int position, int altModeIndex)
     {
-        int index = starMode ? 1 : 0;
-        _parent[index] = parent;
-        _position[index] = position;
+        _parent[altModeIndex] = parent;
+        _position[altModeIndex] = position;
     }
 
-    MenuFolderImpl *MenuFolderImpl::_Close(int &position, bool starMode)
+    MenuFolderImpl *MenuFolderImpl::_Close(int &position, int altModeIndex)
     {
-        int index = starMode ? 1 : 0;
-        if (_parent[index] != nullptr && _position[index] != -1)
-            position = _position[index];
-        return (_parent[index]);
+        if (_parent[altModeIndex] != nullptr && _position[altModeIndex] != -1)
+            position = _position[altModeIndex];
+        return (_parent[altModeIndex]);
     }
 }

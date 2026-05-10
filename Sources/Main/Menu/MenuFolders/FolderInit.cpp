@@ -243,9 +243,9 @@ namespace CTRPluginFramework
         editFreecamSen = new MenuEntry("Edit sensitivity", nullptr, Freecam::editSensitivity, true, DescUtils::getDesc("freecam_sensitivity_note"), true);
         swapZoom = new MenuEntry("Swap to Perspective Zoom", nullptr, Freecam::setZoomType, false, DescUtils::getDesc("zoom_swap_note"), true);
 
-        menu += menuFreecam;
-        menu += editFreecamSen;
-        menu += swapZoom;
+        menu.Append(menuFreecam, 1);
+        menu.Append(editFreecamSen, 1);
+        menu.Append(swapZoom, 1);
     }
 
     void InitCostumeFolder(PluginMenu &menu)

@@ -25,7 +25,10 @@ namespace CTRPluginFramework
         void Append(MenuItem *item) const;
         void AddToHidden(MenuItem *item) const;
         void Refresh(void);
-        void UnStar(MenuItem* item);
+        void ValidateFolderVisibility(MenuFolderImpl *&folder, int altModeIndex);
+        void UnStar(MenuItem *item);
+        void AddToGameModesMenu(MenuItem *item);
+        void AddToFreecamMenu(MenuItem *item);
         void Init(void);
 
         void AddPluginVersion(bool isDev = false);
@@ -64,10 +67,14 @@ namespace CTRPluginFramework
         MenuFolderImpl* _folder;
         MenuFolderImpl* _returnFolder;
         MenuFolderImpl* _starred;
+        MenuFolderImpl* _freecamFolder;
+        MenuFolderImpl* _gameModesFolder;
         MenuFolderImpl* _starredConst;
 
         int _mode;
         bool _starMode;
+        bool _altGameplayMode;
+        bool _freecamMode;
 
         int _selector;
         int _selectedTextSize;
