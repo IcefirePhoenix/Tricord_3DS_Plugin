@@ -269,48 +269,6 @@ namespace CTRPluginFramework
 		Player::overwriteOffset(Y_rotationAsPercent * 360.0);
 	}
 
-	// Allows the Freecam's hotkeys to be reconfigured
-	void Freecam::editHotkeys(MenuEntry* entry)
-	{
-		Keyboard menu("Freecam Hotkey Selection Menu", "Choose a Freecam hotkey to edit.\n\nNote: ZL/ZR and C-stick controls are available\nonly on n2/3DS models.");
-		StringVector opts;
-
-		bool isMenuOpen = true;
-		menu.CanAbort(false);
-
-		while (isMenuOpen)
-		{
-			opts.clear();
-			opts.push_back(std::string("Save and exit"));
-			opts.push_back(std::string("Freecam toggle"));
-			opts.push_back(std::string("Camera lock toggle"));
-			opts.push_back(std::string("Reset camera toggle"));
-			opts.push_back(std::string("Shift camera north"));
-			opts.push_back(std::string("Shift camera south"));
-			opts.push_back(std::string("Shift camera east"));
-			opts.push_back(std::string("Shift camera west"));
-			opts.push_back(std::string("Zoom camera in"));
-			opts.push_back(std::string("Zoom camera out"));
-			opts.push_back(std::string("Raise camera"));
-			opts.push_back(std::string("Lower camera"));
-			opts.push_back(std::string("Orbit downwards"));
-			opts.push_back(std::string("Orbit upwards"));
-			opts.push_back(std::string("Orbit clockwise"));
-			opts.push_back(std::string("Orbit counterclockwise"));
-
-			menu.Populate(opts);
-
-			int chose = menu.Open();
-			if (chose == 0)
-			{
-				isMenuOpen = false;
-				break;
-			}
-			else
-				menuFreecam->Hotkeys[chose - 1].AskForKeys();
-		}
-	}
-
 	// Restores/patches out dynamic camera movements caused by item usage, Doppel swaps, swim boosts, etc.
 	void manageDynamicCamShifts(bool disableShifts)
 	{
