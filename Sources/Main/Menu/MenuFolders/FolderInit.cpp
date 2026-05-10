@@ -658,6 +658,7 @@ namespace CTRPluginFramework
 
         *merchant += merchantGoods;
 
+        *merchant += new MenuEntry("Force Merchant to buy at double price", Save::enableMerchantDoublePrice, DescUtils::getDesc("merchant_double_price_note"));
         *merchant += new MenuEntry("Enable SpotPass-exclusive material slots", Save::enableSpotPassSlots, DescUtils::getDesc("merchant_spotpass_note"));
 
         MenuFolder *dailyRiches = new MenuFolder("Daily Riches");

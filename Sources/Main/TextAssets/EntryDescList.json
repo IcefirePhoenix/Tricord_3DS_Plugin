@@ -1198,6 +1198,15 @@
             }
         },
         {
+            "name": "merchant_double_price_note",
+            "content": {
+                "intro": "By speaking directly to the Merchant, you can gain extra rupees by selling materials you own. This entry forces the Merchant to buy materials for double the usual price, which is normally a random event that has a 20% chance of occurring each day.",
+                "note": "Disabling this entry restores RNG-based behavior. Changes require the Merchant's stall to be reset, which can be triggered via Tricord or by waiting for the system clock to advance to the next day.",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "merchant_spotpass_note",
             "content": {
                 "intro": "Forces the Merchant's stall to hold five materials, instead of the usual three. These extra slots are normally enabled by turning on SpotPass from the title screen. Be sure to reload the area for changes to take effect.",

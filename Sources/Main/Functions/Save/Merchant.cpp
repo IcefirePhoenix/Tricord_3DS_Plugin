@@ -114,6 +114,17 @@ namespace CTRPluginFramework
         }
     }
 
+    // Bypass RNG logic for double-price event
+    void Save::enableMerchantDoublePrice(MenuEntry *entry)
+    {
+        u32 startAddr = AddressList::getAddress("MerchantDoublePriceFlag");
+
+        if (entry->WasJustActivated() || !entry->IsActivated())
+        {
+            Process::Write8(startAddr, entry->IsActivated() ? 0xE1 : 0x1);
+            Process::Write8(startAddr + 0x4, entry->IsActivated() ? 0xE5 : 0x5);
+        }
+    }
 
     // Toggles two additional stall slots, altering Merchant inventory count to either 3 or 5
     void Save::enableSpotPassSlots(MenuEntry *entry)

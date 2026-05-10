@@ -2353,6 +2353,14 @@
             }
         },
         {
+            "name": "MerchantDoublePriceFlag",
+            "regionAddrs": {
+                "usaAddress": "0x00256937",
+                "eurAddress": "0x002569DB",
+                "jpnAddress": "0x00257823"
+            }
+        },
+        {
             "name": "MerchantSpotPass",
             "regionAddrs": {
                 "usaAddress": "0x005C58CC",
