@@ -2355,9 +2355,9 @@
         {
             "name": "MerchantSpotPass",
             "regionAddrs": {
-                "usaAddress": "0x005C58CF",
-                "eurAddress": "0x005C5CFF",
-                "jpnAddress": "0x005C6833"
+                "usaAddress": "0x005C58CC",
+                "eurAddress": "0x005C5CFC",
+                "jpnAddress": "0x005C6830"
             }
         },
         {

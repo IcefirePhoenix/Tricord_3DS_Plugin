@@ -120,7 +120,7 @@ namespace CTRPluginFramework
     {
         if (entry->WasJustActivated() || !entry->IsActivated())
         {
-            Process::Write8(AddressList::getAddress("MerchantSpotPass"), entry->IsActivated() ? 0xEA : 0xA);
+            Process::Write32(AddressList::getAddress("MerchantSpotPass"), entry->IsActivated() ? 0xE1A00000 : 0x0A000001);
         }
     }
 }
