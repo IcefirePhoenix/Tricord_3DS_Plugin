@@ -658,6 +658,7 @@ namespace CTRPluginFramework
 
         *merchant += merchantGoods;
 
+        *merchant += new MenuEntry("Enable SpotPass-exclusive material slots", Save::enableSpotPassSlots, DescUtils::getDesc("merchant_spotpass_note"));
 
         MenuFolder *dailyRiches = new MenuFolder("Daily Riches");
         *dailyRiches += new MenuEntry("Allow all treasure chests to be opened", Save::disableDailyRichesTimeCheck, DescUtils::getDesc("DR_time_reset_note"));

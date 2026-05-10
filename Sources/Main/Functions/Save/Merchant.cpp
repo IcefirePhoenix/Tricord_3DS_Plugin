@@ -48,7 +48,6 @@ namespace CTRPluginFramework
             entry->SetName(newName << material);
     }
 
-
     // Writes custom material selections to memory -> returns choice as string to display in menu
     std::string openMerchantMatMenu(u8 slotNumber)
     {
@@ -77,6 +76,13 @@ namespace CTRPluginFramework
             MessageBox("Success", "Street Merchant Stall has been restocked. Please reload the current area to observe changes.")();
     }
 
+    // Overwrite "last refresh" timestamp with something earlier than the earliest possible system date (Jan 1, 2011)
+    // Easiest candidate = default UNIX timestamp (Jan 1, 1970)
+    bool overwriteMerchantTimestamp(void)
+    {
+        return Process::Write32(AddressList::getAddress("ResetMerchant"), JAN1_1970);
+    }
+
     // Force-triggers refresh of merchant materials, randomizing the selection
     // This normally occurs when 24 hours has passed since the last refresh, verified via timestamp
     void Save::resetMerchant(MenuEntry *entry)
@@ -93,9 +99,7 @@ namespace CTRPluginFramework
             merchantE
         };
 
-        // Overwrite "last refresh" timestamp with something earlier than the earliest possible system date (Jan 1, 2011)
-        // Easiest candidate = default UNIX timestamp (Jan 1, 1970)
-        if (Process::Write32(AddressList::getAddress("ResetMerchant"), JAN1_1970))
+        if (overwriteMerchantTimestamp())
         {
             for (MenuEntry* slot : matSlots)
             {
@@ -105,7 +109,18 @@ namespace CTRPluginFramework
                 if (charIndex != std::string::npos)
                     slot->SetName(slotName.substr(0, charIndex));
             }
-            MessageBox("Success", "Street Merchant Stall has been reset. Please reload the current area to observe changes.")();
+
+            MessageBox("Success", "Street Merchant Stall has been reset. Please reload the current area for changes to take effect.")();
+        }
+    }
+
+
+    // Toggles two additional stall slots, altering Merchant inventory count to either 3 or 5
+    void Save::enableSpotPassSlots(MenuEntry *entry)
+    {
+        if (entry->WasJustActivated() || !entry->IsActivated())
+        {
+            Process::Write8(AddressList::getAddress("MerchantSpotPass"), entry->IsActivated() ? 0xEA : 0xA);
         }
     }
 }

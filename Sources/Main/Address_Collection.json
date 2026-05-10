@@ -2353,6 +2353,14 @@
             }
         },
         {
+            "name": "MerchantSpotPass",
+            "regionAddrs": {
+                "usaAddress": "0x005C58CF",
+                "eurAddress": "0x005C5CFF",
+                "jpnAddress": "0x005C6833"
+            }
+        },
+        {
             "name": "DailyRichesFirstChestSet",
             "regionAddrs": {
                 "usaAddress": "0x002A6864",

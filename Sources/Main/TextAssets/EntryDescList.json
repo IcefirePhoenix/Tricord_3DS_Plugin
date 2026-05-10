@@ -1198,6 +1198,15 @@
             }
         },
         {
+            "name": "merchant_spotpass_note",
+            "content": {
+                "intro": "Forces the Merchant's stall to hold five materials, instead of the usual three. These extra slots are normally enabled by turning on SpotPass from the title screen. Be sure to reload the area for changes to take effect.",
+                "note": "Turning this entry off will attempt to reset the number of slots to three, however, this WILL be overrided by your current SpotPass settings.",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "merchant_restock_note",
             "content": {
                 "intro": "Forces the Merchant to immediately restock the material stall, which normally happens daily.",

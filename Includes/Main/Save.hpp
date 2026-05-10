@@ -29,6 +29,7 @@ namespace CTRPluginFramework
         static void selMerchantSlot(MenuEntry* entry);
         static void restockMerchant(MenuEntry* entry);
         static void resetMerchant(MenuEntry* entry);
+        static void enableSpotPassSlots(MenuEntry *entry);
         static void selLevelCompletion(MenuEntry* entry);
         static void selPrizeSetAction(MenuEntry *entry);
         static void forcePrizeLocation(MenuEntry *entry);
