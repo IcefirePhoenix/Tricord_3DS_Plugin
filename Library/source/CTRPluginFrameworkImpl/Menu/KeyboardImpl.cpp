@@ -491,7 +491,11 @@ namespace CTRPluginFramework
         IntRect clampArea(22, 25, 270, 190); // note: used for selection menus
 
         Renderer::SetTarget(BOTTOM);
-        Window::BottomWindow.Draw();
+
+        if (_canAbort)
+            Window::BottomWindow.Draw();
+        else
+            Window::BottomWindow.DrawBackground();
 
         // Draw "normal" keyboard
         if (!_customKeyboard)

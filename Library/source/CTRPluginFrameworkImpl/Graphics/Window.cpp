@@ -31,9 +31,8 @@ namespace CTRPluginFramework
         _closeBtn = nullptr;
     }
 
-    void    Window::Draw(void) const
+    void Window::DrawBackground(void) const
     {
-        // Background
         if (_image != nullptr)
             _image->Draw(_rect.leftTop);
         else
@@ -41,39 +40,31 @@ namespace CTRPluginFramework
             Renderer::DrawRect2(_rect, Preferences::Settings.BackgroundMainColor, Preferences::Settings.BackgroundSecondaryColor);
             Renderer::DrawRect(_border, Preferences::Settings.BackgroundBorderColor, false);
         }
-
-        // Close button
-        if (_closeBtn != nullptr)
-            _closeBtn->Draw();
     }
 
-    void    Window::Draw(const std::string& title) const
+    void Window::Draw() const
     {
-        // Background
-        if (_image != nullptr)
-            _image->Draw(_rect.leftTop);
-        else
-        {
-            Renderer::DrawRect2(_rect, Preferences::Settings.BackgroundMainColor, Preferences::Settings.BackgroundSecondaryColor);
-            Renderer::DrawRect(_border, Preferences::Settings.BackgroundBorderColor, false);
-        }
+        DrawBackground();
+        DrawButton();
+    }
 
-        // Title
+    void Window::Draw(const std::string& title) const
+    {
+        DrawBackground();
+
         Color &color = Preferences::Settings.WindowTitleColor;
         int posY = _rect.leftTop.y + 5;
         int posX = _rect.leftTop.x + 10;
-        int xx = Renderer::DrawGameFontString(title.c_str(),posX, posY, 330, color);
+        int xx = Renderer::DrawGameFontString(title.c_str(), posX, posY, 330, color);
+
         Renderer::DrawLine(posX, posY, xx, color);
 
-        // Close button
-        if (_closeBtn != nullptr)
-            _closeBtn->Draw();
+        DrawButton();
     }
 
-    void    Window::DrawButton(void) const
+    void Window::DrawButton() const
     {
-        // Close button
-        if (_closeBtn != nullptr)
+        if (_closeBtn)
             _closeBtn->Draw();
     }
 
