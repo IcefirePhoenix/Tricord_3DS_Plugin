@@ -357,10 +357,9 @@ namespace CTRPluginFramework
             while (manager.PollEvent(event))
             {
                 _ProcessEvent(event);
-                if (_userAbort || Window::BottomWindow.MustClose())
+                if (_userAbort)
                 {
-                    ret = USER_ABORT;
-                    goto exit;
+                    return USER_ABORT;
                 }
             }
 
@@ -373,8 +372,16 @@ namespace CTRPluginFramework
 
             Renderer::EndFrame();
 
+            if (Window::BottomWindow.MustClose())
+            {
+                _isOpen = false;
+                return USER_ABORT;
+            }
+
             if (submitBtn())
+            {
                 _askForExit = true;
+            }
 
             // if it's a standard keyboard
             if (!_customKeyboard)
@@ -428,19 +435,7 @@ namespace CTRPluginFramework
             }
         }
 
-    exit:
-        PluginMenu *menu = PluginMenu::GetRunningInstance();
-        if (menu && !menu->IsOpen() && ret != SLEEP_ABORT)
-        {
-            if (System::IsNew3DS())
-            {
-                ScreenImpl::Top->Clear(true);
-                ScreenImpl::Bottom->Clear(true);
-            }
-        }
-        if (_mustRelease)
-            ProcessImpl::Play(false);
-        return (ret);
+        return ret;
     }
 
     void    KeyboardImpl::Close(void)
