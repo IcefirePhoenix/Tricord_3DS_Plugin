@@ -1316,8 +1316,6 @@ namespace CTRPluginFramework
 
         if (item != nullptr && !item->GetNote().empty())
             _InfoBtn.Enable();
-
-        OSD::Notify("here");
     }
 
     void PluginMenuHome::AddPluginVersion(bool isDev)
