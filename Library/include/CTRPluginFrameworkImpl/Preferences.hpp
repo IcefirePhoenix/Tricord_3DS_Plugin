@@ -9,7 +9,7 @@
 
 // This must be changed every time CTRPFData.bin's structure is updated!
 // Ref: devkitPro/libctru/include/3ds/os.h
-#define SETTINGS_VERSION SYSTEM_VERSION(1, 1, 3)
+#define SETTINGS_VERSION SYSTEM_VERSION(1, 1, 4)
 namespace CTRPluginFramework
 {
     class Preferences
