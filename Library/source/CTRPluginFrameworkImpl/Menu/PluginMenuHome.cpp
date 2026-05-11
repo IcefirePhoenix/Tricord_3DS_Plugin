@@ -961,8 +961,8 @@ namespace CTRPluginFramework
 
     void PluginMenuHome::_showStarredBtn_OnClick(void)
     {
-        static int bak = 0;
-        std::swap(bak, _selector);
+        static int oldStarredSelector = 0;
+        std::swap(oldStarredSelector, _selector);
 
         if (!_starMode)
         {
@@ -1053,6 +1053,9 @@ namespace CTRPluginFramework
         if (MessageBox("Gameplay Modes", msg, DialogType::DialogYesNo)())
             _altGameplayMode = !_altGameplayMode;
 
+        static int oldGMSelector = 0;
+        std::swap(oldGMSelector, _selector);
+
         MenuFolderImpl *folder = _folder;
 
         if (_freecamMode)
@@ -1116,6 +1119,9 @@ namespace CTRPluginFramework
     void PluginMenuHome::_freecamBtn_OnClick(void)
     {
         _freecamMode = !_freecamMode;
+
+        static int oldFreecamSelector = 0;
+        std::swap(oldFreecamSelector, _selector);
 
         MenuFolderImpl *folder = _folder;
 
