@@ -1049,6 +1049,9 @@ namespace CTRPluginFramework
             // Swap screens
             Renderer::EndFrame();
 
+            if (Window::BottomWindow.MustClose())
+                exit = true;
+
         } while (!exit);
     }
 
