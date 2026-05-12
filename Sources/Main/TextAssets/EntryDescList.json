@@ -262,6 +262,15 @@
             }
         },
         {
+            "name": "dash_speed_note",
+            "content": {
+                "intro": "Allows you to set a custom dash speed.",
+                "note": "",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "move_speed_note",
             "content": {
                 "intro": "Allows you to set a custom movement speed.",

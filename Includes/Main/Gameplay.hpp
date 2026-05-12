@@ -91,7 +91,7 @@ namespace CTRPluginFramework
         static void writeChallengeEdit(MenuEntry* entry);
         static void writePlayerControl(MenuEntry* entry);
         static void writeSwordSuitDamageFix(MenuEntry* entry);
-
+        static void setDashSpeed(MenuEntry *entry);
         static void customSpeed(MenuEntry* entry);
     };
 }

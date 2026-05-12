@@ -14,7 +14,6 @@ namespace CTRPluginFramework
     // Sets custom movement speed
     void Gameplay::customSpeed(MenuEntry *entry)
     {
-
         float newSpeed, defaultSpeed = 1.0;
         std::string speedIntro = "Enter a custom movement speed value.\n\nThe default value is 1.0.\n\nNote: Negative values will invert movement.";
 
@@ -25,10 +24,10 @@ namespace CTRPluginFramework
 
             if (editSpeed.Open(newSpeed, defaultSpeed) == 0)
             {
-                entry->SetName("Disable custom movement speed edits");
+                entry->SetName("Restore default movement speed");
                 Process::WriteFloat(AddressList::getAddress("SpeedMultiplierNormal"), newSpeed);
 
-                // Redirect all sword damage multiplier writes to go to the speed multiplier address
+                // Redirect all sword damage multiplier writes to the speed multiplier address
                 // Since it writes the same speed multiplier value anyway
                 Process::Write8(AddressList::getAddress("SwordDamageBoostA"), 0x41);
                 Process::Write8(AddressList::getAddress("SpeedDamageUndoA"), 0x41);
@@ -97,6 +96,30 @@ namespace CTRPluginFramework
         if (controlAuto)
         {
             GeneralHelpers::setCurrLink(GameData::getPlayerIDFromColor("All"));
+        }
+    }
+
+    // Sets custom dash speeds
+    void Gameplay::setDashSpeed(MenuEntry *entry)
+    {
+        float newSpeed, defaultSpeed = 0.125;
+
+        if (entry->Name() == "Set custom dash speed")
+        {
+            Keyboard editSpeed("Dash Speed Setter", "Input a new dash speed value. Default speed is 0.125.\n\nNote: Negative speeds will result in Link dashing backwards.");
+
+            editSpeed.IsHexadecimal(false);
+
+            if (editSpeed.Open(newSpeed, defaultSpeed) == 0)
+            {
+                Process::WriteFloat(AddressList::getAddress("DashSpeed"), newSpeed);
+                entry->SetName("Restore default dash speed");
+            }
+        }
+        else
+        {
+            Process::WriteFloat(AddressList::getAddress("DashSpeed"), defaultSpeed);
+            entry->SetName("Set custom dash speed");
         }
     }
 }

@@ -179,6 +179,7 @@ namespace CTRPluginFramework
         *move += moonJumpFlight;
         *move += new MenuEntry("Control all players", nullptr, Gameplay::controlAllPlayers, false, DescUtils::getDesc("control_all_note"));
         *move += new MenuEntry("Set custom movement speed", nullptr, Gameplay::customSpeed, true, DescUtils::getDesc("move_speed_note"));
+        *move += new MenuEntry("Set custom dash speed", nullptr, Gameplay::setDashSpeed, true, DescUtils::getDesc("dash_speed_note"));
 
         *gameplay += warp;
         *gameplay += healthFairies;
