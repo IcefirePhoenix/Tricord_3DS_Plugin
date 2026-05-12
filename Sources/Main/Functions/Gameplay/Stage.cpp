@@ -30,7 +30,6 @@ namespace CTRPluginFramework
     // Allows boss introduction cutscenes to be skipped
     void Gameplay::skipBossIntro(MenuEntry *entry)
     {
-        // TODO: lady's pets?
         if (entry->WasJustActivated())
         {
             Process::Patch(AddressList::getAddress("BossIntroInit"), 0xE1A00000); // NOP

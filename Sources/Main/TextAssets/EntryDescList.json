@@ -247,7 +247,7 @@
             "name": "skip_boss_intro_note",
             "content": {
                 "intro": "Allows you to skip boss introduction cutscenes at the beginning of each world's boss and miniboss fight.",
-                "note": "",
+                "note": "Note: Does not apply to the Lady's Pets, found in The Lady's Lair - 4.",
                 "modeCompatibility": 2,
                 "clientOnly": false
             }
