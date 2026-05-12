@@ -626,6 +626,7 @@ namespace CTRPluginFramework
 
         MenuFolder *progression = new MenuFolder("Level Progression");
         *progression += new MenuEntry("Edit Level Completion", nullptr, Save::selLevelCompletion, true, DescUtils::getDesc("level_completion_note"));
+        *progression += new MenuEntry("Unlock all DoT zones", nullptr, Save::unlockDoT, true, DescUtils::getDesc("dot_unlock_note"));
 
         MenuFolder *merchant = new MenuFolder("Street Merchant");
         MenuFolder *merchantGoods = new MenuFolder("Current Inventory");

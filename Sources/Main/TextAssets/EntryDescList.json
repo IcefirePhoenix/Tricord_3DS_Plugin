@@ -1189,6 +1189,15 @@
             }
         },
         {
+            "name": "dot_unlock_note",
+            "content": {
+                "intro": "Unlocks the entirety of DoT, allowing you to access Forest Zone - Baneful Zone without previously clearing prerequisite zones.",
+                "note": "",
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "merchant_mat_note",
             "content": {
                 "intro": "Allows you to edit the materials sold by the Merchant.",
