@@ -156,12 +156,14 @@ namespace CTRPluginFramework
 
     static void setScreenshotTimer(void)
     {
-        std::string desc = "Enter the amount of seconds you would like to continuously take screenshots.\n\nTo disable the timer, enter 0.\n\nNote: May not work as expected on emulator. Timer may also be inconsistent on console.";
+        std::string desc = "Enter the number of seconds you would like to continuously take screenshots.\n\nTo disable the timer, enter 0.\n\nNote: May not work as expected on emulator. Timer may also be inconsistent on console.";
 
         u32 current = static_cast<u32>(Screenshot::Timer.AsSeconds());
         Keyboard keyboard("Screenshot Timer", desc);
 
         keyboard.IsHexadecimal(false);
+        keyboard.DisableSignKey();
+
         keyboard.OnKeyboardEvent([](Keyboard &kb, KeyboardEvent &event)
         {
             if (event.type == KeyboardEvent::CharacterAdded)
