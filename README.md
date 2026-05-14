@@ -4,10 +4,8 @@
 
 [![GitHub Stars](https://img.shields.io/github/stars/IcefirePhoenix/Tricord_3DS_Plugin?style=flat&logo=github&label=Stars)](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin)
 [![GitHub release](https://img.shields.io/github/v/release/IcefirePhoenix/Tricord_3DS_Plugin?include_prereleases&sort=semver&logo=github&label=Latest%20Release)](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/releases)
-[![Commit History](https://img.shields.io/github/commit-activity/m/IcefirePhoenix/Tricord_3DS_Plugin?logo=github&label=Commit%20Activity)](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/commits)
 [![Discord](https://img.shields.io/discord/906580635819315351?logo=discord&label=TFH%20Modding%20Discord)](https://discord.com/invite/P6csr4jc5U)
 [![Gamebanana Badge](https://img.shields.io/badge/main_page-yellow?style=flat&logo=gamebanana&label=TFH%20GameBanana)](https://gamebanana.com/games/15553)
-
 
 # Tricord
 A multipurpose utility plugin for The Legend of Zelda: Tri Force Heroes. Built upon CTRPluginFramework, which can be found [here](https://gitlab.com/thepixellizeross/ctrpluginframework) for reference.
@@ -28,7 +26,9 @@ Older versions of Luma3DS / emulator may or may not be compatible. If Tricord ca
 ###  Major Features
 - Freecam with button-based controls
 - Custom gameplay modes, some of which are also playable via online multiplayer
+- Movement modifiers, such as Moon Jump or Flight
 - Visual and UI improvement options
+- Facial expression editor, featuring unused and rarely-seen textures
 - Warp from anywhere, to anywhere
 - Ability to edit the default emote selector menus
 - Real-time respawn location trackers
@@ -61,7 +61,7 @@ A full list of features can be found in the [Wiki](https://github.com/IcefirePho
 * 0004000000176E00 - Japan
 
 ### Updating
-Download the latest files from the [releases page](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/releases) and reinstall them to the SD card (or emulated SD card) in the same places as described above, overwriting previous files. Don't worry about other newly generated files that you may find in the plugins folder (such as `CTRPFData.bin` or .txt files); they usually do not need to be removed or replaced **unless explicitly mentioned in a release**.
+Download the latest `Tricord.3gx` from the [releases page](https://github.com/IcefirePhoenix/Tricord_3DS_Plugin/releases) and reinstall it to the SD card (or emulated SD card) in the same places as described above, overwriting the previous file. Don't worry about previously generated files and/or folders that you may find in the Tricord folder; they usually do not need to be removed or replaced **unless explicitly mentioned in a release**.
 
 ## Emulator Compatibility Notes
 Tricord works by manipulating RAM data, and since the memory layout found on emulators (Azahar, Citra, Lime3DS, etc.) may not be 1:1 with the mapping found on original hardware memory, we can't always guarantee compatibility. Our testing is done on the [latest release](https://azahar-emu.org/pages/download/) of Azahar. Your mileage may vary on older builds or other emulators.
@@ -87,7 +87,7 @@ If you encounter a bug, please let us know! You can do this by opening an Issue 
 
 To save an error log to your SD card, be sure to press X while in the crash screen. The log can be found under `Tricord/Crash Logs/[NA/EU/JP]`.
 
-If you do not have a GitHub account, you can also reach out via the [TFH Modding Discord server](https://tinyurl.com/TFHmodding). Your feedback is greatly appreciated and helps make this project better for everyone!
+If you do not have a GitHub account, you can also submit a bug report via the [TFH Modding Discord server](https://tinyurl.com/TFHmodding). Your feedback is greatly appreciated and helps make this project better for everyone!
 
 ## HID-related ErrDisp and wumiibo
 CTRPF plugins, including Tricord, may conflict with existing installations of wumiibo depending on your console model. Before troubleshooting, it is recommended to try loading the default CTRPF plugin found [here](https://github.com/PabloMK7/CTRPluginFramework-BlankTemplate/releases) to verify that the issue is not Tricord-specific. If the problem persists, it is likely due to wumiibo. From here, you can either:
@@ -133,6 +133,8 @@ Our team has done extensive work in reverse engineering various components of TF
 ## Credits
 
 Stratty - For coming up with the Tricord name and letting us use it for this project :)
+
+Luxus - For testing features thoroughly and providing lots of helpful feedback!
 
 The Pixellizer Group (notably Nanquitas and PabloMK7) - [CTRPluginFramework library](https://gitlab.com/thepixellizeross/ctrpluginframework)
 

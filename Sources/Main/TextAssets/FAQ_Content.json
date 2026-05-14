@@ -35,7 +35,7 @@
             "content": [
                 {
                     "section_header": "Tricord's GitHub repository:",
-                    "body": "https://github.com/IcefirePhoenix/Tricord_3DS_Plugin\n\nThe wiki can be accessed through one of the headers at the top of the repo's web page, or by appending \"/wiki\" to the URL above."
+                    "body": "https://github.com/IcefirePhoenix/Tricord_3DS_Plu\ngin\n\nThe wiki can be accessed through one of the headers at the top of the repo's page, or by appending \"/wiki\" to the URL above."
                 },
                 {
                     "section_header": "Checkpoint, for save file management:",
@@ -51,12 +51,8 @@
                     "body": "- Wintenix\n- Peanut\n- Glem"
                 },
                 {
-                    "section_header": "Beta Testers:",
-                    "body": "TBA"
-                },
-                {
                     "section_header": "Other Credits:",
-                    "body": "- Stratty: For coming up with the Tricord name and letting us use it for this project :)\n- The Pixellizer Group: CTRPluginFramework library\n- Neils Lohmann: JSON for Modern C++ library\n- Nayuki: QR Code generator library"
+                    "body": "- Stratty: For coming up with the Tricord name and letting us use it for this project :)\n- Luxus: For testing features thoroughly and providing lots of helpful feedback!\n- The Pixellizer Group: CTRPluginFramework library\n- Neils Lohmann: JSON for Modern C++ library\n- Nayuki: QR Code generator library"
                 }
             ]
         }
