@@ -36,7 +36,6 @@ namespace CTRPluginFramework
     void writePhysicsChanges(int player);
     float setHeightAdjustmentSpeed(float originalSpeed);
 
-    void setAllProgressionFlags(void);
     void setSpecificProgressionFlags(u64 flags);
     void manageEnemy(bool keepAlive);
     void startWarp(void);
@@ -75,6 +74,9 @@ namespace CTRPluginFramework
         static void adjustLateralSpeed(MenuEntry *entry);
 
         static void infTime(MenuEntry* entry);
+        static void setAllProgressionFlags(MenuEntry *entry);
+        static void skipBossIntro(MenuEntry *entry);
+        static void skipLadyDialogue(MenuEntry *entry);
 
         static std::string retrieveNonStageName(int targetLevelID, int targetStage, std::string levelName);
         static void restoreBookmarks(void);
@@ -89,7 +91,7 @@ namespace CTRPluginFramework
         static void writeChallengeEdit(MenuEntry* entry);
         static void writePlayerControl(MenuEntry* entry);
         static void writeSwordSuitDamageFix(MenuEntry* entry);
-
+        static void setDashSpeed(MenuEntry *entry);
         static void customSpeed(MenuEntry* entry);
     };
 }

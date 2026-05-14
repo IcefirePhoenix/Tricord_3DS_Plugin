@@ -3,8 +3,22 @@
 
 namespace CTRPluginFramework
 {
+    // Unlocks all DoT stages
+    void Save::unlockDoT(MenuEntry* entry)
+    {
+        u32 DoTProgress;
+
+        Process::Read32(AddressList::getAddress("NormalNCCompletion") + 0x4, DoTProgress);
+        DoTProgress |= 0x1FE; // sets bits 33-40 within level completion bitstring A
+
+        if (Process::Write32(AddressList::getAddress("NormalNCCompletion") + 0x4, DoTProgress))
+            MessageBox("Success", "All DoT zones are now unlocked.")();
+        else
+            MessageBox("Error", "DoT zones could not be unlocked. Please try again.")();
+    }
+
     // Toggles level completion per world
-    void Save::selLevelCompletion(MenuEntry *entry)
+    void Save::selLevelCompletion(MenuEntry* entry)
     {
         std::string msg, modeStr;
         int world = Level::selDrablandsWorld(false);

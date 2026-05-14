@@ -210,11 +210,4 @@ namespace CTRPluginFramework
 
         Window::BottomWindow.Update(isTouched, touchPos);
     }
-
-    void LevelStatusEditor::_EditDoTCompletion(void)
-    {
-        // TODO:
-        // no challenge only = bitstring[0]
-        // design new menu with 8 checkboxes only
-    }
 }

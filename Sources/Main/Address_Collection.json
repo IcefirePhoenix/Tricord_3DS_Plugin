@@ -1297,6 +1297,22 @@
             }
         },
         {
+            "name": "LadyMidgameCutsceneStatus",
+            "regionAddrs": {
+                "usaAddress": "0x32D7638A",
+                "eurAddress": "0x32D7640A",
+                "jpnAddress": "0x32DC8BAE"
+            }
+        },
+        {
+            "name": "LadyEndgameCutsceneStatus",
+            "regionAddrs": {
+                "usaAddress": "0x32D77F32",
+                "eurAddress": "0x32D77FB2",
+                "jpnAddress": "0x32DCA756"
+            }
+        },
+        {
             "name": "StageProgressionFlags",
             "regionAddrs": {
                 "usaAddress": "0x32D73214",
@@ -1462,6 +1478,30 @@
                 "usaAddress": "0x32D81F18",
                 "eurAddress": "0x32D81F98",
                 "jpnAddress": "0x32DD473C"
+            }
+        },
+        {
+            "name": "BossIntroInit",
+            "regionAddrs": {
+                "usaAddress": "0x001CAD98",
+                "eurAddress": "0x001CAE28",
+                "jpnAddress": "0x001CB31C"
+            }
+        },
+        {
+            "name": "BossCamCutsceneInit",
+            "regionAddrs": {
+                "usaAddress": "0x001CADA4",
+                "eurAddress": "0x001CAE34",
+                "jpnAddress": "0x001CB328"
+            }
+        },
+        {
+            "name": "BossBGMCutsceneInit",
+            "regionAddrs": {
+                "usaAddress": "0x0058724C",
+                "eurAddress": "0x0058767C",
+                "jpnAddress": "0x0058811C"
             }
         },
         {
@@ -2310,6 +2350,62 @@
                 "usaAddress": "0x31A0779C",
                 "eurAddress": "0x31A077F4",
                 "jpnAddress": "0x31A074E8"
+            }
+        },
+        {
+            "name": "MerchantDoublePriceFlag",
+            "regionAddrs": {
+                "usaAddress": "0x00256937",
+                "eurAddress": "0x002569DB",
+                "jpnAddress": "0x00257823"
+            }
+        },
+        {
+            "name": "MerchantSpotPass",
+            "regionAddrs": {
+                "usaAddress": "0x005C58CC",
+                "eurAddress": "0x005C5CFC",
+                "jpnAddress": "0x005C6830"
+            }
+        },
+        {
+            "name": "DailyRichesFirstChestSet",
+            "regionAddrs": {
+                "usaAddress": "0x002A6864",
+                "eurAddress": "0x002A6C08",
+                "jpnAddress": "0x002A7740"
+            }
+        },
+        {
+            "name": "DailyRichesPrizeSetCheck",
+            "regionAddrs": {
+                "usaAddress": "0x002A6990",
+                "eurAddress": "0x002A6D34",
+                "jpnAddress": "0x002A786C"
+            }
+        },
+        {
+            "name": "DefaultDR_PrizeSet",
+            "regionAddrs": {
+                "usaAddress": "0x002A6994",
+                "eurAddress": "0x002A6D38",
+                "jpnAddress": "0x002A7870"
+            }
+        },
+        {
+            "name": "ResetDailyRiches",
+            "regionAddrs": {
+                "usaAddress": "0x31A077BC",
+                "eurAddress": "0x31A07814",
+                "jpnAddress": "0x31A07508"
+            }
+        },
+        {
+            "name": "DailyRichesChestOpenFlag",
+            "regionAddrs": {
+                "usaAddress": "0x31A077D5",
+                "eurAddress": "0x31A0782D",
+                "jpnAddress": "0x31A07521"
             }
         },
         {

@@ -21,7 +21,7 @@ namespace CTRPluginFramework
         MenuFolderImpl(MenuFolder *owner, const std::string &name, const std::string &note = "");
         virtual ~MenuFolderImpl();
 
-        void Append(MenuItem *item, bool isStar = false);
+        void Append(MenuItem *item, bool isAltFolder = false);
         u32 ItemsCount(void) const;
         MenuItem *GetItem(u32 uid);
         void DisableAll(void);
@@ -53,15 +53,13 @@ namespace CTRPluginFramework
         friend class PluginMenuHome;
         friend class Menu;
 
-        // Private methods
-        void _Open(MenuFolderImpl *parent, int position, bool starMode = false);
-        MenuFolderImpl *_Close(int &position, bool starMode = false);
+        void _Open(MenuFolderImpl *parent, int position, int altModeIndex);
+        MenuFolderImpl *_Close(int &position, int altModeIndex);
 
-        // Private members
         MenuFolder *_owner;
-        MenuFolderImpl *_parent[2];
+        MenuFolderImpl *_parent[4];
         std::vector<MenuItem *> _items;
-        int _position[2];
+        int _position[4];
         bool _restricted;
 
     };

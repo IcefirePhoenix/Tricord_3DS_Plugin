@@ -52,9 +52,14 @@ namespace CTRPluginFramework
             { Hotkey(Key::L | Key::R, "Reset current area") }));
     }
 
-    void InitChallengeCodes(PluginMenu &menu)
+    void InitStageCodes(PluginMenu &menu)
     {
-        *challenges += new MenuEntry("Infinite time", Gameplay::infTime, DescUtils::getDesc("inf_time_note"));
+        *stage += (EntryWithHotkey(new MenuEntry("Set all progression flags in the current stage", Gameplay::setAllProgressionFlags, DescUtils::getDesc("set_progress_flags_note")),
+            { Hotkey(Key::DPadUp | Key::X, "Set progression flags") }));
+
+        *stage += new MenuEntry("Auto-skip boss introduction cutscenes", Gameplay::skipBossIntro, DescUtils::getDesc("skip_boss_intro_note"));
+        *stage += new MenuEntry("Auto-skip Lady Maud dialogue cutscenes", Gameplay::skipLadyDialogue, DescUtils::getDesc("skip_lady_intro_note"));
+        *stage += new MenuEntry("Infinite time", Gameplay::infTime, DescUtils::getDesc("inf_time_note"));
     }
 
     void InitHealthFairyCodes(PluginMenu &menu)
@@ -159,7 +164,7 @@ namespace CTRPluginFramework
         enemies = new MenuFolder("Enemies");
         physics = new MenuFolder("Ground Physics");
         moonJumpFlight = new MenuFolder("Moon Jump & Flight");
-        challenges = new MenuFolder("Challenges");
+        stage = new MenuFolder("Stage");
 
         InitWarpCodes(menu);
         InitHealthFairyCodes(menu);
@@ -167,20 +172,21 @@ namespace CTRPluginFramework
         InitEnemyCodes(menu);
         InitPhysicsCodes(menu);
         InitMoonJumpCodes(menu);
-        InitChallengeCodes(menu);
+        InitStageCodes(menu);
 
         MenuFolder *move = new MenuFolder("Movement");
         *move += physics;
         *move += moonJumpFlight;
         *move += new MenuEntry("Control all players", nullptr, Gameplay::controlAllPlayers, false, DescUtils::getDesc("control_all_note"));
         *move += new MenuEntry("Set custom movement speed", nullptr, Gameplay::customSpeed, true, DescUtils::getDesc("move_speed_note"));
+        *move += new MenuEntry("Set custom dash speed", nullptr, Gameplay::setDashSpeed, true, DescUtils::getDesc("dash_speed_note"));
 
         *gameplay += warp;
         *gameplay += healthFairies;
         *gameplay += energy;
         *gameplay += move;
         *gameplay += enemies;
-        *gameplay += challenges;
+        *gameplay += stage;
 
         // auto-managed by plugin; hidden from users...
         controlAllAuto = new MenuEntry("Control all players (auto)", Gameplay::writePlayerControl, "", true);
@@ -238,9 +244,9 @@ namespace CTRPluginFramework
         editFreecamSen = new MenuEntry("Edit sensitivity", nullptr, Freecam::editSensitivity, true, DescUtils::getDesc("freecam_sensitivity_note"), true);
         swapZoom = new MenuEntry("Swap to Perspective Zoom", nullptr, Freecam::setZoomType, false, DescUtils::getDesc("zoom_swap_note"), true);
 
-        menu += menuFreecam;
-        menu += editFreecamSen;
-        menu += swapZoom;
+        menu.Append(menuFreecam, 1);
+        menu.Append(editFreecamSen, 1);
+        menu.Append(swapZoom, 1);
     }
 
     void InitCostumeFolder(PluginMenu &menu)
@@ -621,11 +627,14 @@ namespace CTRPluginFramework
 
         MenuFolder *progression = new MenuFolder("Level Progression");
         *progression += new MenuEntry("Edit Level Completion", nullptr, Save::selLevelCompletion, true, DescUtils::getDesc("level_completion_note"));
+        *progression += new MenuEntry("Unlock all DoT zones", nullptr, Save::unlockDoT, true, DescUtils::getDesc("dot_unlock_note"));
 
         MenuFolder *merchant = new MenuFolder("Street Merchant");
-        *merchant += new MenuEntry("Restock Street Merchant stall", nullptr, Save::restockMerchant, false, DescUtils::getDesc("merchant_restock_note"));
-        *merchant += new MenuEntry("Reset Street Merchant materials", nullptr, Save::resetMerchant, false, DescUtils::getDesc("merchant_reset_note"));
-        *merchant += new MenuEntryLabel();
+        MenuFolder *merchantGoods = new MenuFolder("Current Inventory");
+
+        *merchantGoods += new MenuEntry("Restock Street Merchant stall", nullptr, Save::restockMerchant, false, DescUtils::getDesc("merchant_restock_note"));
+        *merchantGoods += new MenuEntry("Reset Street Merchant materials", nullptr, Save::resetMerchant, false, DescUtils::getDesc("merchant_reset_note"));
+        *merchantGoods += new MenuEntryLabel();
 
         merchantA = new MenuEntry("Set 1st material slot", nullptr, Save::selMerchantSlot, true, DescUtils::getDesc("merchant_mat_note"));
         merchantB = new MenuEntry("Set 2nd material slot", nullptr, Save::selMerchantSlot, true, DescUtils::getDesc("merchant_mat_note"));
@@ -646,12 +655,23 @@ namespace CTRPluginFramework
         {
             slots[iterator]->SetAltIcon(true);                               // remove icon
             slots[iterator]->SetArg(reinterpret_cast<void *>(iterator * 2)); // slot IDs are even numbers
-            *merchant += slots[iterator];
+            *merchantGoods += slots[iterator];
         }
+
+        *merchant += merchantGoods;
+
+        *merchant += new MenuEntry("Force Merchant to buy at double price", Save::enableMerchantDoublePrice, DescUtils::getDesc("merchant_double_price_note"));
+        *merchant += new MenuEntry("Enable SpotPass-exclusive material slots", Save::enableSpotPassSlots, DescUtils::getDesc("merchant_spotpass_note"));
+
+        MenuFolder *dailyRiches = new MenuFolder("Daily Riches");
+        *dailyRiches += new MenuEntry("Allow all treasure chests to be opened", Save::disableDailyRichesTimeCheck, DescUtils::getDesc("DR_time_reset_note"));
+        *dailyRiches += new MenuEntry("Place prize in leftmost treasure chest", Save::forcePrizeLocation, DescUtils::getDesc("DR_prize_location_note"));
+        *dailyRiches += new MenuEntry("Edit prize item", nullptr, Save::selPrizeSetAction, true, DescUtils::getDesc("DR_prize_note"));
 
         *save += voice;
         *save += progression;
         *save += merchant;
+        *save += dailyRiches;
 
         *save += new MenuEntry("Set Hero Point count", nullptr, Save::heroPointCountSet, true, DescUtils::getDesc("hero_point_note"));
         *save += new MenuEntry("Set Coliseum Win count", nullptr, Save::coliseumWinCountSet, true, DescUtils::getDesc("coliseum_win_note"));

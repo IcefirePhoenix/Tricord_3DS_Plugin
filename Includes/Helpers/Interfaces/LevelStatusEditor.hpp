@@ -27,7 +27,6 @@ namespace CTRPluginFramework
         void    _DrawTop(void) const;
         void    _DrawBottom(void);
         void    _Update(void);
-        void    _EditDoTCompletion(void);
 
         int                     _world;
         int                     _playMode;

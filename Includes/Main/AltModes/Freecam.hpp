@@ -36,7 +36,6 @@ namespace CTRPluginFramework
     {
     public:
         static void useFreecam(MenuEntry* entry);
-        static void editHotkeys(MenuEntry* entry);
         static void editSensitivity(MenuEntry* entry);
         static void setZoomType(MenuEntry* entry);
         static CameraMode getCameraType(void);

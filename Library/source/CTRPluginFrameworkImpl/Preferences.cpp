@@ -7,6 +7,17 @@
 
 namespace CTRPluginFramework
 {
+    enum ConfigStatus
+    {
+        CONFIG_OK = 0,
+        CONFIG_MISSING = -1,
+        CONFIG_INVALID_HEADER = -2,
+        CONFIG_INVALID_SIG = -3,
+        CONFIG_OUTDATED = -4,
+        CONFIG_METADATA_INVALID = -5,
+        CONFIG_BODY_INVALID = -6
+    };
+
     BMPImage* Preferences::bottomBackgroundImage = nullptr;
 
     u32 Preferences::MenuHotkeys = static_cast<u32>(Key::Select);
@@ -60,22 +71,6 @@ namespace CTRPluginFramework
         return (temp);
     }
 
-    /*BMPImage *UpSampleThenCrop(BMPImage *img, int maxX, int maxY)
-    {
-        BMPImage *temp = UpSampleUntilItsEnough(img, maxX, maxY);
-
-        BMPImage *res =  new BMPImage(maxX, maxY);
-
-        u32 cx = temp->Width() / 2;
-        u32 cy = temp->Height() / 2;
-
-        temp->RoiFromCenter(cx, cy, maxX, maxY, *res);
-
-        delete temp;
-
-        return (res);
-    }*/
-
     float GetRatio(int width, int height, int maxX, int maxY)
     {
         if (width >= height)
@@ -116,32 +111,43 @@ namespace CTRPluginFramework
         if (File::Open(settings, "CTRPFData.bin") == 0 && settings.GetSize() > 0)
         {
             if (settings.Read(&header, sizeof(u32) * 6))
-                goto fail;
+            {
+                Preferences::Set(Preferences::QoL_Patch);
+                return ConfigStatus::CONFIG_METADATA_INVALID;
+            }
 
-            if (header.size != settings.GetSize() || !std::equal(g_signature, g_signature + 8, header.sig))
-                goto fail;
+            if (header.size != settings.GetSize())
+            {
+                Preferences::Set(Preferences::QoL_Patch);
+                return ConfigStatus::CONFIG_INVALID_HEADER;
+            }
+
+            if (!std::equal(g_signature, g_signature + 8, header.sig))
+            {
+                Preferences::Set(Preferences::QoL_Patch);
+                return ConfigStatus::CONFIG_INVALID_SIG;
+            }
 
             if (header.version != SETTINGS_VERSION)
             {
-                OSD::Notify(Color::Orange << "Config file version mismatch!");
-                OSD::Notify("Default settings applied");
-                goto fail;
+                Preferences::Set(Preferences::QoL_Patch);
+                return ConfigStatus::CONFIG_OUTDATED;
             }
 
-            // Rewind file
             settings.Rewind();
-            return settings.Read(&header, sizeof(Header));
-        }
 
-    fail:
-        Preferences::Set(Preferences::QoL_Patch);
-        return -1;
+            if (settings.Read(&header, sizeof(Header)) == 0)
+                return ConfigStatus::CONFIG_OK;
+            else
+                return ConfigStatus::CONFIG_BODY_INVALID;
+        }
+        return ConfigStatus::CONFIG_MISSING;
     }
 
     void    Preferences::LoadSettings(void)
     {
-        File    settings;
-        Header  header = { 0 };
+        File settings;
+        Header header = { 0 };
 
         std::string dirPath = "/Tricord/Screenshots/";
         if (!Directory::IsExists(dirPath))
@@ -155,22 +161,35 @@ namespace CTRPluginFramework
         Screenshot::Path = dirPath;
         Screenshot::Prefix = "Screenshot";
 
-        if (OpenConfigFile(settings, header) == 0)
+        int configReadStatus = OpenConfigFile(settings, header);
+        switch (configReadStatus)
         {
-            MenuHotkeys = header.hotkeys & ((System::IsNew3DS() && Settings.AreN3DSButtonsAvailable) ? ~0x0 : ~(Key::CStick | Key::ZL | Key::ZR));
-            Flags = header.flags;
+            case ConfigStatus::CONFIG_OK:
+            {
+                MenuHotkeys = header.hotkeys & ((System::IsNew3DS() && Settings.AreN3DSButtonsAvailable) ? ~0x0 : ~(Key::CStick | Key::ZL | Key::ZR));
+                Flags = header.flags;
 
-            Screenshot::Prefix = std::strlen(header.screenshotCustomName) == 0 ? "Screenshot" : header.screenshotCustomName;
+                Screenshot::Prefix = std::strlen(header.screenshotCustomName) == 0 ? "Screenshot" : header.screenshotCustomName;
 
-            // these have already been given default values under Screenshot.cpp, so only update if necessary
-            if (header.screenshotHotkeys != 0)
-                Screenshot::Hotkeys = header.screenshotHotkeys;
+                // these have already been given default values under Screenshot.cpp, so only update if necessary
+                if (header.screenshotHotkeys != 0)
+                    Screenshot::Hotkeys = header.screenshotHotkeys;
 
-            if (header.screenshotScreenCapture != 0)
-                Screenshot::Screens = header.screenshotScreenCapture; // this has already been 1-indexed when previously saved
+                if (header.screenshotScreenCapture != 0)
+                    Screenshot::Screens = header.screenshotScreenCapture; // this has already been 1-indexed when previously saved
 
-            if (header.screenshotTimer != 0)
-                Screenshot::Timer = Seconds(static_cast<float>(header.screenshotTimer));
+                if (header.screenshotTimer != 0)
+                    Screenshot::Timer = Seconds(static_cast<float>(header.screenshotTimer));
+
+                break;
+            }
+            case ConfigStatus::CONFIG_OUTDATED:
+                OSD::Notify("Outdated config detected, reverting to default settings.", Color::Orange);
+                break;
+
+            default:
+                OSD::Notify("Config file invalid or missing, reverting to default settings.", Color::Orange);
+                break;
         }
 
         Screenshot::Initialize();
@@ -186,25 +205,34 @@ namespace CTRPluginFramework
         File settings;
         Header header = { 0 };
 
-        if (OpenConfigFile(settings, header) == 0)
+        int configReadStatus = OpenConfigFile(settings, header);
+        switch (configReadStatus)
         {
-            if (header.favoritesCount != 0)
+            case ConfigStatus::CONFIG_OK:
             {
-                PluginMenuImpl::LoadFavoritesFromFile(header, settings);
+                if (header.favoritesCount != 0)
+                {
+                    PluginMenuImpl::LoadFavoritesFromFile(header, settings);
 
-                if (autoEnableFavorites)
-                    PluginMenuImpl::ActivateFavoritesFromFile(header, settings);
+                    if (autoEnableFavorites)
+                        PluginMenuImpl::ActivateFavoritesFromFile(header, settings);
+                }
+
+                if (header.hotkeysCount != 0)
+                    PluginMenuImpl::LoadHotkeysFromFile(header, settings);
+
+                if (autoEnableSavedCheats && header.enabledCheatsCount != 0)
+                    PluginMenuImpl::ActivateEnabledCheatsFromFile(header, settings);
+
+                PluginMenuImpl::LoadNameColorsFromFile(header, settings);
+                PluginMenuImpl::LoadBookmarkWarpsFromFile(header, settings);
+                PluginMenuImpl::LoadFaceExprFromFile(header, settings);
+
+                break;
             }
-
-            if (header.hotkeysCount != 0)
-                PluginMenuImpl::LoadHotkeysFromFile(header, settings);
-
-            if (autoEnableSavedCheats && header.enabledCheatsCount != 0)
-                PluginMenuImpl::ActivateEnabledCheatsFromFile(header, settings);
-
-            PluginMenuImpl::LoadNameColorsFromFile(header, settings);
-            PluginMenuImpl::LoadBookmarkWarpsFromFile(header, settings);
-            PluginMenuImpl::LoadFaceExprFromFile(header, settings);
+            default:
+                OSD::Notify("Saved user preferences have been reset.", Color::Orange);
+                break;
         }
     }
 

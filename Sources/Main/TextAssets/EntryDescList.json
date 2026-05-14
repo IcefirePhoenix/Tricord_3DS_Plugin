@@ -235,6 +235,42 @@
             }
         },
         {
+            "name": "set_progress_flags_note",
+            "content": {
+                "intro": "Sets all stage progression flags, allowing you to bypass puzzles and/or enemy waves to clear a stage early.",
+                "note": "May cause glitches with Totem Armos, if instances of this enemy have not already spawned when this entry is triggered.",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "skip_boss_intro_note",
+            "content": {
+                "intro": "Allows you to skip boss introduction cutscenes at the beginning of each world's boss and miniboss fight.",
+                "note": "Note: Does not apply to the Lady's Pets, found in The Lady's Lair - 4.",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "skip_lady_intro_note",
+            "content": {
+                "intro": "Allows you to skip Lady Maud's dialogue cutscene at the beginning of The Lady's Lair - 4 and Sky Temple - 4.",
+                "note": "",
+                "modeCompatibility": 2,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "dash_speed_note",
+            "content": {
+                "intro": "Allows you to set a custom dash speed.",
+                "note": "",
+                "modeCompatibility": 3,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "move_speed_note",
             "content": {
                 "intro": "Allows you to set a custom movement speed.",
@@ -1162,10 +1198,37 @@
             }
         },
         {
+            "name": "dot_unlock_note",
+            "content": {
+                "intro": "Unlocks the entirety of DoT, allowing you to access Forest Zone - Baneful Zone without previously clearing prerequisite zones.",
+                "note": "",
+                "modeCompatibility": 1,
+                "clientOnly": false
+            }
+        },
+        {
             "name": "merchant_mat_note",
             "content": {
                 "intro": "Allows you to edit the materials sold by the Merchant.",
                 "note": "Story materials and Freebies can be purchased using this entry.",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "merchant_double_price_note",
+            "content": {
+                "intro": "By speaking directly to the Merchant, you can gain extra rupees by selling materials you own. This entry forces the Merchant to buy materials for double the usual price, which is normally a random event that has a 20% chance of occurring each day.",
+                "note": "Disabling this entry restores RNG-based behavior. Changes require the Merchant's stall to be reset, which can be triggered via Tricord or by waiting for the system clock to advance to the next day.",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "merchant_spotpass_note",
+            "content": {
+                "intro": "Forces the Merchant's stall to hold five materials, instead of the usual three. These extra slots are normally enabled by turning on SpotPass from the title screen. Be sure to reload the area for changes to take effect.",
+                "note": "Turning this entry off will attempt to reset the number of slots to three, however, this WILL be overrided by your current SpotPass settings.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }
@@ -1184,6 +1247,33 @@
             "content": {
                 "intro": "Resets the Merchant's material selection, which normally happens daily. Existing materials will get replaced with a new random selection.",
                 "note": "Any selections made to \"Set Nth material slot\" will also be reset.",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "DR_time_reset_note",
+            "content": {
+                "intro": "Allows Daily Riches treasure chests to be opened at any time, disabling the daily restriction. Additionally, all treasure chests can be opened without reloading the area.",
+                "note": "",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "DR_prize_location_note",
+            "content": {
+                "intro": "Forces the Daily Riches prize item to spawn in the first treasure chest, located to the far left. All remaining chests will contain Freebies.",
+                "note": "",
+                "modeCompatibility": 0,
+                "clientOnly": false
+            }
+        },
+        {
+            "name": "DR_prize_note",
+            "content": {
+                "intro": "Allows you to set a certain material as the Daily Riches prize. The prize description located on the bottom screen will also be updated. Be sure to reload the area for changes to take effect.",
+                "note": "If normal RNG behavior is restored, the current prize round MUST be completed before the game can assign a new prize.",
                 "modeCompatibility": 0,
                 "clientOnly": false
             }

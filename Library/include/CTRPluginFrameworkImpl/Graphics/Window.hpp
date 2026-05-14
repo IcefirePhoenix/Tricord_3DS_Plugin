@@ -16,25 +16,26 @@ namespace CTRPluginFramework
         Window(u32 posX, u32 posY, u32 width, u32 height, bool closeBtn, BMPImage *image);
         ~Window(void);
 
-        void    Draw(void) const;
-        void    Draw(const std::string &title) const;
-        void    DrawButton(void) const;
-        void    Update(const bool isTouched, const IntVector &touchPos) const;
-        bool    MustClose(void) const;
-        void    Close(void) const;
+        void Draw(void) const;
+        void Draw(const std::string& title) const;
+        void DrawBackground(void) const;
+        void DrawButton() const;
+        void Update(const bool isTouched, const IntVector &touchPos) const;
+        bool MustClose(void) const;
+        void Close(void) const;
         const IntRect &GetRect(void) const;
 
-        static Window   TopWindow;
-        static Window   BottomWindow;
+        static Window TopWindow;
+        static Window BottomWindow;
 
-        static void     UpdateBackgrounds(void);
+        static void UpdateBackgrounds(void);
 
     private:
 
-        IntRect     _rect;
-        IntRect     _border;
-        Button    * _closeBtn;
-        BMPImage  * _image;
+        IntRect _rect;
+        IntRect _border;
+        Button* _closeBtn;
+        BMPImage* _image;
     };
 }
 

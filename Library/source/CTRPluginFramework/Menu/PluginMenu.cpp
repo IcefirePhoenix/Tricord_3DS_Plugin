@@ -10,9 +10,6 @@ namespace CTRPluginFramework
     PluginMenu::PluginMenu(std::string name, std::string about, u32 menuType) :
         OnReady(nullptr), OnFirstOpening{ nullptr }, OnOpening{ nullptr }, OnClosing{ nullptr }, OnNewFrame{ nullptr }, _menu(new PluginMenuImpl(name, about, menuType))
     {
-        FreecamToggle = false;
-        GameplayToggle = false;
-
         _menu->AddPluginVersion();
     }
 
@@ -20,22 +17,22 @@ namespace CTRPluginFramework
     {
     }
 
-    void    PluginMenu::Append(MenuEntry *item) const
+    void    PluginMenu::Append(MenuEntry *item, int modeIndex) const
     {
         if (item == nullptr)
             return;
 
         MenuEntryImpl *entry = item->_item.get();
-        _menu->Append(entry);
+        _menu->Append(entry, modeIndex);
     }
 
-    void    PluginMenu::Append(MenuFolder *item) const
+    void    PluginMenu::Append(MenuFolder *item, int modeIndex) const
     {
         if (item == nullptr)
             return;
 
         MenuFolderImpl *folder = item->_item.get();
-        _menu->Append(folder);
+        _menu->Append(folder, modeIndex);
     }
 
     void PluginMenu::AddToHidden(MenuEntry *item) const

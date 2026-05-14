@@ -48,13 +48,13 @@ namespace CTRPluginFramework
         ** Append a new entry to the menu (root)
         ** item = pointer to a MenuEntry object
         ******************************/
-        void    Append(MenuEntry *item) const;
+        void    Append(MenuEntry *item, int folderIndex = 0) const;
 
         /*
         ** Append a new folder to the menu (root)
         ** item = pointer to a MenuFolder object
         ******************************/
-        void    Append(MenuFolder *item) const;
+        void    Append(MenuFolder *item, int folderIndex = 0) const;
 
         void    AddToHidden(MenuFolder *item) const;
         void    AddToHidden(MenuEntry *item) const;
@@ -205,9 +205,6 @@ namespace CTRPluginFramework
          * \param callback The callback function
          */
         static void                ScreenshotSetcallback(OnScreenshotCallback callback);
-
-        bool FreecamToggle;
-        bool GameplayToggle;
 
     private:
         std::unique_ptr<PluginMenuImpl> _menu;

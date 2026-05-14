@@ -32,9 +32,13 @@ namespace CTRPluginFramework
         _root = _folder = new MenuFolderImpl("Main Menu - Code Collection");
         _hidden = new MenuFolderImpl("Hidden");
         _starredConst = _starred = new MenuFolderImpl("Favorites");
+        _freecamFolder = new MenuFolderImpl("Freecam");
+        _gameModesFolder = new MenuFolderImpl("Game Modes");
         _returnFolder = nullptr;
 
         _starMode = false;
+        _altGameplayMode = false;
+        _freecamMode = false;
         _selector = 0;
         _selectedTextSize = 0;
         _scrollOffset = 0.f;
@@ -70,9 +74,9 @@ namespace CTRPluginFramework
             }
             else
             {
-                if (PluginMenu::GetRunningInstance()->FreecamToggle) // gamemode toggle remains locked
+                if (home->_freecamMode) // gamemode toggle remains locked
                     home->_freecamBtn.Unlock();
-                else if (PluginMenu::GetRunningInstance()->GameplayToggle)
+                else if (home->_altGameplayMode)
                 {
                     home->_gameModeBtn.Unlock();
                     home->_freecamBtn.Unlock();
@@ -110,16 +114,26 @@ namespace CTRPluginFramework
         }, this, Task::AppCores);
 
         _mode = mode;
+        bool closeRequested = Window::BottomWindow.MustClose();
 
         // Process events
         if (_noteTB.IsOpen())
         {
+            if (closeRequested)
+            {
+                _noteTB.Close();
+                _InfoBtn.SetState(false);
+                closeRequested = false;
+            }
+
             for (size_t i = 0; i < eventList.size(); i++)
+            {
                 if (_noteTB.ProcessEvent(eventList[i]) == false)
                 {
                     _InfoBtn.SetState(false);
                     break;
                 }
+            }
         }
         else
         {
@@ -139,6 +153,26 @@ namespace CTRPluginFramework
         if (_discordBtn()) _discordBtn_OnClick();
         if (_controllerBtn()) _controllerBtn_OnClick();
 
+        // allow submenus to return to main menu via return button
+        // note: closeRequest is consumed, preventing plugin from being closed entirely
+        if (_starMode && closeRequested)
+        {
+            _showStarredBtn_OnClick();
+            _showStarredBtn.SetState(false);
+            closeRequested = false;
+        }
+        else if (_freecamMode && closeRequested)
+        {
+            _freecamBtn_OnClick();
+            _freecamBtn.SetState(false);
+            closeRequested = false;
+        }
+        else if (_altGameplayMode && closeRequested)
+        {
+            _gameModeBtn_OnClick();
+            closeRequested = false;
+        }
+
         top.Start();
         top.Wait();
 
@@ -147,7 +181,7 @@ namespace CTRPluginFramework
 
         mode = _mode;
 
-        close = Window::BottomWindow.MustClose();
+        close = closeRequested;
         close |= _closedRootFolder && !Preferences::IsEnabled(Preferences::Prevent_Close_Menu_B);
 
         _closedRootFolder = false;
@@ -165,6 +199,32 @@ namespace CTRPluginFramework
         _hidden->Append(item);
     }
 
+    void PluginMenuHome::ValidateFolderVisibility(MenuFolderImpl *&folder, int altModeIndex)
+    {
+        do
+        {
+            // Root folder
+            if (folder->_container == nullptr)
+                break;
+
+            while (!folder->Flags.isVisible)
+            {
+                MenuFolderImpl *p = folder->_Close(_selector, altModeIndex);
+
+                if (p)
+                {
+                    folder = p;
+
+                    if (_selector >= 1)
+                        _selector--;
+                }
+                else
+                    break;
+            }
+
+        } while (true);
+    }
+
     void PluginMenuHome::Refresh(void)
     {
         // If the currently selected folder is root
@@ -174,7 +234,7 @@ namespace CTRPluginFramework
             // If current folder is hidden, close it
             while (!_folder->Flags.isVisible)
             {
-                MenuFolderImpl *p = _folder->_Close(_selector);
+                MenuFolderImpl *p = _folder->_Close(_selector, 0);
 
                 if (p)
                 {
@@ -187,36 +247,22 @@ namespace CTRPluginFramework
             }
         }
 
-        // Starred folder
-        do
-        {
-            // If the currently selected folder is root
-            // Nothing to do
-            if (_starred->_container == nullptr)
-                break;
-
-            // If current folder is hidden, close it
-            while (!_starred->Flags.isVisible)
-            {
-                MenuFolderImpl *p = _starred->_Close(_selector, true);
-
-                if (p)
-                {
-                    _starred = p;
-                    if (_selector >= 1)
-                        _selector--;
-                }
-                else
-                    break;
-            }
-        } while (true);
+        ValidateFolderVisibility(_starred, 1);
+        ValidateFolderVisibility(_freecamFolder, 2);
+        ValidateFolderVisibility(_gameModesFolder, 3);
 
         // Check for the validity of _selector range
-        MenuFolderImpl *folder = _starMode ? _starred : _folder;
+        MenuFolderImpl *folder = _folder;
+
+        if (_freecamMode)
+            folder = _freecamFolder;
+        else if (_starMode)
+            folder = _starred;
+        else if (_altGameplayMode)
+            folder = _gameModesFolder;
 
         if (_selector >= static_cast<int>(folder->ItemsCount()))
             _selector = 0;
-
     }
 
 #define IsUnselectableEntry(item) (item->IsEntry() && item->AsMenuEntryImpl()._flags.isUnselectable)
@@ -309,8 +355,25 @@ namespace CTRPluginFramework
         static Clock inputClock;
         static MenuItem* last = nullptr;
 
-        MenuFolderImpl* folder = _starMode ? _starred : _folder;
-        MenuItem* item;
+        int altModeIndex = 0;
+        MenuItem *item;
+        MenuFolderImpl *folder = _folder;
+
+        if (_freecamMode)
+        {
+            folder = _freecamFolder;
+            altModeIndex = 2;
+        }
+        else if (_starMode)
+        {
+            folder = _starred;
+            altModeIndex = 1;
+        }
+        else if (_altGameplayMode)
+        {
+            folder = _gameModesFolder;
+            altModeIndex = 3;
+        }
 
         switch (event.type)
         {
@@ -402,7 +465,7 @@ namespace CTRPluginFramework
                         ********************/
                     case Key::B:
                     {
-                        MenuFolderImpl *newFolder = folder->_Close(_selector, _starMode);
+                        MenuFolderImpl *newFolder = folder->_Close(_selector, altModeIndex);
 
                         // Call the MenuEntry::OnAction callback if there's one
                         if (folder->_owner != nullptr && folder->_owner->OnAction != nullptr)
@@ -412,24 +475,62 @@ namespace CTRPluginFramework
                         if (newFolder != nullptr)
                         {
                             SoundEngine::PlayMenuSound(SoundEngine::Event::CANCEL);
-                            if (_starMode)
+
+                            if (_freecamMode)
+                                _freecamFolder = newFolder;
+                            else if (_starMode)
                                 _starred = newFolder;
+                            else if (_altGameplayMode)
+                                _gameModesFolder = newFolder;
                             else
                                 _folder = newFolder;
                         }
                         else
-                            _closedRootFolder = true;
-
+                        {
+                            // handle behavior once root folder has been reached
+                            if (_noteTB.IsOpen())
+                            {
+                                _noteTB.Close();
+                                _InfoBtn.SetState(false);
+                            }
+                            else if (_starMode)
+                            {
+                                _showStarredBtn_OnClick();
+                                _showStarredBtn.SetState(false);
+                            }
+                            else if (_freecamMode)
+                            {
+                                _freecamBtn_OnClick();
+                                _freecamBtn.SetState(false);
+                            }
+                            else if (_altGameplayMode)
+                            {
+                                _gameModeBtn_OnClick();
+                            }
+                            else
+                            {
+                                // signal plugin close, as user has already reached the root folder AND is not attempting to exit a submenu
+                                _closedRootFolder = true;
+                            }
+                        }
                         break;
                     }
-                    default: break;
+                    default:
+                        break;
                 }
                 break;
-            } // End Key::Pressed event
-            default: break;
-        } // End switch
+            }
+            // End Key::Pressed event
+            default:
+                break;
+        }
 
-        folder = _starMode ? _starred : _folder;
+        if (_freecamMode)
+            folder = _freecamFolder;
+        else if (_starMode)
+            folder = _starred;
+        else if (_altGameplayMode)
+            folder = _gameModesFolder;
 
         if (_selector >= static_cast<int>(folder->ItemsCount()))
             _selector = 0;
@@ -498,7 +599,14 @@ namespace CTRPluginFramework
         // Draw background
         Window::TopWindow.Draw();
 
-        MenuFolderImpl* folder = _starMode ? _starred : _folder;
+        MenuFolderImpl *folder = _folder;
+
+        if (_freecamMode)
+            folder = _freecamFolder;
+        else if (_starMode)
+            folder = _starred;
+        else if (_altGameplayMode)
+            folder = _gameModesFolder;
 
         // Draw Title
         int maxWidth = 360;
@@ -648,7 +756,14 @@ namespace CTRPluginFramework
 
         // Buttons visibility
 
-        MenuFolderImpl *folder = _starMode ? _starred : _folder;
+        MenuFolderImpl *folder = _folder;
+
+        if (_freecamMode)
+            folder = _freecamFolder;
+        else if (_starMode)
+            folder = _starred;
+        else if (_altGameplayMode)
+            folder = _gameModesFolder;
 
         if (folder && (*folder)[_selector])
         {
@@ -748,8 +863,24 @@ namespace CTRPluginFramework
 
     void PluginMenuHome::_TriggerEntry(void)
     {
-        MenuFolderImpl* folder = _starMode ? _starred : _folder;
+        MenuFolderImpl *folder = _folder;
+        int altModeIndex = 0;
 
+        if (_freecamMode)
+        {
+            folder = _freecamFolder;
+            altModeIndex = 2;
+        }
+        else if (_starMode)
+        {
+            folder = _starred;
+            altModeIndex = 1;
+        }
+        else if (_altGameplayMode)
+        {
+            folder = _gameModesFolder;
+            altModeIndex = 3;
+        }
 
         if (_selector >= static_cast<int>(folder->ItemsCount()))
             return;
@@ -812,19 +943,26 @@ namespace CTRPluginFramework
                 }
             }
             SoundEngine::PlayMenuSound(SoundEngine::Event::ACCEPT);
-            p->_Open(folder, _selector, _starMode);
-            if (_starMode)
+
+            p->_Open(folder, _selector, altModeIndex);
+
+            if (_freecamMode)
+                _freecamFolder = p;
+            else if (_starMode)
                 _starred = p;
+            else if (_altGameplayMode)
+                _gameModesFolder = p;
             else
                 _folder = p;
+
             _selector = 0;
         }
     }
 
     void PluginMenuHome::_showStarredBtn_OnClick(void)
     {
-        static int bak = 0;
-        std::swap(bak, _selector);
+        static int oldStarredSelector = 0;
+        std::swap(oldStarredSelector, _selector);
 
         if (!_starMode)
         {
@@ -873,8 +1011,16 @@ namespace CTRPluginFramework
 
     void PluginMenuHome::_controllerBtn_OnClick(void)
     {
-        MenuFolderImpl* f = _starMode ? _starred : _folder;
-        MenuEntryImpl* e = reinterpret_cast<MenuEntryImpl *>(f->_items[_selector]);
+        MenuFolderImpl *folder = _folder;
+
+        if (_freecamMode)
+            folder = _freecamFolder;
+        else if (_starMode)
+            folder = _starred;
+        else if (_altGameplayMode)
+            folder = _gameModesFolder;
+
+        MenuEntryImpl* e = reinterpret_cast<MenuEntryImpl *>(folder->_items[_selector]);
         MenuEntry *entry = e->_owner;
 
         if (entry != nullptr)
@@ -900,24 +1046,63 @@ namespace CTRPluginFramework
 
     void PluginMenuHome::_gameModeBtn_OnClick(void)
     {
-        std::string msg = PluginMenu::GetRunningInstance()->GameplayToggle ? "If you exit this menu, any active Gameplay Modes will be disabled.\n\nWould you like to continue to the Main Menu?" : "Choosing a custom Gameplay Mode will auto-disable any codes that may cause conflicts (see the Wiki for details). You will also be unable to access most of the Main Menu until you quit.\n\nWould you like to proceed?\n";
+        std::string msg = _altGameplayMode ? "If you exit this menu, any active Gameplay Modes will be disabled.\n\nWould you like to continue to the Main Menu?" : "Choosing a custom Gameplay Mode will auto-disable any codes that may cause conflicts (see the Wiki for details). You will also be unable to access most of the Main Menu until you quit.\n\nWould you like to proceed?\n";
 
         _gameModeBtn.SetState(true); // prevent flickering
 
         if (MessageBox("Gameplay Modes", msg, DialogType::DialogYesNo)())
-            PluginMenu::GetRunningInstance()->GameplayToggle = !PluginMenu::GetRunningInstance()->GameplayToggle;
+            _altGameplayMode = !_altGameplayMode;
+
+        static int oldGMSelector = 0;
+        std::swap(oldGMSelector, _selector);
+
+        MenuFolderImpl *folder = _folder;
+
+        if (_freecamMode)
+            folder = _freecamFolder;
+        else if (_starMode)
+            folder = _starred;
+        else if (_altGameplayMode)
+            folder = _gameModesFolder;
+
+        if (folder->ItemsCount() == 0)
+        {
+            _InfoBtn.Disable();
+            _AddFavoriteBtn.Lock();
+            _controllerBtn.Lock();
+
+            _selectedTextSize = 0;
+        }
+        else
+        {
+            MenuEntryImpl *e = reinterpret_cast<MenuEntryImpl *>(folder->_items[_selector]);
+
+            if (e->note.size())
+            {
+                _InfoBtn.Enable();
+                _InfoBtn.Unlock();
+            }
+            else
+                _InfoBtn.Disable();
+
+            _AddFavoriteBtn.Unlock();
+            _AddFavoriteBtn.SetState(e->_IsStarred());
+
+            _selectedTextSize = Renderer::GetTextSize(e->name.c_str());
+            _maxScrollOffset = static_cast<float>(_selectedTextSize) - 200.f;
+            _scrollClock.Restart();
+            _scrollOffset = 0.f;
+            _reverseFlow = false;
+        }
 
         // Freecam remains selectable here
-        if (PluginMenu::GetRunningInstance()->GameplayToggle)
+        if (_altGameplayMode)
         {
             _toolsBtn.Lock();
             _showStarredBtn.Lock();
             _AddFavoriteBtn.Lock();
             _arBtn.Lock();
             _settingsBtn.Lock();
-
-            _returnFolder = _folder;
-            _folder = _root;
         }
         else
         {
@@ -928,21 +1113,57 @@ namespace CTRPluginFramework
             _AddFavoriteBtn.Unlock();
             _arBtn.Unlock();
             _settingsBtn.Unlock();
-
-            if (_returnFolder == nullptr)
-                return;
-
-            _folder = _returnFolder;
-            _returnFolder = nullptr;
         }
     }
 
     void PluginMenuHome::_freecamBtn_OnClick(void)
     {
-        PluginMenu::GetRunningInstance()->FreecamToggle = !PluginMenu::GetRunningInstance()->FreecamToggle;
+        _freecamMode = !_freecamMode;
+
+        static int oldFreecamSelector = 0;
+        std::swap(oldFreecamSelector, _selector);
+
+        MenuFolderImpl *folder = _folder;
+
+        if (_freecamMode)
+            folder = _freecamFolder;
+        else if (_starMode)
+            folder = _starred;
+        else if (_altGameplayMode)
+            folder = _gameModesFolder;
+
+        if (folder->ItemsCount() == 0)
+        {
+            _InfoBtn.Disable();
+            _AddFavoriteBtn.Lock();
+            _controllerBtn.Lock();
+
+            _selectedTextSize = 0;
+        }
+        else
+        {
+            MenuEntryImpl *e = reinterpret_cast<MenuEntryImpl *>(folder->_items[_selector]);
+
+            if (e->note.size())
+            {
+                _InfoBtn.Enable();
+                _InfoBtn.Unlock();
+            }
+            else
+                _InfoBtn.Disable();
+
+            _AddFavoriteBtn.Unlock();
+            _AddFavoriteBtn.SetState(e->_IsStarred());
+
+            _selectedTextSize = Renderer::GetTextSize(e->name.c_str());
+            _maxScrollOffset = static_cast<float>(_selectedTextSize) - 200.f;
+            _scrollClock.Restart();
+            _scrollOffset = 0.f;
+            _reverseFlow = false;
+        }
 
         // if current folder is root, that means we are either in freecam, game mode, or home
-        if (PluginMenu::GetRunningInstance()->FreecamToggle)
+        if (_freecamMode)
         {
             _gameModeBtn.SetState(false);
 
@@ -952,18 +1173,11 @@ namespace CTRPluginFramework
             _AddFavoriteBtn.Lock();
             _arBtn.Lock();
             _settingsBtn.Lock();
-
-            // this cannot be overrided by a Game Mode onClick update as its button is locked...
-            if (_folder != _root)
-            {
-                _returnFolder = _folder;
-                _folder = _root;
-            }
         }
         else
         {
             // freecam menu closed
-            if (!PluginMenu::GetRunningInstance()->GameplayToggle)
+            if (!_altGameplayMode)
             {
                 _gameModeBtn.Unlock();
                 _toolsBtn.Unlock();
@@ -971,12 +1185,6 @@ namespace CTRPluginFramework
                 _AddFavoriteBtn.Unlock();
                 _arBtn.Unlock();
                 _settingsBtn.Unlock();
-
-                if (_returnFolder == nullptr)
-                    return;
-
-                _folder = _returnFolder;
-                _returnFolder = nullptr;
             }
             else // should still be in root folder here
             {
@@ -1016,7 +1224,14 @@ namespace CTRPluginFramework
 
     void PluginMenuHome::_StarItem(void)
     {
-        MenuFolderImpl* folder = _starMode ? _starred : _folder;
+        MenuFolderImpl *folder = _folder;
+
+        if (_freecamMode)
+            folder = _freecamFolder;
+        else if (_starMode)
+            folder = _starred;
+        else if (_altGameplayMode)
+            folder = _gameModesFolder;
 
         if (_selector >= static_cast<int>(folder->ItemsCount()))
             return;
@@ -1040,9 +1255,26 @@ namespace CTRPluginFramework
         }
     }
 
+    void PluginMenuHome::AddToGameModesMenu(MenuItem* item)
+    {
+        _gameModesFolder->Append(item, true);
+    }
+
+    void PluginMenuHome::AddToFreecamMenu(MenuItem* item)
+    {
+        _freecamFolder->Append(item, true);
+    }
+
     void PluginMenuHome::UnStar(MenuItem* item)
     {
-        MenuFolderImpl* folder = _starMode ? _starred : _folder;
+        MenuFolderImpl *folder = _folder;
+
+        if (_freecamMode)
+            folder = _freecamFolder;
+        else if (_starMode)
+            folder = _starred;
+        else if (_altGameplayMode)
+            folder = _gameModesFolder;
 
         if (item != nullptr)
         {
@@ -1074,8 +1306,16 @@ namespace CTRPluginFramework
 
     void PluginMenuHome::Init(void)
     {
-        MenuFolderImpl* folder = _starMode ? _starred : _folder;
-        MenuItem    *item = folder->ItemsCount() != 0 ? folder->_items[0] : nullptr;
+        MenuFolderImpl *folder = _folder;
+
+        if (_freecamMode)
+            folder = _freecamFolder;
+        else if (_starMode)
+            folder = _starred;
+        else if (_altGameplayMode)
+            folder = _gameModesFolder;
+
+        MenuItem *item = folder->ItemsCount() != 0 ? folder->_items[0] : nullptr;
 
         if (folder->ItemsCount() != 0)
             _AddFavoriteBtn.Unlock();
@@ -1101,15 +1341,26 @@ namespace CTRPluginFramework
         if (folder != _root)
         {
             if(_folder == folder)
-                _folder = _folder->_Close(_selector, false);
+                _folder = _folder->_Close(_selector, 0);
             if (_starred == folder)
-                _starred = _starred->_Close(_selector, true);
+                _starred = _starred->_Close(_selector, 1);
+            if (_freecamFolder == folder)
+                _freecamFolder = _freecamFolder->_Close(_selector, 2);
+            if (_gameModesFolder == folder)
+                _gameModesFolder = _gameModesFolder->_Close(_selector, 3);
         }
     }
 
     void PluginMenuHome::UpdateNote(void)
     {
-        MenuFolderImpl* folder = _starMode ? _starred : _folder;
+        MenuFolderImpl *folder = _folder;
+
+        if (_freecamMode)
+            folder = _freecamFolder;
+        else if (_starMode)
+            folder = _starred;
+        else if (_altGameplayMode)
+            folder = _gameModesFolder;
 
         if (!folder || !((*folder)[_selector]))
             return;

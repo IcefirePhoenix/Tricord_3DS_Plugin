@@ -86,7 +86,7 @@ namespace CTRPluginFramework
     bool    TextBox::ProcessEvent(Event &event)
     {
         if (!_isOpen)
-            return (false);
+            return false;
 
         if (event.type == Event::KeyDown)
         {
@@ -100,10 +100,8 @@ namespace CTRPluginFramework
                         if (_currentLine > 0)
                         {
                             _currentLine--;
-                            _scrollPosition -= _scrollPadding;; //_scrollPadding;
+                            _scrollPosition -= _scrollPadding;
                         }
-                        //else
-                         //   _currentLine = _newline.size() - _maxLines;
                         _inputClock.Restart();
                     }
                     break;
@@ -118,8 +116,6 @@ namespace CTRPluginFramework
                             _currentLine++;
                             _scrollPosition += _scrollPadding;
                         }
-                        //else
-                        //    _currentLine = 0;
                         _inputClock.Restart();
                     }
                     break;
@@ -151,8 +147,6 @@ namespace CTRPluginFramework
                             _currentLine -= 2;
                             _scrollPosition -= _scrollPadding * 2;
                         }
-                        //else
-                         //   _currentLine = _newline.size() - _maxLines;
                         _inputClock.Restart();
                     }
                     break;
@@ -166,8 +160,6 @@ namespace CTRPluginFramework
                             _currentLine += 2;
                             _scrollPosition += _scrollPadding * 2;
                         }
-                        //else
-                        //    _currentLine = 0;
                         _inputClock.Restart();
                     }
                     break;
@@ -175,13 +167,14 @@ namespace CTRPluginFramework
                 case Key::B:
                 {
                     Close();
-                    return (false);
-                    break;
+                    return false;
+
                 }
-                default: break;
+                default:
+                    break;
             }
         }
-        return (true);
+        return true;
     }
 
     void    TextBox::Update(const std::string& title, std::string& text)
