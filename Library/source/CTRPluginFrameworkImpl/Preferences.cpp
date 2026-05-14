@@ -112,34 +112,34 @@ namespace CTRPluginFramework
         {
             if (settings.Read(&header, sizeof(u32) * 6))
             {
-                Preferences::Set(Preferences::QoL_Patch);
                 return ConfigStatus::CONFIG_METADATA_INVALID;
             }
 
             if (header.size != settings.GetSize())
             {
-                Preferences::Set(Preferences::QoL_Patch);
                 return ConfigStatus::CONFIG_INVALID_HEADER;
             }
 
             if (!std::equal(g_signature, g_signature + 8, header.sig))
             {
-                Preferences::Set(Preferences::QoL_Patch);
                 return ConfigStatus::CONFIG_INVALID_SIG;
             }
 
             if (header.version != SETTINGS_VERSION)
             {
-                Preferences::Set(Preferences::QoL_Patch);
                 return ConfigStatus::CONFIG_OUTDATED;
             }
 
             settings.Rewind();
 
             if (settings.Read(&header, sizeof(Header)) == 0)
+            {
                 return ConfigStatus::CONFIG_OK;
+            }
             else
+            {
                 return ConfigStatus::CONFIG_BODY_INVALID;
+            }
         }
         return ConfigStatus::CONFIG_MISSING;
     }
@@ -185,10 +185,12 @@ namespace CTRPluginFramework
             }
             case ConfigStatus::CONFIG_OUTDATED:
                 OSD::Notify("Outdated config detected, reverting to default settings.", Color::Orange);
+                Preferences::Set(Preferences::QoL_Patch);
                 break;
 
             default:
                 OSD::Notify("Config file invalid or missing, reverting to default settings.", Color::Orange);
+                Preferences::Set(Preferences::QoL_Patch);
                 break;
         }
 
@@ -232,6 +234,7 @@ namespace CTRPluginFramework
             }
             default:
                 OSD::Notify("Saved user preferences have been reset.", Color::Orange);
+                Preferences::Set(Preferences::QoL_Patch);
                 break;
         }
     }
